@@ -72,7 +72,6 @@ const served: System = {
     [id.b]: placed(id.b, 'B', 2),
     [id.notes]: placed(id.notes, 'Notes', { leaf: 3 }),
   },
-  owned: true,
   version: 0,
 }
 

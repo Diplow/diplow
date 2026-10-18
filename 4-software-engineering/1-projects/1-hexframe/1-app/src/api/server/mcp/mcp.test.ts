@@ -1,6 +1,7 @@
 import { Effect, Exit } from 'effect'
 import { describe, expect, it, vi } from 'vitest'
 
+import { hexframeStar } from '#/domains/mapping/entities'
 import * as Iam from '#/domains/iam/iam'
 import { transactional } from '#/repositories/database/database'
 import { granted } from '#/repositories/database/tiles/testing'
@@ -103,7 +104,7 @@ describe('the tool table, as an agent lists it', () => {
     const description = (name: string) => tools.find((tool) => tool.name === name)?.description
     for (const tool of tools.filter(({ annotations }) => annotations?.readOnlyHint === false)) {
       expect(tool.description).toMatch(/TileNotFound: .+; map or open_tile/)
-      expect(tool.description).toMatch(/ShippedReadOnly: that Tile is hexframe's own, Help's or/)
+      expect(tool.description).toMatch(/Shipped: that Tile is hexframe's own, Help's or/)
     }
     for (const name of ['open_tile', 'map']) {
       expect(description(name)).toMatch(/Help, hexframe's own guide, .+ id "help"/)
@@ -159,7 +160,8 @@ describe('Help, through the MCP endpoint', () => {
     expect(opened).toMatchObject({
       value: {
         tile: { _tag: 'Tile', id: 'help', title: 'Hexframe' },
-        parent: null,
+        // Help stands under the Hexframe Organization's star, by its card (HEX-139).
+        parent: { id: hexframeStar, title: 'Hexframe' },
         branches: { 1: { _tag: 'Tile', id: 'help/1' }, 6: { _tag: 'Tile', id: 'help/6' } },
         context: { '-1': { _tag: 'Tile', id: 'help/-1' } },
       },

@@ -11,6 +11,7 @@ import {
   type Field,
   foundIn,
   type FoundTile,
+  isShippedId,
   type Pinned,
   type PinnedTiles,
   type PlacedReference,
@@ -21,7 +22,7 @@ import {
   tileAt,
 } from '../system'
 import type { FieldsAsked } from '../rows'
-import { type Actor, owns, Right, rightsOn, type Sharing } from './rights'
+import { type Actor, owns, type Right, rightsOn, type Sharing } from './rights'
 
 /**
  * A System as an actor may see it: flat, as Mapping holds it, with only what they may read, each
@@ -32,7 +33,8 @@ import { type Actor, owns, Right, rightsOn, type Sharing } from './rights'
  * them: a reader draws "…" between it and the star. What stands below a gap stands in `tiles`, under
  * it. The System's Version and the card's are their owner's alone: anyone else is shown, in the
  * System's, how what they see stands (`sightVersion`), since a count of changes would tell of the
- * Tiles kept from them. Its owner sees it whole, every right on every Tile, and no gap.
+ * Tiles kept from them. Its owner sees it whole, every right on every Tile but a shipped one, which
+ * they read alone, and no gap.
  */
 export interface Seen extends System {
   readonly rights: Readonly<Record<string, ReadonlyArray<Right>>>
@@ -187,8 +189,12 @@ export function sightVersion({ root, tiles, gaps, rights, pinned }: Omit<Seen, '
     ),
     ...Object.values(gaps).map((gap) => `gap ${gap.id} ${String(gap.version)}`),
     ...Object.entries(rights).map(([id, held]) => `rights ${id} ${held.join('+')}`),
-    ...Object.values(pinned).map(
-      (pin) => `pinned ${pin.id} ${JSON.stringify([pin.title, pin.preview, pin.starTitle])}`,
+    // A pin of a Tile hexframe ships says no words here: they change with a deploy alone, never by a
+    // write, and differ only by the language they are read in, which is no change of the System.
+    ...Object.values(pinned).map((pin) =>
+      isShippedId(pin.id)
+        ? `pinned ${pin.id}`
+        : `pinned ${pin.id} ${JSON.stringify([pin.title, pin.preview, pin.starTitle])}`,
     ),
   ].sort()
   let hash = 0x811c9dc5
@@ -231,8 +237,9 @@ export function seenBy(
   const star = system.root.id
   const sight = sightOf(actor, sharing, star)
   if (owns(actor, sharing.owner)) {
+    // Every right on every Tile, but *read* alone on a Tile hexframe ships (`rightsOn`).
     const every = [star, ...tileIds(Object.values(system.tiles))].map(
-      (id) => [id, Right.literals] as const,
+      (id) => [id, [...rightsOn(actor, sharing, id)]] as const,
     )
     const { tiles } = referencesShown(system, pointsAtShown(system, sight, pinned))
     return {

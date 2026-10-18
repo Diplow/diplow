@@ -195,7 +195,7 @@ const refusal = {
     'the user may read that Tile but not do this: write it, write a Tile it carries, write the ' +
     "parent it goes under, or move it where someone could read it who couldn't before, which " +
     'only its owner does, from the app. Leave it as it is, and say so in your answer.',
-  ShippedReadOnly:
+  Shipped:
     "that Tile is hexframe's own, Help's or the tutorial's, which every user reads and none " +
     "writes; change a Tile of the user's System instead.",
   TileChanged:
@@ -274,7 +274,7 @@ const createTile = write({
     PreviewTooLong: refusal.PreviewTooLong,
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     NotAllowed: refusal.NotAllowed,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
     ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
@@ -302,7 +302,7 @@ const editTile = write({
     TitleMissing: refusal.TitleMissing,
     PreviewTooLong: refusal.PreviewTooLong,
     NotAllowed: refusal.NotAllowed,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
     ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
@@ -339,7 +339,7 @@ const moveTile = write({
       'a Tile cannot move under itself or anything below it; pick a parent outside it.',
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     NotAllowed: refusal.NotAllowed,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
     ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
@@ -370,7 +370,7 @@ const swapTiles = write({
     MovedUnderItself: 'neither Tile may lie below the other; move one of them instead.',
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     NotAllowed: refusal.NotAllowed,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
     ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
@@ -401,7 +401,7 @@ const deleteTile = write({
     TileChanged: refusal.TileChanged,
     RootFixed: refusal.RootFixed,
     NotAllowed: refusal.NotAllowed,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
     ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
@@ -431,7 +431,7 @@ const createReference = write({
     DirectionTaken: refusal.DirectionTaken,
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     NotAllowed: refusal.NotAllowed,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
     ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
@@ -445,7 +445,7 @@ const createReference = write({
         field.annotate({
           description:
             "The id of the Tile the Reference points at, in the user's System or in another the " +
-            'user may read.',
+            'user may read, Help\'s among them, by its own id ("help/3").',
         }),
     }),
   ),
@@ -464,7 +464,7 @@ const deleteReference = write({
     TileNotFound: refusal.TileNotFound,
     TileChanged: refusal.TileChanged,
     NotAllowed: refusal.NotAllowed,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
     ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,

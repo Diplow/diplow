@@ -209,7 +209,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
         for (const parent of [helpRoot, tutorialRoot, `${tutorialRoot}/2`]) {
           const place = { _tag: 'Slot', parent, slot: 1 } as const
           expect(yield* Effect.flip(land(accountId, place)), parent).toMatchObject({
-            _tag: 'ShippedReadOnly',
+            _tag: 'Shipped',
             kind: 'Forbidden',
           })
         }

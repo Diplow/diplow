@@ -89,7 +89,7 @@ describe('what a Leaf may hold, on a System made by hand', () => {
   })
   /** The flat System these rows hold, owned by an Account. */
   const flat = (rows: ReadonlyArray<Row>) => {
-    const found = systemFrom(rows, { owned: true })
+    const found = systemFrom(rows)
     if (found === undefined) throw new Error('These rows hold no Root')
     return found
   }

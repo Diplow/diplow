@@ -75,7 +75,6 @@ const branch = (
 const served: System = {
   root: { _tag: 'Tile', id: id.root, title: 'Me', preview: '', body: '', version: 1 },
   tiles: { [id.a]: branch(id.a, 'A', 1), [id.b]: branch(id.b, 'B', 2) },
-  owned: true,
   version: 0,
 }
 
@@ -587,7 +586,6 @@ describe("a write to someone else's System, visited", () => {
         parent: ana.root,
       },
     },
-    owned: true,
     version: 7,
     rights: { [ana.root]: [], [ana.journal]: ['read', 'write'] },
     gaps: {},
@@ -599,7 +597,7 @@ describe("a write to someone else's System, visited", () => {
       (options) =>
         Promise.resolve({
           ok: true,
-          value: options?.data === undefined ? { ...served, rights: {}, gaps: {} } : hers,
+          value: options?.data?.system === undefined ? { ...served, rights: {}, gaps: {} } : hers,
         }) as never,
     )
   }

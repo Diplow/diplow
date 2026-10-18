@@ -41,7 +41,6 @@ const system: System = {
     deeper: placed('deeper', 'inner', { leaf: 2 }),
     link: { _tag: 'Reference', id: 'link', parent: 'a', slot: -1, target: 'b' },
   },
-  owned: true,
   version: 7,
 }
 

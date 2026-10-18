@@ -56,7 +56,6 @@ const system: System = {
     garden: tile('garden', 'ana', 2),
     pinned: { _tag: 'Reference', id: 'pinned', parent: 'garden', slot: -1, target: 'journal' },
   },
-  owned: true,
   version: 9,
 }
 
@@ -95,9 +94,8 @@ describe('a System as anyone else sees it', () => {
   it('holds what Bob, in Family, reads, each Tile with his rights on it', () => {
     const seen = seenBy(actor('bob', ['family']), system, scenario)
     expect(seen.root).toEqual(star)
-    // He stands for no owner, yet the System is still one an owner holds.
+    // He stands for no owner.
     expect(seen.asOwner).toBe(false)
-    expect(seen.owned).toBe(system.owned)
     expect(Object.keys(seen.tiles).sort()).toEqual([
       'draft',
       'entry',
@@ -216,6 +214,21 @@ describe('the Version a reader who is not the owner is shown', () => {
     expect(strangerOn(system, scenarioWith(grant('garden', everyone, 'read')))).toBe(before)
     const toStranger = grant('garden', { _tag: 'Account', id: 'stranger' }, 'read+write')
     expect(strangerOn(system, scenarioWith(toStranger))).not.toBe(before)
+  })
+  it('names a pin of a Tile hexframe ships by its id alone, whatever language its words come in', () => {
+    const shownWith = (id: string, words: { title: string; preview: string; starTitle: string }) =>
+      sightVersion({
+        root: star,
+        tiles: {},
+        gaps: {},
+        rights: {},
+        pinned: { [id]: { id, ...words } },
+        asOwner: false,
+      })
+    const english = { title: 'Children and Directions', preview: 'Six.', starTitle: 'Hexframe' }
+    const french = { title: 'Enfants et directions', preview: 'Six.', starTitle: 'Hexframe' }
+    expect(shownWith('help/3', french)).toBe(shownWith('help/3', english))
+    expect(shownWith('journal', french)).not.toBe(shownWith('journal', english))
   })
 })
 

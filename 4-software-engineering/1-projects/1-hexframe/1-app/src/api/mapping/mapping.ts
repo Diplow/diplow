@@ -8,7 +8,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { Schema, Struct } from 'effect'
 
-import { GrantChange, shippedRoots, StarQuery, TileId } from '#/domains/mapping/entities'
+import { AnyTileId, GrantChange, shippedRoots, StarQuery, TileId } from '#/domains/mapping/entities'
 import {
   CreateReference,
   CreateTile,
@@ -72,20 +72,26 @@ export const ImportUpload = Schema.fromFormData(
   }),
 )
 
+/** One of the app's languages, the page's, which a Tile hexframe ships is read in. */
+const Language = Schema.Literals(locales)
+
 /**
  * A System hexframe ships, by its Root, as Mapping names it, Help's or the tutorial's, in one of the
  * app's languages: the page's.
  */
 export const ShippedRead = Schema.Struct({
   root: Schema.Literals(shippedRoots),
-  language: Schema.Literals(locales),
+  language: Language,
 })
 
 /**
- * The System a read names, by its star, a UUID, as Mapping's `TileId` bounds it: none for the
- * Account's own.
+ * The System a read names, by its star, a UUID, as Mapping's `TileId` bounds it, none for the
+ * Account's own; and the page's language, which a Tile hexframe ships among it is read in, English
+ * when none is given (HEX-139).
  */
-export const SystemRead = Schema.UndefinedOr(Schema.Struct({ system: TileId }))
+export const SystemRead = Schema.UndefinedOr(
+  Schema.Struct({ system: Schema.optionalKey(TileId), language: Schema.optionalKey(Language) }),
+)
 
 /**
  * A System, flat, as the Account may see it, its Root and every Tile and Reference below it by id
@@ -94,10 +100,19 @@ export const SystemRead = Schema.UndefinedOr(Schema.Struct({ system: TileId }))
  */
 export const system = createServerFn({ method: 'GET' })
   .validator(Schema.toStandardSchemaV1(SystemRead))
-  .handler(({ data, context }) => run(context, Mapping.systemAt(data?.system)))
+  .handler(({ data, context }) => run(context, Mapping.systemAt(data?.system, data?.language)))
 
-/** The Tile a link leads to, by its id, a UUID, as Mapping's `TileId` bounds it. */
-export const TileVisit = Schema.Struct({ tile: TileId })
+/**
+ * The Tile a link leads to, by its id: a UUID, as Mapping's `TileId` bounds it, or the id of a Tile
+ * hexframe ships, which the Hexframe star holds (`ShippedId`, HEX-139).
+ */
+export const TileVisit = Schema.Struct({ tile: AnyTileId })
+
+/** A public Tile's System read: the Tile, as a link names it, and the page's language. */
+export const PublicRead = Schema.Struct({
+  tile: TileVisit.fields.tile,
+  language: Schema.optionalKey(Language),
+})
 
 /**
  * Where a link to a Tile leads the Account, `/t/<id>`: the star of the System holding it, none for
@@ -114,7 +129,7 @@ export const visit = createServerFn({ method: 'GET' })
  * read is `TileNotFound`, as one that doesn't exist; no Session is asked, nor used.
  */
 export const publicSystem = createServerFn({ method: 'GET' })
-  .validator(Schema.toStandardSchemaV1(TileVisit))
+  .validator(Schema.toStandardSchemaV1(PublicRead))
   .handler(({ data, context }) => run(context, Mapping.publicSystem(data)))
 
 /**
@@ -176,7 +191,7 @@ export const deleteReference = createServerFn({ method: 'POST' })
  * never given more than `read`: its owner's alone, from a Session, never a Key's
  * (`SessionRequired`); anyone else is `NotAllowed`, or `TileNotFound` where they may not read the
  * Tile, a star that names nothing is `TileNotFound`, the owner's own `NotAllowed`, and a Tile
- * hexframe ships is `ShippedReadOnly`. A Grant that first opens the Tile to someone is told in their
+ * hexframe ships is `Shipped`. A Grant that first opens the Tile to someone is told in their
  * timeline.
  */
 export const setGrant = createServerFn({ method: 'POST' })

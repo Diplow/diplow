@@ -140,9 +140,10 @@ const mayOpen = (actor: Actor, sharing: Sharing) => owns(actor, sharing.owner) &
  * Whether the actor may change who reaches this Tile of the System, or read who does: its owner, from
  * a Session, never through a Key, a Turn's Key or an agent. An id the System holds no Tile of, a
  * Reference's included, which has no reach of its own, and a Tile the actor may not read are
- * `TileNotFound`, alike; with `read`, `NotAllowed`, which says nothing of who else reads it. A Tile of
- * a System hexframe ships is the service's to refuse first (`ShippedReadOnly`), as for an Operation,
- * since the shipped ids are no rule of the System.
+ * `TileNotFound`, alike; with `read`, `NotAllowed`, which says nothing of who else reads it. A Tile
+ * hexframe ships is the service's to refuse first (`Shipped`), as for an Operation: its Grants are
+ * nobody's, whichever System is asked and whoever asks, so `Shipped` is said before any System is
+ * read, rather than whatever this System would answer of an id it may not hold.
  */
 export function mayShare(
   actor: Actor,

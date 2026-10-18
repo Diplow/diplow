@@ -7,7 +7,8 @@ import type { GrantRow } from '#/repositories/database/tiles/grants'
 import { granted } from '#/repositories/database/tiles/testing'
 
 import { noKey, run, type StartContext } from '../server/run'
-import { GrantChange } from '#/domains/mapping/entities'
+import { GrantChange, hexframeStar } from '#/domains/mapping/entities'
+import { shipped } from '#/domains/mapping/shipped/shipped'
 
 import { StarSearch, SystemRead, TileReach, TileVisit } from './mapping'
 import * as Service from '#/domains/mapping/mapping'
@@ -18,8 +19,9 @@ import * as Mapping from './programs'
 // them, over PGlite: `system` naming a star, and `readTile` and `openTile` reading from a Tile of the
 // System holding it, each as the Account may see it, a Turn's Key never past its own System; where a
 // link to a Tile leads (`visit`), and the Titles a timeline names across Systems (Mapping's `titlesAcross`);
-// who reaches a Tile, set and read by its owner from a Session alone (`setGrant`, `whoReaches`); and a
-// star found by its Title or by a link (`findStars`, `starOfLink`).
+// who reaches a Tile, set and read by its owner from a Session alone (`setGrant`, `whoReaches`); a
+// star found by its Title or by a link (`findStars`, `starOfLink`); and Help and the tutorial, read
+// through the Hexframe Organization's star they are mounted under (HEX-139).
 
 /** How a request is proven: by a Session, by an Account's Key, or by a Turn's Key. */
 type Proof = 'session' | 'key' | 'turn key'
@@ -102,12 +104,15 @@ describe('a System named by its star, as the Account may see it', () => {
     expect(await run(request(bob, 'turn key'), Mapping.system)).toMatchObject({ ok: true })
   })
 
-  it('takes a star, a UUID, or nothing', () => {
+  it('takes a star, a UUID, or nothing, and the page’s language or none', () => {
     const accepts = (input: unknown) => Schema.is(SystemRead)(input)
     expect(accepts(undefined)).toBe(true)
+    expect(accepts({})).toBe(true)
     expect(accepts({ system: crypto.randomUUID() })).toBe(true)
+    expect(accepts({ system: crypto.randomUUID(), language: 'fr' })).toBe(true)
+    expect(accepts({ language: 'en' })).toBe(true)
     expect(accepts({ system: 'help' })).toBe(false)
-    expect(accepts({})).toBe(false)
+    expect(accepts({ language: 'de' })).toBe(false)
   })
 })
 
@@ -219,10 +224,13 @@ describe('a link to a Tile, and the Titles a timeline names, across Systems', ()
     expect(await value(visit(root.id, 'turn key'))).toEqual({})
   })
 
-  it('takes a Tile by its UUID alone', () => {
+  it('takes a Tile by its UUID, or a Tile hexframe ships by its own id, and nothing else', () => {
     const accepts = (input: unknown) => Schema.is(TileVisit)(input)
     expect(accepts({ tile: crypto.randomUUID() })).toBe(true)
-    expect(accepts({ tile: 'help' })).toBe(false)
+    expect(accepts({ tile: 'help' })).toBe(true)
+    expect(accepts({ tile: 'tutorial/2' })).toBe(true)
+    expect(accepts({ tile: 'helper' })).toBe(false)
+    expect(accepts({ tile: 'help/9' })).toBe(false)
     expect(accepts({})).toBe(false)
   })
 
@@ -412,6 +420,45 @@ describe('a star found by its Title or by a link, for the star picker', () => {
     expect(await run(signedOut(), Mapping.starOfLink({ tile: garden.id }))).toMatchObject({
       ok: false,
       failure: { _tag: 'SignedOut' },
+    })
+  })
+})
+
+describe('Help and the tutorial, through the Hexframe Organization’s star', () => {
+  /** The Title of Help's Tile of this id in a language, as the build bundled it. */
+  const helpTitle = (language: 'en' | 'fr', id: string) =>
+    shipped.help[language].rows.find((row) => row.id === id)?.title
+
+  it('reads them as Children of its star, in the page’s language, signed in or out', async () => {
+    const visitor = someone()
+    const seen = await value(run(request(visitor), Mapping.systemAt(hexframeStar, 'fr')))
+    expect(seen.root).toMatchObject({ id: hexframeStar, title: 'Hexframe' })
+    expect(seen.tiles['help/3']).toMatchObject({ title: helpTitle('fr', 'help/3') })
+    expect(seen.tiles.tutorial).toMatchObject({ parent: hexframeStar })
+    expect(await value(run(request(visitor), Mapping.visit({ tile: 'help/3' })))).toEqual({
+      system: hexframeStar,
+    })
+    const anyone = await value(
+      run(signedOut(), Mapping.publicSystem({ tile: 'help/3', language: 'fr' })),
+    )
+    expect(anyone.tiles['help/3']).toMatchObject({ title: helpTitle('fr', 'help/3') })
+    expect(anyone.rights['help/3']).toEqual(['read'])
+    const opened = await value(run(signedOut(), Mapping.publicTile({ tile: 'help' })))
+    expect(opened.parent).toEqual({ id: hexframeStar, title: 'Hexframe' })
+  })
+
+  it('still reads Help by a Turn’s Key, wherever its Turn works', async () => {
+    const opened = await value(
+      run(request(someone(), 'turn key'), Mapping.openTile({ id: 'help/3', fields: ['title'] })),
+    )
+    expect(opened.tile).toMatchObject({ id: 'help/3', title: helpTitle('en', 'help/3') })
+  })
+
+  it('refuses everyone a Grant on one of their Tiles, `Shipped`', async () => {
+    const change = { tile: 'help', subject: { _tag: 'Everyone' }, value: 'none' } as const
+    expect(await run(request(someone()), Mapping.setGrant(change))).toMatchObject({
+      ok: false,
+      failure: { _tag: 'Shipped', kind: 'Forbidden' },
     })
   })
 })

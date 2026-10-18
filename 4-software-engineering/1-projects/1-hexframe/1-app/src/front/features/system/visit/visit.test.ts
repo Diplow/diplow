@@ -48,7 +48,6 @@ const seen: Seen = {
   gaps: { seeds: found('seeds', 'Seeds') },
   rights: { ana: [], garden: ['read', 'write'], seeds: ['read', '@'], sprouts: ['read'] },
   pinned: {},
-  owned: true,
   asOwner: false,
   version: 0,
 }

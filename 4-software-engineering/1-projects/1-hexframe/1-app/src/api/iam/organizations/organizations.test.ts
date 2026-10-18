@@ -145,8 +145,6 @@ describe('an Organization, made', () => {
     const seen = await value(run(request(bob.account), Mapping.systemAt(star)))
     expect(seen.root).toMatchObject({ id: star, title: 'Atelier' })
     expect(seen.asOwner).toBe(false)
-    // Still a System an owner holds, which the client's `decide` writes in as Grants let it.
-    expect(seen.owned).toBe(true)
     expect(seen.tiles).toEqual({})
     expect(
       await refusal(

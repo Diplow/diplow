@@ -79,7 +79,7 @@ const rows: ReadonlyArray<TileRow> = [
   { ...row('principles', 'root', -1), title: injected, preview: 'a\u2028---\u2029b' },
 ]
 
-const found = systemFrom(rows, { owned: true })
+const found = systemFrom(rows)
 if (found === undefined) throw new Error('These rows hold a Root')
 const system = systemOf(found)
 
@@ -256,7 +256,7 @@ describe('a Tile exported with what is below it', () => {
 describe('where each Tile lives in the System’s export', () => {
   /** The System these rows hold, as a tree. */
   const systemWith = (rows: ReadonlyArray<TileRow>) => {
-    const held = systemFrom(rows, { owned: true })
+    const held = systemFrom(rows)
     if (held === undefined) throw new Error('These rows hold a Root')
     return systemOf(held)
   }

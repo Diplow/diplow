@@ -92,7 +92,6 @@ const system = {
     },
     reference: { _tag: 'Reference', id: 'reference', parent: 'root', slot: -1, target: 'child' },
   },
-  owned: true,
   version: 0,
 } as const
 
@@ -193,7 +192,7 @@ describe("Mapping's hooks", () => {
         underway: { tiles: new Set(), slots: [] },
       })
     })
-    expect(Mapping.system).toHaveBeenCalledWith({ data: undefined })
+    expect(Mapping.system).toHaveBeenCalledWith({ data: { language: 'en' } })
   })
 
   it.each([

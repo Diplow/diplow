@@ -8,7 +8,14 @@ import { TestDatabase } from '#/repositories/database/testing'
 import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import * as Mapping from '../mapping'
-import { previewLimit, type Row, shippedRoots, systemOf } from '../entities'
+import {
+  hexframeStar,
+  previewLimit,
+  type Row,
+  shippedOf,
+  shippedRoots,
+  systemOf,
+} from '../entities'
 import {
   CreateReference,
   CreateTile,
@@ -19,7 +26,7 @@ import {
   type Operation,
   SwapTiles,
 } from '../operations'
-import { shipped, shippedOf } from './shipped'
+import { shipped } from './shipped'
 import { vaultOf } from './vault'
 import { actingOnOwn } from '../testing'
 
@@ -179,7 +186,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
         depth: 1,
         fields: ['title', 'preview'],
       })
-      expect(read.parent).toBeNull()
+      expect(read.parent).toEqual({ id: hexframeStar, title: 'Hexframe' })
       expect(read.tile).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
       expect(read.tile).not.toHaveProperty('body')
       expect(Object.keys(read.tile.branches ?? {})).toEqual(['1', '2', '3', '4', '5', '6'])
@@ -247,7 +254,7 @@ layer(TestTiles)("the tutorial, read through Mapping's readTile and openTile", (
         depth: 1,
         fields: ['title', 'preview'],
       })
-      expect(read.parent).toBeNull()
+      expect(read.parent).toEqual({ id: hexframeStar, title: 'Hexframe' })
       expect(read.tile).toMatchObject({
         _tag: 'Tile',
         id: 'tutorial',
@@ -309,10 +316,6 @@ function writesTo(root: string, { root: rootOfOwn, own }: { root: string; own: s
     new SwapTiles({ a: `${root}/-1`, aVersion: 1, b: own, bVersion: 1 }, unchecked),
     new DeleteTile({ id: `${root}/6/2`, version: 1 }, unchecked),
     new DeleteTile({ id: `${root}/../../x`, version: 1 }, unchecked),
-    new CreateReference(
-      { parent: own, parentVersion: 1, slot: -1, target: `${root}/2` },
-      unchecked,
-    ),
     new CreateReference({ parent: root, parentVersion: 1, slot: -2, target: own }, unchecked),
     new DeleteReference({ parent: root, parentVersion: 1, slot: -1 }, unchecked),
   ]
@@ -361,7 +364,7 @@ const withOwnTile = Effect.gen(function* () {
 })
 
 /** What a write refused as a shipped System's is refused with. */
-const readOnly = { _tag: 'ShippedReadOnly', kind: 'Forbidden' }
+const readOnly = { _tag: 'Shipped', kind: 'Forbidden' }
 
 layer(TestTiles)('the Systems hexframe ships, refused to every write in Mapping itself', (it) => {
   it.effect(

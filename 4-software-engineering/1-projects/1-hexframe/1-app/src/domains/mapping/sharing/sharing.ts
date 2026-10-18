@@ -48,7 +48,7 @@ export class TileShared extends Schema.TaggedClass<TileShared>()('TileShared', {
 /**
  * The System the actor acts on, read by `read`, and how it is shared, once `mayShare` found the actor
  * may change or read who reaches this Tile of it: its owner, from a Session. A Tile of a System
- * hexframe ships, Help's or the tutorial's, is refused first, `ShippedReadOnly`, as every Operation
+ * hexframe ships, Help's or the tutorial's, is refused first, `Shipped`, as every Operation
  * naming one is (`outsideShipped`): read by Everyone for being shipped, its Grants nobody's.
  */
 const sharedOn = <E, R>(

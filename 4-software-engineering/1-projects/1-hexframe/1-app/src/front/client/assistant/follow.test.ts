@@ -29,7 +29,6 @@ afterEach(() => {
 const systemAt = (version: number, title: string) => ({
   root: { _tag: 'Tile', id: 'root', title, preview: '', body: '', version: 1 },
   tiles: {},
-  owned: true,
   version,
 })
 

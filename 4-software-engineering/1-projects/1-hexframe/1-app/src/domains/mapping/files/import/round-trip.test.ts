@@ -76,7 +76,7 @@ const rows: ReadonlyArray<TileRow> = [
   { ...row('principles', 'root', -1), title: 'Line one\n---\nid: x', preview: 'a b' },
 ]
 
-const found = systemFrom(rows, { owned: true })
+const found = systemFrom(rows)
 if (found === undefined) throw new Error('These rows hold a Root')
 const system = systemOf(found)
 

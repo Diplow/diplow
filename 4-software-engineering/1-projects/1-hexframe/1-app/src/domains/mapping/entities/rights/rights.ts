@@ -1,13 +1,14 @@
 // Rights on a Tile, and the Grants they come from. A Tile carries a Grant for any number of subjects,
 // an Account, a Group or Everyone; a subject without one inherits its parent's value, and a star, which
 // has no parent, gives none. What an actor may do on a Tile is, for each subject covering them, the
-// nearest explicit value walking up, then the union of those; its owner may do everything. Everyone
-// reads at most: a Grant giving it more is none. Pure: the API layer says who the actor is, the tiles
+// nearest explicit value walking up, then the union of those; its owner may do everything but on a
+// Tile hexframe ships, which everyone reads and nobody writes. Everyone reads at most: a Grant giving
+// it more is none. Pure: the API layer says who the actor is, the tiles
 // repository keeps the Grants, Mapping decides here.
 import { Option, Schema } from 'effect'
 
 import type { Row } from '../rows'
-import type { System } from '../system'
+import { isShippedId, type System } from '../system'
 
 /**
  * What someone may do on a Tile: `read` it; `write` it, which includes reading it; and `@`, run the
@@ -207,12 +208,18 @@ export const valueOn = (sharing: Sharing, subject: Subject, tile: string): Grant
 export const heldBy = (sharing: Sharing, subject: Subject, tile: string): ReadonlyArray<Right> =>
   given[valueOn(sharing, subject, tile)]
 
+/** What anyone may do on a Tile hexframe ships, being shipped its one source: read it, nothing more. */
+const shippedRights: ReadonlyArray<Right> = ['read']
+
 /**
- * The rights an actor has on a Tile of a System: every one when they stand for its owner, else the
- * union of what each subject covering them holds there. None on an id the System doesn't hold.
+ * The rights an actor has on a Tile of a System: on a Tile hexframe ships, *read* alone, for anyone,
+ * its owner included, with no Grant behind it (HEX-139); every one when they stand for its owner;
+ * else the union of what each subject covering them holds there. None on an id the System doesn't
+ * hold.
  */
 export function rightsOn(actor: Actor, sharing: Sharing, tile: string): ReadonlySet<Right> {
   if (!sharing.lineage.has(tile)) return new Set()
+  if (isShippedId(tile)) return new Set(shippedRights)
   if (owns(actor, sharing.owner)) return new Set(Right.literals)
   return new Set(subjectsOf(actor).flatMap((subject) => heldBy(sharing, subject, tile)))
 }

@@ -198,7 +198,6 @@ describe('cardOf, what a Tile named in the chat says in its card', () => {
       notes: placed('notes', 'work', { leaf: 4 }, 'Notes'),
       why: placed('why', 'work', -1, 'Why'),
     },
-    owned: true,
     version: 1,
   }
   const proposed: Proposed = {

@@ -6,7 +6,7 @@ import type {
   DirectionTaken,
   ImportRefused,
   LeafHoldsNothing,
-  ShippedReadOnly,
+  Shipped,
   TileNotFound,
 } from '#/domains/mapping/errors'
 import { uploadLimit } from '#/domains/mapping/landing/landing'
@@ -180,7 +180,7 @@ describe('an import, over the wire', () => {
   it('lists the errors it can fail with by its type', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.importTiles>>>().toEqualTypeOf<
-      ImportRefused | SignedOut | TileNotFound | DirectionTaken | LeafHoldsNothing | ShippedReadOnly
+      ImportRefused | SignedOut | TileNotFound | DirectionTaken | LeafHoldsNothing | Shipped
     >()
   })
 })

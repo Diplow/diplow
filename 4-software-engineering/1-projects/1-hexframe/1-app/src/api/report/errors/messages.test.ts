@@ -27,7 +27,7 @@ import {
   NotAllowed,
   PreviewTooLong,
   RootFixed,
-  ShippedReadOnly,
+  Shipped,
   TileChanged,
   TileIdTaken,
   TileNotFound,
@@ -218,7 +218,7 @@ describe("the message table, on Mapping's refusals", () => {
       'You can read this tile, but not change it this way. Its owner decides who writes here, and who may see it.',
     ],
     [
-      new ShippedReadOnly(),
+      new Shipped(),
       "Help and the tutorial are hexframe's own: everyone reads them, nobody changes them.",
     ],
     [
@@ -282,7 +282,7 @@ describe("the message table, on Mapping's refusals", () => {
       'Vous pouvez lire cette tuile, mais pas la modifier ainsi. Son propriétaire décide qui y écrit, et qui peut la voir.',
     ],
     [
-      new ShippedReadOnly(),
+      new Shipped(),
       'L’aide et le tutoriel appartiennent à hexframe : tout le monde les lit, personne ne les modifie.',
     ],
   ])("words Mapping's %s in French too", (failure, sentence) => {

@@ -74,7 +74,6 @@ const flat: System = {
     principles: placed('principles', 'root', -2),
     toBare: reference('toBare', 'root', -3, 'bare'),
   },
-  owned: true,
   version: 0,
 }
 
