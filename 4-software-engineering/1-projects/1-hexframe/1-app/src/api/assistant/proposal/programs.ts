@@ -243,12 +243,13 @@ export const proposalNow = (accountId: string) =>
  * Proposal's own Entry offers none (`../someone/`'s `batchInAnothers`).
  */
 export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
-  Effect.flatMap(Iam.sessionOnly, ({ account }) =>
+  // From a Session only, which then proves the request: who acted, by IAM's rule, is that Session.
+  Effect.flatMap(Effect.andThen(Iam.sessionOnly, Iam.signedIn), (signed) =>
     Effect.gen(function* () {
-      // The user decided the writes, so they are the user's, published as the Session's, which proves
-      // the request; the agent only drafted them, as the Proposal's own Entry tells. Mapping still
-      // takes them as no write of the Session's own: an agent's draft widens who reads no Tile.
-      const signed: Iam.SignedIn = { account, by: { _tag: 'Session' } }
+      // The user decided the writes, so they are the user's, published as the Session's; the agent
+      // only drafted them, as the Proposal's own Entry tells. Mapping still takes them as no write of
+      // the Session's own: an agent's draft widens who reads no Tile.
+      const { account } = signed
       const own = yield* MappingPrograms.actingOnOwn(account.id, { session: false })
       yield* transactional(
         Assistant.acceptProposal(account.id, proposal, {
