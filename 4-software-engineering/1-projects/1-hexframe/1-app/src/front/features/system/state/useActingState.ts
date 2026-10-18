@@ -109,13 +109,40 @@ const copied = {
   'copy-mention': ({ id }: TileNode) => linkTo(id),
 }
 
+/** What a free slot's new Tile is named by, by the ring it stands in. */
+const addLabels = {
+  children: m.system_add_child,
+  branches: m.system_add_child,
+  leaves: m.system_add_leaf,
+  context: m.system_add_context,
+}
+
+/**
+ * Asks to join the Organization a star names, by its id and Title, a toast saying so once asked
+ * (HEX-138).
+ */
+function useJoining() {
+  const asking = useAskToJoin()
+  return (star: string, title: string) => {
+    const named = title === '' ? m.system_untitled() : title
+    asking.mutate(
+      { star },
+      {
+        onSuccess: () => {
+          toast(m.organization_join_asked({ title: named }))
+        },
+      },
+    )
+  }
+}
+
 export function useActingState(input: ActingInput) {
   const { systems, search, onSearchChange, exporting, onAsk } = input
   const move = useMoveTile()
   const swap = useSwapTiles()
   const remove = useDeleteTile()
   const unlink = useDeleteReference()
-  const join = useAskToJoin()
+  const join = useJoining()
   const [deleting, setDeleting] = useState<TileNode>()
   const { root, flat, tree } = systems
   const begin = (change: Change) => {
@@ -198,16 +225,7 @@ export function useActingState(input: ActingInput) {
         onAsk(id)
         return
       case 'join':
-        join.mutate(
-          { star: id },
-          {
-            onSuccess: () => {
-              toast(
-                m.organization_join_asked({ title: title === '' ? m.system_untitled() : title }),
-              )
-            },
-          },
-        )
+        join(id, title)
         return
       default:
         // Open, Go in, Show its Context and Back out are the canvas's.
@@ -222,14 +240,8 @@ export function useActingState(input: ActingInput) {
   const addHere = (target: EmptySlotTarget): Action | undefined => {
     const place = newTileOf(target)
     if (place === undefined || !addsAt(systems, place)) return undefined
-    const labels = {
-      children: m.system_add_child,
-      branches: m.system_add_child,
-      leaves: m.system_add_leaf,
-      context: m.system_add_context,
-    }
     return {
-      label: labels[target.ring]({ title: target.parent.title }),
+      label: addLabels[target.ring]({ title: target.parent.title }),
       onSelect: () => {
         begin({ kind: 'add', ...place })
       },

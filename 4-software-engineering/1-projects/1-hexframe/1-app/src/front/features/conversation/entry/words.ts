@@ -317,7 +317,7 @@ const joinedPieces = (
 })
 
 /** What a change of the user's place in an Organization says, by the admin who made it. */
-export function membershipWords(entry: Omit<Membership, '_tag'>, naming: Naming): Words {
+function membershipWords(entry: Omit<Membership, '_tag'>, naming: Naming): Words {
   const said = memberships[entry.what][entry.group === undefined ? 'members' : 'group']
   return weave(said, { who: outsider(entry.by), ...joinedPieces(entry, naming) })
 }

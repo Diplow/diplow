@@ -88,6 +88,47 @@ const acrossSystems = (theirs: Date, yours: Date): ReadonlyArray<Entry> => [
 /** Atelier, an Organization of the fixture's, by its star. */
 const atelier = { id: 'atelier', title: 'Atelier' }
 
+/**
+ * The user's place in Atelier, at one instant (HEX-138): added by Ana, Cleo asking to join it, Dan
+ * one of its Groups, and the user's own request to join that Group accepted.
+ */
+const inAtelier = (at: Date): Entry[] => [
+  {
+    _tag: 'Membership',
+    id: 'o1',
+    at,
+    what: 'added',
+    by: 'Ana Lima',
+    organization: atelier,
+  },
+  {
+    _tag: 'JoinAsked',
+    id: 'o2',
+    at,
+    request: 'cleo-asks',
+    who: 'Cleo Diaz',
+    organization: atelier,
+  },
+  {
+    _tag: 'JoinAsked',
+    id: 'o3',
+    at,
+    request: 'dan-asks',
+    who: 'Dan Okafor',
+    organization: atelier,
+    group: 'Design',
+  },
+  {
+    _tag: 'Membership',
+    id: 'o4',
+    at,
+    what: 'accepted',
+    by: 'Ana Lima',
+    organization: atelier,
+    group: 'Design',
+  },
+]
+
 export function conversationFixture(now: Date): {
   entries: Entry[]
   titles: Titles
@@ -202,40 +243,7 @@ export function conversationFixture(now: Date): {
       tile: { id: 'ana-garden', title: 'Garden' },
       rights: ['read', 'write'],
     },
-    {
-      _tag: 'Membership',
-      id: 'o1',
-      at: today(5),
-      what: 'added',
-      by: 'Ana Lima',
-      organization: atelier,
-    },
-    {
-      _tag: 'JoinAsked',
-      id: 'o2',
-      at: today(5),
-      request: 'cleo-asks',
-      who: 'Cleo Diaz',
-      organization: atelier,
-    },
-    {
-      _tag: 'JoinAsked',
-      id: 'o3',
-      at: today(5),
-      request: 'dan-asks',
-      who: 'Dan Okafor',
-      organization: atelier,
-      group: 'Design',
-    },
-    {
-      _tag: 'Membership',
-      id: 'o4',
-      at: today(5),
-      what: 'accepted',
-      by: 'Ana Lima',
-      organization: atelier,
-      group: 'Design',
-    },
+    ...inAtelier(today(5)),
     ...acrossSystems(today(5), today(4)),
     { _tag: 'Change', id: 'c6', at: today(4), verb: 'TileDeleted', tile: drafts, actor: you },
     said('m3', today(3), 'user', 'What would you add to Games?'),

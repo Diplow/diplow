@@ -71,7 +71,7 @@ const accountAt = (star: string) =>
  * `outside` it, where it may ask to join. None for a star that names no Organization. What tells the
  * page that a star's menu offers its Members and Groups widgets, or Ask to join.
  */
-export type Standing = Role | 'outside' | null
+type Standing = Role | 'outside' | null
 
 /**
  * Where the Account the request's Session proves stands in the Organization a star names, read now,

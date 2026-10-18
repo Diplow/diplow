@@ -72,37 +72,8 @@ export function EntryBlock({ block, naming, decide, joining }: BlockProps) {
         />
       )
     }
-    case 'asked': {
-      const { entry } = block
-      const state = joining.states[entry.request]
-      return (
-        <Receipt
-          words={joinAskedWords(entry, naming)}
-          at={entry.at}
-          tone="quiet"
-          said={state === undefined || state === 'open' ? undefined : decided[state]()}
-          actions={
-            state === 'open'
-              ? [
-                  {
-                    label: m.conversation_join_accept(),
-                    onSelect: () => {
-                      joining.decide(entry.request, true)
-                    },
-                  },
-                  {
-                    label: m.conversation_join_decline(),
-                    onSelect: () => {
-                      joining.decide(entry.request, false)
-                    },
-                  },
-                ]
-              : undefined
-          }
-          pending={joining.pending}
-        />
-      )
-    }
+    case 'asked':
+      return <JoinAskedEntry entry={block.entry} naming={naming} joining={joining} />
     case 'applied': {
       const { entry } = block
       return (
@@ -126,4 +97,40 @@ export function EntryBlock({ block, naming, decide, joining }: BlockProps) {
       )
     }
   }
+}
+
+/**
+ * Someone asking to join an Organization the user is an admin of: Accept and Decline while it is
+ * open, then how it was decided; neither once it is no longer theirs to decide.
+ */
+function JoinAskedEntry({
+  entry,
+  naming,
+  joining,
+}: {
+  entry: Extract<Block, { kind: 'asked' }>['entry']
+  naming: Naming
+  joining: Joining
+}) {
+  const state = joining.states[entry.request]
+  const choose = (accept: boolean) => () => {
+    joining.decide(entry.request, accept)
+  }
+  return (
+    <Receipt
+      words={joinAskedWords(entry, naming)}
+      at={entry.at}
+      tone="quiet"
+      said={state === undefined || state === 'open' ? undefined : decided[state]()}
+      actions={
+        state === 'open'
+          ? [
+              { label: m.conversation_join_accept(), onSelect: choose(true) },
+              { label: m.conversation_join_decline(), onSelect: choose(false) },
+            ]
+          : undefined
+      }
+      pending={joining.pending}
+    />
+  )
 }

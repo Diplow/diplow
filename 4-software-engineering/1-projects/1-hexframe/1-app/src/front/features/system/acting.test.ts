@@ -252,8 +252,9 @@ describe('the lines home leaves out', () => {
   })
 
   it('leaves out an import as the Root, but into an empty System', () => {
-    // An Account's own star is no Organization's: its menu opens no Members nor Groups widget.
-    expect(withoutOf(systems, hex('tile:root'))).toEqual(['import', 'members', 'groups'])
+    // An Account's own star is no Organization's: its menu opens no Members nor Groups widget, nor
+    // asks to join it.
+    expect(withoutOf(systems, hex('tile:root'))).toEqual(['import', 'members', 'groups', 'join'])
     const empty: System = { ...flat, root: { ...flat.root, title: '' }, tiles: {} }
     const bare = systemOf(empty)
     const alone = canvasTree(bare, { yours: true })
@@ -262,7 +263,7 @@ describe('the lines home leaves out', () => {
     )
     expect(
       center && withoutOf({ root: bare, flat: empty, tree: alone, reach: 'owned' }, center),
-    ).toEqual(['members', 'groups'])
+    ).toEqual(['members', 'groups', 'join'])
   })
 })
 
@@ -344,7 +345,19 @@ describe('the lines a System visited leaves out', () => {
       reach: read === 'owned' ? read : { ...read, members: true },
     }
     expect(withoutOf(member, hex('tile:root'))).not.toContain('members')
+    expect(withoutOf(member, hex('tile:root'))).toContain('join')
     expect(withoutOf(theirs, hex('tile:root'))).toContain('members')
+  })
+
+  it('offers Ask to join on the star of an Organization the user is outside of alone', () => {
+    const read = visiting()
+    const outside: Systems = {
+      ...systems,
+      reach: read === 'owned' ? read : { ...read, joins: true },
+    }
+    expect(withoutOf(outside, hex('tile:root'))).not.toContain('join')
+    expect(withoutOf(outside, hex('tile:root'))).toContain('members')
+    expect(withoutOf(theirs, hex('tile:root'))).toContain('join')
   })
 
   it('offers what their rights let them write, the owner’s lines and the agent’s never', () => {

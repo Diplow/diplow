@@ -45,25 +45,31 @@ const said = (text: string): EntryContent => ({ _tag: 'Message', author: 'user',
  * recorded as it ends, and a Proposal as its agent drafts it.
  */
 const recorded = (accountId: string, content: EntryContent, ago = 0) =>
-  transactional(
-    content._tag === 'Message'
-      ? postMessage(accountId, content.text)
-      : content._tag === 'Navigation'
-        ? recordNavigation(accountId, content, ago)
-        : content._tag === 'Shared'
-          ? recordShared(accountId, Struct.omit(content, ['_tag']))
-          : content._tag === 'Membership'
-            ? recordMembership(accountId, Struct.omit(content, ['_tag']))
-            : content._tag === 'JoinAsked'
-              ? recordJoinAsked(accountId, Struct.omit(content, ['_tag']))
-              : content._tag === 'TurnEnded' ||
-                  content._tag === 'Proposal' ||
-                  content._tag === 'TurnApplied'
-                ? Effect.die(new Error('A Turn’s end and what it did are recorded as they happen'))
-                : content.actor._tag === 'Someone'
-                  ? Effect.die(new Error('Someone else’s change is recorded as their write runs'))
-                  : recordChange(accountId, summarizedOf(content), content.actor),
-  )
+  transactional(recording(accountId, content, ago))
+
+/** The operation an Entry of this kind is recorded through, as `recorded` says. */
+function recording(accountId: string, content: EntryContent, ago: number) {
+  switch (content._tag) {
+    case 'Message':
+      return postMessage(accountId, content.text)
+    case 'Navigation':
+      return recordNavigation(accountId, content, ago)
+    case 'Shared':
+      return recordShared(accountId, Struct.omit(content, ['_tag']))
+    case 'Membership':
+      return recordMembership(accountId, Struct.omit(content, ['_tag']))
+    case 'JoinAsked':
+      return recordJoinAsked(accountId, Struct.omit(content, ['_tag']))
+    case 'TurnEnded':
+    case 'Proposal':
+    case 'TurnApplied':
+      return Effect.die(new Error('A Turn’s end and what it did are recorded as they happen'))
+    default:
+      return content.actor._tag === 'Someone'
+        ? Effect.die(new Error('Someone else’s change is recorded as their write runs'))
+        : recordChange(accountId, summarizedOf(content), content.actor)
+  }
+}
 
 /** A change or an import as Mapping would have summarized it, who acted left out. */
 const summarizedOf = (content: Extract<EntryContent, { _tag: 'Change' | 'Import' }>): Summarized =>
