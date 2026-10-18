@@ -218,7 +218,9 @@ layer(TestTiles)('who reaches a Tile, set by its owner, over PGlite', (it) => {
       // Bob, reading Journal by his Grant, shares it with nobody, himself included.
       yield* sharing(own, journal.id, bob.system, 'read+write')
       expect(
-        yield* Effect.flip(sharing({ ...bob, system: star }, journal.id, bob.system, 'read+write+@')),
+        yield* Effect.flip(
+          sharing({ ...bob, system: star }, journal.id, bob.system, 'read+write+@'),
+        ),
       ).toMatchObject({ _tag: 'NotAllowed' })
       expect((yield* whoReaches(own, journal.id)).others).toMatchObject([
         { value: 'read+write', from: journal.id },

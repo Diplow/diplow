@@ -229,43 +229,48 @@ layer(TestLayer)("the Conversation recording Mapping's events, over PGlite", (it
       expect(yield* recordedFor(account.id)).toEqual([])
     }),
   )
-
-  it.effect('tells a Tile shared in the timeline of the Account it was shared with, once', () =>
-    Effect.gen(function* () {
-      const ana = yield* someone
-      const bob = yield* someone
-      const star = yield* rootOf(ana.bySession)
-      yield* asked(Mapping.editTile({ id: star, version: 1, title: 'Ana Lima' }), ana.bySession)
-      const journal = yield* Effect.flatten(
-        asked(
-          Mapping.createTile({ parent: star, slot: 1, title: 'Journal', preview: '', body: '' }),
-          ana.bySession,
-        ),
-      )
-      const toBob = { _tag: 'Account', star: yield* rootOf(bob.bySession) } as const
-      const share = (value: Choice) =>
-        Effect.flatten(
-          asked(Mapping.setGrant({ tile: journal.id, subject: toBob, value }), ana.bySession),
-        )
-      yield* share('read')
-      const told = {
-        _tag: 'Shared',
-        by: 'Ana Lima',
-        tile: { id: journal.id, title: 'Journal' },
-        rights: 'read',
-      }
-      expect(yield* recordedFor(bob.account.id)).toEqual([told])
-      // Bob reads it now, through `may`.
-      const seen = yield* Effect.flatten(asked(Mapping.systemAt(star), bob.bySession))
-      expect(Object.keys(seen.tiles)).toEqual([journal.id])
-      // A second change, then its removal, tell nothing; nor is Ana told of her own share.
-      yield* share('read+write')
-      yield* share('inherit')
-      expect(yield* recordedFor(bob.account.id)).toEqual([told])
-      expect((yield* recordedFor(ana.account.id)).map(({ _tag }) => _tag)).toEqual([
-        'Change',
-        'Change',
-      ])
-    }),
-  )
 })
+
+layer(TestLayer)(
+  'a Tile shared, told in the Conversation it was shared into, over PGlite',
+  (it) => {
+    it.effect('tells a Tile shared in the timeline of the Account it was shared with, once', () =>
+      Effect.gen(function* () {
+        const ana = yield* someone
+        const bob = yield* someone
+        const star = yield* rootOf(ana.bySession)
+        yield* asked(Mapping.editTile({ id: star, version: 1, title: 'Ana Lima' }), ana.bySession)
+        const journal = yield* Effect.flatten(
+          asked(
+            Mapping.createTile({ parent: star, slot: 1, title: 'Journal', preview: '', body: '' }),
+            ana.bySession,
+          ),
+        )
+        const toBob = { _tag: 'Account', star: yield* rootOf(bob.bySession) } as const
+        const share = (value: Choice) =>
+          Effect.flatten(
+            asked(Mapping.setGrant({ tile: journal.id, subject: toBob, value }), ana.bySession),
+          )
+        yield* share('read')
+        const told = {
+          _tag: 'Shared',
+          by: 'Ana Lima',
+          tile: { id: journal.id, title: 'Journal' },
+          rights: 'read',
+        }
+        expect(yield* recordedFor(bob.account.id)).toEqual([told])
+        // Bob reads it now, through `may`.
+        const seen = yield* Effect.flatten(asked(Mapping.systemAt(star), bob.bySession))
+        expect(Object.keys(seen.tiles)).toEqual([journal.id])
+        // A second change, then its removal, tell nothing; nor is Ana told of her own share.
+        yield* share('read+write')
+        yield* share('inherit')
+        expect(yield* recordedFor(bob.account.id)).toEqual([told])
+        expect((yield* recordedFor(ana.account.id)).map(({ _tag }) => _tag)).toEqual([
+          'Change',
+          'Change',
+        ])
+      }),
+    )
+  },
+)

@@ -1,7 +1,8 @@
 // A fixture Conversation for /design-system, about the fixture System its canvas draws: four days of
 // Assistant's Entries, every kind at least once, a change by each kind of actor, a Message linking
 // Tiles, one of them deleted since, a Proposal accepted and one open, a Turn's change applied, which
-// it offers to undo, a Turn stopped, and the Titles of the Tiles its navigations went to and its
+// it offers to undo, a Turn stopped, a Tile someone shared with the user, which stands in their
+// System, and the Titles of the Tiles its navigations went to and its
 // Messages link; and the fixture System's Tiles, which its composer offers to `@`. Its days are
 // counted back from `now`, so the timeline always shows a today and a yesterday.
 // Like the System, its content is the user's own, so it is not translated.
@@ -158,6 +159,14 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
       at: today(5),
       steps: [{ gesture: 'center', tile: 'ulysse' }],
       gestures: 1,
+    },
+    {
+      _tag: 'Shared',
+      id: 's1',
+      at: today(5),
+      by: 'Ana Lima',
+      tile: { id: 'ana-garden', title: 'Garden' },
+      rights: 'read+write',
     },
     { _tag: 'Change', id: 'c6', at: today(4), verb: 'TileDeleted', tile: drafts, actor: you },
     said('m3', today(3), 'user', 'What would you add to Games?'),

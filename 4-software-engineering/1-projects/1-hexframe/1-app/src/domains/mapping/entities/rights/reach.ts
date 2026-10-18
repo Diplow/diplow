@@ -24,8 +24,7 @@ export type Choice = typeof Choice.Type
  * Someone a Grant is set for, as its owner names them: by their star, their Handle, its id, never by
  * an id of IAM's, which nobody types (HEX-130). Mapping finds the Account it stands for.
  */
-export const Someone = Schema.TaggedStruct('Account', { star: TileId })
-export type Someone = typeof Someone.Type
+const Someone = Schema.TaggedStruct('Account', { star: TileId })
 
 /**
  * A Tile's Grant as its owner sets it, a Tile by its UUID: for Everyone, `read`, `none`, or
