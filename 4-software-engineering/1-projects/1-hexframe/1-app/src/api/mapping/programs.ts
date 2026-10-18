@@ -7,7 +7,13 @@
 import { Effect } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
-import type { Actor, Field, GrantChange, ShippedRoot } from '#/domains/mapping/entities'
+import {
+  type Actor,
+  anyone,
+  type Field,
+  type GrantChange,
+  type ShippedRoot,
+} from '#/domains/mapping/entities'
 import { TileNotFound } from '#/domains/mapping/errors'
 import {
   CreateReference,
@@ -118,6 +124,39 @@ export const visit = ({ tile }: { tile: string }) =>
         acting.system === own.system ? {} : { system: acting.system }
       return Effect.as(Mapping.shownTile(acting, tile), led)
     },
+  )
+
+/**
+ * Runs a read for anyone holding the link to a Tile, signed in or not, proving nothing (Mapping's
+ * `anyone`, whom Everyone alone covers), on the System holding it, once Mapping found Everyone may
+ * read it (`ownTile`): a Tile it may not, a star's card included, is `TileNotFound`, as one that
+ * doesn't exist, and so is an id no System holds. No Session nor Key is asked, and none is used, so
+ * a signed-in caller reads it as anyone would.
+ */
+const forEveryone = <A, E, R>(
+  tile: string,
+  read: (acting: Mapping.Acting) => Effect.Effect<A, E, R>,
+) =>
+  Effect.flatMap(Mapping.holding(tile), (star) => {
+    if (star === undefined) return Effect.fail(new TileNotFound())
+    const acting: Mapping.Acting = { actor: anyone, system: star }
+    return Effect.andThen(Mapping.ownTile(acting, tile), read(acting))
+  })
+
+/**
+ * The System holding a public Tile, flat, as anyone may see it, from its star's card (`Seen`): what
+ * the read-only canvas of `/t/<id>` draws signed out (HEX-129).
+ */
+export const publicSystem = ({ tile }: { tile: string }) => forEveryone(tile, Mapping.system)
+
+/**
+ * A public Tile opened as anyone may read it, as the MCP's `open_tile` opens one (`Mapping.openTile`,
+ * the same read): its Title, Preview and Body, its parent, and its Branches, Leaves and Context by
+ * Title and Preview, what Everyone may not read of them left out. What `/t/<id>.md` writes as Markdown.
+ */
+export const publicTile = ({ tile }: { tile: string }) =>
+  forEveryone(tile, (acting) =>
+    Mapping.openTile(acting, { id: tile, fields: ['title', 'preview', 'body'], language: 'en' }),
   )
 
 /**

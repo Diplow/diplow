@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   type Actor,
+  anyone,
   Grant,
   type GrantValue,
   grantOf,
@@ -160,5 +161,19 @@ describe('Everyone', () => {
     expect(grantOf({ tile: 'ana', subject: 'account', subjectId: null, value: 'read' })).toBe(
       undefined,
     )
+  })
+
+  it('is all anyone a request proves nothing of holds: Everyone’s read, never a Group’s nor Bob’s', () => {
+    expect(rights(anyone, 'ana')).toEqual(['read'])
+    expect(rights(anyone, 'garden')).toEqual(['read'])
+    expect(rights(anyone, 'journal')).toEqual([])
+    const named = sharingOf('ana', lineage, [
+      grant('ana', bob, 'read+write+@'),
+      grant('ana', { _tag: 'Account', id: '' }, 'read'),
+      grant('garden', everyone, 'read'),
+    ])
+    expect(rights(anyone, 'ana', named)).toEqual([])
+    expect(rights(anyone, 'garden', named)).toEqual(['read'])
+    expect(rights(anyone, 'pinned', named)).toEqual(['read'])
   })
 })

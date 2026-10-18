@@ -60,6 +60,7 @@ import {
   exportTile,
   importTiles,
   moveTile,
+  publicSystem,
   shipped,
   swapTiles,
   system,
@@ -115,6 +116,22 @@ export async function leadsTo(tile: string): Promise<{ readonly system?: string 
     return await settle('visit', visit({ data: { tile } }))
   } catch (error) {
     if (asCallFailed(error, 'visit').failure.kind === 'NotFound') return undefined
+    throw error
+  }
+}
+
+/**
+ * The System holding a Tile Everyone may read, as anyone holding its link sees it, signed in or not
+ * (HEX-129): what `/t/<id>` draws signed out, read once by the route, as `leadsTo` is, since nothing
+ * the page does changes it. Undefined for a Tile Everyone may not read, as for one that doesn't exist,
+ * and for a link naming no Tile, which is not sent. Any other failure is thrown, for the route to show.
+ */
+export async function publicSystemOf(tile: string): Promise<Seen | undefined> {
+  if (!Schema.is(TileVisit)({ tile })) return undefined
+  try {
+    return await settle('publicSystem', publicSystem({ data: { tile } }))
+  } catch (error) {
+    if (asCallFailed(error, 'publicSystem').failure.kind === 'NotFound') return undefined
     throw error
   }
 }

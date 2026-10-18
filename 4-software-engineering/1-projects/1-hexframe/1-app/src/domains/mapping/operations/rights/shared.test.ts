@@ -23,10 +23,10 @@ const granting = (owner: string, ...rows: ReadonlyArray<GrantRow>) =>
   transactional(Effect.forEach(rows, (row) => granted(owner, row), { discard: true }))
 
 /** Someone acting on Ana's System who doesn't own it, in these Groups. */
-const visitor = (system: string, groups: ReadonlyArray<string> = []): Mapping.Acting => {
+const visitor = (system: string, groups: ReadonlyArray<string> = []) => {
   const account = crypto.randomUUID()
-  const actor: Actor = { account, groups, owners: [account], session: true }
-  return { actor, system }
+  const actor = { account, groups, owners: [account], session: true } satisfies Actor
+  return { actor, system } satisfies Mapping.Acting
 }
 
 /** Ana's System as the grill tells it: her star, `Journal` with an `Entry` below it, and `Garden`. */

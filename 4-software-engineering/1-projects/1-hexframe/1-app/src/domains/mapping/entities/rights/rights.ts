@@ -97,24 +97,32 @@ export function grantOf(row: GrantRow): Grant | undefined {
 
 /**
  * Who acts, as Mapping reads them, handed over by the API layer fresh for every request, never
- * cached: their Account; the Groups they belong to; the owners they stand for, their own Account and,
- * later, the Organizations they are an admin of; and whether the change is the user's own, made from
- * a Session, rather than a Key's, a Turn's Key's or an agent's, an accepted Proposal's included until
- * its writes are the user's (HEX-135). Every id is opaque to Mapping.
+ * cached: their Account, none for anyone a request proves nothing of (`anyone`); the Groups they
+ * belong to; the owners they stand for, their own Account and, later, the Organizations they are an
+ * admin of; and whether the change is the user's own, made from a Session, rather than a Key's, a
+ * Turn's Key's or an agent's, an accepted Proposal's included until its writes are the user's
+ * (HEX-135). Every id is opaque to Mapping.
  */
 export interface Actor {
-  readonly account: string
+  readonly account: string | undefined
   readonly groups: ReadonlyArray<string>
   readonly owners: ReadonlyArray<string>
   readonly session: boolean
 }
 
+/**
+ * Anyone holding the link to a Tile, signed in or not, the request proving no Account: an actor
+ * Everyone alone covers, in no Group, standing for no owner, acting from no Session. What a public
+ * Tile is read as (HEX-129).
+ */
+export const anyone: Actor = { account: undefined, groups: [], owners: [], session: false }
+
 /** Whether the actor stands for this owner, and so has every right on its System's Tiles. */
 export const owns = (actor: Actor, owner: string) => actor.owners.includes(owner)
 
-/** The subjects covering an actor: their Account, each of their Groups, and Everyone. */
+/** The subjects covering an actor: their Account, if any, each of their Groups, and Everyone. */
 const subjectsOf = (actor: Actor): ReadonlyArray<Subject> => [
-  { _tag: 'Account', id: actor.account },
+  ...(actor.account === undefined ? [] : [{ _tag: 'Account', id: actor.account } as const]),
   ...actor.groups.map((id): Subject => ({ _tag: 'Group', id })),
   { _tag: 'Everyone' },
 ]
