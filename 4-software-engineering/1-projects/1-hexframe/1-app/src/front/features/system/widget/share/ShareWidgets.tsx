@@ -65,6 +65,7 @@ export function ShareWidgets({ system, tile: { id: tile, title }, onClose }: Sha
           back()
         }}
         onCancel={back}
+        takesFocus
       />
     )
   }

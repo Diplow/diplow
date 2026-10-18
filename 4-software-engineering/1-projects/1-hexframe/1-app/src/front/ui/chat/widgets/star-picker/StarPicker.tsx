@@ -40,6 +40,8 @@ interface StarPickerProps {
   /** A star picked, handed to whoever opened the widget. */
   onPick: (star: StarShown) => void
   onCancel: () => void
+  /** Its field takes the focus as it opens, where a gesture of the user's opened it. */
+  takesFocus?: boolean
 }
 
 /** What the widget says where what is typed leads to no star to pick, in place of the list. */
@@ -51,7 +53,15 @@ const said: Record<Exclude<StarsShown['state'], 'found'>, () => string> = {
 }
 
 /** The star picker: a Title or a link typed, and the stars it leads to, by their cards. */
-export function StarPicker({ title, typed, onType, found, onPick, onCancel }: StarPickerProps) {
+export function StarPicker({
+  title,
+  typed,
+  onType,
+  found,
+  onPick,
+  onCancel,
+  takesFocus = false,
+}: StarPickerProps) {
   const stars = found.state === 'found' ? found.stars : []
   const stale = found.state === 'found' && found.stale === true
   const [only] = stars
@@ -71,6 +81,7 @@ export function StarPicker({ title, typed, onType, found, onPick, onCancel }: St
         onChange={onType}
         placeholder={m.widget_star_placeholder()}
         autoComplete="off"
+        takesFocus={takesFocus}
         // Enter picks the one star found, never one among several, nor one the last search found.
         onEnter={
           !stale && stars.length === 1 && only !== undefined

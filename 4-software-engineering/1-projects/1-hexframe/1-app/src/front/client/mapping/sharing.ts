@@ -1,6 +1,6 @@
 // Who reaches a Tile on the client, over Mapping's server functions (src/api/mapping/mapping.ts): who
-// reaches it, read as one query by the Tile, and its Grant for Everyone set or removed, which reads
-// who reaches it again once it settles, failed or not. Both are its owner's alone, from a Session: a
+// reaches it, read as one query by the Tile, and its Grant for Everyone, or for someone named by
+// their star, set or removed, which reads who reaches it again once it settles, failed or not. Both are its owner's alone, from a Session: a
 // refusal goes to its channel (../channels.ts), and a hook's caller handles none. Setting a Grant
 // changes nothing the owner's own read of the System shows, so it is read again for no write here.
 // And the star someone is shared with, found by what is typed in the star picker: a Title, or a link
@@ -25,7 +25,10 @@ const reachScope = 'whoReaches'
 export const useWhoReaches = (tile: string) =>
   useQuery(read({ scope: reachScope, key: [tile], call: () => whoReaches({ data: { tile } }) }))
 
-/** Sets a Tile's Grant for Everyone, or removes it, then reads who reaches it again. */
+/**
+ * Sets a Tile's Grant for Everyone, or for someone by their star, or removes it, then reads who
+ * reaches it again.
+ */
 export const useSetGrant = () => {
   const client = useQueryClient()
   return useMutation({
