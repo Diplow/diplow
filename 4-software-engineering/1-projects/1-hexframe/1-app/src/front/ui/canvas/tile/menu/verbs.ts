@@ -53,6 +53,7 @@ export type Verb =
   | 'copy'
   | 'share'
   | 'export'
+  | 'members'
   | 'delete'
   | 'remove-reference'
   | 'new-tile'
@@ -128,7 +129,7 @@ function centerGroups(subject: Extract<Subject, { title: string }>): readonly Gr
     [own && 'edit'],
     [holds && 'add', kind === 'untitled' && 'import'],
     ['ask-agent'],
-    [kind !== 'broken' && 'copy', own && 'share', own && 'export'],
+    [kind !== 'broken' && 'copy', own && 'share', own && 'export', own && 'members'],
   ]
 }
 

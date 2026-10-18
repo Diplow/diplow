@@ -10,8 +10,8 @@ import { useState } from 'react'
 
 import { type System, tileAt } from '#/domains/mapping/entities'
 import { useSetGrant, useStarsFor, useWhoReaches } from '#/front/client/mapping/sharing'
-import { ShareWidget } from '#/front/ui/chat/widgets/share/ShareWidget'
-import { StarPicker } from '#/front/ui/chat/widgets/star-picker/StarPicker'
+import { ShareWidget } from '#/front/ui/chat/widgets/sharing/share/ShareWidget'
+import { StarPicker } from '#/front/ui/chat/widgets/sharing/star-picker/StarPicker'
 import { m } from '#/paraglide/messages'
 
 import { copy } from '../../copy'

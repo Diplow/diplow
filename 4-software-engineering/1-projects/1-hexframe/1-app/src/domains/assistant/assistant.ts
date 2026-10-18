@@ -513,12 +513,13 @@ export interface Applying {
  * System it is: the Account's own, answering what undoes them and their changes, which the Proposal
  * keeps and its Entry offers; or someone else's (`elsewhere`), each write that System's owner's to
  * undo, so the Proposal keeps none, whose owner it names first, so both Conversations are locked in
- * one order before the accept takes the Account's own.
+ * one order before the accept takes the Account's own; none when no Conversation of that owner is
+ * told its writes, a System whose owner keeps no timeline, which the API layer says (HEX-136).
  */
 export interface AcceptRuns<A, B, E, R> {
   readonly own: (accepted: OpenProposal) => Effect.Effect<A, E, R>
   readonly elsewhere: {
-    readonly owner: (star: string) => Effect.Effect<string, E, R>
+    readonly owner: (star: string) => Effect.Effect<string | undefined, E, R>
     readonly run: (accepted: OpenProposal, star: string) => Effect.Effect<B, E, R>
   }
 }
@@ -541,7 +542,8 @@ export const acceptProposal = <A extends Applying, B, E, R>(
   Effect.gen(function* () {
     const open = (yield* conversationState(accountId)).open
     if (open?.elsewhere !== undefined) {
-      yield* lockConversations([accountId, yield* runs.elsewhere.owner(open.elsewhere)])
+      const owner = yield* runs.elsewhere.owner(open.elsewhere)
+      yield* lockConversations(owner === undefined ? [accountId] : [accountId, owner])
     }
     const { before, entry } = yield* operate(accountId, (state) =>
       decide(state, new AcceptProposal({ proposal })),

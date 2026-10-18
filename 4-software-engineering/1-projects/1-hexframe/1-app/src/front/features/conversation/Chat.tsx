@@ -214,6 +214,8 @@ interface ChatComposerProps {
   onHelp: (words: string) => void
   /** `/keys`: the Account's Keys opened in the chat. */
   onKeys: () => void
+  /** `/organization`: an Organization made in the chat. */
+  onOrganization: () => void
   /** `/tutorial`: the tutorial on the canvas. */
   onTutorial: () => void
   /** The star of the System the page visits, someone else's; none at home. */
@@ -222,6 +224,7 @@ interface ChatComposerProps {
 
 export function ChatComposer(props: ChatComposerProps) {
   const { onSend, turn, mode, onPoint, center, carried, onHelp, onKeys, onTutorial } = props
+  const { onOrganization } = props
   const own = useTiles()
   const visited = useVisitedTiles(props.visiting)
   const tiles = useMemo(
@@ -254,6 +257,7 @@ export function ChatComposer(props: ChatComposerProps) {
       }
       onHelp={onHelp}
       onKeys={onKeys}
+      onOrganization={onOrganization}
       onTutorial={onTutorial}
       invited={invited ? 'tutorial' : undefined}
       onSignOut={() => {

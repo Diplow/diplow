@@ -177,16 +177,30 @@ export const pieces = [
   {
     name: 'ShareWidget',
     tier: 'chat',
-    sources: ['ui/chat/widgets/share/ShareWidget.tsx'],
+    sources: ['ui/chat/widgets/sharing/share/ShareWidget.tsx'],
     madeOf: ['Widget'],
     note: m.gallery_note_share_widget,
   },
   {
     name: 'StarPicker',
     tier: 'chat',
-    sources: ['ui/chat/widgets/star-picker/StarPicker.tsx'],
+    sources: ['ui/chat/widgets/sharing/star-picker/StarPicker.tsx'],
     madeOf: ['Widget'],
     note: m.gallery_note_star_picker,
+  },
+  {
+    name: 'OrganizationWidget',
+    tier: 'chat',
+    sources: ['ui/chat/widgets/sharing/organization/OrganizationWidget.tsx'],
+    madeOf: ['Widget'],
+    note: m.gallery_note_organization_widget,
+  },
+  {
+    name: 'MembersWidget',
+    tier: 'chat',
+    sources: ['ui/chat/widgets/sharing/organization/MembersWidget.tsx'],
+    madeOf: ['Widget'],
+    note: m.gallery_note_members_widget,
   },
   {
     name: 'HelpWidget',

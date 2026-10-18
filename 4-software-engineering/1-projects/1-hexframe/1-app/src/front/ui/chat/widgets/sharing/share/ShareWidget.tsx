@@ -12,8 +12,8 @@ import { useId, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { runsToCurve, toCurve } from '../../../layouts/screen/state/useAlongCurve'
-import { Widget } from '../../layouts/Widget'
+import { runsToCurve, toCurve } from '../../../../layouts/screen/state/useAlongCurve'
+import { Widget } from '../../../layouts/Widget'
 import { choiceSaid, type ShareChoice } from './rights'
 
 /** Someone who reaches the tile, as its row shows them, every word already its caller's. */

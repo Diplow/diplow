@@ -1,7 +1,7 @@
 import { Schema } from 'effect'
 import { describe, expect, it } from 'vitest'
 
-import { accountsIn, choiceOn, GrantChange, namedBy, opens, reachOn } from './reach'
+import { choiceOn, GrantChange, namedBy, namedIn, opens, reachOn } from './reach'
 import { Grant, type GrantValue, lineageFrom, originOn, sharingOf, type Subject } from './rights'
 
 // Who reaches a Tile, on a System made by hand: each subject with its value and the Tile it comes
@@ -143,12 +143,23 @@ describe('who reaches a Tile, named', () => {
       ]),
       'journal',
     )
-    expect(accountsIn(reaching)).toEqual(['bob', 'cleo'])
+    expect(namedIn(reaching)).toEqual(['bob', 'cleo', 'family'])
     const card = { id: 'bobs-star', title: 'Bob', preview: 'Bob, in short.' }
     expect(namedBy(reaching, new Map([['bob', card]])).others).toEqual([
       { subject: bob, value: 'read', from: 'journal', star: card },
       { subject: { _tag: 'Account', id: 'cleo' }, value: 'read', from: 'journal', star: undefined },
-      { subject: family, value: 'read', from: 'journal' },
+      { subject: family, value: 'read', from: 'journal', star: undefined },
+    ])
+  })
+
+  it("names a Group by the star whose owner has its id, an Organization's Members", () => {
+    const reaching = reachOn(
+      sharingOf('ana', lineage, [grant('journal', family, 'read')]),
+      'journal',
+    )
+    const card = { id: 'familys-star', title: 'Family', preview: '' }
+    expect(namedBy(reaching, new Map([['family', card]])).others).toEqual([
+      { subject: family, value: 'read', from: 'journal', star: card },
     ])
   })
 })

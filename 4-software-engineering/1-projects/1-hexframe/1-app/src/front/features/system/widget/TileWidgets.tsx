@@ -1,6 +1,7 @@
 // The tile widget in the chat, at the conversation's foot: the change under way when it is a form, a
-// new Tile's in the slot clicked, a Tile's edit or an import, or who may see a Tile, its share
-// widget (`share/`), as the URL holds it; once a form is
+// new Tile's in the slot clicked, a Tile's edit or an import, who may see a Tile, its share widget
+// (`share/`), who belongs to the Organization whose star it is, or an Organization being made
+// (`organization/`), as the URL holds it; once a form is
 // sent, the receipt it leaves; or an export a Tile's menu started, working, then its receipt, or failed.
 // One at a time, the latest. A write ends its form as it is sent, its receipt in the form's place at
 // once, and a refusal puts the form back (`useRefusalState`), the user's words with it. The Root's
@@ -34,6 +35,8 @@ import { type Reopened, useRefusalState } from '../state/useRefusalState'
 import { canvasTree, tileIn } from '../tree'
 import { EditTileWidget, NameRootWidget, NewTileWidget } from './forms'
 import { freeFor, slotOf, tilesBelow, whereIn } from './place'
+import { MembersWidgets } from './organization/MembersWidgets'
+import { NewOrganization } from './organization/NewOrganization'
 import { ShareWidgets } from './share/ShareWidgets'
 import type { Exporting, Receipt, TileWidgetsState } from './state/useTileWidgetsState'
 
@@ -154,6 +157,10 @@ function widgetOf(change: Change, widgets: TileWidgetsState, page: WidgetContext
       return importOf(change.place, page)
     case 'share':
       return shareOf(change.id, page)
+    case 'members':
+      return membersOf(change.id, page)
+    case 'organization':
+      return <NewOrganization key="organization" onClose={page.onCancel} />
     case 'none':
     case 'move':
       return shownOf(widgets, page)
@@ -169,6 +176,19 @@ function shareOf(id: string, page: WidgetContext) {
       key={`share:${id}`}
       system={page.system}
       tile={{ id, title: shared.title }}
+      onClose={page.onCancel}
+    />
+  )
+}
+
+/** Who belongs to the Organization whose star the System drawn has; none for any other star. */
+function membersOf(star: string, page: WidgetContext) {
+  if (star !== page.root.id) return null
+  return (
+    <MembersWidgets
+      key={`members:${star}`}
+      star={star}
+      title={page.root.title}
       onClose={page.onCancel}
     />
   )

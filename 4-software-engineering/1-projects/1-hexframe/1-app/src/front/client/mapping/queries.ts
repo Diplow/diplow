@@ -197,6 +197,8 @@ export interface SystemShown {
   readonly rights: Seen['rights']
   /** The Tiles of other Systems its References point at that the Account may read, by id. */
   readonly pinned: Seen['pinned']
+  /** Whether the Account stands for its owner: its own, or an Organization's it is an admin of. */
+  readonly asOwner: Seen['asOwner']
 }
 
 /**
@@ -235,6 +237,7 @@ export function useSystem({ throwing = true, star }: { throwing?: boolean; star?
         gaps: data.gaps,
         rights: data.rights,
         pinned: data.pinned,
+        asOwner: data.asOwner,
       }
     }, [data, writes, star]),
   }

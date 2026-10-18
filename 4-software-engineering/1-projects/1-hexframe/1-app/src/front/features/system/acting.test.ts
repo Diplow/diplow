@@ -252,7 +252,8 @@ describe('the lines home leaves out', () => {
   })
 
   it('leaves out an import as the Root, but into an empty System', () => {
-    expect(withoutOf(systems, hex('tile:root'))).toEqual(['import'])
+    // An Account's own star is no Organization's: its menu opens no Members widget.
+    expect(withoutOf(systems, hex('tile:root'))).toEqual(['import', 'members'])
     const empty: System = { ...flat, root: { ...flat.root, title: '' }, tiles: {} }
     const bare = systemOf(empty)
     const alone = canvasTree(bare, { yours: true })
@@ -261,7 +262,7 @@ describe('the lines home leaves out', () => {
     )
     expect(
       center && withoutOf({ root: bare, flat: empty, tree: alone, reach: 'owned' }, center),
-    ).toEqual([])
+    ).toEqual(['members'])
   })
 })
 
@@ -322,6 +323,28 @@ describe('the lines a System visited leaves out', () => {
     expect(slotWithout(asking, 'holding')).toEqual(['share', 'export', 'import'])
     expect(slotWithout(asking, 'root')).toEqual(['share', 'export', 'import', 'ask-agent'])
     expect(slotWithout(systems, 'root')).toEqual([])
+  })
+
+  it("offers an Organization's admin its owner's lines, those that land at home aside", () => {
+    const read = visiting()
+    const admin: Systems = {
+      ...systems,
+      reach: read === 'owned' ? read : { ...read, asOwner: true },
+    }
+    const center = withoutOf(admin, hex('tile:root'))
+    expect(center).not.toContain('share')
+    expect(center).toEqual(expect.arrayContaining(['import', 'export', 'members']))
+    expect(withoutOf(admin, hex('tile:holding'))).not.toContain('share')
+  })
+
+  it('offers the Members widget on the star of an Organization the user belongs to alone', () => {
+    const read = visiting()
+    const member: Systems = {
+      ...systems,
+      reach: read === 'owned' ? read : { ...read, members: true },
+    }
+    expect(withoutOf(member, hex('tile:root'))).not.toContain('members')
+    expect(withoutOf(theirs, hex('tile:root'))).toContain('members')
   })
 
   it('offers what their rights let them write, the owner’s lines and the agent’s never', () => {

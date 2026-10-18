@@ -25,6 +25,7 @@ import {
   Split,
   Trash2,
   Unlink,
+  Users,
 } from 'lucide-react'
 import {
   useState,
@@ -243,6 +244,9 @@ function lineOf(verb: Verb, subject: Subject): Line {
       return { icon: <Share2 />, shortcut: { key: 's' }, label: m.tile_menu_share }
     case 'export':
       return { icon: <Download />, shortcut: { key: 'e', shift: true }, label: m.tile_menu_export }
+    case 'members':
+      // An Organization's star: its Members widget opens in the chat.
+      return { icon: <Users />, label: m.tile_menu_members }
     case 'delete': {
       const below = tile?.below ?? 0
       return {

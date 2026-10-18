@@ -46,6 +46,7 @@ const run = [
   'language',
   'help',
   'keys',
+  'organization',
   'tutorial',
   'sign-out',
 ] as const satisfies ReadonlyArray<CommandId>
@@ -69,6 +70,8 @@ export interface Offering {
   readonly help?: boolean
   /** The page opens the Account's Keys, in the chat. */
   readonly keys?: boolean
+  /** The page makes an Organization, in the chat. */
+  readonly organization?: boolean
   /** The page shows the tutorial on the canvas. */
   readonly tutorial?: boolean
   /** The page signs the Account out. */
@@ -86,6 +89,7 @@ export function offered({
   undoable,
   help = false,
   keys = false,
+  organization = false,
   tutorial = false,
   signOut = false,
   invited,
@@ -97,6 +101,7 @@ export function offered({
     language: true,
     help,
     keys,
+    organization,
     tutorial,
     'sign-out': signOut,
   }

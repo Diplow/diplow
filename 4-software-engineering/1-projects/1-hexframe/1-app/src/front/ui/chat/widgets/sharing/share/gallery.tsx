@@ -7,9 +7,9 @@ import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { toast } from '../../../atoms/Toaster'
-import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
-import { said } from '../../samples'
+import { toast } from '../../../../atoms/Toaster'
+import { GalleryColumn, GallerySection, GalleryState } from '../../../../gallery/frame'
+import { said } from '../../../samples'
 import { choiceSaid, rightsSaid, type ShareChoice } from './rights'
 import { type Chosen, type ReachRow, ShareWidget } from './ShareWidget'
 

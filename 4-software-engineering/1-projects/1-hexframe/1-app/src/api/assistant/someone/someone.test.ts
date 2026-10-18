@@ -17,6 +17,7 @@ import { layer as appliedLayer } from '#/repositories/database/conversations/app
 import { layer as conversationsLayer } from '#/repositories/database/conversations/conversations'
 import { layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
 import { layer as turnsLayer } from '#/repositories/database/conversations/turns'
+import { layer as organizationsLayer } from '#/repositories/database/organizations/organizations'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { layer as zipLayer } from '#/repositories/zip/zip'
 
@@ -35,6 +36,7 @@ import { recordedInConversation } from '../recording'
 
 const TestLayer = Layer.mergeAll(
   tilesLayer,
+  organizationsLayer,
   conversationsLayer,
   proposalsLayer,
   appliedLayer,

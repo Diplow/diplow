@@ -1,6 +1,6 @@
 // What the System's page carries in its URL: the canvas's view (front/ui/canvas/view), and the change the user
-// has under way, if any: a new Tile's form, an import, a Tile's form, who may see a Tile, or a Tile to
-// move. A link shows the page as its sender saw it, the open form included. Every function here is
+// has under way, if any: a new Tile's form, an import, a Tile's form, who may see a Tile, an
+// Organization's members, an Organization being made, or a Tile to move. A link shows the page as its sender saw it, the open form included. Every function here is
 // pure.
 import { Schema } from 'effect'
 
@@ -38,6 +38,10 @@ const SystemSearch = Schema.Struct({
   edit: Schema.optionalKey(orDefault(TileId)),
   /** The Tile whose share widget is open: who may see it, which its owner sets (HEX-128). */
   share: Schema.optionalKey(orDefault(TileId)),
+  /** The star whose Members widget is open: an Organization's, who belongs to it (HEX-136). */
+  members: Schema.optionalKey(orDefault(TileId)),
+  /** An Organization being made: its widget open, which `/organization` opens (HEX-136). */
+  organization: Schema.optionalKey(orDefault(Schema.Literal(true))),
   /** The Tile being moved: the next empty slot clicked is where it goes. */
   move: Schema.optionalKey(orDefault(TileId)),
 })
@@ -58,6 +62,8 @@ export type Change =
   | { kind: 'import'; place: ImportPlace }
   | { kind: 'edit'; id: string }
   | { kind: 'share'; id: string }
+  | { kind: 'members'; id: string }
+  | { kind: 'organization' }
   | { kind: 'move'; id: string }
 
 /** Reads the URL's search params, field by field: the route's `validateSearch`. */
@@ -76,14 +82,18 @@ function importPlaceOf(into: string, slot: Slot | undefined): ImportPlace | unde
 
 /**
  * The change under way. The URL holds one at most; were it to hold several, a form wins over who may
- * see a Tile, and both over a move, since a widget covers the canvas.
+ * see a Tile, which wins over who belongs to an Organization, and each over a move, since a widget
+ * covers the canvas.
  */
-export function changeOf({ add, slot, import: into, edit, share, move }: SystemSearch): Change {
+export function changeOf(search: SystemSearch): Change {
+  const { add, slot, import: into, edit, share, members, organization, move } = search
   if (edit !== undefined) return { kind: 'edit', id: edit }
   if (add !== undefined && slot !== undefined) return { kind: 'add', parent: add, slot }
   const place = into === undefined ? undefined : importPlaceOf(into, slot)
   if (place !== undefined) return { kind: 'import', place }
   if (share !== undefined) return { kind: 'share', id: share }
+  if (members !== undefined) return { kind: 'members', id: members }
+  if (organization !== undefined) return { kind: 'organization' }
   if (move !== undefined) return { kind: 'move', id: move }
   return { kind: 'none' }
 }
@@ -107,6 +117,8 @@ export function withChange(search: SystemSearch, change: Change): SystemSearch {
     ...(change.kind === 'import' && importSearch(change.place)),
     edit: change.kind === 'edit' ? change.id : undefined,
     share: change.kind === 'share' ? change.id : undefined,
+    members: change.kind === 'members' ? change.id : undefined,
+    organization: change.kind === 'organization' ? true : undefined,
     move: change.kind === 'move' ? change.id : undefined,
   }
 }
@@ -121,6 +133,7 @@ export const keyOf = (change: Change): string => JSON.stringify(withChange({}, c
 function namedBy(change: Change): string | undefined {
   switch (change.kind) {
     case 'none':
+    case 'organization':
       return undefined
     case 'add':
       return change.parent
@@ -128,6 +141,7 @@ function namedBy(change: Change): string | undefined {
       return change.place._tag === 'Slot' ? change.place.parent : undefined
     case 'edit':
     case 'share':
+    case 'members':
     case 'move':
       return change.id
   }
@@ -146,7 +160,14 @@ export function withoutTile(search: SystemSearch, gone: TileNode): SystemSearch 
 }
 
 /** The changes the chat shows at its foot, each in a widget: every one but a move, and none. */
-const inWidget: ReadonlySet<Change['kind']> = new Set(['add', 'import', 'edit', 'share'])
+const inWidget: ReadonlySet<Change['kind']> = new Set([
+  'add',
+  'import',
+  'edit',
+  'share',
+  'members',
+  'organization',
+])
 
 /**
  * Whether going to `next` opens a widget at the chat's foot, a new Tile's form, an import, an edit or

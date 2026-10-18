@@ -153,7 +153,9 @@ export function useActingState(input: ActingInput) {
     const { id, title } = hex.tile
     switch (chosen.verb) {
       case 'edit':
-        begin({ kind: 'edit', id })
+      case 'share':
+      case 'members':
+        begin({ kind: chosen.verb, id })
         return
       case 'make-leaf':
       case 'make-branch': {
@@ -175,9 +177,6 @@ export function useActingState(input: ActingInput) {
         // One export at a time, as the chat shows one.
         if (!exporting.pending)
           exporting.start({ tile: { id, title }, below: tilesBelow(flat, id) })
-        return
-      case 'share':
-        begin({ kind: 'share', id })
         return
       case 'delete':
         setDeleting(hex.tile)

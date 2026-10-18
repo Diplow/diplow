@@ -77,9 +77,8 @@ async function value<A>(outcome: Promise<{ ok: true; value: A } | { ok: false }>
 }
 
 /** The Account's System, read flat through its server function, as its tree, as the client builds it. */
-async function systemTree(context: StartContext) {
-  return systemOf(await value(run(context, Mapping.system)))
-}
+const systemTree = async (context: StartContext) =>
+  systemOf(await value(run(context, Mapping.system)))
 
 /** Someone's System, read once so its Root exists, with a Child of the Root in Direction 1. */
 async function withAChild() {
@@ -103,6 +102,7 @@ describe('the System, read flat', () => {
       rights: { [first.root.id]: ['read', 'write', '@'] },
       gaps: {},
       pinned: {},
+      asOwner: true,
     })
     expect((await value(run(context, Mapping.system))).root.id).toBe(first.root.id)
   })

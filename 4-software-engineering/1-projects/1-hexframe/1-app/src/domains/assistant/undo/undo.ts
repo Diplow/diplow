@@ -53,15 +53,16 @@ export const applyInTurn = <A extends Applying, E, R>(
  * its end takes it, and the owner's, held as `run` records the write there (`writtenBySomeone`), never
  * wait on another Turn's write in the Account's own System; then the Turn read, `TurnOver` once it
  * ended, `run` never run (`writingTurn`); then `run`, which runs the write there and tells its owner,
- * who holds its Undo: nothing is kept with the Turn, which offers none of it. Answers what `run`
- * answered. In the transaction the API layer opened.
+ * who holds its Undo: nothing is kept with the Turn, which offers none of it. `owner` is none when
+ * no Conversation of the System's owner is told the write, the API layer's to say: the Turn's alone
+ * is locked then. Answers what `run` answered. In the transaction the API layer opened.
  */
 export const writtenInTurnElsewhere = <A, E, R>(
-  { accountId, turnId, owner }: { accountId: string; turnId: string; owner: string },
+  { accountId, turnId, owner }: { accountId: string; turnId: string; owner: string | undefined },
   run: Effect.Effect<A, E, R>,
 ) =>
   Effect.gen(function* () {
-    yield* lockConversations([accountId, owner])
+    yield* lockConversations(owner === undefined ? [accountId] : [accountId, owner])
     yield* writingTurn(accountId, turnId)
     return yield* run
   })

@@ -34,19 +34,44 @@ import { tilesBelow } from './widget/place'
  * through; on one they visit, someone else's, those the rights Mapping showed them there let through
  * too (`Seen`'s, asked of Mapping's `shownAllowed`, a preview the server decides again), the agent
  * where they hold *@* (HEX-134), and never who sees a Tile, its export nor an import, which are the
- * owner's or land at home. What a visitor sees at all is Mapping's to say;
- * `hexframe-app-sharing-organizations/decisions.md#DEC-4`, `#DEC-9`, `#DEC-11`.
+ * owner's or land at home; unless they stand for its owner there (`asOwner`, as `Seen` says it), an
+ * Organization's admin, who shares its Tiles as its owner does (HEX-136). Its star's menu opens the
+ * Organization's Members widget for each of its members (`members`). What a visitor sees at all is
+ * Mapping's to say; `hexframe-app-sharing-organizations/decisions.md#DEC-4`, `#DEC-9`, `#DEC-11`,
+ * `#DEC-13`.
  */
-export type Reach = 'owned' | { readonly visiting: Seen['rights'] }
+export type Reach =
+  | 'owned'
+  | {
+      readonly visiting: Seen['rights']
+      /** Whether the user stands for the owner of the System visited: an Organization's admin. */
+      readonly asOwner?: boolean
+      /** Whether the star visited is an Organization's the user belongs to. */
+      readonly members?: boolean
+    }
 
 /**
  * The lines a menu never offers on a System visited, a Tile's or a free slot's: who sees a Tile and
  * its export, which are its owner's, and an import, which lands in the Account's own System. The
- * server refuses each anyway; the page offers none.
+ * server refuses each anyway; the page offers none. An admin of an Organization visited shares its
+ * Tiles: its export and an import still land at home, so neither is offered there.
  */
 const visitorsWithout = ['share', 'export', 'import'] as const satisfies ReadonlyArray<Verb>
 
 const ownersAlone: ReadonlySet<Verb> = new Set(visitorsWithout)
+
+const homeAlone: ReadonlySet<Verb> = new Set(['export', 'import'])
+
+/** The lines the user may not take on a System visited for not being its owner, or for being away. */
+const notTheirs = (reach: Exclude<Reach, 'owned'>) =>
+  reach.asOwner === true ? homeAlone : ownersAlone
+
+/**
+ * Whether a Tile's menu opens an Organization's Members widget for the user: on its star, of an
+ * Organization they belong to.
+ */
+const membersAt = ({ reach, root }: Pick<Systems, 'reach' | 'root'>, hex: TileHex) =>
+  reach !== 'owned' && reach.members === true && hex.tile.id === root.id
 
 /**
  * Whether the user may ask the agent at a Tile of the System drawn, as far as the page can tell: on
@@ -282,7 +307,8 @@ export function framesOf(systems: Systems, hex: TileHex) {
 /**
  * The lines home leaves out of a Tile's menu: a Leaf's Context, which a Leaf has none of; an import
  * as the Root, but into an empty System's; the agent's on a broken Reference, which names no Tile;
- * and, on a System visited, the owner's lines, the agent's where the user holds no *@*, and each
+ * the Members widget's, but on the star of an Organization the user belongs to; and, on a System
+ * visited, the owner's lines, but for its admin, the agent's where the user holds no *@*, and each
  * line that writes where the user's rights hold it back (`heldBack`).
  */
 export function withoutOf(systems: Systems, hex: TileHex): Verb[] {
@@ -290,12 +316,14 @@ export function withoutOf(systems: Systems, hex: TileHex): Verb[] {
     ...(hex.tile.broken === true ? (['ask-agent'] as const) : []),
     ...(hex.tile.leaf === true ? (['show-context'] as const) : []),
     ...(hex.tile.root !== undefined && !isEmptySystem(systems.root) ? (['import'] as const) : []),
+    ...(hex.role === 'center' && !membersAt(systems, hex) ? (['members'] as const) : []),
   ]
-  if (systems.reach === 'owned') return left
+  const { reach } = systems
+  if (reach === 'owned') return left
   const subject = subjectOf(systems, hex)
   const lines = subject === undefined ? [] : groupsOf(subject).flat()
   const held = lines.filter(
-    (verb) => !left.includes(verb) && (ownersAlone.has(verb) || heldBack(systems, hex, verb)),
+    (verb) => !left.includes(verb) && (notTheirs(reach).has(verb) || heldBack(systems, hex, verb)),
   )
   return [...left, ...held]
 }

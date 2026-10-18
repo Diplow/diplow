@@ -53,7 +53,7 @@ const parent: TileNode = { id: id.b, title: 'B', preview: '' }
 function render(underway: Underway = nothing) {
   vi.mocked(Mapping.system).mockResolvedValue({
     ok: true,
-    value: { ...served, rights: {}, gaps: {}, pinned: {} },
+    value: { ...served, rights: {}, gaps: {}, pinned: {}, asOwner: true },
   })
   const client = makeQueryClient()
   const wrapper = ({ children }: { children: ReactNode }) =>

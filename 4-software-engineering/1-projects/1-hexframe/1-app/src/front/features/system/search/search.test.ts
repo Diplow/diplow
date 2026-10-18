@@ -77,6 +77,22 @@ describe('changeOf', () => {
     expect(read({ share: 'a', edit: 'b' })).toEqual({ kind: 'edit', id: 'b' })
     expect(read({ move: 'a', share: 'b' })).toEqual({ kind: 'share', id: 'b' })
   })
+  it("reads an Organization's members and an Organization being made, after who may see a Tile", () => {
+    expect(read({ members: 'a' })).toEqual({ kind: 'members', id: 'a' })
+    expect(read({ organization: true })).toEqual({ kind: 'organization' })
+    expect(read({ organization: 'yes' })).toEqual({ kind: 'none' })
+    expect(read({ members: 'a', share: 'b' })).toEqual({ kind: 'share', id: 'b' })
+    expect(read({ members: 'a', organization: true })).toEqual({ kind: 'members', id: 'a' })
+    expect(read({ move: 'a', organization: true })).toEqual({ kind: 'organization' })
+  })
+
+  it('writes each back as the one change under way', () => {
+    const members = withChange(readSystemSearch({ share: 'b' }), { kind: 'members', id: 'a' })
+    expect(members).toMatchObject({ members: 'a', share: undefined, organization: undefined })
+    const made = withChange(members, { kind: 'organization' })
+    expect(made).toMatchObject({ organization: true, members: undefined })
+    expect(changeOf(withChange(made, { kind: 'none' }))).toEqual({ kind: 'none' })
+  })
 })
 
 describe('withView and withChange', () => {
@@ -204,6 +220,8 @@ describe('opensWidget', () => {
     expect(opensWidget(none, withChange(none, { kind: 'edit', id: 'a' }))).toBe(true)
     expect(opensWidget(none, withChange(none, { kind: 'share', id: 'a' }))).toBe(true)
     expect(opensWidget(adding, withChange(adding, { kind: 'share', id: 'a' }))).toBe(true)
+    expect(opensWidget(none, withChange(none, { kind: 'members', id: 'a' }))).toBe(true)
+    expect(opensWidget(none, withChange(none, { kind: 'organization' }))).toBe(true)
     expect(opensWidget(none, withChange(none, { kind: 'import', place: { _tag: 'Root' } }))).toBe(
       true,
     )
