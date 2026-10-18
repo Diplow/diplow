@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Actor, Entry } from '#/domains/assistant/entities'
+import type { Entry, OwnActor } from '#/domains/assistant/entities'
 import type { PlacedTile, Slot, System } from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
 import { placeOf } from '#/front/ui/canvas/tile/menu/verbs'
@@ -16,7 +16,7 @@ import type { Proposed } from './proposal'
 
 const at = new Date('2026-10-12T10:00:00Z')
 
-const change = (id: string, tile: string, actor: Actor, other?: string): Entry => ({
+const change = (id: string, tile: string, actor: OwnActor, other?: string): Entry => ({
   _tag: 'Change',
   id,
   at,
@@ -26,9 +26,9 @@ const change = (id: string, tile: string, actor: Actor, other?: string): Entry =
   actor,
 })
 
-const agent: Actor = { _tag: 'Assistant' }
-const key: Actor = { _tag: 'Key', name: 'laptop' }
-const you: Actor = { _tag: 'You' }
+const agent: OwnActor = { _tag: 'Assistant' }
+const key: OwnActor = { _tag: 'Key', name: 'laptop' }
+const you: OwnActor = { _tag: 'You' }
 
 const proposal = (
   id: string,
@@ -65,6 +65,21 @@ describe('touchesOf, the changes made since the page opened', () => {
       { tile: 'c', by: 'key', entry: 'keyed' },
       { tile: 'e', by: 'agent', entry: 'swap' },
       { tile: 'f', by: 'agent', entry: 'swap' },
+    ])
+  })
+
+  it('touches a Tile someone else changed in the user’s System as from outside, as a Key does', () => {
+    const theirs: Entry = {
+      _tag: 'Change',
+      id: 'theirs',
+      at,
+      verb: 'TileEdited',
+      tile: { id: 'g', title: 'g' },
+      actor: { _tag: 'Someone', star: 'Bob', by: { _tag: 'You' } },
+      undone: false,
+    }
+    expect(touchesOf([theirs], { known, accepted: [] })).toEqual([
+      { tile: 'g', by: 'key', entry: 'theirs' },
     ])
   })
 

@@ -43,7 +43,7 @@ export function EntryBlock({ block, naming, decide }: BlockProps) {
           words={changeWords(entry, naming)}
           at={entry.at}
           tone="quiet"
-          undone={entry.undone === true}
+          undone={entry.undone}
           onUndo={
             offersUndo(entry)
               ? () => {

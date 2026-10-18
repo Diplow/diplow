@@ -54,7 +54,8 @@ const behind = {
  */
 async function caughtUp(client: QueryClient, queryKey: QueryKey, stillBehind: () => boolean) {
   for (let reads = 0; reads < 2 && stillBehind(); reads++) {
-    await client.invalidateQueries({ queryKey }, { cancelRefetch: false })
+    // Exactly this read: the Account's own System's key starts every visited one's.
+    await client.invalidateQueries({ queryKey, exact: true }, { cancelRefetch: false })
   }
 }
 

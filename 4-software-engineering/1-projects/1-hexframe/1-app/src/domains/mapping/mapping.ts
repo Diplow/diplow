@@ -893,42 +893,15 @@ export const runBatch = (acting: Acting, batch: ReadonlyArray<Batched>) =>
   )
 
 /**
- * Runs an Operation on the System the actor acts on by the same `operate` as an Operation's own function, a
- * create under its id or a fresh one, and answers, beside the Tile as it now stands for a create or
- * an edit, how many events it made and what undoes it: its inverse, from the System it ran on, after
- * `earlier`, the undo of what ran before it in the same batch, when one is given (`extended`), as a
- * batch that runs in several goes runs one Operation after the other. A clash on a create's id is a
- * defect: such a create carries none.
+ * Runs an Operation on the System the actor acts on by the same `operate` as an Operation's own
+ * function, a create under its id or a fresh one, decided by `decidedOne`, a write under an id taken
+ * answering `onTaken`. Answers the System it ran on, the events it made, the System they leave and,
+ * for a create or an edit, the Tile as it now stands: what `runOperation` and `runUndoable` both
+ * make what undoes it from.
  */
-export const runOperation = <O extends Operation>(
-  acting: Acting,
-  operation: O,
-  earlier: Undo | undefined,
-) =>
+const ranOne = <O extends Operation, T>(acting: Acting, operation: O, onTaken: OnTaken<T>) =>
   Effect.gen(function* () {
     const made = yield* madeFor(operation)
-    const { system, events, after } = yield* operate(acting, operation, (held) =>
-      Result.map(decidedOne(held, operation, made), (next) => next.events),
-    )
-    const tile = yield* tileAnswered(after, operation, made)
-    const undo = earlier === undefined ? undoOf(system, events) : extended(earlier, system, events)
-    return { undo, changes: events.length, ...(tile !== undefined && { tile }) }
-  })
-
-/**
- * Runs an Operation on the System the actor acts on as its own function runs it, a create under the
- * id its caller chose refused `TileIdTaken`, as `createTile` refuses it, and answers, beside the Tile
- * as it now stands for a create or an edit, what undoes it, from the System it ran on, and Mapping's
- * summary of the change it made, as the System it leaves holds it, none for one that changed nothing:
- * what the API layer runs a write someone else makes in a System by, so its owner may undo it.
- */
-export const runUndoable = <O extends Operation>(acting: Acting, operation: O) =>
-  Effect.gen(function* () {
-    const made = yield* madeFor(operation)
-    // Only a create carries an id its caller chose, so only a create is ever refused `TileIdTaken`.
-    const onTaken = (
-      operation._tag === 'CreateTile' && operation.id !== undefined ? chosen : madeHere
-    ) as OnTaken<O extends CreateTile ? TileIdTaken : never>
     const { system, events, after } = yield* operate(
       acting,
       operation,
@@ -936,6 +909,41 @@ export const runUndoable = <O extends Operation>(acting: Acting, operation: O) =
       onTaken,
     )
     const tile = yield* tileAnswered(after, operation, made)
+    return { system, events, after, tile }
+  })
+
+/**
+ * Runs an Operation on the System the actor acts on (`ranOne`), and answers, beside the Tile as it
+ * now stands for a create or an edit, how many events it made and what undoes it: its inverse, from
+ * the System it ran on, after `earlier`, the undo of what ran before it in the same batch, when one
+ * is given (`extended`), as a batch that runs in several goes runs one Operation after the other. A
+ * clash on a create's id is a defect: such a create carries none.
+ */
+export const runOperation = <O extends Operation>(
+  acting: Acting,
+  operation: O,
+  earlier: Undo | undefined,
+) =>
+  Effect.map(ranOne(acting, operation, madeHere), ({ system, events, tile }) => ({
+    undo: earlier === undefined ? undoOf(system, events) : extended(earlier, system, events),
+    changes: events.length,
+    ...(tile !== undefined && { tile }),
+  }))
+
+/**
+ * Runs an Operation on the System the actor acts on (`ranOne`) as its own function runs it, a create
+ * under the id its caller chose refused `TileIdTaken`, as `createTile` refuses it, and answers,
+ * beside the Tile as it now stands for a create or an edit, what undoes it, from the System it ran
+ * on, and Mapping's summary of the change it made, as the System it leaves holds it, none for one
+ * that changed nothing: what the API layer runs a write someone else makes in a System by, so its
+ * owner may undo it.
+ */
+export const runUndoable = <O extends Operation>(acting: Acting, operation: O) => {
+  // Only a create carries an id its caller chose, so only a create's type lists `TileIdTaken`.
+  const onTaken = (
+    operation._tag === 'CreateTile' && operation.id !== undefined ? chosen : madeHere
+  ) as OnTaken<O extends CreateTile ? TileIdTaken : never>
+  return Effect.map(ranOne(acting, operation, onTaken), ({ system, events, after, tile }) => {
     const [change] = summariesIn(after, events)
     return {
       undo: undoOf(system, events),
@@ -943,6 +951,7 @@ export const runUndoable = <O extends Operation>(acting: Acting, operation: O) =
       ...(tile !== undefined && { tile }),
     }
   })
+}
 
 /**
  * Undoes a batch that ran, in the transaction around it, all of it or nothing: its inverse run on the

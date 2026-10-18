@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { type Entry, linkTo } from '#/domains/assistant/entities'
+import { type Entry, linkTo, type OwnActor, type Someone } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 import type { Word } from '#/front/ui/chat/text/words'
 
@@ -22,14 +22,11 @@ const tile = (word: Word | undefined) =>
 
 type Changed = Extract<Told, { _tag: 'Change' }>
 
-const change = (actor: Changed['actor'], verb = 'TileEdited'): Changed => ({
-  _tag: 'Change',
-  id: 'c',
-  at,
-  verb,
-  tile: games,
-  actor,
-})
+/** A change by one of the user's own, or by someone else, who offers its Undo until undone. */
+function change(actor: OwnActor | Someone, verb = 'TileEdited'): Changed {
+  const said = { _tag: 'Change', id: 'c', at, verb, tile: games } as const
+  return actor._tag === 'Someone' ? { ...said, actor, undone: false } : { ...said, actor }
+}
 
 describe('happenedOf', () => {
   it('tells a change by who made it, the agent without its name', () => {
@@ -113,7 +110,7 @@ describe('happenedOf', () => {
   })
 
   it('tells a change someone else made in the user’s System by their star, and who of theirs', () => {
-    const by = (of: Extract<Changed['actor'], { _tag: 'Someone' }>['by'], star = 'Bob Martin') =>
+    const by = (of: Someone['by'], star = 'Bob Martin') =>
       happenedOf(change({ _tag: 'Someone', star, by: of }), naming)
     expect(by({ _tag: 'You' })).toMatchObject({ who: 'outside' })
     expect(by({ _tag: 'You' }).words[0]).toEqual({ name: 'Bob Martin' })
@@ -248,7 +245,6 @@ describe('blocksOf', () => {
     const theirs: Entry = {
       ...change({ _tag: 'Someone', star: 'Bob', by: { _tag: 'You' } }),
       id: 'c3',
-      undone: false,
     }
     const blocks = blocksOf([
       change({ _tag: 'You' }),

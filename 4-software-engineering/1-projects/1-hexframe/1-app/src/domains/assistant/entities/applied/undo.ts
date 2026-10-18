@@ -8,7 +8,7 @@
 import { Result } from 'effect'
 
 import { NothingToUndo } from '../../errors'
-import type { EntryContent } from '../entry'
+import { type EntryContent, isTheirs } from '../entry'
 
 /**
  * The Entry of an accepted Proposal once what undoes its writes was kept: it then offers its Undo,
@@ -36,7 +36,7 @@ export function undoneEntry(content: EntryContent): EntryContent | undefined {
     case 'TurnApplied':
       return content.undone ? undefined : { ...content, undone: true }
     case 'Change':
-      return content.undone === false ? { ...content, undone: true } : undefined
+      return isTheirs(content) && !content.undone ? { ...content, undone: true } : undefined
     default:
       return undefined
   }

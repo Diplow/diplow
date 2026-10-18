@@ -56,7 +56,7 @@ export interface Systems {
  * their own, anything; on one they visit, what their rights there let through (`shownAllowed`).
  * Whether `decide` makes something of it is its caller's to ask.
  */
-export const mayMake = ({ reach, flat }: Pick<Systems, 'reach' | 'flat'>, operation: Operation) =>
+const mayMake = ({ reach, flat }: Pick<Systems, 'reach' | 'flat'>, operation: Operation) =>
   reach === 'owned' || shownAllowed(reach.visiting, flat, operation)
 
 /** The swap of a moving Tile with another, where Mapping makes something of it; none otherwise. */
@@ -99,9 +99,15 @@ function movable(systems: Pick<Systems, 'reach' | 'flat'>, id: string) {
   return mayMake(systems, { _tag: 'MoveTile', id, version, parent, slot })
 }
 
-/** Whether the user may add a Tile under this one, as far as their rights there say. */
-const addsUnder = (systems: Pick<Systems, 'reach' | 'flat'>, parent: string) =>
-  mayMake(systems, { _tag: 'CreateTile', parent, slot: 1, title: '', preview: '', body: '' })
+/**
+ * Whether the user may add a Tile in this slot, as far as their rights there say: anywhere on their
+ * own System, under a Tile they write on one they visit. The slot plays no part in the rights, so
+ * any slot of a Tile asks whether anything may go under it.
+ */
+export const addsAt = (
+  systems: Pick<Systems, 'reach' | 'flat'>,
+  { parent, slot }: { parent: string; slot: Slot },
+) => mayMake(systems, { _tag: 'CreateTile', parent, slot, title: '', preview: '', body: '' })
 
 /**
  * The move that turns a Tile into the other kind, in its own Direction, as Mapping has no operation
@@ -157,7 +163,7 @@ function childrenOf(tile: TileNode): PickerFrame['seats'] {
  * Tile under it; and only where the user's rights let them add one there.
  */
 function takesOne(systems: Pick<Systems, 'reach' | 'flat'>, located: Located | undefined) {
-  if (located === undefined || !addsUnder(systems, located.tile.id)) return false
+  if (located === undefined || !addsAt(systems, { parent: located.tile.id, slot: 1 })) return false
   if (located.kind === 'leaf') return turnOf(systems, located) !== undefined
   return holds(located.tile)
 }

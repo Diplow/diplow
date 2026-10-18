@@ -19,7 +19,6 @@ import { type ConversationRow, Proposals } from '#/repositories/database/convers
 import { type TurnRow, Turns } from '#/repositories/database/conversations/turns'
 
 import {
-  type Actor,
   type Day,
   dayAt,
   deadlineOf,
@@ -31,6 +30,7 @@ import {
   isBadEnd,
   Mode,
   type Navigation,
+  type OwnActor,
   ProposedChange,
   routeOf,
   type Shared,
@@ -133,7 +133,7 @@ export const recordNavigation = (accountId: string, navigation: Navigation, ago:
 export const recordChange = (
   accountId: string,
   summarized: Summarized,
-  actor: Actor,
+  actor: OwnActor,
   { elsewhere = false }: { readonly elsewhere?: boolean } = {},
 ) =>
   record(

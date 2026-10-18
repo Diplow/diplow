@@ -8,7 +8,16 @@
 // What the user's System and timeline say is quoted as data, each text one JSON string in a fenced
 // block, so no Title, Preview or Message reads as one of the Turn's rules. It holds no secret, ever:
 // the Turn's Key never reaches it. Pure.
-import type { Actor, Entry, Fate, Mode, ProposedChange, SharedRight } from '../entities'
+import {
+  type Actor,
+  type Entry,
+  type Fate,
+  isTheirs,
+  type Mode,
+  type ProposedChange,
+  type SharedRight,
+  type Someone,
+} from '../entities'
 
 /** A Tile as the user has it on screen: its id, its Title and its Preview, as Mapping reads them. */
 export interface Glimpse {
@@ -72,7 +81,7 @@ const actorOf = (actor: Actor): string => {
 }
 
 /** Someone else who wrote in the user's System, as the agent reads it: who of theirs acted. */
-function someoneOf({ star, by }: Extract<Actor, { readonly _tag: 'Someone' }>): string {
+function someoneOf({ star, by }: Someone): string {
   const another = anotherOf(star)
   switch (by._tag) {
     case 'You':
@@ -126,8 +135,10 @@ const changeLine = ({ verb, tile, other }: ProposedChange) =>
  */
 function changeSaid(entry: Extract<Entry, { _tag: 'Change' }>): string {
   const told = `${actorOf(entry.actor)} ${changeLine(entry)}`
-  if (entry.elsewhere === true) return `${told}, in another Account's System, not the user's.`
-  return `${told}${entry.undone === true ? ', which the user undid' : ''}.`
+  if (isTheirs(entry)) return `${told}${entry.undone ? ', which the user undid' : ''}.`
+  return entry.elsewhere === true
+    ? `${told}, in another Account's System, not the user's.`
+    : `${told}.`
 }
 
 /** One Entry, as a line of the prompt. */

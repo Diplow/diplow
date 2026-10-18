@@ -33,6 +33,9 @@ export type OwnActor = typeof OwnActor.Type
  */
 const Someone = Schema.TaggedStruct('Someone', { star: Schema.String, by: OwnActor })
 
+/** Someone else, writing in the user's System. */
+export type Someone = typeof Someone.Type
+
 /** Who acted, as the timeline shows it: one of the user's own (`OwnActor`), or someone else. */
 export const Actor = Schema.Union([...OwnActor.members, Someone])
 
@@ -76,17 +79,27 @@ const changed = {
 }
 
 /**
- * A change to a System, as Mapping summarized it, and who acted. Made by the user in someone else's
- * System, it says so (`elsewhere`), its Tiles standing there, not in the user's. Made by someone else
- * in the user's, it offers its Undo, once (`undone`, false until the user undid it), what undoes it
- * kept with it.
+ * A change to a System the user's own made, as Mapping summarized it, and who of theirs acted. Made in
+ * someone else's System, it says so (`elsewhere`), its Tiles standing there, not in the user's.
  */
-const Change = Schema.TaggedStruct('Change', {
+const OwnChange = Schema.TaggedStruct('Change', {
   ...changed,
-  actor: Actor,
+  actor: OwnActor,
   elsewhere: Schema.optionalKey(Schema.Literal(true)),
-  undone: Schema.optionalKey(Schema.Boolean),
 })
+
+/**
+ * A change someone else made in the user's System, as Mapping summarized it, and who of theirs acted.
+ * It offers its Undo, once, what undoes it kept with it: `undone`, false until the user undid it.
+ */
+const TheirChange = Schema.TaggedStruct('Change', {
+  ...changed,
+  actor: Someone,
+  undone: Schema.Boolean,
+})
+
+/** Someone else's change in the user's System, which offers its Undo once. */
+export type TheirChange = typeof TheirChange.Type
 
 /**
  * A change an agent drafted into a Proposal, as Mapping summarized it on the System the Proposal
@@ -123,7 +136,7 @@ const TurnApplied = Schema.TaggedStruct('TurnApplied', {
 const Import = Schema.TaggedStruct('Import', {
   tile: Named,
   count: Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: 2_147_483_647 })),
-  actor: Actor,
+  actor: OwnActor,
 })
 
 /** A Turn that ended otherwise than by its answer, and how: a Stop, a limit, its time, its sandbox. */
@@ -154,7 +167,8 @@ export type Shared = typeof Shared.Type
 /** What an Entry says, whichever kind it is: what is stored of it, and what it is decoded by. */
 export const EntryContent = Schema.Union([
   Message,
-  Change,
+  OwnChange,
+  TheirChange,
   Import,
   Navigation,
   TurnEnded,
@@ -173,7 +187,14 @@ export type Entry = EntryContent & { readonly id: string; readonly at: Date }
  * Assistant reads Mapping's summary by, which Mapping's own satisfies.
  */
 export type Summarized =
-  Omit<typeof Change.Type, 'actor' | 'elsewhere' | 'undone'> | Omit<typeof Import.Type, 'actor'>
+  Omit<typeof OwnChange.Type, 'actor' | 'elsewhere'> | Omit<typeof Import.Type, 'actor'>
+
+/**
+ * Whether an Entry is a change someone else made in the user's System, which offers its Undo once:
+ * told apart from the user's own by who acted.
+ */
+export const isTheirs = (content: EntryContent): content is TheirChange =>
+  content._tag === 'Change' && content.actor._tag === 'Someone'
 
 /** A change as Mapping summarized it, never an import: what a write someone else made changed. */
 export type SummarizedChange = Extract<Summarized, { readonly _tag: 'Change' }>

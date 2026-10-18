@@ -11,7 +11,7 @@ import { Clock, Effect } from 'effect'
 import { Applied } from '#/repositories/database/conversations/applied'
 
 import { type Applying, lockConversation, record, rewritten, writingTurn } from '../assistant'
-import { type Actor, type SummarizedChange, undoing, undoneEntry } from '../entities'
+import { type Someone, type SummarizedChange, undoing, undoneEntry } from '../entities'
 
 /**
  * Runs a write one of the Account's Turns in apply made, in the one order it holds in: the
@@ -59,7 +59,7 @@ export interface Written {
  */
 export const writtenBySomeone = <A extends Written, E, R>(
   accountId: string,
-  actor: Extract<Actor, { readonly _tag: 'Someone' }>,
+  actor: Someone,
   run: Effect.Effect<A, E, R>,
 ) =>
   Effect.gen(function* () {

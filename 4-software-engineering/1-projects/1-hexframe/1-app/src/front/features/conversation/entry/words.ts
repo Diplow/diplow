@@ -13,8 +13,11 @@ import {
   type Actor,
   type BadEnd,
   type Entry,
+  isTheirs,
   partsOf,
   type ProposedChange,
+  type Someone,
+  type TheirChange,
 } from '#/domains/assistant/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
@@ -128,7 +131,7 @@ const keyOf = (actor: Extract<Actor, { _tag: 'Key' }>): Word =>
  * Someone else who wrote in the user's System, by the Title their star had then, "Someone" for one
  * not named yet, and who of theirs acted: themselves, their agent, or one of their Keys.
  */
-function someoneOf({ star, by }: Extract<Actor, { _tag: 'Someone' }>): Word {
+function someoneOf({ star, by }: Someone): Word {
   const name = star === '' ? m.conversation_someone() : star
   switch (by._tag) {
     case 'You':
@@ -301,8 +304,9 @@ function sharedOf(entry: Extract<Told, { _tag: 'Shared' }>, naming: Naming): Hap
  */
 export function changeWords(entry: Extract<Entry, { _tag: 'Change' }>, naming: Naming): Words {
   const said = isVerb(entry.verb) ? changes[entry.verb] : changed
+  const elsewhere = !isTheirs(entry) && entry.elsewhere === true
   const tileOf = (tile: { id: string; title: string }) =>
-    entry.elsewhere === true ? elsewhereOf(tile, naming) : recorded(tile, naming)
+    elsewhere ? elsewhereOf(tile, naming) : recorded(tile, naming)
   const pieces = {
     title: tileOf(entry.tile),
     other: entry.other === undefined ? named('') : tileOf(entry.other),
@@ -376,7 +380,7 @@ export function proposedOf(change: ProposedChange, naming: Naming, open: boolean
  */
 export type Block =
   | { readonly kind: 'lines'; readonly entries: ReadonlyArray<Told> }
-  | { readonly kind: 'theirs'; readonly entry: Extract<Entry, { _tag: 'Change' }> }
+  | { readonly kind: 'theirs'; readonly entry: TheirChange & Pick<Entry, 'id' | 'at'> }
   | {
       readonly kind: 'message'
       readonly entry: Extract<Entry, { _tag: 'Message' }>
@@ -405,11 +409,8 @@ export function blocksOf(entries: ReadonlyArray<Entry>): ReadonlyArray<Block> {
         blocks.push({ kind: 'applied', entry })
         return
       case 'Change':
-        if (entry.undone !== undefined) {
-          blocks.push({ kind: 'theirs', entry })
-          return
-        }
-        lineAfter(blocks, entry)
+        if (isTheirs(entry)) blocks.push({ kind: 'theirs', entry })
+        else lineAfter(blocks, entry)
         return
       default:
         lineAfter(blocks, entry)

@@ -571,3 +571,81 @@ describe('what the writes on their way change', () => {
     })
   })
 })
+
+describe("a write to someone else's System, visited", () => {
+  const ana = {
+    root: crypto.randomUUID(),
+    journal: crypto.randomUUID(),
+  }
+
+  /** Ana's System as Bob is shown it: her star's card, and Journal, which he writes. */
+  const hers = {
+    root: { _tag: 'Tile', id: ana.root, title: 'Ana', preview: '', body: '', version: 1 },
+    tiles: {
+      [ana.journal]: {
+        ...branch(ana.journal, 'Journal', 1, 3),
+        parent: ana.root,
+      },
+    },
+    owned: true,
+    version: 7,
+    rights: { [ana.root]: [], [ana.journal]: ['read', 'write'] },
+    gaps: {},
+  }
+
+  /** Bob's own System, and Ana's by her star, each answered by its read. */
+  function servingBoth() {
+    vi.mocked(Mapping.system).mockImplementation(
+      (options) =>
+        Promise.resolve({
+          ok: true,
+          value: options?.data === undefined ? { ...served, rights: {}, gaps: {} } : hers,
+        }) as never,
+    )
+  }
+
+  async function renderedBoth() {
+    servingBoth()
+    const client = makeQueryClient()
+    const wrapper = ({ children }: { children: ReactNode }) =>
+      createElement(QueryClientProvider, { client }, children)
+    const { result } = renderHook(
+      () => ({
+        own: useSystem().data?.system,
+        visited: useSystem({ star: ana.root }).data?.system,
+        edit: useEditTile(),
+      }),
+      { wrapper },
+    )
+    await waitFor(() => {
+      expect([result.current.own, result.current.visited].every(Boolean)).toBe(true)
+    })
+    return result
+  }
+
+  it('shows the write on the System holding its Tile alone, and sends it', async () => {
+    const edited = later<unknown>()
+    vi.mocked(Mapping.editTile).mockReturnValue(edited.promise as never)
+    const result = await renderedBoth()
+    act(() => {
+      result.current.edit.mutate({ id: ana.journal, version: 3, title: 'Our journal' })
+    })
+    await waitFor(() => {
+      expect(result.current.visited?.tiles[ana.journal]).toMatchObject({ title: 'Our journal' })
+    })
+    expect(result.current.own).toEqual({ ...served, rights: {}, gaps: {} })
+    expect(Mapping.editTile).toHaveBeenCalledOnce()
+    edited.settle(ok)
+  })
+
+  it('foresees a refusal on that System, by the Version it shows there, and sends nothing', async () => {
+    const result = await renderedBoth()
+    act(() => {
+      result.current.edit.mutate({ id: ana.journal, version: 1, title: 'Stale' })
+    })
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(m.error_mapping_tile_changed())
+    })
+    expect(Mapping.editTile).not.toHaveBeenCalled()
+  })
+})

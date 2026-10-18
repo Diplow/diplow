@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Actor, Entry } from '#/domains/assistant/entities'
+import type { Entry, OwnActor } from '#/domains/assistant/entities'
 
 import { besideReceipt, dayOf, laterOf, latestUndoable, splitByDay } from './timeline'
 
@@ -81,7 +81,7 @@ describe('besideReceipt', () => {
     id: string,
     tile: string,
     verb: string,
-    actor: Actor = { _tag: 'You' },
+    actor: OwnActor = { _tag: 'You' },
   ): Entry => ({
     _tag: 'Change',
     id,

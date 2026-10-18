@@ -17,7 +17,7 @@ import {
 } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import type { Acting, Moving } from '#/front/ui/canvas/Canvas'
-import type { Direction, Slot } from '#/domains/mapping/entities'
+import type { Direction } from '#/domains/mapping/entities'
 import type { EmptySlotTarget } from '#/front/ui/canvas/geometry/shape'
 import type { Action } from '#/front/ui/canvas/keys'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
@@ -25,9 +25,9 @@ import type { TileAct } from '#/front/ui/canvas/tile/menu/verbs'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 
 import {
+  addsAt,
   allows,
   framesOf,
-  mayMake,
   moveTo,
   movesHere,
   referenceAt,
@@ -73,13 +73,6 @@ interface Deleting {
   confirm: () => void
   cancel: () => void
 }
-
-/**
- * Whether the user may add a Tile in this slot, as far as the page can tell: anywhere on their own
- * System, under a Tile their rights let them write on one they visit.
- */
-const addsAt = (systems: Systems, { parent, slot }: { parent: string; slot: Slot }) =>
-  mayMake(systems, { _tag: 'CreateTile', parent, slot, title: '', preview: '', body: '' })
 
 /** The move a Leaf takes to grow into a Branch before a Tile goes under it; none for any other. */
 const growing = (systems: Systems, hex: TileHex) =>

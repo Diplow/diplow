@@ -27,15 +27,17 @@ const applied = (undone: boolean): EntryContent => ({
   undone,
 })
 
-/** A change: the user's own, or someone else's in the user's System, which offers its Undo. */
-const change = (undone?: boolean): EntryContent => ({
-  _tag: 'Change',
-  verb: 'TileEdited',
-  tile: { id: 'tile-1', title: 'Journal' },
-  actor:
-    undone === undefined ? { _tag: 'You' } : { _tag: 'Someone', star: 'Bob', by: { _tag: 'You' } },
-  ...(undone !== undefined && { undone }),
-})
+/** A change: the user's own, or, with `undone`, someone else's in the user's System. */
+const change = (undone?: boolean): EntryContent => {
+  const said = {
+    _tag: 'Change',
+    verb: 'TileEdited',
+    tile: { id: 'tile-1', title: 'Journal' },
+  } as const
+  return undone === undefined
+    ? { ...said, actor: { _tag: 'You' } }
+    : { ...said, actor: { _tag: 'Someone', star: 'Bob', by: { _tag: 'You' } }, undone }
+}
 
 describe('offeringEntry, an accepted Proposal offering its Undo', () => {
   it('says an accepted Proposal may be undone, once', () => {
