@@ -1,0 +1,44 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/someone/turn.test.ts
+  s_eb2c82211b20e8::t_0097938b4abc3b 171-182,187-195
+  s_eb2c82211b20e8::t_2c5c56e0726fb8 183-186
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_ea1cd664f27fcd 74-75,81-84,86-90,93-98,100-105,108-114,116-127,130-133,136-137,141-142,146-149,152-153,157-158,162-169,180-182,185
+  s_eb2c82211b20e8::t_93a3b8406cd355 244-245
+  s_eb2c82211b20e8::t_4a73e12f84ba35 303-304
+  s_eb2c82211b20e8::t_e6b96535ad266a 453
+  s_eb2c82211b20e8::t_fb3476e7a8aa83 222-226
+  s_eb2c82211b20e8::t_c80c3559c7bc56 54-56
+  s_eb2c82211b20e8::t_c9c14a751fe249 208-209
+  s_eb2c82211b20e8::t_964d7aaab33141 316-317
+  s_eb2c82211b20e8::t_6efc138d7a3049 323,326,329
+  s_eb2c82211b20e8::t_1629938aa1b0fe 345
+  s_eb2c82211b20e8::t_decbad8cd9a460 234
+  s_eb2c82211b20e8::t_55a2b5e2234d59 53
+  s_eb2c82211b20e8::t_e7f6f8d10039f5 239
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/CLAUDE.md
+  s_eb2c82211b20e8::t_0845618b209bda 41
+  s_eb2c82211b20e8::t_8707d97b98d276 40
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/programs.ts
+  s_eb2c82211b20e8::t_63267d34412ff8 162-164
+  s_eb2c82211b20e8::t_22ffa7e4687566 146,150,153
+  s_eb2c82211b20e8::t_91bccd8b264427 175
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_eb2c82211b20e8::t_c8fa570778bf06 21
+  s_eb2c82211b20e8::t_7f4048dfe1eb90 35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c13fa124745e340125edb51541000941efcbf0d0",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
