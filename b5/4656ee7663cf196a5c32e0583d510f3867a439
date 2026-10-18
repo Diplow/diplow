@@ -1,0 +1,23 @@
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_eb2c82211b20e8::t_220f20b0c90d50 1364-1365
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_eb2c82211b20e8::t_220f20b0c90d50 1364-1365
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/organization/NewOrganization.tsx
+  s_eb2c82211b20e8::t_220f20b0c90d50 5-7,11,34-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b54656ee7663cf196a5c32e0583d510f3867a439",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
