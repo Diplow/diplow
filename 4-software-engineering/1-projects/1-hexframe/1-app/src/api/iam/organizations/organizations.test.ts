@@ -102,7 +102,7 @@ describe('an Organization, made', () => {
     const { ana, asAna, star, plans } = await atelier()
     const seen = await value(run(asAna, Mapping.systemAt(star)))
     expect(seen.root).toMatchObject({ id: star, title: 'Atelier' })
-    expect(seen.owned).toBe(true)
+    expect(seen.asOwner).toBe(true)
     expect(seen.rights[plans.id]).toEqual(['read', 'write', '@'])
     expect(await value(run(asAna, Organizations.roleIn({ star })))).toBe('admin')
     // Her own System stays hers, and is no Organization's.
@@ -139,7 +139,9 @@ describe('an Organization, made', () => {
     const bob = await someone('Bob Martin')
     const seen = await value(run(request(bob.account), Mapping.systemAt(star)))
     expect(seen.root).toMatchObject({ id: star, title: 'Atelier' })
-    expect(seen.owned).toBe(false)
+    expect(seen.asOwner).toBe(false)
+    // Still a System an owner holds, which the client's `decide` writes in as Grants let it.
+    expect(seen.owned).toBe(true)
     expect(seen.tiles).toEqual({})
     expect(
       await refusal(
@@ -171,7 +173,7 @@ describe("an Organization's members", () => {
       { subject: { _tag: 'Group' }, value: 'read+write', star: { id: star, title: 'Atelier' } },
     ])
     const seen = await value(run(asBob, Mapping.systemAt(star)))
-    expect(seen.owned).toBe(false)
+    expect(seen.asOwner).toBe(false)
     expect(seen.rights[plans.id]).toEqual(['read', 'write'])
     const ours = await value(
       run(asBob, Mapping.editTile({ id: plans.id, version: plans.version, title: 'Our plans' })),
@@ -201,13 +203,13 @@ describe("an Organization's members", () => {
     await value(run(asAna, Organizations.addMember({ star, member: bob.star })))
     await value(run(asAna, Organizations.setMemberRole({ star, member: bob.star, role: 'admin' })))
     const asAdmin = await value(run(asBob, Mapping.systemAt(star)))
-    expect(asAdmin.owned).toBe(true)
+    expect(asAdmin.asOwner).toBe(true)
     expect(asAdmin.rights[plans.id]).toEqual(['read', 'write', '@'])
     const everyone = { _tag: 'Everyone' } as const
     await value(run(asBob, Mapping.setGrant({ tile: plans.id, subject: everyone, value: 'read' })))
     await value(run(asAna, Organizations.setMemberRole({ star, member: bob.star, role: 'member' })))
     const demoted = await value(run(asBob, Mapping.systemAt(star)))
-    expect(demoted.owned).toBe(false)
+    expect(demoted.asOwner).toBe(false)
     expect(demoted.rights[plans.id]).toEqual(['read'])
   })
 

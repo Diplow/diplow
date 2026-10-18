@@ -48,7 +48,7 @@ export interface Seen extends System {
    * alone does, sharing its Tiles among it: an Account on its own, and on the Systems whose owners
    * the API layer says it stands for (`Actor.owners`).
    */
-  readonly owned: boolean
+  readonly asOwner: boolean
 }
 
 /**
@@ -241,7 +241,7 @@ export function seenBy(
       rights: Object.fromEntries(every),
       gaps: {},
       pinned: pinsOf(tiles, pinned),
-      owned: true,
+      asOwner: true,
     }
   }
   const tiles: Record<string, PlacedTile | PlacedReference> = {}
@@ -260,7 +260,7 @@ export function seenBy(
     rights: Object.fromEntries(rights),
     gaps,
     pinned: pinsOf(tiles, pinned),
-    owned: false,
+    asOwner: false,
   }
   return { ...shown, version: sightVersion(shown) }
 }

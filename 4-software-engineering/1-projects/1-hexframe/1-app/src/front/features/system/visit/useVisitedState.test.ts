@@ -36,6 +36,7 @@ const seen = (root: FoundTile, tiles: Seen['tiles'] = {}): Seen => ({
   gaps: {},
   pinned: {},
   owned: true,
+  asOwner: false,
   version: 0,
 })
 

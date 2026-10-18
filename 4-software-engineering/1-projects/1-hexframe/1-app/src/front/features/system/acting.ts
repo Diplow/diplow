@@ -66,9 +66,12 @@ const homeAlone: ReadonlySet<Verb> = new Set(['export', 'import'])
 const notTheirs = (reach: Exclude<Reach, 'owned'>) =>
   reach.owner === true ? homeAlone : ownersAlone
 
-/** Whether the star drawn opens an Organization's Members widget for the user: one they belong to. */
-const opensMembers = ({ reach }: Pick<Systems, 'reach'>) =>
-  reach !== 'owned' && reach.members === true
+/**
+ * Whether a Tile's menu opens an Organization's Members widget for the user: on its star, of an
+ * Organization they belong to.
+ */
+const membersAt = ({ reach, root }: Pick<Systems, 'reach' | 'root'>, hex: TileHex) =>
+  reach !== 'owned' && reach.members === true && hex.tile.id === root.id
 
 /**
  * Whether the user may ask the agent at a Tile of the System drawn, as far as the page can tell: on
@@ -313,7 +316,7 @@ export function withoutOf(systems: Systems, hex: TileHex): Verb[] {
     ...(hex.tile.broken === true ? (['ask-agent'] as const) : []),
     ...(hex.tile.leaf === true ? (['show-context'] as const) : []),
     ...(hex.tile.root !== undefined && !isEmptySystem(systems.root) ? (['import'] as const) : []),
-    ...(hex.tile.root !== undefined && !opensMembers(systems) ? (['members'] as const) : []),
+    ...(hex.role === 'center' && !membersAt(systems, hex) ? (['members'] as const) : []),
   ]
   const { reach } = systems
   if (reach === 'owned') return left

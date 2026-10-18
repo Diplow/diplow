@@ -49,6 +49,7 @@ const seen: Seen = {
   rights: { ana: [], garden: ['read', 'write'], seeds: ['read', '@'], sprouts: ['read'] },
   pinned: {},
   owned: true,
+  asOwner: false,
   version: 0,
 }
 
