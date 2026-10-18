@@ -7,7 +7,7 @@
 // acted, as a timeline shows it, which both read.
 import { Effect, Option, Schema } from 'effect'
 
-import type { Actor, OwnActor } from '#/domains/assistant/entities'
+import type { OwnActor, Someone } from '#/domains/assistant/entities'
 import * as AssistantUndo from '#/domains/assistant/undo/undo'
 import { keyName, type SignedIn } from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
@@ -39,14 +39,17 @@ export const actorOf = ({ account, by }: SignedIn) => {
 
 /**
  * Who acted, as the owner's timeline shows a write someone else made there: that Account, by the
- * Title its own star has now, the card anyone sees, `''` while it has none, and who of theirs acted.
+ * Title its own star has now, the card anyone sees, `''` while it has none, and who of theirs acted,
+ * a Key of theirs by no name, the one they gave it being theirs alone.
  */
 const someoneOf = (signed: SignedIn, own: Mapping.Acting) =>
-  Effect.gen(function* () {
-    const [star] = yield* Mapping.glimpses(own, [own.system])
-    const by = yield* actorOf(signed)
-    return { _tag: 'Someone', star: star?.title ?? '', by } satisfies Actor
-  })
+  Effect.map(Mapping.glimpses(own, [own.system]), ([star]): Someone => ({
+    _tag: 'Someone',
+    star: star?.title ?? '',
+    by: {
+      _tag: signed.by._tag === 'Session' ? 'You' : signed.by._tag === 'Key' ? 'Key' : 'Assistant',
+    },
+  }))
 
 /**
  * Runs a write the signed-in Account makes in someone else's System, the one `acting` names, as

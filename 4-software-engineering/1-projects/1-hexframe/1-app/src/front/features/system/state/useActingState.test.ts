@@ -510,7 +510,9 @@ describe("on someone else's System, visited", () => {
     expect(under.length).toBeGreaterThan(0)
     for (const slot of under) {
       expect(result.current.emptySlots(slot)).toBeDefined()
-      expect(result.current.acting.slot(slot)?.without).toEqual(['import', 'ask-agent'])
+      expect(result.current.acting.slot(slot)?.without).toEqual(
+        expect.arrayContaining(['import', 'ask-agent']),
+      )
     }
     for (const slot of free().filter(({ parent }) => parent.id === 'root')) {
       expect(result.current.emptySlots(slot)).toBeUndefined()

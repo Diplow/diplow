@@ -35,6 +35,7 @@ import {
   swapAt,
   tradeOf,
   turnOf,
+  visitorsWithout,
   withoutOf,
   type Systems,
 } from '../acting'
@@ -230,7 +231,7 @@ export function useActingState(input: ActingInput) {
     const fresh = newTileOf(target) ?? place
     return {
       subject: { kind: 'slot', at: target.direction, parent: target.parent.title },
-      ...(systems.reach !== 'owned' && { without: ['import', 'ask-agent'] as const }),
+      ...(systems.reach !== 'owned' && { without: visitorsWithout }),
       onAct: ({ verb }) => {
         if (verb === 'new-tile') begin({ kind: 'add', ...fresh })
         if (verb === 'import') begin({ kind: 'import', place: { _tag: 'Slot', ...place } })

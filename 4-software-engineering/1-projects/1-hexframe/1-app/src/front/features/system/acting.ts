@@ -39,8 +39,19 @@ import { tilesBelow } from './widget/place'
  */
 export type Reach = 'owned' | { readonly visiting: Seen['rights'] }
 
-/** The lines a Tile's menu never offers on a System visited, its owner's alone or a Turn's. */
-const ownersAlone: ReadonlySet<Verb> = new Set(['share', 'export', 'import', 'ask-agent'])
+/**
+ * The lines a menu never offers on a System visited, a Tile's or a free slot's: who sees a Tile and
+ * its export, which are its owner's, an import, which lands in the Account's own System, and the
+ * agent, whose Turn starts there alone. The server refuses each anyway; the page offers none.
+ */
+export const visitorsWithout = [
+  'share',
+  'export',
+  'import',
+  'ask-agent',
+] as const satisfies ReadonlyArray<Verb>
+
+const ownersAlone: ReadonlySet<Verb> = new Set(visitorsWithout)
 
 /** The System three ways: its tree, Mapping's; flat, which `decide` rules on; as the canvas draws it. */
 export interface Systems {

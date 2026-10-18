@@ -129,7 +129,7 @@ const keyOf = (actor: Extract<Actor, { _tag: 'Key' }>): Word =>
 
 /**
  * Someone else who wrote in the user's System, by the Title their star had then, "Someone" for one
- * not named yet, and who of theirs acted: themselves, their agent, or one of their Keys.
+ * not named yet, and who of theirs acted: themselves, their agent, or one of their Keys, by no name.
  */
 function someoneOf({ star, by }: Someone): Word {
   const name = star === '' ? m.conversation_someone() : star
@@ -139,9 +139,7 @@ function someoneOf({ star, by }: Someone): Word {
     case 'Assistant':
       return { name: m.conversation_someones_agent({ name }) }
     case 'Key':
-      return by.name === undefined
-        ? { name: m.conversation_someones_revoked_key({ name }) }
-        : { name: m.conversation_someones_key({ name, key: by.name }) }
+      return { name: m.conversation_someones_key({ name }) }
   }
 }
 

@@ -126,7 +126,7 @@ describe('a Turn in ask', () => {
         { verb: 'TileCreated', tile: { id: team.id, title: 'Team' } },
       ],
     })
-    expect(await value(run(signedIn, Assistant.latest))).toMatchObject({
+    expect(await value(run(signedIn, Assistant.latestOf(undefined)))).toMatchObject({
       mode: 'ask',
       proposal: { id: proposal?.proposal, drafts: 2 },
     })
@@ -182,7 +182,7 @@ describe('a Turn in ask', () => {
     expect(await run(signedIn, Proposal.acceptProposal({ proposal: open.proposal }))).toMatchObject(
       { ok: false, failure: { _tag: 'ProposalClosed', kind: 'Conflict' } },
     )
-    expect(await value(run(signedIn, Assistant.latest))).not.toHaveProperty('proposal')
+    expect(await value(run(signedIn, Assistant.latestOf(undefined)))).not.toHaveProperty('proposal')
   })
 
   it('is refused whole once a Tile it names changed since, takes no more drafts, then is discarded', async () => {
@@ -244,7 +244,7 @@ describe('a Turn in ask', () => {
       failure: { _tag: 'TurnOver', kind: 'Unauthenticated' },
     })
     expect(await proposals()).toEqual(before)
-    expect(await value(run(signedIn, Assistant.latest))).not.toHaveProperty('proposal')
+    expect(await value(run(signedIn, Assistant.latestOf(undefined)))).not.toHaveProperty('proposal')
   })
 })
 

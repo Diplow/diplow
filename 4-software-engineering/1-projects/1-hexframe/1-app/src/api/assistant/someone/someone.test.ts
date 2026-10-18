@@ -22,7 +22,7 @@ import { layer as zipLayer } from '#/repositories/zip/zip'
 
 import * as Mapping from '../../mapping/programs'
 import { WaitUntil, serverBus } from '../../server/bus'
-import { latest, latestOf } from '../programs'
+import { latestOf } from '../programs'
 import { undo } from '../proposal/programs'
 import { recordedInConversation } from '../recording'
 
@@ -176,29 +176,37 @@ layer(TestLayer)("a write in someone else's System, over PGlite", (it) => {
     }),
   )
 
-  it.effect("labels a write by Bob's Key in Ana's timeline as his Key, by its name", () =>
-    Effect.gen(function* () {
-      const { ana, bob, journal } = yield* shared('read+write')
-      const made = yield* Effect.flatten(
-        asked(
-          Mapping.createTile({ parent: journal.id, slot: 2, title: 'Note', preview: '', body: '' }),
-          bob.byKey,
-        ),
-      )
-      expect(said(theirs(yield* recordedFor(ana.account.id)))).toEqual([
-        {
-          _tag: 'Change',
-          verb: 'TileCreated',
-          tile: { id: made.id, title: 'Note' },
-          actor: { _tag: 'Someone', star: 'Bob Martin', by: { _tag: 'Key', name: 'Claude Code' } },
-          undone: false,
-        },
-      ])
-      expect(said(yield* recordedFor(bob.account.id)).at(-1)).toMatchObject({
-        actor: { _tag: 'Key', name: 'Claude Code' },
-        elsewhere: true,
-      })
-    }),
+  it.effect(
+    "labels a write by Bob's Key in Ana's timeline as a Key of his, never by its name",
+    () =>
+      Effect.gen(function* () {
+        const { ana, bob, journal } = yield* shared('read+write')
+        const made = yield* Effect.flatten(
+          asked(
+            Mapping.createTile({
+              parent: journal.id,
+              slot: 2,
+              title: 'Note',
+              preview: '',
+              body: '',
+            }),
+            bob.byKey,
+          ),
+        )
+        expect(said(theirs(yield* recordedFor(ana.account.id)))).toEqual([
+          {
+            _tag: 'Change',
+            verb: 'TileCreated',
+            tile: { id: made.id, title: 'Note' },
+            actor: { _tag: 'Someone', star: 'Bob Martin', by: { _tag: 'Key' } },
+            undone: false,
+          },
+        ])
+        expect(said(yield* recordedFor(bob.account.id)).at(-1)).toMatchObject({
+          actor: { _tag: 'Key', name: 'Claude Code' },
+          elsewhere: true,
+        })
+      }),
   )
 
   it.effect('lets Ana undo it once, as her own change, and never Bob through her Entry', () =>
@@ -320,7 +328,7 @@ layer(TestLayer)("what Bob may do in Ana's System, and what his page follows of 
       yield* asked(Mapping.editTile({ id: journal.id, version: 1, title: 'Ours' }), ana.bySession)
       expect(yield* visited).not.toBe(before)
       // His own System's Version is the count it always was; none is asked of his own star.
-      const own = yield* Effect.flatten(asked(latest, bob.bySession))
+      const own = yield* Effect.flatten(asked(latestOf(undefined), bob.bySession))
       expect(own).not.toHaveProperty('visited')
       const ownStar = yield* rootOf(bob.bySession)
       const asOwn = yield* Effect.flatten(asked(latestOf({ visiting: ownStar }), bob.bySession))

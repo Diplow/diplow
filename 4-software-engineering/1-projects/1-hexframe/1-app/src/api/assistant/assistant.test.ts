@@ -87,7 +87,7 @@ async function messagePosted(
 describe("Assistant's server functions", () => {
   it.each<readonly [string, Program]>([
     ['conversationDay', Assistant.conversationDay({ offset: 0 })],
-    ['latest', Assistant.latest],
+    ['latest', Assistant.latestOf(undefined)],
     ['sendMessage', Assistant.sendMessage(sent('Hello'))],
     [
       'recordNavigation',
@@ -152,16 +152,16 @@ describe("Assistant's server functions", () => {
 
   it('answers the System’s Version, the Entry last recorded, which every write moves, and the Mode', async () => {
     const { call } = request()
-    expect(await value(call(Assistant.latest))).toEqual({ version: 0, mode: 'ask' })
+    expect(await value(call(Assistant.latestOf(undefined)))).toEqual({ version: 0, mode: 'ask' })
     const posted = await messagePosted(call, 'Name me')
-    expect(await value(call(Assistant.latest))).toEqual({
+    expect(await value(call(Assistant.latestOf(undefined)))).toEqual({
       version: 0,
       mode: 'ask',
       lastEntry: posted.id,
     })
     const { root } = await value(call(Mapping.system))
     await value(call(Mapping.editTile({ id: root.id, version: 1, title: 'Ada' })))
-    const latest = await value(call(Assistant.latest))
+    const latest = await value(call(Assistant.latestOf(undefined)))
     const { entries } = await value(call(Assistant.conversationDay({ offset: 0 })))
     expect(latest).toEqual({ version: 1, mode: 'ask', lastEntry: entries.at(-1)?.id })
     expect(latest.lastEntry).not.toBe(posted.id)
@@ -173,12 +173,12 @@ describe("Assistant's server functions", () => {
     await value(
       call(Mapping.createTile({ parent: root.id, slot: 1, title: 'One', preview: '', body: '' })),
     )
-    expect(await value(call(Assistant.latest))).toMatchObject({ version: 1 })
+    expect(await value(call(Assistant.latestOf(undefined)))).toMatchObject({ version: 1 })
     const refused = await call(
       Mapping.moveTile({ id: root.id, version: 1, parent: root.id, slot: 2 }),
     )
     expect(refused.ok).toBe(false)
-    expect(await value(call(Assistant.latest))).toMatchObject({ version: 1 })
+    expect(await value(call(Assistant.latestOf(undefined)))).toMatchObject({ version: 1 })
   })
 
   it('records a merged navigation dated from its last gesture, its Tiles named as they are now', async () => {
@@ -231,7 +231,7 @@ describe("Assistant's server functions", () => {
     expectTypeOf<Errors<ReturnType<typeof Assistant.conversationDay>>>().toEqualTypeOf<
       SignedOut | SessionRequired | TileNotFound
     >()
-    expectTypeOf<Errors<typeof Assistant.latest>>().toEqualTypeOf<
+    expectTypeOf<Errors<ReturnType<typeof Assistant.latestOf>>>().toEqualTypeOf<
       SignedOut | SessionRequired | TileNotFound
     >()
   })

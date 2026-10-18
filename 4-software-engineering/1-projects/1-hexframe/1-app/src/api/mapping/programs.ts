@@ -64,6 +64,14 @@ const forAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effec
   )
 
 /**
+ * Whether the request is a Turn's Key's naming another System than its Account's own: a Turn's Key
+ * reads and writes the System its Turn started in alone, whatever else its Account may reach, so
+ * every read and every change of another System answers it `TileNotFound`.
+ */
+const turnKeyElsewhere = (signed: Iam.SignedIn, own: Mapping.Acting, star: string) =>
+  signed.by._tag === 'TurnKey' && star !== own.system
+
+/**
  * Runs a read for the signed-in Account on the System the star `named` answers names, its own when
  * it answers none, looked up once the request is proven signed in, so nothing is looked up for a
  * request nothing proves,
@@ -84,7 +92,7 @@ const onSystem = <A, E, R, N, R2>(
       ]),
       ([own, star]): Effect.Effect<A, E | TileNotFound, R> => {
         if (star === undefined || star === own.system) return operation(own, own)
-        if (signed.by._tag === 'TurnKey') return Effect.fail(new TileNotFound())
+        if (turnKeyElsewhere(signed, own, star)) return Effect.fail(new TileNotFound())
         return operation({ ...own, system: star }, own)
       },
     ),
@@ -124,7 +132,7 @@ const changeAt = <O extends Operation, A, E, R>(
     ])
     if (star === undefined || star === mine.system)
       return yield* transactional(own(mine, operation))
-    if (signed.by._tag === 'TurnKey') return yield* Effect.fail(new TileNotFound())
+    if (turnKeyElsewhere(signed, mine, star)) return yield* Effect.fail(new TileNotFound())
     const acting = { ...mine, system: star }
     return yield* transactional(
       Effect.flatMap(Someone.writtenInAnothers(signed, { acting, own: mine }, operation), answer),

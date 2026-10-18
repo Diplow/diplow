@@ -116,9 +116,6 @@ const latestOwn = (accountId: string, own: Mapping.Acting) =>
     }
   })
 
-/** The latest of the Account's own, as the page polls it at home. */
-export const latest = latestOf(undefined)
-
 /**
  * The Version of a System the Account visits, by its star, as it is shown it (Mapping's
  * `systemVersion`): none for no star, its own, whose Version the poll says already, or a star that

@@ -29,9 +29,16 @@ export type OwnActor = typeof OwnActor.Type
 /**
  * Someone else, writing in the user's System: another Account, by the Title its star had when the
  * write was recorded, `''` for one not named yet, and who acted of theirs, the Account itself, one of
- * its Keys, or its Assistant.
+ * its Keys, never by the name it gave it, which is its own, or its Assistant.
  */
-const Someone = Schema.TaggedStruct('Someone', { star: Schema.String, by: OwnActor })
+const Someone = Schema.TaggedStruct('Someone', {
+  star: Schema.String,
+  by: Schema.Union([
+    Schema.TaggedStruct('You', {}),
+    Schema.TaggedStruct('Key', {}),
+    Schema.TaggedStruct('Assistant', {}),
+  ]),
+})
 
 /** Someone else, writing in the user's System. */
 export type Someone = typeof Someone.Type

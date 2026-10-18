@@ -117,11 +117,8 @@ describe('happenedOf', () => {
     expect(by({ _tag: 'Assistant' }).words[0]).toEqual({
       name: m.conversation_someones_agent({ name: 'Bob Martin' }),
     })
-    expect(by({ _tag: 'Key', name: 'laptop' }).words[0]).toEqual({
-      name: m.conversation_someones_key({ name: 'Bob Martin', key: 'laptop' }),
-    })
     expect(by({ _tag: 'Key' }).words[0]).toEqual({
-      name: m.conversation_someones_revoked_key({ name: 'Bob Martin' }),
+      name: m.conversation_someones_key({ name: 'Bob Martin' }),
     })
     expect(by({ _tag: 'You' }, '').words[0]).toEqual({ name: m.conversation_someone() })
     // In the user's own System: the Tile as it holds it.

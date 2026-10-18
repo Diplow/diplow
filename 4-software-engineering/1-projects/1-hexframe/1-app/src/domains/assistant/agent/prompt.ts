@@ -89,9 +89,7 @@ function someoneOf({ star, by }: Someone): string {
     case 'Assistant':
       return `The agent of ${another},`
     case 'Key':
-      return by.name === undefined
-        ? `A revoked key of ${another},`
-        : `The key ${quoted(by.name)} of ${another},`
+      return `A key of ${another},`
   }
 }
 
