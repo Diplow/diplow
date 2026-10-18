@@ -201,12 +201,20 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
 export const setMode = ({ mode }: { readonly mode: Mode }) =>
   forSession((accountId) => transactional(Assistant.setMode(accountId, mode)))
 
-/** An open Proposal as the page compares it, by its id and how many writes it holds. */
-const counted = (open: OpenProposal) => ({ id: open.id, drafts: open.drafts.length })
+/**
+ * An open Proposal as the page compares it, by its id and how many writes it holds, and the System it
+ * changes, someone else's by its star (`elsewhere`), none for the Account's own.
+ */
+const counted = (open: OpenProposal) => ({
+  id: open.id,
+  drafts: open.drafts.length,
+  ...(open.elsewhere !== undefined && { elsewhere: open.elsewhere }),
+})
 
 /**
- * The Account's Conversation as the page polls it: its Mode, and its open Proposal by its id and how
- * many writes it holds, none when none is open, so a draft reads the Conversation again. One read.
+ * The Account's Conversation as the page polls it: its Mode, and its open Proposal by its id, how
+ * many writes it holds and the System it changes, none when none is open, so a draft reads the
+ * Conversation again. One read.
  */
 export const conversationNow = (accountId: string) =>
   Effect.map(Assistant.conversationState(accountId), ({ mode, open }) => ({
@@ -216,9 +224,10 @@ export const conversationNow = (accountId: string) =>
 
 /**
  * The Account's open Proposal as a day of the Conversation answers it: its id, how many writes it
- * holds, and the writes themselves, as Mapping batched them, encoded, which the canvas folds over the
- * System the page shows to draw what the Proposal would do (HEX-109); none when none is open. One
- * read, so the writes are the ones counted.
+ * holds, the System it changes (`counted`), and the writes themselves, as Mapping batched them,
+ * encoded, which the canvas folds over that System to draw what the Proposal would do (HEX-109), the
+ * Account's own or the one it visits; none when none is open. One read, so the writes are the ones
+ * counted.
  */
 export const proposalNow = (accountId: string) =>
   Effect.flatMap(Assistant.openProposal(accountId), (open) =>

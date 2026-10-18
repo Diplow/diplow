@@ -2,9 +2,10 @@
 // Tile the chat points at, a name hovered or focused, or the `@` list's row; the Tile it centered,
 // glinting; the Tile the running Turn works in; the changes the agent or a Key made since the page
 // opened, each glinting as it comes and keeping its dot until the user opens its Tile; and the open
-// Proposal, folded over the System the page shows. It reads today's Entries and the open Proposal
-// beside the chat (`useToday`); the route hands it the System and the Turn running, and tells it what
-// the chat points at, what it centered and where the user went.
+// Proposal, folded over the System it changes, drawn while the canvas shows that one, the Account's
+// own or the one it visits. It reads today's Entries and the open Proposal beside the chat
+// (`useToday`); the route hands it the Account's System, the one visited and the Turn running, and
+// tells it what the chat points at, what it centered and where the user went.
 import { useMemo, useState } from 'react'
 
 import type { System } from '#/domains/mapping/entities'
@@ -23,13 +24,31 @@ const opening: ReadonlySet<Gesture> = new Set<Gesture>([
 ])
 
 interface MarksInput {
-  /** The System as the page shows it, flat; none before it is read. */
+  /** The Account's own System as the page shows it, flat; none before it is read. */
   system: System | undefined
+  /**
+   * The System the page visits instead, someone else's, by its star, and as the canvas shows it,
+   * flat, none before it is read; no star at home.
+   */
+  visited: { readonly star: string | undefined; readonly system: System | undefined }
   /** The Tile the running Turn works in, its location; none while no Turn runs. */
   working: string | undefined
 }
 
-export function useMarksState({ system, working }: MarksInput) {
+/**
+ * The System the open Proposal changes, as the page holds it: the Account's own, or the one it
+ * visits when the Proposal is over that one (`elsewhere`), by its star; none for another, nor before
+ * it is read.
+ */
+const changedBy = (
+  elsewhere: string | undefined,
+  { system, visited }: Pick<MarksInput, 'system' | 'visited'>,
+) => {
+  if (elsewhere === undefined) return system
+  return elsewhere === visited.star ? visited.system : undefined
+}
+
+export function useMarksState({ system, visited, working }: MarksInput) {
   const today = useToday()
   const [pointed, setPointed] = useState<string>()
   const [arrived, setArrived] = useState<Arrival>()
@@ -45,13 +64,20 @@ export function useMarksState({ system, working }: MarksInput) {
   if (known === undefined && today !== undefined) {
     setKnown(new Set(today.entries.map(({ id }) => id)))
   }
-  const open = today?.proposal?.id
+  const proposal = today?.proposal
+  const open = proposal?.id
   if (open !== undefined && !watched.has(open)) setWatched(new Set([...watched, open]))
-  const writes = today?.proposal?.writes
+  const writes = proposal?.writes
+  const changed =
+    proposal === undefined ? undefined : changedBy(proposal.elsewhere, { system, visited })
   const proposed = useMemo(
-    () => (system === undefined || writes === undefined ? undefined : proposedOf(system, writes)),
-    [system, writes],
+    () => (changed === undefined || writes === undefined ? undefined : proposedOf(changed, writes)),
+    [changed, writes],
   )
+  // Drawn while the canvas shows the System it changes; named in the chat's cards, which read the
+  // Account's own, when it changes that one.
+  const drawn = proposal?.elsewhere === visited.star ? proposed : undefined
+  const named = proposal?.elsewhere === undefined ? proposed : undefined
   const entries = today?.entries ?? []
   const touches =
     known === undefined ? [] : touchesOf(entries, { known, accepted: acceptedOf(entries, watched) })
@@ -66,9 +92,9 @@ export function useMarksState({ system, working }: MarksInput) {
     setPlayed((before) => new Set([...before, ...risen]))
   }
   return {
-    marks: canvasMarksOf({ pointed, arrived, working, touches, opened, played, proposed }),
+    marks: canvasMarksOf({ pointed, arrived, working, touches, opened, played, proposed: drawn }),
     /** What a Tile named in the chat says in its card; none before the System is read. */
-    cardOf: (id: string) => (system === undefined ? undefined : cardOf(system, proposed, id)),
+    cardOf: (id: string) => (system === undefined ? undefined : cardOf(system, named, id)),
     actions: {
       /**
        * A name's card opened or shut: the Tile is pointed at meanwhile. A card shutting clears its own

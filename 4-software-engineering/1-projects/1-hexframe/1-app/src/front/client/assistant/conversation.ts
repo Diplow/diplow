@@ -108,9 +108,10 @@ const decodeWrites = Schema.decodeUnknownOption(Schema.Array(Batched))
 
 /**
  * Today as the canvas reads it, beside the chat: today's Entries, oldest first, and the open Proposal,
- * by its id, with its writes as Mapping batched them, decoded by its schema, which the canvas folds
- * over the System to draw what it would do; none before today is read. The same Query as the chat's,
- * its failure left to the chat's boundary.
+ * by its id, with the System it changes, someone else's by its star (`elsewhere`), none for the
+ * Account's own, and its writes as Mapping batched them, decoded by its schema, which the canvas folds
+ * over that System to draw what it would do; none before today is read. The same Query as the
+ * chat's, its failure left to the chat's boundary.
  */
 export function useToday() {
   const { data } = useInfiniteQuery({ ...conversationRead, throwOnError: false })
@@ -122,6 +123,7 @@ export function useToday() {
       entries,
       proposal: proposal && {
         id: proposal.id,
+        ...(proposal.elsewhere !== undefined && { elsewhere: proposal.elsewhere }),
         writes: Option.getOrElse(decodeWrites(proposal.writes), () => []),
       },
     }

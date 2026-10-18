@@ -67,7 +67,12 @@ describe('the System the URL visits', () => {
     await waitFor(() => {
       expect(Mapping.system).toHaveBeenCalled()
     })
-    expect(result.current).toEqual({ star: undefined, tree: undefined, titles: new Map() })
+    expect(result.current).toEqual({
+      star: undefined,
+      tree: undefined,
+      system: undefined,
+      titles: new Map(),
+    })
     expect(Mapping.system).not.toHaveBeenCalledWith({ data: { system: 'bob' } })
   })
 
@@ -85,9 +90,12 @@ describe('the System the URL visits', () => {
       expect(result.current.tree).toMatchObject({ id: 'ana', branches: { 2: { id: 'garden' } } })
     })
     expect(result.current.star).toBe('ana')
+    // Flat too, which the open Proposal over it is folded over.
+    expect(result.current.system?.root.id).toBe('ana')
     rerender({ star: undefined, own: 'bob' })
     expect(result.current.star).toBeUndefined()
     expect(result.current.tree).toBeUndefined()
+    expect(result.current.system).toBeUndefined()
     expect(result.current.titles.get('garden')).toBe('Garden')
   })
 })

@@ -527,7 +527,7 @@ function SignedIn() {
   const visit = useVisitedState(search.system, system?.root.id)
   // What crosses from the chat to the canvas: the Tile it points at, the one it centered, where the
   // running Turn works, the changes made meanwhile, and the open Proposal.
-  const marks = useMarksState({ system, working: turn?.location })
+  const marks = useMarksState({ system, visited: visit, working: turn?.location })
   // What crosses from the canvas to the chat: a Tile carried off it, for the composer to name.
   const [carried, setCarried] = useState<CarriedTile>()
   const onViewChange = (view: CanvasView, action: ViewAction) => {

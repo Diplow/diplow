@@ -239,6 +239,10 @@ describe('a Turn’s writes in someone else’s System, by its Mode', () => {
     await end()
     const { proposal } = await value(run(signedIn, Assistant.latestOf(undefined)))
     if (proposal === undefined) return expect.fail('No Proposal was opened')
+    // The poll and the day say whose System it changes, so the canvas draws it over hers.
+    expect(proposal).toMatchObject({ drafts: 1, elsewhere: ana.star })
+    const { proposal: drawn } = await value(run(signedIn, Assistant.conversationDay({ offset: 0 })))
+    expect(drawn).toMatchObject({ id: proposal.id, elsewhere: ana.star, writes: [{}] })
     await value(run(signedIn, Proposal.acceptProposal({ proposal: proposal.id })))
     const after = await value(run(ana.signedIn, Mapping.system))
     expect(after.tiles[(drafted as { value: { id: string } }).value.id]).toMatchObject({
@@ -285,6 +289,7 @@ describe('a Turn’s writes in someone else’s System, by its Mode', () => {
     const { proposal } = await value(run(signedIn, Assistant.latestOf(undefined)))
     if (proposal === undefined) return expect.fail('The Proposal at home is gone')
     expect(proposal.drafts).toBe(1)
+    expect(proposal).not.toHaveProperty('elsewhere')
     await value(run(signedIn, Proposal.discardProposal({ proposal: proposal.id })))
   })
 })

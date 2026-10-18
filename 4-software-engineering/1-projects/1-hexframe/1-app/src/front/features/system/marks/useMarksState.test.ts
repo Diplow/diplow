@@ -17,7 +17,8 @@ import { useMarksState } from './useMarksState'
 // a name's card shutting clearing its own Tile only; a Tile centered glinting; the Turn's location
 // working; a change recorded after the page opened glinting, then a dot until its Tile is opened, one
 // the page held first left alone; the user's acceptance of a Proposal they saw open glinting in their
-// amber; and the open Proposal's create standing as a ghost, which a name's card says too.
+// amber; and the open Proposal's create standing as a ghost, which a name's card says too, drawn on
+// the System it changes alone, the Account's own or the one visited.
 vi.mock('#/api/assistant/assistant', () => ({ conversationDay: vi.fn() }))
 
 afterEach(() => {
@@ -64,8 +65,11 @@ const proposalEntry = (fate: 'open' | 'accepted'): Entry => ({
   fate,
 })
 
-/** The open Proposal as the day answers it: Tooling created under Work, in Direction 2. */
-const open = {
+/**
+ * The open Proposal as the day answers it: Tooling created under Work, in Direction 2, over the
+ * Account's own System, or, `elsewhere`, over someone else's by its star.
+ */
+const open: { id: string; drafts: number; elsewhere?: string; writes: unknown[] } = {
   id: 'proposal',
   drafts: 1,
   writes: [
@@ -95,12 +99,24 @@ const answering = (entries: Entry[], proposal?: typeof open) => {
   } as never)
 }
 
-async function render(entries: Entry[], proposal?: typeof open, working?: string) {
+/** The Account's own System with nothing but its Root, where Work is no Tile. */
+const bare: System = { ...system, tiles: {} }
+
+/**
+ * The page with the hook, on the Account's own System (`own`), unless it visits one by its star,
+ * drawn from the same Tiles as `system`.
+ */
+async function render(
+  entries: Entry[],
+  proposal?: typeof open,
+  { working, visiting, own = system }: { working?: string; visiting?: string; own?: System } = {},
+) {
   answering(entries, proposal)
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
-  const rendered = renderHook(() => useMarksState({ system, working }), { wrapper })
+  const visited = { star: visiting, system: visiting === undefined ? undefined : system }
+  const rendered = renderHook(() => useMarksState({ system: own, visited, working }), { wrapper })
   await waitFor(() => {
     expect(conversationDay).toHaveBeenCalled()
   })
@@ -128,7 +144,7 @@ describe('useMarksState, what crosses from the chat to the canvas', () => {
   })
 
   it('glints a Tile the chat centered, and runs the light round where the Turn works', async () => {
-    const { result } = await render([], undefined, id.root)
+    const { result } = await render([], undefined, { working: id.root })
     act(() => {
       result.current.actions.arrive(id.work)
     })
@@ -180,5 +196,33 @@ describe('useMarksState, what crosses from the chat to the canvas', () => {
       })
     })
     expect(result.current.marks.slot?.({ parent, ring: 'children', direction: 2 })).toBeUndefined()
+  })
+
+  it('draws a Proposal over someone else’s System on theirs alone, never on the Account’s own', async () => {
+    const parent: TileNode = { id: id.work, title: 'Work', preview: '' }
+    const ghost = (marks: ReturnType<typeof useMarksState>['marks']) =>
+      marks.slot?.({ parent, ring: 'children', direction: 2 })
+    const overAna = { ...open, elsewhere: 'ana' }
+    // Folded over hers, which holds Work, where the Account's own holds none.
+    const there = await render([proposalEntry('open')], overAna, { visiting: 'ana', own: bare })
+    await waitFor(() => {
+      expect(ghost(there.result.current.marks)).toMatchObject({ id: id.made })
+    })
+    // The chat's cards read the Account's own System, which the Proposal leaves as it is.
+    expect(there.result.current.cardOf(id.made)).toBeUndefined()
+    cleanup()
+    const home = await render([proposalEntry('open')], overAna)
+    await waitFor(() => {
+      expect(home.result.current.cardOf(id.work)).toBeDefined()
+    })
+    expect(ghost(home.result.current.marks)).toBeUndefined()
+    expect(home.result.current.cardOf(id.made)).toBeUndefined()
+    // Nor is one over the Account's own drawn on a System it visits.
+    cleanup()
+    const visiting = await render([proposalEntry('open')], open, { visiting: 'ana' })
+    await waitFor(() => {
+      expect(visiting.result.current.cardOf(id.made)).toMatchObject({ description: 'Tools' })
+    })
+    expect(ghost(visiting.result.current.marks)).toBeUndefined()
   })
 })
