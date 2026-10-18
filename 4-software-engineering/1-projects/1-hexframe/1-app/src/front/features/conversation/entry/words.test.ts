@@ -143,7 +143,7 @@ describe('happenedOf', () => {
     const declined = happenedOf(membership('declined', '', 'Design'), naming)
     expect(declined.words[0]).toEqual({ name: m.conversation_someone() })
     expect(declined.words).toContain('Design')
-    expect(declined.words.join('')).not.toBe(added.words.join(''))
+    expect(declined.words).not.toEqual(added.words)
   })
 
   it('tells someone asking to join, by their star, the Organization and its Group', () => {

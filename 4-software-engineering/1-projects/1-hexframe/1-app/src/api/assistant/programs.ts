@@ -46,7 +46,7 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
  * first, and the Titles of the Tiles its navigations went to and its Messages link, as the System
  * holding each now shows it to the Account, its own or one it visited (Mapping's `titlesAcross`), by id. A
  * navigation and a link keep a Tile's id alone; a Tile no System holds any longer, or one kept from
- * the Account since, has no Title there. With them, `requests`, how each request to join an
+ * the Account since, has no Title there. With them, `requests`, when it names any, how each request to join an
  * Organization its Entries name stands now, by its id, for the requests of an Organization the
  * Account is an admin of now (IAM's `requestsSeen`, HEX-138), so an admin's timeline offers Accept
  * and Decline while it is open, whoever decided it since; `earlier`, the instant of the latest Entry before the day,
@@ -73,7 +73,7 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
         day,
         entries,
         titles,
-        requests: Object.fromEntries(requests),
+        ...(requests.size > 0 && { requests: Object.fromEntries(requests) }),
         ...(earlier !== undefined && { earlier }),
         ...(lastEntry !== undefined && { lastEntry }),
         ...(proposal !== undefined && { proposal }),
