@@ -72,6 +72,12 @@ const ends = {
   sandbox: 'its sandbox failed',
 } as const
 
+/** Who shared a Tile, as the agent reads it: another Account, by its star's Title, if it has one. */
+const sharerOf = (by: string) =>
+  by === ''
+    ? 'Another Account, whose star has no title,'
+    : `Another Account, whose star is titled ${quoted(by)},`
+
 /** What a Tile shared lets the user do, as the agent reads it. */
 const sharedRights: Record<SharedRights, string> = {
   read: 'read it',
@@ -119,7 +125,7 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
       return `A Turn of yours in apply made ${made}${entry.undone ? ', which the user undid' : ''}.`
     }
     case 'Shared':
-      return `Another Account, whose star is titled ${quoted(entry.by)}, shared ${named(entry.tile.title, entry.tile.id)} with the user, who may ${sharedRights[entry.rights]} there; it stands in that Account's System, not the user's.`
+      return `${sharerOf(entry.by)} shared ${named(entry.tile.title, entry.tile.id)} with the user, who may ${sharedRights[entry.rights]} there; it stands in that Account's System, not the user's.`
   }
 }
 

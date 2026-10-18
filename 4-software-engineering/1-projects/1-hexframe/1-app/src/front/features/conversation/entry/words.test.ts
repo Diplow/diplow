@@ -40,7 +40,7 @@ describe('happenedOf', () => {
     expect(agents.who).toBe('agent')
     expect(agents.words[0]).toBe(m.conversation_edited_agent({ title: '' }))
     const keys = happenedOf(change({ _tag: 'Key', name: 'laptop' }), naming)
-    expect(keys.who).toBe('key')
+    expect(keys.who).toBe('outside')
     expect(keys.words[0]).toEqual({ name: m.conversation_key({ name: 'laptop' }) })
     expect(happenedOf(change({ _tag: 'Key' }), naming).words[0]).toBe(m.conversation_revoked_key())
   })
@@ -102,7 +102,7 @@ describe('happenedOf', () => {
         visited.push(id)
       },
     })
-    expect(told).toMatchObject({ who: 'key', detail: 'read, write' })
+    expect(told).toMatchObject({ who: 'outside', detail: 'read, write' })
     expect(told.words[0]).toEqual({ name: 'Ana Lima' })
     // Not the user's own System's: shown as it was shared, never struck through, and visited.
     const journal = told.words.find((word) => typeof word === 'object' && 'tile' in word)

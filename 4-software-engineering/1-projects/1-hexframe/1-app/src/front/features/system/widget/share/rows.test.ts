@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Reach } from '#/domains/mapping/entities'
+import type { NamedReach, Reach } from '#/domains/mapping/entities'
 
-import { changeOf, fromOf, shareRowsOf, withSent } from './rows'
+import { changeOf, fromOf, named, shareRowsOf, withSent } from './rows'
 
 // Who reaches a Tile, as the share widget words it: where each value comes from, what its owner set
 // for Everyone and for someone named by their star there, through inherit, what a choice sends and
@@ -33,8 +33,13 @@ describe('who reaches a Tile, in words', () => {
       {
         everyone: everyone('read', star),
         others: [
-          { subject: { _tag: 'Group', id: 'family' }, value: 'read+write+@', from: journal },
-          { subject: { _tag: 'Account', id: 'bob' }, value: 'none', from: entry },
+          {
+            subject: { _tag: 'Group', id: 'family' },
+            value: 'read+write+@',
+            from: journal,
+            star: undefined,
+          },
+          { subject: { _tag: 'Account', id: 'bob' }, value: 'none', from: entry, star: undefined },
         ],
       },
       around,
@@ -45,6 +50,7 @@ describe('who reaches a Tile, in words', () => {
       value: 'read',
       from: 'from your star',
       choice: 'inherit',
+      offered: ['read', 'none', 'inherit'],
     })
     expect(rows.others).toEqual([
       { key: 'Group:family', who: 'A group', value: 'read, write, @', from: 'from Journal' },
@@ -80,9 +86,9 @@ describe('someone the Tile is shared with', () => {
         from: journal,
         star: { id: crypto.randomUUID(), title: '', preview: '' },
       },
-      { subject: { _tag: 'Group', id: 'family' }, value: 'read', from: journal },
+      { subject: { _tag: 'Group', id: 'family' }, value: 'read', from: journal, star: undefined },
     ],
-  } satisfies { everyone: Reach; others: Reach[] }
+  } satisfies { everyone: Reach; others: NamedReach[] }
   const rows = shareRowsOf(reached, around)
 
   it('is named by their star, one not named yet said so, with what its owner set here', () => {
@@ -93,6 +99,7 @@ describe('someone the Tile is shared with', () => {
         value: 'read, write',
         from: 'set here',
         choice: 'read+write',
+        offered: ['none', 'read', 'read+write', 'read+@', 'read+write+@', 'inherit'],
         star: bobsStar,
       },
       expect.objectContaining({ who: 'A star not named yet', choice: 'inherit' }),
@@ -131,5 +138,10 @@ describe('someone the Tile is shared with', () => {
     const toEveryone = { tile: entry, subject: { _tag: 'Everyone' }, value: 'read' } as const
     expect(withSent(rows, toEveryone).everyone.choice).toBe('read')
     expect(withSent(rows, undefined)).toEqual(rows)
+  })
+
+  it('is named among the rows by their star, so picking them again sends nothing', () => {
+    expect(named(rows, bobsStar)).toBe(true)
+    expect(named(rows, crypto.randomUUID())).toBe(false)
   })
 })

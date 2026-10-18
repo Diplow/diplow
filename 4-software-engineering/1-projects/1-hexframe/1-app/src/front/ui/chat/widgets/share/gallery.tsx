@@ -10,8 +10,8 @@ import { m } from '#/paraglide/messages'
 import { toast } from '../../../atoms/Toaster'
 import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
 import { said } from '../../samples'
-import { rightsSaid } from './rights'
-import { type Chosen, type ReachRow, type ShareChoice, ShareWidget } from './ShareWidget'
+import { choiceSaid, rightsSaid, type ShareChoice } from './rights'
+import { type Chosen, type ReachRow, ShareWidget } from './ShareWidget'
 
 export function ShareWidgetGallery() {
   return (
@@ -43,6 +43,29 @@ export function ShareWidgetGallery() {
 /** A sample tile's link, plainly a sample's: it leads nowhere. */
 const sampleLink = 'https://hexframe.ai/t/00000000-0000-4000-8000-000000000000'
 
+/** What Everyone is offered, as home offers it: never a write. */
+const everyoneOffered: readonly ShareChoice[] = ['read', 'none', 'inherit']
+
+/** What someone is offered, as home offers it: every value, then inherit. */
+const someoneOffered: readonly ShareChoice[] = [
+  'none',
+  'read',
+  'read+write',
+  'read+@',
+  'read+write+@',
+  'inherit',
+]
+
+/** The rights each sample choice gives Bob, as Mapping would answer: inheriting, none. */
+const bobsRights: Record<ShareChoice, readonly ('read' | 'write' | '@')[]> = {
+  none: [],
+  read: ['read'],
+  'read+write': ['read', 'write'],
+  'read+@': ['read', '@'],
+  'read+write+@': ['read', 'write', '@'],
+  inherit: [],
+}
+
 /** Where a value set comes from, as home words it: here, or the tile above, its star. */
 const fromOf = (choice: ShareChoice) =>
   choice === 'inherit' ? m.widget_share_from_star() : m.widget_share_set_here()
@@ -51,25 +74,27 @@ const fromOf = (choice: ShareChoice) =>
 const everyoneOf = (choice: ShareChoice): ReachRow & Chosen => ({
   key: 'everyone',
   who: m.widget_share_everyone(),
-  value: rightsSaid(choice === 'none' ? 'none' : 'read'),
+  value: rightsSaid(choice === 'none' ? [] : ['read']),
   from: fromOf(choice),
   choice,
+  offered: everyoneOffered,
 })
 
 /** Bob, someone the tile is shared with, once the choice landed: inheriting, he reads nothing. */
 const bobOf = (choice: ShareChoice): ReachRow & Chosen => ({
   key: 'bob',
   who: 'Bob Martin',
-  value: rightsSaid(choice === 'inherit' ? 'none' : choice),
+  value: rightsSaid(bobsRights[choice]),
   from: choice === 'inherit' ? m.widget_share_by_default() : m.widget_share_set_here(),
   choice,
+  offered: someoneOffered,
 })
 
 /** A group reaching it, by a Grant set on the tile above, which nobody sets here yet. */
 const group = (): ReachRow => ({
   key: 'group',
   who: m.widget_share_group(),
-  value: rightsSaid('read+write'),
+  value: rightsSaid(['read', 'write']),
   from: m.widget_share_from({ title: m.gallery_sample_chat_projects() }),
 })
 
@@ -91,8 +116,7 @@ function LiveShare({
         const who = key === 'bob' ? 'Bob Martin' : m.widget_share_everyone()
         if (key === 'bob') setBobs(next)
         else setChoice(next)
-        const words = next === 'inherit' ? m.widget_share_choice_inherit() : rightsSaid(next)
-        toast(m.gallery_share_chosen({ who, choice: words }))
+        toast(m.gallery_share_chosen({ who, choice: choiceSaid(next) }))
       }}
       onAdd={said(m.gallery_share_add())}
       link={sampleLink}

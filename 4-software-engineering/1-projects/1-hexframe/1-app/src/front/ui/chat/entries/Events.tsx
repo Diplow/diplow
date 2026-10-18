@@ -18,7 +18,7 @@ import { Time } from './time'
  * Who acted: the user, the agent, someone from outside, a Key or another Account sharing a tile, or
  * hexframe itself, a limit or a failure.
  */
-type Who = Exclude<Voice, 'destructive'> | 'key'
+type Who = Exclude<Voice, 'destructive'> | 'outside'
 
 /** One thing that happened, said in a sentence that names who did it, but the agent's. */
 export interface Happened {
@@ -42,7 +42,7 @@ export interface Folded {
 const marks: Record<Who, { hollow: boolean; className: string }> = {
   human: { hollow: false, className: 'text-human' },
   agent: { hollow: false, className: 'text-agent' },
-  key: { hollow: true, className: 'fill-card text-faint' },
+  outside: { hollow: true, className: 'fill-card text-faint' },
   app: { hollow: false, className: 'text-faint' },
 }
 

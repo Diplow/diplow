@@ -11,7 +11,7 @@ import { TileId } from '../tile'
 import { Everyone, GrantValue, originOn, Reading, type Sharing, type Subject } from './rights'
 
 /** What the owner sets on a Tile for Everyone: `read`, `none`, or `inherit`. Never more than read. */
-const EveryoneChoice = Schema.Literals(['read', 'none', 'inherit'])
+export const EveryoneChoice = Schema.Literals(['read', 'none', 'inherit'])
 
 /**
  * What the owner sets on a Tile for someone: any value, `none` to `read+write+@`, or `inherit`,
@@ -39,15 +39,20 @@ export type GrantChange = typeof GrantChange.Type
 
 /**
  * One subject reaching a Tile: the value it has there and the Tile whose Grant gives it, the Tile
- * itself when it is set there, `null` when no Tile above sets one, the star giving `none`; and, for
- * an Account, its star by its card, which names it, none until it is read (`namedBy`) or for an
- * Account with no star.
+ * itself when it is set there, `null` when no Tile above sets one, the star giving `none`.
  */
 export interface Reach {
   readonly subject: Subject
   readonly value: GrantValue
   readonly from: string | null
-  readonly star?: StarCard | undefined
+}
+
+/**
+ * One subject reaching a Tile, named: an Account by its star's card, none for an Account with no
+ * star, nor for a Group, which IAM names later. What the Share widget lists (`namedBy`).
+ */
+export interface NamedReach extends Reach {
+  readonly star: StarCard | undefined
 }
 
 /**
@@ -57,10 +62,10 @@ export interface Reach {
 export const choiceOn = ({ value, from }: Reach, tile: string): Choice =>
   from === tile ? value : 'inherit'
 
-/** Who reaches a Tile: Everyone, always, and everyone else who does. */
-export interface Reaching {
+/** Who reaches a Tile: Everyone, always, and everyone else who does, named or not yet. */
+export interface Reaching<Other extends Reach = Reach> {
   readonly everyone: Reach
-  readonly others: ReadonlyArray<Reach>
+  readonly others: ReadonlyArray<Other>
 }
 
 /**
@@ -89,11 +94,12 @@ export const accountsIn = ({ others }: Reaching): ReadonlyArray<string> =>
 export const namedBy = (
   { everyone, others }: Reaching,
   stars: ReadonlyMap<string, StarCard>,
-): Reaching => ({
+): Reaching<NamedReach> => ({
   everyone,
-  others: others.map((reach) =>
-    reach.subject._tag === 'Account' ? { ...reach, star: stars.get(reach.subject.id) } : reach,
-  ),
+  others: others.map((reach) => ({
+    ...reach,
+    star: reach.subject._tag === 'Account' ? stars.get(reach.subject.id) : undefined,
+  })),
 })
 
 const reads = Schema.is(Reading)

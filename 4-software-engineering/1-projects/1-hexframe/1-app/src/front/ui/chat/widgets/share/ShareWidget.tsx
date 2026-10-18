@@ -14,13 +14,7 @@ import { m } from '#/paraglide/messages'
 
 import { runsToCurve, toCurve } from '../../../layouts/screen/state/useAlongCurve'
 import { Widget } from '../../layouts/Widget'
-import type { Rights } from './rights'
-
-/**
- * What the owner sets on the tile for someone: a value, none to read, write and @, or what the tile
- * above has. Everyone is offered read, none or inherit alone: it never writes.
- */
-export type ShareChoice = Rights | 'inherit'
+import { choiceSaid, type ShareChoice } from './rights'
 
 /** Someone who reaches the tile, as its row shows them, every word already its caller's. */
 export interface ReachRow {
@@ -33,9 +27,11 @@ export interface ReachRow {
   readonly from: string
 }
 
-/** A row whose value the owner sets here: what they set for it on this tile. */
+/** A row whose value the owner sets here: what they set for it on this tile, and what it offers. */
 export interface Chosen {
   readonly choice: ShareChoice
+  /** The choices offered, in order, as Mapping lets them: Everyone never writes. */
+  readonly offered: readonly ShareChoice[]
 }
 
 interface ShareWidgetProps {
@@ -87,7 +83,7 @@ export function ShareWidget({
       <ul className="grid">
         <Row row={everyone} hint={m.widget_share_everyone_hint()}>
           <Choices
-            offered={everyoneChoices}
+            offered={everyone.offered}
             legend={m.widget_share_choose()}
             chosen={everyone.choice}
             sending={sending}
@@ -98,9 +94,9 @@ export function ShareWidget({
         </Row>
         {others.map((row) => (
           <Row key={row.key} row={row}>
-            {row.choice !== undefined && (
+            {row.choice !== undefined && row.offered !== undefined && (
               <Choices
-                offered={someoneChoices}
+                offered={row.offered}
                 legend={m.widget_share_choose_for({ who: row.who })}
                 chosen={row.choice}
                 sending={sending}
@@ -148,29 +144,6 @@ function Row({ row, hint, children }: { row: ReachRow; hint?: string; children?:
   )
 }
 
-/** Each choice, as its button says it. */
-const labels: Record<ShareChoice, () => string> = {
-  none: m.widget_share_choice_none,
-  read: m.widget_share_choice_read,
-  'read+write': m.widget_share_choice_read_write,
-  'read+@': m.widget_share_choice_read_agent,
-  'read+write+@': m.widget_share_choice_read_write_agent,
-  inherit: m.widget_share_choice_inherit,
-}
-
-/** What Everyone is offered: read, none, or inherit, never write nor @. */
-const everyoneChoices: readonly ShareChoice[] = ['read', 'none', 'inherit']
-
-/** What someone is offered: every value, then inherit. */
-const someoneChoices: readonly ShareChoice[] = [
-  'none',
-  'read',
-  'read+write',
-  'read+@',
-  'read+write+@',
-  'inherit',
-]
-
 /** A row's value on the tile, one of those offered, as a radio group the arrows go round. */
 function Choices({
   offered,
@@ -208,7 +181,7 @@ function Choices({
             }}
             className="sr-only"
           />
-          {labels[choice]()}
+          {choiceSaid(choice)}
         </label>
       ))}
     </fieldset>

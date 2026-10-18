@@ -16,6 +16,7 @@ import {
   partsOf,
   type ProposedChange,
 } from '#/domains/assistant/entities'
+import { rightsOf } from '#/domains/mapping/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { Gesture } from '#/front/ui/canvas/view/view'
@@ -107,7 +108,7 @@ export const messageWords = (text: string, naming: Naming): Words =>
 
 /** Who acted, as a line's mark says it: the user, the agent, or a Key from outside. */
 const whoOf = (actor: Actor): Happened['who'] =>
-  actor._tag === 'You' ? 'human' : actor._tag === 'Assistant' ? 'agent' : 'key'
+  actor._tag === 'You' ? 'human' : actor._tag === 'Assistant' ? 'agent' : 'outside'
 
 /** The Key that acted, named, or a revoked one, which has no name left. */
 const keyOf = (actor: Extract<Actor, { _tag: 'Key' }>): Word =>
@@ -263,9 +264,9 @@ function sharedOf(entry: Extract<Told, { _tag: 'Shared' }>, naming: Naming): Hap
   }
   const who: Word = { name: by === '' ? m.conversation_someone() : by }
   return {
-    who: 'key',
+    who: 'outside',
     words: weave(m.conversation_shared, { who, title }),
-    detail: rightsSaid(rights),
+    detail: rightsSaid(rightsOf(rights)),
     at,
   }
 }

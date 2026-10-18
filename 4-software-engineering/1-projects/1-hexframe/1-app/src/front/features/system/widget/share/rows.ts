@@ -7,11 +7,14 @@
 import { Schema } from 'effect'
 
 import {
-  type Choice,
+  Choice,
   choiceOn,
+  EveryoneChoice,
   GrantChange,
+  type NamedReach,
   type Reach,
   type Reaching,
+  rightsOf,
   subjectKeyOf,
 } from '#/domains/mapping/entities'
 import { rightsSaid } from '#/front/ui/chat/widgets/share/rights'
@@ -32,7 +35,7 @@ export interface Around {
  * Who a subject is, in words: Everyone, someone by their star's Title, one not named yet said so, or
  * a group, until IAM names them.
  */
-function whoOf({ subject, star }: Reach) {
+function whoOf(subject: Reach['subject'], star: NamedReach['star']) {
   switch (subject._tag) {
     case 'Everyone':
       return m.widget_share_everyone()
@@ -52,11 +55,11 @@ export function fromOf(from: string | null, { tile, star, titleOf }: Around) {
   return m.widget_share_from({ title: titleOf(from) ?? '' })
 }
 
-/** One subject reaching the Tile, as its row words it. */
-const rowOf = (reach: Reach, around: Around): ReachRow => ({
+/** One subject reaching the Tile, as its row words it, an Account by its star when it has one. */
+const rowOf = (reach: Reach, around: Around, star?: NamedReach['star']): ReachRow => ({
   key: subjectKeyOf(reach.subject),
-  who: whoOf(reach),
-  value: rightsSaid(reach.value),
+  who: whoOf(reach.subject, star),
+  value: rightsSaid(rightsOf(reach.value)),
   from: fromOf(reach.from, around),
 })
 
@@ -69,18 +72,23 @@ type OtherRow = ReachRow | SomeoneRow
 /** The star a row's choice names, none for a row no choice is sent for. */
 const starOf = (row: OtherRow) => ('star' in row ? row.star : undefined)
 
-const otherOf = (reach: Reach, around: Around): OtherRow => {
-  const row = rowOf(reach, around)
+const otherOf = (reach: NamedReach, around: Around): OtherRow => {
+  const row = rowOf(reach, around, reach.star)
   if (reach.subject._tag !== 'Account' || reach.star === undefined) return row
-  return { ...row, choice: choiceOn(reach, around.tile), star: reach.star.id }
+  const choice = choiceOn(reach, around.tile)
+  return { ...row, choice, offered: Choice.literals, star: reach.star.id }
 }
 
 /**
- * Who reaches the Tile, as the share widget shows them: Everyone's row with its choice, then everyone
- * else's.
+ * Who reaches the Tile, as the share widget shows them: Everyone's row with its choice, offered
+ * what Mapping lets Everyone have, then everyone else's, someone offered any value.
  */
-export const shareRowsOf = ({ everyone, others }: Reaching, around: Around) => ({
-  everyone: { ...rowOf(everyone, around), choice: choiceOn(everyone, around.tile) },
+export const shareRowsOf = ({ everyone, others }: Reaching<NamedReach>, around: Around) => ({
+  everyone: {
+    ...rowOf(everyone, around),
+    choice: choiceOn(everyone, around.tile),
+    offered: EveryoneChoice.literals,
+  },
   others: others.map((reach) => otherOf(reach, around)),
 })
 
