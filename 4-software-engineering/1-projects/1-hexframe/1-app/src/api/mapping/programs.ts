@@ -8,14 +8,17 @@ import { Effect, Option } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
 import * as Iam from '#/domains/iam/iam'
+import * as Groups from '#/domains/iam/organizations/groups'
 import * as Organizations from '#/domains/iam/organizations/organizations'
 import {
   type Actor,
   anyone,
   type Field,
   type GrantChange,
+  groupsUnnamedIn,
   nowhere,
   type ShippedRoot,
+  withGroups,
 } from '#/domains/mapping/entities'
 import { TileNotFound } from '#/domains/mapping/errors'
 import {
@@ -373,26 +376,33 @@ const fromSession = <A, E, R>(
 
 /**
  * The Grant a change sets, as Mapping keeps it: one naming the star of an Organization's System is
- * for its Members Group, every one of its members (HEX-136); any other as it came, Mapping finding
- * the Account a star names, or refusing a star that names nothing.
+ * for its Members Group, every one of its members (HEX-136); one naming a Group by its id, set to
+ * anything but `inherit`, only once IAM found the Account the request's Session proves may name it,
+ * a member of its Organization (`shareableGroup`, `GroupNotFound` otherwise, a deleted Group's
+ * included), while a Grant to any Group may be removed, a dead one's too (HEX-137); any other as it
+ * came, Mapping finding the Account a star names, or refusing a star that names nothing.
  */
 const grantOf = (change: GrantChange) =>
   Effect.gen(function* () {
     if (change.subject._tag === 'Everyone') return change
+    if (change.subject._tag === 'Group') {
+      if (change.value !== 'inherit') yield* Groups.shareableGroup(change.subject.id)
+      return change
+    }
     const owner = yield* Effect.option(Mapping.ownerOf(change.subject.star))
     if (Option.isNone(owner) || !(yield* Organizations.isOrganization(owner.value))) return change
     const members = { _tag: 'Group', id: Organizations.membersGroupOf(owner.value) } as const
-    const grant: Sharing.GroupGrant = { tile: change.tile, subject: members, value: change.value }
+    const grant: GrantChange = { tile: change.tile, subject: members, value: change.value }
     return grant
   })
 
 /**
- * A Tile's Grant for Everyone set, `read` or `none`, or for someone named by their star, any value,
- * or removed, `inherit`, by the owner of the System holding it, from a Session, in one transaction:
- * an Organization named by its star is its Members Group (`grantOf`). No Operation: it is neither
- * proposed nor undone. One that first opens the Tile to an Account publishes Mapping's `TileShared`,
- * which `../assistant/recording.ts` tells in their timeline once the transaction committed; no other
- * change of who reaches a Tile is told.
+ * A Tile's Grant for Everyone set, `read` or `none`, or for someone named by their star, or a Group
+ * by its id, any value, or removed, `inherit`, by the owner of the System holding it, from a Session,
+ * in one transaction: an Organization named by its star is its Members Group (`grantOf`). No
+ * Operation: it is neither proposed nor undone. One that first opens the Tile to an Account
+ * publishes Mapping's `TileShared`, which `../assistant/recording.ts` tells in their timeline once
+ * the transaction committed; no other change of who reaches a Tile is told.
  */
 export const setGrant = (change: GrantChange) =>
   fromSession(change.tile, (acting) =>
@@ -401,10 +411,26 @@ export const setGrant = (change: GrantChange) =>
 
 /**
  * Who reaches a Tile, each subject with its value and the Tile it comes from, each Account by its
- * star's card, read by the owner of the System holding it, from a Session.
+ * star's card, an Organization's Members by its star's, and each Group of an Organization's own by
+ * its name, IAM's, and its Organization's star's card, read now; a Group IAM no longer knows, a
+ * deleted one, left out, but where its Grant is set on the Tile, said gone so the owner may clear it
+ * (Mapping's `withGroups`, HEX-137). Read by the owner of the System holding it, from a Session.
  */
 export const whoReaches = ({ tile }: { tile: string }) =>
-  fromSession(tile, (acting) => Sharing.whoReaches(acting, tile))
+  fromSession(tile, (acting) =>
+    Effect.gen(function* () {
+      const reaching = yield* Sharing.whoReaches(acting, tile)
+      const named = yield* Groups.groupsNamed(groupsUnnamedIn(reaching))
+      const stars = yield* Stars.starsOf([...named.values()].map((group) => group.organization))
+      const cards = new Map(
+        [...named].map(([id, { name, organization }]) => [
+          id,
+          { name, organization: stars.get(organization) },
+        ]),
+      )
+      return withGroups(reaching, tile, cards)
+    }),
+  )
 
 /** An Operation as a server function decodes it: its fields, without the tag its name says. */
 type Fields<O> = Omit<O, '_tag'>

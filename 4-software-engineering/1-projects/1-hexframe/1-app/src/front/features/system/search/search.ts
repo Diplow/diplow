@@ -1,6 +1,6 @@
 // What the System's page carries in its URL: the canvas's view (front/ui/canvas/view), and the change the user
 // has under way, if any: a new Tile's form, an import, a Tile's form, who may see a Tile, an
-// Organization's members, an Organization being made, or a Tile to move. A link shows the page as its sender saw it, the open form included. Every function here is
+// Organization's members or its Groups, an Organization being made, or a Tile to move. A link shows the page as its sender saw it, the open form included. Every function here is
 // pure.
 import { Schema } from 'effect'
 
@@ -40,6 +40,8 @@ const SystemSearch = Schema.Struct({
   share: Schema.optionalKey(orDefault(TileId)),
   /** The star whose Members widget is open: an Organization's, who belongs to it (HEX-136). */
   members: Schema.optionalKey(orDefault(TileId)),
+  /** The star whose Groups widget is open: an Organization's, its Groups (HEX-137). */
+  groups: Schema.optionalKey(orDefault(TileId)),
   /** An Organization being made: its widget open, which `/organization` opens (HEX-136). */
   organization: Schema.optionalKey(orDefault(Schema.Literal(true))),
   /** The Tile being moved: the next empty slot clicked is where it goes. */
@@ -63,6 +65,7 @@ export type Change =
   | { kind: 'edit'; id: string }
   | { kind: 'share'; id: string }
   | { kind: 'members'; id: string }
+  | { kind: 'groups'; id: string }
   | { kind: 'organization' }
   | { kind: 'move'; id: string }
 
@@ -86,13 +89,14 @@ function importPlaceOf(into: string, slot: Slot | undefined): ImportPlace | unde
  * covers the canvas.
  */
 export function changeOf(search: SystemSearch): Change {
-  const { add, slot, import: into, edit, share, members, organization, move } = search
+  const { add, slot, import: into, edit, share, members, groups, organization, move } = search
   if (edit !== undefined) return { kind: 'edit', id: edit }
   if (add !== undefined && slot !== undefined) return { kind: 'add', parent: add, slot }
   const place = into === undefined ? undefined : importPlaceOf(into, slot)
   if (place !== undefined) return { kind: 'import', place }
   if (share !== undefined) return { kind: 'share', id: share }
   if (members !== undefined) return { kind: 'members', id: members }
+  if (groups !== undefined) return { kind: 'groups', id: groups }
   if (organization !== undefined) return { kind: 'organization' }
   if (move !== undefined) return { kind: 'move', id: move }
   return { kind: 'none' }
@@ -118,6 +122,7 @@ export function withChange(search: SystemSearch, change: Change): SystemSearch {
     edit: change.kind === 'edit' ? change.id : undefined,
     share: change.kind === 'share' ? change.id : undefined,
     members: change.kind === 'members' ? change.id : undefined,
+    groups: change.kind === 'groups' ? change.id : undefined,
     organization: change.kind === 'organization' ? true : undefined,
     move: change.kind === 'move' ? change.id : undefined,
   }
@@ -142,6 +147,7 @@ function namedBy(change: Change): string | undefined {
     case 'edit':
     case 'share':
     case 'members':
+    case 'groups':
     case 'move':
       return change.id
   }
@@ -166,6 +172,7 @@ const inWidget: ReadonlySet<Change['kind']> = new Set([
   'edit',
   'share',
   'members',
+  'groups',
   'organization',
 ])
 

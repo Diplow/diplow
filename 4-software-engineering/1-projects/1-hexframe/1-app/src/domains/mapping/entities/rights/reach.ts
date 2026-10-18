@@ -1,8 +1,9 @@
 // Who reaches a Tile, and from where, as its owner reads it in the Share widget: for each subject a
 // System's Grants name, and Everyone, the value it has on the Tile and the Tile whose Grant gives
-// it, an Account named by its star; and what the owner sets there, for Everyone or for someone named
-// by their star, `inherit` removing the Tile's Grant so its value comes from above again, and when
-// that first opens the Tile to someone, which their timeline is told. Pure: Mapping's sharing
+// it, an Account named by its star, a Group of an Organization's own by the name its caller gives it,
+// IAM's; and what the owner sets there, for Everyone, for someone named by their star or for a Group
+// by its id, `inherit` removing the Tile's Grant so its value comes from above again, and when that
+// first opens the Tile to someone, which their timeline is told. Pure: Mapping's sharing
 // (`../../sharing/`) reads and writes the Grants, the front words the list.
 import { Schema } from 'effect'
 
@@ -27,13 +28,21 @@ export type Choice = typeof Choice.Type
 const Someone = Schema.TaggedStruct('Account', { star: TileId })
 
 /**
+ * A Group a Grant is set for, by its id, a UUID, opaque to Mapping: a Group of an Organization's own
+ * has no star to be named by (HEX-137). Who may name which is the API layer's to ask IAM before
+ * Mapping sets it.
+ */
+const SomeGroup = Schema.TaggedStruct('Group', { id: Schema.String.check(Schema.isUUID()) })
+
+/**
  * A Tile's Grant as its owner sets it, a Tile by its UUID: for Everyone, `read`, `none`, or
- * `inherit`, so neither `write` nor `@` is ever offered; for someone named by their star, any
- * `Choice`. A Group comes after.
+ * `inherit`, so neither `write` nor `@` is ever offered; for someone named by their star, or a Group
+ * by its id, any `Choice`.
  */
 export const GrantChange = Schema.Union([
   Schema.Struct({ tile: TileId, subject: Everyone, value: EveryoneChoice }),
   Schema.Struct({ tile: TileId, subject: Someone, value: Choice }),
+  Schema.Struct({ tile: TileId, subject: SomeGroup, value: Choice }),
 ])
 export type GrantChange = typeof GrantChange.Type
 
@@ -48,13 +57,25 @@ export interface Reach {
 }
 
 /**
+ * A Group of an Organization's own as its caller names it, IAM's: its name, and the card of its
+ * Organization's star, none while it has none.
+ */
+export interface GroupCard {
+  readonly name: string
+  readonly organization: StarCard | undefined
+}
+
+/**
  * One subject reaching a Tile, named: an Account by its star's card, a Group by the card of the star
  * whose owner has its id, as an Organization's Members Group has its own (HEX-136), none for either
- * with no such star, a Group IAM names otherwise included, which comes later. What the Share widget
- * lists (`namedBy`).
+ * with no such star; a Group of an Organization's own by the name its caller gives it (`group`,
+ * `withGroups`), or said `gone` where nobody names it any more, its Grant reaching nobody. What the
+ * Share widget lists (`namedBy`).
  */
 export interface NamedReach extends Reach {
   readonly star: StarCard | undefined
+  readonly group?: GroupCard
+  readonly gone?: true
 }
 
 /**
@@ -105,6 +126,31 @@ export const namedBy = (
     ...reach,
     star: reach.subject._tag === 'Everyone' ? undefined : stars.get(reach.subject.id),
   })),
+})
+
+/** The Groups among those reaching a Tile no star names: an Organization's own, or one gone. */
+export const groupsUnnamedIn = ({ others }: Reaching<NamedReach>): ReadonlyArray<string> =>
+  others.flatMap(({ subject, star }) =>
+    subject._tag === 'Group' && star === undefined ? [subject.id] : [],
+  )
+
+/**
+ * Who reaches a Tile once its caller named the Groups no star names, IAM's (`groupsUnnamedIn`):
+ * each by its name and its Organization; one no longer named, a deleted Group, which reaches nobody,
+ * left out, but where its Grant is set on the Tile itself, said `gone`, so its owner may clear it.
+ */
+export const withGroups = (
+  { everyone, others }: Reaching<NamedReach>,
+  tile: string,
+  groups: ReadonlyMap<string, GroupCard>,
+): Reaching<NamedReach> => ({
+  everyone,
+  others: others.flatMap((reach): NamedReach[] => {
+    if (reach.subject._tag !== 'Group' || reach.star !== undefined) return [reach]
+    const group = groups.get(reach.subject.id)
+    if (group !== undefined) return [{ ...reach, group }]
+    return reach.from === tile ? [{ ...reach, gone: true }] : []
+  }),
 })
 
 const reads = Schema.is(Reading)

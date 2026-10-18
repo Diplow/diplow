@@ -1,8 +1,8 @@
 // Who reaches a Tile, changed by its System's owner alone, from a Session: a Tile's Grant for
 // Everyone, for someone named by their star, or for a Group by its id, set or removed, and who
 // reaches the Tile read, each subject with its value and the Tile it comes from, each Account by its
-// star, which the Share widget lists. It is no Operation: nothing proposes nor undoes it, and the System's Version stays
-// where it was. A Grant that first opens a Tile to someone publishes `TileShared`, which the API
+// star, which the Share widget lists. It is no Operation: nothing proposes nor undoes it, and the
+// System's Version stays where it was. A Grant that first opens a Tile to someone publishes `TileShared`, which the API
 // layer tells in their timeline; no other change of who reaches a Tile says anything. A Tile's
 // Grants are the owner's to set where its System is locked, so a move deciding who it opens a Tile
 // to reads them as they stand (`../operations/rights/may.ts`). The API layer calls it as directly
@@ -13,7 +13,6 @@ import { Bus } from '#/domains/bus'
 import { Tiles } from '#/repositories/database/tiles/tiles'
 
 import {
-  type Choice,
   type GrantChange,
   lineageOf,
   namedBy,
@@ -67,22 +66,11 @@ const sharedOn = <E, R>(
   })
 
 /**
- * A Tile's Grant for a Group, by its id, opaque to Mapping, any `Choice`: what the API layer sets once
- * it found that the star a change names stands for a Group, an Organization's Members (HEX-136).
- * Never decoded from a request, which names someone by their star alone.
- */
-export interface GroupGrant {
-  readonly tile: string
-  readonly subject: { readonly _tag: 'Group'; readonly id: string }
-  readonly value: Choice
-}
-
-/**
  * The subject a change names, as a Grant is kept for it: Everyone, a Group by its id, or the Account
  * a star stands for, found by the star, `TileNotFound` for an id that names no star, once
  * `grantableTo` found a Grant on the System may name them: the System's own owner is `NotAllowed`.
  */
-const subjectOf = (named: (GrantChange | GroupGrant)['subject'], sharing: Sharing) =>
+const subjectOf = (named: GrantChange['subject'], sharing: Sharing) =>
   Effect.gen(function* () {
     if (named._tag === 'Everyone' || named._tag === 'Group') return named satisfies Subject
     const account = yield* Tiles.use((tiles) => tiles.ownerOf(named.star))
@@ -93,13 +81,14 @@ const subjectOf = (named: (GrantChange | GroupGrant)['subject'], sharing: Sharin
 
 /**
  * Sets a Tile's Grant for Everyone, `read` or `none`, for an Account named by its star or for a Group
- * by its id, any value, in place of the one it had, or removes it, `inherit`, so the Tile's value
+ * by its id, which the API layer found the actor may name (HEX-137), or an Organization's Members it
+ * found a star stands for (HEX-136), any value, in place of the one it had, or removes it, `inherit`, so the Tile's value
  * comes from its parent again: on the System the actor acts on, its star locked, by its owner from a
  * Session alone, in the transaction around it. A Grant that opens the Tile to an Account (`opens`)
  * publishes `TileShared`, which reaches the bus once that transaction commits; a Group's is told to
  * none of its members.
  */
-export const grant = (acting: Acting, change: GrantChange | GroupGrant) =>
+export const grant = (acting: Acting, change: GrantChange) =>
   Effect.gen(function* () {
     const { tile, value } = change
     const { owner, system, sharing } = yield* sharedOn(acting, tile, lockedOf)

@@ -1,7 +1,16 @@
 import { Schema } from 'effect'
 import { describe, expect, it } from 'vitest'
 
-import { choiceOn, GrantChange, namedBy, namedIn, opens, reachOn } from './reach'
+import {
+  choiceOn,
+  GrantChange,
+  groupsUnnamedIn,
+  namedBy,
+  namedIn,
+  opens,
+  reachOn,
+  withGroups,
+} from './reach'
 import { Grant, type GrantValue, lineageFrom, originOn, sharingOf, type Subject } from './rights'
 
 // Who reaches a Tile, on a System made by hand: each subject with its value and the Tile it comes
@@ -109,6 +118,14 @@ describe('a change to who reaches a Tile', () => {
     expect(accepts({ tile, subject: { _tag: 'Account', star: 'help' }, value: 'read' })).toBe(false)
     expect(accepts({ tile, subject: { _tag: 'Group', star }, value: 'read' })).toBe(false)
   })
+
+  it('names a Group by its id, a UUID, and gives it any value', () => {
+    const id = crypto.randomUUID()
+    for (const value of ['none', 'read', 'read+write', 'read+@', 'read+write+@', 'inherit']) {
+      expect(accepts({ tile, subject: { _tag: 'Group', id }, value })).toBe(true)
+    }
+    expect(accepts({ tile, subject: family, value: 'read' })).toBe(false)
+  })
 })
 
 describe('a Tile opened to someone', () => {
@@ -161,5 +178,56 @@ describe('who reaches a Tile, named', () => {
     expect(namedBy(reaching, new Map([['family', card]])).others).toEqual([
       { subject: family, value: 'read', from: 'journal', star: card },
     ])
+  })
+})
+
+describe('who reaches a Tile, its Groups named by their caller', () => {
+  const design: Subject = { _tag: 'Group', id: 'design' }
+  const gone: Subject = { _tag: 'Group', id: 'gone' }
+  const atelier = { id: 'atelier-star', title: 'Atelier', preview: '' }
+  const reaching = namedBy(
+    reachOn(
+      sharingOf('ana', lineage, [
+        grant('ana', design, 'read'),
+        grant('ana', gone, 'read'),
+        grant('journal', gone, 'none'),
+        grant('journal', family, 'read'),
+      ]),
+      'journal',
+    ),
+    new Map([['family', { id: 'familys-star', title: 'Family', preview: '' }]]),
+  )
+
+  it('asks the names of the Groups no star names alone', () => {
+    expect(groupsUnnamedIn(reaching)).toEqual(['design', 'gone'])
+  })
+
+  it('names each by its caller’s name, and says a gone one’s Grant on the Tile, else leaves it out', () => {
+    const named = withGroups(
+      reaching,
+      'journal',
+      new Map([['design', { name: 'Design', organization: atelier }]]),
+    )
+    expect(named.others).toEqual([
+      {
+        subject: design,
+        value: 'read',
+        from: 'ana',
+        star: undefined,
+        group: { name: 'Design', organization: atelier },
+      },
+      { subject: gone, value: 'none', from: 'journal', star: undefined, gone: true },
+      expect.objectContaining({ subject: family }),
+    ])
+    // Below, where the gone Group's Grant comes from above, it is no row at all.
+    const below = withGroups(
+      namedBy(
+        reachOn(sharingOf('ana', lineage, [grant('ana', gone, 'read')]), 'garden'),
+        new Map(),
+      ),
+      'garden',
+      new Map(),
+    )
+    expect(below.others).toEqual([])
   })
 })

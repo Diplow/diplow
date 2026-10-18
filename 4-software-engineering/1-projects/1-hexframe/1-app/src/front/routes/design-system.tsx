@@ -14,7 +14,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
 import { merged, turnLocation, type Navigation } from '#/domains/assistant/entities'
-import { keyNameBounds, keyNameOf } from '#/domains/iam/entities'
+import { groupNameBounds, groupNameOf, keyNameBounds, keyNameOf } from '#/domains/iam/entities'
 import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
@@ -61,9 +61,13 @@ import { ChatLayoutsGallery } from '#/front/ui/chat/layouts/gallery'
 import { ChatTextGallery } from '#/front/ui/chat/text/gallery'
 import { HelpWidgetGallery } from '#/front/ui/chat/widgets/help/gallery'
 import { KeyWidgetGallery } from '#/front/ui/chat/widgets/keys/gallery'
-import { ShareWidgetGallery } from '#/front/ui/chat/widgets/sharing/share/gallery'
+import {
+  GroupPickerGallery,
+  ShareWidgetGallery,
+} from '#/front/ui/chat/widgets/sharing/share/gallery'
 import { StarPickerGallery } from '#/front/ui/chat/widgets/sharing/star-picker/gallery'
 import {
+  GroupsWidgetGallery,
   MembersWidgetGallery,
   OrganizationWidgetGallery,
 } from '#/front/ui/chat/widgets/sharing/organization/gallery'
@@ -294,8 +298,10 @@ function Specimens({ chapter, view, onViewChange, onCenter }: SpecimensProps) {
           <KeyWidgetGallery nameLimit={keyNameBounds.max} nameOf={keyNameOf} />
           <ShareWidgetGallery />
           <StarPickerGallery typedOf={typedOf} />
+          <GroupPickerGallery />
           <OrganizationWidgetGallery />
           <MembersWidgetGallery />
+          <GroupsWidgetGallery nameOf={groupNameOf} nameLimit={groupNameBounds.max} />
           <ReadBoundary>
             <HelpGallery />
           </ReadBoundary>

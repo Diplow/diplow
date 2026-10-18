@@ -1,7 +1,7 @@
 // The tile widget in the chat, at the conversation's foot: the change under way when it is a form, a
 // new Tile's in the slot clicked, a Tile's edit or an import, who may see a Tile, its share widget
-// (`share/`), who belongs to the Organization whose star it is, or an Organization being made
-// (`organization/`), as the URL holds it; once a form is
+// (`share/`), who belongs to the Organization whose star it is, its Groups, or an Organization being
+// made (`organization/`), as the URL holds it; once a form is
 // sent, the receipt it leaves; or an export a Tile's menu started, working, then its receipt, or failed.
 // One at a time, the latest. A write ends its form as it is sent, its receipt in the form's place at
 // once, and a refusal puts the form back (`useRefusalState`), the user's words with it. The Root's
@@ -35,6 +35,7 @@ import { type Reopened, useRefusalState } from '../state/useRefusalState'
 import { canvasTree, tileIn } from '../tree'
 import { EditTileWidget, NameRootWidget, NewTileWidget } from './forms'
 import { freeFor, slotOf, tilesBelow, whereIn } from './place'
+import { GroupsWidgets } from './organization/GroupsWidgets'
 import { MembersWidgets } from './organization/MembersWidgets'
 import { NewOrganization } from './organization/NewOrganization'
 import { ShareWidgets } from './share/ShareWidgets'
@@ -159,6 +160,8 @@ function widgetOf(change: Change, widgets: TileWidgetsState, page: WidgetContext
       return shareOf(change.id, page)
     case 'members':
       return membersOf(change.id, page)
+    case 'groups':
+      return groupsOf(change.id, page)
     case 'organization':
       return <NewOrganization key="organization" onClose={page.onCancel} />
     case 'none':
@@ -187,6 +190,19 @@ function membersOf(star: string, page: WidgetContext) {
   return (
     <MembersWidgets
       key={`members:${star}`}
+      star={star}
+      title={page.root.title}
+      onClose={page.onCancel}
+    />
+  )
+}
+
+/** The Groups of the Organization whose star the System drawn has; none for any other star. */
+function groupsOf(star: string, page: WidgetContext) {
+  if (star !== page.root.id) return null
+  return (
+    <GroupsWidgets
+      key={`groups:${star}`}
       star={star}
       title={page.root.title}
       onClose={page.onCancel}

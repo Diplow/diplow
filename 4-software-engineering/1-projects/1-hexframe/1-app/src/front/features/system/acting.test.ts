@@ -252,8 +252,8 @@ describe('the lines home leaves out', () => {
   })
 
   it('leaves out an import as the Root, but into an empty System', () => {
-    // An Account's own star is no Organization's: its menu opens no Members widget.
-    expect(withoutOf(systems, hex('tile:root'))).toEqual(['import', 'members'])
+    // An Account's own star is no Organization's: its menu opens no Members nor Groups widget.
+    expect(withoutOf(systems, hex('tile:root'))).toEqual(['import', 'members', 'groups'])
     const empty: System = { ...flat, root: { ...flat.root, title: '' }, tiles: {} }
     const bare = systemOf(empty)
     const alone = canvasTree(bare, { yours: true })
@@ -262,7 +262,7 @@ describe('the lines home leaves out', () => {
     )
     expect(
       center && withoutOf({ root: bare, flat: empty, tree: alone, reach: 'owned' }, center),
-    ).toEqual(['members'])
+    ).toEqual(['members', 'groups'])
   })
 })
 

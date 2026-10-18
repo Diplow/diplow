@@ -1,21 +1,25 @@
 // Who may see a Tile of the Account's own System, in the chat, at the conversation's foot, on ui's
 // share widget, opened by the Tile's menu's Share, its owner's alone: everyone who reaches it, each
 // with its value and where it comes from, Everyone set to read, to none, or back to inherit, someone
-// added through the star picker, by their star, and set to any value or back to inherit, and the
-// link it is visited by, copied. Whether it is open, and on which Tile, is the URL's, a change under
-// way as a form is (`share`, `../../search/search.ts`), which `TileWidgets` draws; whether the star
-// picker shows in its place, and what is typed there, is this widget's own. Setting a Grant is no
-// Operation: the System's queue, its overlay and the owner's timeline know nothing of it.
+// added through the star picker, by their star, a group of an Organization the user belongs to
+// through the group picker (HEX-137), and set to any value or back to inherit, a group gone cleared,
+// and the link it is visited by, copied. Whether it is open, and on which Tile, is the URL's, a
+// change under way as a form is (`share`, `../../search/search.ts`), which `TileWidgets` draws;
+// which picker shows in its place, and what is typed there, is this widget's own. Setting a Grant is
+// no Operation: the System's queue, its overlay and the owner's timeline know nothing of it.
 import { useState } from 'react'
 
 import { type System, tileAt } from '#/domains/mapping/entities'
+import { useGroupsToShareWith } from '#/front/client/iam/organizations'
 import { useSetGrant, useStarsFor, useWhoReaches } from '#/front/client/mapping/sharing'
+import { GroupPicker } from '#/front/ui/chat/widgets/sharing/share/GroupPicker'
 import { ShareWidget } from '#/front/ui/chat/widgets/sharing/share/ShareWidget'
 import { StarPicker } from '#/front/ui/chat/widgets/sharing/star-picker/StarPicker'
 import { m } from '#/paraglide/messages'
 
 import { copy } from '../../copy'
 import { visitLinkOf } from '../../visit/visit'
+import { groupPicked, groupsOffered } from './groups'
 import { changeOf, named, shareRowsOf, withSent } from './rows'
 
 interface ShareWidgetsProps {
@@ -28,16 +32,17 @@ interface ShareWidgetsProps {
 }
 
 /**
- * The share widget on a Tile of the Account's own System, once who reaches it is read, or the star
- * picker in its place while someone is being added: the star picked is set to read on the Tile, then
- * the widget comes back, with them among its rows, to be set to any value there; one among them
- * already is set to nothing new. While a choice is on its way, its row shows it and every choice
- * waits.
+ * The share widget on a Tile of the Account's own System, once who reaches it is read, or a picker in
+ * its place while someone or a group is being added: the star or the group picked is set to read on
+ * the Tile, then the widget comes back, with them among its rows, to be set to any value there; one
+ * among them already is set to nothing new. While a choice is on its way, its row shows it and every
+ * choice waits.
  */
 export function ShareWidgets({ system, tile: { id: tile, title }, onClose }: ShareWidgetsProps) {
   const { data: reached } = useWhoReaches(tile)
+  const { data: shareable = [] } = useGroupsToShareWith()
   const setGrant = useSetGrant()
-  const [picking, setPicking] = useState(false)
+  const [picking, setPicking] = useState<'star' | 'group'>()
   const [typed, setTyped] = useState('')
   const found = useStarsFor(typed, location.href)
   if (reached === undefined) return null
@@ -47,11 +52,25 @@ export function ShareWidgets({ system, tile: { id: tile, title }, onClose }: Sha
     star: system.root.id,
     titleOf: (id) => tileAt(system, id)?.title,
   })
-  if (picking) {
-    const back = () => {
-      setPicking(false)
-      setTyped('')
-    }
+  const back = () => {
+    setPicking(undefined)
+    setTyped('')
+  }
+  if (picking === 'group') {
+    return (
+      <GroupPicker
+        title={m.widget_share_with_which_group({ title: shown })}
+        organizations={groupsOffered(shareable, rows)}
+        onPick={(organization, group) => {
+          const change = groupPicked(shareable, tile, { organization, group })
+          if (change !== undefined) setGrant.mutate(change)
+          back()
+        }}
+        onCancel={back}
+      />
+    )
+  }
+  if (picking === 'star') {
     return (
       <StarPicker
         title={m.widget_share_with_whom({ title: shown })}
@@ -83,8 +102,15 @@ export function ShareWidgets({ system, tile: { id: tile, title }, onClose }: Sha
         if (change !== undefined) setGrant.mutate(change)
       }}
       onAdd={() => {
-        setPicking(true)
+        setPicking('star')
       }}
+      onAddGroup={
+        shareable.length === 0
+          ? undefined
+          : () => {
+              setPicking('group')
+            }
+      }
       link={link}
       onCopyLink={() => {
         copy(link)
