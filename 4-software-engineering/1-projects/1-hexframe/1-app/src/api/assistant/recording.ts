@@ -1,7 +1,8 @@
 // The Conversation records every change to the System, whoever made it: the API layer, which alone
 // composes domains, subscribes to Mapping's events on the bus and hands Assistant Mapping's own
 // summary of each, with who acted, as the timeline shows them: "you", a Key by its name, or the
-// Assistant. And a Tile someone shared, in the Conversation of the Account it was shared with, by
+// Assistant (`./someone/`'s `actorOf`), a change made in someone else's System said so. And a Tile
+// someone shared, in the Conversation of the Account it was shared with, by
 // the Title of the sharer's star. Wired in ../server/run.ts. The bus runs it once the write's
 // transaction committed, inside the request through its `waitUntil`, and a reaction that fails is
 // reported without touching the write it follows; a rolled-back write publishes nothing, so it lands
@@ -9,8 +10,6 @@
 import { Effect, Option } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
-import type { Actor } from '#/domains/assistant/entities'
-import { keyName, type SignedIn } from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
 import { rightsOf } from '#/domains/mapping/entities'
 import { MappingEvent } from '#/domains/mapping/operations'
@@ -19,43 +18,32 @@ import { transactional } from '#/repositories/database/database'
 
 import { on } from '../server/bus'
 import { actingOnOwn } from '../mapping/programs'
+import { actorOf } from './someone/someone'
 
 /**
- * Who acted, as the timeline shows it: "you" for a Session, a Key by its name, read now, and the
- * Assistant for a Turn's Key.
+ * Records each of Mapping's events as an Entry of the Conversation of the Account that acted, as
+ * Mapping summarized it on the System it changed: the Account's own, or someone else's, where the
+ * envelope says it was made (`elsewhere`), the Entry then saying so, its Tiles named as the Account
+ * may see them there; that owner's timeline told it already, in the write's transaction
+ * (`./someone/`). An event nobody signed in made, which no door lets through, has no Conversation to
+ * land in.
  */
-const actorOf = ({ account, by }: SignedIn) => {
-  switch (by._tag) {
-    case 'Session':
-      return Effect.succeed<Actor>({ _tag: 'You' })
-    case 'TurnKey':
-      return Effect.succeed<Actor>({ _tag: 'Assistant' })
-    case 'Key':
-      return Effect.map(keyName(account.id, by.keyId), (name) =>
-        Option.match(name, {
-          onNone: (): Actor => ({ _tag: 'Key' }),
-          onSome: (named): Actor => ({ _tag: 'Key', name: named }),
-        }),
-      )
-  }
-}
-
-/**
- * Records each of Mapping's events as an Entry of the Conversation of the Account that acted. An event
- * nobody signed in made, which no door lets through, has no Conversation to land in.
- */
-export const recordedInConversation = on(MappingEvent, (event, actor) =>
+export const recordedInConversation = on(MappingEvent, (event, actor, elsewhere) =>
   Option.match(actor, {
     onNone: () => Effect.void,
     onSome: (signedIn) =>
       Effect.gen(function* () {
         const accountId = signedIn.account.id
+        const own = yield* actingOnOwn(accountId, { session: false })
+        const where = Option.getOrUndefined(elsewhere)
         const summary = yield* Mapping.summary(
-          yield* actingOnOwn(accountId, { session: false }),
+          where === undefined ? own : { ...own, system: where },
           event,
         )
         const actor = yield* actorOf(signedIn)
-        yield* transactional(Assistant.recordChange(accountId, summary, actor))
+        yield* transactional(
+          Assistant.recordChange(accountId, summary, actor, { elsewhere: where !== undefined }),
+        )
       }),
   }),
 )

@@ -51,6 +51,10 @@ const quoted = (text: string) => JSON.stringify(text)
 const named = (title: string | undefined, id: string) =>
   `${title === undefined || title === '' ? 'an untitled Tile' : quoted(title)} (id ${quoted(id)})`
 
+/** Another Account, as the agent reads it: by its star's Title, if it has one, never as a party. */
+const anotherOf = (star: string) =>
+  star === '' ? 'another Account, whose star has no title' : `another Account, whose star is titled ${quoted(star)}`
+
 /** Who acted, as the agent reads it. */
 const actorOf = (actor: Actor): string => {
   switch (actor._tag) {
@@ -60,6 +64,23 @@ const actorOf = (actor: Actor): string => {
       return 'You, the Assistant,'
     case 'Key':
       return actor.name === undefined ? 'A revoked key' : `The key ${quoted(actor.name)}`
+    case 'Someone':
+      return someoneOf(actor)
+  }
+}
+
+/** Someone else who wrote in the user's System, as the agent reads it: who of theirs acted. */
+function someoneOf({ star, by }: Extract<Actor, { readonly _tag: 'Someone' }>): string {
+  const another = anotherOf(star)
+  switch (by._tag) {
+    case 'You':
+      return `${another.charAt(0).toUpperCase()}${another.slice(1)},`
+    case 'Assistant':
+      return `The agent of ${another},`
+    case 'Key':
+      return by.name === undefined
+        ? `A revoked key of ${another},`
+        : `The key ${quoted(by.name)} of ${another},`
   }
 }
 
@@ -73,10 +94,7 @@ const ends = {
 } as const
 
 /** Who shared a Tile, as the agent reads it: another Account, by its star's Title, if it has one. */
-const sharerOf = (by: string) =>
-  by === ''
-    ? 'Another Account, whose star has no title,'
-    : `Another Account, whose star is titled ${quoted(by)},`
+const sharerOf = (by: string) => someoneOf({ _tag: 'Someone', star: by, by: { _tag: 'You' } })
 
 /** What each right a Tile shared gives lets the user do there, as the agent reads it. */
 const sharedRights: Record<SharedRight, string> = {
@@ -106,7 +124,9 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
     case 'Message':
       return `${entry.author === 'user' ? 'User' : 'You'}: ${quoted(entry.text)}`
     case 'Change':
-      return `${actorOf(entry.actor)} ${changeLine(entry)}.`
+      return entry.elsewhere === true
+        ? `${actorOf(entry.actor)} ${changeLine(entry)}, in another Account's System, not the user's.`
+        : `${actorOf(entry.actor)} ${changeLine(entry)}${entry.undone === true ? ', which the user undid' : ''}.`
     case 'Proposal': {
       const changes =
         entry.changes.length === 0 ? 'nothing yet' : entry.changes.map(changeLine).join('; ')

@@ -8,6 +8,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
 import { Ago, Day, MessageText, Mode, Navigation, TileRef } from '#/domains/assistant/entities'
+import { TileId } from '#/domains/mapping/entities'
 
 import { run } from '../server/run'
 import * as Assistant from './programs'
@@ -55,12 +56,19 @@ export const conversationDay = createServerFn({ method: 'GET' })
   .handler(({ data, context }) => run(context, Assistant.conversationDay(data)))
 
 /**
+ * What the poll asks beside the Account's own: the System the page visits, by its star, whose Version
+ * as the Account is shown it the poll answers too (HEX-132).
+ */
+export const LatestAsked = Schema.Struct({ visiting: TileId })
+
+/**
  * The latest of what home shows, polled on focus, and every 2 s while a Turn runs: the System's
- * Version, the Conversation's last Entry, and the Turn running, with its agent's step.
+ * Version, the Conversation's last Entry, and the Turn running, with its agent's step; and, asked for
+ * the System the page visits, its Version as the Account is shown it.
  */
 export const latest = createServerFn({ method: 'GET' })
-  .validator(Schema.toStandardSchemaV1(Schema.Undefined))
-  .handler(({ context }) => run(context, Assistant.latest))
+  .validator(Schema.toStandardSchemaV1(Schema.UndefinedOr(LatestAsked)))
+  .handler(({ data, context }) => run(context, Assistant.latestOf(data)))
 
 /**
  * Posts the user's Message and, when the Account may use the Assistant, starts a Turn answering it;

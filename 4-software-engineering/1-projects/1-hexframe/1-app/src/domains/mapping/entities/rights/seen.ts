@@ -15,9 +15,9 @@ import { type Actor, owns, Right, rightsOn, type Sharing } from './rights'
  * the client offers its actions by; and its gaps, by id, each a Tile they may read below a Tile they
  * may not, hung from the star with no place of its own, since its place is under a Tile kept from
  * them: a reader draws "…" between it and the star. What stands below a gap stands in `tiles`, under
- * it. The System's Version and the card's are their owner's alone: anyone else is shown none, since
- * a count of changes would tell of the Tiles kept from them. Its owner sees it whole, every right on
- * every Tile, and no gap.
+ * it. The System's Version and the card's are their owner's alone: anyone else is shown, in the
+ * System's, how what they see stands (`sightVersion`), since a count of changes would tell of the
+ * Tiles kept from them. Its owner sees it whole, every right on every Tile, and no gap.
  */
 export interface Seen extends System {
   readonly rights: Readonly<Record<string, ReadonlyArray<Right>>>
@@ -94,10 +94,36 @@ const tileIds = (held: ReadonlyArray<PlacedTile | PlacedReference | FoundTile>) 
   held.flatMap((placed) => (placed._tag === 'Tile' ? [placed.id] : []))
 
 /**
+ * How what a reader is shown of a System stands, as one number, for anyone but its owner: the star as
+ * they see it, every Tile and Reference they see where it stands, each Tile at its Version, and their
+ * rights on each, hashed (FNV-1a, 32 bits). It moves whenever any of it does, and never for what is
+ * kept from them, which a count of the System's changes would tell of. No count: two of them only
+ * ever say the same or another, which a visitor's poll compares to read the System again.
+ */
+export function sightVersion({ root, tiles, gaps, rights }: Omit<Seen, 'version'>): number {
+  const lines = [
+    `star ${root.id} ${String(root.version)} ${JSON.stringify([root.title, root.preview])}`,
+    ...Object.values(tiles).map((held) =>
+      held._tag === 'Tile'
+        ? `tile ${held.id} ${String(held.version)} ${held.parent} ${JSON.stringify(held.slot)}`
+        : `reference ${held.id} ${held.target} ${held.parent} ${String(held.slot)}`,
+    ),
+    ...Object.values(gaps).map((gap) => `gap ${gap.id} ${String(gap.version)}`),
+    ...Object.entries(rights).map(([id, held]) => `rights ${id} ${held.join('+')}`),
+  ].sort()
+  let hash = 0x811c9dc5
+  for (const unit of lines.join('\n')) {
+    hash = Math.imul(hash ^ (unit.codePointAt(0) ?? 0), 0x01000193)
+  }
+  return hash >>> 0
+}
+
+/**
  * The System as this actor may see it, from the Grants its Tiles carry (`sharing`): whole for its
  * owner, every right on every Tile; for anyone else, only the Tiles and References they may read,
  * a Reference to a Tile they may not read left out, the star as its card unless they may read it, a
- * Tile below one they may not read a gap, and no count of the System's changes.
+ * Tile below one they may not read a gap, and, for the System's Version, how what they see stands
+ * (`sightVersion`), no count of the System's changes.
  */
 export function seenBy(actor: Actor, system: System, sharing: Sharing): Seen {
   const star = system.root.id
@@ -117,12 +143,12 @@ export function seenBy(actor: Actor, system: System, sharing: Sharing): Seen {
   }
   const seen = [star, ...tileIds([...Object.values(tiles), ...Object.values(gaps)])]
   const rights = seen.map((id) => [id, [...rightsOn(actor, sharing, id)]] as const)
-  return {
+  const shown = {
     ...system,
     root: sight.reads(star) ? system.root : cardOf(system.root),
     tiles,
-    version: 0,
     rights: Object.fromEntries(rights),
     gaps,
   }
+  return { ...shown, version: sightVersion(shown) }
 }

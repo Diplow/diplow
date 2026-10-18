@@ -27,6 +27,16 @@ const applied = (undone: boolean): EntryContent => ({
   undone,
 })
 
+/** A change: the user's own, or someone else's in the user's System, which offers its Undo. */
+const change = (undone?: boolean): EntryContent => ({
+  _tag: 'Change',
+  verb: 'TileEdited',
+  tile: { id: 'tile-1', title: 'Journal' },
+  actor:
+    undone === undefined ? { _tag: 'You' } : { _tag: 'Someone', star: 'Bob', by: { _tag: 'You' } },
+  ...(undone !== undefined && { undone }),
+})
+
 describe('offeringEntry, an accepted Proposal offering its Undo', () => {
   it('says an accepted Proposal may be undone, once', () => {
     expect(offeringEntry(proposal('accepted'))).toEqual(proposal('accepted', false))
@@ -52,6 +62,15 @@ describe('undoneEntry and offersUndo, the Entries that offer an Undo', () => {
     expect(undoneEntry(applied(false))).toEqual(applied(true))
     expect(offersUndo(proposal('accepted', false))).toBe(true)
     expect(offersUndo(applied(false))).toBe(true)
+  })
+
+  it("says someone else's change undone, once, and offers none for the user's own", () => {
+    expect(undoneEntry(change(false))).toEqual(change(true))
+    expect(offersUndo(change(false))).toBe(true)
+    for (const entry of [change(true), change()]) {
+      expect(undoneEntry(entry)).toBeUndefined()
+      expect(offersUndo(entry)).toBe(false)
+    }
   })
 
   it('offers none for an open, discarded or undone Proposal, a Turn undone, or another Entry', () => {

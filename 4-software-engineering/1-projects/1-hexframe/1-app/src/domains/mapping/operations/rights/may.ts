@@ -13,6 +13,7 @@ import {
   owns,
   type Right,
   rightsOn,
+  type Seen,
   type Sharing,
   type System,
   tileAt,
@@ -34,11 +35,14 @@ interface Needs {
   readonly moved: ReadonlyMap<string, string>
 }
 
-/** A parent a swap's Tile takes, the other's: none for the star, which `decide` refuses to swap. */
-const parentIn = (sharing: Sharing, id: string) => sharing.lineage.get(id) ?? undefined
+/**
+ * Where a Tile stands, by its parent's id, as whoever decides reads it: the parent a swap's Tile
+ * takes, the other's; none for the star, which `decide` refuses to swap.
+ */
+type ParentOf = (id: string) => string | undefined
 
 /** What each Operation needs of the System it is decided on. */
-function needsOf(system: System, sharing: Sharing, operation: Operation): Needs {
+function needsOf(system: System, parentOf: ParentOf, operation: Operation): Needs {
   const none = new Map<string, string>()
   switch (operation._tag) {
     case 'CreateTile':
@@ -64,7 +68,7 @@ function needsOf(system: System, sharing: Sharing, operation: Operation): Needs 
     }
     case 'SwapTiles': {
       const { a, b } = operation
-      const [aParent, bParent] = [parentIn(sharing, a), parentIn(sharing, b)]
+      const [aParent, bParent] = [parentOf(a), parentOf(b)]
       const moved = new Map<string, string>()
       if (bParent !== undefined) moved.set(a, bParent)
       if (aParent !== undefined) moved.set(b, aParent)
@@ -134,12 +138,13 @@ export const grantableTo = (sharing: Sharing, account: string): Result.Result<vo
   account === sharing.owner ? Result.fail(new NotAllowed()) : Result.void
 
 /**
- * Whether a change without a Session would delete one of these Tiles while it carries a Grant. It may
- * not: such a change is the one an undo undoes (an applied Turn's, an accepted Proposal's), and an
- * undo makes a deleted Tile again with no Grant, so a Tile kept from someone would come back open.
+ * Whether a change by anyone but the owner from a Session would delete one of these Tiles while it
+ * carries a Grant. It may not: such a change is the one an undo undoes (an applied Turn's, an
+ * accepted Proposal's, a write someone else made in the owner's System), and an undo makes a deleted
+ * Tile again with no Grant, so a Tile kept from someone would come back open.
  */
 const dropsGrants = (actor: Actor, sharing: Sharing, gone: ReadonlyArray<string>) =>
-  !actor.session && gone.some((id) => (sharing.grants.get(id)?.size ?? 0) > 0)
+  !mayOpen(actor, sharing) && gone.some((id) => (sharing.grants.get(id)?.size ?? 0) > 0)
 
 /** A System decided on, and how it is shared. */
 interface On {
@@ -152,14 +157,15 @@ interface On {
  * it names, `TileNotFound`, as for a Tile that isn't there. With `read`, but without `write` on what
  * it changes, carries or goes under, `NotAllowed`; and so is a move or a swap that would give someone
  * a right on a Tile they did not hold before, for anyone but the System's owner acting from a Session,
- * and a delete without a Session over a Tile that carries a Grant.
+ * and a delete by anyone else over a Tile that carries a Grant.
  */
 export function allowed(
   actor: Actor,
   { system, sharing }: On,
   operation: Operation,
 ): Result.Result<void, TileNotFound | NotAllowed> {
-  const { named, written, moved } = needsOf(system, sharing, operation)
+  const parentOf: ParentOf = (id) => sharing.lineage.get(id) ?? undefined
+  const { named, written, moved } = needsOf(system, parentOf, operation)
   if (!named.every((id) => may(actor, sharing, id, 'read'))) return Result.fail(new TileNotFound())
   if (!written.every((id) => may(actor, sharing, id, 'write'))) return Result.fail(new NotAllowed())
   if (!mayOpen(actor, sharing) && widens(system, sharing, moved)) {
@@ -188,4 +194,28 @@ export function allowedBatch(
   return opens(sharing, now, kept) || dropsGrants(actor, sharing, gone)
     ? Result.fail(new NotAllowed())
     : Result.void
+}
+
+/**
+ * Whether the rights a reader was shown on each Tile (`Seen`'s) let them make this Operation on the
+ * System as they see it, as `allowed` asks them: *read* on every Tile it names, *write* on what it
+ * changes, carries or goes under. A preview for the client, which offers a line of a System it visits
+ * by it as it asks `decide`, never a guard: what the reader is not shown, a Tile kept from them below
+ * one they write, who a move would open a Tile to, a Grant a delete would drop, is the service's to
+ * refuse.
+ */
+export function shownAllowed(rights: Seen['rights'], system: System, operation: Operation) {
+  const parentOf: ParentOf = (id) => {
+    const found = tileAt(system, id)
+    return found !== undefined && 'parent' in found ? found.parent : undefined
+  }
+  // A Reference has no rights of its own: the Tile holding it gives them, as `rightsOn` reads it.
+  const held = (id: string, right: Right): boolean => {
+    const shown = rights[id]
+    if (shown !== undefined) return shown.includes(right)
+    const reference = Object.hasOwn(system.tiles, id) ? system.tiles[id] : undefined
+    return reference?._tag === 'Reference' && held(reference.parent, right)
+  }
+  const { named, written } = needsOf(system, parentOf, operation)
+  return named.every((id) => held(id, 'read')) && written.every((id) => held(id, 'write'))
 }

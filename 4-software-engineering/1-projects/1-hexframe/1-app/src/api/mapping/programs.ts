@@ -1,7 +1,7 @@
 // The programs behind Mapping's server functions (./mapping.ts): each runs one of Mapping's operations
 // for the Account the request proves, by its Session or its Key, on the System the request names, its
-// own unless a read names another, by its star or by one of its Tiles, or fails with IAM's
-// `SignedOut`, and a change in the transaction it opens. They sit in a module of their own because they reach the domain and the
+// own unless a read names another, by its star or by one of its Tiles, or a change is made at a Tile
+// of another (HEX-132), or fails with IAM's `SignedOut`, and a change in the transaction it opens. They sit in a module of their own because they reach the domain and the
 // database: the client imports the server functions, and only their handlers import this module,
 // which Start strips from the client.
 import { Effect } from 'effect'
@@ -22,7 +22,9 @@ import {
   DeleteReference,
   DeleteTile,
   EditTile,
+  madeAt,
   MoveTile,
+  type Operation,
   SwapTiles,
 } from '#/domains/mapping/operations'
 import * as Landing from '#/domains/mapping/landing/landing'
@@ -33,6 +35,7 @@ import type { Locale } from '#/paraglide/runtime'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
 
+import * as Someone from '../assistant/someone/someone'
 import { tileLink, tileOfLink } from './files/download'
 
 /**
@@ -97,9 +100,47 @@ const fromTile = <A, E, R>(
   operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>,
 ) => onSystem(() => (id === undefined ? Effect.succeed(undefined) : Mapping.holding(id)), operation)
 
-/** Runs a change for the signed-in Account, in one transaction: it commits whole, or not at all. */
-const changeForAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>) =>
-  forAccount((acting) => transactional(operation(acting)))
+/**
+ * Runs a change for the signed-in Account, the Operation `made` makes, on the System holding the
+ * Tile it is made at (Mapping's `madeAt`, `Mapping.holding`), in one transaction, which commits whole
+ * or not at all: its own, by the Operation's own function, `own`; or someone else's, a Grant letting it write there, by
+ * `../assistant/someone/`, where Mapping decides what it may do and the owner's timeline tells it
+ * with what undoes it, its answer the Tile for a create or an edit (`answer`). An id no System holds
+ * is decided on its own System, `TileNotFound` there. A Turn's Key changes the System its Turn
+ * started in alone: another is `TileNotFound`, as for a Tile kept from it.
+ */
+const changeAt = <O extends Operation, A, E, R>(
+  made: () => O,
+  own: (acting: Mapping.Acting, operation: O) => Effect.Effect<A, E, R>,
+  answer: (tile: Answered | undefined) => Effect.Effect<A>,
+) =>
+  Effect.gen(function* () {
+    const signed = yield* Iam.signedIn
+    // Made once the request is proven, as the fields a caller sent are only decoded then.
+    const operation = made()
+    const [mine, star] = yield* Effect.all([
+      actingOnOwn(signed.account.id, { session: signed.by._tag === 'Session' }),
+      Mapping.holding(madeAt(operation)),
+    ])
+    if (star === undefined || star === mine.system) return yield* transactional(own(mine, operation))
+    if (signed.by._tag === 'TurnKey') return yield* Effect.fail(new TileNotFound())
+    const acting = { ...mine, system: star }
+    return yield* transactional(
+      Effect.flatMap(Someone.writtenInAnothers(signed, { acting, own: mine }, operation), answer),
+    )
+  })
+
+/** The Tile a create or an edit answers, as it now stands, with its Version. */
+type Answered = Effect.Success<ReturnType<typeof Mapping.editTile>>
+
+/** A create's or an edit's answer: the Tile it made or changed, which such a write always answers. */
+const answeredTile = (tile: Answered | undefined) =>
+  tile === undefined
+    ? Effect.die(new Error('A create or an edit answered no Tile'))
+    : Effect.succeed(tile)
+
+/** What a write that answers no Tile answers: nothing. */
+const nothing = () => Effect.void
 
 /**
  * A System, flat, as the Account may see it: by its star, what the Account may read of it, from the
@@ -263,28 +304,28 @@ type Fields<O> = Omit<O, '_tag'>
 
 /**
  * A create, under the id its caller chose, which a Tile of any System may have (`TileIdTaken`), or
- * under one Mapping makes.
+ * under one Mapping makes, under a Tile of whichever System holds it (`changeAt`).
  */
 export const createTile = (input: Fields<CreateTile>) =>
-  changeForAccount((acting) => Mapping.createTile(acting, new CreateTile(input)))
+  changeAt(() => new CreateTile(input), Mapping.createTile, answeredTile)
 
 export const editTile = (input: Fields<EditTile>) =>
-  changeForAccount((acting) => Mapping.editTile(acting, new EditTile(input)))
+  changeAt(() => new EditTile(input), Mapping.editTile, answeredTile)
 
 export const moveTile = (input: Fields<MoveTile>) =>
-  changeForAccount((acting) => Mapping.moveTile(acting, new MoveTile(input)))
+  changeAt(() => new MoveTile(input), Mapping.moveTile, nothing)
 
 export const swapTiles = (input: Fields<SwapTiles>) =>
-  changeForAccount((acting) => Mapping.swapTiles(acting, new SwapTiles(input)))
+  changeAt(() => new SwapTiles(input), Mapping.swapTiles, nothing)
 
 export const deleteTile = (input: Fields<DeleteTile>) =>
-  changeForAccount((acting) => Mapping.deleteTile(acting, new DeleteTile(input)))
+  changeAt(() => new DeleteTile(input), Mapping.deleteTile, nothing)
 
 export const createReference = (input: Fields<CreateReference>) =>
-  changeForAccount((acting) => Mapping.createReference(acting, new CreateReference(input)))
+  changeAt(() => new CreateReference(input), Mapping.createReference, nothing)
 
 export const deleteReference = (input: Fields<DeleteReference>) =>
-  changeForAccount((acting) => Mapping.deleteReference(acting, new DeleteReference(input)))
+  changeAt(() => new DeleteReference(input), Mapping.deleteReference, nothing)
 
 /** An upload, as the import's server function decodes it: the file, what it is, where it lands. */
 interface ImportUpload {

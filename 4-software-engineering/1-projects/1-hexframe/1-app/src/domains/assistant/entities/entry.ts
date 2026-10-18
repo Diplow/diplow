@@ -14,15 +14,27 @@ import { Fate } from './proposal/proposal'
 import { BadEnd } from './turn/turn'
 
 /**
- * Who acted, as the timeline shows it: the user themselves, at one of their Sessions ("you"); one of
- * their Keys, by its name, which a Key revoked before its write was recorded no longer has; or the
- * Assistant, in one of their Turns, by its Turn's Key.
+ * Who acted of an Account's own, as its timeline shows it: the user themselves, at one of their
+ * Sessions ("you"); one of their Keys, by its name, which a Key revoked before its write was recorded
+ * no longer has; or the Assistant, in one of their Turns, by its Turn's Key.
  */
-export const Actor = Schema.Union([
+export const OwnActor = Schema.Union([
   Schema.TaggedStruct('You', {}),
   Schema.TaggedStruct('Key', { name: Schema.optionalKey(Schema.String) }),
   Schema.TaggedStruct('Assistant', {}),
 ])
+
+export type OwnActor = typeof OwnActor.Type
+
+/**
+ * Someone else, writing in the user's System: another Account, by the Title its star had when the
+ * write was recorded, `''` for one not named yet, and who acted of theirs, the Account itself, one of
+ * its Keys, or its Assistant.
+ */
+const Someone = Schema.TaggedStruct('Someone', { star: Schema.String, by: OwnActor })
+
+/** Who acted, as the timeline shows it: one of the user's own (`OwnActor`), or someone else. */
+export const Actor = Schema.Union([...OwnActor.members, Someone])
 
 export type Actor = typeof Actor.Type
 
@@ -63,8 +75,18 @@ const changed = {
   other: Schema.optionalKey(Named),
 }
 
-/** A change to the System, as Mapping summarized it, and who acted. */
-const Change = Schema.TaggedStruct('Change', { ...changed, actor: Actor })
+/**
+ * A change to a System, as Mapping summarized it, and who acted. Made by the user in someone else's
+ * System, it says so (`elsewhere`), its Tiles standing there, not in the user's. Made by someone else
+ * in the user's, it offers its Undo, once (`undone`, false until the user undid it), what undoes it
+ * kept with it.
+ */
+const Change = Schema.TaggedStruct('Change', {
+  ...changed,
+  actor: Actor,
+  elsewhere: Schema.optionalKey(Schema.Literal(true)),
+  undone: Schema.optionalKey(Schema.Boolean),
+})
 
 /**
  * A change an agent drafted into a Proposal, as Mapping summarized it on the System the Proposal
@@ -150,7 +172,12 @@ export type Entry = EntryContent & { readonly id: string; readonly at: Date }
  * A change or an import as Mapping summarized it, before Assistant says who acted: the shape
  * Assistant reads Mapping's summary by, which Mapping's own satisfies.
  */
-export type Summarized = Omit<typeof Change.Type, 'actor'> | Omit<typeof Import.Type, 'actor'>
+export type Summarized =
+  | Omit<typeof Change.Type, 'actor' | 'elsewhere' | 'undone'>
+  | Omit<typeof Import.Type, 'actor'>
+
+/** A change as Mapping summarized it, never an import: what a write someone else made changed. */
+export type SummarizedChange = Extract<Summarized, { readonly _tag: 'Change' }>
 
 /** The most an Entry may date back, in milliseconds: a day. */
 const longestAgo = 24 * 60 * 60_000

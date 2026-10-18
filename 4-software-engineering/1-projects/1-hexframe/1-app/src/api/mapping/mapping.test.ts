@@ -596,7 +596,6 @@ describe('who acts, and on which System', () => {
       system,
     })
     const attempts = (acting: Service.Acting): ReadonlyArray<Program> => [
-      Service.systemVersion(acting),
       Service.ownTile(acting, child.id),
       transactional(
         Service.editTile(acting, new EditTile({ id: child.id, version: 1, title: 'Mine now' })),
@@ -607,24 +606,28 @@ describe('who acts, and on which System', () => {
       ),
     ]
     // The other Account's star, and a star that names no System at all, refused alike; and a read
-    // of the System, which shows anyone a star's card, refused that one.
+    // of the System, which shows anyone a star's card, and its Version, refused that one.
     const nowhere = named(crypto.randomUUID())
     for (const attempt of [
       ...attempts(named(root.id)),
       ...attempts(nowhere),
       Service.system(nowhere),
+      Service.systemVersion(nowhere),
     ]) {
       expect(await run(stranger, attempt)).toMatchObject({
         ok: false,
         failure: { _tag: 'TileNotFound', kind: 'NotFound' },
       })
     }
-    // The other Account's star read: its card, untitled, and nothing below it.
-    expect(await value(run(stranger, Service.system(named(root.id))))).toMatchObject({
+    // The other Account's star read: its card, untitled, and nothing below it; its Version, how
+    // that stands, no count of the changes kept from it.
+    const card = await value(run(stranger, Service.system(named(root.id))))
+    expect(card).toMatchObject({
       root: { id: root.id, title: '', body: '' },
       tiles: {},
       rights: { [root.id]: [] },
     })
+    expect(await value(run(stranger, Service.systemVersion(named(root.id))))).toBe(card.version)
     // The Titles of what it may read: the star's alone, its card's, of the other Account's.
     expect(await run(stranger, Service.titles(named(root.id), [root.id, child.id]))).toEqual({
       ok: true,

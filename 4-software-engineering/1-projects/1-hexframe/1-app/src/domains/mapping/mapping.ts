@@ -191,12 +191,16 @@ const ownersWhole = (acting: Acting) => Effect.flatMap(reached(acting), wholeOf)
 export const holding = (id: string) => Tiles.use((tiles) => tiles.starHolding(id))
 
 /**
- * The Version of the System the actor acts on, how many events changed it, read alone: what a client
- * polls to know when to read the System again. 0 before its first change. Its owner's read alone.
+ * The Version of the System the actor acts on, as they are shown it: what a client polls to know when
+ * to read the System again. Its owner's is how many events changed it, read alone, 0 before its first
+ * change; anyone else's how what they see of it stands (`sightVersion`), read as `system` reads it,
+ * since a count of the System's changes would tell of the Tiles kept from them.
  */
 export const systemVersion = (acting: Acting) =>
-  Effect.flatMap(reached(acting), (owner) =>
-    Tiles.use((tiles) => Effect.map(tiles.systemVersion(owner), (version) => version ?? 0)),
+  Effect.flatMap(ownerOf(acting.system), (owner) =>
+    owns(acting.actor, owner)
+      ? Tiles.use((tiles) => Effect.map(tiles.systemVersion(owner), (version) => version ?? 0))
+      : Effect.map(system(acting), ({ version }) => version),
   )
 
 /**
@@ -909,6 +913,35 @@ export const runOperation = <O extends Operation>(
     const tile = yield* tileAnswered(after, operation, made)
     const undo = earlier === undefined ? undoOf(system, events) : extended(earlier, system, events)
     return { undo, changes: events.length, ...(tile !== undefined && { tile }) }
+  })
+
+/**
+ * Runs an Operation on the System the actor acts on as its own function runs it, a create under the
+ * id its caller chose refused `TileIdTaken`, as `createTile` refuses it, and answers, beside the Tile
+ * as it now stands for a create or an edit, what undoes it, from the System it ran on, and Mapping's
+ * summary of the change it made, as the System it leaves holds it, none for one that changed nothing:
+ * what the API layer runs a write someone else makes in a System by, so its owner may undo it.
+ */
+export const runUndoable = <O extends Operation>(acting: Acting, operation: O) =>
+  Effect.gen(function* () {
+    const made = yield* madeFor(operation)
+    // Only a create carries an id its caller chose, so only a create is ever refused `TileIdTaken`.
+    const onTaken = (
+      operation._tag === 'CreateTile' && operation.id !== undefined ? chosen : madeHere
+    ) as OnTaken<O extends CreateTile ? TileIdTaken : never>
+    const { system, events, after } = yield* operate(
+      acting,
+      operation,
+      (held) => Result.map(decidedOne(held, operation, made), (next) => next.events),
+      onTaken,
+    )
+    const tile = yield* tileAnswered(after, operation, made)
+    const [change] = summariesIn(after, events)
+    return {
+      undo: undoOf(system, events),
+      ...(change !== undefined && { change }),
+      ...(tile !== undefined && { tile }),
+    }
   })
 
 /**

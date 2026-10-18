@@ -22,7 +22,7 @@ import { tileLink } from '../mapping/files/download'
 import { WaitUntil } from '../server/bus'
 import { systemRules } from '../server/mcp/tools'
 
-import type { DayAsked, MergedNavigation, SentMessage } from './assistant'
+import type { DayAsked, LatestAsked, MergedNavigation, SentMessage } from './assistant'
 import { conversationNow, proposalNow, shownTo } from './proposal/programs'
 import { actingOnOwn } from '../mapping/programs'
 
@@ -75,11 +75,27 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
  * step now, the Conversation's Mode, and its
  * open Proposal, by its id, with how many writes it holds. The page reads the System again once the
  * Version moved, and the Conversation once its last Entry or its Proposal is another, and follows
- * closely while a Turn runs.
+ * closely while a Turn runs. With the star of a System the page visits, someone else's, the Version
+ * of it the Account is shown (`visited`, Mapping's `systemVersion`, how what it sees there stands),
+ * none for a star that names no System or its own, so the visited System is followed as its own is
+ * (HEX-132).
  */
-export const latest = forSession((accountId) =>
+export const latestOf = (asked: typeof LatestAsked.Type | undefined) =>
+  forSession((accountId) =>
+    Effect.gen(function* () {
+      const own = yield* actingOnOwn(accountId, { session: false })
+      const [now, visited] = yield* Effect.all([
+        latestOwn(accountId, own),
+        visitedVersion(own, asked?.visiting),
+      ])
+      return { ...now, ...(visited !== undefined && { visited }) }
+    }),
+  )
+
+/** The latest of the Account's own System and Conversation, which `latestOf` answers. */
+const latestOwn = (accountId: string, own: Mapping.Acting) =>
   Effect.gen(function* () {
-    const version = yield* Mapping.systemVersion(yield* actingOnOwn(accountId, { session: false }))
+    const version = yield* Mapping.systemVersion(own)
     const lastEntry = yield* Assistant.lastEntry(accountId)
     const live = yield* Assistant.liveTurn(accountId)
     const { mode, proposal } = yield* conversationNow(accountId)
@@ -98,8 +114,24 @@ export const latest = forSession((accountId) =>
       ...(turn !== undefined && { turn }),
       ...(proposal !== undefined && { proposal }),
     }
-  }),
-)
+  })
+
+/** The latest of the Account's own, as the page polls it at home. */
+export const latest = latestOf(undefined)
+
+/**
+ * The Version of a System the Account visits, by its star, as it is shown it (Mapping's
+ * `systemVersion`): none for no star, its own, whose Version the poll says already, or a star that
+ * names no System any longer.
+ */
+const visitedVersion = (own: Mapping.Acting, star: string | undefined) =>
+  star === undefined || star === own.system
+    ? Effect.succeed(undefined)
+    : Effect.catchTag(
+        Mapping.systemVersion({ ...own, system: star }),
+        'TileNotFound',
+        () => Effect.succeed(undefined),
+      )
 
 /**
  * Records where the user went, consecutive navigations merged into one Entry by the browser, dated

@@ -16,7 +16,9 @@ import { EditTile } from '#/domains/mapping/operations'
 import * as MappingService from '#/domains/mapping/mapping'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { browser, TestAuth } from '#/repositories/auth/testing'
+import { layer as appliedLayer } from '#/repositories/database/conversations/applied'
 import { layer as conversationsLayer } from '#/repositories/database/conversations/conversations'
+import { layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
 import { transactional } from '#/repositories/database/database'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { archiveOf } from '#/repositories/zip/testing'
@@ -33,7 +35,13 @@ import { recordedInConversation, toldShared } from './recording'
 // Account's Conversation, by the sharer's star, and never by a change after. A write runs as its door runs it, a server function's with
 // a Session, an MCP call's with a Key.
 
-const TestLayer = Layer.mergeAll(tilesLayer, conversationsLayer, zipLayer).pipe(
+const TestLayer = Layer.mergeAll(
+  tilesLayer,
+  conversationsLayer,
+  proposalsLayer,
+  appliedLayer,
+  zipLayer,
+).pipe(
   Layer.provideMerge(TestAuth),
   (repositories) =>
     Layer.provideMerge(serverBus([recordedInConversation, toldShared]), repositories),
