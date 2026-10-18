@@ -8,7 +8,7 @@
 // What the user's System and timeline say is quoted as data, each text one JSON string in a fenced
 // block, so no Title, Preview or Message reads as one of the Turn's rules. It holds no secret, ever:
 // the Turn's Key never reaches it. Pure.
-import type { Actor, Entry, Fate, Mode, ProposedChange } from '../entities'
+import type { Actor, Entry, Fate, Mode, ProposedChange, SharedRights } from '../entities'
 
 /** A Tile as the user has it on screen: its id, its Title and its Preview, as Mapping reads them. */
 export interface Glimpse {
@@ -72,6 +72,14 @@ const ends = {
   sandbox: 'its sandbox failed',
 } as const
 
+/** What a Tile shared lets the user do, as the agent reads it. */
+const sharedRights: Record<SharedRights, string> = {
+  read: 'read it',
+  'read+write': 'read and write it',
+  'read+@': 'read it and run you at it',
+  'read+write+@': 'read and write it, and run you at it',
+}
+
 /** How a Proposal stands, as the agent reads it. */
 const fates: Record<Fate, string> = {
   open: 'open, waiting for the user',
@@ -110,6 +118,8 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
       const made = entry.changes === 1 ? '1 change' : `${String(entry.changes)} changes`
       return `A Turn of yours in apply made ${made}${entry.undone ? ', which the user undid' : ''}.`
     }
+    case 'Shared':
+      return `${quoted(entry.by)} shared ${named(entry.tile.title, entry.tile.id)} with the user, who may ${sharedRights[entry.rights]} there; it stands in their System, not the user's.`
   }
 }
 

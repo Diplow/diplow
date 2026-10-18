@@ -242,16 +242,18 @@ const fromSession = <A, E, R>(
   )
 
 /**
- * A Tile's Grant for Everyone set, `read` or `none`, or removed, `inherit`, by the owner of the System
- * holding it, from a Session, in one transaction. No Operation: it is neither proposed nor undone,
- * and no timeline tells of it.
+ * A Tile's Grant for Everyone set, `read` or `none`, or for someone named by their star, any value,
+ * or removed, `inherit`, by the owner of the System holding it, from a Session, in one transaction.
+ * No Operation: it is neither proposed nor undone. One that first opens the Tile to someone
+ * publishes Mapping's `TileShared`, which `../assistant/recording.ts` tells in their timeline once
+ * the transaction committed; no other change of who reaches a Tile is told.
  */
 export const setGrant = (change: GrantChange) =>
   fromSession(change.tile, (acting) => transactional(Sharing.grant(acting, change)))
 
 /**
- * Who reaches a Tile, each subject with its value and the Tile it comes from, read by the owner of the
- * System holding it, from a Session.
+ * Who reaches a Tile, each subject with its value and the Tile it comes from, each Account by its
+ * star's card, read by the owner of the System holding it, from a Session.
  */
 export const whoReaches = ({ tile }: { tile: string }) =>
   fromSession(tile, (acting) => Sharing.whoReaches(acting, tile))

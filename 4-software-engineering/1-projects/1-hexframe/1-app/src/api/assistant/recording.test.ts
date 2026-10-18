@@ -11,6 +11,7 @@ import {
   proven,
   signUp,
 } from '#/domains/iam/iam'
+import type { Choice } from '#/domains/mapping/entities'
 import { EditTile } from '#/domains/mapping/operations'
 import * as MappingService from '#/domains/mapping/mapping'
 import { HttpExchange } from '#/repositories/auth/auth'
@@ -23,17 +24,19 @@ import { layer as zipLayer } from '#/repositories/zip/zip'
 
 import * as Mapping from '../mapping/programs'
 import { WaitUntil, serverBus } from '../server/bus'
-import { recordedInConversation } from './recording'
+import { recordedInConversation, toldShared } from './recording'
 
 // The Conversation recording Mapping's events, over PGlite, with Better Auth for real so a Key has a
 // name: a change by a Session, the same by a Key, an import, each landing as an Entry of the acting
 // Account's Conversation, labeled as the timeline shows who acted, once its transaction committed;
-// and a rolled-back write landing nothing. A write runs as its door runs it, a server function's with
+// a rolled-back write landing nothing; and a Tile shared with an Account, told once in that
+// Account's Conversation, by the sharer's star, and never by a change after. A write runs as its door runs it, a server function's with
 // a Session, an MCP call's with a Key.
 
 const TestLayer = Layer.mergeAll(tilesLayer, conversationsLayer, zipLayer).pipe(
   Layer.provideMerge(TestAuth),
-  (repositories) => Layer.provideMerge(serverBus([recordedInConversation]), repositories),
+  (repositories) =>
+    Layer.provideMerge(serverBus([recordedInConversation, toldShared]), repositories),
 )
 
 let accounts = 0
@@ -224,6 +227,45 @@ layer(TestLayer)("the Conversation recording Mapping's events, over PGlite", (it
       yield* asked(rolledBack, bySession)
       yield* asked(Mapping.editTile({ id: root, version: 9, title: 'Stale' }), bySession)
       expect(yield* recordedFor(account.id)).toEqual([])
+    }),
+  )
+
+  it.effect('tells a Tile shared in the timeline of the Account it was shared with, once', () =>
+    Effect.gen(function* () {
+      const ana = yield* someone
+      const bob = yield* someone
+      const star = yield* rootOf(ana.bySession)
+      yield* asked(Mapping.editTile({ id: star, version: 1, title: 'Ana Lima' }), ana.bySession)
+      const journal = yield* Effect.flatten(
+        asked(
+          Mapping.createTile({ parent: star, slot: 1, title: 'Journal', preview: '', body: '' }),
+          ana.bySession,
+        ),
+      )
+      const toBob = { _tag: 'Account', star: yield* rootOf(bob.bySession) } as const
+      const share = (value: Choice) =>
+        Effect.flatten(
+          asked(Mapping.setGrant({ tile: journal.id, subject: toBob, value }), ana.bySession),
+        )
+      yield* share('read')
+      const told = {
+        _tag: 'Shared',
+        by: 'Ana Lima',
+        tile: { id: journal.id, title: 'Journal' },
+        rights: 'read',
+      }
+      expect(yield* recordedFor(bob.account.id)).toEqual([told])
+      // Bob reads it now, through `may`.
+      const seen = yield* Effect.flatten(asked(Mapping.systemAt(star), bob.bySession))
+      expect(Object.keys(seen.tiles)).toEqual([journal.id])
+      // A second change, then its removal, tell nothing; nor is Ana told of her own share.
+      yield* share('read+write')
+      yield* share('inherit')
+      expect(yield* recordedFor(bob.account.id)).toEqual([told])
+      expect((yield* recordedFor(ana.account.id)).map(({ _tag }) => _tag)).toEqual([
+        'Change',
+        'Change',
+      ])
     }),
   )
 })

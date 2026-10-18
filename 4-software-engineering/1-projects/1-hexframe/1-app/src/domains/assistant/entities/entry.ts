@@ -1,7 +1,8 @@
 // The Conversation's Entries: what its timeline holds, oldest first. A Message between the user and the
 // agent; a change to the System, whoever made it; an import; where the user went, consecutive
-// navigations merged into one (./navigation.ts); how a Turn ended, when not by its answer; and a
-// Proposal, the changes its agent drafted in ask, and how the user decided it. A change and an import
+// navigations merged into one (./navigation.ts); how a Turn ended, when not by its answer; a
+// Proposal, the changes its agent drafted in ask, and how the user decided it; and a Tile someone
+// shared with the user, which lives in their System, not the user's. A change and an import
 // are recorded as Mapping summarized them when they happened, with who acted, and never rebuilt: the
 // timeline is a record of the past; a Proposal's Entry alone follows it until the user decides it.
 // Assistant knows no Tile: a change names its verb and its Tiles as they came. Pure.
@@ -106,6 +107,25 @@ const Import = Schema.TaggedStruct('Import', {
 /** A Turn that ended otherwise than by its answer, and how: a Stop, a limit, its time, its sandbox. */
 const TurnEnded = Schema.TaggedStruct('TurnEnded', { how: BadEnd })
 
+/** What a Tile shared lets the user do there: read it, and maybe write it, or run the agent at it. */
+export const SharedRights = Schema.Literals(['read', 'read+write', 'read+@', 'read+write+@'])
+
+export type SharedRights = typeof SharedRights.Type
+
+/**
+ * A Tile someone shared with the user, as the API layer told it when a Grant first opened it to
+ * them: who shared it, by the Title of their star then, the Tile, by its id and the Title it had
+ * then, in their System, and what the user may do there. Changing it later, or taking it back, says
+ * nothing.
+ */
+const Shared = Schema.TaggedStruct('Shared', {
+  by: Schema.String,
+  tile: Named,
+  rights: SharedRights,
+})
+
+export type Shared = typeof Shared.Type
+
 /** What an Entry says, whichever kind it is: what is stored of it, and what it is decoded by. */
 export const EntryContent = Schema.Union([
   Message,
@@ -115,6 +135,7 @@ export const EntryContent = Schema.Union([
   TurnEnded,
   Proposal,
   TurnApplied,
+  Shared,
 ])
 
 export type EntryContent = typeof EntryContent.Type

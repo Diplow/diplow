@@ -171,10 +171,13 @@ export const deleteReference = createServerFn({ method: 'POST' })
   .handler(({ data, context }) => run(context, Mapping.deleteReference(data)))
 
 /**
- * Sets a Tile's Grant for Everyone, `read` or `none`, or removes it, `inherit`, so the Tile inherits
- * again, its input Mapping's `GrantChange`, never more than `read`: its owner's alone, from
- * a Session, never a Key's (`SessionRequired`); anyone else is `NotAllowed`, or `TileNotFound` where
- * they may not read the Tile, and a Tile hexframe ships is `ShippedReadOnly`.
+ * Sets a Tile's Grant for Everyone, `read` or `none`, or for someone named by their star, any value,
+ * or removes it, `inherit`, so the Tile inherits again, its input Mapping's `GrantChange`, Everyone
+ * never given more than `read`: its owner's alone, from a Session, never a Key's
+ * (`SessionRequired`); anyone else is `NotAllowed`, or `TileNotFound` where they may not read the
+ * Tile, a star that names nothing is `TileNotFound`, the owner's own `NotAllowed`, and a Tile
+ * hexframe ships is `ShippedReadOnly`. A Grant that first opens the Tile to someone is told in their
+ * timeline.
  */
 export const setGrant = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(GrantChange))
@@ -185,7 +188,8 @@ export const TileReach = Schema.Struct({ tile: TileId })
 
 /**
  * Who reaches a Tile, Everyone and each subject a Grant names, with its value and the Tile it comes
- * from: read by its owner alone, from a Session, as `setGrant` refuses everyone else.
+ * from, each Account by its star's card: read by its owner alone, from a Session, as `setGrant`
+ * refuses everyone else.
  */
 export const whoReaches = createServerFn({ method: 'GET' })
   .validator(Schema.toStandardSchemaV1(TileReach))

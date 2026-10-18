@@ -4,7 +4,7 @@ import { Effect } from 'effect'
 import { Bus, type DomainEvent } from '#/domains/bus'
 import { transactional } from '#/repositories/database/database'
 
-import type { Actor, Choice, GrantChange } from '../entities'
+import type { Actor, Choice } from '../entities'
 import * as Mapping from '../mapping'
 import { actingOnOwn, createReference, createTile, held, TestTiles, tree } from '../testing'
 import { grant, TileShared, whoReaches } from './sharing'
