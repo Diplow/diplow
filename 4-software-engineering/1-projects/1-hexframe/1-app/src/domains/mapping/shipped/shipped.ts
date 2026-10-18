@@ -9,19 +9,18 @@
 // slots from it, `help/3/-1`, `tutorial/2`, the same in every language, looked up among the bundled
 // Tiles, never read as a file path. The build refuses a folder that reads as no Tile in either
 // (vite.config.ts).
-import { Effect, Schema } from 'effect'
+import { Effect } from 'effect'
 
 import { noteFiles } from '#/repositories/shipped/note'
 import { shippedNotes } from '#/repositories/shipped/shipped'
 
 import { TileNotFound } from '../errors'
 import {
-  contextDirections,
-  directions,
   type Field,
   type FieldsAsked,
   type Found,
   type ShippedRoot,
+  shippedIdOf,
   systemFrom,
   systemOf,
   withContent,
@@ -34,18 +33,11 @@ export const helpRoot = 'help' satisfies ShippedRoot
 /** The id of the tutorial's Root. */
 export const tutorialRoot = 'tutorial' satisfies ShippedRoot
 
-/** A slot, as a Help id writes it: a Child's Direction or a Context slot. */
-const slot = [...directions, ...contextDirections].join('|')
-
 /**
  * A well-formed Help id, as a reader may send one, which the MCP's reads take: Help's Root, then the
- * slot of each generation below it, `help/3/-1`. The id of every Tile of Help has this form; not every
- * id of this form has a Tile.
+ * slot of each generation below it, `help/3/-1` (`shippedIdOf`).
  */
-export const HelpId = Schema.String.check(
-  Schema.isMaxLength(64),
-  Schema.isPattern(new RegExp(`^${helpRoot}(/(${slot}))*$`)),
-)
+export const HelpId = shippedIdOf([helpRoot])
 
 /**
  * The languages the shipped Systems are written in: English, and French beside it. The shipped

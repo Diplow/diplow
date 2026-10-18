@@ -35,7 +35,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
             },
             {
               "maxLength": 64,
-              "pattern": "^help(\\/(1|2|3|4|5|6|-1|-2|-3|-4|-5|-6))*$",
+              "pattern": "^(help)(\\/(1|2|3|4|5|6|-1|-2|-3|-4|-5|-6))*$",
               "type": "string",
             },
           ],
@@ -89,7 +89,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
             },
             {
               "maxLength": 64,
-              "pattern": "^help(\\/(1|2|3|4|5|6|-1|-2|-3|-4|-5|-6))*$",
+              "pattern": "^(help)(\\/(1|2|3|4|5|6|-1|-2|-3|-4|-5|-6))*$",
               "type": "string",
             },
           ],

@@ -19,7 +19,6 @@ import {
   type PinnedTiles,
   pointsAt,
   referencesShown,
-  Right,
   rightsOn,
   seenBy,
   sharingOf,
@@ -246,6 +245,28 @@ export const holding = (id: string) =>
     : Tiles.use((tiles) => tiles.starHolding(id))
 
 /**
+ * The star of the System a read from a Tile, or a change made at it, works on, by the Tile's id: the
+ * System holding it (`holding`), but none for a Tile hexframe ships, which Mapping reads, and refuses
+ * every write of, by its id alone (`find`, `outsideShipped`), wherever the request works, a Turn's
+ * included, as before Help and the tutorial were mounted under the Hexframe star (HEX-139).
+ */
+export const workingAt = (id: string) =>
+  isShippedId(id) ? Effect.succeed<string | undefined>(undefined) : holding(id)
+
+/**
+ * A star's Title, its card's, which anyone sees, `''` for an id no star has: two lookups, the owner
+ * it names and its row.
+ */
+export const starTitle = (star: string) =>
+  Effect.flatMap(
+    Tiles.use((tiles) => tiles.ownerOf(star)),
+    (owner) =>
+      owner === undefined
+        ? Effect.succeed('')
+        : Effect.map(rowsIn({ owner, star }, [star], ['title']), (rows) => rows[0]?.title ?? ''),
+  )
+
+/**
  * The Titles of the Tiles of the System the actor acts on among these ids that pass `kept`, by id: a
  * deleted one's, a Reference's or an id it holds no Tile of has none. A Tile hexframe ships, under
  * the Hexframe star, is named in English.
@@ -350,15 +371,11 @@ export const shownTile = (acting: Acting, id: string) => tileKept(acting, id, 's
 export const agentAt = (acting: Acting, id: string) =>
   Effect.gen(function* () {
     const owner = yield* ownerOf(acting.system)
-    // Its owner holds every right but on a Tile hexframe ships, which `rightsOn` gives *read* alone.
-    const rights =
-      owns(acting.actor, owner) && !isShippedId(id)
-        ? new Set(Right.literals)
-        : yield* Effect.map(
-            Effect.all([placesIn(owner), grantsIn(owner)], { concurrency: 'unbounded' }),
-            ([places, grants]) =>
-              rightsOn(acting.actor, sharingOf(owner, lineageFrom(places), grants), id),
-          )
+    const [places, grants] = yield* Effect.all(
+      [placesIn(owner), owns(acting.actor, owner) ? Effect.succeed([]) : grantsIn(owner)],
+      { concurrency: 'unbounded' },
+    )
+    const rights = rightsOn(acting.actor, sharingOf(owner, lineageFrom(places), grants), id)
     const titled = yield* titledIn({ owner, star: acting.system }, [id], () => true)
     return yield* Effect.fromResult(agentAllowed(rights, { isTile: id in titled }))
   })

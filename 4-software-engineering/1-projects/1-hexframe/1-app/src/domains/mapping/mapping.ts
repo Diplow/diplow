@@ -28,7 +28,7 @@ import {
   pinning,
   reading,
   seenThrough,
-  titles,
+  starTitle,
   titlesAcross,
   wholeOf,
 } from './sharing/reading'
@@ -42,7 +42,6 @@ import {
   type FieldsAsked,
   type Found,
   acrossGaps,
-  anyone,
   foundInSeen,
   hexframeStar,
   isShippedId,
@@ -112,6 +111,7 @@ export {
   titles,
   titlesAcross,
   wholeOf,
+  workingAt,
 } from './sharing/reading'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
@@ -239,13 +239,10 @@ const find = <O extends Field, F extends Field>(
 const mountedParent = <O extends Field, F extends Field>(found: Found<O, F>) =>
   found.parent !== null
     ? Effect.succeed(found)
-    : Effect.map(
-        titles({ actor: anyone, system: hexframeStar }, [hexframeStar]),
-        (named): Found<O, F> => ({
-          ...found,
-          parent: { id: hexframeStar, title: named[hexframeStar] ?? '' },
-        }),
-      )
+    : Effect.map(starTitle(hexframeStar), (title): Found<O, F> => ({
+        ...found,
+        parent: { id: hexframeStar, title },
+      }))
 
 /**
  * What a read from a Tile of the Hexframe Organization's System finds, its star when no id is given:

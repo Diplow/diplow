@@ -19,6 +19,7 @@ import {
   type Slot,
   slotOfRow,
   type Tile,
+  TileId,
   type Version,
 } from './tile'
 
@@ -103,14 +104,24 @@ export const isShippedId = (id: string) => shippedOf(id) !== undefined
 const slot = [...directions, ...contextDirections].join('|')
 
 /**
- * A well-formed id of a Tile hexframe ships, as a reader may send one: a shipped Root, then the slot
- * of each generation below it, `help/3/-1`, `tutorial/2`. The id of every shipped Tile has this form;
- * not every id of this form has a Tile. What a link and a Reference take beside a `TileId`.
+ * A well-formed id of a Tile hexframe ships from one of these Roots, as a reader may send one: the
+ * Root, then the slot of each generation below it, `help/3/-1`, `tutorial/2`. The id of every
+ * shipped Tile has this form; not every id of this form has a Tile.
  */
-export const ShippedId = Schema.String.check(
-  Schema.isMaxLength(64),
-  Schema.isPattern(new RegExp(`^(${shippedRoots.join('|')})(/(${slot}))*$`)),
-)
+export const shippedIdOf = (roots: ReadonlyArray<ShippedRoot>) =>
+  Schema.String.check(
+    Schema.isMaxLength(64),
+    Schema.isPattern(new RegExp(`^(${roots.join('|')})(/(${slot}))*$`)),
+  )
+
+/** A well-formed id of any Tile hexframe ships (`shippedIdOf`). */
+const ShippedId = shippedIdOf(shippedRoots)
+
+/**
+ * A Tile's id as a link or a Reference's target names it: a UUID (`TileId`), or the id of a Tile
+ * hexframe ships (`ShippedId`), which the Hexframe star holds (HEX-139).
+ */
+export const AnyTileId = Schema.Union([TileId, ShippedId])
 
 /** A Leaf in its System's tree: one file's worth, a Tile with nothing below it and no Context. */
 export type LeafTile = FoundTile

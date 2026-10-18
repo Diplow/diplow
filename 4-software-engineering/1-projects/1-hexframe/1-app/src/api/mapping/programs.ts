@@ -16,7 +16,6 @@ import {
   type Field,
   type GrantChange,
   groupsUnnamedIn,
-  isShippedId,
   nowhere,
   type ShippedRoot,
   withGroups,
@@ -163,37 +162,28 @@ const onSystem = <A, E, R, N, R2>(
   )
 
 /**
- * The star of the System holding the Tile a request reads from or writes at, by its id, for a read
- * or a change made where it works: none for a Tile hexframe ships, which Mapping reads, and refuses
- * every write of, by its id alone, wherever the request works, a Turn's Key's included, as it did
- * before Help and the tutorial were mounted under the Hexframe star (HEX-139).
- */
-const heldAt = (id: string) =>
-  isShippedId(id) ? Effect.succeed<string | undefined>(undefined) : Mapping.holding(id)
-
-/**
- * Runs a read from one Tile for the signed-in Account on the System holding it (`heldAt`), its own
- * when no id is given, or for an id no System holds, or a Tile hexframe ships, which Mapping reads by
- * its id alone (`onSystem`).
+ * Runs a read from one Tile for the signed-in Account on the System it works on (Mapping's
+ * `workingAt`): the one holding it, its own when no id is given, or for an id no System holds, or a
+ * Tile hexframe ships, which Mapping reads by its id alone (`onSystem`).
  */
 const fromTile = <A, E, R>(
   id: string | undefined,
   operation: (acting: Mapping.Acting, across: Mapping.Across) => Effect.Effect<A, E, R>,
 ) =>
   onSystem(
-    () => (id === undefined ? Effect.succeed(undefined) : heldAt(id)),
+    () => (id === undefined ? Effect.succeed(undefined) : Mapping.workingAt(id)),
     (acting, _own, across) => operation(acting, across),
   )
 
 /**
- * Runs a change for the signed-in Account, the Operation `made` makes, on the System holding the
- * Tile it is made at (Mapping's `madeAt`, `Mapping.holding`), in one transaction, which commits whole
- * or not at all: its own, by the Operation's own function, `own`; or someone else's, a Grant letting it write there, by
- * `../assistant/someone/`, where Mapping decides what it may do and the owner's timeline tells it
- * with what undoes it, its answer the Tile for a create or an edit (`answer`). An id no System holds
- * is decided on its own System, `TileNotFound` there, and a Tile hexframe ships too, `Shipped` there
- * (`heldAt`). A Turn's Key changes the System its Turn started in alone: another is `TileNotFound`,
- * as for a Tile kept from it.
+ * Runs a change for the signed-in Account, the Operation `made` makes, on the System the Tile it is
+ * made at works on (Mapping's `madeAt`, then `workingAt`), in one transaction, which commits whole or
+ * not at all: its own, by the Operation's own function, `own`; or someone else's, a Grant letting it
+ * write there, by `../assistant/someone/`, where Mapping decides what it may do and the owner's
+ * timeline tells it with what undoes it, its answer the Tile for a create or an edit (`answer`). An
+ * id no System holds is decided on its own System, `TileNotFound` there, and a Tile hexframe ships
+ * too, `Shipped` there. A Turn's Key changes the System its Turn started in alone: another is
+ * `TileNotFound`, as for a Tile kept from it.
  */
 const changeAt = <O extends Operation, A, E, R>(
   made: () => O,
@@ -206,7 +196,7 @@ const changeAt = <O extends Operation, A, E, R>(
     const operation = made()
     const [mine, star] = yield* Effect.all([
       actingOnOwn(signed.account.id, { session: signed.by._tag === 'Session' }),
-      heldAt(madeAt(operation)),
+      Mapping.workingAt(madeAt(operation)),
     ])
     const home = yield* homeOf(signed, mine)
     if (turnKeyElsewhere(signed, home, star ?? mine.system)) {

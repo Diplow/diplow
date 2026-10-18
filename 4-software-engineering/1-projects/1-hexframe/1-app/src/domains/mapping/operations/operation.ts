@@ -4,7 +4,7 @@
 // Operation may do to a System is the service's to decide.
 import { Schema } from 'effect'
 
-import { ContextDirection, contentBounds, ShippedId, Slot, TileId, Version } from '../entities'
+import { AnyTileId, ContextDirection, contentBounds, Slot, TileId, Version } from '../entities'
 
 /**
  * What a Tile says, bounded so nothing unbounded reaches the service, which says what a Title and a
@@ -67,13 +67,13 @@ export class DeleteTile extends Schema.TaggedClass<DeleteTile>()('DeleteTile', {
  * Puts a Reference to `target` in a free Context slot of the Tile `parent`, named with the Version
  * read of it: a Reference has none of its own, so its writes count on the Tile whose slot they change.
  * Its target is a Tile's id, or a Tile hexframe ships by its own (`ShippedId`), which anyone may pin
- * as any Tile they read (HEX-139).
+ * as any Tile they read (`AnyTileId`, HEX-139).
  */
 export class CreateReference extends Schema.TaggedClass<CreateReference>()('CreateReference', {
   parent: TileId,
   parentVersion: Version,
   slot: ContextDirection,
-  target: Schema.Union([TileId, ShippedId]),
+  target: AnyTileId,
 }) {}
 
 /** Empties a Context slot of the Tile `parent`, named with the Version read of it, that holds a Reference. */

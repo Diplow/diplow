@@ -8,7 +8,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { Schema, Struct } from 'effect'
 
-import { GrantChange, ShippedId, shippedRoots, StarQuery, TileId } from '#/domains/mapping/entities'
+import { AnyTileId, GrantChange, shippedRoots, StarQuery, TileId } from '#/domains/mapping/entities'
 import {
   CreateReference,
   CreateTile,
@@ -106,7 +106,7 @@ export const system = createServerFn({ method: 'GET' })
  * The Tile a link leads to, by its id: a UUID, as Mapping's `TileId` bounds it, or the id of a Tile
  * hexframe ships, which the Hexframe star holds (`ShippedId`, HEX-139).
  */
-export const TileVisit = Schema.Struct({ tile: Schema.Union([TileId, ShippedId]) })
+export const TileVisit = Schema.Struct({ tile: AnyTileId })
 
 /** A public Tile's System read: the Tile, as a link names it, and the page's language. */
 export const PublicRead = Schema.Struct({
