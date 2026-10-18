@@ -1,0 +1,114 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/reach.ts
+  s_eb2c82211b20e8::t_3dd9765e9e97f5 3-6,30-36,39-40,45,59-67,71-73,77-78,131-153
+  s_eb2c82211b20e8::t_89a6e786c1b4a4 154-155
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/organization/rows.test.ts
+  s_eb2c82211b20e8::t_8137c36b48db08 3,43-64,71
+  s_eb2c82211b20e8::t_4d7fa16ac02414 65-70
+  s_eb2c82211b20e8::t_eef77f868240c9 72
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/sharing/share/gallery.tsx
+  s_eb2c82211b20e8::t_ba59feeae498ef 164,166,189,199-203
+  s_eb2c82211b20e8::t_8b9121c0a466aa 2-7,15,96-97,99-115,127-129,134,136,138-139,144,150-151,156-163,165,167-188,190-198,204-218
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/reach.test.ts
+  s_eb2c82211b20e8::t_2103f74dfb8a36 4-13,121-128,183-232
+  s_eb2c82211b20e8::t_31fcfcab059c00 233
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/sharing/sharing.ts
+  s_eb2c82211b20e8::t_a4c0be9bdb0c8e 4-5,73,84-85,91
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/sharing/share/ShareWidget.tsx
+  s_eb2c82211b20e8::t_dfc97e51f8028a 6-9,11,29-30,53-54,69,83-85,106-118
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/menu/TileMenu.tsx
+  s_eb2c82211b20e8::t_7d7d01698d98ac 29
+  s_eb2c82211b20e8::t_bbd2fcf2a5a51e 251-253
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/groups.ts
+  s_eb2c82211b20e8::t_9a4d42f6d44bc9 1-5,7-15,19-34,37,43-44,46,48-49
+  s_eb2c82211b20e8::t_35c2ee421fa96c 16-18
+  s_eb2c82211b20e8::t_55a1cba9d3300f 6,35-36,38-42,45,47
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/groups.test.ts
+  s_eb2c82211b20e8::t_55a1cba9d3300f 59-64,66-68
+  s_eb2c82211b20e8::t_9a4d42f6d44bc9 1-58,65,69-70
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/menu/verbs.ts
+  s_eb2c82211b20e8::t_bbd2fcf2a5a51e 57,133-139
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/rows.test.ts
+  s_eb2c82211b20e8::t_86fc45ba44601c 5
+  s_eb2c82211b20e8::t_4d7fa16ac02414 221-223
+  s_eb2c82211b20e8::t_0b92f3a4df0308 103,143,153-220,224
+  s_eb2c82211b20e8::t_da1e17996c9f90 225
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/hexes.tsx
+  s_eb2c82211b20e8::t_bbd2fcf2a5a51e 50
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_eb2c82211b20e8::t_4ad7b52e0a1764 1351,1365-1398
+  s_eb2c82211b20e8::t_c7475de6a91cf3 1297,1300,1399-1407
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/TileWidgets.tsx
+  s_eb2c82211b20e8::t_bbd2fcf2a5a51e 3-4,38,163-164,200-205
+  s_eb2c82211b20e8::t_15fc0320c94cf7 206-212
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.ts
+  s_eb2c82211b20e8::t_66a0c2e65122dd 52-54
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/sharing/share/GroupPicker.tsx
+  s_eb2c82211b20e8::t_eaeed4aef53c75 80,82
+  s_eb2c82211b20e8::t_9af34c1a411ee4 1-79,81,83-99
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_22ed65bccc5957 11,18,21,379-383,388-391,395,400-405,414-417,420-433
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.test.ts
+  s_eb2c82211b20e8::t_c4bf1036eb4190 114-116,140-145
+  s_eb2c82211b20e8::t_66a0c2e65122dd 11-13
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/acting.test.ts
+  s_eb2c82211b20e8::t_0b92f3a4df0308 255-256,265
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/organizations/groups.test.ts
+  s_eb2c82211b20e8::t_ef79bf6e1c953b 1-92,96-274
+  s_eb2c82211b20e8::t_4d7fa16ac02414 93-95
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/organization/rows.ts
+  s_eb2c82211b20e8::t_8137c36b48db08 3-10,32-65
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/rows.ts
+  s_eb2c82211b20e8::t_20374a895cc923 4-8,36-39,42-43,45-46,51,53-58,63,67,70-71,73,79-80,82-87,89-90,92-106,109-113,118-119,133-139,142-146,151-153,162,166,168,182-184
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/organization/GroupsWidgets.tsx
+  s_eb2c82211b20e8::t_0dc5ca97fa4e23 21,77-79
+  s_eb2c82211b20e8::t_b6ead21e23c935 1-20,22-76,80-154
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_eb2c82211b20e8::t_c7475de6a91cf3 1297,1300,1399-1407
+  s_eb2c82211b20e8::t_4ad7b52e0a1764 1351,1365-1398
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/sharing/organization/gallery.tsx
+  s_eb2c82211b20e8::t_4d7fa16ac02414 233-235
+  s_eb2c82211b20e8::t_8b9121c0a466aa 2-6,14,130-232,236-284,286-287
+  s_eb2c82211b20e8::t_211c07aa78e0f5 285
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_eb2c82211b20e8::t_ea28d6527a6791 17
+  s_eb2c82211b20e8::t_c7475de6a91cf3 64-67,70,301,304
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/sharing/organization/GroupsWidget.tsx
+  s_eb2c82211b20e8::t_6b216ca0a72363 1-9,11-85,87-217
+  s_eb2c82211b20e8::t_46f17582acf76d 10,86
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/pieces.ts
+  s_eb2c82211b20e8::t_c7475de6a91cf3 191-197,212-218
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search/search.ts
+  s_eb2c82211b20e8::t_bbd2fcf2a5a51e 3,43-44,68,92,99,125,150,175
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/ShareWidgets.tsx
+  s_eb2c82211b20e8::t_2e20e1dd71b9ed 4-9,13,15,22,35-39,43,45,55-64,67-73,105,107-113
+  s_eb2c82211b20e8::t_55a1cba9d3300f 65-66
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/organizations.ts
+  s_eb2c82211b20e8::t_9a4d42f6d44bc9 145-147
+  s_eb2c82211b20e8::t_f9a1604893023d 4-8,21-32,72-75,80-81,115-144,148-198
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/acting.ts
+  s_eb2c82211b20e8::t_bbd2fcf2a5a51e 39,70-71,310,319
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useActingState.ts
+  s_eb2c82211b20e8::t_bbd2fcf2a5a51e 158
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/organizations/programs.ts
+  s_eb2c82211b20e8::t_4d7fa16ac02414 177-184
+  s_eb2c82211b20e8::t_858656e7ef23cc 1-8,14,158-176,185-260
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/organizations/groups.ts
+  s_eb2c82211b20e8::t_14a48679ec2036 70-72
+  s_eb2c82211b20e8::t_858656e7ef23cc 1-69
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "84c8e7c1f1b94461f0f83dd6a113821592ce1542",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
