@@ -1,0 +1,68 @@
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_eb2c82211b20e8::t_8dfab66d3cf2e5 1286-1288,1290-1293,1295-1304,1306-1309
+  s_eb2c82211b20e8::t_80c866920756f5 1289,1294,1305,1310
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/sharing/stars.ts
+  s_eb2c82211b20e8::t_3266d2890e3eb3 20-21,31-34
+  s_eb2c82211b20e8::t_ff1fbc11969e19 30
+  s_eb2c82211b20e8::t_c4f9ac44329889 1-19,22-29,35-36
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/star.ts
+  s_eb2c82211b20e8::t_d083f4dd61cb27 12
+  s_eb2c82211b20e8::t_b09c3f5c1e9a54 1-11,13-43
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/star-picker/StarPicker.tsx
+  s_eb2c82211b20e8::t_8bde09c4d88787 1-94,96-102,104-135
+  s_eb2c82211b20e8::t_9eed985f86ddbf 103
+  s_eb2c82211b20e8::t_3266d2890e3eb3 95
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/index.ts
+  s_eb2c82211b20e8::t_e3e8b6bd54067a 12
+  s_eb2c82211b20e8::t_a9ef6779555d61 3-4
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/star-picker/gallery.tsx
+  s_eb2c82211b20e8::t_7f95b197ddf404 1-114
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/sharing/stars.test.ts
+  s_eb2c82211b20e8::t_cd856d2a69fd74 99
+  s_eb2c82211b20e8::t_b0475782c692af 6,8,44
+  s_eb2c82211b20e8::t_3266d2890e3eb3 71-75
+  s_eb2c82211b20e8::t_d44c50f66a86ea 1-5,7,9-43,45-70,76-98,100-154
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/sharing.ts
+  s_eb2c82211b20e8::t_3266d2890e3eb3 88-92,97-101
+  s_eb2c82211b20e8::t_767ac6f53c271b 6-9,11-19,41-83,87,93-96,102-103,105-110
+  s_eb2c82211b20e8::t_80cca04497767f 84-86,104
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.ts
+  s_eb2c82211b20e8::t_b427d12d44a263 4-5,11,193-213
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/pieces.ts
+  s_eb2c82211b20e8::t_9eed985f86ddbf 185-190
+  s_eb2c82211b20e8::t_e2b1215c6b23dd 184
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/sharing.test.ts
+  s_eb2c82211b20e8::t_80cca04497767f 7,10,13-20,85-158,163-182
+  s_eb2c82211b20e8::t_3266d2890e3eb3 159-162
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_eb2c82211b20e8::t_8dfab66d3cf2e5 1286-1310
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_eb2c82211b20e8::t_9eed985f86ddbf 18,64,291
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/seen.test.ts
+  s_eb2c82211b20e8::t_a411d068443370 12,21-22,267-326
+  s_eb2c82211b20e8::t_2849880cf6844b 327
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_eb2c82211b20e8::t_ede9233dd477de 10,78-87,184-189,349-351,415-433
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_1dd50625eb691e 15,31,131-138,145-154,156,162-163
+  s_eb2c82211b20e8::t_20be413d919a35 139-144
+  s_eb2c82211b20e8::t_3266d2890e3eb3 158-161
+  s_eb2c82211b20e8::t_9532223e80221a 155,157,164
+  s_eb2c82211b20e8::t_c98c17dde9ec84 165-166
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a541751a180a1f72cdb48c6b4eb6d337bc1e9e81",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
