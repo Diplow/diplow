@@ -1,0 +1,36 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/sharing/organization/MembersWidget.tsx
+  s_eb2c82211b20e8::t_6c1d990fd2a72b 4,93,95-106
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/organization/MembersWidgets.tsx
+  s_eb2c82211b20e8::t_e64e1e7e018e46 4,80-83
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/organizations.test.ts
+  s_eb2c82211b20e8::t_da0c2b490a2200 129-131
+  s_eb2c82211b20e8::t_6c1d990fd2a72b 126-128
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/organizations.ts
+  s_eb2c82211b20e8::t_6c1d990fd2a72b 39-40,43-47,49-52
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/organizations.ts
+  s_eb2c82211b20e8::t_a48cba3ba92950 146-163,168
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/errors.ts
+  s_eb2c82211b20e8::t_a48cba3ba92950 78-79
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE.md
+  s_eb2c82211b20e8::t_da0c2b490a2200 31
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/organizations/organizations.test.ts
+  s_eb2c82211b20e8::t_ac3537fad251c2 278-280
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-sharing-organizations/decisions.md
+  s_eb2c82211b20e8::t_f0c39f9b0d6b97 194
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "20433e12997d6cfbd791a0cb22e5d99f744a5c59",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
