@@ -98,7 +98,7 @@ import {
   extended,
 } from './operations'
 
-export { HelpId, helpRoot, type ShippedLanguage, shippedSystem } from './shipped/shipped'
+export { HelpId, helpRoot, shippedSystem } from './shipped/shipped'
 export type { Acting, Across } from './sharing/reading'
 export {
   agentAt,

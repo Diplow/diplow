@@ -78,15 +78,26 @@ describe("Mapping's Operations", () => {
     expect(decodes({ _tag: 'DeleteReference', parent: p, parentVersion: 1, slot: 3 })).toBe(false)
   })
 
-  it('name every Tile by a UUID, and only by one: no Help id, no other text', () => {
+  it('name every Tile they write by a UUID, and only by one: no Help id, no other text', () => {
     for (const id of ['', 't', 'help', 'help/3', 'x'.repeat(36), `${t}x`]) {
       expect(decodes({ _tag: 'DeleteTile', id, version: 1 })).toBe(false)
       expect(decodes({ _tag: 'SwapTiles', a: t, aVersion: 1, b: id, bVersion: 1 })).toBe(false)
       expect(
-        decodes({ _tag: 'CreateReference', parent: p, parentVersion: 1, slot: -1, target: id }),
+        decodes({ _tag: 'CreateReference', parent: id, parentVersion: 1, slot: -1, target: t }),
       ).toBe(false)
     }
     expect(() => new MoveTile({ id: 'help/3', version: 1, parent: p, slot: 2 })).toThrow()
+  })
+
+  it('let a Reference point at a Tile hexframe ships by its own id, and at nothing else', () => {
+    const pinning = (target: string) =>
+      decodes({ _tag: 'CreateReference', parent: p, parentVersion: 1, slot: -1, target })
+    for (const target of ['help', 'help/3/-1', 'tutorial', 'tutorial/2']) {
+      expect(pinning(target), target).toBe(true)
+    }
+    for (const target of ['', 't', 'helper', 'help/7', 'help/../x', 'x'.repeat(36), `${t}x`]) {
+      expect(pinning(target), target).toBe(false)
+    }
   })
 
   it('require the Version its writer read of each existing Tile, a whole number from 1', () => {

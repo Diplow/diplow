@@ -8,7 +8,14 @@ import { TestDatabase } from '#/repositories/database/testing'
 import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import * as Mapping from '../mapping'
-import { previewLimit, type Row, shippedOf, shippedRoots, systemOf } from '../entities'
+import {
+  hexframeStar,
+  previewLimit,
+  type Row,
+  shippedOf,
+  shippedRoots,
+  systemOf,
+} from '../entities'
 import {
   CreateReference,
   CreateTile,
@@ -179,7 +186,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
         depth: 1,
         fields: ['title', 'preview'],
       })
-      expect(read.parent).toBeNull()
+      expect(read.parent).toEqual({ id: hexframeStar, title: 'Hexframe' })
       expect(read.tile).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
       expect(read.tile).not.toHaveProperty('body')
       expect(Object.keys(read.tile.branches ?? {})).toEqual(['1', '2', '3', '4', '5', '6'])
@@ -247,7 +254,7 @@ layer(TestTiles)("the tutorial, read through Mapping's readTile and openTile", (
         depth: 1,
         fields: ['title', 'preview'],
       })
-      expect(read.parent).toBeNull()
+      expect(read.parent).toEqual({ id: hexframeStar, title: 'Hexframe' })
       expect(read.tile).toMatchObject({
         _tag: 'Tile',
         id: 'tutorial',

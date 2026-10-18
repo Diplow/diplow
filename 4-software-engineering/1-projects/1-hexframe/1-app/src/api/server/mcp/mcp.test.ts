@@ -1,6 +1,7 @@
 import { Effect, Exit } from 'effect'
 import { describe, expect, it, vi } from 'vitest'
 
+import { hexframeStar } from '#/domains/mapping/entities'
 import * as Iam from '#/domains/iam/iam'
 import { transactional } from '#/repositories/database/database'
 import { granted } from '#/repositories/database/tiles/testing'
@@ -159,7 +160,8 @@ describe('Help, through the MCP endpoint', () => {
     expect(opened).toMatchObject({
       value: {
         tile: { _tag: 'Tile', id: 'help', title: 'Hexframe' },
-        parent: null,
+        // Help stands under the Hexframe Organization's star, by its card (HEX-139).
+        parent: { id: hexframeStar, title: 'Hexframe' },
         branches: { 1: { _tag: 'Tile', id: 'help/1' }, 6: { _tag: 'Tile', id: 'help/6' } },
         context: { '-1': { _tag: 'Tile', id: 'help/-1' } },
       },

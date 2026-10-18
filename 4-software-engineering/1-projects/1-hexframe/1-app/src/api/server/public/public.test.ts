@@ -158,7 +158,7 @@ describe('/t/<id>.md', () => {
     const missing = await fetched(crypto.randomUUID())
     expect(missing.status).toBe(404)
     const said = await missing.text()
-    for (const id of [star, journal.id, shed.id, tools.id, 'help', 'not-a-tile']) {
+    for (const id of [star, journal.id, shed.id, tools.id, 'help/1/1', 'helper', 'not-a-tile']) {
       const answer = await fetched(id)
       expect(answer.status).toBe(404)
       expect(answer.headers.get('x-robots-tag')).toBe('noindex')

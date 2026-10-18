@@ -192,7 +192,7 @@ describe("Mapping's hooks", () => {
         underway: { tiles: new Set(), slots: [] },
       })
     })
-    expect(Mapping.system).toHaveBeenCalledWith({ data: undefined })
+    expect(Mapping.system).toHaveBeenCalledWith({ data: { language: 'en' } })
   })
 
   it.each([

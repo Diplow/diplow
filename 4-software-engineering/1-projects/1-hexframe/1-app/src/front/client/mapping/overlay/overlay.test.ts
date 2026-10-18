@@ -597,7 +597,7 @@ describe("a write to someone else's System, visited", () => {
       (options) =>
         Promise.resolve({
           ok: true,
-          value: options?.data === undefined ? { ...served, rights: {}, gaps: {} } : hers,
+          value: options?.data?.system === undefined ? { ...served, rights: {}, gaps: {} } : hers,
         }) as never,
     )
   }

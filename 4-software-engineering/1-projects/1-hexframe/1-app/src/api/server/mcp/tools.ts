@@ -445,7 +445,7 @@ const createReference = write({
         field.annotate({
           description:
             "The id of the Tile the Reference points at, in the user's System or in another the " +
-            'user may read.',
+            'user may read, Help\'s among them, by its own id ("help/3").',
         }),
     }),
   ),

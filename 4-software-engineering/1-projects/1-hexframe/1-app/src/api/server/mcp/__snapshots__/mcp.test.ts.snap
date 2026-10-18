@@ -433,10 +433,19 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
           "type": "number",
         },
         "target": {
-          "description": "The id of the Tile the Reference points at, in the user's System or in another the user may read.",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|[fF]{8}-[fF]{4}-[fF]{4}-[fF]{4}-[fF]{12})$",
-          "type": "string",
+          "anyOf": [
+            {
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|[fF]{8}-[fF]{4}-[fF]{4}-[fF]{4}-[fF]{12})$",
+              "type": "string",
+            },
+            {
+              "maxLength": 64,
+              "pattern": "^(help|tutorial)(\\/(1|2|3|4|5|6|-1|-2|-3|-4|-5|-6))*$",
+              "type": "string",
+            },
+          ],
+          "description": "The id of the Tile the Reference points at, in the user's System or in another the user may read, Help's among them, by its own id ("help/3").",
         },
       },
       "required": [
