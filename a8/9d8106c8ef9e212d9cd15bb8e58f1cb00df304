@@ -1,0 +1,35 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_eb2c82211b20e8::t_f553bc864f17bb 774-775
+  s_eb2c82211b20e8::t_80d381673d8277 801-802
+  s_eb2c82211b20e8::t_e42ccd8505000d 843
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/CLAUDE.md
+  s_eb2c82211b20e8::t_0af931b28f2f32 27
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_eb2c82211b20e8::t_4422eaeb5f8a90 48
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.ts
+  s_eb2c82211b20e8::t_96170214308e04 206-225,227,237-239,241,243,246
+  s_eb2c82211b20e8::t_be7c09d4c973bb 228-233,247
+  s_eb2c82211b20e8::t_c3a2ca667da0f1 25-26
+  s_eb2c82211b20e8::t_1381a0b92d9fbc 276-277
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.test.ts
+  s_eb2c82211b20e8::t_50b4dbdc5d3286 324,328-330
+  s_eb2c82211b20e8::t_ceabdf49b00f4e 17-18,29,32-34
+  s_eb2c82211b20e8::t_5e1f972d80ea8a 311-321
+  s_eb2c82211b20e8::t_50477ae46f8819 270-276,281,287-289,293-310,322-323,325-327
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a89d8106c8ef9e212d9cd15bb8e58f1cb00df304",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
