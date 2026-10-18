@@ -152,6 +152,20 @@ describe('latestUndoable', () => {
     expect(latestUndoable([message('a', now)])).toBeUndefined()
     expect(latestUndoable([])).toBeUndefined()
   })
+
+  it("passes over someone else's change, which its own Entry undoes", () => {
+    const theirs: Entry = {
+      _tag: 'Change',
+      id: 'theirs',
+      at: now,
+      verb: 'TileEdited',
+      tile: { id: 'journal', title: 'Journal' },
+      actor: { _tag: 'Someone', star: 'Bob', by: { _tag: 'You' } },
+      undone: false,
+    }
+    expect(latestUndoable([applied('t1', false), theirs])).toBe('t1')
+    expect(latestUndoable([theirs])).toBeUndefined()
+  })
 })
 
 describe('laterOf', () => {

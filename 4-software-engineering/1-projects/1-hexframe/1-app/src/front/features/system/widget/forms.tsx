@@ -44,8 +44,8 @@ interface NewTileProps extends FormProps {
   /** The Tile it goes under, its id and its Title as the canvas shows it. */
   parent: { id: string; title: string }
   slot: Slot
-  /** Imports files into this slot instead; none once it is a receipt. */
-  onImport?: () => void
+  /** Imports files into this slot instead; none once it is a receipt, nor on a System visited. */
+  onImport?: (() => void) | undefined
 }
 
 /** A new Tile's form, in the slot it was opened on, then its receipt. */

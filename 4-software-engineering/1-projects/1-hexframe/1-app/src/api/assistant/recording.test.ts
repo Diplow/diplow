@@ -41,10 +41,8 @@ const TestLayer = Layer.mergeAll(
   proposalsLayer,
   appliedLayer,
   zipLayer,
-).pipe(
-  Layer.provideMerge(TestAuth),
-  (repositories) =>
-    Layer.provideMerge(serverBus([recordedInConversation, toldShared]), repositories),
+).pipe(Layer.provideMerge(TestAuth), (repositories) =>
+  Layer.provideMerge(serverBus([recordedInConversation, toldShared]), repositories),
 )
 
 let accounts = 0

@@ -127,10 +127,8 @@ export const latest = latestOf(undefined)
 const visitedVersion = (own: Mapping.Acting, star: string | undefined) =>
   star === undefined || star === own.system
     ? Effect.succeed(undefined)
-    : Effect.catchTag(
-        Mapping.systemVersion({ ...own, system: star }),
-        'TileNotFound',
-        () => Effect.succeed(undefined),
+    : Effect.catchTag(Mapping.systemVersion({ ...own, system: star }), 'TileNotFound', () =>
+        Effect.succeed(undefined),
       )
 
 /**

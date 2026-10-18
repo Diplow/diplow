@@ -122,7 +122,8 @@ const changeAt = <O extends Operation, A, E, R>(
       actingOnOwn(signed.account.id, { session: signed.by._tag === 'Session' }),
       Mapping.holding(madeAt(operation)),
     ])
-    if (star === undefined || star === mine.system) return yield* transactional(own(mine, operation))
+    if (star === undefined || star === mine.system)
+      return yield* transactional(own(mine, operation))
     if (signed.by._tag === 'TurnKey') return yield* Effect.fail(new TileNotFound())
     const acting = { ...mine, system: star }
     return yield* transactional(

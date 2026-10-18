@@ -196,7 +196,7 @@ describe('the Version a reader who is not the owner is shown', () => {
     const before = strangerOn(system)
     expect(strangerOn(changed('garden', { title: 'Orchard', version: 2 }))).not.toBe(before)
     expect(strangerOn({ ...system, root: { ...star, title: 'Ana Lima' } })).not.toBe(before)
-    const { garden: _gone, ...left } = system.tiles
+    const left = Object.fromEntries(Object.entries(system.tiles).filter(([id]) => id !== 'garden'))
     expect(strangerOn({ ...system, tiles: left })).not.toBe(before)
     // The same rights by another Grant say the same; a right more says another.
     const scenarioWith = (more: Grant) =>

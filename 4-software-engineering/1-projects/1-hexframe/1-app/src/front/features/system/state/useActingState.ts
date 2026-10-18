@@ -17,7 +17,7 @@ import {
 } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import type { Acting, Moving } from '#/front/ui/canvas/Canvas'
-import type { Direction } from '#/domains/mapping/entities'
+import type { Direction, Slot } from '#/domains/mapping/entities'
 import type { EmptySlotTarget } from '#/front/ui/canvas/geometry/shape'
 import type { Action } from '#/front/ui/canvas/keys'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
@@ -27,9 +27,9 @@ import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import {
   allows,
   framesOf,
+  mayMake,
   moveTo,
-  acts,
-  type Reach,
+  movesHere,
   referenceAt,
   subjectOf,
   swapAt,
@@ -73,6 +73,17 @@ interface Deleting {
   confirm: () => void
   cancel: () => void
 }
+
+/**
+ * Whether the user may add a Tile in this slot, as far as the page can tell: anywhere on their own
+ * System, under a Tile their rights let them write on one they visit.
+ */
+const addsAt = (systems: Systems, { parent, slot }: { parent: string; slot: Slot }) =>
+  mayMake(systems, { _tag: 'CreateTile', parent, slot, title: '', preview: '', body: '' })
+
+/** The move a Leaf takes to grow into a Branch before a Tile goes under it; none for any other. */
+const growing = (systems: Systems, hex: TileHex) =>
+  hex.tile.leaf === true ? turnOf(systems, tileIn(systems.root, hex.tile.id)) : undefined
 
 /** The slot an empty Direction stands for, for an import or the moving one; none takes no click. */
 function placeOf(target: EmptySlotTarget, going?: TileNode) {
@@ -122,7 +133,7 @@ export function useActingState(input: ActingInput) {
     switch (verb) {
       case 'add': {
         // A new Tile is a Leaf; under a Leaf, which grows into a Branch first, in its queue before it.
-        const grown = hex.tile.leaf === true ? turnOf(flat, tileIn(root, hex.tile.id)) : undefined
+        const grown = growing(systems, hex)
         if (grown !== undefined) move.mutate(grown)
         begin({ kind: 'add', parent: hex.tile.id, slot: { leaf: at } })
         return
@@ -154,7 +165,7 @@ export function useActingState(input: ActingInput) {
       case 'make-branch': {
         // Shown at once, offering the change back: a second one while the first is on its way would
         // undo it, so it waits.
-        const turned = turnOf(flat, tileIn(root, id))
+        const turned = turnOf(systems, tileIn(root, id))
         if (turned !== undefined && !move.isPending) move.mutate(turned)
         return
       }
@@ -195,12 +206,12 @@ export function useActingState(input: ActingInput) {
   }
 
   /**
-   * A click on a free slot, or New tile here: the new Tile's form, for that slot; none on a System
-   * only looked at.
+   * A click on a free slot, or New tile here: the new Tile's form, for that slot; none where the
+   * user's rights hold it back.
    */
   const addHere = (target: EmptySlotTarget): Action | undefined => {
     const place = newTileOf(target)
-    if (place === undefined || !acts(systems.reach)) return undefined
+    if (place === undefined || !addsAt(systems, place)) return undefined
     const labels = {
       children: m.system_add_child,
       branches: m.system_add_child,
@@ -216,15 +227,17 @@ export function useActingState(input: ActingInput) {
   }
 
   /**
-   * A free slot's menu: a new Tile there, an import into it, or the agent asked for one; none on a
-   * System only looked at.
+   * A free slot's menu: a new Tile there, an import into it, or the agent asked for one; none where
+   * the user's rights hold it back, and on a System visited, a new Tile alone, an import and the
+   * agent starting from home.
    */
   const slotActing = (target: EmptySlotTarget): Acting | undefined => {
     const place = placeOf(target)
-    if (place === undefined || !acts(systems.reach)) return undefined
+    if (place === undefined || !addsAt(systems, place)) return undefined
     const fresh = newTileOf(target) ?? place
     return {
       subject: { kind: 'slot', at: target.direction, parent: target.parent.title },
+      ...(systems.reach !== 'owned' && { without: ['import', 'ask-agent'] as const }),
       onAct: ({ verb }) => {
         if (verb === 'new-tile') begin({ kind: 'add', ...fresh })
         if (verb === 'import') begin({ kind: 'import', place: { _tag: 'Slot', ...place } })
@@ -271,15 +284,13 @@ export function useActingState(input: ActingInput) {
       slot: slotActing,
     },
     deleting: deleting === undefined ? undefined : deleteOf(deleting),
-    ...movingOf({ tree, search, flat, reach: systems.reach, begin, sent, move, swap, addHere }),
+    ...movingOf({ systems, search, begin, sent, move, swap, addHere }),
   }
 }
 
 interface MovingInput {
-  tree: TileNode
+  systems: Systems
   search: SystemSearch
-  flat: Systems['flat']
-  reach: Reach
   begin: (change: Change) => void
   sent: () => void
   move: ReturnType<typeof useMoveTile>
@@ -291,15 +302,18 @@ interface MovingInput {
  * The move under way, the URL's: the Tile on the move, its free slots and its swaps, each sending
  * its write and ending the move as it is sent; a drag starting one, Escape or Stop ending it. A move
  * whose Tile is gone, deleted from another tab or an old link, is no move: the free slots add a Tile;
- * nor is any on a System only looked at.
+ * nor is one of a Tile the user's rights on a System visited keep where it is (`movesHere`).
  */
 function movingOf(input: MovingInput) {
-  const { tree, search, flat, reach, begin, sent, move, swap, addHere } = input
+  const { systems, search, begin, sent, move, swap, addHere } = input
   const change = changeOf(search)
-  const tile = change.kind === 'move' && acts(reach) ? findTile(tree, change.id) : undefined
+  const tile =
+    change.kind === 'move' && movesHere(systems, change.id)
+      ? findTile(systems.tree, change.id)
+      : undefined
   const moveHere = (going: TileNode) => (target: EmptySlotTarget) => {
     const place = placeOf(target, going)
-    const moved = place === undefined ? undefined : allows(flat, going.id, place)
+    const moved = place === undefined ? undefined : allows(systems, going.id, place)
     if (moved === undefined) return undefined
     const names = { tile: going.title, title: target.parent.title }
     return {
@@ -311,7 +325,7 @@ function movingOf(input: MovingInput) {
     }
   }
   const swapWith = (going: TileNode) => (held: TileNode) => {
-    const swapped = tradeOf(flat, going, held)
+    const swapped = tradeOf(systems, going, held)
     return swapped !== undefined
       ? {
           label: m.system_swap_with({ title: held.title }),

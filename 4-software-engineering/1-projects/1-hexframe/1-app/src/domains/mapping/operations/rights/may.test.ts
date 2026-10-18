@@ -6,6 +6,7 @@ import {
   type Grant,
   lineageOf,
   type PlacedTile,
+  rightsOn,
   sharingOf,
   type Slot,
   type System,
@@ -23,6 +24,7 @@ import {
   mayShare,
   MoveTile,
   type Operation,
+  shownAllowed,
   SwapTiles,
 } from '..'
 
@@ -174,6 +176,15 @@ describe('what an Operation needs', () => {
     expect(verdict(actor('ana', false), new DeleteTile({ id: id.garden, version: 1 }))).toBe('ok')
   })
 
+  it('refuses the same delete to anyone but the owner, from a Session too: its owner may undo it', () => {
+    const writes = sharingOf('ana', lineageOf(system), [
+      bobsGrant,
+      { tile: id.square, subject: { _tag: 'Everyone' }, value: 'read' },
+    ])
+    expect(verdict(bob, new DeleteTile({ id: id.square, version: 1 }), writes)).toBe('NotAllowed')
+    expect(verdict(bob, new DeleteTile({ id: id.bench, version: 1 }), writes)).toBe('ok')
+  })
+
   it('refuses a move without write on what it carries, or on the parent it lands under', () => {
     expect(verdict(bob, move(id.journal, id.garden, 1))).toBe('NotAllowed')
     const readOnly = sharingOf('ana', lineageOf(system), [
@@ -299,5 +310,49 @@ describe('who a Grant may name', () => {
     expect(Result.isSuccess(grantableTo(sharing, 'cleo'))).toBe(true)
     const owner = grantableTo(sharing, 'ana')
     expect(Result.isFailure(owner) && owner.failure._tag).toBe('NotAllowed')
+  })
+})
+
+describe('what the rights a reader was shown let them make, as the client foresees it', () => {
+  // Bob's rights as `Seen` carries them, on the System as he sees it: Secret is kept from him.
+  const shownTiles = Object.fromEntries(
+    Object.entries(system.tiles).filter(([tile]) => tile !== id.secret),
+  )
+  const shown: System = { ...system, tiles: shownTiles }
+  const rights = Object.fromEntries(
+    [id.ana, ...Object.keys(shownTiles)].map((tile) => [tile, [...rightsOn(bob, sharing, tile)]]),
+  )
+  const stranger = Object.fromEntries(
+    [id.ana, ...Object.keys(shownTiles)].map((tile) => [
+      tile,
+      [...rightsOn(actor('stranger'), sharing, tile)],
+    ]),
+  )
+
+  it('agrees with `allowed` on what the reader sees, read and write alike', () => {
+    for (const operation of [
+      edit(id.entry),
+      edit(id.square),
+      new DeleteTile({ id: id.garden, version: 1 }),
+      move(id.garden, id.journal, 3),
+      new SwapTiles({ a: id.garden, aVersion: 1, b: id.square, bVersion: 1 }),
+      new CreateTile({ parent: id.bench, slot: 1, title: 'New', preview: '', body: '' }),
+    ]) {
+      expect(shownAllowed(rights, shown, operation)).toBe(verdict(bob, operation) === 'ok')
+      expect(shownAllowed(stranger, shown, operation)).toBe(false)
+    }
+    expect(shownAllowed(stranger, shown, edit(id.garden))).toBe(false)
+  })
+
+  it('reads a Reference by the Tile holding it, and a Tile it is not shown as none', () => {
+    const pinned: System = {
+      ...shown,
+      tiles: {
+        ...shown.tiles,
+        pin: { _tag: 'Reference', id: 'pin', parent: id.garden, slot: -1, target: id.entry },
+      },
+    }
+    expect(shownAllowed(rights, pinned, new DeleteTile({ id: id.garden, version: 1 }))).toBe(true)
+    expect(shownAllowed(rights, shown, edit(id.secret))).toBe(false)
   })
 })

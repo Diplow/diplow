@@ -251,6 +251,33 @@ const entries: ReadonlyArray<Entry> = [
     id: 'e11',
     at,
   },
+  {
+    _tag: 'Change',
+    verb: 'TileEdited',
+    tile: { id: 'journal', title: 'Our journal' },
+    actor: { _tag: 'You' },
+    elsewhere: true,
+    id: 'e12',
+    at,
+  },
+  {
+    _tag: 'Change',
+    verb: 'TileCreated',
+    tile: { id: 'note', title: 'Note' },
+    actor: { _tag: 'Someone', star: 'Bob', by: { _tag: 'Key', name: 'laptop' } },
+    undone: false,
+    id: 'e13',
+    at,
+  },
+  {
+    _tag: 'Change',
+    verb: 'TileEdited',
+    tile: { id: 'games', title: 'Games' },
+    actor: { _tag: 'Someone', star: '', by: { _tag: 'Assistant' } },
+    undone: true,
+    id: 'e14',
+    at,
+  },
 ]
 
 describe("a Turn's prompt", () => {
@@ -345,6 +372,9 @@ describe("a Turn's prompt", () => {
       '- 14:02 UTC: You drafted a Proposal (the user accepted it, then undid it): TileDeleted "Old" (id "old").',
       '- 14:02 UTC: Another Account, whose star is titled "hexframe", shared "Journal" (id "journal") with the user, who may read it, write it there; it stands in that Account\'s System, not the user\'s.',
       '- 14:02 UTC: Another Account, whose star has no title, shared "Garden" (id "garden") with the user, who may read it there; it stands in that Account\'s System, not the user\'s.',
+      '- 14:02 UTC: The user TileEdited "Our journal" (id "journal"), in another Account\'s System, not the user\'s.',
+      '- 14:02 UTC: The key "laptop" of another Account, whose star is titled "Bob", TileCreated "Note" (id "note").',
+      '- 14:02 UTC: The agent of another Account, whose star has no title, TileEdited "Games" (id "games"), which the user undid.',
     ])
   })
 

@@ -157,13 +157,13 @@ describe('what a menu says of a Tile', () => {
 
 describe('turning into the other kind', () => {
   it('turns a bare Branch into a Leaf, and a Leaf into a Branch where its Direction is free', () => {
-    expect(turnOf(flat, tileIn(root, 'bare'))).toEqual({
+    expect(turnOf(systems, tileIn(root, 'bare'))).toEqual({
       id: 'bare',
       version: 1,
       parent: 'root',
       slot: { leaf: 2 },
     })
-    expect(turnOf(flat, tileIn(root, 'run.yaml'))).toEqual({
+    expect(turnOf(systems, tileIn(root, 'run.yaml'))).toEqual({
       id: 'run.yaml',
       version: 1,
       parent: 'root',
@@ -173,12 +173,12 @@ describe('turning into the other kind', () => {
 
   it('turns no Branch holding a Child or a Context Tile, no Leaf whose Branch slot is taken', () => {
     for (const id of ['holding', 'framed', 'notes'])
-      expect(turnOf(flat, tileIn(root, id))).toBeUndefined()
+      expect(turnOf(systems, tileIn(root, id))).toBeUndefined()
   })
 
   it('turns neither the Root nor a Context Tile, nor an id no Tile has', () => {
     for (const id of ['root', 'principles', 'gone'])
-      expect(turnOf(flat, tileIn(root, id))).toBeUndefined()
+      expect(turnOf(systems, tileIn(root, id))).toBeUndefined()
   })
 })
 
@@ -264,20 +264,30 @@ describe('the lines home leaves out', () => {
   })
 })
 
-describe('the lines a System only looked at leaves out', () => {
-  // Someone else's System, visited: looked at, whatever its Grants give the visitor.
-  const theirs: Systems = { ...systems, reach: 'looking' }
+/** The rights a visitor holds, each Tile they see read-only, but those named, which they write. */
+const visiting = (...writes: ReadonlyArray<string>): Systems['reach'] => ({
+  visiting: Object.fromEntries(
+    ['root', ...Object.keys(flat.tiles).filter((id) => flat.tiles[id]?._tag === 'Tile')].map(
+      (id) => [id, writes.includes(id) ? ['read', 'write'] : ['read']],
+    ),
+  ),
+})
 
-  it('keeps on a Tile the lines that go somewhere and Copy, none that acts', () => {
+describe('the lines a System visited leaves out', () => {
+  // Someone else's System, read alone: looked at and copied from.
+  const theirs: Systems = { ...systems, reach: visiting() }
+
+  it('keeps on a Tile they read the lines that go somewhere and Copy, none that acts', () => {
     expect(withoutOf(theirs, hex('tile:holding'))).toEqual([
       'edit',
-      'add',
       'move',
       'ask-agent',
       'share',
       'export',
       'delete',
     ])
+    // Nothing may be added under it, nor may it turn: the menu holds neither line.
+    expect(subjectOf(theirs, hex('tile:holding'))).toMatchObject({ holds: false, turns: false })
     expect(withoutOf(systems, hex('tile:holding'))).toEqual([])
   })
 
@@ -298,6 +308,22 @@ describe('the lines a System only looked at leaves out', () => {
     expect(center.filter((verb) => verb === 'import')).toHaveLength(1)
     expect(center).not.toEqual(expect.arrayContaining(['back-out']))
     expect(center).not.toContain('copy')
+  })
+
+  it('offers what their rights let them write, the owner’s lines and the agent’s never', () => {
+    // Holding and what it holds are theirs to write; the Root above it is not.
+    const writer: Systems = { ...systems, reach: visiting('holding', 'inner') }
+    expect(withoutOf(writer, hex('tile:holding'))).toEqual(['move', 'ask-agent', 'share', 'export'])
+    expect(subjectOf(writer, hex('tile:holding'))).toMatchObject({ holds: true })
+    // Inner moves within Holding, which they write; it lands nowhere outside it.
+    const inner = hex('tile:inner', { center: 'holding' })
+    expect(withoutOf(writer, inner)).not.toContain('move')
+    expect(framesOf(writer, inner).standsIn?.lands?.(2)).toBe(true)
+    expect(framesOf(systems, hex('tile:holding')).standsIn?.lands?.(5)).toBe(true)
+    expect(framesOf(writer, hex('tile:holding')).standsIn?.lands?.(5)).toBe(false)
+    // A swap with a Tile of the Root's they only read is held back too.
+    expect(swapAt(writer, hex('tile:holding'), 2)).toBeUndefined()
+    expect(swapAt(systems, hex('tile:holding'), 2)).toBeDefined()
   })
 })
 

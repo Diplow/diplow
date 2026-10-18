@@ -619,15 +619,13 @@ describe('who acts, and on which System', () => {
         failure: { _tag: 'TileNotFound', kind: 'NotFound' },
       })
     }
-    // The other Account's star read: its card, untitled, and nothing below it; its Version, how
-    // that stands, no count of the changes kept from it.
-    const card = await value(run(stranger, Service.system(named(root.id))))
-    expect(card).toMatchObject({
+    // The other Account's star read: its card, untitled, and nothing below it; its Version is how
+    // that stands (`operations/rights/seen.test.ts`).
+    expect(await value(run(stranger, Service.system(named(root.id))))).toMatchObject({
       root: { id: root.id, title: '', body: '' },
       tiles: {},
       rights: { [root.id]: [] },
     })
-    expect(await value(run(stranger, Service.systemVersion(named(root.id))))).toBe(card.version)
     // The Titles of what it may read: the star's alone, its card's, of the other Account's.
     expect(await run(stranger, Service.titles(named(root.id), [root.id, child.id]))).toEqual({
       ok: true,

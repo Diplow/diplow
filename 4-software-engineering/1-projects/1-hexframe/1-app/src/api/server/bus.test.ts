@@ -220,10 +220,18 @@ describe('the envelope', () => {
       Effect.gen(function* () {
         const event = new DevHappened({ n: 1 })
         expect(yield* heardOn({ session: true })).toEqual([
-          { event, actor: Option.some({ account, by: { _tag: 'Session' } }), elsewhere: Option.none() },
+          {
+            event,
+            actor: Option.some({ account, by: { _tag: 'Session' } }),
+            elsewhere: Option.none(),
+          },
         ])
         expect(yield* heardOn({ keyId: 'k-1' })).toEqual([
-          { event, actor: Option.some({ account, by: { _tag: 'Key', keyId: 'k-1' } }), elsewhere: Option.none() },
+          {
+            event,
+            actor: Option.some({ account, by: { _tag: 'Key', keyId: 'k-1' } }),
+            elsewhere: Option.none(),
+          },
         ])
       }),
   )
@@ -232,7 +240,11 @@ describe('the envelope', () => {
     Effect.gen(function* () {
       const { heard, bus: listened } = listening()
       yield* settled(new DevHappened({ n: 1 })).pipe(Effect.provide(listened))
-      const none = { event: new DevHappened({ n: 1 }), actor: Option.none(), elsewhere: Option.none() }
+      const none = {
+        event: new DevHappened({ n: 1 }),
+        actor: Option.none(),
+        elsewhere: Option.none(),
+      }
       expect(yield* heardOn({})).toEqual([none])
       expect(heard).toEqual([none])
     }),
@@ -241,9 +253,7 @@ describe('the envelope', () => {
   it.effect("carries where a change was made, by a program changing someone else's System", () =>
     Effect.gen(function* () {
       const { heard, bus: listened } = listening()
-      yield* changingIn('star-1')(settled(new DevHappened({ n: 1 }))).pipe(
-        Effect.provide(listened),
-      )
+      yield* changingIn('star-1')(settled(new DevHappened({ n: 1 }))).pipe(Effect.provide(listened))
       yield* settled(new DevHappened({ n: 2 })).pipe(Effect.provide(listened))
       expect(heard.map(({ elsewhere }) => elsewhere)).toEqual([
         Option.some('star-1'),

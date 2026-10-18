@@ -98,10 +98,18 @@ layer(TestLayer)("Mapping's events on the bus, over PGlite", (it) => {
           Mapping.editTile({ id: root, version, title: 'Ada Lovelace' })
         const event = new TileEdited({ id: root, title: 'Ada Lovelace' })
         expect((yield* asked(edit(1), bySession)).heard).toEqual([
-          { event, actor: Option.some({ account, by: { _tag: 'Session' } }), elsewhere: Option.none() },
+          {
+            event,
+            actor: Option.some({ account, by: { _tag: 'Session' } }),
+            elsewhere: Option.none(),
+          },
         ])
         expect((yield* asked(edit(2), byKey('key-1'))).heard).toEqual([
-          { event, actor: Option.some({ account, by: { _tag: 'Key', keyId: 'key-1' } }), elsewhere: Option.none() },
+          {
+            event,
+            actor: Option.some({ account, by: { _tag: 'Key', keyId: 'key-1' } }),
+            elsewhere: Option.none(),
+          },
         ])
       }),
   )

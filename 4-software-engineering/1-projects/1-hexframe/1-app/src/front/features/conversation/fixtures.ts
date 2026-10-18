@@ -2,7 +2,8 @@
 // Assistant's Entries, every kind at least once, a change by each kind of actor, a Message linking
 // Tiles, one of them deleted since, a Proposal accepted and one open, a Turn's change applied, which
 // it offers to undo, a Turn stopped, a Tile someone shared with the user, which stands in their
-// System, and the Titles of the Tiles its navigations went to and its
+// System, the user's change there, someone else's change in the user's System, which offers its
+// Undo, and the Titles of the Tiles its navigations went to and its
 // Messages link; and the fixture System's Tiles, which its composer offers to `@`. Its days are
 // counted back from `now`, so the timeline always shows a today and a yesterday.
 // Like the System, its content is the user's own, so it is not translated.
@@ -57,6 +58,31 @@ const openProposal = (at: Date): Entry => {
     fate: 'open',
   }
 }
+
+/**
+ * The changes made across two Systems: the user's in Ana's Garden, shared with them, which stands in
+ * her System; and Ana's in the user's Games, which offers its Undo.
+ */
+const acrossSystems = (theirs: Date, yours: Date): ReadonlyArray<Entry> => [
+  {
+    _tag: 'Change',
+    id: 'c8',
+    at: theirs,
+    verb: 'TileEdited',
+    tile: { id: 'ana-garden', title: 'Garden, in spring' },
+    actor: you,
+    elsewhere: true,
+  },
+  {
+    _tag: 'Change',
+    id: 'c9',
+    at: yours,
+    verb: 'TileEdited',
+    tile: tile('games'),
+    actor: { _tag: 'Someone', star: 'Ana Lima', by: { _tag: 'You' } },
+    undone: false,
+  },
+]
 
 export function conversationFixture(now: Date): { entries: Entry[]; titles: Titles } {
   const at = (daysAgo: number, hour: number, minute: number) =>
@@ -168,6 +194,7 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
       tile: { id: 'ana-garden', title: 'Garden' },
       rights: ['read', 'write'],
     },
+    ...acrossSystems(today(5), today(4)),
     { _tag: 'Change', id: 'c6', at: today(4), verb: 'TileDeleted', tile: drafts, actor: you },
     said('m3', today(3), 'user', 'What would you add to Games?'),
     {

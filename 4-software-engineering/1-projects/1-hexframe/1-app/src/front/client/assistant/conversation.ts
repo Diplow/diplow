@@ -143,13 +143,19 @@ export const useAssistantAvailable = () =>
   )
 
 /** The System's Version, the Conversation's last Entry and the Turn running, asked of their server function. */
-export const askLatest = () => latest({ data: undefined })
+export const askLatest = (visiting?: string) =>
+  latest({ data: visiting === undefined ? undefined : { visiting } })
 
 /** The poll's read, by the server function's name. */
 export const latestScope = 'latest'
 
 /** The poll, read alone, which `./follow.ts` follows: a frame read, whose failure shows nothing. */
-export const latestRead = read({ scope: latestScope, key: [], call: askLatest, frame: true })
+export const latestRead = read({
+  scope: latestScope,
+  key: [],
+  call: () => askLatest(),
+  frame: true,
+})
 
 /** Reads the Conversation again, every day of it the page holds. */
 const readAgain = (client: ReturnType<typeof useQueryClient>) =>

@@ -460,14 +460,23 @@ describe('a move under way', () => {
   })
 })
 
-describe("on a System only looked at, someone else's", () => {
+/** The rights a visitor holds, each Tile they see read-only, but those named, which they write. */
+const visiting = (...writes: ReadonlyArray<string>): Reach => ({
+  visiting: Object.fromEntries(
+    ['root', ...Object.keys(flat.tiles).filter((id) => flat.tiles[id]?._tag === 'Tile')].map(
+      (id) => [id, writes.includes(id) ? ['read', 'write'] : ['read']],
+    ),
+  ),
+})
+
+describe("on someone else's System, visited", () => {
   const free = (view: CanvasView = {}) =>
     layoutCanvas(showView(tree, opened(view))).flatMap((drawn) =>
       drawn.kind === 'empty' ? [drawn.slot] : [],
     )
 
-  it('offers no free slot a click, nor a menu', () => {
-    const { result } = render({}, { reach: 'looking' })
+  it('offers no free slot a click, nor a menu, where they only read', () => {
+    const { result } = render({}, { reach: visiting() })
     const slots = free()
     expect(slots.length).toBeGreaterThan(0)
     for (const slot of slots) {
@@ -476,20 +485,37 @@ describe("on a System only looked at, someone else's", () => {
     }
   })
 
-  it("leaves every line that acts out of a Tile's menu, Copy aside", () => {
-    const { result } = render({}, { reach: 'looking' })
-    const without = result.current.acting.tile(hex('tile:holding'))?.without
-    expect(without).toEqual(
-      expect.arrayContaining(['edit', 'move', 'delete', 'add', 'ask-agent', 'share']),
+  it("leaves every line that acts out of a Tile's menu they only read, Copy aside", () => {
+    const { result } = render({}, { reach: visiting() })
+    const acting = result.current.acting.tile(hex('tile:holding'))
+    expect(acting?.without).toEqual(
+      expect.arrayContaining(['edit', 'move', 'delete', 'ask-agent', 'share']),
     )
-    expect(without).not.toContain('copy')
+    expect(acting?.without).not.toContain('copy')
+    expect(acting?.subject).toMatchObject({ holds: false })
   })
 
-  it('is no move, as a link may name one', () => {
-    const { result } = render({ move: 'bare' }, { reach: 'looking' })
+  it('is no move of a Tile they may not move, as a link may name one', () => {
+    const { result } = render({ move: 'bare' }, { reach: visiting() })
     expect(result.current.move.moving).toBeUndefined()
     expect(free().map((slot) => result.current.emptySlots(slot))).toEqual(
       free().map(() => undefined),
     )
+  })
+
+  it('offers a new Tile under one they write, its form alone, and a move within it', () => {
+    const writer = visiting('holding', 'inner')
+    const { result } = render({}, { reach: writer })
+    const under = free({ center: 'holding' }).filter(({ parent }) => parent.id === 'holding')
+    expect(under.length).toBeGreaterThan(0)
+    for (const slot of under) {
+      expect(result.current.emptySlots(slot)).toBeDefined()
+      expect(result.current.acting.slot(slot)?.without).toEqual(['import', 'ask-agent'])
+    }
+    for (const slot of free().filter(({ parent }) => parent.id === 'root')) {
+      expect(result.current.emptySlots(slot)).toBeUndefined()
+    }
+    const moving = render({ move: 'inner', center: 'holding' }, { reach: writer })
+    expect(moving.result.current.move.moving).toMatchObject({ id: 'inner' })
   })
 })

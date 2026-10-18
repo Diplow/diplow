@@ -53,7 +53,9 @@ const named = (title: string | undefined, id: string) =>
 
 /** Another Account, as the agent reads it: by its star's Title, if it has one, never as a party. */
 const anotherOf = (star: string) =>
-  star === '' ? 'another Account, whose star has no title' : `another Account, whose star is titled ${quoted(star)}`
+  star === ''
+    ? 'another Account, whose star has no title'
+    : `another Account, whose star is titled ${quoted(star)}`
 
 /** Who acted, as the agent reads it. */
 const actorOf = (actor: Actor): string => {
@@ -118,15 +120,23 @@ const fates: Record<Fate, string> = {
 const changeLine = ({ verb, tile, other }: ProposedChange) =>
   `${verb} ${named(tile.title, tile.id)}${other === undefined ? '' : `, with ${named(other.title, other.id)}`}`
 
+/**
+ * A change, as a line of the prompt, by who acted: made by the user in someone else's System, said
+ * so; made by someone else in the user's, whether the user undid it.
+ */
+function changeSaid(entry: Extract<Entry, { _tag: 'Change' }>): string {
+  const told = `${actorOf(entry.actor)} ${changeLine(entry)}`
+  if (entry.elsewhere === true) return `${told}, in another Account's System, not the user's.`
+  return `${told}${entry.undone === true ? ', which the user undid' : ''}.`
+}
+
 /** One Entry, as a line of the prompt. */
 function lineOf(entry: Entry, titles: PromptOf['titles']): string {
   switch (entry._tag) {
     case 'Message':
       return `${entry.author === 'user' ? 'User' : 'You'}: ${quoted(entry.text)}`
     case 'Change':
-      return entry.elsewhere === true
-        ? `${actorOf(entry.actor)} ${changeLine(entry)}, in another Account's System, not the user's.`
-        : `${actorOf(entry.actor)} ${changeLine(entry)}${entry.undone === true ? ', which the user undid' : ''}.`
+      return changeSaid(entry)
     case 'Proposal': {
       const changes =
         entry.changes.length === 0 ? 'nothing yet' : entry.changes.map(changeLine).join('; ')

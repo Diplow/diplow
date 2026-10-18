@@ -63,13 +63,15 @@ function FixtureConversation({ onCenter }: { onCenter: (tile: string) => void })
       }),
     )
   }
-  // And undoes what was applied for itself, the Entry saying so (Assistant's `undoneEntry`).
+  // And undoes what was applied for itself, someone else's change by its Entry, the Entry saying so
+  // (Assistant's `undoneEntry`).
   const undo = (applied: string) => {
     setEntries((before) =>
       before.map((entry) => {
         const offers =
           (entry._tag === 'Proposal' && entry.proposal === applied) ||
-          (entry._tag === 'TurnApplied' && entry.turn === applied)
+          (entry._tag === 'TurnApplied' && entry.turn === applied) ||
+          (entry._tag === 'Change' && entry.id === applied)
         return offers ? { ...entry, ...undoneEntry(entry) } : entry
       }),
     )

@@ -173,8 +173,7 @@ export type Entry = EntryContent & { readonly id: string; readonly at: Date }
  * Assistant reads Mapping's summary by, which Mapping's own satisfies.
  */
 export type Summarized =
-  | Omit<typeof Change.Type, 'actor' | 'elsewhere' | 'undone'>
-  | Omit<typeof Import.Type, 'actor'>
+  Omit<typeof Change.Type, 'actor' | 'elsewhere' | 'undone'> | Omit<typeof Import.Type, 'actor'>
 
 /** A change as Mapping summarized it, never an import: what a write someone else made changed. */
 export type SummarizedChange = Extract<Summarized, { readonly _tag: 'Change' }>
