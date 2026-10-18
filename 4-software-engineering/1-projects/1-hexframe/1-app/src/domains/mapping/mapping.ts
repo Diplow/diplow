@@ -23,6 +23,7 @@ import {
   outside,
   ownerOf,
   pinnedFor,
+  pinnedShown,
   pinning,
   reading,
   titledIn,
@@ -58,6 +59,7 @@ import {
   tileAt,
   type ToKeep,
   pointing,
+  shownAlone,
   type Version,
   withContent,
 } from './entities'
@@ -259,8 +261,10 @@ const find = <O extends Field, F extends Field>(
   if (id !== undefined && shipped !== undefined)
     return findInShipped(shipped, id, { fields, language })
   if (over.length === 0) return findOwn(acting, { id, depth, fields, across })
+  // A Turn reads through its batch, on its own System alone: a Reference to a Tile that System does
+  // not hold, a pin or a deleted Tile's, says no id (`pointing`).
   return Effect.flatMap(ownersWhole(acting), (held) => {
-    const found = foundIn(fold(held, over).system, { id, depth, fields })
+    const found = foundIn(shownAlone(fold(held, over).system), { id, depth, fields })
     return found === undefined ? Effect.fail(new TileNotFound()) : Effect.succeed(found)
   })
 }
@@ -390,11 +394,17 @@ export const openTile = <F extends Field>(
  * The Tile of this id in the System the actor acts on, and everything below it, zipped: the archive's
  * name, `<slug>.zip`, its Tile's slug, and its bytes, streamed as they are zipped. A Tile of another
  * System is `TileNotFound`, as is a Reference, which has no files of its own. `link` is where the app
- * shows a Tile, for a Reference whose Tile the export leaves out.
+ * shows a Tile, for a Reference whose Tile the export leaves out: a pin's, with its Title and Preview,
+ * while the actor may read it there and `across` lets the export resolve it; any other Tile the
+ * System does not hold, deleted or kept from them, by no id (`referencesShown`).
  */
-export const exportTile = (acting: Acting, { id, link }: { id: string; link: LinkOf }) =>
+export const exportTile = (
+  acting: Acting,
+  { id, link, across }: { id: string; link: LinkOf; across: boolean },
+) =>
   Effect.gen(function* () {
-    const exported = exportOf(systemOf(yield* ownersWhole(acting)), id, link)
+    const { system, pinned } = yield* pinnedShown(acting, yield* ownersWhole(acting), across)
+    const exported = exportOf(systemOf(system, pinned), id, link)
     if (exported === undefined) return yield* new TileNotFound()
     const { zipped } = yield* Zip
     return { name: `${exported.slug}.zip`, bytes: zipped(exported.files) }
@@ -403,12 +413,14 @@ export const exportTile = (acting: Acting, { id, link }: { id: string; link: Lin
 /**
  * The System the actor acts on as files, the export of its Root, and where each of its Tiles lives in them,
  * by id, both from one read, so a reader of the files finds a Tile's folder or file by its id. `link`
- * is where the app shows a Tile, for a Reference whose Tile is gone. With a batch `over` it, the
- * System the batch makes (`fold`), as the reads through it show it.
+ * is where the app shows a Tile, for a Reference whose Tile the files leave out. With a batch `over`
+ * it, the System the batch makes (`fold`), as the reads through it show it. A Turn's files, read on
+ * its own System alone: a Reference to a Tile that System does not hold, a pin or a deleted Tile's,
+ * by no id (`referencesShown`).
  */
 export const systemFiles = (acting: Acting, link: LinkOf, over: ReadonlyArray<Batched> = []) =>
   Effect.gen(function* () {
-    const whole = systemOf(fold(yield* ownersWhole(acting), over).system)
+    const whole = systemOf(shownAlone(fold(yield* ownersWhole(acting), over).system))
     const exported = exportOf(whole, whole.id, link)
     if (exported === undefined) return yield* Effect.die(new Error('A System exports its Root'))
     return { files: exported.files, places: placesOf(whole) }
@@ -856,7 +868,11 @@ const ranOne = <O extends Operation, T>(
     const { system, events, after } = yield* operate(
       acting,
       operation,
-      (held) => Result.map(decidedOne(held, operation, made, elsewhere), (next) => next.events),
+      (held) =>
+        Result.map(
+          decidedOne(held, operation, made, { targetElsewhere: elsewhere }),
+          (next) => next.events,
+        ),
       onTaken,
     )
     const tile = yield* tileAnswered(after, operation, made)

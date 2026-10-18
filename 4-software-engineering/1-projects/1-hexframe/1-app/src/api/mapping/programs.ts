@@ -58,9 +58,17 @@ export const actingOnOwn = (accountId: string, { session }: { readonly session: 
  * Runs an operation for the signed-in Account, the one the request proves, never one a caller sends,
  * on its own System (`actingOnOwn`), a Session said only when one proves the request.
  */
-const forAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>) =>
-  Effect.flatMap(Iam.signedIn, ({ account, by }) =>
-    Effect.flatMap(actingOnOwn(account.id, { session: by._tag === 'Session' }), operation),
+const forAccount = <A, E, R>(
+  operation: (
+    acting: Mapping.Acting,
+    across: { readonly across: boolean },
+  ) => Effect.Effect<A, E, R>,
+) =>
+  Effect.flatMap(Iam.signedIn, (signed) =>
+    Effect.flatMap(
+      actingOnOwn(signed.account.id, { session: signed.by._tag === 'Session' }),
+      (acting) => operation(acting, acrossFor(signed)),
+    ),
   )
 
 /**
@@ -295,13 +303,14 @@ export const openTile = <F extends Field>(
 
 /**
  * A Tile of the Account's System and everything below it, zipped: the archive's name and its bytes,
- * streamed. A Reference whose Tile is left out links it on the site the request reached.
+ * streamed. A Reference whose Tile is left out links it on the site the request reached, a pin while
+ * the Account may read its Tile, but by a Turn's Key, which resolves none (`acrossFor`).
  */
 export const exportTile = ({ id }: { id: string }) =>
-  forAccount((acting) =>
+  forAccount((acting, across) =>
     Effect.gen(function* () {
       const { url } = yield* HttpExchange
-      return yield* Mapping.exportTile(acting, { id, link: tileLink(url) })
+      return yield* Mapping.exportTile(acting, { id, link: tileLink(url), ...across })
     }),
   )
 

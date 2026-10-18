@@ -54,13 +54,17 @@ export function visitTree({
   return tree
 }
 
+/** The gestures that take the canvas to a Tile: centering it, with its Context or not. */
+const following: ReadonlyArray<ViewAction['gesture']> = ['center', 'show-context']
+
 /**
  * The Tile a gesture on the canvas follows a pin to, a Reference to a Tile of another System, which
- * the canvas draws under that Tile's id but never draws itself: visited by its link (`/t/<id>`)
- * rather than centered, leading wherever the Account may read it; none for any other gesture.
+ * the canvas draws under that Tile's id but never draws itself: centering it, by a click, Open, Go
+ * in or Show its Context, visits it by its link (`/t/<id>`) instead, leading wherever the Account may
+ * read it; none for any other gesture.
  */
-export const pinFollowed = (pinned: SystemShown['pinned'], { tile }: ViewAction) =>
-  Object.hasOwn(pinned, tile) ? tile : undefined
+export const pinFollowed = (pinned: SystemShown['pinned'], { gesture, tile }: ViewAction) =>
+  following.includes(gesture) && Object.hasOwn(pinned, tile) ? tile : undefined
 
 /**
  * Where a Tile the chat names is centered: on the System visited when it holds it, else on the

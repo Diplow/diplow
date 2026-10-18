@@ -9,7 +9,7 @@ import { Result, Schema } from 'effect'
 
 import { Frontmatter, Name, type System, TileConfig, TileId, tileAt } from '../../entities'
 import { BatchOutdated } from '../../errors'
-import { decide, type Decided, type Refusal, type Refusals } from '../decider/decide'
+import { decide, type Decided, type Made, type Refusal, type Refusals } from '../decider/decide'
 import { evolve } from '../decider/evolve'
 import { changeOf, type ChangeSummary, type OperationEvent } from '../events'
 import { Operation } from '../operation'
@@ -119,7 +119,7 @@ export const decidedOne = <O extends Operation>(
   system: System,
   operation: O,
   made?: string,
-  targetElsewhere = false,
+  { targetElsewhere = false }: Pick<Made, 'targetElsewhere'> = {},
 ) =>
   afterOne(system, batchedOf(operation, made), targetElsewhere) as Result.Result<
     Step,
@@ -139,10 +139,16 @@ export const added = <O extends Operation>(folded: Folded, operation: O, made?: 
 
 /**
  * What a timeline tells of some events of a batch, each a change summarized by Mapping (`changeOf`),
- * the Titles it does not say read from `after`, the System once they applied.
+ * the Titles it does not say read from `after`, the System once they applied; the other Tile a
+ * Reference points at left out when `after` does not hold it, a pin's, which whoever's timeline it
+ * is may not read, so not even its id is told.
  */
 export const summariesIn = (
   after: System,
   events: ReadonlyArray<OperationEvent>,
 ): ReadonlyArray<ChangeSummary> =>
-  events.map((event) => changeOf(event, (id) => tileAt(after, id)?.title ?? ''))
+  events.map((event) => {
+    const change = changeOf(event, (id) => tileAt(after, id)?.title ?? '')
+    const { other, ...rest } = change
+    return other === undefined || tileAt(after, other.id) !== undefined ? change : rest
+  })

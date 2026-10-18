@@ -149,6 +149,8 @@ describe('a pin followed on the canvas', () => {
 
   it('leaves any other gesture to the canvas, a Tile of the System drawn included', () => {
     expect(pinFollowed(pinned, { gesture: 'center', tile: 'garden' })).toBeUndefined()
-    expect(pinFollowed({}, { gesture: 'expand', tile: 'shed' })).toBeUndefined()
+    expect(pinFollowed({}, { gesture: 'center', tile: 'shed' })).toBeUndefined()
+    expect(pinFollowed(pinned, { gesture: 'expand', tile: 'shed' })).toBeUndefined()
+    expect(pinFollowed(pinned, { gesture: 'show-context', tile: 'shed' })).toBe('shed')
   })
 })

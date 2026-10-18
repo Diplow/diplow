@@ -7,15 +7,16 @@ import { granted } from '#/repositories/database/tiles/testing'
 
 import { type Actor, systemOf } from '../../entities'
 import * as Mapping from '../../mapping'
-import { CreateReference, ReferenceCreated } from '..'
+import { CreateReference, EditTile, ReferenceCreated } from '..'
 import { actingOnOwn, createTile, editTile, held, TestTiles, tree } from '../../testing'
 
 // A pin, over PGlite: a Reference from a Context slot to a Tile of another System, which its creator
 // may read there (HEX-133). Bob pins Ana's Journal, shared with him, sees it from her star, loses
 // *read*, and sees it unavailable, as a Reference whose Tile was deleted shows; Carol, reading Bob's
 // Tile, who never read Journal, sees the same, with no id; a Tile Bob never read is `TileNotFound`;
-// a Turn, bound to its own System, pins nothing; and an export writes the pin as its link. On Systems
-// made by hand, what a reader is shown is `../../entities/rights/seen.test.ts`'s.
+// a Turn, bound to its own System, pins nothing and reads no id, nor do its files. On Systems made by
+// hand, what a reader is shown is `../../entities/rights/seen.test.ts`'s; the export's link,
+// `api/mapping/files/download.test.ts`'s.
 
 const content = (title: string) => ({ title, preview: `${title}, in short.`, body: `# ${title}` })
 
@@ -180,6 +181,22 @@ layer(TestTiles)('a pin, a Reference to a Tile of another System, over PGlite', 
         across: false,
       })
       expect(opened.context[-1]).toEqual({ _tag: 'BrokenReference', target: '' })
+      // And to a read through its batch, its Proposal's, the System it reads its own alone.
+      const over = [{ operation: new EditTile({ id: desk.id, version: 2, title: 'Desk' }) }]
+      const through = yield* Mapping.openTile(bobs, {
+        id: desk.id,
+        fields: ['title'],
+        language: 'en',
+        over,
+        across: false,
+      })
+      expect(through.context[-1]).toEqual({ _tag: 'BrokenReference', target: '' })
+      // Nor do its files, which its sandbox starts with, tell the id.
+      const { files } = yield* Mapping.systemFiles(bobs, (id) => `https://hexframe.test/t/${id}`)
+      expect(files.find((file) => file.content.includes('reference:'))?.content).toContain(
+        'reference: ""',
+      )
+      expect(JSON.stringify(files)).not.toContain(journal.id)
     }),
   )
 
@@ -193,22 +210,11 @@ layer(TestTiles)('a pin, a Reference to a Tile of another System, over PGlite', 
         Mapping.runUndoable({ actor, system: bobsStar }, pin(desk, journal.id), { across: true }),
       )
       expect(ran.change).toMatchObject({ verb: 'ReferenceCreated' })
+      // Bob's receipt names no Tile of another System, which he might not read, not even by its id.
+      expect(ran.change).not.toHaveProperty('other')
       const { drawn } = yield* shownToBob(bob, desk.id)
       // Bob may read Journal, shared with him: he sees what Ana pinned.
       expect(drawn).toMatchObject({ tile: { title: 'Journal' }, elsewhere: { starTitle: 'Ana' } })
-    }),
-  )
-
-  it.effect('exports a pin as its link in the app, the Tile it points at in no file', () =>
-    Effect.gen(function* () {
-      const { journal, bob, desk } = yield* scenario
-      const bobs = yield* actingOnOwn(bob)
-      yield* transactional(Mapping.createReference(bobs, pin(desk, journal.id)))
-      const link = (id: string) => `https://hexframe.test/t/${id}`
-      const { files } = yield* Mapping.systemFiles(bobs, link)
-      const pinned = files.find((file) => file.content.includes('reference:'))
-      expect(pinned?.content).toContain(`reference: ${link(journal.id)}`)
-      expect(JSON.stringify(files)).not.toContain('Journal, in short.')
     }),
   )
 })

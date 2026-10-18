@@ -13,6 +13,7 @@ import {
   lineageFrom,
   owns,
   type PinnedTiles,
+  referencesShown,
   sharingOf,
   sightOf,
   type System,
@@ -124,6 +125,23 @@ export const pinnedFor = (actor: Actor, ids: ReadonlyArray<string>, here: string
     const pinned: PinnedTiles = Object.fromEntries(found.flat())
     return pinned
   })
+
+/**
+ * The actor's own System held whole as an export writes it for them: its References as they are
+ * shown them (`referencesShown`), each pin with the Tile it points at while they may read it there
+ * (`pinned`), resolved unless `across` says none.
+ */
+export const pinnedShown = (acting: Acting, held: System, across: boolean) =>
+  Effect.map(
+    across ? pinnedFor(acting.actor, outside(held), acting.system) : Effect.succeed({}),
+    (pinned: PinnedTiles) => ({
+      system: referencesShown(
+        held,
+        (target) => tileAt(held, target) !== undefined || Object.hasOwn(pinned, target),
+      ),
+      pinned,
+    }),
+  )
 
 /**
  * The star of the System holding the Tile of this id, `undefined` for an id no Tile nor Reference

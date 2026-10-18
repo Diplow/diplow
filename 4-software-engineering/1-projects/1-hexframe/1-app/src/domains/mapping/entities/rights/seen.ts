@@ -97,6 +97,28 @@ export const pointing = <R extends { readonly target: string | null }>(
 ): R => (reference.target === null || shown(reference.target) ? reference : unavailable(reference))
 
 /**
+ * A System with each of its References as a reader is shown it (`pointing`), by whether they are
+ * shown the Tile it points at: what a whole read, an export and a Turn's files write, so none of them
+ * tells an id the reader is not shown.
+ */
+export const referencesShown = (system: System, shown: (target: string) => boolean): System => ({
+  ...system,
+  tiles: Object.fromEntries(
+    Object.entries(system.tiles).map(([id, held]) => [
+      id,
+      held._tag === 'Reference' ? pointing(held, shown) : held,
+    ]),
+  ),
+})
+
+/**
+ * A System as a reader who reads it alone is shown it, a Turn its own: each Reference to a Tile it
+ * does not hold, a pin or a deleted Tile's, unavailable (`referencesShown`).
+ */
+export const shownAlone = (system: System): System =>
+  referencesShown(system, (target) => tileAt(system, target) !== undefined)
+
+/**
  * Whether a reader is shown the Tile a Reference points at: one of the System, as `sight` shows it;
  * one it does not hold, among the Tiles of other Systems they may read (`pinned`), a deleted one in
  * none.
@@ -200,13 +222,7 @@ export function seenBy(
     const every = [star, ...tileIds(Object.values(system.tiles))].map(
       (id) => [id, Right.literals] as const,
     )
-    const shown = pointsAtShown(system, sight, pinned)
-    const tiles = Object.fromEntries(
-      Object.entries(system.tiles).map(([id, held]) => [
-        id,
-        held._tag === 'Reference' ? pointing(held, shown) : held,
-      ]),
-    )
+    const { tiles } = referencesShown(system, pointsAtShown(system, sight, pinned))
     return {
       ...system,
       tiles,
