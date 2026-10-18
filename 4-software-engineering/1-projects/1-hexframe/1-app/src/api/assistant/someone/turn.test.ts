@@ -168,6 +168,31 @@ describe('a Turn on a Tile of someone else’s System', () => {
     await home.end()
   })
 
+  it('binds its Key to Ana’s System in the programs the server functions run too', async () => {
+    const { ana, journal } = await shared('read+write+@')
+    const { star: bobStar, signedIn } = await bob
+    const { turn, end } = await bobsTurn(journal.id, 'apply')
+    const { account } = await value(run(signedIn, Iam.signedIn))
+    const byTurn: StartContext = {
+      ...signedIn,
+      session: Exit.succeed(Option.none()),
+      key: Exit.succeed(Option.some({ account, by: { _tag: 'TurnKey', turnId: turn.id } })),
+    }
+    const notFound = { ok: false, failure: { _tag: 'TileNotFound' } }
+    // Naming no System, it reads Ana's, from her star's card; naming his own, nothing.
+    expect((await value(run(byTurn, Mapping.system))).root).toMatchObject({
+      id: ana.star,
+      body: '',
+    })
+    expect(await run(byTurn, Mapping.systemAt(bobStar))).toMatchObject(notFound)
+    // A change made at a Tile of his own is out of its reach; one at hers is made there.
+    const mine = Mapping.editTile({ id: bobStar, version: 2, title: 'Bob' })
+    expect(await run(byTurn, mine)).toMatchObject(notFound)
+    const hers = Mapping.editTile({ id: journal.id, version: 1, title: 'Ours' })
+    expect(await run(byTurn, hers)).toMatchObject({ ok: true, value: { title: 'Ours' } })
+    await end()
+  })
+
   it('reaches nothing more once Ana takes *@* back, from its next call', async () => {
     const { ana, journal } = await shared('read+write+@')
     const { client, end } = await bobsTurn(journal.id, 'apply')
