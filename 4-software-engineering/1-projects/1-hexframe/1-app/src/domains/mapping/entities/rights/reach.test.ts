@@ -119,14 +119,15 @@ describe('a Tile opened to someone', () => {
   /** Bob on a Tile, before a change. */
   const before = (tile: string) => ({ subject: bob, ...originOn(sharing, bob, tile) })
 
-  it('is told when the Tile’s own Grant goes from nothing, or none, to read or more', () => {
+  it('is told when a Grant of the Tile’s own first lets them read, whatever the Tile above gives', () => {
+    // Entry inherits read from Journal: a Grant of its own is a share of its own.
     expect(opens(before('entry'), 'entry', 'read+write')).toBe(true)
-    expect(opens(before('garden'), 'garden', 'read')).toBe(true)
     expect(opens({ subject: bob, value: 'none', from: null }, 'garden', 'read+@')).toBe(true)
   })
 
-  it('is not told by a change of a value that reads already, by none, nor by inherit', () => {
+  it('is not told by any change of a Grant set there, none to read included, by none, nor by inherit', () => {
     expect(opens(before('journal'), 'journal', 'read+write+@')).toBe(false)
+    expect(opens(before('garden'), 'garden', 'read')).toBe(false)
     expect(opens(before('entry'), 'entry', 'none')).toBe(false)
     expect(opens(before('garden'), 'garden', 'inherit')).toBe(false)
   })

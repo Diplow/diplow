@@ -235,6 +235,14 @@ const entries: ReadonlyArray<Entry> = [
     id: 'e9',
     at,
   },
+  {
+    _tag: 'Shared',
+    by: 'hexframe',
+    tile: { id: 'journal', title: 'Journal' },
+    rights: 'read+write',
+    id: 'e10',
+    at,
+  },
 ]
 
 describe("a Turn's prompt", () => {
@@ -327,6 +335,7 @@ describe("a Turn's prompt", () => {
       '- 14:02 UTC: A Turn of yours in apply made 3 changes.',
       '- 14:02 UTC: A Turn of yours in apply made 1 change, which the user undid.',
       '- 14:02 UTC: You drafted a Proposal (the user accepted it, then undid it): TileDeleted "Old" (id "old").',
+      '- 14:02 UTC: Another Account, whose star is titled "hexframe", shared "Journal" (id "journal") with the user, who may read and write it there; it stands in that Account\'s System, not the user\'s.',
     ])
   })
 

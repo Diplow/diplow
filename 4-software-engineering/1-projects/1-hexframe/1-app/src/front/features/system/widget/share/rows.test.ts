@@ -122,7 +122,11 @@ describe('someone the Tile is shared with', () => {
       value: 'none',
     } as const
     const shown = withSent(rows, sent)
-    expect(shown.others.map((row) => row.choice)).toEqual(['none', 'inherit', undefined])
+    expect(shown.others.map((row) => ('choice' in row ? row.choice : undefined))).toEqual([
+      'none',
+      'inherit',
+      undefined,
+    ])
     expect(shown.everyone.choice).toBe('inherit')
     const toEveryone = { tile: entry, subject: { _tag: 'Everyone' }, value: 'read' } as const
     expect(withSent(rows, toEveryone).everyone.choice).toBe('read')

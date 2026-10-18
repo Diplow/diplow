@@ -16,7 +16,7 @@ import { m } from '#/paraglide/messages'
 
 import { copy } from '../../copy'
 import { visitLinkOf } from '../../visit/visit'
-import { changeOf, shareRowsOf, withSent } from './rows'
+import { changeOf, named, shareRowsOf, withSent } from './rows'
 
 interface ShareWidgetsProps {
   /** The Account's own System, as the page shows it. */
@@ -41,7 +41,7 @@ export function ShareWidgets({ system, tile: { id: tile, title }, onClose }: Sha
   const [typed, setTyped] = useState('')
   const found = useStarsFor(typed, location.href)
   if (reached === undefined) return null
-  const named = title === '' ? m.tile_word_root() : title
+  const shown = title === '' ? m.tile_word_root() : title
   const rows = shareRowsOf(reached, {
     tile,
     star: system.root.id,
@@ -54,12 +54,12 @@ export function ShareWidgets({ system, tile: { id: tile, title }, onClose }: Sha
     }
     return (
       <StarPicker
-        title={m.widget_share_with_whom({ title: named })}
+        title={m.widget_share_with_whom({ title: shown })}
         typed={typed}
         onType={setTyped}
         found={found}
         onPick={(star) => {
-          if (!rows.others.some((row) => row.star === star.id)) {
+          if (!named(rows, star.id)) {
             setGrant.mutate({ tile, subject: { _tag: 'Account', star: star.id }, value: 'read' })
           }
           back()
@@ -74,7 +74,7 @@ export function ShareWidgets({ system, tile: { id: tile, title }, onClose }: Sha
   const link = visitLinkOf(tile, location.href)
   return (
     <ShareWidget
-      title={named}
+      title={shown}
       everyone={everyone}
       others={others}
       sending={sent !== undefined}

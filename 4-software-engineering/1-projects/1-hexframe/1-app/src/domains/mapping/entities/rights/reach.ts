@@ -8,7 +8,7 @@ import { Schema } from 'effect'
 
 import type { StarCard } from '../star'
 import { TileId } from '../tile'
-import { Everyone, GrantValue, originOn, rightsOf, type Sharing, type Subject } from './rights'
+import { Everyone, GrantValue, originOn, Reading, type Sharing, type Subject } from './rights'
 
 /** What the owner sets on a Tile for Everyone: `read`, `none`, or `inherit`. Never more than read. */
 const EveryoneChoice = Schema.Literals(['read', 'none', 'inherit'])
@@ -96,18 +96,14 @@ export const namedBy = (
   ),
 })
 
-/** A value that lets its subject read, every one but `none`. */
-export const Reading = Schema.Literals(['read', 'read+write', 'read+@', 'read+write+@'])
-export type Reading = typeof Reading.Type
+const reads = Schema.is(Reading)
 
 /**
- * Whether a choice opens the Tile to its subject by the Tile's own Grant: before it, that Grant gave
- * them nothing, none being set there or `none`; after it, they read, or more. What tells someone a
- * Tile was shared with them, once: a change of a value that already let them read says nothing, nor
- * does `none`, nor `inherit`, whatever the Tile above gives.
+ * Whether a choice opens the Tile to its subject by a Grant of its own: before it, the Tile set
+ * nothing for them; after it, it lets them read, or more. What tells someone a Tile was shared with
+ * them, once per Grant: any change of a Grant set there already says nothing, `none` to `read`
+ * included, so toggling a value never tells again, nor does `none`, nor `inherit`, whatever the Tile
+ * above gives. A Grant removed then set again is a share of its own.
  */
-export function opens(before: Reach, tile: string, choice: Choice): choice is Reading {
-  if (choice === 'inherit' || rightsOf(choice).length === 0) return false
-  const was = choiceOn(before, tile)
-  return was === 'inherit' || was === 'none'
-}
+export const opens = (before: Reach, tile: string, choice: Choice): choice is Reading =>
+  reads(choice) && choiceOn(before, tile) === 'inherit'

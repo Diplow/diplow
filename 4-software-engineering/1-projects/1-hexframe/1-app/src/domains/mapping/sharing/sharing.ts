@@ -21,15 +21,16 @@ import {
   originOn,
   reachOn,
   Reading,
+  type Sharing,
   sharingOf,
   type Subject,
   subjectRowOf,
   type System,
   tileAt,
 } from '../entities'
-import { NotAllowed, TileNotFound } from '../errors'
+import { TileNotFound } from '../errors'
 import { type Acting, grantsIn, lockedOf, outsideShipped, ownerOf, wholeOf } from '../mapping'
-import { mayShare } from '../operations'
+import { grantableTo, mayShare } from '../operations'
 
 /**
  * A Tile shared with an Account: a Grant its System's owner set first let them read it, or more. The
@@ -66,16 +67,15 @@ const sharedOn = <E, R>(
 
 /**
  * The subject a change names, as a Grant is kept for it: Everyone, or the Account a star stands for,
- * found by the star, `TileNotFound` for an id that names no star. The System's own owner is
- * `NotAllowed`: they may do everything there already, and a Grant to them would list them among
- * those it is shared with.
+ * found by the star, `TileNotFound` for an id that names no star, once `grantableTo` found a Grant
+ * on the System may name them: the System's own owner is `NotAllowed`.
  */
-const subjectOf = (named: GrantChange['subject'], owner: string) =>
+const subjectOf = (named: GrantChange['subject'], sharing: Sharing) =>
   Effect.gen(function* () {
     if (named._tag === 'Everyone') return named satisfies Subject
     const account = yield* Tiles.use((tiles) => tiles.ownerOf(named.star))
     if (account === undefined) return yield* Effect.fail(new TileNotFound())
-    if (account === owner) return yield* Effect.fail(new NotAllowed())
+    yield* Effect.fromResult(grantableTo(sharing, account))
     return { _tag: 'Account', id: account } satisfies Subject
   })
 
@@ -90,7 +90,7 @@ export const grant = (acting: Acting, change: GrantChange) =>
   Effect.gen(function* () {
     const { tile, value } = change
     const { owner, system, sharing } = yield* sharedOn(acting, tile, lockedOf)
-    const subject = yield* subjectOf(change.subject, owner)
+    const subject = yield* subjectOf(change.subject, sharing)
     const before = { subject, ...originOn(sharing, subject, tile) }
     const writes = (yield* Tiles).writes(owner)
     const named = subjectRowOf(subject)

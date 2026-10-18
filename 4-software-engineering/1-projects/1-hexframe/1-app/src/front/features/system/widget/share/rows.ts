@@ -60,11 +60,14 @@ const rowOf = (reach: Reach, around: Around): ReachRow => ({
   from: fromOf(reach.from, around),
 })
 
-/**
- * Someone else reaching the Tile, as its row words it: an Account named by its star with what its
- * owner chose there and the star a choice names it by; anyone else, a Group, with no choice yet.
- */
-export type OtherRow = ReachRow & Partial<Chosen> & { readonly star?: string }
+/** Someone's row: an Account named by its star, what its owner chose there, the star a choice names. */
+type SomeoneRow = ReachRow & Chosen & { readonly star: string }
+
+/** Someone else reaching the Tile, as its row words it: someone's, or a Group's, with no choice yet. */
+type OtherRow = ReachRow | SomeoneRow
+
+/** The star a row's choice names, none for a row no choice is sent for. */
+const starOf = (row: OtherRow) => ('star' in row ? row.star : undefined)
 
 const otherOf = (reach: Reach, around: Around): OtherRow => {
   const row = rowOf(reach, around)
@@ -84,6 +87,10 @@ export const shareRowsOf = ({ everyone, others }: Reaching, around: Around) => (
 /** The rows the share widget shows, as `shareRowsOf` words them. */
 export type ShareRows = ReturnType<typeof shareRowsOf>
 
+/** Whether one of the rows names this star already. */
+export const named = ({ others }: ShareRows, star: string) =>
+  others.some((row) => starOf(row) === star)
+
 const isChange = Schema.is(GrantChange)
 
 /**
@@ -97,7 +104,8 @@ export function changeOf(
   key: string,
   value: Choice,
 ): GrantChange | undefined {
-  const star = others.find((row) => row.key === key)?.star
+  const row = others.find((other) => other.key === key)
+  const star = row === undefined ? undefined : starOf(row)
   const change =
     key === everyone.key
       ? { tile, subject: { _tag: 'Everyone' }, value }
@@ -117,6 +125,6 @@ export function withSent(
   if (subject._tag === 'Everyone') return { everyone: { ...everyone, choice: value }, others }
   return {
     everyone,
-    others: others.map((row) => (row.star === subject.star ? { ...row, choice: value } : row)),
+    others: others.map((row) => (starOf(row) === subject.star ? { ...row, choice: value } : row)),
   }
 }

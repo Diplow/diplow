@@ -185,11 +185,14 @@ layer(TestTiles)('who reaches a Tile, set by its owner, over PGlite', (it) => {
         expect(yield* heardFrom(sharing(own, journal.id, bob.system, value))).toEqual([])
       }
       expect(yield* readBy(bobs)).toEqual([])
-      // Nor does none, and the read that follows it opens the Tile, so it is told.
+      // Shared again once taken back, it is a share of its own, told; toggled after, never.
+      expect(yield* heardFrom(sharing(own, journal.id, bob.system, 'read'))).toHaveLength(1)
+      for (const value of ['none', 'read', 'none'] as const) {
+        expect(yield* heardFrom(sharing(own, journal.id, bob.system, value))).toEqual([])
+      }
+      // None first says nothing, nor does the read that follows it, a change of that Grant.
       expect(yield* heardFrom(sharing(own, garden.id, bob.system, 'none'))).toEqual([])
-      expect(yield* heardFrom(sharing(own, garden.id, bob.system, 'read+@'))).toMatchObject([
-        { _tag: 'TileShared', tile: garden.id, title: 'Garden', value: 'read+@' },
-      ])
+      expect(yield* heardFrom(sharing(own, garden.id, bob.system, 'read+@'))).toEqual([])
       expect((yield* whoReaches(own, garden.id)).others).toEqual([
         {
           subject: { _tag: 'Account', id: bob.actor.account },

@@ -119,7 +119,7 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
       return `A Turn of yours in apply made ${made}${entry.undone ? ', which the user undid' : ''}.`
     }
     case 'Shared':
-      return `${quoted(entry.by)} shared ${named(entry.tile.title, entry.tile.id)} with the user, who may ${sharedRights[entry.rights]} there; it stands in their System, not the user's.`
+      return `Another Account, whose star is titled ${quoted(entry.by)}, shared ${named(entry.tile.title, entry.tile.id)} with the user, who may ${sharedRights[entry.rights]} there; it stands in that Account's System, not the user's.`
   }
 }
 
