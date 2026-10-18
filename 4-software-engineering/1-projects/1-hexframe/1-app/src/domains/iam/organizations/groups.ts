@@ -139,7 +139,7 @@ export const setInGroup = (
     // Put in, a request of theirs to join it has nothing left to decide.
     if (placed) {
       yield* Organizations.use((organizations) =>
-        organizations.dropOpenRequests(organization, account, group),
+        organizations.dropGroupRequest(organization, { group, account }),
       )
     }
   })

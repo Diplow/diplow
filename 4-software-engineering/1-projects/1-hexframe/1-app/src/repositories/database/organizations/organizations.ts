@@ -80,8 +80,8 @@ export class Organizations extends Context.Service<
         member: Omit<MemberRow, 'joined'>,
       ) => Effect.Effect<void, never, InTransaction>
       /**
-       * Takes an Account out of an Organization, its Groups and its open requests to join one of them
-       * with it. Inside a transaction.
+       * Takes an Account out of an Organization, and its Groups with it; its requests to join are
+       * IAM's to drop (`dropOpenRequests`). Inside a transaction.
        */
       readonly remove: (
         organization: string,

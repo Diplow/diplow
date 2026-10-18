@@ -342,7 +342,7 @@ describe('the lines a System visited leaves out', () => {
     const read = visiting()
     const member: Systems = {
       ...systems,
-      reach: read === 'owned' ? read : { ...read, members: true },
+      reach: read === 'owned' ? read : { ...read, standing: 'member' },
     }
     expect(withoutOf(member, hex('tile:root'))).not.toContain('members')
     expect(withoutOf(member, hex('tile:root'))).toContain('join')
@@ -353,10 +353,16 @@ describe('the lines a System visited leaves out', () => {
     const read = visiting()
     const outside: Systems = {
       ...systems,
-      reach: read === 'owned' ? read : { ...read, joins: true },
+      reach: read === 'owned' ? read : { ...read, standing: 'outside' },
     }
     expect(withoutOf(outside, hex('tile:root'))).not.toContain('join')
     expect(withoutOf(outside, hex('tile:root'))).toContain('members')
+    // Asked already, it offers no second ask.
+    const asked: Systems = {
+      ...outside,
+      reach: read === 'owned' ? read : { ...read, standing: 'asked' },
+    }
+    expect(withoutOf(asked, hex('tile:root'))).toContain('join')
     expect(withoutOf(theirs, hex('tile:root'))).toContain('join')
   })
 

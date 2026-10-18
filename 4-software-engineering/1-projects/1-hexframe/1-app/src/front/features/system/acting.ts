@@ -8,6 +8,7 @@
 // no rule of its own.
 import { Result } from 'effect'
 
+import type { Standing } from '#/domains/iam/entities'
 import {
   contextSlotOf,
   type Direction,
@@ -36,8 +37,8 @@ import { tilesBelow } from './widget/place'
  * where they hold *@* (HEX-134), and never who sees a Tile, its export nor an import, which are the
  * owner's or land at home; unless they stand for its owner there (`asOwner`, as `Seen` says it), an
  * Organization's admin, who shares its Tiles as its owner does (HEX-136). Its star's menu opens the
- * Organization's Members and Groups widgets for each of its members (`members`), and Ask to join for
- * anyone outside it (`joins`, HEX-138). What a visitor sees at all is
+ * Organization's Members and Groups widgets for each of its members, and Ask to join for anyone
+ * outside it who has not asked yet (`standing`, HEX-138). What a visitor sees at all is
  * Mapping's to say; `hexframe-app-sharing-organizations/decisions.md#DEC-4`, `#DEC-9`, `#DEC-11`,
  * `#DEC-13`.
  */
@@ -47,10 +48,11 @@ export type Reach =
       readonly visiting: Seen['rights']
       /** Whether the user stands for the owner of the System visited: an Organization's admin. */
       readonly asOwner?: boolean
-      /** Whether the star visited is an Organization's the user belongs to. */
-      readonly members?: boolean
-      /** Whether the star visited is an Organization's the user is outside of, and may ask to join. */
-      readonly joins?: boolean
+      /**
+       * Where the user stands in the Organization whose star is visited, IAM's `Standing`: a member
+       * or an admin, outside it, or having asked; none for a star of no Organization.
+       */
+      readonly standing?: Standing | null | undefined
     }
 
 /**
@@ -74,11 +76,13 @@ const notTheirs = (reach: Exclude<Reach, 'owned'>) =>
  * of an Organization they belong to.
  */
 const membersAt = ({ reach, root }: Pick<Systems, 'reach' | 'root'>, hex: TileHex) =>
-  reach !== 'owned' && reach.members === true && hex.tile.id === root.id
+  reach !== 'owned' &&
+  (reach.standing === 'admin' || reach.standing === 'member') &&
+  hex.tile.id === root.id
 
 /** Whether a Tile's menu offers Ask to join: on the star of an Organization the user is outside of. */
 const joinsAt = ({ reach, root }: Pick<Systems, 'reach' | 'root'>, hex: TileHex) =>
-  reach !== 'owned' && reach.joins === true && hex.tile.id === root.id
+  reach !== 'owned' && reach.standing === 'outside' && hex.tile.id === root.id
 
 /**
  * Whether the user may ask the agent at a Tile of the System drawn, as far as the page can tell: on

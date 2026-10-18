@@ -45,14 +45,15 @@ export interface JoinRows {
     id: string,
     decided: { readonly state: Exclude<RequestState, 'open'>; readonly at: Date },
   ) => Effect.Effect<void, never, InTransaction>
-  /**
-   * Deletes the requests an Account has open to an Organization, or to one of its Groups alone.
-   * Inside a transaction.
-   */
+  /** Deletes every request an Account has open to an Organization. Inside a transaction. */
   readonly dropOpenRequests: (
     organization: string,
     account: string,
-    group?: string,
+  ) => Effect.Effect<void, never, InTransaction>
+  /** Deletes the request an Account has open to join one Group. Inside a transaction. */
+  readonly dropGroupRequest: (
+    organization: string,
+    member: { readonly group: string; readonly account: string },
   ) => Effect.Effect<void, never, InTransaction>
 }
 
@@ -74,6 +75,14 @@ const rowOf = ({
   JoinRequestRow,
   'group' | 'decidedAt'
 >): JoinRequestRow => ({ ...row, group: group ?? undefined, decidedAt: decidedAt ?? undefined })
+
+/** An Account's open requests to an Organization, as a condition. */
+const openOf = (organization: string, account: string) =>
+  and(
+    eq(joinRequest.organizationId, organization),
+    eq(joinRequest.accountId, account),
+    eq(joinRequest.state, 'open'),
+  )
 
 export const joinRowsOf = (database: Database['Service']): JoinRows => ({
   requestsNamed: (ids) =>
@@ -111,18 +120,18 @@ export const joinRowsOf = (database: Database['Service']): JoinRows => ({
         .where(and(eq(joinRequest.id, id), eq(joinRequest.state, 'open')))
         .pipe(Effect.orDie, Effect.asVoid),
     ),
-  dropOpenRequests: (organization, account, group) =>
+  dropOpenRequests: (organization, account) =>
     inTransaction(
       database
         .delete(joinRequest)
-        .where(
-          and(
-            eq(joinRequest.organizationId, organization),
-            eq(joinRequest.accountId, account),
-            eq(joinRequest.state, 'open'),
-            group === undefined ? undefined : eq(joinRequest.groupId, group),
-          ),
-        )
+        .where(openOf(organization, account))
+        .pipe(Effect.orDie, Effect.asVoid),
+    ),
+  dropGroupRequest: (organization, { group, account }) =>
+    inTransaction(
+      database
+        .delete(joinRequest)
+        .where(and(openOf(organization, account), eq(joinRequest.groupId, group)))
         .pipe(Effect.orDie, Effect.asVoid),
     ),
 })

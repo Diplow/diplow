@@ -11,6 +11,7 @@ import { CurrentKey, CurrentSession, signUp } from '../iam'
 import { createGroup, setInGroup } from './groups'
 import {
   askedAlready,
+  askRefusal,
   askToJoin,
   decideJoinRequest,
   groupStandings,
@@ -205,8 +206,9 @@ layer(TestLayer)('Joining an Organization', (it) => {
         new JoinAsked({ request, organization: team, group: design, account: bob.account.id }),
       )
       const towardDesign = (members: ReadonlyArray<string> = []) =>
-        Effect.map(groupStandings(bob.account.id, team, [{ id: design, members }]), (standings) =>
-          standings.get(design),
+        Effect.map(
+          groupStandings(bob.account.id, team, [{ id: design, members }]),
+          ([standing]) => standing?.joining,
         )
       expect(yield* towardDesign()).toBe('asked')
       expect(yield* failedWith(bob.asSession(askToJoin(team, design)))).toBe('JoinRequestOpen')
@@ -267,6 +269,20 @@ layer(TestLayer)('Adding, removing and leaving', (it) => {
         expect(published.slice(from)).toEqual(facts)
       }),
   )
+})
+
+describe('who may ask for what', () => {
+  const members = [{ account: 'ana' }, { account: 'bob' }]
+  const groups = [{ id: 'design', members: ['bob'] }]
+
+  it('is anyone outside for the Members, a member not in it for a Group, seen by members alone', () => {
+    expect(askRefusal({ members, groups }, 'dan', undefined)).toBeUndefined()
+    expect(askRefusal({ members, groups }, 'ana', undefined)).toBe('member')
+    expect(askRefusal({ members, groups }, 'ana', 'design')).toBeUndefined()
+    expect(askRefusal({ members, groups }, 'bob', 'design')).toBe('in-group')
+    expect(askRefusal({ members, groups }, 'dan', 'design')).toBe('no-group')
+    expect(askRefusal({ members, groups }, 'ana', 'ops')).toBe('no-group')
+  })
 })
 
 describe('asking again', () => {

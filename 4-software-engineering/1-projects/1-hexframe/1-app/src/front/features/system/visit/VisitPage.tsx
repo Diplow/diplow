@@ -59,8 +59,7 @@ export function VisitPage(props: VisitPageProps) {
       reach={{
         visiting: data.rights,
         asOwner: data.asOwner,
-        members: standing === 'admin' || standing === 'member',
-        joins: standing === 'outside',
+        standing,
       }}
       search={search}
       pinned={data.pinned}

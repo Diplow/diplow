@@ -49,22 +49,52 @@ export class JoinDecided extends Schema.TaggedClass<JoinDecided>()('JoinDecided'
 }) {}
 
 /**
- * That the asking Account may ask to join this, among an Organization's members as found: its
- * Members, for anyone who is not one of them (`AlreadyMember`); one of its Groups, for a member who
- * is not in it (`AlreadyInGroup`), `GroupNotFound` for anyone else, since a Group is its members' to
- * see, and for an id none of its Groups has.
+ * Why an Account may not ask to join this, by an Organization's members and its Groups: its Members,
+ * for one of them (`member`); one of its Groups, for one already in it (`in-group`), and `no-group`
+ * for anyone not among its members, since a Group is its members' to see, and for an id none of its
+ * Groups has; none when it may. Pure.
+ */
+export function askRefusal(
+  {
+    members,
+    groups,
+  }: {
+    readonly members: ReadonlyArray<{ readonly account: string }>
+    readonly groups: ReadonlyArray<{ readonly id: string; readonly members: ReadonlyArray<string> }>
+  },
+  account: string,
+  group: string | undefined,
+): 'member' | 'in-group' | 'no-group' | undefined {
+  const member = members.some((one) => one.account === account)
+  if (group === undefined) return member ? 'member' : undefined
+  const asked = member ? groups.find((one) => one.id === group) : undefined
+  if (asked === undefined) return 'no-group'
+  return asked.members.includes(account) ? 'in-group' : undefined
+}
+
+/**
+ * That the asking Account may ask to join this, the Organization's row locked: `OrganizationNotFound`
+ * for an id no Organization has, then as `askRefusal` says, `AlreadyMember`, `AlreadyInGroup` or
+ * `GroupNotFound`.
  */
 const mayAsk = (organization: string, account: string, group: string | undefined) =>
   Effect.gen(function* () {
-    const found = yield* Organizations.use((organizations) => organizations.locked(organization))
-    if (found.length === 0) return yield* new OrganizationNotFound()
-    const member = roleIn(found, account) !== undefined
-    if (group === undefined) return member ? yield* new AlreadyMember() : undefined
-    if (!member) return yield* new GroupNotFound()
-    const groups = yield* Organizations.use((organizations) => organizations.groupsOf(organization))
-    const asked = groups.find((one) => one.id === group)
-    if (asked === undefined) return yield* new GroupNotFound()
-    if (asked.members.includes(account)) return yield* new AlreadyInGroup()
+    const members = yield* Organizations.use((organizations) => organizations.locked(organization))
+    if (members.length === 0) return yield* new OrganizationNotFound()
+    const groups =
+      group === undefined
+        ? []
+        : yield* Organizations.use((organizations) => organizations.groupsOf(organization))
+    switch (askRefusal({ members, groups }, account, group)) {
+      case 'member':
+        return yield* new AlreadyMember()
+      case 'in-group':
+        return yield* new AlreadyInGroup()
+      case 'no-group':
+        return yield* new GroupNotFound()
+      case undefined:
+        return
+    }
   })
 
 /** How long after a decline an Account may ask for the same again, in milliseconds: a day. */
@@ -223,27 +253,25 @@ export const standingIn = (organization: string) =>
   })
 
 /**
- * Where an Account stands toward each of some Groups of an Organization, read now: `in` it, may `ask`
- * to join it, or has `asked` (`askedAlready`). What the Groups widget offers each by.
+ * Some Groups of an Organization, each with where an Account stands toward it, read now: `in` it,
+ * may `ask` to join it, or has `asked` (`askedAlready`). What the Groups widget offers each by.
  */
-export const groupStandings = (
+export const groupStandings = <
+  G extends { readonly id: string; readonly members: ReadonlyArray<string> },
+>(
   account: string,
   organization: string,
-  groups: ReadonlyArray<{ readonly id: string; readonly members: ReadonlyArray<string> }>,
+  groups: ReadonlyArray<G>,
 ) =>
-  Effect.map(
-    askedSoFar(account, organization),
-    ([requests, now]) =>
-      new Map(
-        groups.map(({ id, members }): readonly [string, GroupStanding] => [
-          id,
-          members.includes(account)
-            ? 'in'
-            : askedAlready(requests, id, now) === undefined
-              ? 'ask'
-              : 'asked',
-        ]),
-      ),
+  Effect.map(askedSoFar(account, organization), ([requests, now]) =>
+    groups.map((group) => {
+      const joining: GroupStanding = group.members.includes(account)
+        ? 'in'
+        : askedAlready(requests, group.id, now) === undefined
+          ? 'ask'
+          : 'asked'
+      return { ...group, joining }
+    }),
   )
 
 /** The admins of an Organization, by their Accounts, read now, outside any request: who is told. */

@@ -179,10 +179,10 @@ export const groups = ({ star }: { readonly star: string }) =>
     const found = yield* Groups.groups(organization)
     const stars = yield* Stars.starsOf(found.flatMap((group) => group.members))
     const standings = yield* Joining.groupStandings(account.id, organization, found)
-    return found.map((group): GroupShown => ({
+    return standings.map((group): GroupShown => ({
       id: group.id,
       name: group.name,
-      joining: standings.get(group.id) ?? 'ask',
+      joining: group.joining,
       members: group.members.map((member) => ({
         star: stars.get(member),
         you: member === account.id,
