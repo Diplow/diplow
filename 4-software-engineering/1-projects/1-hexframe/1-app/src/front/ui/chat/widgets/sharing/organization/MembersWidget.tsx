@@ -1,7 +1,7 @@
 // Who belongs to an Organization, in the conversation: the app's own widget, so it carries no voice.
 // Each member by their star's title, the reader marked as themselves, and what they are there, an
 // admin or a member; for an admin, each member's role set and each taken out, and someone added,
-// from the widget's actions; each row running on to the curve at its height. Controlled: the rows
+// from the widget's actions; for anyone, Leave on their own row; each row running on to the curve at its height. Controlled: the rows
 // are worded by the caller, who says what each change does, as IAM decides it, and who finds
 // someone.
 import { cn } from 'cn'
@@ -90,16 +90,20 @@ export function MembersWidget({
                 {roleSaid[row.role]()}
               </p>
             </div>
-            {manages && (
+            {(manages || row.you) && (
               <div className="flex flex-wrap items-center justify-between gap-1.5">
-                <Roles
-                  legend={m.widget_members_role_for({ who: row.who })}
-                  chosen={row.role}
-                  sending={sending}
-                  onChoose={(role) => {
-                    onRole(row.key, role)
-                  }}
-                />
+                {manages ? (
+                  <Roles
+                    legend={m.widget_members_role_for({ who: row.who })}
+                    chosen={row.role}
+                    sending={sending}
+                    onChoose={(role) => {
+                      onRole(row.key, role)
+                    }}
+                  />
+                ) : (
+                  <span />
+                )}
                 <button
                   type="button"
                   disabled={sending}

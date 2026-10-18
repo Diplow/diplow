@@ -275,6 +275,9 @@ describe("an Organization's members", () => {
     expect(await refusal(run(asAna, Organizations.removeMember({ star, member: nobody })))).toBe(
       'MemberNotFound',
     )
+    // Bob, added without asking, leaves of his own accord.
+    await value(run(asBob, Organizations.removeMember({ star, member: bob.star })))
+    expect(await value(run(asBob, Organizations.roleIn({ star })))).toBeNull()
   })
 
   it('keep their last admin, and are managed from a Session alone', async () => {

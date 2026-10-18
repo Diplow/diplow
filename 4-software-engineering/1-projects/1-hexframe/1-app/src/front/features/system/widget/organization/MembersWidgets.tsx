@@ -1,7 +1,7 @@
 // Who belongs to an Organization, in the chat, at the conversation's foot, on ui's Members widget,
 // opened by its star's menu for each of its members (HEX-136): each member by their star and their
 // role; for an admin, a role set, a member taken out, themselves included, and someone added through
-// the star picker, by their star, a member. Whether it is open, and on which star, is the URL's, a
+// the star picker, by their star, a member; for anyone, leaving, which closes it. Whether it is open, and on which star, is the URL's, a
 // change under way as Share is (`members`, `../../search/search.ts`), which `TileWidgets` draws;
 // whether the star picker shows in its place, and what is typed there, is this widget's own. IAM
 // decides each change, its last admin kept; a refusal goes to its channel.
@@ -77,7 +77,10 @@ export function MembersWidgets({ star, title, onClose }: MembersWidgetsProps) {
       }}
       onRemove={(key) => {
         const member = starOfRow(key)
-        if (member !== undefined) remove.mutate({ star, member })
+        if (member === undefined) return
+        // Leaving, the widget goes with the Organization the user no longer belongs to.
+        const leaving = members.find((one) => one.star?.id === member)?.you === true
+        remove.mutate({ star, member }, { onSuccess: leaving ? onClose : undefined })
       }}
       onAdd={() => {
         setPicking(true)

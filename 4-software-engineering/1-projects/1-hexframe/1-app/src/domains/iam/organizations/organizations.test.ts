@@ -123,6 +123,12 @@ layer(TestLayer)('Organizations', (it) => {
       expect(yield* failedWith(cleo.asSession(members(crypto.randomUUID())))).toBe(
         'OrganizationNotFound',
       )
+      expect(
+        yield* failedWith(cleo.asSession(transactional(removeMember(team, cleo.account.id)))),
+      ).toBe('OrganizationNotFound')
+      // A member added without asking leaves of their own accord.
+      yield* bob.asSession(transactional(removeMember(team, bob.account.id)))
+      expect(yield* belonging(bob.account.id)).toEqual({ admins: [], groups: [] })
     }),
   )
 

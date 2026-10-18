@@ -75,8 +75,8 @@ export class AdminRequired extends Schema.TaggedError<AdminRequired>()('AdminReq
 }) {}
 
 /**
- * The change would leave the Organization without an admin: its last admin can neither leave, nor be
- * removed, nor be made a member.
+ * The change would leave the Organization without an admin who joined it of their own accord: that
+ * last can neither leave, nor be removed, nor be made a member. An admin only added may always leave.
  */
 export class LastAdmin extends Schema.TaggedError<LastAdmin>()('LastAdmin', {
   kind: kind('Conflict'),

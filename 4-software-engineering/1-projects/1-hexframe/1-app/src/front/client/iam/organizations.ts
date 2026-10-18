@@ -36,11 +36,20 @@ export const useRoleIn = (star: string | undefined) =>
       call: () => roleIn({ data: { star: star ?? '' } }),
     }),
     enabled: star !== undefined,
+    // A menu line hangs on it: a failure leaves it out rather than taking the canvas's boundary.
+    throwOnError: false,
   })
 
-/** The members of the Organization a star names, the earliest first, each by their star's card. */
+/**
+ * The members of the Organization a star names, the earliest first, each by their star's card. A
+ * failure throws nothing: once the user left, or for a star of no Organization of theirs, the
+ * widget shows nothing rather than the chat's boundary.
+ */
 export const useMembers = (star: string) =>
-  useQuery(read({ scope: membersScope, key: [star], call: () => members({ data: { star } }) }))
+  useQuery({
+    ...read({ scope: membersScope, key: [star], call: () => members({ data: { star } }) }),
+    throwOnError: false,
+  })
 
 /** One member, as the Members widget lists them: their star's card, their role, whether it is you. */
 export type Member = NonNullable<ReturnType<typeof useMembers>['data']>[number]

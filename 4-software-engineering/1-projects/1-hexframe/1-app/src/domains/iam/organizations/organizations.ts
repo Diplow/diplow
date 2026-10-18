@@ -143,14 +143,29 @@ export const setRole = (organization: string, account: string, role: Role) =>
   })
 
 /**
- * Takes an Account out of an Organization, by one of its admins from a Session, themselves included:
- * `MemberNotFound` for an Account not among its members, and `LastAdmin` for its last admin who
- * joined (`lastJoinedAdmin`). Holds from the next request on, since nothing is kept of it. Inside a
+ * The members of an Organization, its row locked until the transaction ends, once the Account the
+ * request's Session proves asks to take this one out: themselves, whatever their role, so anyone
+ * added without asking may leave; anyone else as `managedBy` lets an admin.
+ */
+const leftBy = (organization: string, account: string) =>
+  Effect.gen(function* () {
+    const { account: asking } = yield* sessionOnly
+    if (asking.id !== account) return yield* managedBy(organization)
+    const found = yield* Organizations.use((organizations) => organizations.locked(organization))
+    if (roleIn(found, account) === undefined) return yield* new OrganizationNotFound()
+    return found
+  })
+
+/**
+ * Takes an Account out of an Organization, from a Session: by one of its admins, or by the Account
+ * itself, leaving, whatever its role, so nobody stays in one they never chose. `MemberNotFound` for
+ * an Account not among its members, and `LastAdmin` for its last admin who joined
+ * (`lastJoinedAdmin`). Holds from the next request on, since nothing is kept of it. Inside a
  * transaction.
  */
 export const removeMember = (organization: string, account: string) =>
   Effect.gen(function* () {
-    const found = yield* managedBy(organization)
+    const found = yield* leftBy(organization, account)
     const role = yield* roleOf(found, account)
     if (role === 'admin' && lastJoinedAdmin(found, account)) return yield* new LastAdmin()
     yield* Organizations.use((organizations) => organizations.remove(organization, account))
