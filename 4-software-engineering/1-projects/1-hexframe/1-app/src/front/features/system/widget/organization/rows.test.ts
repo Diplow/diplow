@@ -49,8 +49,9 @@ describe('the Groups widget’s rows', () => {
       { star: ana.star, you: true },
       { star: undefined, you: false },
     ],
+    asked: false,
   }
-  const ops = { id: 'ops', name: 'Ops', members: [] }
+  const ops = { id: 'ops', name: 'Ops', members: [], asked: false }
 
   it('name each Group and who is in it, keyed by its id, an empty one said so', () => {
     const [designs, opss] = groupRowsOf([design, ops])
@@ -59,6 +60,13 @@ describe('the Groups widget’s rows', () => {
     expect(opss?.key).toBe('ops')
     expect(opss?.who).not.toBe('')
     expect(opss?.who).not.toBe(designs?.who)
+  })
+
+  it('offer to ask to join a Group the reader is not in, said asked once they did', () => {
+    const [designs, opss] = groupRowsOf([design, ops])
+    expect(designs?.joining).toBeUndefined()
+    expect(opss?.joining).toBe('ask')
+    expect(groupRowsOf([{ ...ops, asked: true }])[0]?.joining).toBe('asked')
   })
 
   it('offer each member with a star, in the Group or not, keyed by their star', () => {

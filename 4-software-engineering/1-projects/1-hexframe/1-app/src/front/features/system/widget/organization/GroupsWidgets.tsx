@@ -1,7 +1,8 @@
 // An Organization's Groups, in the chat, at the conversation's foot, on ui's Groups widget, opened by
 // its star's menu for each of its members (HEX-137): its Members, then each Group of its own by its
 // name and who is in it; for an admin, a Group opened to be renamed, deleted, or have its members put
-// in or taken out, through the Organization's members, and a new one named, then opened to be filled.
+// in or taken out, through the Organization's members, and a new one named, then opened to be filled;
+// for a member, a Group they are not in asked to join, an admin deciding (HEX-138).
 // Whether it is open, and on which star, is the URL's, a change under way as Members is (`groups`,
 // `../../search/search.ts`), which `TileWidgets` draws; which Group is open, and the name typed, is
 // this widget's own. IAM decides each change: a name refused shows on its field, IAM's own rule
@@ -10,12 +11,13 @@ import { useState } from 'react'
 
 import { groupNameBounds, groupNameOf } from '#/domains/iam/entities'
 import {
+  useAskToJoin,
   useCreateGroup,
   useDeleteGroup,
   useGroups,
   useMembers,
   useRenameGroup,
-  useRoleIn,
+  useStandingIn,
   useSetInGroup,
 } from '#/front/client/iam/organizations'
 import { type FormErrors, submitMutation } from '#/front/client/channels'
@@ -45,19 +47,20 @@ type Open = 'new' | { readonly group: string } | undefined
  * while an admin makes or changes it.
  */
 export function GroupsWidgets({ star, title, onClose }: GroupsWidgetsProps) {
-  const { data: role } = useRoleIn(star)
+  const { data: standing } = useStandingIn(star)
   const { data: groups } = useGroups(star)
   const { data: members = [] } = useMembers(star)
   const create = useCreateGroup()
   const rename = useRenameGroup()
   const remove = useDeleteGroup()
   const setIn = useSetInGroup()
+  const ask = useAskToJoin()
   const [open, setOpen] = useState<Open>()
   const [name, setName] = useState('')
   const [refused, setRefused] = useState<string>()
   if (groups === undefined) return null
   const shown = title === '' ? m.widget_star_untitled() : title
-  const manages = role === 'admin'
+  const manages = standing === 'admin'
   const opened = typeof open === 'object' ? groups.find(({ id }) => id === open.group) : undefined
   const back = () => {
     setOpen(undefined)
@@ -144,6 +147,19 @@ export function GroupsWidgets({ star, title, onClose }: GroupsWidgetsProps) {
         const group = groups.find(({ id }) => id === key)
         if (group !== undefined) openOn(group)
       }}
+      onAsk={(key) => {
+        const group = groups.find(({ id }) => id === key)
+        if (group === undefined) return
+        ask.mutate(
+          { star, group: group.id },
+          {
+            onSuccess: () => {
+              toast(m.widget_groups_asked_toast({ name: group.name }))
+            },
+          },
+        )
+      }}
+      asking={ask.isPending}
       onNew={() => {
         setOpen('new')
         setName('')

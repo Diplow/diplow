@@ -19,6 +19,7 @@ type Scope =
   | 'whoReaches'
   | 'postMessage'
   | 'acceptProposal'
+  | 'askToJoin'
 
 interface Entry {
   tag: Failure['_tag']
@@ -47,11 +48,16 @@ const table: readonly Entry[] = [
   { tag: 'AdminRequired', message: m.error_iam_admin_required },
   { tag: 'LastAdmin', message: m.error_iam_last_admin },
   { tag: 'AccountNotFound', message: m.error_iam_account_not_found },
+  { tag: 'AlreadyMember', scope: 'askToJoin', message: m.error_iam_join_already_member },
   { tag: 'AlreadyMember', message: m.error_iam_already_member },
   { tag: 'MemberNotFound', message: m.error_iam_member_not_found },
   { tag: 'GroupNameInvalid', message: m.error_iam_group_name_invalid },
   { tag: 'GroupNameTaken', message: m.error_iam_group_name_taken },
   { tag: 'GroupNotFound', message: m.error_iam_group_not_found },
+  { tag: 'AlreadyInGroup', message: m.error_iam_already_in_group },
+  { tag: 'JoinRequestOpen', message: m.error_iam_join_request_open },
+  { tag: 'JoinRequestNotFound', message: m.error_iam_join_request_not_found },
+  { tag: 'JoinRequestDecided', message: m.error_iam_join_request_decided },
   { tag: 'TurnRunning', message: m.error_assistant_turn_running },
   { tag: 'AllowanceSpent', message: m.error_assistant_allowance_spent },
   { tag: 'ProposalClosed', message: m.error_assistant_proposal_closed },

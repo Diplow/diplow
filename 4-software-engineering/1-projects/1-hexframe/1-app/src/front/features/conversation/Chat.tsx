@@ -35,6 +35,7 @@ import {
 } from '#/front/client/assistant/conversation'
 import type { LiveTurn } from '#/front/client/assistant/follow'
 import { useSignOut } from '#/front/client/iam/access'
+import { useDecideJoinRequest } from '#/front/client/iam/organizations'
 import { useSystem } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
@@ -134,6 +135,7 @@ export function ChatTimeline(props: ChatTimelineProps) {
   const undoing = useUndo()
   // An Undo asked for by `/undo` too.
   const undoPending = useUndoing()
+  const deciding = useDecideJoinRequest()
   const tiles = useTiles()
   const system = useMemo(
     () =>
@@ -150,8 +152,11 @@ export function ChatTimeline(props: ChatTimelineProps) {
   if (data === undefined) return <Skeleton className="h-40" />
   const now = new Date()
   // The pages come today first; the timeline reads oldest first.
-  const days = data.pages.map(({ day, entries, titles }, index) =>
-    dayOf({ date: day.date, entries: index === 0 ? beside(entries) : entries, titles }, now),
+  const days = data.pages.map(({ day, entries, titles, requests }, index) =>
+    dayOf(
+      { date: day.date, entries: index === 0 ? beside(entries) : entries, titles, requests },
+      now,
+    ),
   )
   return (
     <Timeline
@@ -192,6 +197,12 @@ export function ChatTimeline(props: ChatTimelineProps) {
           undoing.mutate(applied)
         },
         pending: accepting.isPending || discarding.isPending || undoPending,
+      }}
+      joining={{
+        decide: (request, accept) => {
+          deciding.mutate({ request, accept })
+        },
+        pending: deciding.isPending,
       }}
     />
   )

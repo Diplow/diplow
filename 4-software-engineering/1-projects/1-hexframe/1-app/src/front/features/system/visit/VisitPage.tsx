@@ -3,9 +3,10 @@
 // hung from the star across a gap, each Tile's menu holding the lines that look, Copy, those that
 // write where the Account's rights there let it (HEX-132), and the agent's where it holds *@* there,
 // the Turn then starting in that Tile, of their System (HEX-134); an Organization's, its owner's
-// lines to its admins, and its star's Members widget to its members (HEX-136).
+// lines to its admins, its star's Members and Groups widgets to its members (HEX-136), and Ask to
+// join to anyone outside it (HEX-138).
 import type { Direction } from '#/domains/mapping/entities'
-import { useRoleIn } from '#/front/client/iam/organizations'
+import { useStandingIn } from '#/front/client/iam/organizations'
 import { useSystem } from '#/front/client/mapping/queries'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
@@ -44,8 +45,8 @@ const none = () => undefined
 export function VisitPage(props: VisitPageProps) {
   const { star, search, onSearchChange, onViewChange, marks, onAsk } = props
   const { data } = useSystem({ star })
-  // Whether the star is an Organization's the Account belongs to, read without throwing: a menu line.
-  const { data: role } = useRoleIn(star)
+  // Where the Account stands in the Organization the star names, if any, read without throwing: a menu line.
+  const { data: standing } = useStandingIn(star)
   if (data === undefined) return <Skeleton className="min-h-0 flex-1" />
   return (
     <System
@@ -58,7 +59,8 @@ export function VisitPage(props: VisitPageProps) {
       reach={{
         visiting: data.rights,
         asOwner: data.asOwner,
-        members: role !== undefined && role !== null,
+        members: standing === 'admin' || standing === 'member',
+        joins: standing === 'outside',
       }}
       search={search}
       pinned={data.pinned}

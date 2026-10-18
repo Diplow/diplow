@@ -1,7 +1,7 @@
 // The Organization widgets on /design-system, live on samples: an Organization named, refused while
 // its name is blank, made in a toast, and on a phone; its members, as an admin manages them, as a
 // member reads them, and on a phone; and its groups (HEX-137), as an admin makes, renames, fills and
-// deletes them, as a member reads them, and on a phone. Nothing reaches IAM: what home would change,
+// deletes them, as a member reads them and asks to join one (HEX-138), and on a phone. Nothing reaches IAM: what home would change,
 // and the star picker it would open to add someone, show in a toast, and the rows follow each change
 // as IAM would answer it, its last admin kept, a group's name refused as IAM refuses it.
 import { useState } from 'react'
@@ -165,6 +165,8 @@ interface SampleGroup {
   readonly key: string
   readonly name: string
   readonly members: readonly string[]
+  /** You asked to join it, and wait. */
+  readonly asked?: boolean
 }
 
 /** The sample groups: Design, with you and Cleo; Ops, nobody yet. */
@@ -180,15 +182,24 @@ const whoIs = (key: string) => {
   return member.you ? m.widget_members_you({ who: member.who }) : member.who
 }
 
+/** Whether you may ask to join a sample group, or asked: none where you are in it. */
+const joiningOf = ({ members, asked = false }: SampleGroup): GroupRow['joining'] =>
+  members.some((member) => sampleMembers.find((row) => row.key === member)?.you === true)
+    ? undefined
+    : asked
+      ? 'asked'
+      : 'ask'
+
 /** The groups as home words them. */
 const rowsOf = (groups: readonly SampleGroup[]): GroupRow[] =>
-  groups.map(({ key, name, members }) => ({
-    key,
-    name,
+  groups.map((group) => ({
+    key: group.key,
+    name: group.name,
     who:
-      members.length === 0
+      group.members.length === 0
         ? m.widget_groups_nobody()
-        : members.map(whoIs).join(m.widget_groups_joiner()),
+        : group.members.map(whoIs).join(m.widget_groups_joiner()),
+    joining: joiningOf(group),
   }))
 
 function LiveGroups({
@@ -277,6 +288,9 @@ function LiveGroups({
       onOpen={(key) => {
         setOpen(key)
         setName(groups.find((group) => group.key === key)?.name ?? '')
+      }}
+      onAsk={(key) => {
+        setGroups(groups.map((group) => (group.key === key ? { ...group, asked: true } : group)))
       }}
       onNew={() => {
         setOpen('new')

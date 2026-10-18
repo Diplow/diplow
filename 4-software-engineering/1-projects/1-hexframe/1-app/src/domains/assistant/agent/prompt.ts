@@ -14,6 +14,7 @@ import {
   type Entry,
   type Fate,
   isTheirs,
+  type Membership,
   type Mode,
   type ProposedChange,
   type SharedRight,
@@ -117,8 +118,11 @@ const ends = {
   sandbox: 'its sandbox failed',
 } as const
 
-/** Who shared a Tile, as the agent reads it: another Account, by its star's Title, if it has one. */
-const sharerOf = (by: string) => someoneOf({ _tag: 'Someone', star: by, by: { _tag: 'You' } })
+/**
+ * Another Account who shared a Tile, acted on the user's place in an Organization, or asked to join
+ * one, as the agent reads it: by its star's Title, if it has one.
+ */
+const accountOf = (by: string) => someoneOf({ _tag: 'Someone', star: by, by: { _tag: 'You' } })
 
 /** What each right a Tile shared gives lets the user do there, as the agent reads it. */
 const sharedRights: Record<SharedRight, string> = {
@@ -130,6 +134,23 @@ const sharedRights: Record<SharedRight, string> = {
 /** What the rights a Tile shared gives let the user do, as the agent reads it: "read it, write it". */
 const mayDo = (rights: ReadonlyArray<SharedRight>) =>
   rights.length === 0 ? 'do nothing' : rights.map((right) => sharedRights[right]).join(', ')
+
+/**
+ * An Organization, or one of its Groups, as the agent reads it: by its star, or the Group's name and
+ * that star, quoted.
+ */
+const organizationOf = ({ organization, group }: Pick<Membership, 'organization' | 'group'>) => {
+  const star = `the Organization ${named(organization.title, organization.id)}`
+  return group === undefined ? star : `the group ${quoted(group)} of ${star}`
+}
+
+/** What one of an Organization's admins did to the user's place there, as the agent reads it. */
+const membershipSaid: Record<Membership['what'], (into: string) => string> = {
+  added: (into) => `added the user to ${into}, without asking first`,
+  removed: (into) => `took the user out of ${into}`,
+  accepted: (into) => `accepted the user's request to join ${into}`,
+  declined: (into) => `declined the user's request to join ${into}`,
+}
 
 /** How a Proposal stands, as the agent reads it. */
 const fates: Record<Fate, string> = {
@@ -182,7 +203,11 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
       return `A Turn of yours in apply made ${made}${entry.undone ? ', which the user undid' : ''}.`
     }
     case 'Shared':
-      return `${sharerOf(entry.by)} shared ${named(entry.tile.title, entry.tile.id)} with the user, who may ${mayDo(entry.rights)} there; it stands in that Account's System, not the user's.`
+      return `${accountOf(entry.by)} shared ${named(entry.tile.title, entry.tile.id)} with the user, who may ${mayDo(entry.rights)} there; it stands in that Account's System, not the user's.`
+    case 'Membership':
+      return `${accountOf(entry.by)} ${membershipSaid[entry.what](organizationOf(entry))}.`
+    case 'JoinAsked':
+      return `${accountOf(entry.who)} asked to join ${organizationOf(entry)}, of which the user is an admin; the user accepts or declines it in the timeline, not you.`
   }
 }
 

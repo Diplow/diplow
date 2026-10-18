@@ -36,15 +36,26 @@ const whoOf = ({ star, you }: { star: Member['star']; you: boolean }) => {
   return you ? m.widget_members_you({ who }) : who
 }
 
-/** The Groups as the Groups widget shows them, each by its name and who is in it, keyed by its id. */
+/**
+ * Whether the reader may ask to join a Group, or asked and waits: none where they are in it.
+ * HEX-138.
+ */
+const joiningOf = ({ members, asked }: Group): GroupRow['joining'] =>
+  members.some((member) => member.you) ? undefined : asked ? 'asked' : 'ask'
+
+/**
+ * The Groups as the Groups widget shows them, each by its name and who is in it, keyed by its id,
+ * and whether the reader may ask to join it.
+ */
 export const groupRowsOf = (groups: readonly Group[]): GroupRow[] =>
-  groups.map(({ id, name, members }) => ({
-    key: id,
-    name,
+  groups.map((group) => ({
+    key: group.id,
+    name: group.name,
     who:
-      members.length === 0
+      group.members.length === 0
         ? m.widget_groups_nobody()
-        : members.map(whoOf).join(m.widget_groups_joiner()),
+        : group.members.map(whoOf).join(m.widget_groups_joiner()),
+    joining: joiningOf(group),
   }))
 
 /**

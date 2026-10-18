@@ -1,14 +1,16 @@
 // IAM's Organizations: the `organization` and `membership` tables (../schema.ts), which Better Auth
 // does not keep. An Organization is its id alone, its name being its star's Title in Mapping; who
 // belongs to it is a membership per Account, an admin or a member; and its Groups of its own, with who
-// is in each (./groups.ts, merged in here). IAM decides what a role lets someone do, and that an
-// Organization keeps an admin; this folder reads and writes the rows.
+// is in each (./groups.ts, merged in here); and the requests to join it or one of its Groups
+// (./joining.ts, merged in too). IAM decides what a role lets someone do, and that an Organization
+// keeps an admin; this folder reads and writes the rows.
 import { and, asc, eq } from 'drizzle-orm'
 import { Context, Effect, Layer } from 'effect'
 
 import { Database, InTransaction, inTransaction } from '../database'
 import { membership, organization, user } from '../schema'
 import { type GroupRows, groupRowsOf } from './groups'
+import { groupRequestsDropped, type JoinRows, joinRowsOf } from './joining'
 
 /** A role in an Organization, as the `membership` table keeps it. */
 type MemberRole = 'admin' | 'member'
@@ -31,49 +33,61 @@ export interface MemberRow {
 
 export class Organizations extends Context.Service<
   Organizations,
-  GroupRows & {
-    /**
-     * Adds an Organization of this id, its first member this Account, an admin who joined. Inside a
-     * transaction.
-     */
-    readonly create: (
-      organization: string,
-      admin: string,
-    ) => Effect.Effect<void, never, InTransaction>
-    /** Whether an Organization has this id. */
-    readonly exists: (organization: string) => Effect.Effect<boolean>
-    /** Whether an Account has this id. */
-    readonly isAccount: (account: string) => Effect.Effect<boolean>
-    /** The Organizations an Account belongs to, each with its role there, in no order. */
-    readonly membershipsOf: (account: string) => Effect.Effect<ReadonlyArray<MembershipRow>>
-    /**
-     * The members of an Organization, the earliest first, none for an id no Organization has, the
-     * Organization's row locked until the transaction ends when asked inside one (`locked`), so two
-     * changes of its members decide one after the other.
-     */
-    readonly members: (organization: string) => Effect.Effect<ReadonlyArray<MemberRow>>
-    readonly locked: (
-      organization: string,
-    ) => Effect.Effect<ReadonlyArray<MemberRow>, never, InTransaction>
-    /**
-     * Adds an Account to an Organization with a role, as no member who joined, answering false when
-     * it was one already.
-     */
-    readonly add: (
-      organization: string,
-      member: Omit<MemberRow, 'joined'>,
-    ) => Effect.Effect<boolean, never, InTransaction>
-    /** Sets a member's role. Inside a transaction. */
-    readonly setRole: (
-      organization: string,
-      member: Omit<MemberRow, 'joined'>,
-    ) => Effect.Effect<void, never, InTransaction>
-    /** Takes an Account out of an Organization. Inside a transaction. */
-    readonly remove: (
-      organization: string,
-      account: string,
-    ) => Effect.Effect<void, never, InTransaction>
-  }
+  GroupRows &
+    JoinRows & {
+      /**
+       * Adds an Organization of this id, its first member this Account, an admin who joined. Inside a
+       * transaction.
+       */
+      readonly create: (
+        organization: string,
+        admin: string,
+      ) => Effect.Effect<void, never, InTransaction>
+      /** Whether an Organization has this id. */
+      readonly exists: (organization: string) => Effect.Effect<boolean>
+      /** Whether an Account has this id. */
+      readonly isAccount: (account: string) => Effect.Effect<boolean>
+      /** The Organizations an Account belongs to, each with its role there, in no order. */
+      readonly membershipsOf: (account: string) => Effect.Effect<ReadonlyArray<MembershipRow>>
+      /**
+       * The members of an Organization, the earliest first, none for an id no Organization has, the
+       * Organization's row locked until the transaction ends when asked inside one (`locked`), so two
+       * changes of its members decide one after the other.
+       */
+      readonly members: (organization: string) => Effect.Effect<ReadonlyArray<MemberRow>>
+      readonly locked: (
+        organization: string,
+      ) => Effect.Effect<ReadonlyArray<MemberRow>, never, InTransaction>
+      /**
+       * Adds an Account to an Organization with a role, as no member who joined, answering false when
+       * it was one already.
+       */
+      readonly add: (
+        organization: string,
+        member: Omit<MemberRow, 'joined'>,
+      ) => Effect.Effect<boolean, never, InTransaction>
+      /**
+       * Adds an Account to an Organization, a member who joined of its own accord, its request to join
+       * accepted; nothing when it was one already. Inside a transaction.
+       */
+      readonly join: (
+        organization: string,
+        account: string,
+      ) => Effect.Effect<void, never, InTransaction>
+      /** Sets a member's role. Inside a transaction. */
+      readonly setRole: (
+        organization: string,
+        member: Omit<MemberRow, 'joined'>,
+      ) => Effect.Effect<void, never, InTransaction>
+      /**
+       * Takes an Account out of an Organization, its Groups and its open requests to join one of them
+       * with it. Inside a transaction.
+       */
+      readonly remove: (
+        organization: string,
+        account: string,
+      ) => Effect.Effect<void, never, InTransaction>
+    }
 >()('hexframe/Organizations') {}
 
 const make = Effect.gen(function* () {
@@ -100,6 +114,7 @@ const make = Effect.gen(function* () {
 
   return Organizations.of({
     ...groupRowsOf(database),
+    ...joinRowsOf(database),
     create: (id, admin) =>
       inTransaction(
         Effect.gen(function* () {
@@ -153,6 +168,14 @@ const make = Effect.gen(function* () {
             Effect.map((added) => added.length > 0),
           ),
       ),
+    join: (id, account) =>
+      inTransaction(
+        database
+          .insert(membership)
+          .values({ organizationId: id, accountId: account, role: 'member', joined: true })
+          .onConflictDoNothing()
+          .pipe(Effect.orDie, Effect.asVoid),
+      ),
     setRole: (id, { account, role }) =>
       inTransaction(
         database
@@ -163,7 +186,10 @@ const make = Effect.gen(function* () {
       ),
     remove: (id, account) =>
       inTransaction(
-        database.delete(membership).where(ofOne(id, account)).pipe(Effect.orDie, Effect.asVoid),
+        Effect.andThen(
+          groupRequestsDropped(database, id, account),
+          database.delete(membership).where(ofOne(id, account)).pipe(Effect.orDie, Effect.asVoid),
+        ),
       ),
   })
 })

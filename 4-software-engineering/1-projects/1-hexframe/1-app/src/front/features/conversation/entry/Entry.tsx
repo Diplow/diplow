@@ -4,25 +4,42 @@
 // (`Message`); a Proposal, which the user accepts or discards, then may undo (`./Proposal.tsx`); and
 // what a Turn in apply wrote, the receipt it leaves with its Undo, then undone (`Receipt`); and a
 // change someone else made in the user's System, by who of theirs acted, from outside, its Undo
-// offered once, then undone (`Receipt`, quiet).
+// offered once, then undone (`Receipt`, quiet); and someone asking to join an Organization the user
+// is an admin of, Accept and Decline offered while it is open, then how it was decided, by this admin
+// or another (`Receipt`, quiet, HEX-138).
 import { offersUndo } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 import { Events } from '#/front/ui/chat/entries/Events'
 import { Receipt } from '#/front/ui/chat/entries/Receipt'
 import { Message } from '#/front/ui/chat/text/Message'
 
-import type { Deciding } from './parts'
+import type { Deciding, Joining } from './parts'
 import { ProposalEntry } from './Proposal'
-import { type Block, changeWords, happenedOf, messageWords, type Naming } from './words'
+import {
+  type Block,
+  changeWords,
+  happenedOf,
+  joinAskedWords,
+  messageWords,
+  type Naming,
+} from './words'
 
 interface BlockProps {
   block: Block
   naming: Naming
   /** Accepts or discards an open Proposal, and undoes what was applied. */
   decide: Deciding
+  /** Accepts or declines a request to join, as it stands now. */
+  joining: Joining
 }
 
-export function EntryBlock({ block, naming, decide }: BlockProps) {
+/** How a request to join was decided, said after its line. */
+const decided = {
+  accepted: m.conversation_join_was_accepted,
+  declined: m.conversation_join_was_declined,
+}
+
+export function EntryBlock({ block, naming, decide, joining }: BlockProps) {
   switch (block.kind) {
     case 'lines':
       return <Events lines={block.entries.map((entry) => happenedOf(entry, naming))} />
@@ -52,6 +69,37 @@ export function EntryBlock({ block, naming, decide }: BlockProps) {
               : undefined
           }
           pending={decide.pending}
+        />
+      )
+    }
+    case 'asked': {
+      const { entry } = block
+      const state = joining.states[entry.request]
+      return (
+        <Receipt
+          words={joinAskedWords(entry, naming)}
+          at={entry.at}
+          tone="quiet"
+          said={state === undefined || state === 'open' ? undefined : decided[state]()}
+          actions={
+            state === 'open'
+              ? [
+                  {
+                    label: m.conversation_join_accept(),
+                    onSelect: () => {
+                      joining.decide(entry.request, true)
+                    },
+                  },
+                  {
+                    label: m.conversation_join_decline(),
+                    onSelect: () => {
+                      joining.decide(entry.request, false)
+                    },
+                  },
+                ]
+              : undefined
+          }
+          pending={joining.pending}
         />
       )
     }

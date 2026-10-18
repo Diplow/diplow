@@ -36,7 +36,8 @@ import { tilesBelow } from './widget/place'
  * where they hold *@* (HEX-134), and never who sees a Tile, its export nor an import, which are the
  * owner's or land at home; unless they stand for its owner there (`asOwner`, as `Seen` says it), an
  * Organization's admin, who shares its Tiles as its owner does (HEX-136). Its star's menu opens the
- * Organization's Members and Groups widgets for each of its members (`members`). What a visitor sees at all is
+ * Organization's Members and Groups widgets for each of its members (`members`), and Ask to join for
+ * anyone outside it (`joins`, HEX-138). What a visitor sees at all is
  * Mapping's to say; `hexframe-app-sharing-organizations/decisions.md#DEC-4`, `#DEC-9`, `#DEC-11`,
  * `#DEC-13`.
  */
@@ -48,6 +49,8 @@ export type Reach =
       readonly asOwner?: boolean
       /** Whether the star visited is an Organization's the user belongs to. */
       readonly members?: boolean
+      /** Whether the star visited is an Organization's the user is outside of, and may ask to join. */
+      readonly joins?: boolean
     }
 
 /**
@@ -72,6 +75,10 @@ const notTheirs = (reach: Exclude<Reach, 'owned'>) =>
  */
 const membersAt = ({ reach, root }: Pick<Systems, 'reach' | 'root'>, hex: TileHex) =>
   reach !== 'owned' && reach.members === true && hex.tile.id === root.id
+
+/** Whether a Tile's menu offers Ask to join: on the star of an Organization the user is outside of. */
+const joinsAt = ({ reach, root }: Pick<Systems, 'reach' | 'root'>, hex: TileHex) =>
+  reach !== 'owned' && reach.joins === true && hex.tile.id === root.id
 
 /**
  * Whether the user may ask the agent at a Tile of the System drawn, as far as the page can tell: on
@@ -307,7 +314,8 @@ export function framesOf(systems: Systems, hex: TileHex) {
 /**
  * The lines home leaves out of a Tile's menu: a Leaf's Context, which a Leaf has none of; an import
  * as the Root, but into an empty System's; the agent's on a broken Reference, which names no Tile;
- * the Members and Groups widgets', but on the star of an Organization the user belongs to; and, on a System
+ * the Members and Groups widgets', but on the star of an Organization the user belongs to; Ask to
+ * join, but on the star of one they are outside of; and, on a System
  * visited, the owner's lines, but for its admin, the agent's where the user holds no *@*, and each
  * line that writes where the user's rights hold it back (`heldBack`).
  */
@@ -317,6 +325,7 @@ export function withoutOf(systems: Systems, hex: TileHex): Verb[] {
     ...(hex.tile.leaf === true ? (['show-context'] as const) : []),
     ...(hex.tile.root !== undefined && !isEmptySystem(systems.root) ? (['import'] as const) : []),
     ...(hex.role === 'center' && !membersAt(systems, hex) ? (['members', 'groups'] as const) : []),
+    ...(hex.role === 'center' && !joinsAt(systems, hex) ? (['join'] as const) : []),
   ]
   const { reach } = systems
   if (reach === 'owned') return left

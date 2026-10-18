@@ -1,12 +1,13 @@
 // An Organization's Groups, in the conversation: the app's own widget, so it carries no voice. Its
 // Members first, which holds everyone, then each Group of its own by its name and who is in it, each
 // row running on to the curve at its height; for an admin, a Group opened to be changed, and a new one
-// made, from the widget's actions. And one Group as an admin changes it (`GroupWidget`): its name,
+// made, from the widget's actions; for a member, a Group they are not in asked to join, or said asked
+// while an admin decides (HEX-138). And one Group as an admin changes it (`GroupWidget`): its name,
 // renamed, and each of the Organization's members put in or taken out, or a new Group named. Controlled:
 // the rows and the members are worded by the caller, who says what each change does, as IAM decides
 // it.
 import { cn } from 'cn'
-import { Pencil, Plus, Trash2, UsersRound } from 'lucide-react'
+import { Pencil, Plus, Trash2, UserPlus, UsersRound } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -21,7 +22,16 @@ export interface GroupRow {
   readonly name: string
   /** Who is in it, in words: "Ana Lima, Bob Martin", or nobody yet. */
   readonly who: string
+  /**
+   * For a member not in it: whether they may ask to join it, or asked and wait for an admin; none
+   * for one in it, or an admin, who puts themselves in.
+   */
+  readonly joining?: 'ask' | 'asked' | undefined
 }
+
+/** The quiet action a row holds, its icon before its words. */
+const rowAction =
+  'inline-flex items-center gap-1.5 justify-self-start px-1 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-(--voice) pointer-coarse:py-2.5 [&_svg]:size-3.5'
 
 interface GroupsWidgetProps {
   /** The Organization, by its name. */
@@ -32,6 +42,10 @@ interface GroupsWidgetProps {
   /** The reader is an admin: each Group is opened to be changed here, and a new one made. */
   manages: boolean
   onOpen: (key: string) => void
+  /** Asks to join a Group, by its row's key. */
+  onAsk: (key: string) => void
+  /** An ask on its way: the others wait. */
+  asking?: boolean
   onNew: () => void
   onDone: () => void
 }
@@ -43,6 +57,8 @@ export function GroupsWidget({
   groups,
   manages,
   onOpen,
+  onAsk,
+  asking = false,
   onNew,
   onDone,
 }: GroupsWidgetProps) {
@@ -69,11 +85,27 @@ export function GroupsWidget({
                 onClick={() => {
                   onOpen(row.key)
                 }}
-                className="inline-flex items-center gap-1.5 justify-self-start px-1 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-(--voice) pointer-coarse:py-2.5 [&_svg]:size-3.5"
+                className={rowAction}
               >
                 <Pencil aria-hidden />
                 {m.widget_groups_change({ name: row.name })}
               </button>
+            )}
+            {!manages && row.joining === 'ask' && (
+              <button
+                type="button"
+                disabled={asking}
+                onClick={() => {
+                  onAsk(row.key)
+                }}
+                className={cn(rowAction, 'disabled:opacity-50')}
+              >
+                <UserPlus aria-hidden />
+                {m.widget_groups_ask({ name: row.name })}
+              </button>
+            )}
+            {!manages && row.joining === 'asked' && (
+              <p className="text-xs text-faint">{m.widget_groups_asked()}</p>
             )}
           </Row>
         ))}

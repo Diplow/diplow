@@ -5,10 +5,12 @@
 // of its ring, swapped, turned into the other kind, a Reference removed, a delete once the dialog is
 // confirmed. Share opens who may see the Tile in the chat, through the URL, as a form does. A copy goes
 // to the clipboard, an export to the chat, and the agent's lines to the
-// composer, which names the Tile first (HEX-110). Lines that go somewhere are the canvas's own. A refusal takes its channel, a toast, or brings the move back (`useRefusalState`).
+// composer, which names the Tile first (HEX-110). Ask to join, on an Organization's star, asks its
+// admins at once, a toast saying so (HEX-138). Lines that go somewhere are the canvas's own. A refusal takes its channel, a toast, or brings the move back (`useRefusalState`).
 import { useState } from 'react'
 
 import { linkTo } from '#/domains/assistant/entities'
+import { useAskToJoin } from '#/front/client/iam/organizations'
 import {
   useDeleteReference,
   useDeleteTile,
@@ -16,6 +18,7 @@ import {
   useSwapTiles,
 } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
+import { toast } from '#/front/ui/atoms/Toaster'
 import type { Acting, Moving } from '#/front/ui/canvas/Canvas'
 import type { Direction } from '#/domains/mapping/entities'
 import type { EmptySlotTarget } from '#/front/ui/canvas/geometry/shape'
@@ -112,6 +115,7 @@ export function useActingState(input: ActingInput) {
   const swap = useSwapTiles()
   const remove = useDeleteTile()
   const unlink = useDeleteReference()
+  const join = useAskToJoin()
   const [deleting, setDeleting] = useState<TileNode>()
   const { root, flat, tree } = systems
   const begin = (change: Change) => {
@@ -192,6 +196,18 @@ export function useActingState(input: ActingInput) {
         return
       case 'ask-agent':
         onAsk(id)
+        return
+      case 'join':
+        join.mutate(
+          { star: id },
+          {
+            onSuccess: () => {
+              toast(
+                m.organization_join_asked({ title: title === '' ? m.system_untitled() : title }),
+              )
+            },
+          },
+        )
         return
       default:
         // Open, Go in, Show its Context and Back out are the canvas's.

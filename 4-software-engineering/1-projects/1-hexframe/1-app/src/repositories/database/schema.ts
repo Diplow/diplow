@@ -499,3 +499,41 @@ export const groupMember = pgTable(
     index('group_member_accountId_idx').on(table.accountId),
   ],
 )
+
+/** How a join request stands, as IAM names it: waiting for an admin, accepted, or declined. */
+const joinRequestStates = ['open', 'accepted', 'declined'] as const
+
+/**
+ * An Account asking to join an Organization's Members, or a member one of its Groups (HEX-138): by an
+ * id IAM makes, a UUID, which the admins' timelines name it by; the Group asked for, null for the
+ * Members, which need no row, its key to that Group of that same Organization deleting the request
+ * with it; and how it stands, open until an admin decides it, then when. That one at most is open per
+ * Account and Group is IAM's to hold, under the Organization's row's lock, never a check here.
+ * Deleting the Organization or the Account deletes it.
+ */
+export const joinRequest = pgTable(
+  'join_request',
+  {
+    id: text('id').primaryKey(),
+    organizationId: text('organization_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    groupId: text('group_id'),
+    accountId: text('account_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    state: text('state', { enum: joinRequestStates }).default('open').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    decidedAt: timestamp('decided_at', { withTimezone: true }),
+  },
+  (table) => [
+    foreignKey({
+      name: 'join_request_group_fkey',
+      columns: [table.groupId, table.organizationId],
+      foreignColumns: [organizationGroup.id, organizationGroup.organizationId],
+    }).onDelete('cascade'),
+    index('join_request_organizationId_idx').on(table.organizationId),
+    index('join_request_accountId_idx').on(table.accountId),
+    check('join_request_state_check', inArray(table.state, [...joinRequestStates])),
+  ],
+)

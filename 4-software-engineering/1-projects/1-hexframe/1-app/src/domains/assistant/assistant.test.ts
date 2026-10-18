@@ -12,6 +12,8 @@ import {
   lastEntry,
   postMessage,
   recordChange,
+  recordJoinAsked,
+  recordMembership,
   recordNavigation,
   recordShared,
 } from './assistant'
@@ -19,6 +21,7 @@ import {
   type EntryContent,
   leadingLink,
   linkTo,
+  namedRequests,
   namedTiles,
   type Navigation,
   partsOf,
@@ -49,13 +52,17 @@ const recorded = (accountId: string, content: EntryContent, ago = 0) =>
         ? recordNavigation(accountId, content, ago)
         : content._tag === 'Shared'
           ? recordShared(accountId, Struct.omit(content, ['_tag']))
-          : content._tag === 'TurnEnded' ||
-              content._tag === 'Proposal' ||
-              content._tag === 'TurnApplied'
-            ? Effect.die(new Error('A Turn’s end and what it did are recorded as they happen'))
-            : content.actor._tag === 'Someone'
-              ? Effect.die(new Error('Someone else’s change is recorded as their write runs'))
-              : recordChange(accountId, summarizedOf(content), content.actor),
+          : content._tag === 'Membership'
+            ? recordMembership(accountId, Struct.omit(content, ['_tag']))
+            : content._tag === 'JoinAsked'
+              ? recordJoinAsked(accountId, Struct.omit(content, ['_tag']))
+              : content._tag === 'TurnEnded' ||
+                  content._tag === 'Proposal' ||
+                  content._tag === 'TurnApplied'
+                ? Effect.die(new Error('A Turn’s end and what it did are recorded as they happen'))
+                : content.actor._tag === 'Someone'
+                  ? Effect.die(new Error('Someone else’s change is recorded as their write runs'))
+                  : recordChange(accountId, summarizedOf(content), content.actor),
   )
 
 /** A change or an import as Mapping would have summarized it, who acted left out. */
@@ -120,6 +127,8 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
       const account = someone()
       yield* at('2026-10-10T10:00:00Z')
       const tile = { id: crypto.randomUUID(), title: 'Games' }
+      const atelier = { id: crypto.randomUUID(), title: 'Atelier' }
+      const request = crypto.randomUUID()
       const kinds: ReadonlyArray<EntryContent> = [
         said('What would you add to Games?'),
         { _tag: 'Change', verb: 'TileMoved', tile, actor: { _tag: 'You' } },
@@ -138,10 +147,21 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
           gestures: 3,
         },
         { _tag: 'Shared', by: 'Ana Lima', tile, rights: ['read', 'write'] },
+        { _tag: 'Membership', what: 'added', by: 'Ana Lima', organization: atelier },
+        {
+          _tag: 'Membership',
+          what: 'declined',
+          by: '',
+          organization: atelier,
+          group: 'Design',
+        },
+        { _tag: 'JoinAsked', request, who: 'Cleo Diaz', organization: atelier, group: 'Design' },
       ]
       for (const content of kinds) yield* recorded(account, content)
       const read = yield* day(account, { date: '2026-10-10', offset: 0 })
       expect(read.map((entry) => Struct.omit(entry, ['id', 'at']))).toEqual(kinds)
+      // The request the day reads anew, once.
+      expect(namedRequests([...read, ...read])).toEqual([request])
     }),
   )
 

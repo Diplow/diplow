@@ -1,9 +1,11 @@
 // The Conversation as the timeline shows it: Assistant's Entries (`domains/assistant/entities`), a
-// day of the reader's calendar at a time, with the Titles of the Tiles its navigations went to. Home
+// day of the reader's calendar at a time, with the Titles of the Tiles its navigations went to, and how
+// the requests to join it names stand, for an admin. Home
 // reads it a day at a time (`useConversation`); /design-system splits its fixtures by day. What a
 // receipt at the conversation's foot tells, the timeline leaves to it. And what the agent applied
 // that `/undo` undoes, the latest that offers its Undo. Pure; the components render it.
 import { dayAt, type Entry, type Navigation, offersUndo } from '#/domains/assistant/entities'
+import type { JoinState } from '#/domains/iam/entities'
 
 /**
  * The Titles of the Tiles a day names by their id alone, those its navigations went to and its
@@ -21,11 +23,21 @@ export interface Day {
   relative?: 'today' | 'yesterday'
   entries: readonly Entry[]
   titles: Titles
+  /**
+   * How the requests to join its Entries name stand now, by their ids, those of an Organization the
+   * reader is an admin of alone (HEX-138); none where the page reads none.
+   */
+  requests?: Readonly<Record<string, JoinState>> | undefined
 }
 
 /** A day of the reader's calendar, `2026-09-27`, holding these Entries, as the timeline shows it. */
 export function dayOf(
-  { date, entries, titles }: { date: string; entries: readonly Entry[]; titles: Titles },
+  {
+    date,
+    entries,
+    titles,
+    requests,
+  }: Pick<Day, 'entries' | 'titles' | 'requests'> & { readonly date: string },
   now: Date,
 ): Day {
   const [year = 0, month = 1, day = 1] = date.split('-').map(Number)
@@ -33,11 +45,26 @@ export function dayOf(
   const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)
   const relative =
     date === dayKey(now) ? 'today' : date === dayKey(yesterday) ? 'yesterday' : undefined
-  return { key: date, date: midnight, ...(relative && { relative }), entries, titles }
+  return {
+    key: date,
+    date: midnight,
+    ...(relative && { relative }),
+    entries,
+    titles,
+    ...(requests !== undefined && { requests }),
+  }
 }
 
-/** Entries split by the reader's local day, oldest day and oldest Entry first, all sharing `titles`. */
-export function splitByDay(entries: readonly Entry[], now: Date, titles: Titles): Day[] {
+/**
+ * Entries split by the reader's local day, oldest day and oldest Entry first, all sharing `titles`
+ * and `requests`.
+ */
+export function splitByDay(
+  entries: readonly Entry[],
+  now: Date,
+  titles: Titles,
+  requests?: Day['requests'],
+): Day[] {
   const days: Array<{ date: string; entries: Entry[] }> = []
   for (const entry of entries.toSorted((a, b) => a.at.getTime() - b.at.getTime())) {
     const date = dayKey(entry.at)
@@ -45,7 +72,7 @@ export function splitByDay(entries: readonly Entry[], now: Date, titles: Titles)
     if (last?.date === date) last.entries.push(entry)
     else days.push({ date, entries: [entry] })
   }
-  return days.map((day) => dayOf({ ...day, titles }, now))
+  return days.map((day) => dayOf({ ...day, titles, requests }, now))
 }
 
 /** The date of the reader's calendar an instant falls on, `2026-09-27`, by Assistant's day split. */

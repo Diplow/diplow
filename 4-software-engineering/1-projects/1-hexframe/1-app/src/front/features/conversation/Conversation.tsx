@@ -27,7 +27,7 @@ import { Message } from '#/front/ui/chat/text/Message'
 import type { Mentionable } from './composer/mention'
 import { modeOf, type Offering, offered, type RunCommand } from './composer/typing'
 import { EntryBlock } from './entry/Entry'
-import type { Deciding } from './entry/parts'
+import type { Deciding, Joining } from './entry/parts'
 import { blocksOf, happenedOf, messageWords, type Naming } from './entry/words'
 import { useComposerState, writeInto } from './state/useComposerState'
 import { type Day, type Later, laterOf, type Went } from './timeline/timeline'
@@ -65,6 +65,8 @@ interface TimelineProps {
   earlier?: Earlier | undefined
   /** Accepts or discards the open Proposal, or undoes what an accepted one or a Turn applied. */
   decide: Deciding
+  /** Accepts or declines a request to join, which each day says how it stands. */
+  joining: Omit<Joining, 'states'>
   /** The System's Tiles now, by id, with their Titles; none before it is read. */
   system?: ReadonlyMap<string, string> | undefined
   /** The user's Messages on their way, or refused, oldest first. */
@@ -150,6 +152,7 @@ export function Timeline({
   pointing,
   earlier,
   decide,
+  joining,
   system,
   sending = [],
   going = [],
@@ -179,6 +182,7 @@ export function Timeline({
               block={block}
               naming={{ titles: day.titles, system, onCenter, ...pointing }}
               decide={decide}
+              joining={{ ...joining, states: day.requests ?? {} }}
             />
           ))}
         </section>

@@ -26,6 +26,7 @@ import {
   Trash2,
   Unlink,
   Users,
+  UserPlus,
   UsersRound,
 } from 'lucide-react'
 import {
@@ -251,6 +252,9 @@ function lineOf(verb: Verb, subject: Subject): Line {
     case 'groups':
       // An Organization's star: its Groups widget opens in the chat (HEX-137).
       return { icon: <UsersRound />, label: m.tile_menu_groups }
+    case 'join':
+      // An Organization's star, for someone outside it: asks its admins (HEX-138).
+      return { icon: <UserPlus />, label: m.tile_menu_join }
     case 'delete': {
       const below = tile?.below ?? 0
       return {

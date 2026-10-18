@@ -2,7 +2,8 @@
 // one line, a small hex in the agent's voice, what was done, its Undo while one is possible, the time,
 // and its changes, folded, one on a line below it once opened, each running on to the curve. An
 // accepted Proposal and a Turn that applied its changes leave one alike; a discarded Proposal one with
-// what it would have changed; once undone, it says so. Its Undo speaks up when it changes, so a screen
+// what it would have changed; once undone, it says so. One that asks the user to decide carries its
+// actions in its Undo's place, then says how it was decided (a request to join, HEX-138). Its Undo speaks up when it changes, so a screen
 // reader hears the undoing land, and it keeps the focus its Undo had once that is gone. Arriving, it
 // says nothing itself: whoever swaps it in announces it, as the Proposal does, or the conversation's
 // log.
@@ -78,6 +79,10 @@ interface ReceiptProps {
   tone?: 'agent' | 'human' | 'app' | 'quiet'
   /** Puts the System back as it stood; none where nothing can be undone. */
   onUndo?: (() => void) | undefined
+  /** What the user decides it by, in the Undo's place, while it asks; none once decided. */
+  actions?: ReadonlyArray<{ readonly label: string; readonly onSelect: () => void }> | undefined
+  /** How it was decided, said after its line, quieter. */
+  said?: string | undefined
   /** A decision on its way: the Undo waits. */
   pending?: boolean
   undone?: boolean
@@ -96,6 +101,8 @@ export function Receipt({
   changes = [],
   tone = 'agent',
   onUndo,
+  actions = [],
+  said,
   pending = false,
   undone = false,
   takesFocus = false,
@@ -129,6 +136,12 @@ export function Receipt({
       </span>
       {/* Only what changes speaks up: the time, written once hydrated, stays out of it. */}
       <span aria-live="polite" className="inline-flex items-center">
+        {said !== undefined && <span className="text-faint">· {said}</span>}
+        {actions.map(({ label, onSelect }) => (
+          <Act key={label} className="ml-1.5 text-[0.78125rem]" waits={pending} onClick={onSelect}>
+            {label}
+          </Act>
+        ))}
         {undone ? (
           <span className="text-faint">· {m.chat_receipt_undone()}</span>
         ) : (

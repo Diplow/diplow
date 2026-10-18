@@ -4,19 +4,26 @@
 // or not, and the System visited too, whose rights a role changes; and its Groups of their own, read
 // as one query by the star, each change of them reading them again, every System and who reaches a
 // Tile too, since who is in a Group changes what they read, and the Groups the Account may name in a
-// Grant (HEX-137). Each from a Session alone: a refusal goes to its channel (../channels.ts), and a
-// hook's caller handles none, but for a Group's name, a form's, refused on its field.
+// Grant (HEX-137); and a request to join an Organization or one of its Groups, made from its star or
+// the Groups widget, and decided by an admin from the timeline, which reads where the Account stands
+// again, and the day too, whose requests show how they stand (HEX-138). Each from a Session alone: a
+// refusal goes to its channel (../channels.ts), and a hook's caller handles none, but for a Group's
+// name, a form's, refused on its field.
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
   addMember,
+  askToJoin,
   createOrganization,
+  decideJoinRequest,
+  type JoinAsked,
+  type JoinDecision,
   type MemberAt,
   type MemberRole,
   members,
-  roleIn,
   removeMember,
   setMemberRole,
+  standingIn,
 } from '#/api/iam/organizations/organizations'
 import {
   createGroup,
@@ -33,8 +40,8 @@ import {
 
 import { read, write } from '../calls'
 
-/** The Account's role in an Organization, by the server function's name. */
-const roleScope = 'roleIn'
+/** Where the Account stands in an Organization, by the server function's name. */
+const standingScope = 'standingIn'
 
 /** An Organization's members, by the server function's name. */
 const membersScope = 'members'
@@ -46,15 +53,16 @@ const groupsScope = 'groups'
 const shareableScope = 'groupsToShareWith'
 
 /**
- * The Account's role in the Organization a star names, `admin` or `member`, none for a star of no
- * Organization of its: what offers the star's Members widget.
+ * Where the Account stands in the Organization a star names: its role, `admin` or `member`, or
+ * `outside` it; none for a star of no Organization. What offers the star's Members and Groups
+ * widgets, or Ask to join.
  */
-export const useRoleIn = (star: string | undefined) =>
+export const useStandingIn = (star: string | undefined) =>
   useQuery({
     ...read({
-      scope: roleScope,
+      scope: standingScope,
       key: [star],
-      call: () => roleIn({ data: { star: star ?? '' } }),
+      call: () => standingIn({ data: { star: star ?? '' } }),
     }),
     enabled: star !== undefined,
     // A menu line hangs on it: a failure leaves it out rather than taking the canvas's boundary.
@@ -81,7 +89,7 @@ export type Member = NonNullable<ReturnType<typeof useMembers>['data']>[number]
  */
 const readAgain = (client: ReturnType<typeof useQueryClient>) =>
   Promise.all([
-    client.invalidateQueries({ queryKey: [roleScope] }),
+    client.invalidateQueries({ queryKey: [standingScope] }),
     client.invalidateQueries({ queryKey: [membersScope] }),
     client.invalidateQueries({ queryKey: [groupsScope] }),
     client.invalidateQueries({ queryKey: [shareableScope] }),
@@ -194,5 +202,34 @@ export const useSetInGroup = () => {
   return useMutation({
     ...write('setInGroup', (data: typeof GroupMember.Type) => setInGroup({ data })),
     onSettled: () => groupsAgain(client),
+  })
+}
+
+/**
+ * Asks to join the Organization a star names, or one of its Groups: where the Account stands, and
+ * the Groups, read again once it settles, so the ask shows as made.
+ */
+export const useAskToJoin = () => {
+  const client = useQueryClient()
+  return useMutation({
+    ...write('askToJoin', (data: typeof JoinAsked.Type) => askToJoin({ data })),
+    onSettled: () =>
+      Promise.all([
+        client.invalidateQueries({ queryKey: [standingScope] }),
+        client.invalidateQueries({ queryKey: [groupsScope] }),
+      ]),
+  })
+}
+
+/**
+ * Accepts or declines a request to join, from the timeline: the day read again once it settles, so
+ * the request shows how it stands, decided here or by another admin before, and who belongs where.
+ */
+export const useDecideJoinRequest = () => {
+  const client = useQueryClient()
+  return useMutation({
+    ...write('decideJoinRequest', (data: typeof JoinDecision.Type) => decideJoinRequest({ data })),
+    onSettled: () =>
+      Promise.all([client.invalidateQueries({ queryKey: ['conversationDay'] }), readAgain(client)]),
   })
 }

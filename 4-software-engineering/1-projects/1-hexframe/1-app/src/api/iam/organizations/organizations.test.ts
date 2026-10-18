@@ -105,9 +105,9 @@ describe('an Organization, made', () => {
     expect(seen.root).toMatchObject({ id: star, title: 'Atelier' })
     expect(seen.asOwner).toBe(true)
     expect(seen.rights[plans.id]).toEqual(['read', 'write', '@'])
-    expect(await value(run(asAna, Organizations.roleIn({ star })))).toBe('admin')
+    expect(await value(run(asAna, Organizations.standingIn({ star })))).toBe('admin')
     // Her own System stays hers, and is no Organization's.
-    expect(await value(run(asAna, Organizations.roleIn({ star: ana.star })))).toBeNull()
+    expect(await value(run(asAna, Organizations.standingIn({ star: ana.star })))).toBeNull()
     expect((await value(run(asAna, Mapping.system))).root.id).toBe(ana.star)
   })
 
@@ -153,7 +153,9 @@ describe('an Organization, made', () => {
         run(request(bob.account), Mapping.editTile({ id: plans.id, version: 1, title: 'Mine' })),
       ),
     ).toBe('TileNotFound')
-    expect(await value(run(request(bob.account), Organizations.roleIn({ star })))).toBeNull()
+    expect(await value(run(request(bob.account), Organizations.standingIn({ star })))).toBe(
+      'outside',
+    )
     expect(await refusal(run(request(bob.account), Organizations.members({ star })))).toBe(
       'OrganizationNotFound',
     )
@@ -166,7 +168,7 @@ describe("an Organization's members", () => {
     const bob = await someone('Bob Martin')
     const asBob = request(bob.account)
     await value(run(asAna, Organizations.addMember({ star, member: bob.star })))
-    expect(await value(run(asBob, Organizations.roleIn({ star })))).toBe('member')
+    expect(await value(run(asBob, Organizations.standingIn({ star })))).toBe('member')
     // A member reads nothing no Grant lets them.
     expect((await value(run(asBob, Mapping.systemAt(star)))).tiles).toEqual({})
     const members = { _tag: 'Account', star } as const
@@ -232,7 +234,7 @@ describe("an Organization's members", () => {
     expect(Object.keys((await value(run(asBob, Mapping.systemAt(star)))).tiles)).toEqual([plans.id])
     await value(run(asAna, Organizations.removeMember({ star, member: bob.star })))
     expect((await value(run(asBob, Mapping.systemAt(star)))).tiles).toEqual({})
-    expect(await value(run(asBob, Organizations.roleIn({ star })))).toBeNull()
+    expect(await value(run(asBob, Organizations.standingIn({ star })))).toBe('outside')
   })
 
   it('are listed by their stars to each of them, changed by its admins alone', async () => {
@@ -277,7 +279,7 @@ describe("an Organization's members", () => {
     )
     // Bob, added without asking, leaves of his own accord.
     await value(run(asBob, Organizations.removeMember({ star, member: bob.star })))
-    expect(await value(run(asBob, Organizations.roleIn({ star })))).toBeNull()
+    expect(await value(run(asBob, Organizations.standingIn({ star })))).toBe('outside')
   })
 
   it('keep their last admin, and are managed from a Session alone', async () => {
@@ -292,7 +294,7 @@ describe("an Organization's members", () => {
     for (const outcome of [
       run(byKey, Organizations.addMember({ star, member: bob.star })),
       run(byKey, Organizations.members({ star })),
-      run(byKey, Organizations.roleIn({ star })),
+      run(byKey, Organizations.standingIn({ star })),
     ]) {
       expect(await refusal(outcome)).toBe('SessionRequired')
     }

@@ -1,12 +1,13 @@
 // The Organizations' server functions: one created, its first admin the Account its Session proves,
 // with its System, whose star is born with its name; the Account's role in the Organization a star
-// names; its members read by one of them; and a member added, made an admin or a member, or taken
-// out, by an admin. Each from a Session alone. Each validates its input, then hands its program
+// names, or that it stands outside it; its members read by one of
+// them; a member added, made an admin or a member, or taken out, by an admin; and a request to join
+// it or one of its Groups, made by anyone, decided by an admin (HEX-138). Each from a Session alone. Each validates its input, then hands its program
 // (./programs.ts) to the helper. An Organization and each member are named by their stars.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
-import { Role } from '#/domains/iam/entities'
+import { GroupId, Role } from '#/domains/iam/entities'
 import { contentBounds, TileId } from '#/domains/mapping/entities'
 
 import { run } from '../../server/run'
@@ -26,15 +27,27 @@ export const MemberAt = Schema.Struct({ star: TileId, member: TileId })
 /** A member's role set, in the Organization a star names. */
 export const MemberRole = Schema.Struct({ star: TileId, member: TileId, role: Role })
 
+/** A request to join the Organization a star names, its Members, or one of its Groups by its id. */
+export const JoinAsked = Schema.Struct({ star: TileId, group: Schema.optionalKey(GroupId) })
+
+/** A request to join, by its id, a UUID IAM made, accepted or declined. */
+export const JoinDecision = Schema.Struct({
+  request: Schema.String.check(Schema.isUUID()),
+  accept: Schema.Boolean,
+})
+
 /** Creates an Organization, the signed-in Account its first admin: answers its star. */
 export const createOrganization = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(OrganizationName))
   .handler(({ data, context }) => run(context, Organizations.createOrganization(data)))
 
-/** The Account's role in the Organization a star names, none for any other star. */
-export const roleIn = createServerFn({ method: 'GET' })
+/**
+ * Where the Account stands in the Organization a star names, its role, or outside it, where it may
+ * ask to join; none for any other star.
+ */
+export const standingIn = createServerFn({ method: 'GET' })
   .validator(Schema.toStandardSchemaV1(OrganizationAt))
-  .handler(({ data, context }) => run(context, Organizations.roleIn(data)))
+  .handler(({ data, context }) => run(context, Organizations.standingIn(data)))
 
 /** The members of the Organization a star names, each by their star and role, for its members. */
 export const members = createServerFn({ method: 'GET' })
@@ -55,3 +68,13 @@ export const setMemberRole = createServerFn({ method: 'POST' })
 export const removeMember = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(MemberAt))
   .handler(({ data, context }) => run(context, Organizations.removeMember(data)))
+
+/** Asks to join the Organization a star names, or one of its Groups: its admins are told. */
+export const askToJoin = createServerFn({ method: 'POST' })
+  .validator(Schema.toStandardSchemaV1(JoinAsked))
+  .handler(({ data, context }) => run(context, Organizations.askToJoin(data)))
+
+/** Accepts or declines a request to join: its Organization's admins' alone. */
+export const decideJoinRequest = createServerFn({ method: 'POST' })
+  .validator(Schema.toStandardSchemaV1(JoinDecision))
+  .handler(({ data, context }) => run(context, Organizations.decideJoinRequest(data)))
