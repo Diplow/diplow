@@ -1,0 +1,27 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/rows.test.ts
+  s_eb2c82211b20e8::t_ed0041b696571f 153-177,181,196,220,235,245,247-249
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/organizations/groups.test.ts
+  s_eb2c82211b20e8::t_ed0041b696571f 226-227,229
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/groups.ts
+  s_eb2c82211b20e8::t_fa7c40dc5eb326 123-127,148-149,175-177
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/organizations/groups.ts
+  s_eb2c82211b20e8::t_5f813019341b25 13,20
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/sharing/share/GroupPicker.tsx
+  s_eb2c82211b20e8::t_5f813019341b25 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3a99f21e2dbc148c825f44e1d3b39e8c4d2c0ae6",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
