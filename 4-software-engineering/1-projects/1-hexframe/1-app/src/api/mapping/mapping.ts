@@ -1,13 +1,14 @@
 // Mapping's server functions: one per operation, for the signed-in Account, which the middleware has
 // already put on the context as its Session, `shipped`, a System hexframe ships whole, Help or the
 // tutorial, for any visitor, `publicSystem`, the System holding a Tile Everyone reads, for anyone,
-// and who reaches a Tile, set and read by its owner from a Session alone. Each validates its input, then hands its program (./programs.ts) to the
+// who reaches a Tile, set and read by its owner from a Session alone, and a star found by its Title
+// or by a link. Each validates its input, then hands its program (./programs.ts) to the
 // helper; its type lists the errors it can fail with. `exportTile` answers its zip as a download
 // (./files/download.ts); `importTiles` takes a form.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema, Struct } from 'effect'
 
-import { GrantChange, shippedRoots, TileId } from '#/domains/mapping/entities'
+import { GrantChange, shippedRoots, StarQuery, TileId } from '#/domains/mapping/entities'
 import {
   CreateReference,
   CreateTile,
@@ -189,3 +190,24 @@ export const TileReach = Schema.Struct({ tile: TileId })
 export const whoReaches = createServerFn({ method: 'GET' })
   .validator(Schema.toStandardSchemaV1(TileReach))
   .handler(({ data, context }) => run(context, Mapping.whoReaches(data)))
+
+/** A star search: the Title, or part of one, trimmed, as Mapping's `StarQuery` bounds it. */
+export const StarSearch = Schema.Struct({ query: StarQuery })
+
+/**
+ * The stars whose Title holds the query, whatever its case, by their cards, their Title and Preview,
+ * those it starts first, a few at most, the Account's own left out: stars alone, never a Tile below
+ * one, a private System's found by its card too. For the signed-in Account (HEX-130).
+ */
+export const findStars = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(StarSearch))
+  .handler(({ data, context }) => run(context, Mapping.findStars(data)))
+
+/**
+ * Where a link to a Tile leads the star picker, by the Tile's id, the same `TileVisit` a link's
+ * visit takes: the star of the System holding it, by its card, once the Account is shown the Tile,
+ * its own said to be its own, nowhere for a Tile kept from it, as for none (HEX-130).
+ */
+export const starOfLink = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(TileVisit))
+  .handler(({ data, context }) => run(context, Mapping.starOfLink(data)))

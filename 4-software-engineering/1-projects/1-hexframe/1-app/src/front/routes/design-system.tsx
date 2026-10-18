@@ -15,7 +15,7 @@ import { useMemo, useState } from 'react'
 
 import { merged, turnLocation, type Navigation } from '#/domains/assistant/entities'
 import { keyNameBounds, keyNameOf } from '#/domains/iam/entities'
-import { previewLimit } from '#/domains/mapping/entities'
+import { previewLimit, starQueryOf } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { useShipped } from '#/front/client/mapping/queries'
@@ -61,6 +61,7 @@ import { ChatTextGallery } from '#/front/ui/chat/text/gallery'
 import { HelpWidgetGallery } from '#/front/ui/chat/widgets/help/gallery'
 import { KeyWidgetGallery } from '#/front/ui/chat/widgets/keys/gallery'
 import { ShareWidgetGallery } from '#/front/ui/chat/widgets/share/gallery'
+import { StarPickerGallery } from '#/front/ui/chat/widgets/star-picker/gallery'
 import { SignInWidgetGallery } from '#/front/ui/chat/widgets/sign-in/gallery'
 import { SignInWidget, type Access } from '#/front/ui/chat/widgets/sign-in/SignInWidget'
 import { TileWidgetGallery } from '#/front/ui/chat/widgets/tile/gallery'
@@ -287,6 +288,7 @@ function Specimens({ chapter, view, onViewChange, onCenter }: SpecimensProps) {
           <TileWidgetGallery previewLimit={previewLimit} />
           <KeyWidgetGallery nameLimit={keyNameBounds.max} nameOf={keyNameOf} />
           <ShareWidgetGallery />
+          <StarPickerGallery queryOf={starQueryOf} />
           <ReadBoundary>
             <HelpGallery />
           </ReadBoundary>
