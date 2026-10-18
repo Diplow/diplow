@@ -193,6 +193,31 @@ layer(TestLayer)('the Mode and the Proposal, over PGlite', (it) => {
       }),
   )
 
+  it.effect(
+    'refuses ProposalClosed a Proposal over another System closed before the accept locks it',
+    () =>
+      Effect.gen(function* () {
+        yield* TestClock.setTime(Date.parse('2026-10-10T10:30:00Z'))
+        const account = crypto.randomUUID()
+        const message = yield* transactional(postMessage(account, 'Tidy Journal.'))
+        const there = yield* transactional(
+          startTurn(account, { message: message.id, location: 'journal', elsewhere: 'ana' }),
+        )
+        const opened = yield* drafted(account, there.id, 'Note')
+        // Read open, then discarded meanwhile, as another tab would, before any lock is held.
+        const refused = yield* transactional(
+          acceptProposal(account, opened.id, {
+            own: () => Effect.die(new Error('A Proposal over Ana’s System runs there')),
+            elsewhere: {
+              owner: () => Effect.as(discardProposal(account, opened.id), undefined),
+              run: () => Effect.die(new Error('A closed Proposal runs nothing')),
+            },
+          }),
+        ).pipe(Effect.flip)
+        expect(refused).toMatchObject({ _tag: 'ProposalClosed', kind: 'Conflict' })
+      }),
+  )
+
   it.effect('discards the open Proposal, and keeps it open through a switch to apply', () =>
     Effect.gen(function* () {
       yield* TestClock.setTime(Date.parse('2026-10-10T11:00:00Z'))
