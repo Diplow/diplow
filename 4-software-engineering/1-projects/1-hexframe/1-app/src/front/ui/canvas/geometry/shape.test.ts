@@ -158,10 +158,9 @@ describe('layoutCanvas', () => {
     ])
   })
 
-  it('opens a Branch into the kind the view names for it', () => {
+  it('opens a Branch named into its Context into its first ring: the center alone shows its own', () => {
     const hexes = layout({ center: 'mixed', expanded: { 1: 'context' } })
-    expect(only(hexes, 'ground')).toMatchObject([{ key: 'ground:b1', ring: 'context' }])
-    expect(empties(hexes).filter((slot) => slot.startsWith('b1'))).toHaveLength(6)
+    expect(only(hexes, 'ground')).toMatchObject([{ key: 'ground:b1', ring: 'children' }])
   })
 
   it('shows a centered Leaf alone, the ground around it, with no slot around it', () => {

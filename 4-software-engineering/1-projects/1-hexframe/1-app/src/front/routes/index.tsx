@@ -46,7 +46,7 @@ import { useMemo, useState } from 'react'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { readSignInSearch, sessionIfAny } from '#/front/client/iam/guard'
 import { useFollowLatest } from '#/front/client/assistant/follow'
-import { useShipped, useSystem } from '#/front/client/mapping/queries'
+import { usePublicSystem, useShipped, useSystem } from '#/front/client/mapping/queries'
 import { accessOf, readAccessSearch, wayBack, withAccess } from '#/front/features/access/search'
 import { SignedOutLines, SignInFoot } from '#/front/features/access/SignedOut'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
@@ -58,6 +58,8 @@ import { AskedAboutTile, Navigated } from '#/front/features/facts'
 import { HelpWidgets } from '#/front/features/shipped/HelpWidgets'
 import { helpNodeOf, topicFound } from '#/front/features/shipped/nodes'
 import {
+  helpOnStar,
+  helpViewIn,
   readHelpSearch,
   readTutorialSearch,
   shippedOnCanvas,
@@ -67,8 +69,7 @@ import {
   withHelp,
   withTutorial,
 } from '#/front/features/shipped/search'
-import { HelpRead, ShippedCanvas } from '#/front/features/shipped/Shipped'
-import type { TutorialRules } from '#/front/features/shipped/tutorial/rules'
+import { HelpRead, ShippedCanvas, type ShippedCanvasProps } from '#/front/features/shipped/Shipped'
 import { useSameSix } from '#/front/features/shipped/tutorial/six'
 import { KeyWidgets } from '#/front/features/keys/KeyWidgets'
 import { useOpenKeys } from '#/front/features/keys/open'
@@ -86,7 +87,12 @@ import {
 import { useMarksState } from '#/front/features/system/marks/useMarksState'
 import { System } from '#/front/features/system/System'
 import { canvasTree, onScreen } from '#/front/features/system/tree'
-import { centeringOf, readVisitSearch, withVisit } from '#/front/features/system/visit/visit'
+import {
+  centeringOf,
+  publicTree,
+  readVisitSearch,
+  withVisit,
+} from '#/front/features/system/visit/visit'
 import { useVisitedState, type Visited } from '#/front/features/system/visit/useVisitedState'
 import { VisitPage, type VisitPageProps } from '#/front/features/system/visit/VisitPage'
 import { TileWidgets } from '#/front/features/system/widget/TileWidgets'
@@ -98,15 +104,15 @@ import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { Told } from '#/front/ui/chat/text/Message'
-import { useTold, type ToldPart } from '#/front/ui/motion'
+import { useTold } from '#/front/ui/motion'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
 import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
-import type { CanvasMarks, PointAt } from '#/front/ui/canvas/Canvas'
+import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
 import { Journey } from '#/front/ui/canvas/layouts/Journey'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
-import { centerOn, withViewIn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
-import type { Direction, ShippedRoot } from '#/domains/mapping/entities'
+import { centerOn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
+import { type Direction, mountedAt, type ShippedRoot } from '#/domains/mapping/entities'
 
 /**
  * Home's search params, each feature's read on its own: the System's view and change, the Keys and
@@ -144,38 +150,24 @@ function Home() {
 const screenOf = ({ keys, help, system }: HomeSearch) => ({ keys, help, system })
 
 /**
- * Help, read in the page's language beside the canvas, never throwing: as the canvas draws it, and as
- * the help widget reads its topics.
- */
-function useHelpTree() {
-  const { data } = useShipped('help', getLocale(), { throwing: false })
-  return useMemo(
-    () => (data === undefined ? undefined : { tree: canvasTree(data), topics: helpNodeOf(data) }),
-    [data],
-  )
-}
-
-/**
  * Help's navigation on home: its canvas's view, its widget's topic, the agent's offer to read a topic
  * in full, and `/help`. A topic centered on the canvas brings it forward on a phone, and turns the
  * widget's page while it is open; one opened to read, or by `/help`, brings the chat.
  */
 function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']) {
   const navigate = Route.useNavigate()
-  const help = useHelpTree()
-  const tree = help?.tree
+  // Help as the canvas draws it, from the Hexframe star it stands under, so the corner names every
+  // ancestor, and as the help widget reads its topics; read beside the canvas, never throwing.
+  const tree = useSideTree('help', false)
+  const { data } = useShipped('help', getLocale(), { throwing: false })
+  const topics = useMemo(() => (data === undefined ? undefined : helpNodeOf(data)), [data])
   const go = (next: (current: HomeSearch) => HomeSearch) => {
     void navigate({ search: next })
   }
   return {
     tree,
     onViewChange: (view: CanvasView) => {
-      go((current) =>
-        // The page follows the topic centered, the widget open; the Root's is Help's own.
-        current.help === undefined || view.center === current.center
-          ? withViewIn(current, view)
-          : { ...withViewIn(current, view), ...withHelp(view.center ?? true) },
-      )
+      go((current) => helpViewIn(current, view))
     },
     onTopic: (id: string, center: boolean) => {
       const view = center && tree !== undefined ? centerOn(tree, id) : undefined
@@ -191,7 +183,7 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
      * Root; the System's view and change set aside, as Help takes the canvas.
      */
     onOpen: (words: string) => {
-      const topic = help === undefined ? undefined : topicFound(help.topics, words)
+      const topic = topics === undefined ? undefined : topicFound(topics, words)
       const view = topic === undefined || tree === undefined ? {} : centerOn(tree, topic)
       go((current) => ({ ...screenOf(current), ...view, ...withHelp(topic ?? true) }))
       turning.turn('chat')
@@ -262,12 +254,9 @@ function useWayHome() {
  * How home moves around a System hexframe ships: its Tiles, for the corner, its view, what the agent
  * has told of its center's words, and the tile pointed at, the tutorial's.
  */
-interface ShippedNavigation {
+interface ShippedNavigation extends Pick<ShippedCanvasProps, 'told' | 'pointed' | 'onPoint'> {
   tree: TileNode | undefined
   onViewChange: (view: CanvasView) => void
-  told?: ToldPart | undefined
-  pointed?: string | undefined
-  onPoint?: PointAt | undefined
 }
 
 /**
@@ -309,6 +298,7 @@ function shippedSide(
         view={view}
         onViewChange={onViewChange}
         onHome={away ? onHome : undefined}
+        light="organization"
       />
     ),
   }
@@ -364,7 +354,7 @@ function visitedSide(
   visit: Visited,
   props: Omit<VisitPageProps, 'star'> & { search: HomeSearch; onHome: () => void },
 ) {
-  const { star, tree } = visit
+  const { star, tree, light } = visit
   if (star === undefined) return undefined
   const { onHome, ...page } = props
   return {
@@ -382,6 +372,7 @@ function visitedSide(
         view={viewOf(props.search)}
         onViewChange={props.onViewChange}
         onHome={onHome}
+        light={light}
       />
     ),
   }
@@ -437,7 +428,7 @@ function SignedOut() {
   const router = useRouter()
   const { state: screen, actions: turning } = useScreenState()
   const help = useHelpNavigation(turning)
-  const view = viewOf(search)
+  const view = helpOnStar(viewOf(search))
   return (
     <main className="h-dvh">
       <h1 className="sr-only">{m.help_title()}</h1>
@@ -450,7 +441,14 @@ function SignedOut() {
             <ShippedSide shipped="help" view={view} onViewChange={help.onViewChange} />
           </ReadBoundary>
         }
-        corner={<Breadcrumb system={help.tree} view={view} onViewChange={help.onViewChange} />}
+        corner={
+          <Breadcrumb
+            system={help.tree}
+            view={view}
+            onViewChange={help.onViewChange}
+            light="organization"
+          />
+        }
         messages={
           <div className="grid gap-5">
             <SignedOutLines />
@@ -682,17 +680,9 @@ function HelpFoot({ topic, onTopic }: HelpFootProps) {
   )
 }
 
-interface ShippedSideProps {
+/** A System hexframe ships, by its Root, and what its canvas takes but the Tiles it reads itself. */
+interface ShippedSideProps extends Omit<ShippedCanvasProps, 'tree' | 'sun' | 'className'> {
   shipped: ShippedRoot
-  view: CanvasView
-  onViewChange: (view: CanvasView) => void
-  /** The tutorial's rules; none for Help. */
-  rules?: TutorialRules | undefined
-  /** The part of the center's words the agent tells of, lit: the tutorial's. */
-  told?: ToldPart | undefined
-  /** The tile pointed at, lit, and a tile pointed at handed on: the tutorial's. */
-  pointed?: string | undefined
-  onPoint?: PointAt | undefined
 }
 
 /**
@@ -701,26 +691,36 @@ interface ShippedSideProps {
  * at, from its line or on the canvas.
  */
 function ShippedSide(props: ShippedSideProps) {
-  const { shipped, view, onViewChange, rules, told, pointed, onPoint } = props
-  // The page's language, from its URL: a shipped System's ids are the same in every language, so the
-  // view holds.
-  const { data } = useShipped(shipped, getLocale())
-  const tree = useMemo(() => (data === undefined ? undefined : canvasTree(data)), [data])
+  const { shipped, ...canvas } = props
+  const tree = useSideTree(shipped)
   if (tree === undefined) return <Loading />
   return (
     <div className={side}>
       <ShippedCanvas
         tree={tree}
-        view={view}
-        onViewChange={onViewChange}
-        rules={rules}
-        told={told}
-        pointed={pointed}
-        onPoint={onPoint}
+        {...canvas}
+        // Help is drawn from the Hexframe star; the tutorial, from its own Root, lies beside it.
+        sun={{ light: 'organization', rootAt: shipped === 'help' ? [] : [mountedAt[shipped]] }}
         className="min-h-0 flex-1"
       />
     </div>
   )
+}
+
+/**
+ * The Tiles of a System hexframe ships as its canvas draws them, read in the page's language, from
+ * its URL: a shipped System's ids are the same in every language, so the view holds. Help from the
+ * Hexframe star it stands under, as anyone sees that star's System; the tutorial from its own Root,
+ * which its rules are written for. With `throwing: false`, for a reader beside the canvas.
+ */
+function useSideTree(shipped: ShippedRoot, throwing = true) {
+  const help = shipped === 'help'
+  const own = useShipped(shipped, getLocale(), { throwing, enabled: !help }).data
+  const star = usePublicSystem('help', getLocale(), { throwing, enabled: help }).data
+  return useMemo(() => {
+    if (help) return star === undefined ? undefined : publicTree(star)
+    return own === undefined ? undefined : canvasTree(own)
+  }, [help, own, star])
 }
 
 interface SystemPageProps {
@@ -772,6 +772,7 @@ function SystemPage(props: SystemPageProps) {
         marks={marks}
         onAsk={ask}
         onCarry={onCarry}
+        sun={{ light: 'human' }}
         className="min-h-0 flex-1"
       />
     </div>

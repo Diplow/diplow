@@ -6,12 +6,14 @@
 // on another's System, the Tiles kept from the reader between its star and a step are one "…".
 // Every part sits on the line's axis: the line is 1px wide and the mark and the points odd in size, so
 // each centre falls on the line's centre and the line stays one crisp pixel. Under a finger, every
-// step grows to a 44px target and the points spread to match.
+// step grows to a 44px target and the points spread to match. The point you are on is lit in the
+// System's light, as its star is: amber on a person's, rose on an Organization's.
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
 import { Sunstone } from '../../layouts/screen/Sunstone'
+import type { Sun } from '../view/tiles'
 
 interface RailStep {
   id: string
@@ -32,10 +34,12 @@ interface RailProps {
    * their own Root. Without it, the mark is only hexframe's.
    */
   onHome?: (() => void) | undefined
+  /** The light of the System's star, which the point you are on takes: a person's by default. */
+  light?: Sun['light']
   className?: string
 }
 
-export function Rail({ steps, onSelect, turns = 0, onHome, className }: RailProps) {
+export function Rail({ steps, onSelect, turns = 0, onHome, light, className }: RailProps) {
   const mark = <Sunstone turns={turns} className="h-[23px] w-[21px]" />
   return (
     <div className={cn('relative w-[31px] pointer-coarse:w-11', className)}>
@@ -72,6 +76,7 @@ export function Rail({ steps, onSelect, turns = 0, onHome, className }: RailProp
                   key={step.id}
                   step={step}
                   here={index === steps.length - 1}
+                  light={light}
                   onSelect={() => {
                     onSelect(step.id)
                   }}
@@ -111,16 +116,25 @@ function Gap() {
 
 interface StepProps {
   step: RailStep
-  /** The Tile you are on: lit amber, and read as where you are rather than a way back. */
+  /** The Tile you are on: lit in its System's light, and read as where you are, not a way back. */
   here: boolean
+  light: Sun['light'] | undefined
   onSelect: () => void
+}
+
+/** The point you are on, in each light a star has. */
+const lit: Record<Sun['light'], string> = {
+  human:
+    'border-human bg-human shadow-[0_0_14px_2px_color-mix(in_oklab,var(--human)_70%,transparent)]',
+  organization:
+    'border-organization bg-organization shadow-[0_0_14px_2px_color-mix(in_oklab,var(--organization)_70%,transparent)]',
 }
 
 /**
  * A point on the line, its label 14px to its left, muted until it is where you are: the prototype's
  * faint reads at 3.1:1 on the ground, short of the 4.5:1 a label needs.
  */
-function Step({ step, here, onSelect }: StepProps) {
+function Step({ step, here, light = 'human', onSelect }: StepProps) {
   const label = cn(
     'absolute top-0 right-[calc(50%+17.5px)] h-full max-w-56 truncate text-[13px]/[17px] font-light whitespace-nowrap [text-shadow:0_0_12px_var(--background)] pointer-coarse:leading-11',
     here ? 'text-foreground' : 'text-muted-foreground',
@@ -131,9 +145,7 @@ function Step({ step, here, onSelect }: StepProps) {
         aria-hidden
         className={cn(
           'size-[7px] rounded-full border',
-          here
-            ? 'border-human bg-human shadow-[0_0_14px_2px_color-mix(in_oklab,var(--human)_70%,transparent)]'
-            : 'border-faint bg-background',
+          here ? lit[light] : 'border-faint bg-background',
         )}
       />
       {here ? (

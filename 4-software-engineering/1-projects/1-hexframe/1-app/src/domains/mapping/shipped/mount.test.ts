@@ -5,12 +5,11 @@ import type { Bus } from '#/domains/bus'
 import { type InTransaction, transactional } from '#/repositories/database/database'
 import type { Tiles } from '#/repositories/database/tiles/tiles'
 
-import { type Actor, anyone, hexframeStar, systemOf } from '../entities'
+import { type Actor, anyone, hexframeStar, mountedAt, systemOf } from '../entities'
 import * as Mapping from '../mapping'
 import { CreateReference, CreateTile, EditTile, MoveTile } from '../operations'
 import { grant } from '../sharing/sharing'
 import { actingOnOwn, createTile, TestTiles } from '../testing'
-import { mountedAt } from './mount'
 import { shipped } from './shipped'
 
 // The Systems hexframe ships, mounted under the Hexframe Organization's star, over PGlite, which the

@@ -169,13 +169,10 @@ describe("a line of a tile's menu that goes somewhere", () => {
     expect(onViewChange).toHaveBeenCalledOnce()
   })
 
-  it("shows a Tile's Context by centering it, and the center's inside it, opening it were it folded", () => {
+  it("shows the center's Context inside it, opening it were it folded, and no other Tile's", () => {
     const { state, actions: act, onViewChange } = render(open)
     act.go(hexOf(state.hexes, 'tile:a'), 'show-context')
-    expect(onViewChange).toHaveBeenLastCalledWith(
-      { center: 'a', frame: 'children', inner: 'context' },
-      { gesture: 'show-context', tile: 'a' },
-    )
+    expect(onViewChange).not.toHaveBeenCalled()
     act.go(hexOf(state.hexes, 'tile:root'), 'show-context')
     expect(onViewChange).toHaveBeenLastCalledWith(
       { ...open, inner: 'context' },
@@ -202,6 +199,48 @@ describe("a line of a tile's menu that goes somewhere", () => {
     const top = render({})
     top.actions.go(hexOf(top.state.hexes, 'tile:root'), 'back-out')
     expect(top.onViewChange).not.toHaveBeenCalled()
+  })
+})
+
+describe('the C key', () => {
+  it('cycles the center: alone, opened into its ring, its Context inside too, then alone again', () => {
+    const steps: [CanvasView, CanvasView, ViewAction['gesture']][] = [
+      [{}, open, 'expand'],
+      [open, { ...open, inner: 'context' }, 'show-context'],
+      [{ ...open, inner: 'context' }, {}, 'collapse'],
+    ]
+    for (const [from, to, gesture] of steps) {
+      const { actions: act, onViewChange } = render(from)
+      act.cycle()
+      expect(onViewChange).toHaveBeenLastCalledWith(to, { gesture, tile: 'root' })
+    }
+  })
+
+  it('keeps a Branch of the ring open as the Context shows inside the center', () => {
+    const { actions: act, onViewChange } = render({ ...open, expanded: { 1: 'children' } })
+    act.cycle()
+    expect(onViewChange).toHaveBeenLastCalledWith(
+      { ...open, inner: 'context', expanded: { 1: 'children' } },
+      { gesture: 'show-context', tile: 'root' },
+    )
+  })
+
+  it('skips a Context that shows nothing, folding the center back from its ring', () => {
+    const { actions: act, onViewChange } = render(inA, { fills: () => false })
+    act.cycle()
+    expect(onViewChange).toHaveBeenLastCalledWith(
+      { center: 'a' },
+      { gesture: 'collapse', tile: 'a' },
+    )
+  })
+
+  it('does nothing where the center holds its click back', () => {
+    const { actions: act, onViewChange } = render(
+      {},
+      { lets: () => ({ click: false, recenter: true }) },
+    )
+    act.cycle()
+    expect(onViewChange).not.toHaveBeenCalled()
   })
 })
 

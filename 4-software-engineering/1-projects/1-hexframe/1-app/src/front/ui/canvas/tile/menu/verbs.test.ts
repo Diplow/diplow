@@ -14,13 +14,19 @@ const branch: Subject = {
 describe('what a tile offers', () => {
   it('groups a Branch of the ring by distance: going there, changing it, placing it, the agent, sharing, then deleting', () => {
     expect(groupsOf(branch)).toEqual([
-      ['open', 'go-in', 'show-context'],
+      ['open', 'go-in'],
       ['edit'],
       ['add', 'move'],
       ['ask-agent'],
       ['copy', 'share', 'export'],
       ['delete'],
     ])
+  })
+
+  it('shows the Context of the center alone, which a Tile of the ring is gone into first to show', () => {
+    expect(groupsOf(branch).flat()).not.toContain('show-context')
+    expect(groupsOf({ ...branch, kind: 'leaf' }).flat()).not.toContain('show-context')
+    expect(groupsOf({ ...branch, at: 'center' }).flat()).toContain('show-context')
   })
 
   it('shares a tile of its own, never a Reference, which is no tile of its own, nor a draft', () => {

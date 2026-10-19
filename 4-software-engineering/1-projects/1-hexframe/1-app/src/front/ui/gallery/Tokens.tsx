@@ -29,6 +29,10 @@ export const colourNotes: readonly Note[] = [
   { tokens: ['glow', 'glow-soft'], note: m.tokens_colour_glow },
   { tokens: ['halo'], note: m.tokens_colour_halo },
   { tokens: ['aura'], note: m.tokens_colour_aura },
+  {
+    tokens: ['organization', 'organization-soft', 'organization-halo'],
+    note: m.tokens_colour_organization,
+  },
   { tokens: ['ambient'], note: m.tokens_colour_ambient },
   { tokens: ['dusk'], note: m.tokens_colour_dusk },
   { tokens: ['tile', 'tile-fade'], note: m.tokens_colour_tile },
@@ -140,6 +144,7 @@ const lightNotes = [
   m.tokens_light_center,
   m.tokens_light_root,
   m.tokens_light_halo,
+  m.tokens_light_sunward,
   m.tokens_light_ambient,
   m.tokens_light_zone,
   m.tokens_light_draft,

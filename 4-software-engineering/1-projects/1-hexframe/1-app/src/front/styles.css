@@ -40,6 +40,9 @@
   --glow-soft: oklch(0.928 0.064 78.4);
   --halo: oklch(0.823 0.145 71.4 / 62%);
   --aura: oklch(0.82 0.143 69.7 / 16%);
+  --organization: oklch(0.786 0.118 4.5);
+  --organization-soft: oklch(0.915 0.048 9.6);
+  --organization-halo: oklch(0.786 0.118 4.5 / 62%);
   --ambient: oklch(0.571 0.245 283.3 / 7%);
   --dusk: oklch(0.3 0.075 292);
   --tile: oklch(1 0 0 / 92%);
@@ -97,6 +100,9 @@
   --glow-soft: oklch(0.907 0.065 82.2);
   --halo: oklch(0.814 0.116 70.6);
   --aura: oklch(0.724 0.145 58 / 18%);
+  --organization: oklch(0.79 0.106 6.5);
+  --organization-soft: oklch(0.905 0.05 10.8);
+  --organization-halo: oklch(0.79 0.106 6.5);
   --ambient: oklch(0.593 0.233 285.2 / 11%);
   --dusk: oklch(0.3 0.075 292);
   --tile: oklch(0.943 0.01 325.7 / 6%);
@@ -153,6 +159,9 @@
   --color-glow-soft: var(--glow-soft);
   --color-halo: var(--halo);
   --color-aura: var(--aura);
+  --color-organization: var(--organization);
+  --color-organization-soft: var(--organization-soft);
+  --color-organization-halo: var(--organization-halo);
   --color-ambient: var(--ambient);
   --color-dusk: var(--dusk);
   --color-tile: var(--tile);

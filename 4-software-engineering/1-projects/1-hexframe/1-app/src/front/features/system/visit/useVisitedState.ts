@@ -4,20 +4,22 @@
 import { useMemo, useState } from 'react'
 
 import type { System } from '#/domains/mapping/entities'
+import { useStandingIn } from '#/front/client/iam/organizations'
 import { type SystemShown, useSystem } from '#/front/client/mapping/queries'
-import type { TileNode } from '#/front/ui/canvas/view/tiles'
+import type { Sun, TileNode } from '#/front/ui/canvas/view/tiles'
 
-import { titlesIn, visitTree } from './visit'
+import { lightOf, titlesIn, visitTree } from './visit'
 
 /**
- * The System visited, by its star, as the canvas draws it, its tree and flat, none on the Account's
- * own; and the Titles of the Tiles of every System visited since the page opened, by id, which the
+ * The System visited, by its star, as the canvas draws it, its tree and flat, and the light its star
+ * glows in (`lightOf`), none on the Account's own; and the Titles of the Tiles of every System visited since the page opened, by id, which the
  * chat names them by, a gesture made there and not yet recorded included, once the canvas went home.
  */
 export interface Visited {
   readonly star: string | undefined
   readonly tree: TileNode | undefined
   readonly system: System | undefined
+  readonly light: Sun['light']
   readonly titles: ReadonlyMap<string, string>
 }
 
@@ -31,6 +33,7 @@ export function useVisitedState(star: string | undefined, own: string | undefine
   const visited = star !== undefined && own !== undefined && star !== own ? star : undefined
   const { data } = useSystem({ throwing: false, ...(visited !== undefined && { star: visited }) })
   const shown = visited === undefined ? undefined : data
+  const { data: standing } = useStandingIn(visited)
   const tree = useMemo(() => (shown === undefined ? undefined : visitTree(shown)), [shown])
   // The Titles kept from each read as it renders, against the last one kept.
   const [kept, keep] = useState<{ from?: SystemShown; titles: ReadonlyMap<string, string> }>({
@@ -39,5 +42,11 @@ export function useVisitedState(star: string | undefined, own: string | undefine
   if (shown !== undefined && shown !== kept.from) {
     keep({ from: shown, titles: new Map([...kept.titles, ...titlesIn(shown)]) })
   }
-  return { star: visited, tree, system: shown?.system, titles: kept.titles }
+  return {
+    star: visited,
+    tree,
+    system: shown?.system,
+    light: lightOf(visited, standing),
+    titles: kept.titles,
+  }
 }

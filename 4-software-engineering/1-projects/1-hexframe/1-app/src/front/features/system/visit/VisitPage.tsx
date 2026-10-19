@@ -14,7 +14,7 @@ import type { CanvasView, ViewAction } from '#/front/ui/canvas/view/view'
 
 import type { SearchChange, SystemSearch } from '../search/search'
 import { System } from '../System'
-import { visitTree } from './visit'
+import { lightOf, visitTree } from './visit'
 
 export interface VisitPageProps {
   /** The star of the System visited, someone else's. */
@@ -70,6 +70,7 @@ export function VisitPage(props: VisitPageProps) {
       marks={marks}
       onAsk={onAsk}
       onCarry={none}
+      sun={{ light: lightOf(star, standing) }}
       className="min-h-0 flex-1"
     />
   )

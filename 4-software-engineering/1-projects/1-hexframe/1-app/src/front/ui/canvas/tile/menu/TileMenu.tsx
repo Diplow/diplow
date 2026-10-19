@@ -215,8 +215,9 @@ function lineOf(verb: Verb, subject: Subject): Line {
       }
     case 'go-in':
       return { icon: <LogIn />, shortcut: { key: 'Enter', shift: true }, label: m.tile_menu_go_in }
+    // No key of its own: C is the canvas's, cycling the center's views (`useCycleKey`).
     case 'show-context':
-      return { icon: <Hexagon />, shortcut: { key: 'c' }, label: m.tile_menu_show_context }
+      return { icon: <Hexagon />, label: m.tile_menu_show_context }
     case 'edit':
       return {
         icon: <Pencil />,

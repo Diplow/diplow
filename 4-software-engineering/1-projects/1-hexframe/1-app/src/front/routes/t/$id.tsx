@@ -9,11 +9,11 @@ import { createFileRoute, Link, notFound, redirect } from '@tanstack/react-route
 import { SearchX } from 'lucide-react'
 import { useMemo } from 'react'
 
-import { systemOf, type Seen } from '#/domains/mapping/entities'
+import { hexframeStar } from '#/domains/mapping/entities'
 import { sessionIfAny } from '#/front/client/iam/guard'
 import { leadsTo, publicSystemOf } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
-import { pinFollowed, visitTree, withVisit } from '#/front/features/system/visit/visit'
+import { pinFollowed, publicTree, withVisit } from '#/front/features/system/visit/visit'
 import { m } from '#/paraglide/messages'
 import { Button } from '#/front/ui/atoms/controls/button'
 import { Canvas } from '#/front/ui/canvas/Canvas'
@@ -81,7 +81,7 @@ function Public() {
   const seen = Route.useLoaderData()
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
-  const tree = useMemo(() => treeOf(seen), [seen])
+  const tree = useMemo(() => publicTree(seen), [seen])
   const view = search.center === undefined ? centerOn(tree, id) : viewIn(search)
   // A view's center absent is the star; here it is the Tile linked, so the star is named outright.
   // A pin followed leads to the Tile of the other System, by its own link.
@@ -90,18 +90,22 @@ function Public() {
     if (pin !== undefined) void navigate({ to: '/t/$id', params: { id: pin }, search: {} })
     else void navigate({ search: { ...next, center: next.center ?? tree.id } })
   }
+  // The star glows amber, a person's, or rose, hexframe's own Organization's; the corner with it.
+  const light = tree.id === hexframeStar ? 'organization' : 'human'
   return (
     <main className="relative h-dvh overflow-hidden">
       <h1 className="sr-only">{m.public_title()}</h1>
       <Canvas
         system={tree}
+        cycles
         view={view}
         onViewChange={onViewChange}
         looking="card"
+        sun={{ light }}
         className="size-full"
       />
       <div className={cornerPlace}>
-        <Breadcrumb system={tree} view={view} onViewChange={onViewChange} />
+        <Breadcrumb system={tree} view={view} onViewChange={onViewChange} light={light} />
       </div>
       <footer className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-center gap-3 p-4">
         <p className="text-sm text-muted-foreground">{m.public_shared()}</p>
@@ -119,15 +123,6 @@ function Public() {
     </main>
   )
 }
-
-/** The System as the canvas and the corner draw it: from its star, its gaps hung from it. */
-const treeOf = (seen: Seen) =>
-  visitTree({
-    system: seen,
-    root: systemOf(seen, seen.pinned),
-    gaps: seen.gaps,
-    pinned: seen.pinned,
-  })
 
 /**
  * A Tile no one may show the reader: kept from them or gone, it can't tell. Signed in, the way home;

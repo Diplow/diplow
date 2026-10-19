@@ -7,7 +7,7 @@
 // Tile whose Body was open, lands on home as these. Pure.
 import { Schema } from 'effect'
 
-import type { ShippedRoot } from '#/domains/mapping/entities'
+import { hexframeStar, shippedOf, type ShippedRoot } from '#/domains/mapping/entities'
 import {
   CanvasView,
   orDefault,
@@ -96,6 +96,35 @@ export const tutorialOn = <S extends CanvasView & TutorialSearch>(
   ...withTutorial(view.center ?? true),
 })
 
+/**
+ * Help's view on the canvas, which draws it from the Hexframe star it stands under, so its corner
+ * names every ancestor: the URL's `center` absent is Help's Root, not the star, so a plain URL still
+ * opens on Help.
+ */
+export const helpOnStar = (view: CanvasView): CanvasView => ({
+  ...view,
+  center: view.center ?? ('help' satisfies ShippedRoot),
+})
+
+/** The URL's view of one the canvas from the Hexframe star hands on: the star named outright. */
+const helpFromStar = (view: CanvasView): CanvasView => ({
+  ...view,
+  center: view.center ?? hexframeStar,
+})
+
+/**
+ * A page's search params with Help's canvas on `next`, as the canvas from the Hexframe star hands it
+ * on (`helpFromStar`), the rest kept; the widget, open, turned to the Tile centered, a Tile of Help,
+ * or to Help's Root for any other, the star or the tutorial beside it.
+ */
+export function helpViewIn<S extends CanvasView & HelpSearch>(search: S, next: CanvasView): S {
+  const view = helpFromStar(next)
+  const { center } = view
+  if (search.help === undefined || center === search.center) return withViewIn(search, view)
+  const topic = center !== undefined && shippedOf(center) === 'help' ? center : true
+  return { ...withViewIn(search, view), ...withHelp(topic) }
+}
+
 /** A System hexframe ships on home's canvas, its view, and what the tutorial lets through. */
 interface OnCanvas {
   shipped: ShippedRoot
@@ -119,7 +148,9 @@ export function shippedOnCanvas(
   search: CanvasView & HelpSearch & TutorialSearch,
   told?: ToldPart,
 ): OnCanvas | undefined {
-  if (search.help !== undefined) return { shipped: 'help', view: viewIn(search), away: false }
+  if (search.help !== undefined) {
+    return { shipped: 'help', view: helpOnStar(viewIn(search)), away: false }
+  }
   if (search.tutorial !== undefined) {
     const rules = tutorialRules(tutorialViewOf(search), told)
     return { shipped: 'tutorial', view: rules.view, away: true, rules }

@@ -118,17 +118,26 @@ export function courseOf(last: Drawing, next: Drawing): Course {
 }
 
 /**
- * How the drawing moves where the center stays but its own hex changes, opened from alone, large, or
- * folded back into it: its hex from where it was drawn to where it is, as one Tile the two drawings
- * share; none where it stands as it stood.
+ * Where the center is framed: the hex it opens into, its ground, while a ring shows inside it, its
+ * Context, its own hex drawn smaller at that ground's heart; else its own hex.
+ */
+const framedAt = (hexes: readonly CanvasHex[], center: string) =>
+  hexes.find((hex) => hex.kind === 'ground' && hex.key === `ground:${center}`)?.hex ??
+  drawnAt(hexes, center)?.hex
+
+/**
+ * How the drawing moves where the center stays but its own frame changes, opened from alone, large,
+ * or folded back into it: its hex from where it was drawn to where it is, as one Tile the two
+ * drawings share; none where it stands as it stood, a ring shown or hidden inside it included, which
+ * moves the center alone, the ring around it staying where it is.
  */
 export function reframingOf(
   last: readonly CanvasHex[],
   next: readonly CanvasHex[],
   center: string,
 ): Course | undefined {
-  const was = drawnAt(last, center)?.hex
-  const is = drawnAt(next, center)?.hex
+  const was = framedAt(last, center)
+  const is = framedAt(next, center)
   if (was === undefined || is === undefined) return undefined
   const moved = Math.hypot(is.center.x - was.center.x, is.center.y - was.center.y)
   if (moved < 1e-6 && Math.abs(is.radius - was.radius) < 1e-6) return undefined

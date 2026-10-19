@@ -208,6 +208,21 @@ describe('reframingOf', () => {
     const branch = drawn({ frame: 'children', expanded: { 4: 'children' } })
     expect(reframingOf(opened.hexes, branch.hexes, 'root')).toBeUndefined()
   })
+
+  it('leaves the ring around the center where it is as its Context shows or hides inside it', () => {
+    const opened = drawn({ frame: 'children' })
+    const context = drawn({ frame: 'children', inner: 'context' })
+    expect(hexIn(context, 'ground:root')).toBeDefined()
+    expect(reframingOf(opened.hexes, context.hexes, 'root')).toBeUndefined()
+    expect(reframingOf(context.hexes, opened.hexes, 'root')).toBeUndefined()
+  })
+
+  it('frames a center opened from alone straight into its Context by the hex it opens into', () => {
+    const alone = drawn({})
+    const context = drawn({ frame: 'children', inner: 'context' })
+    const course = reframingOf(alone.hexes, context.hexes, 'root')
+    expect(course?.to).toEqual(hexIn(context, 'ground:root').hex)
+  })
 })
 
 describe('flightFor and the camera', () => {

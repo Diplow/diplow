@@ -3,9 +3,10 @@
 // thing done on the page (`useThingsDone`). A click on an ancestor centers it; like the canvas, the
 // rail holds no view and hands the next one to the route, with the gesture that asked for it. Before
 // the System is read, or once reading it failed, the mark is alone. On another System than the
-// reader's, the tutorial, the mark is the way back to their own Root, which its caller takes.
+// reader's, the tutorial, the mark is the way back to their own Root, which its caller takes. The
+// point you are on takes the light of the System's star, rose on an Organization's.
 import { Rail } from '#/front/ui/canvas/layouts/Rail'
-import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
+import { pathTo, type Sun, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, showView, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
 
 import { useThingsDone } from './done'
@@ -17,10 +18,13 @@ interface BreadcrumbProps {
   onViewChange: (view: CanvasView, action: ViewAction) => void
   /** The mark chosen, on another System than the reader's: back to their own Root. */
   onHome?: () => void
+  /** The light of the System's star: a person's, amber, by default, or an Organization's, rose. */
+  light?: Sun['light']
   className?: string
 }
 
-export function Breadcrumb({ system, view, onViewChange, onHome, className }: BreadcrumbProps) {
+export function Breadcrumb(props: BreadcrumbProps) {
+  const { system, view, onViewChange, onHome, light, className } = props
   const turns = useThingsDone()
   return (
     <Rail
@@ -30,6 +34,7 @@ export function Breadcrumb({ system, view, onViewChange, onHome, className }: Br
         if (system !== undefined) onViewChange(centerOn(system, tile), { gesture: 'center', tile })
       }}
       onHome={onHome}
+      light={light}
       className={className}
     />
   )

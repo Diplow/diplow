@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import type { TileNode } from './tiles'
 import {
   centerOn,
+  cycleOf,
   opens,
   readCanvasView,
   showView,
@@ -119,13 +120,14 @@ describe('showView', () => {
     })
   })
 
-  it('opens only a Branch of the ring around the center, into a kind it offers', () => {
+  it('opens only a Branch of the ring around the center, into a kind it offers, never its Context', () => {
     const view: CanvasView = {
       frame: 'children',
       expanded: { 1: 'context', 2: 'children', 4: 'leaves', 6: 'context' },
     }
-    // 2 holds a Leaf and 6 nothing; b, in 4, offers no Leaves ring, so it opens into its first.
-    expect(showView(system, view).expanded).toEqual({ 1: 'context', 4: 'children' })
+    // 2 holds a Leaf and 6 nothing; b, in 4, offers no Leaves ring, so it opens into its first, as a,
+    // in 1, does for its Context, which the center alone shows.
+    expect(showView(system, view).expanded).toEqual({ 1: 'children', 4: 'children' })
   })
 
   it('opens no Branch around a ring of Leaves', () => {
@@ -273,9 +275,6 @@ describe('opens, showsContext and withoutEmptyRings', () => {
     expect(withoutEmptyRings(inside, anyone)).toEqual(inside)
     const alone = showView(system, withContext(system, { center: 'b' }))
     expect(withoutEmptyRings(alone, nobody)).toMatchObject({ frame: undefined, inner: undefined })
-    const opened = showView(system, { frame: 'children', expanded: { 1: 'context', 4: 'context' } })
-    expect(withoutEmptyRings(opened, nobody).expanded).toEqual({})
-    expect(withoutEmptyRings(opened, anyone).expanded).toEqual(opened.expanded)
   })
 
   it('closes a Branch of the ring holding nothing the reader may add to, and keeps the others', () => {
@@ -308,5 +307,30 @@ describe('viewIn and withViewIn', () => {
       expanded: { 1: 'children' },
       open: 'why',
     })
+  })
+})
+
+describe('cycleOf, the C key', () => {
+  const nobody = () => false
+  const anyone = () => true
+  const step = (view: CanvasView, fills = anyone) => cycleOf(showView(system, view), fills)
+
+  it('takes the center from alone to its ring, then its Context, then alone again', () => {
+    expect(step({})).toBe('expand')
+    expect(step({ frame: 'children' })).toBe('show-context')
+    expect(step({ frame: 'children', inner: 'context' })).toBe('collapse')
+  })
+
+  it('shows the Context in place of the Leaves inside a center of more than six', () => {
+    expect(step({ center: 'many', frame: 'branches', inner: 'leaves' })).toBe('show-context')
+  })
+
+  it('skips a step that would show nothing, and stays where nothing shows', () => {
+    // a holds no Context, nor may the reader add one: its ring folds back.
+    expect(step({ center: 'a', frame: 'children' }, nobody)).toBe('collapse')
+    // b holds nothing: alone, its Context is all it shows, where the reader may add one.
+    expect(step({ center: 'b' }, anyone)).toBe('expand')
+    expect(step({ center: 'b' }, nobody)).toBeUndefined()
+    expect(step({ center: 'notes' })).toBeUndefined()
   })
 })

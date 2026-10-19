@@ -426,7 +426,7 @@ function TileWordsSpecimen() {
           viewBox={`${String(-box / 2)} -204 ${String(box)} 408`}
           className="h-auto max-w-full"
         >
-          <Tile hex={{ center: origin, radius }} {...tile} scale={scale} />
+          <Tile hex={{ center: origin, radius }} {...tile} place="center" scale={scale} />
         </svg>
         <label className="grid max-w-96 gap-1 text-xs text-muted-foreground">
           {m.gallery_tile_words_size()}
@@ -455,7 +455,7 @@ function TileWordsSpecimen() {
                     height={2 * size + 4}
                     viewBox={`${String(-width / 2)} ${String(-size - 2)} ${String(width)} ${String(2 * size + 4)}`}
                   >
-                    <Tile hex={{ center: origin, radius: size }} {...tile} />
+                    <Tile hex={{ center: origin, radius: size }} {...tile} place="center" />
                   </svg>
                   <figcaption className="text-center font-mono text-xs text-faint">
                     {m.gallery_tile_words_at({ radius: size })}

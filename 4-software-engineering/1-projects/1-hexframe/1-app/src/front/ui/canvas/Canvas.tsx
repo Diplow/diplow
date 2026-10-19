@@ -12,7 +12,10 @@
 // over the page, for its caller to hand on. As the center changes, the camera flies from the last
 // view to the next (`useCamera`): into a child it zooms in, to a parent out, the last view drawn still
 // beneath the next as it flies past and fades. Where its caller introduces opening the center, the
-// tutorial's, the center invites the click that would open it, and its six arrive one by one.
+// tutorial's, the center invites the click that would open it, and its six arrive one by one. Where
+// its caller names the System's star, its sun, the star glows in its light, amber or rose, and, once
+// the center is below it, that light waits at the canvas's edge, on the side the star stands. Where
+// it cycles, the C key takes the center from alone to its ring, then its Context, then alone again.
 import { useRef, useState, type ReactNode, type RefObject } from 'react'
 import { cn } from 'cn'
 
@@ -29,7 +32,7 @@ import {
   type Landing,
   type Moving,
 } from './hexes'
-import type { Action } from './keys'
+import { useCycleKey, type Action } from './keys'
 import { nearestOf } from './state/move/targets'
 import type { CarriedTile, CarryInput } from './state/move/carry'
 import { useMove } from './state/move/useMove'
@@ -49,9 +52,16 @@ import { Arc } from './tile/marks/Marks'
 import type { ToldPart } from '../motion'
 import { wayTo, type TileMark } from './tile/marks/mark'
 import { Ground, Slot } from './tile/places'
-import { Tile, type StandingLook, type TileMotion, type TileWrite } from './tile/Tile'
+import { SunEdge } from './tile/light'
+import {
+  Tile,
+  type StandingLook,
+  type SunLight,
+  type TileMotion,
+  type TileWrite,
+} from './tile/Tile'
 import { listOf, lookOf, placeOf } from './view/looks'
-import { pathTo, type TileNode } from './view/tiles'
+import { pathTo, sunward, type Sun, type TileNode } from './view/tiles'
 import { showsContext, type CanvasView, type ViewAction } from './view/view'
 
 export type { Acting, Moving } from './hexes'
@@ -162,18 +172,31 @@ interface CanvasProps {
    * the line that names it (HEX-122). Without it, pointing at a Tile lights nothing elsewhere.
    */
   onPoint?: PointAt | undefined
+  /**
+   * The System's star, its sun: a person's or an Organization's, and where the root drawn stands
+   * below it, if it is not the star itself. The star glows in its light, and below it that light
+   * waits at the canvas's edge, on the side it stands. Without it, the user's own Root alone glows,
+   * and no light waits at the edge.
+   */
+  sun?: Sun | undefined
+  /**
+   * The C key cycles the center's views, from anywhere on the page but a field, a menu or a dialog:
+   * alone, opened into its ring, its Context inside too, then alone again, a step showing nothing
+   * skipped (`cycleOf`). Without it, the key does nothing here, as on a page of several canvases.
+   */
+  cycles?: boolean
   className?: string
 }
 
 export function Canvas(props: CanvasProps) {
   const { system, view, onViewChange, emptySlots, move, writes, marks, onCarry, lets } = props
-  const { introducesOpening: introduces = false } = props
+  const { introducesOpening: introduces = false, sun } = props
   const { acting, fills } = actingOn(system, props)
   const finger = useFinger()
   const { state, actions } = useCanvasState({ system, view, onViewChange, finger, lets, fills })
   const svg = useRef<SVGSVGElement>(null)
+  useCycleKey(svg, props.cycles === true ? actions.cycle : undefined)
   const scale = useScale(svg, canvasSize)
-  const { width, height } = canvasSize
   const { menu, onMenu } = useMenuOpen()
   const moving = move?.moving
   const placed = centersOf(state.hexes)
@@ -192,12 +215,17 @@ export function Canvas(props: CanvasProps) {
   const inTheAir = gesture.landing !== undefined && gesture.landing !== 'landed'
   // While a tile moves, nothing stands in a free slot: they offer themselves to it.
   const standing = moving === undefined ? marks?.slot : undefined
-  const markOf = tileMarksOf(system, state.hexes, { ...marks, slot: standing }, state.center.id)
+  const center = state.center.id
+  const markOf = tileMarksOf(system, state.hexes, { ...marks, slot: standing }, center)
 
   /** A Tile's hex: the tile, by what it is and where it stands, in its menu where it has one. */
   const tileOf = (hex: TileHex) => {
     const action = actions.actionOf(hex)
-    const look = lookOf(hex, { moving: moving !== undefined })
+    // A star glows in its light, which its look carries to the tile.
+    const look = {
+      ...lookOf(hex, { moving: moving !== undefined }),
+      sun: sunOnOf(system, sun)(hex),
+    }
     const mark = hex.tile.reference === undefined ? markOf(hex.tile.id) : undefined
     return (
       <TileHexView
@@ -255,15 +283,16 @@ export function Canvas(props: CanvasProps) {
   const dragged = (hex: (typeof state.hexes)[number]) =>
     Number(hex.kind === 'tile' && standsFor(hex, gesture.dragging))
   return (
-    <div className={cn('flex min-h-0 flex-col gap-2', props.className)}>
+    <div className={cn('relative flex min-h-0 flex-col gap-2', props.className)}>
+      <SunAtEdge system={system} center={center} hexes={state.hexes} sun={sun} />
       <svg
         ref={svg}
-        viewBox={`0 0 ${String(width)} ${String(height)}`}
+        viewBox={viewBoxOf(canvasSize)}
         role="group"
         aria-label={m.hex_canvas_label({ title: state.center.title })}
-        className="min-h-0 w-full flex-1 select-none"
+        className="relative min-h-0 w-full flex-1 select-none"
       >
-        <Camera system={system} center={state.center.id} hexes={state.hexes} scale={scale}>
+        <Camera system={system} center={center} hexes={state.hexes} scale={scale} sun={sun}>
           {[...state.hexes]
             .sort((a, b) => dragged(a) - dragged(b))
             .map((hex) => {
@@ -314,6 +343,44 @@ export function Canvas(props: CanvasProps) {
       )}
     </div>
   )
+}
+
+/**
+ * The light a Tile glows in, a star's: the root drawn, where the caller says it is the star itself,
+ * not a Reference drawn in its place.
+ */
+function sunOnOf(system: TileNode, sun: Sun | undefined) {
+  return (hex: Hexes[number]): SunLight | undefined =>
+    sun !== undefined &&
+    (sun.rootAt ?? []).length === 0 &&
+    hex.kind === 'tile' &&
+    hex.tile.id === system.id &&
+    hex.tile.reference === undefined
+      ? sun.light
+      : undefined
+}
+
+/**
+ * The star's light at the canvas's edge, on the side it stands from the centered Tile; none at the
+ * star itself, which glows where it is drawn.
+ */
+function SunAtEdge({
+  system,
+  center,
+  hexes,
+  sun,
+}: {
+  system: TileNode
+  center: string
+  hexes: Hexes
+  sun: Sun | undefined
+}) {
+  if (sun === undefined) return null
+  const toward = sunward(system, center, sun.rootAt)
+  if (toward === undefined) return null
+  const drawn = hexes.find((hex) => hex.kind === 'tile' && hex.role === 'center')
+  const from = drawn?.hex.center ?? { x: canvasSize.width / 2, y: canvasSize.height / 2 }
+  return <SunEdge from={from} toward={toward} size={canvasSize} light={sun.light} />
 }
 
 /** What a canvas only looked at lets each Tile show: its menu and its card, its card alone, or neither. */
@@ -378,6 +445,8 @@ interface CameraProps {
   center: string
   hexes: Hexes
   scale: number
+  /** The System's star, whose light the last drawing keeps as it fades. */
+  sun: Sun | undefined
   /** The drawing, as the canvas draws it. */
   children: ReactNode
 }
@@ -387,8 +456,9 @@ interface CameraProps {
  * at rest otherwise, and meanwhile the last drawing beneath it, still, which no pointer reaches and
  * no screen reader hears, nothing in it moving but the camera.
  */
-function Camera({ system, center, hexes, scale, children }: CameraProps) {
+function Camera({ system, center, hexes, scale, sun, children }: CameraProps) {
   const camera = useCamera({ system, center, hexes })
+  const sunOn = sunOnOf(system, sun)
   return (
     <>
       {camera.still && (
@@ -398,7 +468,7 @@ function Camera({ system, center, hexes, scale, children }: CameraProps) {
           className="pointer-events-none origin-top-left **:animate-none!"
         >
           {camera.still.map((hex) => (
-            <StillHex key={hex.key} hex={hex} scale={scale} />
+            <StillHex key={hex.key} hex={hex} scale={scale} sun={sunOn(hex)} />
           ))}
         </g>
       )}
@@ -410,7 +480,15 @@ function Camera({ system, center, hexes, scale, children }: CameraProps) {
 }
 
 /** A hex of the last drawing, as it was drawn, acting on nothing: a free slot dotted. */
-function StillHex({ hex, scale }: { hex: Hexes[number]; scale: number }) {
+function StillHex({
+  hex,
+  scale,
+  sun,
+}: {
+  hex: Hexes[number]
+  scale: number
+  sun: SunLight | undefined
+}) {
   switch (hex.kind) {
     case 'ground':
       return <Ground hex={hex.hex} context={hex.ring === 'context'} />
@@ -419,7 +497,7 @@ function StillHex({ hex, scale }: { hex: Hexes[number]; scale: number }) {
     case 'list':
       return <Tile hex={hex.hex} {...listOf(hex)} scale={scale} />
     case 'tile':
-      return <Tile hex={hex.hex} {...lookOf(hex)} place={placeOf(hex)} scale={scale} />
+      return <Tile hex={hex.hex} {...lookOf(hex)} place={placeOf(hex)} scale={scale} sun={sun} />
   }
 }
 
@@ -557,3 +635,6 @@ function actionLabel(action: TileAction, title: string): string {
       return m.hex_tile_center({ title })
   }
 }
+
+/** The `<svg>`'s viewBox: the canvas's own coordinates. */
+const viewBoxOf = ({ width, height }: typeof canvasSize) => `0 0 ${String(width)} ${String(height)}`

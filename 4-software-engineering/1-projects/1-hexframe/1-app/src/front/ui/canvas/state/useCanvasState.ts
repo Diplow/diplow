@@ -5,8 +5,9 @@
 // center's ring included, blooms out of its heart, and folds back into it for `--duration-fold` before
 // the view that closes it is handed on, at once with reduced motion. Under a finger, a tap on a Branch
 // of the ring goes in, opening it in place waiting in its menu; the menu's lines that go somewhere,
-// open, go in, show the Context, back out, are gestures too. Where its caller holds a Tile's click or
-// its going in back, that gesture does nothing there.
+// open, go in, show the center's Context, back out, are gestures too, and so is the C key, which
+// cycles the center's views. Where its caller holds a Tile's click or its going in back, that gesture
+// does nothing there.
 import { useEffect, useRef, useState } from 'react'
 
 import { directions, type Point } from '../geometry/geometry'
@@ -16,6 +17,7 @@ import { movingFor } from '../../motion'
 import { pathTo, type TileNode } from '../view/tiles'
 import {
   centerOn,
+  cycleOf,
   opens,
   showView,
   toggleCenter,
@@ -39,10 +41,10 @@ export type TileHex = Extract<CanvasHex, { kind: 'tile' }>
 export type TileAction = Extract<Gesture, 'expand' | 'collapse' | 'center'>
 
 /**
- * What a Tile lets through of the gestures made on it: its click, Enter and Space, and its menu's
- * Open (`click`); and moving the center from it (`recenter`), a click that would center it, going
- * into it by a double click, Shift+Enter or its menu's Go in, centering it with its Context by Show
- * its Context, or its menu's Back out.
+ * What a Tile lets through of the gestures made on it: its click, Enter and Space, its menu's Open
+ * and, on the center, the C key (`click`); and moving the center from it (`recenter`), a click that
+ * would center it, going into it by a double click, Shift+Enter or its menu's Go in, or its menu's
+ * Back out.
  */
 export interface TileLets {
   click: boolean
@@ -207,6 +209,41 @@ interface CanvasInput {
   fills?: ((tile: TileNode) => boolean) | undefined
 }
 
+/**
+ * The ground whose six fold back into its heart, `folding`, while they do: `start`, a fold of that
+ * ground for `--duration-fold`, then what it hands on, at once where nothing moves; `stop`, a fold
+ * under way given up.
+ */
+function useFolding() {
+  const [folding, setFolding] = useState<string>()
+  const fold = useRef<ReturnType<typeof setTimeout>>(undefined)
+  useEffect(
+    () => () => {
+      clearTimeout(fold.current)
+    },
+    [],
+  )
+  return {
+    folding,
+    start(ground: string | undefined, then: () => void) {
+      const duration = movingFor('--duration-fold')
+      if (ground === undefined || duration === 0) {
+        then()
+        return
+      }
+      setFolding(ground)
+      fold.current = setTimeout(() => {
+        setFolding(undefined)
+        then()
+      }, duration)
+    },
+    stop() {
+      clearTimeout(fold.current)
+      setFolding(undefined)
+    },
+  }
+}
+
 export function useCanvasState(input: CanvasInput) {
   const { system, view, onViewChange, finger = false, lets = () => everything } = input
   const { fills = () => true } = input
@@ -216,15 +253,7 @@ export function useCanvasState(input: CanvasInput) {
   // The hex the last single click landed on: a double-click centers its Tile only if its first click
   // landed there too, since that click may have redrawn what lies under the pointer.
   const clicked = useRef<string | undefined>(undefined)
-  // The ground whose six fold back into its heart, and the view handed on once they have.
-  const [folding, setFolding] = useState<string>()
-  const fold = useRef<ReturnType<typeof setTimeout>>(undefined)
-  useEffect(
-    () => () => {
-      clearTimeout(fold.current)
-    },
-    [],
-  )
+  const { folding, ...folds } = useFolding()
   // The view as it stands, which a fold checks before handing its own on: a view changed meanwhile,
   // by a link or the browser's Back, gives the fold up rather than being overwritten. And the
   // caller's latest `onViewChange`, which the fold hands its view to, so what else the page changed
@@ -240,12 +269,9 @@ export function useCanvasState(input: CanvasInput) {
   }
 
   /** Centers the Tile of this id, a fold under way given up for it. */
-  function centerTile(tile: string, context = false) {
-    clearTimeout(fold.current)
-    setFolding(undefined)
-    const centered = centerOn(system, tile)
-    if (context) change(withContext(system, centered), 'show-context', tile)
-    else change(centered, 'center', tile)
+  function centerTile(tile: string) {
+    folds.stop()
+    change(centerOn(system, tile), 'center', tile)
   }
 
   /** A click, Enter or Space on `hex`, or what its menu's Open does without a finger's turn. */
@@ -279,17 +305,9 @@ export function useCanvasState(input: CanvasInput) {
    * back into it, at once when nothing moves, unless the view changed meanwhile.
    */
   function foldThen(hex: TileHex, action: TileAction) {
-    const ground = hex.role === 'center' ? ring : hubs.get(hex.key)
-    const duration = movingFor('--duration-fold')
-    if (ground === undefined || duration === 0) {
-      act(hex, action)
-      return
-    }
-    setFolding(ground)
-    fold.current = setTimeout(() => {
-      setFolding(undefined)
+    folds.start(hex.role === 'center' ? ring : hubs.get(hex.key), () => {
       if (latest.current.view === viewNow) act(hex, action)
-    }, duration)
+    })
   }
 
   /**
@@ -325,6 +343,19 @@ export function useCanvasState(input: CanvasInput) {
       click: (hex: TileHex) => {
         press(hex, actionOf(hex))
       },
+      /**
+       * The C key: the center's next view (`cycleOf`), alone, opened into its ring, its Context
+       * inside too, then alone again, folding as a click folds it; none where its click is held.
+       */
+      cycle: () => {
+        const hex = hexes.find(
+          (each): each is TileHex => each.kind === 'tile' && each.role === 'center',
+        )
+        const step = hex !== undefined && lets(hex).click ? cycleOf(shown, fills) : undefined
+        if (hex === undefined || step === undefined || folding !== undefined) return
+        if (step === 'collapse') foldThen(hex, step)
+        else act(hex, step)
+      },
       /** A double-click, or Shift+Enter, on `hex`, a fold under way given up for it. */
       center: (hex: TileHex, from: 'pointer' | 'keyboard') => {
         const again = from === 'keyboard' || clicked.current === hex.key
@@ -333,8 +364,8 @@ export function useCanvasState(input: CanvasInput) {
       },
       /**
        * A line of `hex`'s menu that goes somewhere. Open does what a pointer's click does, a Branch
-       * of the ring opening in place under a finger too; Go in centers it; Show its Context centers
-       * it with its Context inside, or shows the center's; Back out centers the Tile the center
+       * of the ring opening in place under a finger too; Go in centers it; Show its Context shows
+       * the center's, the one Tile that shows its Context; Back out centers the Tile the center
        * stands under.
        */
       go: (hex: TileHex, verb: ViewVerb) => {
@@ -349,8 +380,8 @@ export function useCanvasState(input: CanvasInput) {
             if (!centered && recenter) centerTile(tile)
             return
           case 'show-context':
-            if (!centered && recenter) centerTile(tile, true)
-            else if (centered && shown.inner !== 'context') act(hex, 'show-context')
+            // The center's alone: another Tile is gone into first.
+            if (centered && shown.inner !== 'context') act(hex, 'show-context')
             return
           case 'back-out': {
             const parent = pathTo(system, shown.center.id).at(-2)
