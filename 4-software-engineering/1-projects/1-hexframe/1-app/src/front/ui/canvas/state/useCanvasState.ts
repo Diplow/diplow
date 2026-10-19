@@ -25,6 +25,7 @@ import {
   withContext,
   withoutEmptyRings,
   type CanvasView,
+  type Fills,
   type Gesture,
   type ShownView,
   type ViewAction,
@@ -82,7 +83,7 @@ type TileGesture = TileAction | 'show-context'
 /** How a click is decided: by a finger or not, and which Tiles the reader may add to. */
 interface Deciding {
   finger: boolean
-  fills: (tile: TileNode) => boolean
+  fills: Fills
 }
 
 /**
@@ -91,9 +92,11 @@ interface Deciding {
  * instead. A finger has no double click to go in with: its tap on a Branch of the ring goes in,
  * rather than opening it.
  */
+/** The untitled root, its lamp alone, and an empty System's: not there yet, nothing on it answers. */
+const unborn = (hex: TileHex) => hex.tile.root === 'untitled' || hex.tile.root === 'empty'
+
 function tileAction(hex: TileHex, shown: ShownView, how: Deciding): TileAction | undefined {
-  // The untitled root, its lamp alone, is not there yet: a click on it does nothing.
-  if (hex.tile.root === 'untitled' || hex.tile.root === 'empty') return undefined
+  if (unborn(hex)) return undefined
   switch (hex.role) {
     case 'center':
       if (shown.frame !== undefined) return 'collapse'
@@ -206,7 +209,7 @@ interface CanvasInput {
    * Whether the reader may add to a Tile, a free slot of its ring taking a new Tile: one holding
    * nothing they may not add to opens nothing (`opens`). Without it, they may add to every one.
    */
-  fills?: ((tile: TileNode) => boolean) | undefined
+  fills?: Fills | undefined
 }
 
 /**
@@ -345,13 +348,15 @@ export function useCanvasState(input: CanvasInput) {
       },
       /**
        * The C key: the center's next view (`cycleOf`), alone, opened into its ring, its Context
-       * inside too, then alone again, folding as a click folds it; none where its click is held.
+       * inside too, then alone again, folding as a click folds it; none where its click is held,
+       * nor on a Root not there yet, which nothing answers on.
        */
       cycle: () => {
         const hex = hexes.find(
           (each): each is TileHex => each.kind === 'tile' && each.role === 'center',
         )
-        const step = hex !== undefined && lets(hex).click ? cycleOf(shown, fills) : undefined
+        const held = hex === undefined || unborn(hex) || !lets(hex).click
+        const step = held ? undefined : cycleOf(shown, fills)
         if (hex === undefined || step === undefined || folding !== undefined) return
         if (step === 'collapse') foldThen(hex, step)
         else act(hex, step)

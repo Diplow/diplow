@@ -36,6 +36,7 @@ import {
   type Point,
 } from '../geometry/geometry'
 import { buttonKeys, type Action, type Hand } from '../keys'
+import type { SunLight } from '../view/tiles'
 import { BlurDef, FadeDef, points, proposedRim, Sweep, tint, type Fade } from './light'
 import { fitAlone, fitWords, linesThatFit } from '../geometry/words'
 import { MarkGlow, MarkLines } from './marks/Marks'
@@ -146,9 +147,6 @@ export type TileProps = TileLook & {
    */
   sun?: SunLight | undefined
 }
-
-/** A star's light: a person's, amber, or an Organization's, rose. */
-export type SunLight = 'human' | 'organization'
 
 /** What only one kind takes, read off any tile: none for the others. */
 const clashOf = (look: TileLook) => (look.kind === 'leaf' ? look.clash : undefined)

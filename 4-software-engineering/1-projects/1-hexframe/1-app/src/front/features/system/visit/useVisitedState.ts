@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react'
 import type { System } from '#/domains/mapping/entities'
 import { useStandingIn } from '#/front/client/iam/organizations'
 import { type SystemShown, useSystem } from '#/front/client/mapping/queries'
-import type { Sun, TileNode } from '#/front/ui/canvas/view/tiles'
+import type { SunLight, TileNode } from '#/front/ui/canvas/view/tiles'
 
 import { lightOf, titlesIn, visitTree } from './visit'
 
@@ -19,7 +19,7 @@ export interface Visited {
   readonly star: string | undefined
   readonly tree: TileNode | undefined
   readonly system: System | undefined
-  readonly light: Sun['light']
+  readonly light: SunLight
   readonly titles: ReadonlyMap<string, string>
 }
 

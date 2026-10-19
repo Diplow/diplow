@@ -129,6 +129,17 @@ describe('what a click on a Tile does', () => {
     expect(act.actionOf(hexOf(state.hexes, 'tile:root'))).toBeUndefined()
   })
 
+  it('takes no C on the untitled root, nor on an empty System’s, which nothing answers on', () => {
+    for (const root of ['untitled', 'empty'] as const) {
+      const onViewChange = vi.fn()
+      const { result } = renderHook(() =>
+        useCanvasState({ system: { ...system, root }, view: {}, onViewChange, finger: false }),
+      )
+      result.current.actions.cycle()
+      expect(onViewChange).not.toHaveBeenCalled()
+    }
+  })
+
   it('goes into a Branch of the ring under a finger, which has no double click, and does the rest alike', () => {
     expect(actions({}, { finger: true })).toEqual({ 'tile:root': 'expand' })
     expect(actions(open, { finger: true })).toEqual({

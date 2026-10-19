@@ -105,13 +105,16 @@ export function findTile(system: TileNode, id: string): TileNode | undefined {
   return pathTo(system, id).at(-1)
 }
 
+/** A star's light: a person's, amber, or an Organization's, rose. */
+export type SunLight = 'human' | 'organization'
+
 /**
- * A System's star, the sun its light comes from: a person's, amber, or an Organization's, rose; and,
- * where the root drawn hangs below that star rather than being it, the Directions from the star down
- * to it (`rootAt`): Help stands in the Hexframe Organization's Direction 1, so `[1]`.
+ * A System's star, the sun its light comes from (`SunLight`); and, where the root drawn hangs below
+ * that star rather than being it, the Directions from the star down to it (`rootAt`): the tutorial
+ * stands in the Hexframe Organization's Direction 2, so `[2]`.
  */
 export interface Sun {
-  light: 'human' | 'organization'
+  light: SunLight
   rootAt?: readonly Direction[]
 }
 

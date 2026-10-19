@@ -12,6 +12,7 @@ import {
   readHelpSearch,
   readTutorialSearch,
   shippedOnCanvas,
+  shippedSun,
   shippedTells,
   topicOf,
   turnedTo,
@@ -222,5 +223,12 @@ describe("Help's view, on the canvas drawn from the Hexframe star", () => {
       help: true,
     })
     expect(helpViewIn(open, { center: 'help/3' })).toMatchObject({ help: 'help/3' })
+  })
+})
+
+describe('the star a System hexframe ships stands under', () => {
+  it('glows rose, Help drawn from it, the tutorial from its own Root in its Direction 2', () => {
+    expect(shippedSun('help')).toEqual({ light: 'organization', rootAt: [] })
+    expect(shippedSun('tutorial')).toEqual({ light: 'organization', rootAt: [2] })
   })
 })

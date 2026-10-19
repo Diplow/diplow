@@ -32,7 +32,8 @@ import {
   type Landing,
   type Moving,
 } from './hexes'
-import { useCycleKey, type Action } from './keys'
+import { useCycleKey } from './atoms/useCycleKey'
+import type { Action } from './keys'
 import { nearestOf } from './state/move/targets'
 import type { CarriedTile, CarryInput } from './state/move/carry'
 import { useMove } from './state/move/useMove'
@@ -53,16 +54,10 @@ import type { ToldPart } from '../motion'
 import { wayTo, type TileMark } from './tile/marks/mark'
 import { Ground, Slot } from './tile/places'
 import { SunEdge } from './tile/light'
-import {
-  Tile,
-  type StandingLook,
-  type SunLight,
-  type TileMotion,
-  type TileWrite,
-} from './tile/Tile'
+import { Tile, type StandingLook, type TileMotion, type TileWrite } from './tile/Tile'
 import { listOf, lookOf, placeOf } from './view/looks'
-import { pathTo, sunward, type Sun, type TileNode } from './view/tiles'
-import { showsContext, type CanvasView, type ViewAction } from './view/view'
+import { pathTo, sunward, type Sun, type SunLight, type TileNode } from './view/tiles'
+import { showsContext, type CanvasView, type Fills, type ViewAction } from './view/view'
 
 export type { Acting, Moving } from './hexes'
 
@@ -403,15 +398,14 @@ function useMenuOpen() {
 
 /**
  * Acting on the canvas, its caller's or a canvas only looked at's, and whether the reader may add to
- * a Tile (`fills`): a free slot of its ring has a menu, so a new Tile goes there. One holding nothing
+ * a ring of a Tile (`fills`), its Children or its Context: a free slot of it has a menu, so a new
+ * Tile goes there. One holding nothing
  * they may not add to opens nothing, its ring six slots that take nothing.
  */
 function actingOn(system: TileNode, { acting, looking }: Pick<CanvasProps, 'acting' | 'looking'>) {
   const on = acting ?? lookedAt(system, looking)
-  const fills = (tile: TileNode) =>
-    directions.some(
-      (direction) => on?.slot({ parent: tile, ring: 'children', direction }) !== undefined,
-    )
+  const fills: Fills = (tile, ring) =>
+    directions.some((direction) => on?.slot({ parent: tile, ring, direction }) !== undefined)
   return { acting: on, fills }
 }
 

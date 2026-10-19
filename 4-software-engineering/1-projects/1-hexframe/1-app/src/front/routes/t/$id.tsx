@@ -24,6 +24,7 @@ import {
   type CanvasView,
   type ViewAction,
 } from '#/front/ui/canvas/view/view'
+import type { Sun } from '#/front/ui/canvas/view/tiles'
 import { cornerPlace } from '#/front/ui/layouts/screen/Screen'
 import { EmptyState } from '#/front/ui/layouts/states'
 
@@ -91,7 +92,7 @@ function Public() {
     else void navigate({ search: { ...next, center: next.center ?? tree.id } })
   }
   // The star glows amber, a person's, or rose, hexframe's own Organization's; the corner with it.
-  const light = tree.id === hexframeStar ? 'organization' : 'human'
+  const sun: Sun = { light: tree.id === hexframeStar ? 'organization' : 'human' }
   return (
     <main className="relative h-dvh overflow-hidden">
       <h1 className="sr-only">{m.public_title()}</h1>
@@ -101,11 +102,11 @@ function Public() {
         view={view}
         onViewChange={onViewChange}
         looking="card"
-        sun={{ light }}
+        sun={sun}
         className="size-full"
       />
       <div className={cornerPlace}>
-        <Breadcrumb system={tree} view={view} onViewChange={onViewChange} light={light} />
+        <Breadcrumb system={tree} view={view} onViewChange={onViewChange} sun={sun} />
       </div>
       <footer className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-center gap-3 p-4">
         <p className="text-sm text-muted-foreground">{m.public_shared()}</p>

@@ -7,7 +7,7 @@
 // Tile whose Body was open, lands on home as these. Pure.
 import { Schema } from 'effect'
 
-import { hexframeStar, shippedOf, type ShippedRoot } from '#/domains/mapping/entities'
+import { hexframeStar, mountedAt, shippedOf, type ShippedRoot } from '#/domains/mapping/entities'
 import {
   CanvasView,
   orDefault,
@@ -16,6 +16,7 @@ import {
   viewIn,
   withViewIn,
 } from '#/front/ui/canvas/view/view'
+import type { Sun } from '#/front/ui/canvas/view/tiles'
 import type { ToldPart } from '#/front/ui/motion'
 
 import { tutorialRules, tutorialTells, type TutorialRules } from './tutorial/rules'
@@ -94,6 +95,15 @@ export const tutorialOn = <S extends CanvasView & TutorialSearch>(
 ): S => ({
   ...withViewIn(search, { ...view, center: undefined }),
   ...withTutorial(view.center ?? true),
+})
+
+/**
+ * The star a System hexframe ships stands under, the Hexframe Organization's, rose, which its canvas
+ * and its corner glow in: Help drawn from it, the tutorial from its own Root, in its Direction there.
+ */
+export const shippedSun = (shipped: ShippedRoot): Sun => ({
+  light: 'organization',
+  rootAt: shipped === 'help' ? [] : [mountedAt[shipped]],
 })
 
 /**

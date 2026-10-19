@@ -5,6 +5,7 @@
 import { useId } from 'react'
 
 import { hexCorners, hexWidth, type Hex, type Point } from '../geometry/geometry'
+import type { SunLight } from '../view/tiles'
 
 /** A hex as the `points` of an SVG polygon. */
 export function points(hex: Hex): string {
@@ -107,7 +108,7 @@ export function SunEdge({
   toward: Point
   /** The canvas's size, in its own units. */
   size: { width: number; height: number }
-  light: 'human' | 'organization'
+  light: SunLight
 }) {
   const id = useId()
   const radius = Math.min(size.width, size.height) * 0.7
@@ -137,7 +138,7 @@ export function SunEdge({
 }
 
 /** A star's light from the edge, fading evenly out: its halo, then its haze. */
-const sunStops: Record<'human' | 'organization', ReadonlyArray<[string, string, number]>> = {
+const sunStops: Record<SunLight, ReadonlyArray<[string, string, number]>> = {
   human: [
     ['0', 'halo', 40],
     ['.3', 'halo', 18],

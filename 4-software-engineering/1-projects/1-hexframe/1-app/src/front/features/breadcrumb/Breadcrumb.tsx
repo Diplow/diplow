@@ -18,13 +18,13 @@ interface BreadcrumbProps {
   onViewChange: (view: CanvasView, action: ViewAction) => void
   /** The mark chosen, on another System than the reader's: back to their own Root. */
   onHome?: () => void
-  /** The light of the System's star: a person's, amber, by default, or an Organization's, rose. */
-  light?: Sun['light']
+  /** The System's star, whose light the point you are on takes: a person's, amber, by default. */
+  sun?: Sun
   className?: string
 }
 
 export function Breadcrumb(props: BreadcrumbProps) {
-  const { system, view, onViewChange, onHome, light, className } = props
+  const { system, view, onViewChange, onHome, sun, className } = props
   const turns = useThingsDone()
   return (
     <Rail
@@ -34,7 +34,7 @@ export function Breadcrumb(props: BreadcrumbProps) {
         if (system !== undefined) onViewChange(centerOn(system, tile), { gesture: 'center', tile })
       }}
       onHome={onHome}
-      light={light}
+      light={sun?.light}
       className={className}
     />
   )

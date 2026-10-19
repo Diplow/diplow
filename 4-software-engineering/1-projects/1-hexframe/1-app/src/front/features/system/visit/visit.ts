@@ -8,7 +8,7 @@ import { tilePage } from '#/api/mapping/files/download'
 import { acrossGaps, hexframeStar, systemOf, type Seen } from '#/domains/mapping/entities'
 import type { SystemShown } from '#/front/client/mapping/queries'
 import { localizeUrl } from '#/paraglide/runtime'
-import { findTile, type Sun, type TileNode } from '#/front/ui/canvas/view/tiles'
+import { findTile, type SunLight, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { orDefault, readSearch, TileId, type ViewAction } from '#/front/ui/canvas/view/view'
 
 import { canvasTree } from '../tree'
@@ -71,10 +71,7 @@ export const publicTree = (seen: Seen) =>
  * naming no Organization, nor while it is read): an Organization's, rose, where the Account stands
  * somewhere in it, or hexframe's own; a person's, amber, otherwise.
  */
-export const lightOf = (
-  star: string | undefined,
-  standing: string | null | undefined,
-): Sun['light'] =>
+export const lightOf = (star: string | undefined, standing: string | null | undefined): SunLight =>
   (standing !== undefined && standing !== null) || star === hexframeStar ? 'organization' : 'human'
 
 /** The gestures that take the canvas to a Tile: centering it, with its Context or not. */

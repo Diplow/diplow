@@ -13,7 +13,7 @@ import { cn } from 'cn'
 import { m } from '#/paraglide/messages'
 
 import { Sunstone } from '../../layouts/screen/Sunstone'
-import type { Sun } from '../view/tiles'
+import type { SunLight } from '../view/tiles'
 
 interface RailStep {
   id: string
@@ -35,7 +35,7 @@ interface RailProps {
    */
   onHome?: (() => void) | undefined
   /** The light of the System's star, which the point you are on takes: a person's by default. */
-  light?: Sun['light']
+  light?: SunLight
   className?: string
 }
 
@@ -118,12 +118,12 @@ interface StepProps {
   step: RailStep
   /** The Tile you are on: lit in its System's light, and read as where you are, not a way back. */
   here: boolean
-  light: Sun['light'] | undefined
+  light: SunLight | undefined
   onSelect: () => void
 }
 
 /** The point you are on, in each light a star has. */
-const lit: Record<Sun['light'], string> = {
+const lit: Record<SunLight, string> = {
   human:
     'border-human bg-human shadow-[0_0_14px_2px_color-mix(in_oklab,var(--human)_70%,transparent)]',
   organization:

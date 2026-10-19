@@ -134,24 +134,31 @@ export function showView(system: TileNode, view: CanvasView): ShownView {
 }
 
 /**
+ * Whether the reader may add to a ring of a Tile, a free slot of it taking a new Tile: its Children,
+ * or its Context, a ring of its own, which may take a new Tile where its Children are all taken.
+ */
+export type Fills = (tile: TileNode, ring: 'children' | 'context') => boolean
+
+/**
  * Whether a Tile opens onto something: a ring holding a Branch or a Leaf, or, holding neither, one
  * the reader may add to (`fills`). Holding nothing the reader may add to, its ring would be six free
  * slots that take nothing, so it opens nothing, as a Leaf.
  */
-export function opens(tile: TileNode, fills: (tile: TileNode) => boolean): boolean {
+export function opens(tile: TileNode, fills: Fills): boolean {
   if (firstKindOf(tile) === undefined) return false
   const held = Object.keys({ ...tile.branches, ...tile.leaves }).length
-  return held > 0 || fills(tile)
+  return held > 0 || fills(tile, 'children')
 }
 
 /**
- * Whether a Tile shows a Context: one it holds, or, holding none, one the reader may add to (`fills`).
+ * Whether a Tile shows a Context: one it holds, or, holding none, a Context the reader may add to
+ * (`fills`).
  * A Leaf has none; holding none the reader may add to, its Context would be six free slots that take
  * nothing, so it shows none.
  */
-export function showsContext(tile: TileNode, fills: (tile: TileNode) => boolean): boolean {
+export function showsContext(tile: TileNode, fills: Fills): boolean {
   if (!kindsOf(tile).includes('context')) return false
-  return Object.keys(tile.context ?? {}).length > 0 || fills(tile)
+  return Object.keys(tile.context ?? {}).length > 0 || fills(tile, 'context')
 }
 
 /**
@@ -159,7 +166,7 @@ export function showsContext(tile: TileNode, fills: (tile: TileNode) => boolean)
  * center's Context hidden, the center alone unless its Context still shows inside it, and a Branch
  * of its ring closed.
  */
-export function withoutEmptyRings(shown: ShownView, fills: (tile: TileNode) => boolean): ShownView {
+export function withoutEmptyRings(shown: ShownView, fills: Fills): ShownView {
   const { center } = shown
   const inner = shown.inner === 'context' && !showsContext(center, fills) ? undefined : shown.inner
   if (shown.frame !== undefined && inner === undefined && !opens(center, fills))
@@ -274,7 +281,7 @@ export function withContext(system: TileNode, view: CanvasView): CanvasView {
  */
 export function cycleOf(
   shown: ShownView,
-  fills: (tile: TileNode) => boolean,
+  fills: Fills,
 ): 'expand' | 'show-context' | 'collapse' | undefined {
   const context = showsContext(shown.center, fills)
   if (shown.inner === 'context') return 'collapse'

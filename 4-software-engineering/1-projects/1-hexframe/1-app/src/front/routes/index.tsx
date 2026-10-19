@@ -63,6 +63,7 @@ import {
   readHelpSearch,
   readTutorialSearch,
   shippedOnCanvas,
+  shippedSun,
   shippedTells,
   turnedTo,
   tutorialOn,
@@ -112,7 +113,7 @@ import { Journey } from '#/front/ui/canvas/layouts/Journey'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
-import { type Direction, mountedAt, type ShippedRoot } from '#/domains/mapping/entities'
+import type { Direction, ShippedRoot } from '#/domains/mapping/entities'
 
 /**
  * Home's search params, each feature's read on its own: the System's view and change, the Keys and
@@ -298,7 +299,7 @@ function shippedSide(
         view={view}
         onViewChange={onViewChange}
         onHome={away ? onHome : undefined}
-        light="organization"
+        sun={shippedSun(shipped)}
       />
     ),
   }
@@ -352,7 +353,7 @@ function useCenterFromChat({ tree, visit, arrive, turning }: Centering) {
  */
 function visitedSide(
   visit: Visited,
-  props: Omit<VisitPageProps, 'star'> & { search: HomeSearch; onHome: () => void },
+  props: Omit<VisitPageProps, 'star' | 'light'> & { search: HomeSearch; onHome: () => void },
 ) {
   const { star, tree, light } = visit
   if (star === undefined) return undefined
@@ -363,7 +364,7 @@ function visitedSide(
     at: star,
     canvas: (
       <div className={side}>
-        <VisitPage star={star} {...page} />
+        <VisitPage {...page} star={star} light={light} />
       </div>
     ),
     corner: (
@@ -372,7 +373,7 @@ function visitedSide(
         view={viewOf(props.search)}
         onViewChange={props.onViewChange}
         onHome={onHome}
-        light={light}
+        sun={{ light }}
       />
     ),
   }
@@ -446,7 +447,7 @@ function SignedOut() {
             system={help.tree}
             view={view}
             onViewChange={help.onViewChange}
-            light="organization"
+            sun={shippedSun('help')}
           />
         }
         messages={
@@ -696,13 +697,7 @@ function ShippedSide(props: ShippedSideProps) {
   if (tree === undefined) return <Loading />
   return (
     <div className={side}>
-      <ShippedCanvas
-        tree={tree}
-        {...canvas}
-        // Help is drawn from the Hexframe star; the tutorial, from its own Root, lies beside it.
-        sun={{ light: 'organization', rootAt: shipped === 'help' ? [] : [mountedAt[shipped]] }}
-        className="min-h-0 flex-1"
-      />
+      <ShippedCanvas tree={tree} {...canvas} sun={shippedSun(shipped)} className="min-h-0 flex-1" />
     </div>
   )
 }

@@ -122,7 +122,7 @@ describe('sunward', () => {
   })
 
   it('points to a star the root drawn stands below, from the root itself', () => {
-    // Help, in the Hexframe Organization's Direction 1: its star stands to its bottom right.
+    // A root in its star's Direction 1: the star stands to its bottom right.
     expect(toward(sunward(system, 'root', [1]))).toEqual({ x: 1, y: 1 })
     expect(toward(sunward(system, 'b', [1]))).toEqual({ x: 1, y: 1 })
   })

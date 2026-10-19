@@ -1,10 +1,9 @@
 // The keys of an SVG shape that stands for a button (`role="button"`), which the browser does not give
 // it: Enter acts as it goes down, once per press, not once per repeat; Space acts as it comes up, and
 // going down it only keeps the page from scrolling. ⇧↵ is no click: on a tile it goes in, which is
-// its caller's, or its menu's. And the canvas's own key, C, which cycles the center's views from
-// anywhere on the page but a field, a menu or a dialog.
+// its caller's, or its menu's.
 import type { Slot } from 'radix-ui'
-import { useEffect, useRef, type ComponentProps, type KeyboardEvent, type RefObject } from 'react'
+import type { ComponentProps, KeyboardEvent } from 'react'
 
 /** What a click on a shape that stands for a button does, and its name for a screen reader. */
 export interface Action {
@@ -49,38 +48,3 @@ export function buttonKeys({ onEnter, onSpace, onShiftEnter }: Press) {
  * an HTML element; they hold on an SVG group alike.
  */
 export type Hand = ComponentProps<typeof Slot.Root>
-
-/** Where a key is typed, or belongs to what holds it: a field, a menu or a dialog. */
-const heldElsewhere = (target: EventTarget | null) =>
-  target instanceof Element &&
-  target.closest(
-    'input, textarea, select, [contenteditable="true"], [role="menu"], [role="dialog"]',
-  ) !== null
-
-/**
- * The C key, pressed anywhere on the page but where it is typed or held (`heldElsewhere`), once per
- * press and with no modifier but Shift: `onCycle`, the center's next view. Not while the canvas is
- * inert, the one a journey leaves behind, nor once another listener took the key. Without `onCycle`,
- * the key is left alone.
- */
-export function useCycleKey(canvas: RefObject<Element | null>, onCycle: (() => void) | undefined) {
-  const latest = useRef(onCycle)
-  useEffect(() => {
-    latest.current = onCycle
-  })
-  const listens = onCycle !== undefined
-  useEffect(() => {
-    if (!listens) return
-    const onKey = (event: globalThis.KeyboardEvent) => {
-      if (event.key.toLowerCase() !== 'c' || event.repeat || event.defaultPrevented) return
-      if (event.metaKey || event.ctrlKey || event.altKey || heldElsewhere(event.target)) return
-      if (canvas.current === null || canvas.current.closest('[inert]') !== null) return
-      event.preventDefault()
-      latest.current?.()
-    }
-    addEventListener('keydown', onKey)
-    return () => {
-      removeEventListener('keydown', onKey)
-    }
-  }, [listens, canvas])
-}

@@ -269,6 +269,12 @@ describe('opens, showsContext and withoutEmptyRings', () => {
     expect(showsContext(leaf('notes'), anyone)).toBe(false)
   })
 
+  it('asks each ring of its own, a Context taking a new Tile where the Children take none', () => {
+    const contextOnly = (_: unknown, ring: 'children' | 'context') => ring === 'context'
+    expect(showsContext(tile('b'), contextOnly)).toBe(true)
+    expect(opens(tile('b'), contextOnly)).toBe(false)
+  })
+
   it('hides a Context holding nothing the reader may add to, the center folded with it', () => {
     const inside = showView(system, withContext(system, { center: 'a' }))
     expect(withoutEmptyRings(inside, nobody)).toMatchObject({ frame: 'children', inner: undefined })
