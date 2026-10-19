@@ -13,13 +13,15 @@ import { directions, type Point } from '../geometry/geometry'
 import { layoutCanvas, type CanvasHex } from '../geometry/shape'
 import type { TileMotion } from '../tile/Tile'
 import { movingFor } from '../../motion'
-import { firstKindOf, pathTo, type TileNode } from '../view/tiles'
+import { pathTo, type TileNode } from '../view/tiles'
 import {
   centerOn,
+  opens,
   showView,
   toggleCenter,
   toggleExpanded,
   withContext,
+  withoutEmptyRings,
   type CanvasView,
   type Gesture,
   type ShownView,
@@ -75,22 +77,30 @@ const everything: TileLets = { click: true, recenter: true }
 /** What a gesture on a Tile asks of the view: a click's, or its menu's Show its Context. */
 type TileGesture = TileAction | 'show-context'
 
+/** How a click is decided: by a finger or not, and which Tiles the reader may add to. */
+interface Deciding {
+  finger: boolean
+  fills: (tile: TileNode) => boolean
+}
+
 /**
- * What a click on `hex` does in `shown`; nothing on a centered Leaf, which opens nothing. A finger has
- * no double click to go in with: its tap on a Branch of the ring goes in, rather than opening it.
+ * What a click on `hex` does in `shown`; nothing on a centered Tile that opens nothing, a Leaf, or
+ * one holding nothing the reader may add to (`opens`), which a Branch of the ring is centered for
+ * instead. A finger has no double click to go in with: its tap on a Branch of the ring goes in,
+ * rather than opening it.
  */
-function tileAction(hex: TileHex, shown: ShownView, finger = false): TileAction | undefined {
+function tileAction(hex: TileHex, shown: ShownView, how: Deciding): TileAction | undefined {
   // The untitled root, its lamp alone, is not there yet: a click on it does nothing.
   if (hex.tile.root === 'untitled' || hex.tile.root === 'empty') return undefined
   switch (hex.role) {
     case 'center':
       if (shown.frame !== undefined) return 'collapse'
-      return firstKindOf(shown.center) === undefined ? undefined : 'expand'
+      return opens(shown.center, how.fills) ? 'expand' : undefined
     case 'hub':
       return 'collapse'
     case 'branch':
       // Only the ring around the center opens its Branches; theirs are a generation further.
-      return hex.generation === 1 && !finger ? 'expand' : 'center'
+      return hex.generation === 1 && !how.finger && opens(hex.tile, how.fills) ? 'expand' : 'center'
     case 'leaf':
     case 'context':
       return 'center'
@@ -190,11 +200,17 @@ interface CanvasInput {
   finger?: boolean
   /** What each Tile lets through of the gestures on it; without it, every one. */
   lets?: ((hex: TileHex) => TileLets) | undefined
+  /**
+   * Whether the reader may add to a Tile, a free slot of its ring taking a new Tile: one holding
+   * nothing they may not add to opens nothing (`opens`). Without it, they may add to every one.
+   */
+  fills?: ((tile: TileNode) => boolean) | undefined
 }
 
 export function useCanvasState(input: CanvasInput) {
   const { system, view, onViewChange, finger = false, lets = () => everything } = input
-  const shown = showView(system, view)
+  const { fills = () => true } = input
+  const shown = withoutEmptyRings(showView(system, view), fills)
   const hexes = layoutCanvas(shown)
   const { inside, hubs } = openedIn(hexes)
   // The hex the last single click landed on: a double-click centers its Tile only if its first click
@@ -282,7 +298,7 @@ export function useCanvasState(input: CanvasInput) {
    */
   const actionOf = (hex: TileHex, hand = finger) => {
     const { click, recenter } = lets(hex)
-    const action = click ? tileAction(hex, shown, hand) : undefined
+    const action = click ? tileAction(hex, shown, { finger: hand, fills }) : undefined
     return action === 'center' && !recenter ? undefined : action
   }
 

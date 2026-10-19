@@ -1,6 +1,8 @@
 // The canvas's camera: when the center changes, the drawing flies from the last view to the next
 // instead of swapping, so going into a child zooms in, going to a parent zooms out, and a Tile
-// reached with nothing of it drawn before fades in (`ui/CLAUDE.md`, principle 6). It plays the shape
+// reached with nothing of it drawn before fades in (`ui/CLAUDE.md`, principle 6); and when the center
+// stays but opens from alone or folds back, the scale changes as evenly, its hex carried from where it
+// was drawn to where it is, nothing left beneath. It plays the shape
 // of one world where a Tile's ring lies inside its hex: the next drawing starts where its center was
 // drawn, or would open, in the last one, and comes to rest; the last one, drawn still beneath it,
 // flies the opposite way as it fades. Both move together, one camera, for `--duration-camera`, and
@@ -115,6 +117,24 @@ export function courseOf(last: Drawing, next: Drawing): Course {
   }
 }
 
+/**
+ * How the drawing moves where the center stays but its own hex changes, opened from alone, large, or
+ * folded back into it: its hex from where it was drawn to where it is, as one Tile the two drawings
+ * share; none where it stands as it stood.
+ */
+export function reframingOf(
+  last: readonly CanvasHex[],
+  next: readonly CanvasHex[],
+  center: string,
+): Course | undefined {
+  const was = drawnAt(last, center)?.hex
+  const is = drawnAt(next, center)?.hex
+  if (was === undefined || is === undefined) return undefined
+  const moved = Math.hypot(is.center.x - was.center.x, is.center.y - was.center.y)
+  if (moved < 1e-6 && Math.abs(is.radius - was.radius) < 1e-6) return undefined
+  return { from: was, to: is, levels: 0, arrived: true }
+}
+
 /** A scale about the canvas's origin, then a move: a point `p` drawn at `scale × p + (x, y)`. */
 export interface Placing {
   scale: number
@@ -207,7 +227,8 @@ interface CameraInput {
 /**
  * The camera over the canvas's drawing: the group to draw it in (`drawing`), and, while a flight
  * is under way, the last drawing to draw still beneath it (`still`), in its own group (`last`),
- * which nothing can reach. A flight starts as the center changes, before the next view is painted.
+ * which nothing can reach. A flight starts as the center changes, or its own hex as it opens or
+ * folds, before the next view is painted.
  */
 export function useCamera({ system, center, hexes }: CameraInput) {
   const drawing = useRef<SVGGElement>(null)
@@ -220,7 +241,13 @@ export function useCamera({ system, center, hexes }: CameraInput) {
   useLayoutEffect(() => {
     const before = painted.current
     painted.current = { system, center, hexes }
-    if (before === undefined || before.center === center) return
+    if (before === undefined) return
+    if (before.center === center) {
+      const course = reframingOf(before.hexes, hexes, center)
+      const duration = course === undefined ? 0 : flightFor(0)
+      if (course !== undefined && duration > 0) setFlight({ course, duration, still: [] })
+      return
+    }
     const lastDrawing = { ...before, path: idsTo(before.system, before.center) }
     const nextDrawing = { center, hexes, path: idsTo(system, center) }
     const course = courseOf(lastDrawing, nextDrawing)

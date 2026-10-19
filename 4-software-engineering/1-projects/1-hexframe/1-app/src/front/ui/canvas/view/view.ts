@@ -133,6 +133,48 @@ export function showView(system: TileNode, view: CanvasView): ShownView {
   return { center, frame, inner, expanded: expansionsOf(center, frame, view.expanded ?? {}) }
 }
 
+/**
+ * Whether a Tile opens onto something: a ring holding a Branch or a Leaf, or, holding neither, one
+ * the reader may add to (`fills`). Holding nothing the reader may add to, its ring would be six free
+ * slots that take nothing, so it opens nothing, as a Leaf.
+ */
+export function opens(tile: TileNode, fills: (tile: TileNode) => boolean): boolean {
+  if (firstKindOf(tile) === undefined) return false
+  const held = Object.keys({ ...tile.branches, ...tile.leaves }).length
+  return held > 0 || fills(tile)
+}
+
+/**
+ * Whether a Tile shows a Context: one it holds, or, holding none, one the reader may add to (`fills`).
+ * A Leaf has none; holding none the reader may add to, its Context would be six free slots that take
+ * nothing, so it shows none.
+ */
+export function showsContext(tile: TileNode, fills: (tile: TileNode) => boolean): boolean {
+  if (!kindsOf(tile).includes('context')) return false
+  return Object.keys(tile.context ?? {}).length > 0 || fills(tile)
+}
+
+/**
+ * The view shown, each ring that would open onto nothing folded (`opens`, `showsContext`): the
+ * center's Context hidden, the center alone unless its Context still shows inside it, and a Branch
+ * of its ring closed.
+ */
+export function withoutEmptyRings(shown: ShownView, fills: (tile: TileNode) => boolean): ShownView {
+  const { center } = shown
+  const inner = shown.inner === 'context' && !showsContext(center, fills) ? undefined : shown.inner
+  if (shown.frame !== undefined && inner === undefined && !opens(center, fills))
+    return { ...shown, frame: undefined, inner, expanded: {} }
+  const expanded: ShownView['expanded'] = {}
+  for (const direction of directions) {
+    const kind = shown.expanded[direction]
+    const branch = center.branches?.[direction]
+    if (kind === undefined || branch === undefined) continue
+    const shows = kind === 'context' ? showsContext(branch, fills) : opens(branch, fills)
+    if (shows) expanded[direction] = kind
+  }
+  return { ...shown, inner, expanded }
+}
+
 /** Whether a view opens something within the center's ring, a ring inside it or a Branch. */
 const opensWithin = (view: CanvasView) =>
   view.inner !== undefined || Object.keys(view.expanded ?? {}).length > 0

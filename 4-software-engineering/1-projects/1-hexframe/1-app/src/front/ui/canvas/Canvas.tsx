@@ -19,7 +19,7 @@ import { cn } from 'cn'
 import { m } from '#/paraglide/messages'
 
 import { canvasSize, type EmptySlotTarget } from './geometry/shape'
-import type { Direction, Point } from './geometry/geometry'
+import { directions, type Direction, type Point } from './geometry/geometry'
 import {
   lookingAt,
   SlotHexView,
@@ -52,7 +52,7 @@ import { Ground, Slot } from './tile/places'
 import { Tile, type StandingLook, type TileMotion, type TileWrite } from './tile/Tile'
 import { listOf, lookOf, placeOf } from './view/looks'
 import { pathTo, type TileNode } from './view/tiles'
-import type { CanvasView, ViewAction } from './view/view'
+import { showsContext, type CanvasView, type ViewAction } from './view/view'
 
 export type { Acting, Moving } from './hexes'
 
@@ -168,14 +168,13 @@ interface CanvasProps {
 export function Canvas(props: CanvasProps) {
   const { system, view, onViewChange, emptySlots, move, writes, marks, onCarry, lets } = props
   const { introducesOpening: introduces = false } = props
-  const acting = props.acting ?? lookedAt(system, props.looking)
+  const { acting, fills } = actingOn(system, props)
   const finger = useFinger()
-  const { state, actions } = useCanvasState({ system, view, onViewChange, finger, lets })
+  const { state, actions } = useCanvasState({ system, view, onViewChange, finger, lets, fills })
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, canvasSize)
   const { width, height } = canvasSize
-  // The hex whose menu is open: the other Tiles step back meanwhile.
-  const [menu, setMenu] = useState<string>()
+  const { menu, onMenu } = useMenuOpen()
   const moving = move?.moving
   const placed = centersOf(state.hexes)
   const targets = moving === undefined ? [] : targetsOf(state.hexes, { emptySlots, moving })
@@ -194,9 +193,6 @@ export function Canvas(props: CanvasProps) {
   // While a tile moves, nothing stands in a free slot: they offer themselves to it.
   const standing = moving === undefined ? marks?.slot : undefined
   const markOf = tileMarksOf(system, state.hexes, { ...marks, slot: standing }, state.center.id)
-  const onMenu = (key: string) => (open: boolean) => {
-    setMenu((current) => (open ? key : current === key ? undefined : current))
-  }
 
   /** A Tile's hex: the tile, by what it is and where it stands, in its menu where it has one. */
   const tileOf = (hex: TileHex) => {
@@ -233,7 +229,7 @@ export function Canvas(props: CanvasProps) {
             {...(hand && { hand })}
           />
         )}
-        acting={acting?.tile(hex)}
+        acting={withoutDead(acting?.tile(hex), action, showsContext(hex.tile, fills))}
         go={(verb) => {
           actions.go(hex, verb)
         }}
@@ -327,6 +323,42 @@ function lookedAt(system: TileNode, looking: Looking = false): CanvasActing | un
     tile: (hex) => lookingAt(system, hex, lookOf(hex), looking),
     slot: () => undefined,
   }
+}
+
+/** The hex whose menu is open, by its key: the other Tiles step back meanwhile. */
+function useMenuOpen() {
+  const [menu, setMenu] = useState<string>()
+  const onMenu = (key: string) => (open: boolean) => {
+    setMenu((current) => (open ? key : current === key ? undefined : current))
+  }
+  return { menu, onMenu }
+}
+
+/**
+ * Acting on the canvas, its caller's or a canvas only looked at's, and whether the reader may add to
+ * a Tile (`fills`): a free slot of its ring has a menu, so a new Tile goes there. One holding nothing
+ * they may not add to opens nothing, its ring six slots that take nothing.
+ */
+function actingOn(system: TileNode, { acting, looking }: Pick<CanvasProps, 'acting' | 'looking'>) {
+  const on = acting ?? lookedAt(system, looking)
+  const fills = (tile: TileNode) =>
+    directions.some(
+      (direction) => on?.slot({ parent: tile, ring: 'children', direction }) !== undefined,
+    )
+  return { acting: on, fills }
+}
+
+/**
+ * A Tile's menu, the lines that would do nothing left out: its Open where a click on it does nothing,
+ * a center opening nothing, and its Show its Context where it shows none (`showsContext`).
+ */
+function withoutDead(acting: Acting | undefined, action: TileAction | undefined, context: boolean) {
+  if (acting === undefined) return acting
+  const dead = [
+    ...(action === undefined ? ['open' as const] : []),
+    ...(context ? [] : ['show-context' as const]),
+  ]
+  return dead.length === 0 ? acting : { ...acting, without: [...(acting.without ?? []), ...dead] }
 }
 
 /** A Tile pointed at and let go, handed on by its id where the caller takes it. */

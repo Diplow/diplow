@@ -12,6 +12,7 @@ import {
   heartShare,
   keyframesOf,
   placingAt,
+  reframingOf,
   stillOf,
   useCamera,
   type Drawing,
@@ -191,6 +192,24 @@ describe('stillOf', () => {
   })
 })
 
+describe('reframingOf', () => {
+  it("carries the center's hex from alone, large, to the heart of its ring, and back", () => {
+    const alone = drawn({})
+    const opened = drawn({ frame: 'children' })
+    const course = reframingOf(alone.hexes, opened.hexes, 'root')
+    expect(course).toMatchObject({ from: hexIn(alone, 'tile:root').hex, levels: 0, arrived: true })
+    expect(course?.to).toEqual(hexIn(opened, 'tile:root').hex)
+    expect(course && course.from.radius > course.to.radius).toBe(true)
+    expect(reframingOf(opened.hexes, alone.hexes, 'root')?.to).toEqual(course?.from)
+  })
+
+  it('leaves the drawing where it is while the center stands as it stood', () => {
+    const opened = drawn({ frame: 'children' })
+    const branch = drawn({ frame: 'children', expanded: { 4: 'children' } })
+    expect(reframingOf(opened.hexes, branch.hexes, 'root')).toBeUndefined()
+  })
+})
+
 describe('flightFor and the camera', () => {
   const style = document.documentElement.style
 
@@ -244,6 +263,21 @@ describe('flightFor and the camera', () => {
       vi.advanceTimersByTime(1100)
     })
     expect(result.current.still).toBeUndefined()
+  })
+
+  it('flies as the center opens from alone and folds back, with nothing beneath', () => {
+    vi.useFakeTimers()
+    tokens()
+    reduced(false)
+    const { result, rerender } = camera({})
+    rerender({ view: { frame: 'children' } })
+    expect(result.current.still).toEqual([])
+    settled(() => {
+      vi.advanceTimersByTime(800)
+    })
+    expect(result.current.still).toBeUndefined()
+    rerender({ view: {} })
+    expect(result.current.still).toEqual([])
   })
 
   it('lands at once with reduced motion', () => {

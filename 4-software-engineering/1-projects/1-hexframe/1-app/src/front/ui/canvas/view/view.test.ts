@@ -3,13 +3,16 @@ import { describe, expect, it } from 'vitest'
 import type { TileNode } from './tiles'
 import {
   centerOn,
+  opens,
   readCanvasView,
   showView,
+  showsContext,
   toggleCenter,
   toggleExpanded,
   viewIn,
   withContext,
   withViewIn,
+  withoutEmptyRings,
   type CanvasView,
 } from './view'
 
@@ -233,6 +236,55 @@ describe('centerOn', () => {
   it('centers a Context Tile opened, and a Leaf alone, which has no ring', () => {
     expect(centerOn(system, 'why')).toEqual({ center: 'why', frame: 'children' })
     expect(centerOn(system, 'notes')).toEqual({ center: 'notes' })
+  })
+})
+
+describe('opens, showsContext and withoutEmptyRings', () => {
+  const nobody = () => false
+  const anyone = () => true
+
+  it('opens a Tile onto what it holds, and one holding nothing only where the reader may add to it', () => {
+    expect(opens(system, nobody)).toBe(true)
+    expect(opens(tile('b'), anyone)).toBe(true)
+    expect(opens(tile('b'), nobody)).toBe(false)
+    expect(opens(tile('lonely', { context: { 1: tile('c') } }), nobody)).toBe(false)
+    expect(opens(leaf('notes'), anyone)).toBe(false)
+  })
+
+  it('folds a center holding nothing the reader may add to, but keeps its Context shown', () => {
+    const shown = showView(system, centerOn(system, 'b'))
+    expect(withoutEmptyRings(shown, nobody)).toMatchObject({ frame: undefined, expanded: {} })
+    expect(withoutEmptyRings(shown, anyone)).toEqual(shown)
+    const held = tile('root', { branches: { 4: tile('b', { context: { 1: tile('c') } }) } })
+    const inside = showView(held, withContext(held, { center: 'b' }))
+    expect(withoutEmptyRings(inside, nobody)).toEqual(inside)
+  })
+
+  it('shows a Context it holds, and one holding none only where the reader may add to it', () => {
+    expect(showsContext(system, nobody)).toBe(true)
+    expect(showsContext(tile('b'), anyone)).toBe(true)
+    expect(showsContext(tile('b'), nobody)).toBe(false)
+    expect(showsContext(leaf('notes'), anyone)).toBe(false)
+  })
+
+  it('hides a Context holding nothing the reader may add to, the center folded with it', () => {
+    const inside = showView(system, withContext(system, { center: 'a' }))
+    expect(withoutEmptyRings(inside, nobody)).toMatchObject({ frame: 'children', inner: undefined })
+    expect(withoutEmptyRings(inside, anyone)).toEqual(inside)
+    const alone = showView(system, withContext(system, { center: 'b' }))
+    expect(withoutEmptyRings(alone, nobody)).toMatchObject({ frame: undefined, inner: undefined })
+    const opened = showView(system, { frame: 'children', expanded: { 1: 'context', 4: 'context' } })
+    expect(withoutEmptyRings(opened, nobody).expanded).toEqual({})
+    expect(withoutEmptyRings(opened, anyone).expanded).toEqual(opened.expanded)
+  })
+
+  it('closes a Branch of the ring holding nothing the reader may add to, and keeps the others', () => {
+    const shown = showView(system, {
+      frame: 'children',
+      expanded: { 1: 'children', 4: 'children' },
+    })
+    expect(withoutEmptyRings(shown, nobody).expanded).toEqual({ 1: 'children' })
+    expect(withoutEmptyRings(shown, anyone).expanded).toEqual(shown.expanded)
   })
 })
 

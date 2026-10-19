@@ -39,12 +39,17 @@ const open: CanvasView = { frame: 'children' }
 /** `a` centered, as a gesture leaves it: opened into its first ring, so its Tiles show around it. */
 const inA: CanvasView = { center: 'a', frame: 'children' }
 
-function render(
-  view: CanvasView,
-  { finger = false, lets }: { finger?: boolean; lets?: (hex: TileHex) => TileLets } = {},
-) {
+interface Hand {
+  finger?: boolean
+  lets?: (hex: TileHex) => TileLets
+  fills?: (tile: TileNode) => boolean
+}
+
+function render(view: CanvasView, { finger = false, lets, fills }: Hand = {}) {
   const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
-  const { result } = renderHook(() => useCanvasState({ system, view, onViewChange, finger, lets }))
+  const { result } = renderHook(() =>
+    useCanvasState({ system, view, onViewChange, finger, lets, fills }),
+  )
   return { ...result.current, onViewChange }
 }
 
@@ -56,7 +61,7 @@ function hexOf(hexes: ReturnType<typeof render>['state']['hexes'], key: string):
 }
 
 /** What a click does on each Tile drawn, by key. */
-function actions(view: CanvasView, hand = { finger: false }) {
+function actions(view: CanvasView, hand: Hand = {}) {
   const { state, actions: act } = render(view, hand)
   return Object.fromEntries(
     state.hexes.flatMap((hex) => (hex.kind === 'tile' ? [[hex.key, act.actionOf(hex)]] : [])),
@@ -98,6 +103,21 @@ describe('what a click on a Tile does', () => {
 
   it('does nothing on a centered Leaf, which opens nothing', () => {
     expect(actions({ center: 'notes' })).toEqual({ 'tile:notes': undefined })
+  })
+
+  it('opens nothing holding nothing the reader may add to: such a Branch is centered, and stands alone', () => {
+    const nobody = () => false
+    expect(actions(open, { fills: nobody })).toMatchObject({
+      'tile:a': 'expand',
+      'tile:many': 'expand',
+    })
+    const empty = render(inA, { fills: nobody })
+    expect(empty.actions.actionOf(hexOf(empty.state.hexes, 'tile:a3'))).toBe('center')
+    const alone = render({ center: 'a3', frame: 'children' }, { fills: nobody })
+    expect(alone.state.hexes.filter((hex) => hex.kind === 'empty')).toHaveLength(0)
+    expect(alone.actions.actionOf(hexOf(alone.state.hexes, 'tile:a3'))).toBeUndefined()
+    const added = render({ center: 'a3', frame: 'children' })
+    expect(added.state.hexes.filter((hex) => hex.kind === 'empty')).toHaveLength(6)
   })
 
   it('does nothing on the untitled root, its lamp alone, not there yet', () => {
