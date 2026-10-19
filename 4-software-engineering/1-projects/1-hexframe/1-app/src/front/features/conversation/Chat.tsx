@@ -10,13 +10,16 @@
 // carried from the canvas or one a menu asks the agent about; its commands switch the Mode, undo
 // what the agent last applied, open Help or the Keys, show the tutorial, or go to another language.
 // While a Turn runs, the field waits and send becomes Stop. It offers the Account's Tiles to `@`,
-// from the System the page holds. The Mode, as the poll last saw it, shows under the field,
+// from the System the page holds, and, on a visit, the Tiles of the System visited the Account may
+// run the agent at, its *@*, a Message opening with one starting its Turn there (HEX-134). The Mode, as the poll last saw it, shows under the field,
 // switched through `useSetMode`, the one switched to shown while the switch is on its way; while the
 // chat invites a new account's first command (`./invitation/`), `/tutorial` comes first in its list
 // (HEX-118). Each is shown inside a ReadBoundary, which a failed read lands in.
 import { type ComponentProps, useMemo, useState } from 'react'
 
 import type { Entry, Mode } from '#/domains/assistant/entities'
+import { acrossGaps } from '#/domains/mapping/entities'
+import { runsAgent } from '#/domains/mapping/operations'
 import {
   type Sent,
   useAcceptProposal,
@@ -32,6 +35,7 @@ import {
 } from '#/front/client/assistant/conversation'
 import type { LiveTurn } from '#/front/client/assistant/follow'
 import { useSignOut } from '#/front/client/iam/access'
+import { useDecideJoinRequest } from '#/front/client/iam/organizations'
 import { useSystem } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
@@ -57,6 +61,24 @@ function useTiles() {
     () => (root === undefined ? undefined : mentionablesOf(root, m.system_untitled())),
     [root],
   )
+}
+
+/**
+ * The Tiles of the System the page visits, someone else's, that the Account may run the agent at,
+ * its *@* there as Mapping showed it: what the composer offers to `@` beside the Account's own, from
+ * the star and from each Tile across a gap, so a Message opening with one starts its Turn there. None
+ * at home.
+ */
+function useVisitedTiles(star: string | undefined) {
+  const { data } = useSystem({ throwing: false, ...(star !== undefined && { star }) })
+  const shown = star === undefined ? undefined : data
+  return useMemo(() => {
+    if (shown === undefined) return []
+    const { system, root, gaps, pinned, rights } = shown
+    return [root, ...acrossGaps(system, gaps, pinned)]
+      .flatMap((tree) => mentionablesOf(tree, m.system_untitled()))
+      .filter(({ id }) => runsAgent(rights[id] ?? []))
+  }, [shown])
 }
 
 /** The Entries of the days read so far, oldest first; none before today is read. */
@@ -96,10 +118,15 @@ interface ChatTimelineProps {
    * timeline leaves to it while it shows; none while no receipt is there.
    */
   receipt: Receipted | undefined
+  /**
+   * The Tiles of the System the page visits, someone else's, by id with their Titles, which the chat
+   * names as it names the Account's own, a gesture there on its way included (HEX-127).
+   */
+  visitedTitles?: ReadonlyMap<string, string> | undefined
 }
 
 export function ChatTimeline(props: ChatTimelineProps) {
-  const { onCenter, pointing, turn, resend, underWay, receipt } = props
+  const { onCenter, pointing, turn, resend, underWay, receipt, visitedTitles } = props
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useConversation()
   // Today's page comes first, where what the receipt says is recorded.
   const beside = useBesideReceipt(data?.pages[0]?.entries, receipt)
@@ -108,18 +135,28 @@ export function ChatTimeline(props: ChatTimelineProps) {
   const undoing = useUndo()
   // An Undo asked for by `/undo` too.
   const undoPending = useUndoing()
+  const deciding = useDecideJoinRequest()
   const tiles = useTiles()
   const system = useMemo(
-    () => (tiles === undefined ? undefined : new Map(tiles.map(({ id, title }) => [id, title]))),
-    [tiles],
+    () =>
+      tiles === undefined
+        ? undefined
+        : new Map([
+            ...(visitedTitles ?? []),
+            ...tiles.map(({ id, title }) => [id, title] as const),
+          ]),
+    [tiles, visitedTitles],
   )
   const { messages, forget } = useMessagesOnTheirWay()
   const recording = useNavigationsOnTheirWay()
   if (data === undefined) return <Skeleton className="h-40" />
   const now = new Date()
   // The pages come today first; the timeline reads oldest first.
-  const days = data.pages.map(({ day, entries, titles }, index) =>
-    dayOf({ date: day.date, entries: index === 0 ? beside(entries) : entries, titles }, now),
+  const days = data.pages.map(({ day, entries, titles, requests }, index) =>
+    dayOf(
+      { date: day.date, entries: index === 0 ? beside(entries) : entries, titles, requests },
+      now,
+    ),
   )
   return (
     <Timeline
@@ -161,6 +198,12 @@ export function ChatTimeline(props: ChatTimelineProps) {
         },
         pending: accepting.isPending || discarding.isPending || undoPending,
       }}
+      joining={{
+        decide: (request, accept) => {
+          deciding.mutate({ request, accept })
+        },
+        pending: deciding.isPending,
+      }}
     />
   )
 }
@@ -182,13 +225,23 @@ interface ChatComposerProps {
   onHelp: (words: string) => void
   /** `/keys`: the Account's Keys opened in the chat. */
   onKeys: () => void
+  /** `/organization`: an Organization made in the chat. */
+  onOrganization: () => void
   /** `/tutorial`: the tutorial on the canvas. */
   onTutorial: () => void
+  /** The star of the System the page visits, someone else's; none at home. */
+  visiting?: string | undefined
 }
 
 export function ChatComposer(props: ChatComposerProps) {
   const { onSend, turn, mode, onPoint, center, carried, onHelp, onKeys, onTutorial } = props
-  const tiles = useTiles()
+  const { onOrganization } = props
+  const own = useTiles()
+  const visited = useVisitedTiles(props.visiting)
+  const tiles = useMemo(
+    () => (own === undefined ? undefined : [...own, ...visited]),
+    [own, visited],
+  )
   // While the chat invites it, a `/` offers `/tutorial` first.
   const invited = useInvited()
   const entries = useEntries()
@@ -215,6 +268,7 @@ export function ChatComposer(props: ChatComposerProps) {
       }
       onHelp={onHelp}
       onKeys={onKeys}
+      onOrganization={onOrganization}
       onTutorial={onTutorial}
       invited={invited ? 'tutorial' : undefined}
       onSignOut={() => {

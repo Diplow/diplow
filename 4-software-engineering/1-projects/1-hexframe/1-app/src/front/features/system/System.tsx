@@ -1,4 +1,5 @@
-// The user's System on the canvas, and acting on it where it is: each Tile's menu and hover card, each
+// A System on the canvas, the user's, or one they visit, which they only look at for now (HEX-127),
+// and acting on it where it is: each Tile's menu and hover card, each
 // free slot's menu, a click on a free slot opening the new Tile's form there, and a Tile moved, dragged
 // under a mouse, from its menu's frame or through "Somewhere else…", its free slots offering
 // themselves and the Tiles it can trade places with their swap. A write ends its change as it is sent,
@@ -8,10 +9,17 @@
 // the page, for the composer to name (HEX-110). While a write to the System is on its way, closing or reloading the tab asks first.
 // Like the canvas, it holds no state of its own: the view and the change under way are the URL's,
 // and it hands the next view, with the gesture that asked for it, and the next search params to the
-// route.
+// route; but a gesture following a pin, a Reference to a Tile of another System, which it visits by
+// its link, since it alone holds the pins of the System it draws, own or visited (HEX-133).
+import { useRouter } from '@tanstack/react-router'
 import { cn } from 'cn'
 
-import type { Direction, System as FlatSystem, SystemTile } from '#/domains/mapping/entities'
+import type {
+  Direction,
+  PinnedTiles,
+  System as FlatSystem,
+  SystemTile,
+} from '#/domains/mapping/entities'
 import type { Underway } from '#/front/client/mapping/overlay/overlay'
 import { useSystemWriting } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
@@ -22,8 +30,10 @@ import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import type { CanvasView, ViewAction } from '#/front/ui/canvas/view/view'
 import { Dialog } from '#/front/ui/layouts/Dialog'
 
+import type { Reach } from './acting'
 import { viewOf, type SearchChange, type SystemSearch } from './search/search'
 import { useActingState } from './state/useActingState'
+import { pinFollowed } from './visit/visit'
 import { useWritesState } from './state/useWritesState'
 import type { Exported } from './widget/state/useTileWidgetsState'
 
@@ -32,11 +42,26 @@ interface SystemProps {
   system: FlatSystem
   /** Its tree, Mapping's, from the Root. */
   root: SystemTile
+  /**
+   * The Tiles hung from its star across a gap, each a tree of its own (Mapping's `acrossGaps`): none
+   * on the user's own.
+   */
+  across: ReadonlyArray<SystemTile>
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   /** What the writes on their way change (`useSystem`). */
   underway: Underway
+  /**
+   * How far the user acts on it: their own, every line; someone else's, visited, looked at and copied
+   * from alone, no free slot, move or line that acts offered (`Reach`).
+   */
+  reach: Reach
   search: SystemSearch
+  /**
+   * The Tiles of other Systems its References point at that the user may read, by id: a gesture
+   * following one visits it by its link rather than changing the view (`pinFollowed`).
+   */
+  pinned: PinnedTiles
   /** The next view, after a gesture on the canvas, and the gesture, on which Tile. */
   onViewChange: (view: CanvasView, action: ViewAction) => void
   onSearchChange: (change: SearchChange) => void
@@ -54,9 +79,12 @@ interface SystemProps {
 export function System({
   system,
   root,
+  across,
   tree,
   underway,
+  reach,
   search,
+  pinned,
   onViewChange,
   onSearchChange,
   exporting,
@@ -65,10 +93,11 @@ export function System({
   onCarry,
   className,
 }: SystemProps) {
+  const router = useRouter()
   const writes = useWritesState(underway)
   useLeaveGuard(useSystemWriting())
   const { acting, emptySlots, move, deleting } = useActingState({
-    systems: { root, flat: system, tree },
+    systems: { root, across, flat: system, tree, reach },
     search,
     onSearchChange,
     exporting,
@@ -79,7 +108,11 @@ export function System({
       <Canvas
         system={tree}
         view={viewOf(search)}
-        onViewChange={onViewChange}
+        onViewChange={(view, action) => {
+          const pin = pinFollowed(pinned, action)
+          if (pin === undefined) onViewChange(view, action)
+          else void router.navigate({ to: '/t/$id', params: { id: pin } })
+        }}
         emptySlots={emptySlots}
         acting={acting}
         move={move}

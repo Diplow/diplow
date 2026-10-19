@@ -14,11 +14,18 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
 import { merged, turnLocation, type Navigation } from '#/domains/assistant/entities'
-import { keyNameBounds, keyNameOf } from '#/domains/iam/entities'
+import {
+  groupNameBounds,
+  groupNameOf,
+  keyNameBounds,
+  keyNameOf,
+  sameGroupName,
+} from '#/domains/iam/entities'
 import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { useShipped } from '#/front/client/mapping/queries'
+import { typedOf } from '#/front/client/mapping/sharing'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
 import { encoded } from '#/front/features/conversation/composer/mention'
@@ -60,6 +67,16 @@ import { ChatLayoutsGallery } from '#/front/ui/chat/layouts/gallery'
 import { ChatTextGallery } from '#/front/ui/chat/text/gallery'
 import { HelpWidgetGallery } from '#/front/ui/chat/widgets/help/gallery'
 import { KeyWidgetGallery } from '#/front/ui/chat/widgets/keys/gallery'
+import {
+  GroupPickerGallery,
+  ShareWidgetGallery,
+} from '#/front/ui/chat/widgets/sharing/share/gallery'
+import { StarPickerGallery } from '#/front/ui/chat/widgets/sharing/star-picker/gallery'
+import {
+  GroupsWidgetGallery,
+  MembersWidgetGallery,
+  OrganizationWidgetGallery,
+} from '#/front/ui/chat/widgets/sharing/organization/gallery'
 import { SignInWidgetGallery } from '#/front/ui/chat/widgets/sign-in/gallery'
 import { SignInWidget, type Access } from '#/front/ui/chat/widgets/sign-in/SignInWidget'
 import { TileWidgetGallery } from '#/front/ui/chat/widgets/tile/gallery'
@@ -285,6 +302,16 @@ function Specimens({ chapter, view, onViewChange, onCenter }: SpecimensProps) {
           <ChatEntriesGallery />
           <TileWidgetGallery previewLimit={previewLimit} />
           <KeyWidgetGallery nameLimit={keyNameBounds.max} nameOf={keyNameOf} />
+          <ShareWidgetGallery />
+          <StarPickerGallery typedOf={typedOf} />
+          <GroupPickerGallery />
+          <OrganizationWidgetGallery />
+          <MembersWidgetGallery />
+          <GroupsWidgetGallery
+            nameOf={groupNameOf}
+            nameLimit={groupNameBounds.max}
+            sameName={sameGroupName}
+          />
           <ReadBoundary>
             <HelpGallery />
           </ReadBoundary>

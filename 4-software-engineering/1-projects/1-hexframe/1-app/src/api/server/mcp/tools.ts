@@ -85,7 +85,9 @@ const Fields = (fallback: ReadonlyArray<Field>, description: string) =>
 const ReadId = Schema.Union([TileId, HelpId]).annotate({
   description:
     "A Tile's id, as open_tile and map answer it: a Tile of the user's System, or of Help, from " +
-    `its Root, "${helpRoot}". Without one, the user's Root: the user.`,
+    `its Root, "${helpRoot}", or of another user's System, as far as its owner lets the user read ` +
+    'it, though an agent hexframe runs for the user reads the System its Turn started in alone. ' +
+    "Without one, the user's Root: the user, or, for such an agent, that System's star.",
 })
 
 const help =
@@ -98,8 +100,9 @@ const directions =
   'one file with nothing below it, keyed by the same six Directions, their own. Its Context ' +
   '(`context`) says what it is, keyed -1 to -6. A Context slot may hold a Reference instead of a ' +
   'Tile: ' +
-  "`_tag: 'Reference'`, with the id, Title and Preview of the Tile it points at, or " +
-  "`_tag: 'BrokenReference'` once that Tile is deleted. Every Tile carries its `version`, how many " +
+  "`_tag: 'Reference'`, with the id, Title and Preview of the Tile it points at, and `elsewhere` " +
+  "with its star's Title (`starTitle`) when another System holds it, or `_tag: 'BrokenReference'`, unavailable, " +
+  'once that Tile is deleted or not yours to read, alike. Every Tile carries its `version`, how many ' +
   'changes touched it: a write to a Tile names the version you read of it, and is refused once ' +
   'the Tile changed since.'
 
@@ -107,7 +110,8 @@ const openTile = read({
   name: 'open_tile',
   kind: 'read',
   description:
-    "Opens one Tile of the user's System: what it says (its Title, Preview and Body, or only the " +
+    "Opens one Tile of the user's System, or of a System its owner lets the user read: what " +
+    'it says (its Title, Preview and Body, or only the ' +
     'fields asked), its parent, and its Children and Context, each with its Title and Preview only. ' +
     'Without an id, opens the Root, which is the user. Read a System as its author laid it out: ' +
     "open a Tile, read its Children's Previews, then open only the ones that matter to your task. " +
@@ -126,7 +130,8 @@ const map = read({
   name: 'map',
   kind: 'read',
   description:
-    "Maps the user's System, or Help, below a Tile, the Root when no id is given, several generations at " +
+    "Maps the user's System, another its owner lets the user read, or Help, below a Tile, the " +
+    'Root when no id is given, several generations at ' +
     'once: depth 0 to 3, 2 when not given, each Tile with its Title and Preview. Use it to find ' +
     'where something lives, then open_tile what matters; ask for body only when you need every ' +
     'Body below, since it costs far more. ' +
@@ -186,7 +191,11 @@ const refusal = {
     'a Leaf is one file, with nothing below it: nothing goes under one, and a Tile holding ' +
     'anything takes no Leaf slot. Move the Leaf to a Branch slot first, or move out what the ' +
     'Tile holds.',
-  ShippedReadOnly:
+  NotAllowed:
+    'the user may read that Tile but not do this: write it, write a Tile it carries, write the ' +
+    "parent it goes under, or move it where someone could read it who couldn't before, which " +
+    'only its owner does, from the app. Leave it as it is, and say so in your answer.',
+  Shipped:
     "that Tile is hexframe's own, Help's or the tutorial's, which every user reads and none " +
     "writes; change a Tile of the user's System instead.",
   TileChanged:
@@ -197,6 +206,10 @@ const refusal = {
     "in ask, your writes are drafted into the user's Proposal, and it no longer applies to the " +
     'System: the user changed a Tile it names since. Write nothing more; say so in your answer, ' +
     'so the user discards it and asks again.',
+  ProposalElsewhere:
+    "in ask, your writes are drafted into the user's Proposal, and the one open changes another " +
+    'System than the one this Turn works in: write nothing more; say so in your answer, so the ' +
+    'user accepts or discards it first.',
   TurnOver:
     'your Turn of the Assistant has ended, by its answer, a Stop, its time or its budget, and an ' +
     'ended Turn writes nothing: write nothing more, and end your answer.',
@@ -260,16 +273,20 @@ const createTile = write({
     TitleMissing: refusal.TitleMissing,
     PreviewTooLong: refusal.PreviewTooLong,
     LeafHoldsNothing: refusal.LeafHoldsNothing,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    NotAllowed: refusal.NotAllowed,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: NewTileOfAgent,
   // An agent sends no id, so Mapping makes it, fresh: a clash on it is a defect, never a refusal
   // to teach (`TileIdTaken` comes only to a caller that chose its id).
   program: (input: typeof NewTileOfAgent.Type) =>
-    Proposal.written(new CreateTile(input), (operation) =>
-      Effect.catchTag(Mapping.createTile(operation), 'TileIdTaken', (taken) => Effect.die(taken)),
+    Effect.catchTag(
+      Proposal.written(new CreateTile(input), Mapping.createTile),
+      'TileIdTaken',
+      (taken) => Effect.die(taken),
     ),
 })
 
@@ -284,8 +301,10 @@ const editTile = write({
     TileChanged: refusal.TileChanged,
     TitleMissing: refusal.TitleMissing,
     PreviewTooLong: refusal.PreviewTooLong,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    NotAllowed: refusal.NotAllowed,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: TileEdit.mapFields(
@@ -319,8 +338,10 @@ const moveTile = write({
     MovedUnderItself:
       'a Tile cannot move under itself or anything below it; pick a parent outside it.',
     LeafHoldsNothing: refusal.LeafHoldsNothing,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    NotAllowed: refusal.NotAllowed,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: TileMove.mapFields(
@@ -348,8 +369,10 @@ const swapTiles = write({
     RootFixed: refusal.RootFixed,
     MovedUnderItself: 'neither Tile may lie below the other; move one of them instead.',
     LeafHoldsNothing: refusal.LeafHoldsNothing,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    NotAllowed: refusal.NotAllowed,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: TileSwap.mapFields(
@@ -377,8 +400,10 @@ const deleteTile = write({
     TileNotFound: refusal.TileNotFound,
     TileChanged: refusal.TileChanged,
     RootFixed: refusal.RootFixed,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    NotAllowed: refusal.NotAllowed,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: TileDelete.mapFields(
@@ -396,16 +421,19 @@ const createReference = write({
   name: 'create_reference',
   operation: 'createReference',
   description:
-    "Puts a Reference in a free Context slot of a Tile: a link to another Tile of the user's " +
-    'System, by id, that follows it when it moves and shows broken once it is deleted. Answers ' +
-    'null.',
+    'Puts a Reference in a free Context slot of a Tile: a link to another Tile, by id, of the ' +
+    "user's System or of another System the user may read, that follows it when it moves and shows " +
+    'unavailable to whoever may not read it, once it is deleted too. A Turn works in the System ' +
+    'it started in alone, and pins no Tile of another. Answers null.',
   refusals: {
     TileNotFound: refusal.TileNotFound,
     TileChanged: refusal.TileChanged,
     DirectionTaken: refusal.DirectionTaken,
     LeafHoldsNothing: refusal.LeafHoldsNothing,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    NotAllowed: refusal.NotAllowed,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: NewReference.mapFields(
@@ -415,7 +443,9 @@ const createReference = write({
       slot: (field) => field.annotate({ description: `${described.contextSlot} It must be free.` }),
       target: (field) =>
         field.annotate({
-          description: 'The id of the Tile the Reference points at, in the same System.',
+          description:
+            "The id of the Tile the Reference points at, in the user's System or in another the " +
+            'user may read, Help\'s among them, by its own id ("help/3").',
         }),
     }),
   ),
@@ -433,8 +463,10 @@ const deleteReference = write({
   refusals: {
     TileNotFound: refusal.TileNotFound,
     TileChanged: refusal.TileChanged,
-    ShippedReadOnly: refusal.ShippedReadOnly,
+    NotAllowed: refusal.NotAllowed,
+    Shipped: refusal.Shipped,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: ReferenceSlot.mapFields(

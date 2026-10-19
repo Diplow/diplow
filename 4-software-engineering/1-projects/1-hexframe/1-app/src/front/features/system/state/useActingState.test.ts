@@ -4,9 +4,11 @@ import { act, cleanup, renderHook, waitFor } from '@testing-library/react'
 import { createElement, type ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import * as Organizations from '#/api/iam/organizations/organizations'
 import * as Mapping from '#/api/mapping/mapping'
 import { makeQueryClient } from '#/front/client/channels'
 import {
+  acrossGaps,
   type PlacedReference,
   type PlacedTile,
   type Slot,
@@ -19,10 +21,12 @@ import { layoutCanvas } from '#/front/ui/canvas/geometry/shape'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 import type { TileAct } from '#/front/ui/canvas/tile/menu/verbs'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
-import { firstKindOf } from '#/front/ui/canvas/view/tiles'
+import { firstKindOf, type TileNode } from '#/front/ui/canvas/view/tiles'
 
+import type { Reach, Systems } from '../acting'
 import type { SearchChange, SystemSearch } from '../search/search'
 import { canvasTree } from '../tree'
+import { visitTree } from '../visit/visit'
 import { useActingState } from './useActingState'
 
 // What a Tile's menu and a free slot's do on home, over stand-ins for the server functions: what
@@ -37,6 +41,7 @@ vi.mock('#/api/mapping/mapping', () => ({
   deleteReference: vi.fn(),
   system: vi.fn(),
 }))
+vi.mock('#/api/iam/organizations/organizations', () => ({ askToJoin: vi.fn() }))
 vi.mock('#/front/ui/atoms/Toaster', () => ({ toast: Object.assign(vi.fn(), { error: vi.fn() }) }))
 
 afterEach(() => {
@@ -79,7 +84,6 @@ const flat: System = {
     ),
     toBare: { _tag: 'Reference', id: 'toBare', parent: 'root', slot: -3, target: 'bare' },
   } satisfies Record<string, PlacedTile | PlacedReference>,
-  owned: true,
   version: 0,
 }
 
@@ -87,8 +91,8 @@ const root = systemOf(flat)
 const tree = canvasTree(root, { yours: true })
 
 /** A view with the center opened into its first ring, unless it says otherwise, as a click leaves it. */
-const opened = (view: CanvasView): CanvasView => ({
-  frame: firstKindOf(showView(tree, view).center),
+const opened = (view: CanvasView, drawn: TileNode = tree): CanvasView => ({
+  frame: firstKindOf(showView(drawn, view).center),
   ...view,
 })
 
@@ -100,13 +104,23 @@ function answering(
   vi.mocked(Mapping[write]).mockResolvedValue(outcome as never)
   vi.mocked(Mapping.system).mockResolvedValue({
     ok: true,
-    value: { root: flat.root, tiles: {}, version: 0, owned: true },
+    value: { root: flat.root, tiles: {}, version: 0 },
   } as never)
 }
 
 const done = { ok: true, value: undefined }
 
-function render(search: SystemSearch = {}, { exporting = false } = {}) {
+/** The System drawn: home's own, unless a test draws another. */
+type Drawn = Pick<Systems, 'root' | 'across' | 'flat' | 'tree'>
+
+function render(
+  search: SystemSearch = {},
+  {
+    exporting = false,
+    reach = 'owned',
+    drawn = { root, across: [], flat, tree },
+  }: { exporting?: boolean; reach?: Reach; drawn?: Drawn } = {},
+) {
   const client = makeQueryClient()
   const onSearchChange = vi.fn<(change: SearchChange) => void>()
   const start = vi.fn()
@@ -116,7 +130,7 @@ function render(search: SystemSearch = {}, { exporting = false } = {}) {
   const { result } = renderHook(
     () =>
       useActingState({
-        systems: { root, flat, tree },
+        systems: { ...drawn, reach },
         search,
         onSearchChange,
         exporting: { start, pending: exporting },
@@ -128,8 +142,8 @@ function render(search: SystemSearch = {}, { exporting = false } = {}) {
 }
 
 /** The hex a view draws under this key. */
-function hex(key: string, view: CanvasView = {}): TileHex {
-  const found = layoutCanvas(showView(tree, opened(view))).find(
+function hex(key: string, view: CanvasView = {}, drawn: TileNode = tree): TileHex {
+  const found = layoutCanvas(showView(drawn, opened(view, drawn))).find(
     (drawn): drawn is TileHex => drawn.kind === 'tile' && drawn.key === key,
   )
   if (found === undefined) throw new Error(`No Tile is drawn under ${key}`)
@@ -142,9 +156,10 @@ function choose(
   key: string,
   line: TileAct,
   view?: CanvasView,
+  drawn?: TileNode,
 ) {
   act(() => {
-    result.current.acting.tile(hex(key, view))?.onAct(line, '')
+    result.current.acting.tile(hex(key, view, drawn))?.onAct(line, '')
   })
 }
 
@@ -304,6 +319,14 @@ describe('a line that opens something', () => {
     expect(start).toHaveBeenCalledWith({ tile: { id: 'holding', title: 'holding' }, below: 1 })
   })
 
+  it('opens who may see a Tile in the URL, the root included', () => {
+    const { result, onSearchChange } = render()
+    choose(result, 'tile:holding', { verb: 'share' })
+    expect(changed(onSearchChange)).toMatchObject({ share: 'holding' })
+    choose(result, 'tile:root', { verb: 'share' })
+    expect(changed(onSearchChange)).toMatchObject({ share: 'root' })
+  })
+
   it('exports nothing more while an export is on its way', () => {
     const { result, start } = render({}, { exporting: true })
     choose(result, 'tile:holding', { verb: 'export' })
@@ -320,6 +343,16 @@ describe('a line that opens something', () => {
     })
     expect(writeText).toHaveBeenCalledWith('holding')
     vi.unstubAllGlobals()
+  })
+
+  it('asks to join the Organization a star names, saying so once asked (HEX-138)', async () => {
+    vi.mocked(Organizations.askToJoin).mockResolvedValue(done as never)
+    const { result } = render()
+    choose(result, 'tile:root', { verb: 'join' })
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith(m.organization_join_asked({ title: 'Me' }))
+    })
+    expect(Organizations.askToJoin).toHaveBeenCalledWith({ data: { star: 'root' } })
   })
 })
 
@@ -445,5 +478,100 @@ describe('a move under way', () => {
       expect(Mapping.swapTiles).toHaveBeenCalledOnce()
     })
     expect(changed(onSearchChange, { move: 'bare' })).toMatchObject({ move: undefined })
+  })
+})
+
+/** The rights a visitor holds, each Tile they see read-only, but those named, which they write. */
+const visiting = (...writes: ReadonlyArray<string>): Reach => ({
+  visiting: Object.fromEntries(
+    ['root', ...Object.keys(flat.tiles).filter((id) => flat.tiles[id]?._tag === 'Tile')].map(
+      (id) => [id, writes.includes(id) ? ['read', 'write'] : ['read']],
+    ),
+  ),
+})
+
+describe("on someone else's System, visited", () => {
+  const free = (view: CanvasView = {}) =>
+    layoutCanvas(showView(tree, opened(view))).flatMap((drawn) =>
+      drawn.kind === 'empty' ? [drawn.slot] : [],
+    )
+
+  it('offers no free slot a click, nor a menu, where they only read', () => {
+    const { result } = render({}, { reach: visiting() })
+    const slots = free()
+    expect(slots.length).toBeGreaterThan(0)
+    for (const slot of slots) {
+      expect(result.current.emptySlots(slot)).toBeUndefined()
+      expect(result.current.acting.slot(slot)).toBeUndefined()
+    }
+  })
+
+  it("leaves every line that acts out of a Tile's menu they only read, Copy aside", () => {
+    const { result } = render({}, { reach: visiting() })
+    const acting = result.current.acting.tile(hex('tile:holding'))
+    expect(acting?.without).toEqual(
+      expect.arrayContaining(['edit', 'move', 'delete', 'ask-agent', 'share']),
+    )
+    expect(acting?.without).not.toContain('copy')
+    expect(acting?.subject).toMatchObject({ holds: false })
+  })
+
+  it('is no move of a Tile they may not move, as a link may name one', () => {
+    const { result } = render({ move: 'bare' }, { reach: visiting() })
+    expect(result.current.move.moving).toBeUndefined()
+    expect(free().map((slot) => result.current.emptySlots(slot))).toEqual(
+      free().map(() => undefined),
+    )
+  })
+
+  it('offers a new Tile under one they write, its form alone, and a move within it', () => {
+    const writer = visiting('holding', 'inner')
+    const { result } = render({}, { reach: writer })
+    const under = free({ center: 'holding' }).filter(({ parent }) => parent.id === 'holding')
+    expect(under.length).toBeGreaterThan(0)
+    for (const slot of under) {
+      expect(result.current.emptySlots(slot)).toBeDefined()
+      expect(result.current.acting.slot(slot)?.without).toEqual(
+        expect.arrayContaining(['import', 'ask-agent']),
+      )
+    }
+    for (const slot of free().filter(({ parent }) => parent.id === 'root')) {
+      expect(result.current.emptySlots(slot)).toBeUndefined()
+    }
+    const moving = render({ move: 'inner', center: 'holding' }, { reach: writer })
+    expect(moving.result.current.move.moving).toMatchObject({ id: 'inner' })
+  })
+
+  it('deletes a Tile hung from the star across a gap once confirmed, the star centered', async () => {
+    answering('deleteTile', done)
+    // Holding stands below a Tile kept from the visitor: across a gap, with its Leaf below it.
+    const gap = {
+      _tag: 'Tile',
+      id: 'holding',
+      title: 'holding',
+      preview: '',
+      body: '',
+      version: 1,
+    } as const
+    const tiles = Object.entries(flat.tiles).filter(([id]) => id !== 'holding')
+    const shown: System = { ...flat, tiles: Object.fromEntries(tiles) }
+    const star = systemOf(shown)
+    const gaps = { holding: gap }
+    const drawn: Drawn = {
+      root: star,
+      across: acrossGaps(shown, gaps),
+      flat: shown,
+      tree: visitTree({ system: shown, root: star, gaps, pinned: {} }),
+    }
+    const { result, onSearchChange } = render({}, { reach: visiting('holding', 'inner'), drawn })
+    choose(result, 'tile:holding', { verb: 'delete' }, { center: 'holding' }, drawn.tree)
+    expect(result.current.deleting).toMatchObject({ title: 'holding', below: 1 })
+    act(() => {
+      result.current.deleting?.confirm()
+    })
+    await waitFor(() => {
+      expect(Mapping.deleteTile).toHaveBeenCalledWith({ data: { id: 'holding', version: 1 } })
+    })
+    expect(changed(onSearchChange, { center: 'holding' })).toMatchObject({ center: undefined })
   })
 })

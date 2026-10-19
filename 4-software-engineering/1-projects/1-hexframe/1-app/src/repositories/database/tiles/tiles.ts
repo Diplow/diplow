@@ -1,18 +1,23 @@
-// Mapping's repository: the `tile` table (../schema.ts), read and written one System at a time. It
-// speaks rows, not Tiles: Mapping, above, decides what a row means and which changes are allowed.
-// A change locks the System's Root first, inside the transaction the API layer opened, so two
-// changes to one System never interleave between what Mapping checked and what it wrote. A read from
+// Mapping's repository: the `tile` table (../schema.ts), read and written one System at a time, each
+// System found by its owner's id, which every row of it carries, opaque here as it is to Mapping: an
+// Account's today, an Organization's later. It speaks rows, not Tiles: Mapping, above, decides what a
+// row means, who may act on a System and which changes are allowed. A change locks the System's Root,
+// its star, first, inside the transaction the API layer opened, so two changes to one System never
+// interleave between what Mapping checked and what it wrote. A read from
 // one Tile walks down a generation per query and selects only the content columns asked, so a Body
-// nobody asked for never leaves the database.
-import { type SQL, and, eq, inArray, isNull } from 'drizzle-orm'
+// nobody asked for never leaves the database. The Grants a System's Tiles carry are read here too
+// (./grants.ts), the stars whose Title holds a query, across every System (`starsTitled`), and the
+// stars of some owners (`starsOwnedBy`).
+import { type SQL, and, asc, eq, ilike, inArray, isNull, ne, notIlike } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { Context, Data, Effect, Layer } from 'effect'
 
-import { Database, InTransaction } from '../database'
+import { Database, InTransaction, inTransaction } from '../database'
 import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
+import { type GrantRow, grantsOf, type GrantWrites, grantWritesOf, type PlaceRow } from './grants'
 
 /**
- * One row of the `tile` table, as the Account that owns it reads it. A Root has no parent and no
+ * One row of the `tile` table, as its System's owner reads it. A Root has no parent and no
  * direction; a row with a `target` is a Reference to the row of that id. `name`, `config` and
  * `frontmatter` are what an imported file carried, null when it carried nothing. `version` is the
  * Tile's Version, 1 once added, which Mapping decides and a change writes; `systemVersion`, on the
@@ -71,6 +76,16 @@ type NewTileRow = Omit<
     readonly direction: number
   }
 
+/** A star as a search finds it: its id, and its Title and Preview, never its Body. */
+export type StarRow = Pick<TileRow, 'id' | 'title' | 'preview'>
+
+/** What a star search asks: the text a Title holds, the star left out, and how many at most. */
+export interface StarsTitledQuery {
+  readonly query: string
+  readonly except: string
+  readonly atMost: number
+}
+
 /** A row a batch names: one of the batch, by the key the caller gave it, or one already stored. */
 export type RowRef =
   | { readonly _tag: 'Batch'; readonly key: string }
@@ -88,13 +103,15 @@ export interface BatchRow extends Omit<NewTileRow, 'parentId' | 'target'> {
 }
 
 /**
- * A row was to be added under an id a row already has, in any Account's System: `tile.id` is the
- * table's key. Nothing was written.
+ * A row was to be added under an id a row already has, in any System: `tile.id` is the table's key. Nothing was written.
  */
 export class IdTaken extends Data.TaggedError('IdTaken')<{ readonly id: string }> {}
 
-/** What a change may write, to the System it locked only, inside the same transaction. */
-export interface Writes {
+/**
+ * What a change may write, to the System it locked only, inside the same transaction: its rows, and
+ * the Grants its Tiles carry (`GrantWrites`, ./grants.ts).
+ */
+export interface Writes extends GrantWrites {
   /**
    * Adds a row under the id it carries, made by `Tiles.newId` or chosen by a caller. An id a row of
    * any System already has is `IdTaken`, and nothing is written.
@@ -132,49 +149,80 @@ export interface Writes {
 export class Tiles extends Context.Service<
   Tiles,
   {
+    /** Every row of the owner's System, none for an owner without a Root. */
+    readonly read: (owner: string) => Effect.Effect<ReadonlyArray<TileRow>>
+    /** Where every row of the owner's System stands, its id and its parent's, and nothing else. */
+    readonly places: (owner: string) => Effect.Effect<ReadonlyArray<PlaceRow>>
+    /** Every Grant the Tiles of the owner's System carry. */
+    readonly grants: (owner: string) => Effect.Effect<ReadonlyArray<GrantRow>>
     /**
-     * Every row of the Account's System, its Root added first with the content given when it has
-     * none. Two reads at once add one Root.
+     * The `system_version` of the owner's Root's row, read alone, `undefined` for an owner without a
+     * Root.
      */
-    readonly read: (
-      accountId: string,
-      root: Pick<TileRow, ContentColumn>,
-    ) => Effect.Effect<ReadonlyArray<TileRow>>
+    readonly systemVersion: (owner: string) => Effect.Effect<number | undefined>
     /**
-     * The `system_version` of the Account's Root's row, read alone, `undefined` for an Account
-     * without a Root.
+     * The id of the owner's Root, its star, added first with the content given when it has none. Two
+     * calls at once add one Root.
      */
-    readonly systemVersion: (accountId: string) => Effect.Effect<number | undefined>
-    /** The id of the Account's Root, added first with the content given when it has none. */
-    readonly root: (accountId: string, root: Pick<TileRow, ContentColumn>) => Effect.Effect<string>
+    readonly root: (owner: string, root: Pick<TileRow, ContentColumn>) => Effect.Effect<string>
     /**
-     * The row of this id in the Account's System, then the rows below it, `depth` generations down,
+     * The owner of the System whose Root has this id, `undefined` when no Root has it: what names a
+     * System by its star.
+     */
+    readonly ownerOf: (star: string) => Effect.Effect<string | undefined>
+    /**
+     * The id of the Root of the System holding the row of this id, its star, `undefined` when no row
+     * has it: what names the System a read from one Tile reaches.
+     */
+    readonly starHolding: (id: string) => Effect.Effect<string | undefined>
+    /**
+     * The star of the System holding the row of each of these ids, by id, in one query: an id no row
+     * has is left out. What names the Systems a timeline's Tiles stand in.
+     */
+    readonly starsHolding: (
+      ids: ReadonlyArray<string>,
+    ) => Effect.Effect<ReadonlyMap<string, string>>
+    /**
+     * The Roots of every System whose Title holds `query`, whatever its case, but the `except` one,
+     * each with its id, Title and Preview and nothing else: those whose Title starts with it first,
+     * then the others, each group by Title, `atMost` in all. What finds a star by its Title.
+     */
+    readonly starsTitled: (search: StarsTitledQuery) => Effect.Effect<ReadonlyArray<StarRow>>
+    /**
+     * The Root of each of these owners' Systems, by owner, with its id, Title and Preview and nothing
+     * else, in one query: an owner without a Root is left out. What names the Accounts a Tile's
+     * Grants reach by their stars.
+     */
+    readonly starsOwnedBy: (
+      owners: ReadonlyArray<string>,
+    ) => Effect.Effect<ReadonlyMap<string, StarRow>>
+    /**
+     * The row of this id in the owner's System, then the rows below it, `depth` generations down,
      * one query per generation, that row and the rows below each with only the content columns
      * asked of them. `undefined` when the System holds no row of this id.
      */
     readonly generationsFrom: <O extends ContentColumn, C extends ContentColumn>(
-      accountId: string,
+      owner: string,
       from: {
         readonly id: string
         readonly depth: number
         readonly columns: ColumnsAsked<O, C>
       },
     ) => Effect.Effect<Generations<O, C> | undefined>
-    /** The rows of these ids in the Account's System, each with only the content columns asked. */
+    /** The rows of these ids in the owner's System, each with only the content columns asked. */
     readonly ofIds: <C extends ContentColumn>(
-      accountId: string,
+      owner: string,
       ids: ReadonlyArray<string>,
       columns: ReadonlyArray<C>,
     ) => Effect.Effect<ReadonlyArray<TileRowWith<C>>>
     /**
-     * Locks the System's Root until the transaction ends, then answers its rows as they stand: no
-     * other change to the System runs until then. An Account without a Root has no rows.
+     * Locks the owner's Root, its System's star, until the transaction ends, then answers the
+     * System's rows as they stand: no other change to the System runs until then. An owner without
+     * a Root has no rows.
      */
-    readonly lock: (
-      accountId: string,
-    ) => Effect.Effect<ReadonlyArray<TileRow>, never, InTransaction>
-    /** What a change may write to the Account's System, once it locked it. */
-    readonly writes: (accountId: string) => Writes
+    readonly lock: (owner: string) => Effect.Effect<ReadonlyArray<TileRow>, never, InTransaction>
+    /** What a change may write to the owner's System, once it locked it. */
+    readonly writes: (owner: string) => Writes
     /**
      * A fresh id for a row about to be added, for a change whose caller chose none, so that it knows
      * the id before it writes the row (`Writes.insert`).
@@ -222,35 +270,39 @@ const columns = {
 /** The rows standing under another, for a row to find what lies below it. */
 const under = alias(tile, 'under')
 
-/** A query that only holds inside a transaction: it requires one, so it runs in no other. */
-const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(() => query)
+/** The Root of the System a row is of, for a row to find its star. */
+const star = alias(tile, 'star')
 
-const ofAccount = (accountId: string) => eq(tile.accountId, accountId)
+/** The rows of the owner's System: every row carries its System's owner. */
+const ofOwner = (owner: string) => eq(tile.ownerId, owner)
+
+/** The owner's Root, its System's star: the one row of its System with no parent. */
+const rootOf = (owner: string) => and(ofOwner(owner), isNull(tile.parentId))
 
 /**
- * Two rows of the Account's System trade places. The slot index is checked row by row, never at the
+ * Two rows of the owner's System trade places. The slot index is checked row by row, never at the
  * end of the statement, so two rows cannot trade slots in one update: the first waits under a spare
  * row, one with nothing below it and so every slot free, which a finite System always holds, while
  * the second takes its place.
  */
-const swapRows = (database: Database['Service'], accountId: string, a: string, b: string) =>
+const swapRows = (database: Database['Service'], owner: string, a: string, b: string) =>
   Effect.gen(function* () {
     const place = (id: string, at: Pick<TileRow, 'parentId' | 'direction'>) =>
       database
         .update(tile)
         .set(at)
-        .where(and(ofAccount(accountId), eq(tile.id, id)))
+        .where(and(ofOwner(owner), eq(tile.id, id)))
         .pipe(Effect.asVoid, Effect.orDie)
     const placed = yield* database
       .select(placeColumns)
       .from(tile)
-      .where(and(ofAccount(accountId), inArray(tile.id, [a, b])))
+      .where(and(ofOwner(owner), inArray(tile.id, [a, b])))
       .pipe(Effect.orDie)
     const [spare] = yield* database
       .select({ id: tile.id })
       .from(tile)
       .leftJoin(under, eq(under.parentId, tile.id))
-      .where(and(ofAccount(accountId), isNull(under.id)))
+      .where(and(ofOwner(owner), isNull(under.id)))
       .limit(1)
       .pipe(Effect.orDie)
     const first = placed.find((row) => row.id === a)
@@ -303,19 +355,120 @@ function idsOf(rows: ReadonlyArray<BatchRow>) {
   return { ids, placed }
 }
 
+/** `text` as a `LIKE` pattern matches it, its wildcards and its escape matched as themselves. */
+const literally = (text: string) => text.replace(/[\\%_]/g, (character) => `\\${character}`)
+
+/** A System's star, the id of its owner's Root, the owner a star names, and the star a row is of. */
+const starsOf = (database: Database['Service']) => {
+  const rootId = (owner: string) =>
+    database
+      .select({ id: tile.id })
+      .from(tile)
+      .where(rootOf(owner))
+      .pipe(
+        Effect.orDie,
+        Effect.map(([found]) => found?.id),
+      )
+  const ensureRoot = (owner: string, root: Pick<TileRow, ContentColumn>) =>
+    database
+      .insert(tile)
+      .values({ ...root, id: crypto.randomUUID(), ownerId: owner })
+      .onConflictDoNothing()
+      .pipe(Effect.asVoid, Effect.orDie)
+  return {
+    // Read first, so that a System read again, as most are, writes nothing.
+    root: (owner: string, content: Pick<TileRow, ContentColumn>) =>
+      Effect.flatMap(rootId(owner), (found) =>
+        found !== undefined
+          ? Effect.succeed(found)
+          : ensureRoot(owner, content).pipe(
+              Effect.andThen(rootId(owner)),
+              Effect.flatMap((added) =>
+                added === undefined
+                  ? Effect.die(new Error('A Root was added, then not found'))
+                  : Effect.succeed(added),
+              ),
+            ),
+      ),
+    ownerOf: (star: string) =>
+      database
+        .select({ ownerId: tile.ownerId })
+        .from(tile)
+        .where(and(eq(tile.id, star), isNull(tile.parentId)))
+        .pipe(
+          Effect.orDie,
+          Effect.map(([found]) => found?.ownerId),
+        ),
+    starHolding: (id: string) =>
+      database
+        .select({ id: star.id })
+        .from(tile)
+        .innerJoin(star, and(eq(star.ownerId, tile.ownerId), isNull(star.parentId)))
+        .where(eq(tile.id, id))
+        .pipe(
+          Effect.orDie,
+          Effect.map(([found]) => found?.id),
+        ),
+    starsHolding: (ids: ReadonlyArray<string>) =>
+      ids.length === 0
+        ? Effect.succeed(new Map<string, string>())
+        : database
+            .select({ id: tile.id, star: star.id })
+            .from(tile)
+            .innerJoin(star, and(eq(star.ownerId, tile.ownerId), isNull(star.parentId)))
+            .where(inArray(tile.id, [...ids]))
+            .pipe(
+              Effect.orDie,
+              Effect.map((rows) => new Map(rows.map((row) => [row.id, row.star] as const))),
+            ),
+    starsOwnedBy: (owners: ReadonlyArray<string>) =>
+      owners.length === 0
+        ? Effect.succeed(new Map<string, StarRow>())
+        : database
+            .select({ owner: tile.ownerId, id: tile.id, title: tile.title, preview: tile.preview })
+            .from(tile)
+            .where(and(isNull(tile.parentId), inArray(tile.ownerId, [...owners])))
+            .pipe(
+              Effect.orDie,
+              Effect.map(
+                (rows) => new Map(rows.map(({ owner, ...star }) => [owner, star] as const)),
+              ),
+            ),
+    starsTitled: ({ query, except, atMost }: StarsTitledQuery) =>
+      Effect.gen(function* () {
+        const starting = `${literally(query)}%`
+        const titled = (holds: SQL | undefined, limit: number) =>
+          database
+            .select({ id: tile.id, title: tile.title, preview: tile.preview })
+            .from(tile)
+            .where(and(isNull(tile.parentId), ne(tile.id, except), holds))
+            .orderBy(asc(tile.title), asc(tile.id))
+            .limit(limit)
+            .pipe(Effect.orDie)
+        const first = yield* titled(ilike(tile.title, starting), atMost)
+        if (first.length >= atMost) return first
+        const rest = yield* titled(
+          and(ilike(tile.title, `%${literally(query)}%`), notIlike(tile.title, starting)),
+          atMost - first.length,
+        )
+        return [...first, ...rest]
+      }),
+  }
+}
+
 /** The service over the given database; a database failure is a defect. */
 const make = Effect.gen(function* () {
   const database = yield* Database
-  const rootOf = (accountId: string) => and(ofAccount(accountId), isNull(tile.parentId))
-  const rowsOf = (accountId: string) =>
-    database.select(columns).from(tile).where(ofAccount(accountId)).pipe(Effect.orDie)
+  const rowsOf = (owner: string) =>
+    database.select(columns).from(tile).where(ofOwner(owner)).pipe(Effect.orDie)
 
-  const writes = (accountId: string): Writes => ({
+  const writes = (owner: string): Writes => ({
+    ...grantWritesOf(database, owner),
     insert: (row) =>
       inTransaction(
         database
           .insert(tile)
-          .values({ ...row, accountId })
+          .values({ ...row, ownerId: owner })
           // Only a clash on the key is answered: any other constraint broken is a defect.
           .onConflictDoNothing({ target: tile.id })
           .returning({ id: tile.id })
@@ -332,7 +485,9 @@ const make = Effect.gen(function* () {
           // A key named before it is given throws: a defect.
           const { ids, placed } = yield* Effect.sync(() => idsOf(rows))
           for (let at = 0; at < placed.length; at += batchSize) {
-            const values = placed.slice(at, at + batchSize).map((row) => ({ ...row, accountId }))
+            const values = placed
+              .slice(at, at + batchSize)
+              .map((row) => ({ ...row, ownerId: owner }))
             yield* database.insert(tile).values(values).pipe(Effect.orDie)
           }
           return ids
@@ -343,70 +498,51 @@ const make = Effect.gen(function* () {
         database
           .update(tile)
           .set(changes)
-          .where(and(ofAccount(accountId), eq(tile.id, id)))
+          .where(and(ofOwner(owner), eq(tile.id, id)))
           .pipe(Effect.asVoid, Effect.orDie),
       ),
     remove: (id) =>
       inTransaction(
         database
           .delete(tile)
-          .where(and(ofAccount(accountId), eq(tile.id, id)))
+          .where(and(ofOwner(owner), eq(tile.id, id)))
           .pipe(Effect.asVoid, Effect.orDie),
       ),
-    swap: (a, b) => inTransaction(swapRows(database, accountId, a, b)),
+    swap: (a, b) => inTransaction(swapRows(database, owner, a, b)),
     setSystemVersion: (version) =>
       inTransaction(
         database
           .update(tile)
           .set({ systemVersion: version })
-          .where(rootOf(accountId))
+          .where(rootOf(owner))
           .pipe(Effect.asVoid, Effect.orDie),
       ),
   })
 
-  const ensureRoot = (accountId: string, root: Pick<TileRow, ContentColumn>) =>
-    database
-      .insert(tile)
-      .values({ ...root, id: crypto.randomUUID(), accountId })
-      .onConflictDoNothing()
-      .pipe(Effect.asVoid, Effect.orDie)
-
-  /** The Account's rows matching `where`, with only the content columns asked. */
+  /** The owner's rows matching `where`, with only the content columns asked. */
   const rowsWith = <C extends ContentColumn>(
-    accountId: string,
+    owner: string,
     where: SQL,
     columns: ReadonlyArray<C>,
   ): Effect.Effect<ReadonlyArray<TileRowWith<C>>> =>
     database
       .select({ ...placeColumns, ...versionColumns, ...contentColumnsOf(columns) })
       .from(tile)
-      .where(and(ofAccount(accountId), where))
+      .where(and(ofOwner(owner), where))
       .pipe(Effect.orDie)
 
-  const root = (accountId: string, content: Pick<TileRow, ContentColumn>) =>
-    ensureRoot(accountId, content).pipe(
-      Effect.andThen(
-        database.select({ id: tile.id }).from(tile).where(rootOf(accountId)).pipe(Effect.orDie),
-      ),
-      Effect.flatMap(([found]) =>
-        found === undefined
-          ? Effect.die(new Error('A Root was added, then not found'))
-          : Effect.succeed(found.id),
-      ),
-    )
-
   const generationsFrom = <O extends ContentColumn, C extends ContentColumn>(
-    accountId: string,
+    owner: string,
     from: { readonly id: string; readonly depth: number; readonly columns: ColumnsAsked<O, C> },
   ) =>
     Effect.gen(function* () {
-      const [opened] = yield* rowsWith(accountId, eq(tile.id, from.id), from.columns.opened)
+      const [opened] = yield* rowsWith(owner, eq(tile.id, from.id), from.columns.opened)
       if (opened === undefined) return undefined
       const below: Array<TileRowWith<C>> = []
       let parents = [opened.id]
       for (let left = from.depth; left > 0 && parents.length > 0; left--) {
         const generation = yield* rowsWith(
-          accountId,
+          owner,
           inArray(tile.parentId, parents),
           from.columns.below,
         )
@@ -417,34 +553,35 @@ const make = Effect.gen(function* () {
     })
 
   const ofIds = <C extends ContentColumn>(
-    accountId: string,
+    owner: string,
     ids: ReadonlyArray<string>,
     columns: ReadonlyArray<C>,
   ) =>
-    ids.length === 0 ? Effect.succeed([]) : rowsWith(accountId, inArray(tile.id, [...ids]), columns)
+    ids.length === 0 ? Effect.succeed([]) : rowsWith(owner, inArray(tile.id, [...ids]), columns)
 
   return Tiles.of({
-    read: (accountId, root) => Effect.andThen(ensureRoot(accountId, root), rowsOf(accountId)),
-    systemVersion: (accountId) =>
+    read: rowsOf,
+    systemVersion: (owner) =>
       database
         .select(systemVersionColumns)
         .from(tile)
-        .where(rootOf(accountId))
+        .where(rootOf(owner))
         .pipe(
           Effect.orDie,
           Effect.map(([found]) => found?.systemVersion),
         ),
-    root,
+    ...starsOf(database),
+    ...grantsOf(database),
     generationsFrom,
     ofIds,
-    lock: (accountId) =>
+    lock: (owner) =>
       inTransaction(
         database
           .select({ id: tile.id })
           .from(tile)
-          .where(rootOf(accountId))
+          .where(rootOf(owner))
           .for('update')
-          .pipe(Effect.orDie, Effect.andThen(rowsOf(accountId))),
+          .pipe(Effect.orDie, Effect.andThen(rowsOf(owner))),
       ),
     writes,
     newId: Effect.sync(() => crypto.randomUUID()),

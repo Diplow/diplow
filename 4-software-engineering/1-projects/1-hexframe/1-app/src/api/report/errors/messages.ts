@@ -11,7 +11,15 @@ import type { Failure } from './failure'
  * which its server function bears and the MCP tool that runs it names too, or another server function
  * by its own.
  */
-type Scope = OperationName | 'importTiles' | 'undo'
+type Scope =
+  | OperationName
+  | 'importTiles'
+  | 'undo'
+  | 'setGrant'
+  | 'whoReaches'
+  | 'postMessage'
+  | 'acceptProposal'
+  | 'askToJoin'
 
 interface Entry {
   tag: Failure['_tag']
@@ -30,13 +38,31 @@ const table: readonly Entry[] = [
   { tag: 'EmailMalformed', message: m.error_iam_email_malformed },
   { tag: 'PasswordLengthInvalid', message: m.error_iam_password_length },
   { tag: 'TooManyAttempts', message: m.error_iam_too_many_attempts },
+  { tag: 'SessionRequired', scope: 'setGrant', message: m.error_mapping_share_session_required },
+  { tag: 'SessionRequired', scope: 'whoReaches', message: m.error_mapping_share_session_required },
   { tag: 'SessionRequired', message: m.error_iam_session_required },
   { tag: 'KeyNameInvalid', message: m.error_iam_key_name_invalid },
   { tag: 'KeyNotFound', message: m.error_iam_key_not_found },
   { tag: 'EntitlementMissing', message: m.error_iam_entitlement_missing },
+  { tag: 'OrganizationNotFound', message: m.error_iam_organization_not_found },
+  { tag: 'AdminRequired', message: m.error_iam_admin_required },
+  { tag: 'LastAdmin', message: m.error_iam_last_admin },
+  { tag: 'AccountNotFound', message: m.error_iam_account_not_found },
+  { tag: 'AlreadyMember', scope: 'askToJoin', message: m.error_iam_join_already_member },
+  { tag: 'AlreadyMember', message: m.error_iam_already_member },
+  { tag: 'MemberNotFound', message: m.error_iam_member_not_found },
+  { tag: 'GroupNameInvalid', message: m.error_iam_group_name_invalid },
+  { tag: 'GroupNameTaken', message: m.error_iam_group_name_taken },
+  { tag: 'GroupNotFound', message: m.error_iam_group_not_found },
+  { tag: 'AlreadyInGroup', message: m.error_iam_already_in_group },
+  { tag: 'JoinRequestOpen', message: m.error_iam_join_request_open },
+  { tag: 'JoinRequestDeclined', message: m.error_iam_join_request_declined },
+  { tag: 'JoinRequestNotFound', message: m.error_iam_join_request_not_found },
+  { tag: 'JoinRequestDecided', message: m.error_iam_join_request_decided },
   { tag: 'TurnRunning', message: m.error_assistant_turn_running },
   { tag: 'AllowanceSpent', message: m.error_assistant_allowance_spent },
   { tag: 'ProposalClosed', message: m.error_assistant_proposal_closed },
+  { tag: 'ProposalElsewhere', message: m.error_assistant_proposal_elsewhere },
   { tag: 'NothingToUndo', message: m.error_assistant_nothing_to_undo },
   { tag: 'TurnOver', message: m.error_assistant_turn_over },
   { tag: 'TileNotFound', message: m.error_mapping_tile_not_found },
@@ -50,7 +76,12 @@ const table: readonly Entry[] = [
   { tag: 'MovedUnderItself', message: m.error_mapping_moved_under_itself },
   { tag: 'RootFixed', message: m.error_mapping_root_fixed },
   { tag: 'LeafHoldsNothing', message: m.error_mapping_leaf_holds_nothing },
-  { tag: 'ShippedReadOnly', message: m.error_mapping_shipped_read_only },
+  { tag: 'NotAllowed', scope: 'setGrant', message: m.error_mapping_share_owner_only },
+  { tag: 'NotAllowed', scope: 'whoReaches', message: m.error_mapping_share_owner_only },
+  { tag: 'NotAllowed', scope: 'postMessage', message: m.error_assistant_agent_not_allowed },
+  { tag: 'NotAllowed', scope: 'acceptProposal', message: m.error_assistant_accept_not_allowed },
+  { tag: 'NotAllowed', message: m.error_mapping_not_allowed },
+  { tag: 'Shipped', message: m.error_mapping_shipped },
   { tag: 'BatchOutdated', scope: 'undo', message: m.error_assistant_undo_outdated },
   { tag: 'BatchOutdated', message: m.error_mapping_batch_outdated },
   { tag: 'ImportRefused', message: m.error_mapping_import_refused },

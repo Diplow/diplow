@@ -1,0 +1,405 @@
+// What an actor may read of a System, read for every request from the Grants its Tiles carry, its
+// owner reading it whole; and the Tiles of other Systems a reader's References point at that they may
+// read there, a pin's (HEX-133), each resolved for that reader on every read. Mapping's service reads
+// by it (`../mapping.ts`), and so does `./sharing.ts`. It reads the tiles repository alone, below the
+// service, so the service imports it as it imports its entities, and the Systems hexframe ships where
+// they are mounted, under the Hexframe star (`../shipped/mount.ts`, HEX-139).
+import { Effect } from 'effect'
+
+import { Tiles } from '#/repositories/database/tiles/tiles'
+
+import {
+  type Actor,
+  grantOf,
+  hexframeStar,
+  isShippedId,
+  lineageFrom,
+  lineageOf,
+  owns,
+  type PinnedTiles,
+  pointsAt,
+  referencesShown,
+  rightsOn,
+  seenBy,
+  sharingOf,
+  sightOf,
+  type System,
+  systemFrom,
+  tileAt,
+} from '../entities'
+import { TileNotFound } from '../errors'
+import { agentAllowed, type Batched, fold, type Operation } from '../operations'
+import { mountedAmong, withMounted } from '../shipped/mount'
+import type { ShippedLanguage } from '../shipped/shipped'
+
+/** Who acts, and on which System, named by its star, the id of its Root. */
+export interface Acting {
+  readonly actor: Actor
+  readonly system: string
+}
+
+/**
+ * The owner of the System a star names, `TileNotFound` for a star that names none: what every read
+ * and change of it first finds, and `sharing.ts` before it reads or changes a Tile's Grants there.
+ */
+export const ownerOf = (system: string) =>
+  Tiles.use((tiles) =>
+    Effect.flatMap(tiles.ownerOf(system), (owner) =>
+      owner === undefined ? Effect.fail(new TileNotFound()) : Effect.succeed(owner),
+    ),
+  )
+
+/** The Grants the Tiles of the owner's System carry, a row that is no Grant left out. */
+export const grantsIn = (owner: string) =>
+  Tiles.use((tiles) =>
+    Effect.map(tiles.grants(owner), (rows) =>
+      rows.flatMap((row) => {
+        const found = grantOf(row)
+        return found === undefined ? [] : [found]
+      }),
+    ),
+  )
+
+/**
+ * The owner's System, flat, whole, the Systems hexframe ships mounted in it when it is the Hexframe
+ * Organization's, in the language asked, English by default (`withMounted`).
+ */
+export const wholeOf = (owner: string, language: ShippedLanguage = 'en') =>
+  Effect.gen(function* () {
+    const rows = yield* Tiles.use((tiles) => tiles.read(owner))
+    const found = systemFrom(withMounted(rows, language))
+    if (found === undefined) return yield* Effect.die(new Error('A System was read without a Root'))
+    return found
+  })
+
+/**
+ * The System the actor acts on as they may see it with a batch folded over it, the System the batch
+ * makes (`fold`), as a Turn reads it through its Proposal, and with none, as it stands: its owner's
+ * whole, anyone else's as `seenBy` shows it them there, by the Grants it carries, a Tile the batch
+ * makes read as its parent lets them read it; and no Tile of another System resolved, a Turn reading
+ * the System it started in alone, so a Reference to a Tile it does not hold, a pin or a deleted
+ * Tile's, says no id (`pointing`). What a Turn's files and its reads through its batch read (HEX-134).
+ */
+export const seenThrough = (acting: Acting, over: ReadonlyArray<Batched>) =>
+  Effect.gen(function* () {
+    const owner = yield* ownerOf(acting.system)
+    const folded = fold(yield* wholeOf(owner), over).system
+    const grants = owns(acting.actor, owner) ? [] : yield* grantsIn(owner)
+    return seenBy(acting.actor, folded, sharingOf(owner, lineageOf(folded), grants))
+  })
+
+/**
+ * What the actor may read of the System it acts on, by id, with its owner: every Tile, for its owner;
+ * else what `may` says, from where its Tiles stand and the Grants they carry, read for this request.
+ * And what they are shown (`shows`): what they may read, and the star, whose card, its Title and
+ * Preview, anyone sees.
+ */
+export const reading = ({ actor, system }: Acting) =>
+  Effect.gen(function* () {
+    const owner = yield* ownerOf(system)
+    if (owns(actor, owner)) return { owner, reads: (): boolean => true, shows: (): boolean => true }
+    const [places, grants] = yield* Effect.all([placesIn(owner), grantsIn(owner)], {
+      concurrency: 'unbounded',
+    })
+    return { owner, ...sightOf(actor, sharingOf(owner, lineageFrom(places), grants), system) }
+  })
+
+/** Where every row of the owner's System stands, the mounted Systems hexframe ships among them. */
+const placesIn = (owner: string) =>
+  Tiles.use((tiles) => Effect.map(tiles.places(owner), (places) => withMounted(places)))
+
+/**
+ * The rows of these ids in the System the star names, its owner's, each with only the content columns
+ * asked: the tiles repository's, and the mounted Tiles hexframe ships among them, in the language
+ * asked, under the Hexframe star.
+ */
+const rowsIn = <C extends 'title' | 'preview'>(
+  { owner, star }: { readonly owner: string; readonly star: string },
+  ids: ReadonlyArray<string>,
+  columns: ReadonlyArray<C>,
+  language: ShippedLanguage = 'en',
+) =>
+  Tiles.use((tiles) =>
+    Effect.map(
+      tiles.ofIds(
+        owner,
+        ids.filter((id) => !isShippedId(id)),
+        columns,
+      ),
+      (rows) => [...rows, ...mountedAmong(star, ids, language)],
+    ),
+  )
+
+/**
+ * Whether a read resolves a Reference to a Tile of another System, a pin, for the actor there: by
+ * default; a Turn's Key, which reads the System its Turn started in alone, resolves none, its pins
+ * unavailable, which the API layer, where that binding lives, says.
+ */
+export interface Across {
+  readonly across?: boolean | undefined
+}
+
+/** The ids a System's References point at that it holds no Tile of: another System's, or none. */
+export const outside = (held: System) =>
+  Object.values(held.tiles).flatMap((placed) =>
+    placed._tag === 'Reference' && tileAt(held, placed.target) === undefined ? [placed.target] : [],
+  )
+
+/**
+ * The Tiles of the System the actor acts on among these ids that they may read, each with the Title
+ * of its star, whose card anyone sees: the pins a reader of another System is shown from it.
+ */
+const pinnedIn = (acting: Acting, ids: ReadonlyArray<string>, language: ShippedLanguage) =>
+  Effect.flatMap(reading(acting), ({ owner, reads }) =>
+    Effect.map(
+      rowsIn(
+        { owner, star: acting.system },
+        [acting.system, ...ids.filter(reads)],
+        ['title', 'preview'],
+        language,
+      ),
+      (rows) => {
+        const starTitle = rows.find(({ id }) => id === acting.system)?.title ?? ''
+        return rows.flatMap(({ id, target, title, preview }) =>
+          target === null && ids.includes(id) && reads(id)
+            ? [[id, { id, title, preview, starTitle }] as const]
+            : [],
+        )
+      },
+    ),
+  )
+
+/**
+ * The star of the System holding each of these ids that some System holds, by id: a Tile hexframe
+ * ships is the Hexframe star's, where it is mounted; any other found in one lookup.
+ */
+const holdingAll = (ids: ReadonlyArray<string>) =>
+  Tiles.use((tiles) =>
+    Effect.map(
+      tiles.starsHolding([...new Set(ids)].filter((id) => !isShippedId(id))),
+      (stars): ReadonlyMap<string, string> =>
+        new Map([...stars, ...ids.filter(isShippedId).map((id) => [id, hexframeStar] as const)]),
+    ),
+  )
+
+/**
+ * The Tiles of other Systems than `here` among these ids that the actor may read there, by id, each
+ * with the Title of the star holding it: what a Reference to one of them, a pin, shows its reader,
+ * read for this request, so one they lose *read* on shows unavailable from the next. An id no System
+ * holds, a deleted Tile's, a Reference's, or one kept from the actor, has none, alike. The Systems
+ * holding them are found in one lookup, each then read as the service's `titles` reads it; a Tile
+ * hexframe ships in the language asked, English by default, under the Hexframe star.
+ */
+export const pinnedFor = (
+  actor: Actor,
+  ids: ReadonlyArray<string>,
+  here: string,
+  language: ShippedLanguage = 'en',
+) =>
+  Effect.gen(function* () {
+    const stars = yield* holdingAll(ids)
+    const elsewhere = new Map<string, string[]>()
+    for (const [id, star] of stars) {
+      if (star !== here) elsewhere.set(star, [...(elsewhere.get(star) ?? []), id])
+    }
+    const found = yield* Effect.forEach(
+      [...elsewhere],
+      ([star, named]) => pinnedIn({ actor, system: star }, named, language),
+      { concurrency: 'unbounded' },
+    )
+    const pinned: PinnedTiles = Object.fromEntries(found.flat())
+    return pinned
+  })
+
+/**
+ * The actor's own System held whole as an export writes it for them: its References as they are
+ * shown them (`referencesShown`), each pin with the Tile it points at while they may read it there
+ * (`pinned`), resolved unless `across` says none.
+ */
+export const pinnedShown = (
+  acting: Acting,
+  held: System,
+  { across }: { readonly across: boolean },
+) =>
+  Effect.map(
+    across ? pinnedFor(acting.actor, outside(held), acting.system) : Effect.succeed({}),
+    (pinned: PinnedTiles) => ({
+      system: referencesShown(
+        held,
+        pointsAt((target) => tileAt(held, target) !== undefined, pinned),
+      ),
+      pinned,
+    }),
+  )
+
+/**
+ * The star of the System holding the Tile of this id, `undefined` for an id no Tile nor Reference
+ * of any System has: what the API layer names the System a read from one Tile reaches by. A Tile
+ * hexframe ships is the Hexframe star's, where it is mounted, whether one stands there or not. It
+ * tells nothing that a read then shows: the read asks `may`, so a Tile the actor may not read is
+ * `TileNotFound` there, as an id that names nothing is.
+ */
+export const holding = (id: string) =>
+  isShippedId(id)
+    ? Effect.succeed<string | undefined>(hexframeStar)
+    : Tiles.use((tiles) => tiles.starHolding(id))
+
+/**
+ * The star of the System a read from a Tile, or a change made at it, works on, by the Tile's id: the
+ * System holding it (`holding`), but none for a Tile hexframe ships, which Mapping reads, and refuses
+ * every write of, by its id alone (`find`, `outsideShipped`), wherever the request works, a Turn's
+ * included, as before Help and the tutorial were mounted under the Hexframe star (HEX-139).
+ */
+export const workingAt = (id: string) =>
+  isShippedId(id) ? Effect.succeed<string | undefined>(undefined) : holding(id)
+
+/**
+ * A star's Title, its card's, which anyone sees, `''` for an id no star has: two lookups, the owner
+ * it names and its row.
+ */
+export const starTitle = (star: string) =>
+  Effect.flatMap(
+    Tiles.use((tiles) => tiles.ownerOf(star)),
+    (owner) =>
+      owner === undefined
+        ? Effect.succeed('')
+        : Effect.map(rowsIn({ owner, star }, [star], ['title']), (rows) => rows[0]?.title ?? ''),
+  )
+
+/**
+ * The Titles of the Tiles of the System the actor acts on among these ids that pass `kept`, by id: a
+ * deleted one's, a Reference's or an id it holds no Tile of has none. A Tile hexframe ships, under
+ * the Hexframe star, is named in English.
+ */
+const titledIn = (
+  held: { readonly owner: string; readonly star: string },
+  ids: ReadonlyArray<string>,
+  kept: (id: string) => boolean,
+) =>
+  Effect.map(rowsIn(held, ids.filter(kept), ['title']), (rows) =>
+    Object.fromEntries(
+      rows.flatMap(({ id, target, title }) => (target === null ? [[id, title] as const] : [])),
+    ),
+  )
+
+/**
+ * The Titles of the Tiles of the System the actor acts on among these ids, by id: an id it holds no
+ * Tile of, a deleted one's or a Reference's, or one the actor may not read, has none, but the star's,
+ * whose card anyone sees. What the timeline names a Tile by where it keeps its id.
+ */
+export const titles = (acting: Acting, ids: ReadonlyArray<string>) =>
+  Effect.flatMap(reading(acting), ({ owner, shows }) =>
+    titledIn({ owner, star: acting.system }, ids, shows),
+  )
+
+/**
+ * The Titles of these ids the actor is shown, whichever System holds them: the System they act on
+ * first, then each other one holding an id it holds no Tile of, all found in one lookup, each as the
+ * actor may see it there (`titles`). What the timeline names a Tile of a System visited by, as it
+ * names one of its own. An id no System holds, a deleted Tile's, has none, nor has a Tile kept from
+ * the actor.
+ */
+export const titlesAcross = (acting: Acting, ids: ReadonlyArray<string>) =>
+  Effect.gen(function* () {
+    const here = yield* titles(acting, ids)
+    const rest = [...new Set(ids)].filter((id) => !(id in here))
+    const stars = yield* holdingAll(rest)
+    const elsewhere = new Map<string, string[]>()
+    for (const [id, star] of stars) {
+      if (star !== acting.system) elsewhere.set(star, [...(elsewhere.get(star) ?? []), id])
+    }
+    const found = yield* Effect.forEach(
+      [...elsewhere],
+      ([star, named]) => titles({ ...acting, system: star }, named),
+      { concurrency: 'unbounded' },
+    )
+    return Object.fromEntries([here, ...found].flatMap((named) => Object.entries(named)))
+  })
+
+/**
+ * The Title and Preview of the Tiles of the System the actor acts on among these ids, in their order:
+ * an id it holds no Tile of, a deleted one's or a Reference's, or one the actor may not read, is left
+ * out, but the star, whose card anyone sees: a glimpse of each, for a reader shown several at once.
+ */
+export const glimpses = (acting: Acting, ids: ReadonlyArray<string>) =>
+  Effect.flatMap(reading(acting), ({ owner, shows }) =>
+    Effect.map(
+      rowsIn({ owner, star: acting.system }, ids.filter(shows), ['title', 'preview']),
+      (rows) => {
+        const found = new Map(
+          rows.flatMap(({ id, target, title, preview }) =>
+            target === null ? [[id, { id, title, preview }] as const] : [],
+          ),
+        )
+        return [...new Set(ids)].flatMap((id) => {
+          const glimpse = found.get(id)
+          return glimpse === undefined ? [] : [glimpse]
+        })
+      },
+    ),
+  )
+
+/** Nothing when the id is a Tile of the System the actor acts on that `kept` lets through. */
+const tileKept = (acting: Acting, id: string, kept: 'reads' | 'shows') =>
+  Effect.flatMap(reading(acting), (sight) =>
+    Effect.flatMap(
+      titledIn({ owner: sight.owner, star: acting.system }, [id], sight[kept]),
+      (titled) => (id in titled ? Effect.void : Effect.fail(new TileNotFound())),
+    ),
+  )
+
+/**
+ * Nothing when the id is a Tile of the System the actor acts on that they may read, else
+ * `TileNotFound`: a star they may not read too, whose card is no Tile they read.
+ */
+export const ownTile = (acting: Acting, id: string) => tileKept(acting, id, 'reads')
+
+/**
+ * Nothing when the actor is shown the Tile of this id in the System they act on: one they may read,
+ * or its star, whose card anyone sees; `TileNotFound` otherwise, a Tile kept from them answered as
+ * one that isn't there. Where a link to a Tile may lead them.
+ */
+export const shownTile = (acting: Acting, id: string) => tileKept(acting, id, 'shows')
+
+/**
+ * The rights the actor has on a Tile of the System they act on, where they would run the agent, its
+ * *@*: every right for its owner; `TileNotFound` for a Tile they may not read, as for a Reference's
+ * id or one the System holds none of, so nothing tells whether it exists; `NotAllowed` for one they
+ * may read without *@*, which never says what else they may do there. Where a Turn starts, asked
+ * before it starts (HEX-134).
+ */
+export const agentAt = (acting: Acting, id: string) =>
+  Effect.gen(function* () {
+    const owner = yield* ownerOf(acting.system)
+    const [places, grants] = yield* Effect.all(
+      [placesIn(owner), owns(acting.actor, owner) ? Effect.succeed([]) : grantsIn(owner)],
+      { concurrency: 'unbounded' },
+    )
+    const rights = rightsOn(acting.actor, sharingOf(owner, lineageFrom(places), grants), id)
+    const titled = yield* titledIn({ owner, star: acting.system }, [id], () => true)
+    return yield* Effect.fromResult(agentAllowed(rights, { isTile: id in titled }))
+  })
+
+/**
+ * Whether a Turn already running in a System not its Account's own still reaches it, asked on every
+ * call its Key makes: as `agentAt` asks it at the Turn's Tile, every refusal `TileNotFound`, so a Key
+ * whose *@* was taken back learns nothing of what else its Account may still do there (HEX-134).
+ */
+export const agentStillAt = (acting: Acting, id: string) =>
+  Effect.mapError(agentAt(acting, id), () => new TileNotFound())
+
+/**
+ * Whether an Operation pins a Tile of another System, a Reference's create whose target another
+ * System holds: once the actor may read it there (`ownTile`), before the System it is made in is
+ * locked, so `decide` takes a target that System does not hold; `TileNotFound` when they may not, as
+ * for no Tile at all. Any other Operation, a target of the System acted on or of none, is ruled on by
+ * `decide` there.
+ */
+export const pinning = (acting: Acting, operation: Operation) =>
+  operation._tag === 'CreateReference'
+    ? Effect.flatMap(holding(operation.target), (star) =>
+        star === undefined || star === acting.system
+          ? Effect.succeed(false)
+          : Effect.as(ownTile({ ...acting, system: star }, operation.target), true),
+      )
+    : Effect.succeed(false)

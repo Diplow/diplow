@@ -1,15 +1,17 @@
 // A System, Mapping's aggregate, flat: its Root and every Tile and Reference below it by id, each where
-// it stands, and whether an Account owns it, built from the repository's rows. Its tree, the Root with
+// it stands, built from the repository's rows. Its tree, the Root with
 // everything below it, is a view built from it, for drawing and for writing a Tile as files. Or one
 // Tile read to a depth, with only the fields asked. Pure: what a row means is decided here.
-import { Struct } from 'effect'
+import { Schema, Struct } from 'effect'
 
 import { type Kept, keptOf } from './kept/kept'
 import { contentWith, type FieldsAsked, type Row, type RowWith, withContent } from './rows'
 import {
   type Content,
+  contextDirections,
   type ContextDirection,
   type Direction,
+  directions,
   isContextSlot,
   isLeafSlot,
   rowDirection,
@@ -17,6 +19,7 @@ import {
   type Slot,
   slotOfRow,
   type Tile,
+  TileId,
   type Version,
 } from './tile'
 
@@ -41,7 +44,9 @@ export interface PlacedTile extends FoundTile, Standing {}
 
 /**
  * A Reference of a System, where it stands, always a Context slot: a link to the Tile of `target`, by
- * its id, so it survives a move. It has an id of its own, and no content.
+ * its id, so it survives a move. It has an id of its own, and no content. A read shows its `target`
+ * as `''` when the reader is shown no Tile there (`pointing`, `rights/seen.ts`); what Mapping holds
+ * keeps the id.
  */
 export interface PlacedReference extends Standing {
   readonly _tag: 'Reference'
@@ -53,28 +58,70 @@ export interface PlacedReference extends Standing {
 /**
  * A System, Mapping's aggregate, flat, as a change decides on it and the client holds it: its Root,
  * the one Tile without a parent; every Tile and Reference below it by id, each with its parent and
- * its slot; whether an Account owns it, a System hexframe ships, Help or the tutorial, which every
- * Account reads, owned by none, so the System alone says that nothing in it may change; and its
- * Version, how many events changed it, 0 before the first, which a client polls to know when to read
- * it again.
+ * its slot; and its Version, how many events changed it, 0 before the first, which a client polls to
+ * know when to read it again.
  */
 export interface System {
   readonly root: FoundTile
   readonly tiles: Readonly<Record<string, PlacedTile | PlacedReference>>
-  readonly owned: boolean
   readonly version: number
 }
 
 /**
- * The Systems hexframe ships, owned by no Account, by the ids of their Roots: Help's, then the
- * tutorial's. A Root's id is the name of the app's folder it is written in, and every other id of its
- * System a path of slots from it (`tutorial/2`). Mapping says which they are; the bundle holds a
- * folder for each.
+ * The Systems hexframe ships, by the ids of their Roots: Help's, then the tutorial's. A Root's id is
+ * the name of the app's folder it is written in, and every other id of its System a path of slots
+ * from it (`tutorial/2`). Mapping says which they are; the bundle holds a folder for each.
  */
 export const shippedRoots = ['help', 'tutorial'] as const
 
 /** The Root of a System hexframe ships, by its id. */
 export type ShippedRoot = (typeof shippedRoots)[number]
+
+/**
+ * The star of the Hexframe Organization's System, the same in every environment, made by a migration
+ * (`migrations/20261018133429_hexframe-organization`): the Systems hexframe ships are mounted under
+ * it, each Root a Child of it in its own Direction (`shipped/mount.ts`), read and pinned as any Tile of
+ * that System is (HEX-139).
+ */
+export const hexframeStar = '1444d914-02ce-4951-84f5-5f344fd76718'
+
+/**
+ * The System hexframe ships that an id names, by its Root: the Root or anything below it, well formed
+ * or not, whether a Tile stands there or not; none for any other id. A change writing one is refused,
+ * so `help/../x` is Help's too.
+ */
+export const shippedOf = (id: string): ShippedRoot | undefined =>
+  shippedRoots.find((root) => id === root || id.startsWith(`${root}/`))
+
+/**
+ * Whether an id names a Tile hexframe ships, Help's or the tutorial's (`shippedOf`): being shipped is
+ * the one source of its rights, read by Everyone and written by nobody, its owner included, its Grants
+ * changed by nobody, with no stored Grant saying so.
+ */
+export const isShippedId = (id: string) => shippedOf(id) !== undefined
+
+/** A slot, as a shipped id writes it: a Child's Direction or a Context slot. */
+const slot = [...directions, ...contextDirections].join('|')
+
+/**
+ * A well-formed id of a Tile hexframe ships from one of these Roots, as a reader may send one: the
+ * Root, then the slot of each generation below it, `help/3/-1`, `tutorial/2`. The id of every
+ * shipped Tile has this form; not every id of this form has a Tile.
+ */
+export const shippedIdOf = (roots: ReadonlyArray<ShippedRoot>) =>
+  Schema.String.check(
+    Schema.isMaxLength(64),
+    Schema.isPattern(new RegExp(`^(${roots.join('|')})(/(${slot}))*$`)),
+  )
+
+/** A well-formed id of any Tile hexframe ships (`shippedIdOf`). */
+const ShippedId = shippedIdOf(shippedRoots)
+
+/**
+ * A Tile's id as a link or a Reference's target names it: a UUID (`TileId`), or the id of a Tile
+ * hexframe ships (`ShippedId`), which the Hexframe star holds (HEX-139).
+ */
+export const AnyTileId = Schema.Union([TileId, ShippedId])
 
 /** A Leaf in its System's tree: one file's worth, a Tile with nothing below it and no Context. */
 export type LeafTile = FoundTile
@@ -89,17 +136,42 @@ export interface SystemTile extends FoundTile {
   readonly context: Partial<Record<ContextDirection, SystemTile | Reference | BrokenReference>>
 }
 
-/** A Context slot holding a link to a Tile drawn elsewhere, by its id, so it survives a move. */
+/**
+ * A Context slot holding a link to a Tile drawn elsewhere, by its id, so it survives a move; and, for
+ * a Tile of another System, a pin, the Title of the star holding it (`elsewhere.starTitle`).
+ */
 export interface Reference<T = Tile> {
   readonly _tag: 'Reference'
   readonly tile: T
+  readonly elsewhere?: { readonly starTitle: string }
 }
 
-/** A Reference whose Tile was deleted: shown as broken, it never blocked the delete. */
+/**
+ * A Reference whose Tile its reader is not shown, unavailable: deleted, which it never blocked, or
+ * one they may not read, alike, so nothing tells which. `target` is the id it points at in what Mapping
+ * holds, and none, `''`, in any read, whoever reads it (`pointing`, `rights/seen.ts`).
+ */
 export interface BrokenReference {
   readonly _tag: 'BrokenReference'
   readonly target: string
 }
+
+/**
+ * A Tile of another System a Reference points at, as its reader may read it there: what a reader
+ * needs to decide to open it, its Title and Preview, and `starTitle`, the Title of the star holding it,
+ * whose card anyone sees. What a read resolves a pin by, for that reader, on every read, by the
+ * Tile's id.
+ */
+export interface Pinned extends Pick<Tile, 'id' | 'title' | 'preview'> {
+  readonly starTitle: string
+}
+
+/** The Tiles of other Systems a reader's References point at that they may read, by id. */
+export type PinnedTiles = Readonly<Record<string, Pinned>>
+
+/** The Tile a pin points at, by its id, among those its reader may read; none otherwise. */
+const pinnedAt = (pinned: PinnedTiles, target: string) =>
+  Object.hasOwn(pinned, target) ? pinned[target] : undefined
 
 const tileOf = ({ id, title, preview, body }: Tile): Tile => ({ id, title, preview, body })
 
@@ -125,14 +197,10 @@ function placedOf(row: Row, parent: string): PlacedTile | PlacedReference | unde
 }
 
 /**
- * The System these rows hold, owned by an Account or, one hexframe ships, by none, at the Version
- * its Root's row keeps; `undefined` when they hold no Root. A row the Root is not above stays in it,
- * out of its tree's reach.
+ * The System these rows hold, at the Version its Root's row keeps; `undefined` when they hold no Root.
+ * A row the Root is not above stays in it, out of its tree's reach.
  */
-export function systemFrom(
-  rows: ReadonlyArray<Row>,
-  { owned }: { owned: boolean },
-): System | undefined {
+export function systemFrom(rows: ReadonlyArray<Row>): System | undefined {
   const root = rows.find((row) => row.parentId === null)
   if (root === undefined) return undefined
   const tiles = Object.fromEntries(
@@ -141,7 +209,7 @@ export function systemFrom(
       return placed === undefined ? [] : [[row.id, placed] as const]
     }),
   )
-  return { root: foundOf(root), tiles, owned, version: root.systemVersion }
+  return { root: foundOf(root), tiles, version: root.systemVersion }
 }
 
 /** What finding a Tile's row needs of a row: its id, and whether it is a Reference. */
@@ -222,27 +290,48 @@ function slotsOf<R, T, Leaf, Held>(
   return { branches, leaves, context }
 }
 
-/** A Reference to this Tile, shown as `shown` says, or a broken one when it is no Tile. */
+/**
+ * A Reference to this Tile, shown as `shown` says; else to the Tile of another System its reader may
+ * read there, a pin, with the star holding it; else a broken one, unavailable.
+ */
 const referenceTo = <R, T>(
   target: string,
   tile: R | undefined,
-  shown: (tile: R) => T,
-): Reference<T> | BrokenReference =>
-  tile === undefined
-    ? { _tag: 'BrokenReference', target }
-    : { _tag: 'Reference', tile: shown(tile) }
+  { shown, pinned, glimpsed }: ShownAs<R, T>,
+): Reference<T> | BrokenReference => {
+  if (tile !== undefined) return { _tag: 'Reference', tile: shown(tile) }
+  const pin = pinnedAt(pinned, target)
+  if (pin === undefined) return { _tag: 'BrokenReference', target }
+  return { _tag: 'Reference', tile: glimpsed(pin), elsewhere: { starTitle: pin.starTitle } }
+}
+
+/**
+ * How a Reference shows the Tile it points at: one of its System, as `shown` says; one of another
+ * System its reader may read, among `pinned`, as `glimpsed` says.
+ */
+interface ShownAs<R, T> {
+  readonly shown: (tile: R) => T
+  readonly pinned: PinnedTiles
+  readonly glimpsed: (pin: Pinned) => T
+}
 
 /** A Tile below its System's Root, without where it stands, as its tree holds it. */
 const unplaced = (tile: PlacedTile): FoundTile => Struct.omit(tile, ['parent', 'slot'])
 
 /**
  * A System's tree: its Root with everything below it, each Tile with its Branches, its Leaves and its
- * Context, a Reference with the Tile it points at, or broken when it points at none.
+ * Context, a Reference with the Tile it points at, of the System or, among `pinned`, of another, or
+ * broken when it points at none its reader is shown.
  */
-export function systemOf(system: System): SystemTile {
+export function systemOf(system: System, pinned: PinnedTiles = {}): SystemTile {
   const under = byParent(Object.values(system.tiles), (held) => held.parent)
 
-  const refer = (target: string) => referenceTo(target, tileAt(system, target), tileOf)
+  const refer = (target: string) =>
+    referenceTo(target, tileAt(system, target), {
+      shown: tileOf,
+      pinned,
+      glimpsed: ({ id, title, preview }) => ({ id, title, preview, body: '' }),
+    })
 
   // Its Tiles take its slots, a Branch's, a Leaf's or a Context one; its References only a Context one.
   const place = (tile: FoundTile): SystemTile => {
@@ -305,13 +394,14 @@ export type ReadTile<F extends Field> = ReadBase<F> & {
 
 /**
  * What a read from one Tile finds, before it is shaped: the Tile's row and the rows below it, each with
- * the fields asked of it, the rows of the Tiles their References point at, and its parent, by id and
- * Title.
+ * the fields asked of it, the rows of the Tiles their References point at, the Tiles of other Systems
+ * they point at that the reader may read (`pinned`), and its parent, by id and Title.
  */
 export interface Found<O extends Field, F extends Field> {
   readonly opened: RowWith<O>
   readonly rows: ReadonlyArray<RowWith<F>>
   readonly pointedAt: ReadonlyArray<RowWith<'title' | 'preview'>>
+  readonly pinned?: PinnedTiles | undefined
   readonly parent: Pick<Tile, 'id' | 'title'> | null
 }
 
@@ -322,8 +412,9 @@ export const showing = <U extends Field, F extends U>(
 ): RowWith<F> => ({ ...row, content: contentWith(row.content, fields) })
 
 /**
- * The Tile of this row read `depth` generations down, from the rows reached below it and the rows of
- * the Tiles their References point at.
+ * The Tile of this row read `depth` generations down, from the rows reached below it, the rows of the
+ * Tiles their References point at, and the Tiles of other Systems they point at that the reader may
+ * read (`pinned`).
  */
 export function readOf<F extends Field>(
   opened: RowWith<F>,
@@ -331,10 +422,12 @@ export function readOf<F extends Field>(
     rows,
     depth,
     pointedAt,
+    pinned = {},
   }: {
     rows: ReadonlyArray<RowWith<F>>
     depth: Depth
     pointedAt: ReadonlyArray<RowWith<'title' | 'preview'>>
+    pinned?: PinnedTiles | undefined
   },
 ): ReadTile<F> {
   const targets = new Map(pointedAt.map((row) => [row.id, row]))
@@ -343,10 +436,11 @@ export function readOf<F extends Field>(
   // A Reference's row points at no Tile.
   const refer = (target: string) => {
     const pointed = targets.get(target)
-    return referenceTo(target, pointed?.target === null ? pointed : undefined, (row) => ({
-      id: row.id,
-      ...row.content,
-    }))
+    return referenceTo(target, pointed?.target === null ? pointed : undefined, {
+      shown: (row): Glimpse => ({ id: row.id, ...row.content }),
+      pinned,
+      glimpsed: ({ id, title, preview }) => ({ id, title, preview }),
+    })
   }
 
   const found = (row: RowWith<F>): ReadBase<F> => ({

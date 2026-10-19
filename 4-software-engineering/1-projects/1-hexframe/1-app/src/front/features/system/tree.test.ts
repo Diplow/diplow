@@ -79,6 +79,25 @@ describe('canvasTree', () => {
     })
   })
 
+  it('draws a pin, a Reference to a Tile of another System, from the star holding it', () => {
+    const pinned = canvasTree({
+      ...system,
+      context: {
+        [-3]: {
+          _tag: 'Reference',
+          tile: { id: 'shed', title: 'Shed', preview: 'Tools', body: '' },
+          elsewhere: { starTitle: 'Bob' },
+        },
+      },
+    })
+    expect(pinned.context?.[3]).toEqual({
+      id: 'shed',
+      title: 'Shed',
+      preview: 'Tools',
+      reference: { from: 'Bob' },
+    })
+  })
+
   it('draws a broken Reference as broken, under an id no Tile has', () => {
     expect(tree.context?.[5]).toEqual({
       id: 'broken:root:-5',
@@ -146,6 +165,19 @@ describe('tileIn', () => {
     expect(tileIn(system, 'broken:root:-5')).toBeUndefined()
     expect(tileIn(system, 'nowhere')).toBeUndefined()
   })
+
+  it('finds a Tile hung from the star across a gap, under nothing shown, and what is below it', () => {
+    const gap = tile('gap', { leaves: { 4: tile('page') } })
+    expect(tileIn(system, 'gap')).toBeUndefined()
+    expect(tileIn(system, 'gap', [gap])).toEqual({ kind: 'across', tile: gap, parent: undefined })
+    expect(tileIn(system, 'page', [gap])).toEqual({
+      kind: 'leaf',
+      tile: gap.leaves[4],
+      parent: gap,
+      direction: 4,
+    })
+    expect(tileIn(system, 'root', [gap])).toMatchObject({ kind: 'root' })
+  })
 })
 
 describe('swapsWith', () => {
@@ -174,7 +206,6 @@ describe('swapsWith', () => {
       toA3: { _tag: 'Reference', id: 'toA3', parent: 'root', slot: -2, target: 'a3' },
       toGone: { _tag: 'Reference', id: 'toGone', parent: 'root', slot: -5, target: 'gone' },
     },
-    owned: true,
     version: 0,
   }
   const tree = canvasTree(systemOf(flat))

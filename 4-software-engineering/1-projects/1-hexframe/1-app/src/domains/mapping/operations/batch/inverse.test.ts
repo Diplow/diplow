@@ -55,7 +55,6 @@ const system: System = {
     [id.home]: placed(id.home, id.root, 2, 5),
     [id.link]: { _tag: 'Reference', id: id.link, parent: id.work, slot: -1, target: id.home },
   },
-  owned: true,
   version: 20,
 }
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Actor, Entry } from '#/domains/assistant/entities'
+import type { Entry, OwnActor } from '#/domains/assistant/entities'
 import type { PlacedTile, Slot, System } from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
 import { placeOf } from '#/front/ui/canvas/tile/menu/verbs'
@@ -16,7 +16,7 @@ import type { Proposed } from './proposal'
 
 const at = new Date('2026-10-12T10:00:00Z')
 
-const change = (id: string, tile: string, actor: Actor, other?: string): Entry => ({
+const change = (id: string, tile: string, actor: OwnActor, other?: string): Entry => ({
   _tag: 'Change',
   id,
   at,
@@ -26,9 +26,9 @@ const change = (id: string, tile: string, actor: Actor, other?: string): Entry =
   actor,
 })
 
-const agent: Actor = { _tag: 'Assistant' }
-const key: Actor = { _tag: 'Key', name: 'laptop' }
-const you: Actor = { _tag: 'You' }
+const agent: OwnActor = { _tag: 'Assistant' }
+const key: OwnActor = { _tag: 'Key', name: 'laptop' }
+const you: OwnActor = { _tag: 'You' }
 
 const proposal = (
   id: string,
@@ -68,18 +68,40 @@ describe('touchesOf, the changes made since the page opened', () => {
     ])
   })
 
-  it("makes the change the user's acceptance made theirs, once, a later one by the agent its own", () => {
+  it('touches a Tile someone else changed in the user’s System as from outside, as a Key does', () => {
+    const theirs: Entry = {
+      _tag: 'Change',
+      id: 'theirs',
+      at,
+      verb: 'TileEdited',
+      tile: { id: 'g', title: 'g' },
+      actor: { _tag: 'Someone', star: 'Bob', by: { _tag: 'You' } },
+      undone: false,
+    }
+    expect(touchesOf([theirs], { known, accepted: [] })).toEqual([
+      { tile: 'g', by: 'key', entry: 'theirs' },
+    ])
+  })
+
+  it("touches the change the user's acceptance made as theirs, once, their own later ones not", () => {
     const entries = [
       change('before', 'b', agent),
       proposal('seen', 'accepted', ['b']),
-      change('landed', 'b', agent),
-      change('later', 'b', agent),
+      change('landed', 'b', you),
+      change('later', 'b', you),
+      change('agent', 'b', agent),
     ]
     const accepted = acceptedOf(entries, new Set(['seen']))
     expect(touchesOf(entries, { known: new Set(['before']), accepted })).toEqual([
       { tile: 'b', by: 'human', entry: 'landed' },
-      { tile: 'b', by: 'agent', entry: 'later' },
+      { tile: 'b', by: 'agent', entry: 'agent' },
     ])
+  })
+
+  it("leaves out the user's change no acceptance the page saw made", () => {
+    const entries = [proposal('unseen', 'accepted', ['b']), change('landed', 'b', you)]
+    const accepted = acceptedOf(entries, new Set())
+    expect(touchesOf(entries, { known, accepted })).toEqual([])
   })
 })
 
@@ -176,7 +198,6 @@ describe('cardOf, what a Tile named in the chat says in its card', () => {
       notes: placed('notes', 'work', { leaf: 4 }, 'Notes'),
       why: placed('why', 'work', -1, 'Why'),
     },
-    owned: true,
     version: 1,
   }
   const proposed: Proposed = {

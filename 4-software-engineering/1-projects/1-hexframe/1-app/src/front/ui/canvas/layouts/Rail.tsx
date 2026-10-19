@@ -2,7 +2,8 @@
 // on, a point per step, with hexframe's mark, the Sunstone, at its head, threaded on the line, so the
 // corner reads as one mark rather than a sign beside a list; it turns whole at each thing done.
 // With no step, the mark stands alone; the line and its points come down from it once there is one.
-// Where its caller gives one, the mark is the way back to the reader's own System, from another.
+// Where its caller gives one, the mark is the way back to the reader's own System, from another;
+// on another's System, the Tiles kept from the reader between its star and a step are one "…".
 // Every part sits on the line's axis: the line is 1px wide and the mark and the points odd in size, so
 // each centre falls on the line's centre and the line stays one crisp pixel. Under a finger, every
 // step grows to a 44px target and the points spread to match.
@@ -15,6 +16,8 @@ import { Sunstone } from '../../layouts/screen/Sunstone'
 interface RailStep {
   id: string
   title: string
+  /** Reached across Tiles kept from the reader, which a "…" stands for above it. */
+  across?: true | undefined
 }
 
 interface RailProps {
@@ -63,7 +66,8 @@ export function Rail({ steps, onSelect, turns = 0, onHome, className }: RailProp
           />
           <nav aria-label={m.breadcrumb_label()}>
             <ol className="mt-[18px] flex flex-col gap-[25px] pointer-coarse:mt-1 pointer-coarse:gap-0">
-              {steps.map((step, index) => (
+              {steps.flatMap((step, index) => [
+                ...(step.across === true ? [<Gap key={`gap:${step.id}`} />] : []),
                 <Step
                   key={step.id}
                   step={step}
@@ -71,8 +75,8 @@ export function Rail({ steps, onSelect, turns = 0, onHome, className }: RailProp
                   onSelect={() => {
                     onSelect(step.id)
                   }}
-                />
-              ))}
+                />,
+              ])}
             </ol>
           </nav>
         </div>
@@ -83,6 +87,27 @@ export function Rail({ steps, onSelect, turns = 0, onHome, className }: RailProp
 
 /** Where the mark sits, a 44px target under a finger. */
 const markPlace = 'grid size-[31px] place-items-center pointer-coarse:size-11'
+
+/**
+ * The Tiles kept from the reader between two steps, one "…" on the line in a point's place, which
+ * leads nowhere: nothing there may be centered, nor named.
+ */
+function Gap() {
+  return (
+    <li
+      aria-label={m.breadcrumb_gap()}
+      title={m.breadcrumb_gap()}
+      className="relative flex h-[17px] items-center justify-center pointer-coarse:h-11"
+    >
+      <span
+        aria-hidden
+        className="bg-background px-px text-[13px]/[17px] font-light text-muted-foreground"
+      >
+        …
+      </span>
+    </li>
+  )
+}
 
 interface StepProps {
   step: RailStep

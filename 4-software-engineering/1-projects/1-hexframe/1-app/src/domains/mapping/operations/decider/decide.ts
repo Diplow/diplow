@@ -12,6 +12,7 @@ import {
   type FoundTile,
   heldAt,
   holdsNothingIfLeaf,
+  isShippedId,
   type PlacedTile,
   sameSlot,
   type System,
@@ -21,11 +22,11 @@ import {
 } from '../../entities'
 import {
   type DirectionTaken,
-  ShippedReadOnly,
   type LeafHoldsNothing,
   MovedUnderItself,
   type PreviewTooLong,
   RootFixed,
+  Shipped,
   TileChanged,
   TileNotFound,
   type TitleMissing,
@@ -40,33 +41,30 @@ import {
   TileMoved,
   TilesSwapped,
 } from '../events'
-import type {
-  CreateReference,
-  CreateTile,
-  DeleteReference,
-  DeleteTile,
-  EditTile,
-  MoveTile,
-  Operation,
-  SwapTiles,
+import {
+  type CreateReference,
+  type CreateTile,
+  type DeleteReference,
+  type DeleteTile,
+  type EditTile,
+  type MoveTile,
+  type Operation,
+  type SwapTiles,
+  writtenAt,
 } from '../operation'
 import { freeSlot } from '../placement'
 
 /**
- * What `decide` may refuse each Operation, by its tag: a System hexframe ships refuses every one, and
- * each refuses only what its rules check, so a caller handles no refusal its Operation never gets.
+ * What `decide` may refuse each Operation, by its tag: a Tile hexframe ships refuses every one that
+ * writes it, and each refuses only what its rules check, so a caller handles no refusal its Operation
+ * never gets.
  */
 export interface Refusals {
   readonly CreateTile:
-    | ShippedReadOnly
-    | TitleMissing
-    | PreviewTooLong
-    | TileNotFound
-    | LeafHoldsNothing
-    | DirectionTaken
-  readonly EditTile: ShippedReadOnly | TitleMissing | PreviewTooLong | TileNotFound | TileChanged
+    Shipped | TitleMissing | PreviewTooLong | TileNotFound | LeafHoldsNothing | DirectionTaken
+  readonly EditTile: Shipped | TitleMissing | PreviewTooLong | TileNotFound | TileChanged
   readonly MoveTile:
-    | ShippedReadOnly
+    | Shipped
     | TileNotFound
     | TileChanged
     | RootFixed
@@ -74,11 +72,10 @@ export interface Refusals {
     | DirectionTaken
     | LeafHoldsNothing
   readonly SwapTiles:
-    ShippedReadOnly | TileNotFound | TileChanged | RootFixed | MovedUnderItself | LeafHoldsNothing
-  readonly DeleteTile: ShippedReadOnly | TileNotFound | TileChanged | RootFixed
-  readonly CreateReference:
-    ShippedReadOnly | TileNotFound | TileChanged | LeafHoldsNothing | DirectionTaken
-  readonly DeleteReference: ShippedReadOnly | TileNotFound | TileChanged
+    Shipped | TileNotFound | TileChanged | RootFixed | MovedUnderItself | LeafHoldsNothing
+  readonly DeleteTile: Shipped | TileNotFound | TileChanged | RootFixed
+  readonly CreateReference: Shipped | TileNotFound | TileChanged | LeafHoldsNothing | DirectionTaken
+  readonly DeleteReference: Shipped | TileNotFound | TileChanged
 }
 
 /** Every refusal `decide` may answer, each a Mapping error with its kind. */
@@ -86,12 +83,15 @@ export type Refusal = Refusals[keyof Refusals]
 
 /**
  * What a create is given beside its Operation: the id of what it makes, which `decide` never makes
- * itself, and, for a Tile an import makes, what it keeps from its file, each part already checked
- * (`entities/kept/`).
+ * itself; for a Tile an import makes, what it keeps from its file, each part already checked
+ * (`entities/kept/`); and, for a Reference, `targetElsewhere` when its target is a Tile of another
+ * System that the service found the actor may read there, a pin, which no System decided on holds, so
+ * only the whole table knows it, as it knows an id taken.
  */
 export interface Made {
   readonly id: string
   readonly kept?: ToKeep | undefined
+  readonly targetElsewhere?: boolean | undefined
 }
 
 /**
@@ -194,16 +194,18 @@ const deleteTile = (system: System, { id, version }: DeleteTile): Decided<'Delet
   Result.map(placed(system, id, version), ({ title }) => [new TileDeleted({ id, title })])
 
 /**
- * Puts a Reference to a Tile of the System in a free Context slot of a Tile, never of a Leaf, that Tile
- * at the Version its writer read.
+ * Puts a Reference in a free Context slot of a Tile, never of a Leaf, that Tile at the Version its
+ * writer read: to a Tile of the System, or, `targetElsewhere`, to one of another System, a pin,
+ * which the service found the actor may read there.
  */
 const createReference = (
   system: System,
   { parent, parentVersion, slot, target }: CreateReference,
-  { id }: Made,
+  { id, targetElsewhere = false }: Made,
 ): Decided<'CreateReference'> =>
   Result.gen(function* () {
-    if (tileAt(system, target) === undefined) return yield* refused(new TileNotFound())
+    if (!targetElsewhere && tileAt(system, target) === undefined)
+      return yield* refused(new TileNotFound())
     yield* read(system, parent, parentVersion)
     yield* freeSlot(system, { parent, slot })
     return [new ReferenceCreated({ id, parent, slot, target })]
@@ -234,8 +236,8 @@ function given(made: Made | undefined): Made {
 /**
  * What an Operation does to a System: the events it makes, in the order they apply (`evolve`), none
  * when it changes nothing, or the refusal Mapping answers it. A create is given the id of what it
- * makes (`Made`). A System no Account owns, one hexframe ships, Help or the tutorial, takes no change at
- * all (`ShippedReadOnly`), whatever the Operation names.
+ * makes (`Made`). One writing a Tile hexframe ships, Help's or the tutorial's, wherever it is mounted
+ * (`writtenAt`), is refused first (`Shipped`): a Reference may point at one, nothing else touches it.
  */
 export function decide(system: System, operation: CreateTile, made: Made): Decided<'CreateTile'>
 export function decide(system: System, operation: EditTile): Decided<'EditTile'>
@@ -254,7 +256,7 @@ export function decide(
 ): Decided
 export function decide(system: System, operation: Operation, made: Made): Decided
 export function decide(system: System, operation: Operation, made?: Made): Decided {
-  if (!system.owned) return refused(new ShippedReadOnly())
+  if (writtenAt(operation).some(isShippedId)) return refused(new Shipped())
   switch (operation._tag) {
     case 'CreateTile':
       return createTile(system, operation, given(made))

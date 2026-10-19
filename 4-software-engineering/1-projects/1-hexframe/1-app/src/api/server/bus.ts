@@ -20,13 +20,16 @@ export class WaitUntil extends Context.Service<WaitUntil, (work: Effect.Effect<v
 ) {}
 
 /**
- * What the bus carries: the event, as its domain declared it, and who acted, the signed-in Account and
- * the proof that gave it, a Session or a Key, filled from the request; none when nobody signed in. A
- * domain's event never holds an actor.
+ * What the bus carries: the event, as its domain declared it; who acted, the signed-in Account and
+ * the proof that gave it, a Session or a Key, filled from the request, none when nobody signed in;
+ * and where, the star of the System a change was made in when it is not the actor's own, someone
+ * else's, which the program making it says (`changingIn`), none otherwise. A domain's event never
+ * holds an actor, nor the System it changed.
  */
 export interface Envelope {
   readonly event: DomainEvent
   readonly actor: Option.Option<SignedIn>
+  readonly elsewhere: Option.Option<string>
 }
 
 /** A reaction to one event, wired by the API layer with `on`. */
@@ -41,13 +44,17 @@ export interface Subscription<R> {
  */
 export function on<A extends DomainEvent, R>(
   event: Schema.Codec<A, unknown>,
-  react: (event: A, actor: Envelope['actor']) => Effect.Effect<void, unknown, R>,
+  react: (
+    event: A,
+    actor: Envelope['actor'],
+    elsewhere: Envelope['elsewhere'],
+  ) => Effect.Effect<void, unknown, R>,
 ): Subscription<R> {
   const accepts = Schema.is(event)
   return {
     accepts,
-    handle: ({ event: published, actor }) =>
-      accepts(published) ? react(published, actor) : Effect.void,
+    handle: ({ event: published, actor, elsewhere }) =>
+      accepts(published) ? react(published, actor, elsewhere) : Effect.void,
   }
 }
 
@@ -58,27 +65,23 @@ interface Delivery {
 }
 
 /**
- * Who a program acts as, when it is not who the request proves: the Assistant, by the Turn whose
- * writes a user accepted, for the changes an accepted Proposal makes (`actingAs`).
+ * The System a program changes when it is not its actor's own, by its star: someone else's, where a
+ * write was made that a Grant let through (HEX-132).
  */
-class ActingAs extends Context.Service<ActingAs, SignedIn>()('hexframe/ActingAs') {}
+class ChangingIn extends Context.Service<ChangingIn, string>()('hexframe/ChangingIn') {}
 
 /**
- * Runs a program as `signedIn` acted, for the bus: each event it publishes rides in an envelope saying
- * so, whoever the request proves. It proves nothing: IAM still reads the request's own proofs.
+ * Runs a program that changes someone else's System, the one this star names, for the bus: each
+ * event it publishes rides in an envelope saying where it was made (`elsewhere`), so a reaction reads
+ * it on that System, not the actor's own.
  */
-export const actingAs =
-  (signedIn: SignedIn) =>
-  <A, E, R>(program: Effect.Effect<A, E, R>): Effect.Effect<A, E, Exclude<R, ActingAs>> =>
-    Effect.provideService(program, ActingAs, signedIn)
+export const changingIn =
+  (star: string) =>
+  <A, E, R>(program: Effect.Effect<A, E, R>): Effect.Effect<A, E, Exclude<R, ChangingIn>> =>
+    Effect.provideService(program, ChangingIn, star)
 
-/**
- * Who acted, as the request proves it, by IAM's rule, unless the program acts as another
- * (`actingAs`): none outside a request, or when nothing proves it.
- */
+/** Who acted, as the request proves it, by IAM's rule: none outside a request, or when nothing proves it. */
 const actor = Effect.gen(function* () {
-  const acting = yield* Effect.serviceOption(ActingAs)
-  if (Option.isSome(acting)) return acting
   const session = yield* Effect.serviceOption(CurrentSession)
   const key = yield* Effect.serviceOption(CurrentKey)
   return signedInBy(Option.flatten(session), Option.flatten(key))
@@ -138,7 +141,8 @@ function publish<R>(
   const toSubscribers = delivered(pubsub, subscriptions)
   return (event: DomainEvent) =>
     Effect.gen(function* () {
-      const delivery = toSubscribers({ event, actor: yield* actor })
+      const elsewhere = yield* Effect.serviceOption(ChangingIn)
+      const delivery = toSubscribers({ event, actor: yield* actor, elsewhere })
       const afterCommit = yield* Effect.serviceOption(AfterCommit)
       yield* Option.isSome(afterCommit) ? afterCommit.value(delivery) : delivery
     })

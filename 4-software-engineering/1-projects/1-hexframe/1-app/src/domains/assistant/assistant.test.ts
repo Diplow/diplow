@@ -6,11 +6,22 @@ import { layer as conversationsLayer } from '#/repositories/database/conversatio
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 
-import { before, day, lastEntry, postMessage, recordChange, recordNavigation } from './assistant'
+import {
+  before,
+  day,
+  lastEntry,
+  postMessage,
+  recordChange,
+  recordAskedToJoin,
+  recordMembership,
+  recordNavigation,
+  recordShared,
+} from './assistant'
 import {
   type EntryContent,
   leadingLink,
   linkTo,
+  namedRequests,
   namedTiles,
   type Navigation,
   partsOf,
@@ -34,17 +45,31 @@ const said = (text: string): EntryContent => ({ _tag: 'Message', author: 'user',
  * recorded as it ends, and a Proposal as its agent drafts it.
  */
 const recorded = (accountId: string, content: EntryContent, ago = 0) =>
-  transactional(
-    content._tag === 'Message'
-      ? postMessage(accountId, content.text)
-      : content._tag === 'Navigation'
-        ? recordNavigation(accountId, content, ago)
-        : content._tag === 'TurnEnded' ||
-            content._tag === 'Proposal' ||
-            content._tag === 'TurnApplied'
-          ? Effect.die(new Error('A Turn’s end and what it did are recorded as they happen'))
-          : recordChange(accountId, summarizedOf(content), content.actor),
-  )
+  transactional(recording(accountId, content, ago))
+
+/** The operation an Entry of this kind is recorded through, as `recorded` says. */
+function recording(accountId: string, content: EntryContent, ago: number) {
+  switch (content._tag) {
+    case 'Message':
+      return postMessage(accountId, content.text)
+    case 'Navigation':
+      return recordNavigation(accountId, content, ago)
+    case 'Shared':
+      return recordShared(accountId, Struct.omit(content, ['_tag']))
+    case 'Membership':
+      return recordMembership(accountId, Struct.omit(content, ['_tag']))
+    case 'AskedToJoin':
+      return recordAskedToJoin(accountId, Struct.omit(content, ['_tag']))
+    case 'TurnEnded':
+    case 'Proposal':
+    case 'TurnApplied':
+      return Effect.die(new Error('A Turn’s end and what it did are recorded as they happen'))
+    default:
+      return content.actor._tag === 'Someone'
+        ? Effect.die(new Error('Someone else’s change is recorded as their write runs'))
+        : recordChange(accountId, summarizedOf(content), content.actor)
+  }
+}
 
 /** A change or an import as Mapping would have summarized it, who acted left out. */
 const summarizedOf = (content: Extract<EntryContent, { _tag: 'Change' | 'Import' }>): Summarized =>
@@ -108,6 +133,8 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
       const account = someone()
       yield* at('2026-10-10T10:00:00Z')
       const tile = { id: crypto.randomUUID(), title: 'Games' }
+      const atelier = { id: crypto.randomUUID(), title: 'Atelier' }
+      const request = crypto.randomUUID()
       const kinds: ReadonlyArray<EntryContent> = [
         said('What would you add to Games?'),
         { _tag: 'Change', verb: 'TileMoved', tile, actor: { _tag: 'You' } },
@@ -125,10 +152,22 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
           steps: [{ gesture: 'center', tile: tile.id }],
           gestures: 3,
         },
+        { _tag: 'Shared', by: 'Ana Lima', tile, rights: ['read', 'write'] },
+        { _tag: 'Membership', what: 'added', by: 'Ana Lima', organization: atelier },
+        {
+          _tag: 'Membership',
+          what: 'declined',
+          by: '',
+          organization: atelier,
+          group: 'Design',
+        },
+        { _tag: 'AskedToJoin', request, by: 'Cleo Diaz', organization: atelier, group: 'Design' },
       ]
       for (const content of kinds) yield* recorded(account, content)
       const read = yield* day(account, { date: '2026-10-10', offset: 0 })
       expect(read.map((entry) => Struct.omit(entry, ['id', 'at']))).toEqual(kinds)
+      // The request the day reads anew, once.
+      expect(namedRequests([...read, ...read])).toEqual([request])
     }),
   )
 

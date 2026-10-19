@@ -1,12 +1,14 @@
 // Mapping's server functions: one per operation, for the signed-in Account, which the middleware has
-// already put on the context as its Session, and `shipped`, a System hexframe ships whole, Help or the
-// tutorial, for any visitor. Each validates its input, then hands its program (./programs.ts) to the
+// already put on the context as its Session, `shipped`, a System hexframe ships whole, Help or the
+// tutorial, for any visitor, `publicSystem`, the System holding a Tile Everyone reads, for anyone,
+// who reaches a Tile, set and read by its owner from a Session alone, and a star found by its Title
+// or by a link. Each validates its input, then hands its program (./programs.ts) to the
 // helper; its type lists the errors it can fail with. `exportTile` answers its zip as a download
 // (./files/download.ts); `importTiles` takes a form.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema, Struct } from 'effect'
 
-import { shippedRoots, TileId } from '#/domains/mapping/entities'
+import { AnyTileId, GrantChange, shippedRoots, StarQuery, TileId } from '#/domains/mapping/entities'
 import {
   CreateReference,
   CreateTile,
@@ -70,25 +72,65 @@ export const ImportUpload = Schema.fromFormData(
   }),
 )
 
+/** One of the app's languages, the page's, which a Tile hexframe ships is read in. */
+const Language = Schema.Literals(locales)
+
 /**
  * A System hexframe ships, by its Root, as Mapping names it, Help's or the tutorial's, in one of the
  * app's languages: the page's.
  */
 export const ShippedRead = Schema.Struct({
   root: Schema.Literals(shippedRoots),
-  language: Schema.Literals(locales),
+  language: Language,
 })
 
-/** A call that takes nothing. */
-const Nothing = Schema.toStandardSchemaV1(Schema.Undefined)
+/**
+ * The System a read names, by its star, a UUID, as Mapping's `TileId` bounds it, none for the
+ * Account's own; and the page's language, which a Tile hexframe ships among it is read in, English
+ * when none is given (HEX-139).
+ */
+export const SystemRead = Schema.UndefinedOr(
+  Schema.Struct({ system: Schema.optionalKey(TileId), language: Schema.optionalKey(Language) }),
+)
 
 /**
- * The Account's System, flat: its Root, the user, and every Tile and Reference below it by id, owned
- * by the Account, the Root added on the first read. The client builds its tree.
+ * A System, flat, as the Account may see it, its Root and every Tile and Reference below it by id
+ * that it may read, each Tile with its rights on it: its own, the Root added on the first read, or,
+ * by its star, another's, from the star's card. The client builds its tree.
  */
 export const system = createServerFn({ method: 'GET' })
-  .validator(Nothing)
-  .handler(({ context }) => run(context, Mapping.system))
+  .validator(Schema.toStandardSchemaV1(SystemRead))
+  .handler(({ data, context }) => run(context, Mapping.systemAt(data?.system, data?.language)))
+
+/**
+ * The Tile a link leads to, by its id: a UUID, as Mapping's `TileId` bounds it, or the id of a Tile
+ * hexframe ships, which the Hexframe star holds (`ShippedId`, HEX-139).
+ */
+export const TileVisit = Schema.Struct({ tile: AnyTileId })
+
+/** A public Tile's System read: the Tile, as a link names it, and the page's language. */
+export const PublicRead = Schema.Struct({
+  tile: TileVisit.fields.tile,
+  language: Schema.optionalKey(Language),
+})
+
+/**
+ * Where a link to a Tile leads the Account, `/t/<id>`: the star of the System holding it, none for
+ * its own, once it may read the Tile; a Tile kept from it is `TileNotFound`, as one that doesn't
+ * exist.
+ */
+export const visit = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(TileVisit))
+  .handler(({ data, context }) => run(context, Mapping.visit(data)))
+
+/**
+ * The System holding a Tile Everyone may read, by the Tile's id, flat, as anyone holding the link sees
+ * it, signed in or not: what `/t/<id>` draws signed out, read-only (HEX-129). A Tile Everyone may not
+ * read is `TileNotFound`, as one that doesn't exist; no Session is asked, nor used.
+ */
+export const publicSystem = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(PublicRead))
+  .handler(({ data, context }) => run(context, Mapping.publicSystem(data)))
 
 /**
  * A System hexframe ships whole, by its Root, in the language asked: its Root with everything below
@@ -142,3 +184,49 @@ export const createReference = createServerFn({ method: 'POST' })
 export const deleteReference = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(ReferenceSlot))
   .handler(({ data, context }) => run(context, Mapping.deleteReference(data)))
+
+/**
+ * Sets a Tile's Grant for Everyone, `read` or `none`, or for someone named by their star, any value,
+ * or removes it, `inherit`, so the Tile inherits again, its input Mapping's `GrantChange`, Everyone
+ * never given more than `read`: its owner's alone, from a Session, never a Key's
+ * (`SessionRequired`); anyone else is `NotAllowed`, or `TileNotFound` where they may not read the
+ * Tile, a star that names nothing is `TileNotFound`, the owner's own `NotAllowed`, and a Tile
+ * hexframe ships is `Shipped`. A Grant that first opens the Tile to someone is told in their
+ * timeline.
+ */
+export const setGrant = createServerFn({ method: 'POST' })
+  .validator(Schema.toStandardSchemaV1(GrantChange))
+  .handler(({ data, context }) => run(context, Mapping.setGrant(data)))
+
+/** The Tile whose reach is read, by its id, a UUID, as Mapping's `TileId` bounds it. */
+export const TileReach = Schema.Struct({ tile: TileId })
+
+/**
+ * Who reaches a Tile, Everyone and each subject a Grant names, with its value and the Tile it comes
+ * from, each Account by its star's card: read by its owner alone, from a Session, as `setGrant`
+ * refuses everyone else.
+ */
+export const whoReaches = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(TileReach))
+  .handler(({ data, context }) => run(context, Mapping.whoReaches(data)))
+
+/** A star search: the Title, or part of one, trimmed, as Mapping's `StarQuery` bounds it. */
+export const StarSearch = Schema.Struct({ query: StarQuery })
+
+/**
+ * The stars whose Title holds the query, whatever its case, by their cards, their Title and Preview,
+ * those it starts first, a few at most, the Account's own left out: stars alone, never a Tile below
+ * one, a private System's found by its card too. For the signed-in Account (HEX-130).
+ */
+export const findStars = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(StarSearch))
+  .handler(({ data, context }) => run(context, Mapping.findStars(data)))
+
+/**
+ * Where a link to a Tile leads the star picker, by the Tile's id, the same `TileVisit` a link's
+ * visit takes: the star of the System holding it, by its card, once the Account is shown the Tile,
+ * its own said to be its own, nowhere for a Tile kept from it, as for none (HEX-130).
+ */
+export const starOfLink = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(TileVisit))
+  .handler(({ data, context }) => run(context, Mapping.starOfLink(data)))

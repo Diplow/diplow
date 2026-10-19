@@ -1,0 +1,36 @@
+---
+title: organizations
+parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations
+owner: diplo
+preview: >-
+  IAM's Organizations: who belongs to one, each Account an admin or a member,
+  read on every request for Mapping, created and managed from a Session alone,
+  an admin who joined of their own accord always kept. Its Members Group is
+  its own id; its Groups of its own, named once within it, seen by every
+  member, changed by its admins, each by an id a Grant names. Anyone asks to
+  join it, a member one of its Groups, and an admin accepts or declines.
+---
+# organizations
+
+A concept of IAM's (HEX-136, `hexframe-app-sharing-organizations/decisions.md#DEC-13`): an Organization owns a System of its own, and IAM says who belongs to it. The API layer calls it as directly as the service.
+
+| File | Holds |
+|---|---|
+| `organizations.ts` | `belonging`, the Organizations an Account is an admin of and the Groups it is in, read on every request, never kept; `membersGroupOf`, an Organization's Members Group's id, its own; `isOrganization`; `createOrganization`, `members`, `addMember`, `setRole` and `removeMember`, each from `sessionOnly` |
+| `organizations.test.ts` | Over PGlite with Better Auth's Accounts, every rule below |
+| `groups.ts` | Its Groups of its own (HEX-137, `hexframe-app-sharing-organizations/decisions.md#DEC-14`): `groups`, each with who is in it, read by its members alone; `createGroup`, `renameGroup`, `deleteGroup` and `setInGroup`, each its admin's from `sessionOnly`, under the row's lock (`managedBy`); `groupsNamed`, the Groups some ids name, with their names and Organizations, and `groupsSeen`, the same as the Session's Account may see them, named where it is a member of their Organization, with no name where it is not, which who reaches a Tile names them by; `groupsToShareWith`, the Organizations an Account belongs to with their Groups; `shareableGroup`, whether the Session's Account may name a Group of an Organization's own in a Grant, a member of its Organization, a Members Group's id refused, the Members named by their star alone |
+| `groups.test.ts` | Over PGlite with Better Auth's Accounts, every rule of Groups below |
+| `joining.ts` | Joining of one's own accord (HEX-138, `hexframe-app-sharing-organizations/decisions.md#DEC-15`): `askToJoin`, its Members by anyone outside it, one of its Groups by a member not in it; `decideJoinRequest`, an admin's; each from `sessionOnly`, under the row's lock, publishing `JoinAsked` and `JoinDecided`; `requestsSeen`, how some requests stand, for an admin of their Organization alone; `askRefusal`, pure, why an Account may not ask to join this, already a member, already in the Group, or a Group it cannot see, which `askToJoin` raises; `askedAlready`, pure, why an Account may not ask again for the same now, one open or declined within a day, which asking, `standingIn`, where the Session's Account stands in an Organization, its role, `outside` or `asked`, and `groupStandings`, each of some of its Groups with where an Account stands toward it, `in`, `ask` or `asked`, all read; `adminsOf`, who is told |
+| `joining.test.ts` | Over PGlite with Better Auth's Accounts, every rule of joining below, and the facts published |
+
+## Rules
+
+- **Who belongs where is read, never kept.** `belonging` is asked on every request and every MCP call of a Turn, so a removal or a demotion holds from the next one.
+- **The Members Group's id is the Organization's own.** It needs no row and can never be deleted. Mapping names a Group by the star whose owner has its id, so an Organization's Members read as "its members" in the Share widget; a Group of an Organization's own has an id of its own, a UUID IAM makes, and is named by IAM (`groupsNamed`).
+- **An Organization keeps an admin who joined it of their own accord.** Its maker joined; someone an admin added did not, as no one is asked before being added. The last admin who joined can neither be made a member nor taken out, themselves included (`LastAdmin`). An admin who never joined may always be taken out, leaving included, so nobody can be left holding an Organization they never chose.
+- **A Group is named once, whatever its case, and holds members alone.** Its name is trimmed, 1 to 40 characters as a reader counts them (`GroupNameInvalid`), another Group's whatever its case refused (`GroupNameTaken`), checked under the Organization's row's lock, the table's key holding names apart as written behind it. Who is in it is among the Organization's members (`MemberNotFound`), which the `group_member` table's key to `membership` holds too, so leaving the Organization leaves its Groups.
+- **A Group's name is its Organization's members'.** `groups` refuses anyone else, and `groupsSeen` names a Group to the owner of a Tile whose Grant names it only where that owner is a member of its Organization (cubic's second local review on #154).
+- **A deleted Group's Grants are gone in effect.** Its row and who was in it go; no Grant is written or deleted, in any System. Its id is in no answer of `belonging` from the next request on, so its Grants resolve for nobody, and `shareableGroup` refuses it (`GroupNotFound`).
+- **Someone asks to join, an admin decides.** Anyone outside an Organization asks to join its Members (`AlreadyMember` for a member), one with no member yet included, the Hexframe Organization until its admin is made by hand, the request waiting for one as `standingIn` offers it, a member one of its Groups (`AlreadyInGroup` once in it, `GroupNotFound` for anyone else); one open at most per Account and Group (`JoinRequestOpen`), checked under the row's lock and held by the table's two partial keys behind it, and none for a day after one an admin declined (`JoinRequestDeclined`), so a declined Account cannot fill every admin's timeline. Any one of its admins accepts or declines it, once (`JoinRequestDecided`); anyone else knows of no such request (`JoinRequestNotFound`). Accepted, the Account is a member who joined of its own accord (`join`), so it may take the last admin's place once made an admin; or it is put in the Group. Declined, nothing changes, and it may ask again the next day. Being added, or put in the Group by an admin, drops the Account's open request, which has nothing left to decide, and leaving drops every open one it has there, so no old request brings back someone who left (cubic's first local review on #155, P1).
+- **What happens is a fact on the bus.** `addMember` publishes `MemberAdded`, `removeMember` `MemberRemoved` for someone an admin took out and `MemberLeft` for someone who left, `askToJoin` `JoinAsked`, `decideJoinRequest` `JoinDecided`, none saying who acted; the API layer tells them in the timelines it chooses, IAM telling no one. `MemberLeft` is heard by no one yet: the timeline tells nobody of their own leaving, and the fact stays IAM's to say for whoever comes to need it, since only IAM holds the Session that tells leaving from being taken out.
+- **Every change is an admin's, under the Organization's row's lock.** A member is `AdminRequired`, anyone else `OrganizationNotFound`, as an id no Organization has, so a stranger learns nothing of its members.

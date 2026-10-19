@@ -1,20 +1,23 @@
 // Every table hexframe keeps, in Drizzle's schema language. `drizzle-kit generate` diffs this file
 // against the last migration's snapshot and writes the next migration into ../../../migrations/.
 // Tables arrive with the domains that own them: IAM's, then Mapping's, then Assistant's.
-import { eq, inArray, isNull } from 'drizzle-orm'
+import { type SQL, and, eq, inArray, isNotNull, isNull, ne, or } from 'drizzle-orm'
 import {
   type AnyPgColumn,
   bigint,
   boolean,
   check,
+  foreignKey,
   index,
   integer,
   json,
   jsonb,
   pgTable,
+  primaryKey,
   smallint,
   text,
   timestamp,
+  unique,
   uniqueIndex,
 } from 'drizzle-orm/pg-core'
 
@@ -155,12 +158,14 @@ export type FrontmatterColumn = Readonly<Record<string, string | number | boolea
 
 /**
  * A row is a Tile or, when `target` is set, a Reference to the Tile of that id, standing in a Context
- * slot, whose content columns stay empty. A Root has no parent and no direction: one per Account. Any
+ * slot, whose content columns stay empty. Every row carries `owner_id`, the id of its System's owner,
+ * by which the System's rows are found: an Account's today, an Organization's later, opaque to Mapping
+ * as to this table. A Root, the System's star, has no parent and no direction: one per owner. Any
  * other row stands under its parent in a direction: 1 to 6 for a Branch, 7 to 12 for a Leaf, its
  * Direction past the six Branch slots, so a Leaf and a Branch may share a Direction, and -1 to -6 for
  * a Context slot. One row at most holds a slot; the checks refuse any other, which would hold a slot
  * no reader sees. Deleting a row deletes everything below it; a Reference to it has no key to it, so it stays,
- * broken. `account_id` has no key to `user`: Mapping ignores IAM (hexframe-v0-mapping DEC-1).
+ * broken. `owner_id` has no key to `user`: Mapping ignores IAM (hexframe-v0-mapping DEC-1).
  * `name`, `config` and `frontmatter` keep what an imported file carried, each null when it carried
  * nothing: the name it was imported under, its folder's settings and the frontmatter keys Mapping has no
  * use for, both as JSON objects, the latter in its file's order. Mapping bounds them before writing them and decides what they mean.
@@ -171,7 +176,7 @@ export const tile = pgTable(
   'tile',
   {
     id: text('id').primaryKey(),
-    accountId: text('account_id').notNull(),
+    ownerId: text('owner_id').notNull(),
     parentId: text('parent_id').references((): AnyPgColumn => tile.id, { onDelete: 'cascade' }),
     direction: smallint('direction'),
     title: text('title').notNull(),
@@ -190,8 +195,8 @@ export const tile = pgTable(
     systemVersion: integer('system_version').default(0).notNull(),
   },
   (table) => [
-    index('tile_accountId_idx').on(table.accountId),
-    uniqueIndex('tile_root_idx').on(table.accountId).where(isNull(table.parentId)),
+    index('tile_ownerId_idx').on(table.ownerId),
+    uniqueIndex('tile_root_idx').on(table.ownerId).where(isNull(table.parentId)),
     uniqueIndex('tile_slot_idx').on(table.parentId, table.direction),
     check('tile_root_check', eq(isNull(table.parentId), isNull(table.direction))),
     check(
@@ -201,12 +206,67 @@ export const tile = pgTable(
   ],
 )
 
+/** Two conditions, one of which holds: `or` of two, which is never none. */
+function either(a: SQL, b: SQL): SQL {
+  const one = or(a, b)
+  if (one === undefined) throw new Error('Two conditions made none')
+  return one
+}
+
+/** Two conditions, both holding, as `either` takes one of two. */
+function both(a: SQL, b: SQL): SQL {
+  const all = and(a, b)
+  if (all === undefined) throw new Error('Two conditions made none')
+  return all
+}
+
+/** Who a `grant` row is for, and the values it may hold, as Mapping names them. */
+const grantSubjects = ['account', 'group', 'everyone'] as const
+const grantValues = ['none', 'read', 'read+write', 'read+@', 'read+write+@'] as const
+
+/**
+ * A Tile's Grant for one subject, an Account or a Group by an id opaque to Mapping, as `owner_id` is,
+ * or Everyone, which has none. A subject without a row inherits its parent's value: inherit is never
+ * stored. One row per Tile and subject; deleting a Tile deletes its Grants, and everything below it
+ * theirs. Everyone is never given more than `read`. Mapping decides what a value allows.
+ */
+export const grant = pgTable(
+  'grant',
+  {
+    tileId: text('tile_id')
+      .notNull()
+      .references(() => tile.id, { onDelete: 'cascade' }),
+    subject: text('subject', { enum: grantSubjects }).notNull(),
+    subjectId: text('subject_id'),
+    value: text('value', { enum: grantValues }).notNull(),
+  },
+  (table) => [
+    unique('grant_subject_unique')
+      .on(table.tileId, table.subject, table.subjectId)
+      .nullsNotDistinct(),
+    check('grant_subject_check', inArray(table.subject, [...grantSubjects])),
+    check('grant_value_check', inArray(table.value, [...grantValues])),
+    check(
+      'grant_everyone_id_check',
+      either(ne(table.subject, 'everyone'), isNull(table.subjectId)),
+    ),
+    check(
+      'grant_named_id_check',
+      either(eq(table.subject, 'everyone'), isNotNull(table.subjectId)),
+    ),
+    check(
+      'grant_everyone_check',
+      either(ne(table.subject, 'everyone'), inArray(table.value, ['none', 'read'])),
+    ),
+  ],
+)
+
 // Assistant's (./conversations/): each Account's Conversation, its Entries, its Turns and its
 // Proposals.
 
 /**
  * An Account's Conversation, one at most, added with its first Entry or its Mode's first switch.
- * `account_id` has no key to `user`, as `tile`'s has none: Assistant ignores IAM. `mode` is the Mode
+ * `account_id` has no key to `user`, as `tile`'s `owner_id` has none: Assistant ignores IAM. `mode` is the Mode
  * its Turns take as they start, as Assistant names it, `ask` until the user switches it.
  */
 export const conversation = pgTable('conversation', {
@@ -241,7 +301,9 @@ export const conversationEntry = pgTable(
 
 /**
  * A Turn of the agent, answering one Message of a Conversation (`message_id`, its Entry), started in
- * the Tile `location` names, which has no key to `tile`: Assistant ignores Mapping. `spent` is what it
+ * the Tile `location` names, which has no key to `tile`: Assistant ignores Mapping. `elsewhere` is the
+ * star of the System it started in when that System is someone else's, by its id, with no key either,
+ * null for the Account's own, as every Turn before HEX-134 was. `spent` is what it
  * spent on the model, in millionths of a dollar, and `reserved` what its calls under way reserved,
  * the most they may cost, until each settles. `step` is what its agent is doing now, a read or a
  * shell command, as Assistant encodes it, null between steps and once it ended. `mode` is the Mode
@@ -261,6 +323,7 @@ export const turn = pgTable(
       .notNull()
       .references(() => conversationEntry.id, { onDelete: 'cascade' }),
     location: text('location').notNull(),
+    elsewhere: text('elsewhere'),
     mode: text('mode').default('apply').notNull(),
     startedAt: timestamp('started_at', { withTimezone: true }).notNull(),
     spent: integer('spent').default(0).notNull(),
@@ -280,7 +343,8 @@ export const turn = pgTable(
  * decides it. `drafts` is the array of them, in the order they were drafted, as Assistant encodes
  * them: each write as the API layer encoded it, which neither the repository nor Assistant reads, and
  * the changes it makes. `entry_id` is its Entry in the
- * timeline, `turn_id` the Turn whose write opened it. `decided_at` and `fate` say when and how the user
+ * timeline, `turn_id` the Turn whose write opened it, `elsewhere` the star of the System its drafts change
+ * when it is someone else's, that Turn's, null for the Account's own. `decided_at` and `fate` say when and how the user
  * decided it, both null while it is open, and `proposal_open_idx` lets one be open at most per
  * Conversation. Deleting a Conversation, its Entry or its Turn deletes it.
  */
@@ -298,6 +362,7 @@ export const proposal = pgTable(
       .notNull()
       .references(() => turn.id, { onDelete: 'cascade' }),
     drafts: jsonb('drafts').notNull(),
+    elsewhere: text('elsewhere'),
     openedAt: timestamp('opened_at', { withTimezone: true }).notNull(),
     decidedAt: timestamp('decided_at', { withTimezone: true }),
     fate: text('fate'),
@@ -348,4 +413,147 @@ export const turnKey = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [index('turn_key_accountId_idx').on(table.accountId)],
+)
+
+// IAM's own (./organizations/organizations.ts): Organizations and who belongs to them.
+
+/**
+ * An Organization, a team that owns a System of its own, by its id, which owns that System's rows as
+ * an Account's id owns its own (`tile`'s `owner_id`). It keeps no name: its name is its star's
+ * Title, in Mapping, the one source of it.
+ */
+export const organization = pgTable('organization', {
+  id: text('id').primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+/** The roles an Account holds in an Organization, as IAM names them. */
+const memberRoles = ['admin', 'member'] as const
+
+/**
+ * An Account's place in an Organization, one at most per Account and Organization, an `admin` or a
+ * `member`, and whether it joined of its own accord (`joined`), as its maker did, rather than being
+ * added by an admin without asking. Deleting either deletes it. That an Organization keeps an admin
+ * who joined is IAM's to hold, under the Organization's row's lock, never a check here.
+ */
+export const membership = pgTable(
+  'membership',
+  {
+    organizationId: text('organization_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    accountId: text('account_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    role: text('role', { enum: memberRoles }).notNull(),
+    joined: boolean('joined').default(false).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.organizationId, table.accountId] }),
+    index('membership_accountId_idx').on(table.accountId),
+    check('membership_role_check', inArray(table.role, [...memberRoles])),
+  ],
+)
+
+/**
+ * A Group of an Organization's own (HEX-137), beside its Members Group, which needs no row: by its id,
+ * a UUID IAM makes, which a Grant names, opaque to Mapping, and its name, one per Organization. IAM
+ * compares names whatever their case, under the Organization's row's lock; the key here holds them
+ * apart as written. Deleting the Organization deletes it.
+ */
+export const organizationGroup = pgTable(
+  'organization_group',
+  {
+    id: text('id').primaryKey(),
+    organizationId: text('organization_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    unique('organization_group_name_unique').on(table.organizationId, table.name),
+    unique('organization_group_of_unique').on(table.id, table.organizationId),
+  ],
+)
+
+/**
+ * An Account in a Group, one at most per Group and Account, always among the Group's Organization's
+ * members: its key to `membership` deletes it once the Account leaves the Organization, its key to
+ * the Group, of that same Organization, once the Group is deleted.
+ */
+export const groupMember = pgTable(
+  'group_member',
+  {
+    groupId: text('group_id').notNull(),
+    organizationId: text('organization_id').notNull(),
+    accountId: text('account_id').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.groupId, table.accountId] }),
+    foreignKey({
+      name: 'group_member_group_fkey',
+      columns: [table.groupId, table.organizationId],
+      foreignColumns: [organizationGroup.id, organizationGroup.organizationId],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'group_member_membership_fkey',
+      columns: [table.organizationId, table.accountId],
+      foreignColumns: [membership.organizationId, membership.accountId],
+    }).onDelete('cascade'),
+    index('group_member_accountId_idx').on(table.accountId),
+  ],
+)
+
+/** How a join request stands, as IAM names it: waiting for an admin, accepted, or declined. */
+const joinRequestStates = ['open', 'accepted', 'declined'] as const
+
+/**
+ * An Account asking to join an Organization's Members, or a member one of its Groups (HEX-138): by an
+ * id IAM makes, a UUID, which the admins' timelines name it by; the Group asked for, null for the
+ * Members, which need no row, its key to that Group of that same Organization deleting the request
+ * with it; and how it stands, open until an admin decides it, then when. One at most is open per
+ * Account and Group, which IAM decides under the Organization's row's lock and two partial keys hold
+ * behind it, one for the Members, one for a Group. Deleting the Organization or the Account deletes it.
+ */
+export const joinRequest = pgTable(
+  'join_request',
+  {
+    id: text('id').primaryKey(),
+    organizationId: text('organization_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    groupId: text('group_id'),
+    accountId: text('account_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    state: text('state', { enum: joinRequestStates }).default('open').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    decidedAt: timestamp('decided_at', { withTimezone: true }),
+  },
+  (table) => [
+    foreignKey({
+      name: 'join_request_group_fkey',
+      columns: [table.groupId, table.organizationId],
+      foreignColumns: [organizationGroup.id, organizationGroup.organizationId],
+    }).onDelete('cascade'),
+    index('join_request_organizationId_idx').on(table.organizationId),
+    index('join_request_accountId_idx').on(table.accountId),
+    check('join_request_state_check', inArray(table.state, [...joinRequestStates])),
+    check(
+      'join_request_decided_check',
+      either(
+        both(eq(table.state, 'open'), isNull(table.decidedAt)),
+        both(ne(table.state, 'open'), isNotNull(table.decidedAt)),
+      ),
+    ),
+    uniqueIndex('join_request_open_members_idx')
+      .on(table.organizationId, table.accountId)
+      .where(both(eq(table.state, 'open'), isNull(table.groupId))),
+    uniqueIndex('join_request_open_group_idx')
+      .on(table.organizationId, table.accountId, table.groupId)
+      .where(eq(table.state, 'open')),
+  ],
 )

@@ -1,12 +1,17 @@
 // The tile widget in the chat, at the conversation's foot: the change under way when it is a form, a
-// new Tile's in the slot clicked, a Tile's edit or an import, as the URL holds it; once a form is
+// new Tile's in the slot clicked, a Tile's edit or an import, who may see a Tile, its share widget
+// (`share/`), who belongs to the Organization whose star it is, its Groups, or an Organization being
+// made (`organization/`), as the URL holds it; once a form is
 // sent, the receipt it leaves; or an export a Tile's menu started, working, then its receipt, or failed.
 // One at a time, the latest. A write ends its form as it is sent, its receipt in the form's place at
 // once, and a refusal puts the form back (`useRefusalState`), the user's words with it. The Root's
-// edit is a widget too, with no place to draw, a pencil in its hex.
+// edit is a widget too, with no place to draw, a pencil in its hex. While the URL visits someone
+// else's System, the forms are of its Tiles (HEX-132), those across a gap included, and neither an
+// import nor a pseudo is asked.
 import { useMemo } from 'react'
 
 import {
+  acrossGaps,
   isEmptySystem,
   isLeafSlot,
   tileAt,
@@ -29,9 +34,14 @@ import {
   type SystemSearch,
 } from '../search/search'
 import { type Reopened, useRefusalState } from '../state/useRefusalState'
-import { canvasTree, tileIn } from '../tree'
+import { tileIn } from '../tree'
+import { visitTree } from '../visit/visit'
 import { EditTileWidget, NameRootWidget, NewTileWidget } from './forms'
 import { freeFor, slotOf, tilesBelow, whereIn } from './place'
+import { GroupsWidgets } from './organization/GroupsWidgets'
+import { MembersWidgets } from './organization/MembersWidgets'
+import { NewOrganization } from './organization/NewOrganization'
+import { ShareWidgets } from './share/ShareWidgets'
 import type { Exporting, Receipt, TileWidgetsState } from './state/useTileWidgetsState'
 
 interface TileWidgetsProps {
@@ -43,6 +53,8 @@ interface TileWidgetsProps {
   widgets: TileWidgetsState
   /** A form a refusal put back: on a phone, the chat comes to the front to show it. */
   onFormBack: () => void
+  /** The star of the System the URL visits, someone else's, whose Tiles the forms write; none at home. */
+  visiting?: string | undefined
 }
 
 export function TileWidgets({
@@ -51,18 +63,27 @@ export function TileWidgets({
   onCenter,
   widgets,
   onFormBack,
+  visiting,
 }: TileWidgetsProps) {
   // Read without throwing, as the chat does: a failed read shows on the canvas.
-  const { data } = useSystem({ throwing: false })
+  const { data } = useSystem({ throwing: false, star: visiting })
   // A refused write's receipt goes, and a form put back comes to the front.
   const reopened = useRefusalState(search, onSearchChange, ({ tile, formBack }) => {
     if (tile !== undefined) widgets.actions.refused(tile)
     if (formBack) onFormBack()
   })
   const remove = useDeleteTile()
-  const root = data?.root
-  const tree = useMemo(() => (root === undefined ? undefined : canvasTree(root)), [root])
-  if (data === undefined || root === undefined || tree === undefined) return null
+  // The System as the canvas draws it, the Tiles across its gaps included, a visitor's forms on them.
+  const drawn = useMemo(
+    () =>
+      data === undefined
+        ? undefined
+        : { tree: visitTree(data), across: acrossGaps(data.system, data.gaps, data.pinned) },
+    [data],
+  )
+  if (data === undefined || drawn === undefined) return null
+  const { root } = data
+  const { tree, across } = drawn
   const change = changeOf(search)
   const end = () => {
     onSearchChange((current) => withChange(current, { kind: 'none' }))
@@ -70,7 +91,9 @@ export function TileWidgets({
   const page: WidgetContext = {
     system: data.system,
     root,
+    across,
     tree,
+    visited: visiting !== undefined,
     reopened,
     onCenter,
     naming: { name: widgets.state.naming, onNameChange: widgets.actions.name },
@@ -90,8 +113,9 @@ export function TileWidgets({
       onSearchChange(afterDelete(tree, parent, node))
     },
   }
-  // A new account is asked its pseudo until it gives one.
-  if (root.title === '' && change.kind === 'none' && widgets.state.shown === undefined) {
+  // A new account is asked its pseudo until it gives one, at home: a star visited is someone else's.
+  const unnamed = root.title === '' && !page.visited
+  if (unnamed && change.kind === 'none' && widgets.state.shown === undefined) {
     return nameOf(page)
   }
   return widgetOf(change, widgets, page)
@@ -120,7 +144,11 @@ function nameOf(page: WidgetContext) {
 interface WidgetContext {
   system: System
   root: SystemTile
+  /** The Tiles hung from the star across a gap, each a tree of its own: none at home. */
+  across: ReadonlyArray<SystemTile>
   tree: TileNode
+  /** Someone else's System, visited: nothing imported into it, which only lands at home. */
+  visited: boolean
   reopened: Reopened | undefined
   onCenter: (id: string) => void
   /** The pseudo typed so far for the untitled Root, which the canvas shows as it is typed. */
@@ -142,10 +170,58 @@ function widgetOf(change: Change, widgets: TileWidgetsState, page: WidgetContext
       return editOf(change, widgets.state.shown, page)
     case 'import':
       return importOf(change.place, page)
+    case 'share':
+      return shareOf(change.id, page)
+    case 'members':
+      return membersOf(change.id, page)
+    case 'groups':
+      return groupsOf(change.id, page)
+    case 'organization':
+      return <NewOrganization key="organization" onClose={page.onCancel} />
     case 'none':
     case 'move':
       return shownOf(widgets, page)
   }
+}
+
+/** Who may see a Tile of the Account's own System; none for a Tile it no longer holds. */
+function shareOf(id: string, page: WidgetContext) {
+  const shared = tileAt(page.system, id)
+  if (shared === undefined) return null
+  return (
+    <ShareWidgets
+      key={`share:${id}`}
+      system={page.system}
+      tile={{ id, title: shared.title }}
+      onClose={page.onCancel}
+    />
+  )
+}
+
+/** Who belongs to the Organization whose star the System drawn has; none for any other star. */
+function membersOf(star: string, page: WidgetContext) {
+  if (star !== page.root.id) return null
+  return (
+    <MembersWidgets
+      key={`members:${star}`}
+      star={star}
+      title={page.root.title}
+      onClose={page.onCancel}
+    />
+  )
+}
+
+/** The Groups of the Organization whose star the System drawn has; none for any other star. */
+function groupsOf(star: string, page: WidgetContext) {
+  if (star !== page.root.id) return null
+  return (
+    <GroupsWidgets
+      key={`groups:${star}`}
+      star={star}
+      title={page.root.title}
+      onClose={page.onCancel}
+    />
+  )
 }
 
 /** The receipt a form left, or the export under way, once no form is open. */
@@ -198,12 +274,20 @@ function newTileOf(
       {...formOf(page, key, undefined)}
       parent={{ id: change.parent, title: parent.title }}
       slot={change.slot}
-      onImport={() => {
-        page.begin({
-          kind: 'import',
-          place: { _tag: 'Slot', parent: change.parent, slot: importSlotOf(page.system, change) },
-        })
-      }}
+      onImport={
+        page.visited
+          ? undefined
+          : () => {
+              page.begin({
+                kind: 'import',
+                place: {
+                  _tag: 'Slot',
+                  parent: change.parent,
+                  slot: importSlotOf(page.system, change),
+                },
+              })
+            }
+      }
     />
   )
 }
@@ -262,13 +346,20 @@ function rootOf(key: string, page: WidgetContext) {
   )
 }
 
-/** The Tile an edit is open on, below the Root, where it stands; none once it is gone. */
+/**
+ * The Tile an edit is open on, below the Root or across a gap, where it stands, none for one across
+ * a gap, whose place is kept from the visitor; none once it is gone.
+ */
 function editingOf(id: string, page: WidgetContext) {
-  const located = tileIn(page.root, id)
+  const located = tileIn(page.root, id, page.across)
   const node = findTile(page.tree, id)
+  if (located === undefined || located.kind === 'root' || node === undefined) return undefined
+  // Hung from the star, which is centered once it goes.
+  if (located.kind === 'across') {
+    return { tile: located.tile, node, parent: page.root.id, where: undefined }
+  }
   const placed = tileAt(page.system, id)
-  if (located?.parent === undefined || node === undefined || placed === undefined) return undefined
-  if (!('slot' in placed)) return undefined
+  if (placed === undefined || !('slot' in placed)) return undefined
   const { parent } = located
   const title = findTile(page.tree, parent.id)?.title ?? parent.title
   return {

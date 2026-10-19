@@ -21,6 +21,7 @@ import {
   type Operation,
   SwapTiles,
 } from '..'
+import { actingOnOwn, held } from '../../testing'
 
 // The Decider and the service agree: for each Operation, `evolve` folded over the events `decide`
 // makes on the System as it stood equals the System read back once the service ran it over PGlite,
@@ -53,10 +54,10 @@ interface Run<A, E> {
  */
 const agrees = <A, E>(accountId: string, { operation, change, made }: Run<A, E>) =>
   Effect.gen(function* () {
-    const before = yield* Mapping.system(accountId)
+    const before = yield* held(accountId)
     heard.length = 0
     const answer = yield* transactional(change)
-    const after = yield* Mapping.system(accountId)
+    const after = yield* held(accountId)
     // An Operation that makes nothing never reads what it is given.
     const given = made?.(answer, after) ?? { id: crypto.randomUUID() }
     const events = Result.getOrThrow(decide(before, operation, given))
@@ -70,19 +71,19 @@ const agrees = <A, E>(accountId: string, { operation, change, made }: Run<A, E>)
  */
 const refusedAlike = <A, E>(accountId: string, { operation, change }: Run<A, E>) =>
   Effect.gen(function* () {
-    const before = yield* Mapping.system(accountId)
+    const before = yield* Mapping.system(yield* actingOnOwn(accountId))
     heard.length = 0
     const decided = decide(before, operation, { id: crypto.randomUUID() })
     if (Result.isSuccess(decided)) throw new Error(`decide made events of ${operation._tag}`)
     expect(yield* Effect.flip(transactional(change))).toEqual(decided.failure)
-    expect(yield* Mapping.system(accountId)).toEqual(before)
+    expect(yield* Mapping.system(yield* actingOnOwn(accountId))).toEqual(before)
     expect(heard).toEqual([])
   })
 
 /** The Version of each Tile of the Account's System as it stands, which a writer reading it names. */
 const versions = (accountId: string) =>
   Effect.map(
-    Mapping.system(accountId),
+    Effect.flatMap(actingOnOwn(accountId), Mapping.system),
     (system) =>
       (id: string): Version =>
         tileAt(system, id)?.version ?? 1,
@@ -98,10 +99,12 @@ type Next<O extends Operation = Operation> = (v: (id: string) => Version) => O
  */
 const aSystem = Effect.gen(function* () {
   const accountId = crypto.randomUUID()
-  const { id: root, version } = (yield* Mapping.system(accountId)).root
+  const { id: root, version } = (yield* Mapping.system(yield* actingOnOwn(accountId))).root
   const add = (parent: string, slot: CreateTile['slot'], title: string) =>
     transactional(
-      Mapping.createTile(accountId, new CreateTile({ parent, slot, ...content(title) })),
+      Effect.flatMap(actingOnOwn(accountId), (acting) =>
+        Mapping.createTile(acting, new CreateTile({ parent, slot, ...content(title) })),
+      ),
     ).pipe(Effect.map(({ id }) => id))
   const branch = yield* add(root, 1, 'Branch')
   const child = yield* add(branch, 2, 'Child')
@@ -110,7 +113,7 @@ const aSystem = Effect.gen(function* () {
   const leaf = yield* add(root, { leaf: 1 }, 'Leaf')
   yield* transactional(
     Mapping.createReference(
-      accountId,
+      yield* actingOnOwn(accountId),
       new CreateReference({ parent: root, parentVersion: version, slot: -2, target: child }),
     ),
   )
@@ -130,7 +133,7 @@ layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) =
         const operation = new CreateTile({ ...place, ...content(' Spaced ') })
         yield* agrees(accountId, {
           operation,
-          change: Mapping.createTile(accountId, operation),
+          change: Mapping.createTile(yield* actingOnOwn(accountId), operation),
           made: ({ id }) => ({ id }),
         })
       }
@@ -139,7 +142,7 @@ layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) =
       const chosen = new CreateTile({ id, parent: branch, slot: 5, ...content('Chosen') })
       yield* agrees(accountId, {
         operation: chosen,
-        change: Mapping.createTile(accountId, chosen),
+        change: Mapping.createTile(yield* actingOnOwn(accountId), chosen),
         made: () => ({ id }),
       })
       const kept = {
@@ -149,7 +152,7 @@ layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) =
       const imported = new CreateTile({ parent: root, slot: 5, ...content('Stack') })
       yield* agrees(accountId, {
         operation: imported,
-        change: Mapping.createTile(accountId, imported, kept),
+        change: Mapping.createTile(yield* actingOnOwn(accountId), imported, kept),
         made: ({ id }) => ({ id, kept }),
       })
     }),
@@ -165,7 +168,10 @@ layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) =
       ]
       for (const next of edits) {
         const operation = next(yield* versions(accountId))
-        yield* agrees(accountId, { operation, change: Mapping.editTile(accountId, operation) })
+        yield* agrees(accountId, {
+          operation,
+          change: Mapping.editTile(yield* actingOnOwn(accountId), operation),
+        })
       }
     }),
   )
@@ -181,7 +187,10 @@ layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) =
       ]
       for (const next of moves) {
         const operation = next(yield* versions(accountId))
-        yield* agrees(accountId, { operation, change: Mapping.moveTile(accountId, operation) })
+        yield* agrees(accountId, {
+          operation,
+          change: Mapping.moveTile(yield* actingOnOwn(accountId), operation),
+        })
       }
     }),
   )
@@ -195,7 +204,10 @@ layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) =
           new SwapTiles({ a, aVersion: v(a), b, bVersion: v(b) })
       for (const next of [swap(why, bare), swap(why, leaf), swap(child, child)]) {
         const operation = next(yield* versions(accountId))
-        yield* agrees(accountId, { operation, change: Mapping.swapTiles(accountId, operation) })
+        yield* agrees(accountId, {
+          operation,
+          change: Mapping.swapTiles(yield* actingOnOwn(accountId), operation),
+        })
       }
     }),
   )
@@ -204,7 +216,10 @@ layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) =
     Effect.gen(function* () {
       const { accountId, branch } = yield* aSystem
       const operation = new DeleteTile({ id: branch, version: 1 })
-      yield* agrees(accountId, { operation, change: Mapping.deleteTile(accountId, operation) })
+      yield* agrees(accountId, {
+        operation,
+        change: Mapping.deleteTile(yield* actingOnOwn(accountId), operation),
+      })
     }),
   )
 
@@ -219,7 +234,7 @@ layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) =
       })
       yield* agrees(accountId, {
         operation: created,
-        change: Mapping.createReference(accountId, created),
+        change: Mapping.createReference(yield* actingOnOwn(accountId), created),
         made: (_, after) => ({ id: heldAt(after, bare, -4)?.id ?? '' }),
       })
       const empty: Next<DeleteReference> = (v) =>
@@ -228,7 +243,7 @@ layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) =
         const operation = next(yield* versions(accountId))
         yield* agrees(accountId, {
           operation,
-          change: Mapping.deleteReference(accountId, operation),
+          change: Mapping.deleteReference(yield* actingOnOwn(accountId), operation),
         })
       }
     }),
@@ -240,18 +255,24 @@ layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) =
       // Another writer renamed the Child after this one read it at its first Version; the Root
       // counted the Reference in its slot -2 since.
       const theirs = new EditTile({ id: child, version: 1, title: 'Theirs' })
-      yield* agrees(accountId, { operation: theirs, change: Mapping.editTile(accountId, theirs) })
+      yield* agrees(accountId, {
+        operation: theirs,
+        change: Mapping.editTile(yield* actingOnOwn(accountId), theirs),
+      })
       const mine = new EditTile({ id: child, version: 1, title: 'Mine' })
-      yield* refusedAlike(accountId, { operation: mine, change: Mapping.editTile(accountId, mine) })
+      yield* refusedAlike(accountId, {
+        operation: mine,
+        change: Mapping.editTile(yield* actingOnOwn(accountId), mine),
+      })
       const gone = new DeleteTile({ id: child, version: 1 })
       yield* refusedAlike(accountId, {
         operation: gone,
-        change: Mapping.deleteTile(accountId, gone),
+        change: Mapping.deleteTile(yield* actingOnOwn(accountId), gone),
       })
       const emptied = new DeleteReference({ parent: root, parentVersion: 1, slot: -2 })
       yield* refusedAlike(accountId, {
         operation: emptied,
-        change: Mapping.deleteReference(accountId, emptied),
+        change: Mapping.deleteReference(yield* actingOnOwn(accountId), emptied),
       })
     }),
   )

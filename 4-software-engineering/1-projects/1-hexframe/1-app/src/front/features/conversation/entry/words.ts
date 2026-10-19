@@ -1,6 +1,10 @@
 // What an Entry says, as the chat's pieces take it (`Words`, `Happened`, ui's `chat/`): a Message's
 // text with its links woven in as the Tiles they name; a change, an import, a navigation and a Turn's
-// end as a line by who acted, the user, the agent, a Key, or hexframe itself; and a Proposal's changes.
+// end as a line by who acted, the user, the agent, a Key, or hexframe itself; a Tile shared with the
+// user as a line by whoever shared it, from outside, its Tile visited on a click; the user's place in
+// an Organization changed by one of its admins, a line from outside, its star visited on a click, and
+// someone asking to join one the user is an admin of, which they accept or decline (HEX-138); and a
+// Proposal's changes.
 // A Tile named shows as the Title it had, centering the canvas while the System still holds it, the
 // agent's draft while a Proposal only proposes it, struck through once deleted. And the Entries cut
 // into what the timeline draws: a run of lines on one thread, a Message, a Proposal, what a Turn
@@ -11,13 +15,19 @@ import {
   type Actor,
   type BadEnd,
   type Entry,
+  type AskedToJoin,
+  type Membership,
+  isTheirs,
   partsOf,
   type ProposedChange,
+  type Someone,
+  type TheirChange,
 } from '#/domains/assistant/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { Gesture } from '#/front/ui/canvas/view/view'
 import type { Happened } from '#/front/ui/chat/entries/Events'
+import { rightsSaid } from '#/front/ui/chat/widgets/sharing/share/rights'
 import type { Change } from '#/front/ui/chat/entries/Receipt'
 import type { MentionProps } from '#/front/ui/chat/text/Mention'
 import { type Word, type Words, weave } from '#/front/ui/chat/text/words'
@@ -96,21 +106,50 @@ function recorded(
   return { tile: { title: shown, standing: 'gone' } }
 }
 
+/**
+ * A Tile a change the user made in someone else's System names, by the Title it had: it stands
+ * there, not in the user's, so a click visits it by its link, as a Tile shared is, and it is never
+ * struck through by what the user's own System holds.
+ */
+const elsewhereOf = ({ id, title }: { id: string; title: string }, naming: Naming): Word => ({
+  tile: { title: named(title), onCenter: centering(id, naming.onCenter) },
+})
+
 /** A Message's text, each link woven in as the Tile it names now. */
 export const messageWords = (text: string, naming: Naming): Words =>
   partsOf(text).map((part) =>
     part._tag === 'Text' ? part.text : linked(part.tile, naming.titles[part.tile], naming),
   )
 
-/** Who acted, as a line's mark says it: the user, the agent, or a Key from outside. */
+/** Who acted, as a line's mark says it: the user, the agent, or a Key or someone else from outside. */
 const whoOf = (actor: Actor): Happened['who'] =>
-  actor._tag === 'You' ? 'human' : actor._tag === 'Assistant' ? 'agent' : 'key'
+  actor._tag === 'You' ? 'human' : actor._tag === 'Assistant' ? 'agent' : 'outside'
 
 /** The Key that acted, named, or a revoked one, which has no name left. */
 const keyOf = (actor: Extract<Actor, { _tag: 'Key' }>): Word =>
   actor.name === undefined
     ? m.conversation_revoked_key()
     : { name: m.conversation_key({ name: actor.name }) }
+
+/**
+ * Someone else who wrote in the user's System, by the Title their star had then, "Someone" for one
+ * not named yet, and who of theirs acted: themselves, their agent, or one of their Keys, by no name.
+ */
+function someoneOf({ star, by }: Someone): Word {
+  const name = star === '' ? m.conversation_someone() : star
+  switch (by._tag) {
+    case 'You':
+      return { name }
+    case 'Assistant':
+      return { name: m.conversation_someones_agent({ name }) }
+    case 'Key':
+      return { name: m.conversation_someones_key({ name }) }
+  }
+}
+
+/** Who starts a sentence said by someone from outside: a Key of the user's, or someone else. */
+const outsiderOf = (actor: Extract<Actor, { _tag: 'Key' | 'Someone' }>): Word =>
+  actor._tag === 'Key' ? keyOf(actor) : someoneOf(actor)
 
 /** A sentence about Tiles, said by the user, by the agent, or by a Key, who then starts it. */
 interface Said<Names extends string> {
@@ -127,7 +166,7 @@ function by<Names extends string>(
 ): Words {
   if (actor._tag === 'You') return weave(said.mine, pieces)
   if (actor._tag === 'Assistant') return weave(said.agents, pieces)
-  return weave(said.theirs, { ...pieces, actor: keyOf(actor) })
+  return weave(said.theirs, { ...pieces, actor: outsiderOf(actor) })
 }
 
 type Two = 'title' | 'other'
@@ -218,20 +257,17 @@ const turnEnds: Record<BadEnd, Pick<Happened, 'who' | 'state'> & { text: () => s
 }
 
 /** An Entry the timeline tells in a line. */
-export type Told = Extract<Entry, { _tag: 'Change' | 'Import' | 'Navigation' | 'TurnEnded' }>
+export type Told = Extract<
+  Entry,
+  { _tag: 'Change' | 'Import' | 'Navigation' | 'TurnEnded' | 'Shared' | 'Membership' }
+>
 
 /** The line an Entry is told in, on the thread of what happened. */
 export function happenedOf(entry: Told, naming: Naming): Happened {
   const at = entry.at
   switch (entry._tag) {
-    case 'Change': {
-      const said = isVerb(entry.verb) ? changes[entry.verb] : changed
-      const pieces = {
-        title: recorded(entry.tile, naming),
-        other: entry.other === undefined ? named('') : recorded(entry.other, naming),
-      }
-      return { who: whoOf(entry.actor), words: by(said, entry.actor, pieces), at }
-    }
+    case 'Change':
+      return { who: whoOf(entry.actor), words: changeWords(entry, naming), at }
     case 'Import':
       return { who: whoOf(entry.actor), words: importWords(entry, naming), at }
     case 'Navigation':
@@ -240,7 +276,98 @@ export function happenedOf(entry: Told, naming: Naming): Happened {
       const { text, ...end } = turnEnds[entry.how]
       return { ...end, words: [text()], at }
     }
+    case 'Shared':
+      return sharedOf(entry, naming)
+    case 'Membership':
+      return { who: 'outside', words: membershipWords(entry, naming), at }
   }
+}
+
+type Joined = 'who' | 'organization' | 'group'
+
+/**
+ * What one of an Organization's admins did to the user's place there, by its Members or one of its
+ * Groups.
+ */
+const memberships: Record<
+  Membership['what'],
+  Record<'members' | 'group', (inputs: Record<Joined, string>) => string>
+> = {
+  added: { members: m.conversation_member_added, group: m.conversation_member_added_group },
+  removed: { members: m.conversation_member_removed, group: m.conversation_member_removed_group },
+  accepted: { members: m.conversation_join_accepted, group: m.conversation_join_accepted_group },
+  declined: { members: m.conversation_join_declined, group: m.conversation_join_declined_group },
+}
+
+/** Someone from outside, by the Title their star had then, "Someone" for one not named yet. */
+const outsider = (star: string): Word => ({ name: star === '' ? m.conversation_someone() : star })
+
+/** What an Organization's line names: its star, visited on a click, and its Group, if any. */
+const joinedPieces = (
+  { organization, group }: Pick<Membership, 'organization' | 'group'>,
+  naming: Naming,
+) => ({
+  organization: {
+    tile: {
+      title: named(organization.title),
+      onCenter: centering(organization.id, naming.onCenter),
+    },
+  },
+  group: group ?? '',
+})
+
+/** What a change of the user's place in an Organization says, by the admin who made it. */
+function membershipWords(entry: Omit<Membership, '_tag'>, naming: Naming): Words {
+  const said = memberships[entry.what][entry.group === undefined ? 'members' : 'group']
+  return weave(said, { who: outsider(entry.by), ...joinedPieces(entry, naming) })
+}
+
+/** What someone asking to join an Organization the user is an admin of, or one of its Groups, says. */
+export function askedToJoinWords(entry: AskedToJoin, naming: Naming): Words {
+  const said =
+    entry.group === undefined ? m.conversation_join_asked : m.conversation_join_asked_group
+  return weave(said, { who: outsider(entry.by), ...joinedPieces(entry, naming) })
+}
+
+/**
+ * A Tile someone shared with the user, by the Title their star had then, from outside, and what the
+ * user may do there: its Tile, in their System, by the Title it had then, visited on a click, the
+ * page leading there by its link, or "Nothing to see here" once taken back.
+ */
+function sharedOf(entry: Extract<Told, { _tag: 'Shared' }>, naming: Naming): Happened {
+  const { by, tile, rights, at } = entry
+  const title: Word = {
+    tile: { title: named(tile.title), onCenter: centering(tile.id, naming.onCenter) },
+  }
+  const who: Word = { name: by === '' ? m.conversation_someone() : by }
+  return {
+    who: 'outside',
+    words: weave(m.conversation_shared, { who, title }),
+    detail: rightsSaid(rights),
+    at,
+  }
+}
+
+/**
+ * What a change says, by who acted, its Tiles by the Titles they had: in the user's System, as it
+ * holds them now; made in someone else's, visited by their links (`elsewhereOf`). The Tile a
+ * Reference points at that the user's System does not hold, a pin's, stands elsewhere too, visited by
+ * its link, never struck through (HEX-133).
+ */
+export function changeWords(entry: Extract<Entry, { _tag: 'Change' }>, naming: Naming): Words {
+  const said = isVerb(entry.verb) ? changes[entry.verb] : changed
+  const elsewhere = !isTheirs(entry) && entry.elsewhere === true
+  const tileOf = (tile: { id: string; title: string }) =>
+    elsewhere ? elsewhereOf(tile, naming) : recorded(tile, naming)
+  const pinned = (tile: { id: string }) =>
+    entry.verb === 'ReferenceCreated' && naming.system !== undefined && !naming.system.has(tile.id)
+  const otherOf = (tile: { id: string; title: string }) =>
+    pinned(tile) ? elsewhereOf(tile, naming) : tileOf(tile)
+  const pieces = {
+    title: tileOf(entry.tile),
+    other: entry.other === undefined ? named('') : otherOf(entry.other),
+  }
+  return by(said, entry.actor, pieces)
 }
 
 /** What an import says: the Tile it landed as, and how many came below it, by who imported it. */
@@ -303,9 +430,13 @@ export function proposedOf(change: ProposedChange, naming: Naming, open: boolean
   return { icon: verbIcons[change.verb], words: weave(proposed[change.verb], pieces) }
 }
 
-/** What the timeline draws, in order: a run of lines, a Message, a Proposal, what a Turn applied. */
+/**
+ * What the timeline draws, in order: a run of lines, a Message, a Proposal, what a Turn applied, and
+ * a change someone else made in the user's System, which offers its Undo (`offersUndo`) until undone.
+ */
 export type Block =
   | { readonly kind: 'lines'; readonly entries: ReadonlyArray<Told> }
+  | { readonly kind: 'theirs'; readonly entry: TheirChange & Pick<Entry, 'id' | 'at'> }
   | {
       readonly kind: 'message'
       readonly entry: Extract<Entry, { _tag: 'Message' }>
@@ -314,6 +445,7 @@ export type Block =
     }
   | { readonly kind: 'proposal'; readonly entry: Extract<Entry, { _tag: 'Proposal' }> }
   | { readonly kind: 'applied'; readonly entry: Extract<Entry, { _tag: 'TurnApplied' }> }
+  | { readonly kind: 'asked'; readonly entry: Extract<Entry, { _tag: 'AskedToJoin' }> }
 
 /** The Entries of a day, oldest first, cut into what the timeline draws, the lines run together. */
 export function blocksOf(entries: ReadonlyArray<Entry>): ReadonlyArray<Block> {
@@ -333,13 +465,24 @@ export function blocksOf(entries: ReadonlyArray<Entry>): ReadonlyArray<Block> {
       case 'TurnApplied':
         blocks.push({ kind: 'applied', entry })
         return
-      default: {
-        const last = blocks.at(-1)
-        if (last?.kind === 'lines')
-          blocks[blocks.length - 1] = { ...last, entries: [...last.entries, entry] }
-        else blocks.push({ kind: 'lines', entries: [entry] })
-      }
+      case 'AskedToJoin':
+        blocks.push({ kind: 'asked', entry })
+        return
+      case 'Change':
+        if (isTheirs(entry)) blocks.push({ kind: 'theirs', entry })
+        else lineAfter(blocks, entry)
+        return
+      default:
+        lineAfter(blocks, entry)
     }
   })
   return blocks
+}
+
+/** A line told after the blocks so far: the run it ends joined, or a run of its own begun. */
+function lineAfter(blocks: Block[], entry: Told) {
+  const last = blocks.at(-1)
+  if (last?.kind === 'lines')
+    blocks[blocks.length - 1] = { ...last, entries: [...last.entries, entry] }
+  else blocks.push({ kind: 'lines', entries: [entry] })
 }

@@ -45,7 +45,6 @@ const system: System = {
     up: { _tag: 'Reference', id: 'up', parent: 'branch', slot: -1, target: 'root' },
     across: { _tag: 'Reference', id: 'across', parent: 'root', slot: -2, target: 'child' },
   },
-  owned: true,
   version: 0,
 }
 
@@ -187,7 +186,6 @@ describe('evolve folded over what decide makes', () => {
   const real: System = {
     root: { _tag: 'Tile', id: root, title: '', preview: '', body: '', version: 1 },
     tiles: { [a]: placed(a, root, 1), [b]: placed(b, root, 2), [under]: placed(under, a, -1) },
-    owned: true,
     version: 0,
   }
 

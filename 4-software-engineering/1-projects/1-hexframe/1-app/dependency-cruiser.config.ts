@@ -163,6 +163,14 @@ const config: IConfiguration = {
       to: { path: '^src/domains/.*/testing\\.ts$' },
     },
     {
+      name: 'no-program-importing-the-grant-write',
+      comment:
+        'The tiles repository’s testing.ts sets a Grant with no Session behind it, any subject, outside a transaction: only a test, or a testing.ts, imports it. A program writes a Grant through `Writes.setGrant`, which Mapping’s sharing asks of its owner from a Session (HEX-128).',
+      severity: 'error',
+      from: { pathNot: '(\\.test\\.ts|(^|/)testing\\.ts)$' },
+      to: { path: '^src/repositories/database/tiles/testing\\.ts$' },
+    },
+    {
       name: 'no-domain-importing-another',
       comment: 'Domains ignore each other; only the API layer composes them.',
       severity: 'error',

@@ -16,7 +16,7 @@ import * as Proposal from './programs'
 // A Turn in ask on the fakes, end to end, as `../../server/events/turn.test.ts` runs one in apply: the
 // fake agent's write drafted into the Proposal through `/mcp`, the System untouched; the next Turn's
 // files holding the Proposal folded over the System, its agent reading through it and adding to it;
-// then the Proposal accepted from the Session, its writes landing as the Assistant's. No test reaches
+// then the Proposal accepted from the Session, its writes landing as the user's. No test reaches
 // Blaxel or Anthropic.
 
 const served = doorsServed()
@@ -50,7 +50,9 @@ async function answered(text: string) {
   await waited()
   await until(
     async () =>
-      (await value(run(signedIn, Assistant.latest))).turn === undefined ? true : undefined,
+      (await value(run(signedIn, Assistant.latestOf(undefined)))).turn === undefined
+        ? true
+        : undefined,
     'ended',
   )
   return sent
@@ -61,6 +63,19 @@ const proposals = async (signedIn: StartContext) =>
   (await value(run(signedIn, Assistant.conversationDay({ offset: 0 })))).entries.filter(
     (entry): entry is Extract<Entry, { _tag: 'Proposal' }> => entry._tag === 'Proposal',
   )
+
+/** Today's changes, who acted and their verb, once at least `count` are recorded, the bus waited for. */
+async function changes(signedIn: StartContext, count: number) {
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    const { entries } = await value(run(signedIn, Assistant.conversationDay({ offset: 0 })))
+    const told = entries.flatMap((entry) =>
+      entry._tag === 'Change' ? [`${entry.actor._tag} ${entry.verb}`] : [],
+    )
+    if (told.length >= count) return told
+    await new Promise((resolve) => setTimeout(resolve, 20))
+  }
+  throw new Error(`Fewer than ${String(count)} Changes were recorded`)
+}
 
 /** The Titles of the System's Tiles below its Root, as a Session reads it. */
 const titlesHeld = async (signedIn: StartContext) => {
@@ -109,11 +124,12 @@ describe('a Turn in ask, on the fakes', () => {
     expect(await titlesHeld(signedIn)).toEqual([])
   })
 
-  it('lands whole once accepted, as the Assistant’s', async () => {
+  it('lands whole once accepted, as yours', async () => {
     const { signedIn } = await account
     const [proposal] = await proposals(signedIn)
     await value(run(signedIn, Proposal.acceptProposal({ proposal: proposal?.proposal ?? '' })))
     expect(await titlesHeld(signedIn)).toEqual([drafted, drafted])
     expect((await proposals(signedIn))[0]?.fate).toBe('accepted')
+    expect(await changes(signedIn, 2)).toEqual(['You TileCreated', 'You TileCreated'])
   })
 })

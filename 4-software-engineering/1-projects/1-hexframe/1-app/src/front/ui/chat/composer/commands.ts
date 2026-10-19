@@ -16,6 +16,7 @@ import {
   Download,
   Hexagon,
   KeyRound,
+  Building2,
   Languages,
   LogOut,
   Move,
@@ -58,6 +59,7 @@ export type CommandId =
   | 'stop'
   | 'language'
   | 'keys'
+  | 'organization'
   | 'help'
   | 'tutorial'
   | 'sign-out'
@@ -185,6 +187,13 @@ export const commands: ReadonlyArray<Command> = [
     name: m.composer_command_keys,
     does: m.composer_command_keys_does,
     icon: KeyRound,
+  },
+  {
+    id: 'organization',
+    group: 'you',
+    name: m.composer_command_organization,
+    does: m.composer_command_organization_does,
+    icon: Building2,
   },
   {
     id: 'help',

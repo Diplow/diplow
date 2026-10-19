@@ -79,7 +79,6 @@ const system: System = {
       target: id.child,
     },
   },
-  owned: true,
   version: 0,
 }
 
@@ -88,9 +87,6 @@ const system: System = {
  * 1 for an id it doesn't hold, which no Version saves.
  */
 const v = (tileId: string) => tileAt(system, tileId)?.version ?? 1
-
-/** A System hexframe ships, made by hand: the same System, owned by no Account. */
-const shipped: System = { ...system, owned: false }
 
 const content = { title: 'New', preview: 'New, in short.', body: '# New' }
 
@@ -109,34 +105,47 @@ function refusalOf(decided: Decided) {
   return decided.failure
 }
 
-describe('decide, refusing everything on a System no Account owns', () => {
-  it('refuses a System hexframe ships every Operation, even one its System would take', () => {
+describe('decide, refusing every write of a Tile hexframe ships', () => {
+  // Built past the checks, as a caller whose schema let a shipped id through would.
+  const unchecked = { disableChecks: true }
+
+  it('refuses each Operation writing one, wherever it is mounted, whichever end of a move', () => {
     const operations: ReadonlyArray<Operation> = [
-      new CreateTile({ parent: id.root, slot: 6, ...content }),
-      new EditTile({ id: id.branch, version: v(id.branch), title: 'Mine' }),
-      new MoveTile({ id: id.bare, version: v(id.bare), parent: id.root, slot: 5 }),
-      new SwapTiles({ a: id.branch, aVersion: v(id.branch), b: id.bare, bVersion: v(id.bare) }),
-      new DeleteTile({ id: id.bare, version: v(id.bare) }),
-      new CreateReference({
-        parent: id.root,
-        parentVersion: v(id.root),
-        slot: -3,
-        target: id.bare,
-      }),
-      new DeleteReference({ parent: id.root, parentVersion: v(id.root), slot: -2 }),
+      new CreateTile({ parent: 'help', slot: 6, ...content }, unchecked),
+      new EditTile({ id: 'help/3', version: 1, title: 'Mine' }, unchecked),
+      new MoveTile({ id: 'tutorial/1', version: 1, parent: id.root, slot: 5 }, unchecked),
+      new MoveTile({ id: id.bare, version: v(id.bare), parent: 'help/3', slot: 5 }, unchecked),
+      new SwapTiles({ a: id.bare, aVersion: v(id.bare), b: 'help', bVersion: 1 }, unchecked),
+      new DeleteTile({ id: 'help/../x', version: 1 }, unchecked),
+      new CreateReference(
+        { parent: 'help/3', parentVersion: 1, slot: -3, target: id.bare },
+        unchecked,
+      ),
+      new DeleteReference({ parent: 'tutorial', parentVersion: 1, slot: -2 }, unchecked),
     ]
     for (const operation of operations) {
-      expect(eventsOf(decided(operation)).length, operation._tag).toBe(1)
-      expect(refusalOf(decided(operation, shipped)), operation._tag).toMatchObject({
-        _tag: 'ShippedReadOnly',
+      expect(refusalOf(decided(operation)), operation._tag).toMatchObject({
+        _tag: 'Shipped',
         kind: 'Forbidden',
       })
     }
   })
 
-  it('refuses a shipped System first, before any other rule an Operation breaks', () => {
-    const broken = new CreateTile({ parent: id.nowhere, slot: 1, ...content, title: '' })
-    expect(refusalOf(decided(broken, shipped))).toMatchObject({ _tag: 'ShippedReadOnly' })
+  it('refuses one first, before any other rule it breaks', () => {
+    const broken = new CreateTile({ parent: 'help/3', slot: 1, ...content, title: '' }, unchecked)
+    expect(refusalOf(decided(broken))).toMatchObject({ _tag: 'Shipped' })
+  })
+
+  it('lets a Reference point at one, which writes nothing of it', () => {
+    const pin = new CreateReference({
+      parent: id.root,
+      parentVersion: v(id.root),
+      slot: -3,
+      target: 'help/3',
+    })
+    expect(eventsOf(decide(system, pin, { ...made, targetElsewhere: true }))).toEqual([
+      new ReferenceCreated({ id: id.made, parent: id.root, slot: -3, target: 'help/3' }),
+    ])
   })
 })
 
@@ -345,6 +354,28 @@ describe('decide, creating and deleting a Reference', () => {
     expect(refusalOf(create(id.nowhere, id.child))).toMatchObject({ _tag: 'TileNotFound' })
     expect(refusalOf(create(id.root, id.child, -1))).toMatchObject({ _tag: 'DirectionTaken' })
     expect(refusalOf(create(id.leaf, id.child))).toMatchObject({ _tag: 'LeafHoldsNothing' })
+  })
+
+  it('takes a target the System does not hold once told it stands in another System, a pin', () => {
+    const pin = new CreateReference({
+      parent: id.bare,
+      parentVersion: v(id.bare),
+      slot: -1,
+      target: id.nowhere,
+    })
+    expect(eventsOf(decide(system, pin, { ...made, targetElsewhere: true }))).toEqual([
+      new ReferenceCreated({ id: id.made, parent: id.bare, slot: -1, target: id.nowhere }),
+    ])
+    // Every other rule still holds: the slot free, the holder at the Version read.
+    const held = new CreateReference({
+      parent: id.root,
+      parentVersion: v(id.root),
+      slot: -1,
+      target: id.nowhere,
+    })
+    expect(refusalOf(decide(system, held, { ...made, targetElsewhere: true }))).toMatchObject({
+      _tag: 'DirectionTaken',
+    })
   })
 
   it('empties the slot of a Reference, and changes nothing in a slot holding none', () => {

@@ -18,9 +18,18 @@ describe('what a tile offers', () => {
       ['edit'],
       ['add', 'move'],
       ['ask-agent'],
-      ['copy', 'export'],
+      ['copy', 'share', 'export'],
       ['delete'],
     ])
+  })
+
+  it('shares a tile of its own, never a Reference, which is no tile of its own, nor a draft', () => {
+    expect(groupsOf({ ...branch, at: 'center' }).flat()).toContain('share')
+    expect(groupsOf({ kind: 'root', title: 'diplow', at: 'center' }).flat()).toContain('share')
+    for (const kind of ['reference', 'broken', 'draft'] as const) {
+      expect(groupsOf({ ...branch, kind }).flat()).not.toContain('share')
+      expect(groupsOf({ ...branch, kind, at: 'center' }).flat()).not.toContain('share')
+    }
   })
 
   it('turns a tile into the other kind only where its caller says Mapping allows it', () => {

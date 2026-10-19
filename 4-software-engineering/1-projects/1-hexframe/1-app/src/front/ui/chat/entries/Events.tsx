@@ -1,6 +1,6 @@
 // What happens between the two voices, one line each on a thread of small hexes, coloured by who
-// acted: amber for the user, violet for the agent, hollow for a Key from outside, faint for hexframe
-// itself. A navigation, a change, the agent's step under way, a Turn's end. The tool in faint mono, the
+// acted: amber for the user, violet for the agent, hollow for someone from outside, a Key or another
+// Account sharing a tile, faint for hexframe itself. A navigation, a change, the agent's step under way, a Turn's end. The tool in faint mono, the
 // time at the end, each line running on to the curve at its height. A run of reads folds into one
 // line, open on a click; what changes something stays out.
 import { cn } from 'cn'
@@ -14,8 +14,11 @@ import { HexMark } from '../atoms/hex'
 import { Said, type Words } from '../text/words'
 import { Time } from './time'
 
-/** Who acted: the user, the agent, a Key from outside, or hexframe itself, a limit or a failure. */
-type Who = Exclude<Voice, 'destructive'> | 'key'
+/**
+ * Who acted: the user, the agent, someone from outside, a Key or another Account sharing a tile, or
+ * hexframe itself, a limit or a failure.
+ */
+type Who = Exclude<Voice, 'destructive'> | 'outside'
 
 /** One thing that happened, said in a sentence that names who did it, but the agent's. */
 export interface Happened {
@@ -39,7 +42,7 @@ export interface Folded {
 const marks: Record<Who, { hollow: boolean; className: string }> = {
   human: { hollow: false, className: 'text-human' },
   agent: { hollow: false, className: 'text-agent' },
-  key: { hollow: true, className: 'fill-card text-faint' },
+  outside: { hollow: true, className: 'fill-card text-faint' },
   app: { hollow: false, className: 'text-faint' },
 }
 

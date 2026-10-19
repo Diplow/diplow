@@ -71,7 +71,16 @@ const drafted = (account: string, turn: string, title: string) =>
 
 /** Accepts the Account's Proposal of this id, its writes run as `undo` undoes them. */
 const accepted = (account: string, proposal: string, undo: unknown = { mapping: 0 }) =>
-  transactional(acceptProposal(account, proposal, () => Effect.succeed({ undo, changes: 1 })))
+  transactional(
+    acceptProposal(account, proposal, {
+      own: () => Effect.succeed({ undo, changes: 1 }),
+      // Every Proposal here is over the Account's own System.
+      elsewhere: {
+        owner: () => Effect.die(new Error('No Proposal here is over another System')),
+        run: () => Effect.die(new Error('No Proposal here is over another System')),
+      },
+    }),
+  )
 
 /**
  * Applies a write of one of the Account's Turns, as the API layer does, its run answering what undoes
@@ -181,6 +190,31 @@ layer(TestLayer)('the Mode and the Proposal, over PGlite', (it) => {
           [opened.id, 'accepted'],
           [next.id, 'open'],
         ])
+      }),
+  )
+
+  it.effect(
+    'refuses ProposalClosed a Proposal over another System closed before the accept locks it',
+    () =>
+      Effect.gen(function* () {
+        yield* TestClock.setTime(Date.parse('2026-10-10T10:30:00Z'))
+        const account = crypto.randomUUID()
+        const message = yield* transactional(postMessage(account, 'Tidy Journal.'))
+        const there = yield* transactional(
+          startTurn(account, { message: message.id, location: 'journal', elsewhere: 'ana' }),
+        )
+        const opened = yield* drafted(account, there.id, 'Note')
+        // Read open, then discarded meanwhile, as another tab would, before any lock is held.
+        const refused = yield* transactional(
+          acceptProposal(account, opened.id, {
+            own: () => Effect.die(new Error('A Proposal over Ana’s System runs there')),
+            elsewhere: {
+              owner: () => Effect.as(discardProposal(account, opened.id), undefined),
+              run: () => Effect.die(new Error('A closed Proposal runs nothing')),
+            },
+          }),
+        ).pipe(Effect.flip)
+        expect(refused).toMatchObject({ _tag: 'ProposalClosed', kind: 'Conflict' })
       }),
   )
 

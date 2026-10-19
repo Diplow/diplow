@@ -20,6 +20,7 @@ What home's chat shows of the Account's Keys (HEX-103), on ui's `KeyWidget` ([[4
 |---|---|
 | `KeyWidgets.tsx` | `KeyWidgets`, the widget at the conversation's foot, its every step the one `KeyWidget`, so its hand-off moves the focus |
 | `search.ts` | `keys`, home's search param, the widget open; `withKeys`. Pure and tested |
+| `open.ts` | `useOpenKeys`, `/keys`: the widget opened on home through the router, the rest of its search params kept, the chat brought to the front on a phone; out of home's route, which stood at its 600 lines (`hexframe-app-sharing-organizations/decisions.md#DEC-13`) |
 
 | Folder | Holds |
 |---|---|

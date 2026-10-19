@@ -1,7 +1,10 @@
-import { Exit } from 'effect'
+import { Effect, Exit } from 'effect'
 import { describe, expect, it, vi } from 'vitest'
 
+import { hexframeStar } from '#/domains/mapping/entities'
 import * as Iam from '#/domains/iam/iam'
+import { transactional } from '#/repositories/database/database'
+import { granted } from '#/repositories/database/tiles/testing'
 
 import { provenKey, run } from '../run'
 import { methodNotAllowed, serveMcp } from './mcp'
@@ -101,7 +104,7 @@ describe('the tool table, as an agent lists it', () => {
     const description = (name: string) => tools.find((tool) => tool.name === name)?.description
     for (const tool of tools.filter(({ annotations }) => annotations?.readOnlyHint === false)) {
       expect(tool.description).toMatch(/TileNotFound: .+; map or open_tile/)
-      expect(tool.description).toMatch(/ShippedReadOnly: that Tile is hexframe's own, Help's or/)
+      expect(tool.description).toMatch(/Shipped: that Tile is hexframe's own, Help's or/)
     }
     for (const name of ['open_tile', 'map']) {
       expect(description(name)).toMatch(/Help, hexframe's own guide, .+ id "help"/)
@@ -157,7 +160,8 @@ describe('Help, through the MCP endpoint', () => {
     expect(opened).toMatchObject({
       value: {
         tile: { _tag: 'Tile', id: 'help', title: 'Hexframe' },
-        parent: null,
+        // Help stands under the Hexframe Organization's star, by its card (HEX-139).
+        parent: { id: hexframeStar, title: 'Hexframe' },
         branches: { 1: { _tag: 'Tile', id: 'help/1' }, 6: { _tag: 'Tile', id: 'help/6' } },
         context: { '-1': { _tag: 'Tile', id: 'help/-1' } },
       },
@@ -177,7 +181,7 @@ describe('Help, through the MCP endpoint', () => {
 describe('the MCP endpoint', () => {
   it('opens the Root by default: all it says, and its neighbours by Title and Preview only', async () => {
     const { signedIn, secret } = await signedUp()
-    const { root, child, principles, gone } = await aSystem(signedIn)
+    const { root, child, principles } = await aSystem(signedIn)
     const client = await connect(bearer(secret))
     const opened = await call(client, 'open_tile')
     expect(opened).toEqual({
@@ -192,7 +196,7 @@ describe('the MCP endpoint', () => {
             _tag: 'Reference',
             tile: { id: child.id, title: 'Frontend', preview: child.preview },
           },
-          '-3': { _tag: 'BrokenReference', target: gone.id },
+          '-3': { _tag: 'BrokenReference', target: '' },
         },
       },
     })
@@ -309,5 +313,44 @@ describe('the MCP endpoint', () => {
     const response = methodNotAllowed()
     expect(response.status).toBe(405)
     expect(response.headers.get('allow')).toBe('POST')
+  })
+})
+
+describe('another Account’s System, read with a Key', () => {
+  it("reads another Account's Tile its owner lets the Key's Account read, from the System holding it", async () => {
+    const owner = await signedUp()
+    const { child, grandchild } = await aSystem(owner.signedIn)
+    const ownerId = await value(
+      run(
+        owner.signedIn,
+        Effect.map(Iam.signedIn, ({ account }) => account.id),
+      ),
+    )
+    const reader = await signedUp()
+    const readerId = await value(
+      run(
+        reader.signedIn,
+        Effect.map(Iam.signedIn, ({ account }) => account.id),
+      ),
+    )
+    const toReader = { subject: 'account', subjectId: readerId, value: 'read' } as const
+    await value(
+      run(owner.signedIn, transactional(granted(ownerId, { tile: grandchild.id, ...toReader }))),
+    )
+    const client = await connect(bearer(reader.secret))
+    expect(await call(client, 'open_tile', { id: grandchild.id, fields: ['title'] })).toMatchObject(
+      {
+        value: { tile: { id: grandchild.id, title: 'Routes' } },
+      },
+    )
+    expect(await call(client, 'map', { id: grandchild.id, depth: 0 })).toMatchObject({
+      value: { tile: { title: 'Routes', preview: 'Routes, in short.' } },
+    })
+    // Frontend, above it, stays kept from the reader: TileNotFound, and the read names no parent.
+    const { error } = await call(client, 'open_tile', { id: child.id })
+    expect(error).toMatch(/^TileNotFound: /)
+    expect(await call(client, 'open_tile', { id: grandchild.id })).toMatchObject({
+      value: { parent: null },
+    })
   })
 })

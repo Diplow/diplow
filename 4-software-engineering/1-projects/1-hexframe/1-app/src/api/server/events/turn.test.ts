@@ -60,7 +60,8 @@ const today = async (signedIn: StartContext) =>
   (await value(run(signedIn, Assistant.conversationDay({ offset: 0 })))).entries
 
 /** What the page's poll sees running. */
-const live = async (signedIn: StartContext) => (await value(run(signedIn, Assistant.latest))).turn
+const live = async (signedIn: StartContext) =>
+  (await value(run(signedIn, Assistant.latestOf(undefined)))).turn
 
 /** Waits for the Turn running to end, as the page's poll sees it. */
 const ended = (signedIn: StartContext) =>

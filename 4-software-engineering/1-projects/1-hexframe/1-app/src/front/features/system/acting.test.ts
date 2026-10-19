@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  acrossGaps,
   type PlacedReference,
   type PlacedTile,
   type Slot,
@@ -11,12 +12,13 @@ import { subjectIn } from '#/front/ui/canvas/crossings'
 import { layoutCanvas } from '#/front/ui/canvas/geometry/shape'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
-import { firstKindOf } from '#/front/ui/canvas/view/tiles'
+import { firstKindOf, type TileNode } from '#/front/ui/canvas/view/tiles'
 
 import {
   framesOf,
   moveTo,
   referenceAt,
+  slotWithout,
   subjectOf,
   swapAt,
   turnOf,
@@ -24,6 +26,7 @@ import {
   type Systems,
 } from './acting'
 import { canvasTree, tileIn } from './tree'
+import { visitTree } from './visit/visit'
 
 // A Tile's menu on home, as Mapping reads it, over a System made by hand, flat as the server reads
 // it: what the menu says of each Tile, the frames its Add and Move submenus draw, the lines home
@@ -73,7 +76,6 @@ const flat: System = {
     principles: placed('principles', 'root', -2),
     toBare: reference('toBare', 'root', -3, 'bare'),
   },
-  owned: true,
   version: 0,
 }
 
@@ -81,22 +83,22 @@ const root = systemOf(flat)
 const tree = canvasTree(root, { yours: true })
 
 /** A view with the center opened into its first ring, unless it says otherwise, as a click leaves it. */
-const opened = (view: CanvasView): CanvasView => ({
-  frame: firstKindOf(showView(tree, view).center),
+const opened = (view: CanvasView, drawn: TileNode = tree): CanvasView => ({
+  frame: firstKindOf(showView(drawn, view).center),
   ...view,
 })
-const systems: Systems = { root, flat, tree }
+const systems: Systems = { root, across: [], flat, tree, reach: 'owned' }
 
-/** The hexes a view draws, each Tile's by its key. */
-function hexesOf(view: CanvasView = {}): Record<string, TileHex> {
-  const hexes = layoutCanvas(showView(tree, opened(view)))
+/** The hexes a view of the System drawn draws, each Tile's by its key. */
+function hexesOf(view: CanvasView = {}, drawn: TileNode = tree): Record<string, TileHex> {
+  const hexes = layoutCanvas(showView(drawn, opened(view, drawn)))
   return Object.fromEntries(
     hexes.flatMap((hex) => (hex.kind === 'tile' ? [[hex.key, hex] as const] : [])),
   )
 }
 
-const hex = (key: string, view?: CanvasView) => {
-  const found = hexesOf(view)[key]
+const hex = (key: string, view?: CanvasView, drawn?: TileNode) => {
+  const found = hexesOf(view, drawn)[key]
   if (found === undefined) throw new Error(`No Tile is drawn under ${key}`)
   return found
 }
@@ -157,13 +159,13 @@ describe('what a menu says of a Tile', () => {
 
 describe('turning into the other kind', () => {
   it('turns a bare Branch into a Leaf, and a Leaf into a Branch where its Direction is free', () => {
-    expect(turnOf(flat, tileIn(root, 'bare'))).toEqual({
+    expect(turnOf(systems, tileIn(root, 'bare'))).toEqual({
       id: 'bare',
       version: 1,
       parent: 'root',
       slot: { leaf: 2 },
     })
-    expect(turnOf(flat, tileIn(root, 'run.yaml'))).toEqual({
+    expect(turnOf(systems, tileIn(root, 'run.yaml'))).toEqual({
       id: 'run.yaml',
       version: 1,
       parent: 'root',
@@ -173,12 +175,12 @@ describe('turning into the other kind', () => {
 
   it('turns no Branch holding a Child or a Context Tile, no Leaf whose Branch slot is taken', () => {
     for (const id of ['holding', 'framed', 'notes'])
-      expect(turnOf(flat, tileIn(root, id))).toBeUndefined()
+      expect(turnOf(systems, tileIn(root, id))).toBeUndefined()
   })
 
   it('turns neither the Root nor a Context Tile, nor an id no Tile has', () => {
     for (const id of ['root', 'principles', 'gone'])
-      expect(turnOf(flat, tileIn(root, id))).toBeUndefined()
+      expect(turnOf(systems, tileIn(root, id))).toBeUndefined()
   })
 })
 
@@ -251,14 +253,185 @@ describe('the lines home leaves out', () => {
   })
 
   it('leaves out an import as the Root, but into an empty System', () => {
-    expect(withoutOf(systems, hex('tile:root'))).toEqual(['import'])
+    // An Account's own star is no Organization's: its menu opens no Members nor Groups widget, nor
+    // asks to join it.
+    expect(withoutOf(systems, hex('tile:root'))).toEqual(['import', 'members', 'groups', 'join'])
     const empty: System = { ...flat, root: { ...flat.root, title: '' }, tiles: {} }
     const bare = systemOf(empty)
     const alone = canvasTree(bare, { yours: true })
     const [center] = layoutCanvas(showView(alone, {})).filter(
       (drawn): drawn is TileHex => drawn.kind === 'tile',
     )
-    expect(center && withoutOf({ root: bare, flat: empty, tree: alone }, center)).toEqual([])
+    expect(
+      center &&
+        withoutOf({ root: bare, across: [], flat: empty, tree: alone, reach: 'owned' }, center),
+    ).toEqual(['members', 'groups', 'join'])
+  })
+})
+
+/** The rights a visitor holds, each Tile they see read-only, but those named, which they write. */
+const visiting = (...writes: ReadonlyArray<string>): Systems['reach'] => ({
+  visiting: Object.fromEntries(
+    ['root', ...Object.keys(flat.tiles).filter((id) => flat.tiles[id]?._tag === 'Tile')].map(
+      (id) => [id, writes.includes(id) ? ['read', 'write'] : ['read']],
+    ),
+  ),
+})
+
+describe('the lines a System visited leaves out', () => {
+  // Someone else's System, read alone: looked at and copied from.
+  const theirs: Systems = { ...systems, reach: visiting() }
+
+  it('keeps on a Tile they read the lines that go somewhere and Copy, none that acts', () => {
+    expect(withoutOf(theirs, hex('tile:holding'))).toEqual([
+      'edit',
+      'move',
+      'ask-agent',
+      'share',
+      'export',
+      'delete',
+    ])
+    // Nothing may be added under it, nor may it turn: the menu holds neither line.
+    expect(subjectOf(theirs, hex('tile:holding'))).toMatchObject({ holds: false, turns: false })
+    expect(withoutOf(systems, hex('tile:holding'))).toEqual([])
+  })
+
+  it('leaves out what home leaves out, then the rest that acts, once each', () => {
+    const without = withoutOf(theirs, hex('tile:notes'))
+    expect(without[0]).toBe('show-context')
+    expect(without).toEqual(expect.arrayContaining(['edit', 'move', 'ask-agent', 'delete']))
+    expect(new Set(without).size).toBe(without.length)
+  })
+
+  it('takes a Reference out of no slot, and offers the center no line that acts', () => {
+    expect(withoutOf(theirs, hex('tile:root:context:3', { inner: 'context' }))).toEqual([
+      'ask-agent',
+      'remove-reference',
+    ])
+    const center = withoutOf(theirs, hex('tile:root'))
+    expect(center).toEqual(expect.arrayContaining(['import', 'edit', 'ask-agent', 'export']))
+    expect(center.filter((verb) => verb === 'import')).toHaveLength(1)
+    expect(center).not.toEqual(expect.arrayContaining(['back-out']))
+    expect(center).not.toContain('copy')
+  })
+
+  it('offers the agent where they hold @, the Turn starting there, and nowhere else', () => {
+    const read = visiting()
+    const asking: Systems = {
+      ...systems,
+      reach: read === 'owned' ? read : { visiting: { ...read.visiting, holding: ['read', '@'] } },
+    }
+    expect(withoutOf(asking, hex('tile:holding'))).not.toContain('ask-agent')
+    expect(withoutOf(asking, hex('tile:notes'))).toContain('ask-agent')
+    expect(slotWithout(asking, 'holding')).toEqual(['share', 'export', 'import'])
+    expect(slotWithout(asking, 'root')).toEqual(['share', 'export', 'import', 'ask-agent'])
+    expect(slotWithout(systems, 'root')).toEqual([])
+  })
+
+  it("offers an Organization's admin its owner's lines, those that land at home aside", () => {
+    const read = visiting()
+    const admin: Systems = {
+      ...systems,
+      reach: read === 'owned' ? read : { ...read, asOwner: true },
+    }
+    const center = withoutOf(admin, hex('tile:root'))
+    expect(center).not.toContain('share')
+    expect(center).toEqual(expect.arrayContaining(['import', 'export', 'members']))
+    expect(withoutOf(admin, hex('tile:holding'))).not.toContain('share')
+  })
+
+  it('offers the Members widget on the star of an Organization the user belongs to alone', () => {
+    const read = visiting()
+    const member: Systems = {
+      ...systems,
+      reach: read === 'owned' ? read : { ...read, standing: 'member' },
+    }
+    expect(withoutOf(member, hex('tile:root'))).not.toContain('members')
+    expect(withoutOf(member, hex('tile:root'))).toContain('join')
+    expect(withoutOf(theirs, hex('tile:root'))).toContain('members')
+  })
+
+  it('offers Ask to join on the star of an Organization the user is outside of alone', () => {
+    const read = visiting()
+    const outside: Systems = {
+      ...systems,
+      reach: read === 'owned' ? read : { ...read, standing: 'outside' },
+    }
+    expect(withoutOf(outside, hex('tile:root'))).not.toContain('join')
+    expect(withoutOf(outside, hex('tile:root'))).toContain('members')
+    // Asked already, it offers no second ask.
+    const asked: Systems = {
+      ...outside,
+      reach: read === 'owned' ? read : { ...read, standing: 'asked' },
+    }
+    expect(withoutOf(asked, hex('tile:root'))).toContain('join')
+    expect(withoutOf(theirs, hex('tile:root'))).toContain('join')
+  })
+
+  it('offers what their rights let them write, the owner’s lines and the agent’s never', () => {
+    // Holding and what it holds are theirs to write; the Root above it is not.
+    const writer: Systems = { ...systems, reach: visiting('holding', 'inner') }
+    expect(withoutOf(writer, hex('tile:holding'))).toEqual(['move', 'ask-agent', 'share', 'export'])
+    expect(subjectOf(writer, hex('tile:holding'))).toMatchObject({ holds: true })
+    // Inner moves within Holding, which they write; it lands nowhere outside it.
+    const inner = hex('tile:inner', { center: 'holding' })
+    expect(withoutOf(writer, inner)).not.toContain('move')
+    expect(framesOf(writer, inner).standsIn?.lands?.(2)).toBe(true)
+    expect(framesOf(systems, hex('tile:holding')).standsIn?.lands?.(5)).toBe(true)
+    expect(framesOf(writer, hex('tile:holding')).standsIn?.lands?.(5)).toBe(false)
+    // A swap with a Tile of the Root's they only read is held back too.
+    expect(swapAt(writer, hex('tile:holding'), 2)).toBeUndefined()
+    expect(swapAt(systems, hex('tile:holding'), 2)).toBeDefined()
+  })
+})
+
+describe('a System visited, across a gap', () => {
+  // Ana's System, from her star, kept from the visitor but its card: Deep, below a Tile kept from
+  // them, hangs from the star across the gap; Kid stands under it in 2, holding the Leaf Page in 1.
+  // They write all three.
+  const gap = {
+    _tag: 'Tile',
+    id: 'deep',
+    title: 'DEEP',
+    preview: '',
+    body: '',
+    version: 3,
+  } as const
+  const gaps = { deep: gap }
+  const visited: System = {
+    root: { _tag: 'Tile', id: 'ana', title: 'Ana', preview: '', body: '', version: 1 },
+    tiles: { kid: placed('kid', 'deep', 2), page: placed('page', 'kid', { leaf: 1 }) },
+    version: 0,
+  }
+  const star = systemOf(visited)
+  const writes = ['read', 'write'] as const
+  const theirs: Systems = {
+    root: star,
+    across: acrossGaps(visited, gaps),
+    flat: visited,
+    tree: visitTree({ system: visited, root: star, gaps, pinned: {} }),
+    reach: { visiting: { ana: [], deep: [...writes], kid: [...writes], page: [...writes] } },
+  }
+  const at = (key: string, center: string) => hex(key, { center }, theirs.tree)
+
+  it('says what is below a Tile hung from the star, and that it takes a new one there', () => {
+    const deep = at('tile:deep', 'deep')
+    expect(subjectOf(theirs, deep)).toMatchObject({ at: 'center', below: 2, holds: true })
+    expect(framesOf(theirs, deep).holds?.seats).toEqual({ 2: { title: 'KID', swaps: false } })
+    // Where it stands is kept from them: no ring to move it in.
+    expect(framesOf(theirs, deep).standsIn).toBeUndefined()
+  })
+
+  it('turns and moves a Tile below it within the Tile it stands under', () => {
+    const page = at('tile:page', 'kid')
+    expect(subjectOf(theirs, page)).toMatchObject({ kind: 'leaf', at: 1, turns: true })
+    expect(framesOf(theirs, page).standsIn?.lands?.(3)).toBe(true)
+    expect(moveTo(theirs, page, 3)).toEqual({
+      id: 'page',
+      version: 1,
+      parent: 'kid',
+      slot: { leaf: 3 },
+    })
   })
 })
 

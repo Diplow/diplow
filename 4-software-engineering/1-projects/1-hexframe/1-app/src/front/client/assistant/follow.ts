@@ -2,14 +2,16 @@
 // recorded in the Conversation, the Turn running, the Mode and the open Proposal (`latest`), and reads
 // the System again only once its Version moved past the one the cache holds, and the Conversation once
 // its last Entry or its Proposal is another than the one the cache read with it. So a change the page did not make, an agent's, a Key's or
-// another tab's, shows on the canvas and in the timeline. It polls when the tab regains focus, and
+// another tab's, shows on the canvas and in the timeline. While the page visits someone else's System,
+// the poll asks its Version too, as the Account is shown it, and reads it again once it is another
+// than the one the cache holds, so their changes show there as one's own do at home (HEX-132). It polls when the tab regains focus, and
 // every 2 s while a Turn runs, hidden or not, so the page follows its agent's steps and writes. The
 // pending writes stay folded over whatever the System's read brings (`../mapping/queries.ts`,
 // `useSystem`).
 import { type QueryClient, type QueryKey, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { settle } from '../calls'
-import { systemRead, useEachSystemWrite } from '../mapping/queries'
+import { systemRead, useEachSystemWrite, visitRead } from '../mapping/queries'
 import { askLatest, conversationRead, latestRead, latestScope } from './conversation'
 
 /** How often a page polls while a Turn runs, in milliseconds. */
@@ -39,6 +41,11 @@ const behind = {
     if (held === undefined) return false
     return lastEntry !== held.lastEntry || !sameProposal(proposal, held.proposal)
   },
+  /** Someone else's System, whose Version is no count: another than the one held is behind. */
+  visited: (client: QueryClient, star: string, { visited }: Latest) => {
+    const held = client.getQueryData(visitRead(star).queryKey)
+    return held !== undefined && visited !== undefined && visited !== held.version
+  },
 }
 
 /**
@@ -47,16 +54,23 @@ const behind = {
  */
 async function caughtUp(client: QueryClient, queryKey: QueryKey, stillBehind: () => boolean) {
   for (let reads = 0; reads < 2 && stillBehind(); reads++) {
-    await client.invalidateQueries({ queryKey }, { cancelRefetch: false })
+    // Exactly this read: the Account's own System's key starts every visited one's.
+    await client.invalidateQueries({ queryKey, exact: true }, { cancelRefetch: false })
   }
 }
 
-/** Polls the latest, then reads again, side by side, whatever the cache holds behind it. */
-async function polled(client: QueryClient): Promise<Latest> {
-  const now = await settle(latestScope, askLatest())
+/**
+ * Polls the latest, the System visited by its star among it when one is, then reads again, side by
+ * side, whatever the cache holds behind it.
+ */
+async function polled(client: QueryClient, visiting: string | undefined): Promise<Latest> {
+  const now = await settle(latestScope, askLatest(visiting))
   await Promise.all([
     caughtUp(client, systemRead.queryKey, () => behind.system(client, now)),
     caughtUp(client, conversationRead.queryKey, () => behind.conversation(client, now)),
+    visiting === undefined
+      ? undefined
+      : caughtUp(client, visitRead(visiting).queryKey, () => behind.visited(client, visiting, now)),
   ])
   return now
 }
@@ -65,13 +79,14 @@ async function polled(client: QueryClient): Promise<Latest> {
 export type LiveTurn = NonNullable<Latest['turn']>
 
 /**
- * Has the page follow the System and the Conversation: the latest of both polled when the tab regains
+ * Has the page follow the System and the Conversation, and the System it visits, by its star, while
+ * it visits one: the latest of each polled when the tab regains
  * focus, every 2 s while a Turn runs, and once each write to the System the page made has settled,
  * since the server recorded it in the Conversation as it committed; each read again once it moved.
  * Answers the Turn running and the Conversation's Mode, as the poll last saw them, neither before its
  * first answer.
  */
-export function useFollowLatest(): {
+export function useFollowLatest(visiting?: string): {
   readonly turn: LiveTurn | undefined
   readonly mode: Latest['mode'] | undefined
 } {
@@ -81,7 +96,7 @@ export function useFollowLatest(): {
   }, 'settled')
   const { data } = useQuery({
     ...latestRead,
-    queryFn: () => polled(client),
+    queryFn: () => polled(client, visiting),
     refetchOnWindowFocus: 'always',
     refetchInterval: (query) => (query.state.data?.turn === undefined ? false : closelyEvery),
     // A Turn lasts 15 minutes at most: its page keeps up with it behind another window too.

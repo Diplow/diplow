@@ -1,0 +1,211 @@
+// Who may see a tile, in the conversation: the app's own widget, so it carries no voice. Every one
+// who reaches the tile, each with what they may do there and where that comes from, set on this
+// tile or on one above it; Everyone first, whose value its owner sets here, read, none, or inherit,
+// which leaves it to the tile above; then each person it is shared with, named by their star, whose
+// value the owner sets to none, to read and to any of read's companions, write and @, or back to
+// inherit, a group's alike (HEX-137), and a grant left to a group no longer there cleared; each row
+// running on to the curve at its height; then the link the tile is visited by. Someone or a group is
+// added, and the link copied, from the widget's actions. Controlled: the rows are worded by the
+// caller, who says what each choice does, as Mapping decides it, and who finds someone.
+import { cn } from 'cn'
+import { Eraser, Link, Share2, UserPlus, UsersRound } from 'lucide-react'
+import { useId, type ReactNode } from 'react'
+
+import { m } from '#/paraglide/messages'
+
+import { runsToCurve, toCurve } from '../../../../layouts/screen/state/useAlongCurve'
+import { Widget } from '../../../layouts/Widget'
+import { choiceSaid, type ShareChoice } from './rights'
+
+/** Someone who reaches the tile, as its row shows them, every word already its caller's. */
+export interface ReachRow {
+  readonly key: string
+  /** Who: Everyone, someone by their star's title, a group. */
+  readonly who: string
+  /** What they may do there: read, none, read and write. */
+  readonly value: string
+  /** Where that comes from: set here, from your star, from the tile above that sets it. */
+  readonly from: string
+  /** Its grant reaches nobody, its group gone: the owner clears it, which `onChoose` sends as inherit. */
+  readonly clears?: boolean
+}
+
+/** A row whose value the owner sets here: what they set for it on this tile, and what it offers. */
+export interface Chosen {
+  readonly choice: ShareChoice
+  /** The choices offered, in order, as Mapping lets them: Everyone never writes. */
+  readonly offered: readonly ShareChoice[]
+}
+
+interface ShareWidgetProps {
+  /** The tile shared, by its title. */
+  title: string
+  /** Everyone's row, and what its owner set for it on this tile. */
+  everyone: ReachRow & Chosen
+  /** Everyone else who reaches it: someone, with what its owner set, or a group, which they don't. */
+  others: readonly (ReachRow & Partial<Chosen>)[]
+  /** A choice on its way: the choices wait. */
+  sending?: boolean
+  /** A choice made, on the row of this key, Everyone's included. */
+  onChoose: (key: string, choice: ShareChoice) => void
+  /** Opens what finds someone to share the tile with. */
+  onAdd: () => void
+  /** Opens what picks a group to share the tile with, where the user has groups to pick. */
+  onAddGroup?: (() => void) | undefined
+  /** The link the tile is visited by, which leads whoever may read it there. */
+  link: string
+  onCopyLink: () => void
+  onDone: () => void
+}
+
+/** The share widget: who reaches the tile, Everyone's choice, and its link. */
+export function ShareWidget({
+  title,
+  everyone,
+  others,
+  sending = false,
+  onChoose,
+  onAdd,
+  onAddGroup,
+  link,
+  onCopyLink,
+  onDone,
+}: ShareWidgetProps) {
+  return (
+    <Widget
+      voice="app"
+      icon={<Share2 />}
+      kicker={m.widget_share_kicker()}
+      title={title}
+      subtitle={m.widget_share_what()}
+      actions={[
+        { label: m.widget_share_add(), icon: <UserPlus />, onSelect: onAdd },
+        ...(onAddGroup === undefined
+          ? []
+          : [{ label: m.widget_share_add_group(), icon: <UsersRound />, onSelect: onAddGroup }]),
+        // The action keeps its word, and its focus: the toast says it is copied.
+        { label: m.widget_share_copy_link(), icon: <Link />, onSelect: onCopyLink },
+        { label: m.widget_share_done(), onSelect: onDone },
+      ]}
+      onDismiss={onDone}
+    >
+      <ul className="grid">
+        <Row row={everyone} hint={m.widget_share_everyone_hint()}>
+          <Choices
+            offered={everyone.offered}
+            legend={m.widget_share_choose()}
+            chosen={everyone.choice}
+            sending={sending}
+            onChoose={(choice) => {
+              onChoose(everyone.key, choice)
+            }}
+          />
+        </Row>
+        {others.map((row) => (
+          <Row key={row.key} row={row}>
+            {row.clears === true && (
+              <button
+                type="button"
+                disabled={sending}
+                onClick={() => {
+                  onChoose(row.key, 'inherit')
+                }}
+                className="inline-flex items-center gap-1.5 justify-self-start px-1 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-(--voice) disabled:opacity-50 pointer-coarse:py-2.5 [&_svg]:size-3.5"
+              >
+                <Eraser aria-hidden />
+                {m.widget_share_clear()}
+              </button>
+            )}
+            {row.choice !== undefined && row.offered !== undefined && (
+              <Choices
+                offered={row.offered}
+                legend={m.widget_share_choose_for({ who: row.who })}
+                chosen={row.choice}
+                sending={sending}
+                onChoose={(choice) => {
+                  onChoose(row.key, choice)
+                }}
+              />
+            )}
+          </Row>
+        ))}
+      </ul>
+      <p
+        ref={toCurve}
+        className={cn(
+          runsToCurve,
+          'mt-3 font-mono text-[0.6875rem] leading-normal break-all text-muted-foreground',
+        )}
+      >
+        {link}
+      </p>
+    </Widget>
+  )
+}
+
+/** Someone who reaches the tile: who, then what they may do there and where it comes from. */
+function Row({ row, hint, children }: { row: ReachRow; hint?: string; children?: ReactNode }) {
+  return (
+    <li
+      ref={toCurve}
+      className={cn(runsToCurve, 'grid gap-1.5 border-t border-border py-2.5 last:border-b')}
+    >
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+        <p className="text-sm text-foreground">{row.who}</p>
+        <p className="font-mono text-[0.6875rem] leading-normal text-muted-foreground">
+          <em className="text-foreground not-italic">{row.value}</em>
+          {m.widget_share_from_joiner()}
+          {row.from}
+        </p>
+      </div>
+      {hint !== undefined && (
+        <p className="text-[0.71875rem] leading-snug text-muted-foreground">{hint}</p>
+      )}
+      {children}
+    </li>
+  )
+}
+
+/** A row's value on the tile, one of those offered, as a radio group the arrows go round. */
+function Choices({
+  offered,
+  legend,
+  chosen,
+  sending,
+  onChoose,
+}: {
+  offered: readonly ShareChoice[]
+  legend: string
+  chosen: ShareChoice
+  sending: boolean
+  onChoose: (choice: ShareChoice) => void
+}) {
+  const name = useId()
+  return (
+    <fieldset className="flex flex-wrap gap-1.5" aria-busy={sending}>
+      <legend className="sr-only">{legend}</legend>
+      {offered.map((choice) => (
+        <label
+          key={choice}
+          className={cn(
+            'cursor-pointer border border-border px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground has-focus-visible:outline-1 has-focus-visible:outline-offset-2 has-focus-visible:outline-(--voice) pointer-coarse:py-2.5',
+            chosen === choice && 'border-(--voice) bg-foreground/7 text-foreground',
+          )}
+        >
+          <input
+            type="radio"
+            name={name}
+            value={choice}
+            checked={chosen === choice}
+            onChange={() => {
+              // On its way, a second choice waits for the first.
+              if (!sending) onChoose(choice)
+            }}
+            className="sr-only"
+          />
+          {choiceSaid(choice)}
+        </label>
+      ))}
+    </fieldset>
+  )
+}

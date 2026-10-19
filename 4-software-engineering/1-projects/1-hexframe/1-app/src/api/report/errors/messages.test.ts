@@ -8,6 +8,9 @@ import {
   EmailMalformed,
   EmailTaken,
   EntitlementMissing,
+  GroupNameInvalid,
+  GroupNameTaken,
+  GroupNotFound,
   KeyNameInvalid,
   KeyNotFound,
   PasswordLengthInvalid,
@@ -21,9 +24,10 @@ import {
   ImportRefused,
   LeafHoldsNothing,
   MovedUnderItself,
+  NotAllowed,
   PreviewTooLong,
   RootFixed,
-  ShippedReadOnly,
+  Shipped,
   TileChanged,
   TileIdTaken,
   TileNotFound,
@@ -59,6 +63,24 @@ describe('the message table', () => {
     )
   })
 
+  it('tells who may change who sees a tile, its owner from a browser', () => {
+    expect(messageFor(new NotAllowed(), 'setGrant')).toBe(
+      "Only this tile's owner decides who may see it.",
+    )
+    expect(messageFor(new NotAllowed(), 'whoReaches')).toBe(
+      "Only this tile's owner decides who may see it.",
+    )
+    for (const scope of ['setGrant', 'whoReaches']) {
+      expect(messageFor(new SessionRequired(), scope)).toBe(
+        'Who may see a tile is changed from your own signed-in browser, never with a key.',
+      )
+    }
+    overwriteGetLocale(() => 'fr')
+    expect(messageFor(new NotAllowed(), 'setGrant')).toBe(
+      'Seul le propriétaire de cette tuile décide qui peut la voir.',
+    )
+  })
+
   it('takes an unscoped entry in every scope', () => {
     const sentence = "This tile doesn't exist, or no longer does."
     expect(messageFor(new TileNotFound(), 'editTile')).toBe(sentence)
@@ -89,6 +111,9 @@ describe('the message table', () => {
     ],
     [new KeyNameInvalid({ fields: ['name'] }), 'Give the key a name of 1 to 32 characters.'],
     [new KeyNotFound(), "This key doesn't exist, or was already revoked."],
+    [new GroupNameInvalid({ fields: ['name'] }), 'Give the group a name of 1 to 40 characters.'],
+    [new GroupNameTaken({ fields: ['name'] }), 'Another group of this Organization has this name.'],
+    [new GroupNotFound(), "This group doesn't exist any more, or it's no group of yours."],
   ])("words IAM's %s in its own sentence", (failure, sentence) => {
     expect(messageFor(failure, 'signIn')).toBe(sentence)
   })
@@ -112,6 +137,12 @@ describe('the message table', () => {
     ],
     [new KeyNameInvalid({ fields: ['name'] }), 'Donnez à la clé un nom de 1 à 32 caractères.'],
     [new KeyNotFound(), 'Cette clé n’existe pas, ou a déjà été révoquée.'],
+    [new GroupNameInvalid({ fields: ['name'] }), 'Donnez au groupe un nom de 1 à 40 caractères.'],
+    [
+      new GroupNameTaken({ fields: ['name'] }),
+      'Un autre groupe de cette organisation porte déjà ce nom.',
+    ],
+    [new GroupNotFound(), 'Ce groupe n’existe plus, ou ce n’est pas l’un de vos groupes.'],
   ])("words IAM's %s in French too", (failure, sentence) => {
     overwriteGetLocale(() => 'fr')
     expect(messageFor(failure, 'signIn')).toBe(sentence)
@@ -183,7 +214,11 @@ describe("the message table, on Mapping's refusals", () => {
       "A leaf is a single file: nothing goes under it, and a tile with anything below it can't become one.",
     ],
     [
-      new ShippedReadOnly(),
+      new NotAllowed(),
+      'You can read this tile, but not change it this way. Its owner decides who writes here, and who may see it.',
+    ],
+    [
+      new Shipped(),
       "Help and the tutorial are hexframe's own: everyone reads them, nobody changes them.",
     ],
     [
@@ -243,7 +278,11 @@ describe("the message table, on Mapping's refusals", () => {
       'Une feuille est un seul fichier : rien ne va dessous, et une tuile qui a quelque chose dessous ne peut pas en devenir une.',
     ],
     [
-      new ShippedReadOnly(),
+      new NotAllowed(),
+      'Vous pouvez lire cette tuile, mais pas la modifier ainsi. Son propriétaire décide qui y écrit, et qui peut la voir.',
+    ],
+    [
+      new Shipped(),
       'L’aide et le tutoriel appartiennent à hexframe : tout le monde les lit, personne ne les modifie.',
     ],
   ])("words Mapping's %s in French too", (failure, sentence) => {

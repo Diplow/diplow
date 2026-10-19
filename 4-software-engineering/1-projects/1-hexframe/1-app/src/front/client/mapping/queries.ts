@@ -22,12 +22,14 @@ import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 're
 
 import type { Failure, Outcome } from '#/api/report/errors/failure'
 import {
+  type Seen,
   type ShippedRoot,
   type System,
   type SystemTile,
   systemOf,
+  tileAt,
 } from '#/domains/mapping/entities'
-import type { Operation, OperationName } from '#/domains/mapping/operations'
+import { madeAt, type Operation, type OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './import/upload'
 import {
@@ -59,12 +61,15 @@ import {
   exportTile,
   importTiles,
   moveTile,
+  publicSystem,
   shipped,
   swapTiles,
   system,
+  TileVisit,
+  visit,
 } from '#/api/mapping/mapping'
 
-import type { Locale } from '#/paraglide/runtime'
+import { getLocale, type Locale } from '#/paraglide/runtime'
 
 import { Foreseen, asCallFailed, read, settle, write, writing, type WriteCall } from '../calls'
 import { type FormErrors, settleSubmit, shownOnForm, unshown } from '../channels'
@@ -86,8 +91,71 @@ interface ImportVariables {
  * it moved (`./follow.ts`).
  */
 export const systemRead = {
-  ...read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }),
+  ...read({
+    scope: systemScope,
+    key: [],
+    call: () => system({ data: { language: getLocale() } }),
+  }),
   refetchOnWindowFocus: false,
+}
+
+/**
+ * The read of another's System, by its star, as the Account may see it (HEX-127), a query of its own
+ * beside the Account's. Its Version is how what the Account sees there stands, no count of changes,
+ * which would tell of the Tiles kept from it (Mapping's `sightVersion`): the page polls it as it
+ * polls its own (`../assistant/follow.ts`) and reads the System again once it is another, and, as
+ * the Account's, once a write to a System settles (HEX-132). A Tile hexframe ships among it, the
+ * Hexframe Organization's Help and tutorial or a pin of one, comes in the page's language (HEX-139).
+ */
+export const visitRead = (star: string) => ({
+  ...read({
+    scope: systemScope,
+    key: [star],
+    call: () => system({ data: { system: star, language: getLocale() } }),
+  }),
+  refetchOnWindowFocus: false,
+})
+
+/**
+ * The System the client holds that an Operation changes: the one holding the Tile it is made at
+ * (Mapping's `madeAt`), the Account's own or one it visits, as the server names it; none when the
+ * client holds neither. What a write is foreseen on, and a refused one read back by.
+ */
+function heldFor(client: QueryClient, operation: Operation): Seen | undefined {
+  const at = madeAt(operation)
+  const held = client.getQueriesData<Seen>({ queryKey: [systemScope] })
+  return held.find(([, seen]) => seen !== undefined && tileAt(seen, at) !== undefined)?.[1]
+}
+
+/**
+ * Where a link to a Tile leads the Account (`/t/<id>`, HEX-127): the star of the System holding it,
+ * none for its own; undefined for a Tile it may not read, as for one that doesn't exist, and for a
+ * link naming no Tile, which is not sent. Any other failure is thrown, for the route to show.
+ */
+export async function leadsTo(tile: string): Promise<{ readonly system?: string } | undefined> {
+  if (!Schema.is(TileVisit)({ tile })) return undefined
+  try {
+    return await settle('visit', visit({ data: { tile } }))
+  } catch (error) {
+    if (asCallFailed(error, 'visit').failure.kind === 'NotFound') return undefined
+    throw error
+  }
+}
+
+/**
+ * The System holding a Tile Everyone may read, as anyone holding its link sees it, signed in or not
+ * (HEX-129): what `/t/<id>` draws signed out, read once by the route, as `leadsTo` is, since nothing
+ * the page does changes it. Undefined for a Tile Everyone may not read, as for one that doesn't exist,
+ * and for a link naming no Tile, which is not sent. Any other failure is thrown, for the route to show.
+ */
+export async function publicSystemOf(tile: string): Promise<Seen | undefined> {
+  if (!Schema.is(TileVisit)({ tile })) return undefined
+  try {
+    return await settle('publicSystem', publicSystem({ data: { tile, language: getLocale() } }))
+  } catch (error) {
+    if (asCallFailed(error, 'publicSystem').failure.kind === 'NotFound') return undefined
+    throw error
+  }
 }
 
 /**
@@ -124,30 +192,63 @@ function pendingOf(mutation: Mutation): Pending {
   return pending
 }
 
+/** The System as the page shows it, and the gaps in what the Account may read of it. */
+export interface SystemShown {
+  /** Flat, the server's with every pending write folded over it, which Mapping's `decide` rules on. */
+  readonly system: System
+  /** Its tree, from its star. */
+  readonly root: SystemTile
+  /** What the writes on their way change. */
+  readonly underway: Underway
+  /** The Tiles it may read below Tiles kept from it, by id: none on its own System. */
+  readonly gaps: Seen['gaps']
+  /** The Account's rights on each Tile it is shown, by id, as the server read them: every one on its own. */
+  readonly rights: Seen['rights']
+  /** The Tiles of other Systems its References point at that the Account may read, by id. */
+  readonly pinned: Seen['pinned']
+  /** Whether the Account stands for its owner: its own, or an Organization's it is an admin of. */
+  readonly asOwner: Seen['asOwner']
+}
+
 /**
- * The Account's System as the page shows it: the server's, with every write to it still pending
+ * The Account's System as the page shows it, or, by its star, another's as the Account may see it:
+ * the server's, with every write to it still pending
  * folded over it in order, flat, which Mapping's `decide` rules on, and its tree, its Root, the user,
- * with everything below it. A write that settles stops being pending once the System read again has
+ * with everything below it, the gaps and the Account's rights on each Tile; a write to another
+ * System folding over none, since `decide` finds none of its Tiles there. A write that settles stops being
+ * pending once the System read again has
  * landed, so nothing flickers between its answer and the read. Undefined until the first read lands.
  * Shown inside a ReadBoundary, where its failure appears; signed out, it sends the user to sign in.
  * With `throwing: false`, for what shows beside the canvas, the chat: the same Query, read once,
  * whose failure throws nothing there and leaves it undefined, the canvas's boundary showing it. Not
  * a `frame` read, which would be a Query of its own and read the System twice.
  */
-export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
-  data: { system: System; root: SystemTile; underway: Underway } | undefined
+export function useSystem({ throwing = true, star }: { throwing?: boolean; star?: string } = {}): {
+  data: SystemShown | undefined
 } {
-  const { data } = useQuery(throwing ? systemRead : { ...systemRead, throwOnError: false })
-  const pending = useMutationState({
+  const query = star === undefined ? systemRead : visitRead(star)
+  const { data } = useQuery(throwing ? query : { ...query, throwOnError: false })
+  const writes = useMutationState({
     filters: { status: 'pending', predicate: inSystemQueue },
     select: pendingOf,
   })
   return {
     data: useMemo(() => {
       if (data === undefined) return undefined
+      // A write lands in the System holding its Tile: each folds over the one it names, and changes
+      // nothing in any other, `decide` finding none of its Tiles there; an import, the Account's own.
+      const pending = star === undefined ? writes : writes.filter(({ operation }) => operation)
       const shown = overlaid(data, pending)
-      return { system: shown, root: systemOf(shown), underway: underwayOf(pending, data.root.id) }
-    }, [data, pending]),
+      return {
+        system: shown,
+        root: systemOf(shown, data.pinned),
+        underway: underwayOf(pending, data.root.id),
+        gaps: data.gaps,
+        rights: data.rights,
+        pinned: data.pinned,
+        asOwner: data.asOwner,
+      }
+    }, [data, writes, star]),
   }
 }
 
@@ -202,7 +303,7 @@ function listenForRefusals(client: QueryClient) {
       turn,
       operation,
       shown: shownOnForm(failed),
-      system: client.getQueryData(systemRead.queryKey),
+      system: heldFor(client, operation) ?? client.getQueryData(systemRead.queryKey),
     }
     const shown = [...takers].map((take) => take.current(refused)).includes(true)
     if (!shown) unshown(failed, options.meta?.call ?? 'write')
@@ -299,8 +400,8 @@ function useSystemWrite<I, A, E extends Failure>(
     mutationFn: (input: I) => {
       // Its refusal reaches a page, or a toast, whether or not a page is open by then.
       listenForRefusals(client)
-      const held = client.getQueryData(systemRead.queryKey)
       const operation = operationOf(scope, input)
+      const held = operation === undefined ? undefined : heldFor(client, operation)
       const refusal =
         held === undefined || operation === undefined ? undefined : refusalOf(held, operation)
       if (refusal !== undefined) return Promise.reject(new Foreseen(refusal, scope))

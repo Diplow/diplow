@@ -44,7 +44,7 @@ const rows: ReadonlyArray<Row> = [
 
 describe('the System these rows hold, flat', () => {
   it('holds its Root apart, whichever row comes first, and every row below it by id', () => {
-    const system = systemFrom(rows, { owned: true })
+    const system = systemFrom(rows)
     expect(system?.root).toEqual({ _tag: 'Tile', ...content('root'), version: 1 })
     expect(Object.keys(system?.tiles ?? {}).sort()).toEqual(
       ['child', 'grandchild', 'principle', 'ref-to-gone', 'ref-to-ref', 'ref-to-root'].sort(),
@@ -53,13 +53,13 @@ describe('the System these rows hold, flat', () => {
 
   it('gives each Tile the Version its row holds, flat and in its tree', () => {
     const counted = rows.map((row) => (row.id === 'child' ? { ...row, version: 4 } : row))
-    expect(systemFrom(counted, { owned: true })?.tiles.child).toMatchObject({ version: 4 })
+    expect(systemFrom(counted)?.tiles.child).toMatchObject({ version: 4 })
     expect(systemOf(flat(counted)).branches[2]).toMatchObject({ version: 4 })
   })
 
   it('places each Tile by its parent and its slot, with what it keeps', () => {
     const named = { ...tile('named', 'root', 9), name: 'STACK.md', frontmatter: { owner: 'diplo' } }
-    const system = systemFrom([...rows, named], { owned: true })
+    const system = systemFrom([...rows, named])
     expect(system?.tiles.child).toEqual({
       _tag: 'Tile',
       ...content('child'),
@@ -80,7 +80,7 @@ describe('the System these rows hold, flat', () => {
   })
 
   it('holds a Reference by its target, broken or not: only its tree resolves it', () => {
-    const system = systemFrom(rows, { owned: true })
+    const system = systemFrom(rows)
     expect(system?.tiles['ref-to-gone']).toEqual({
       _tag: 'Reference',
       id: 'ref-to-gone',
@@ -90,32 +90,30 @@ describe('the System these rows hold, flat', () => {
     })
   })
 
-  it('says whether an Account owns it: Help, which every Account reads, is owned by none', () => {
-    expect(systemFrom(rows, { owned: true })?.owned).toBe(true)
-    expect(systemFrom([tile('help', null, null)], { owned: false })).toEqual({
+  it('reads Help’s rows as any System’s, its Root first', () => {
+    expect(systemFrom([tile('help', null, null)])).toEqual({
       root: { _tag: 'Tile', ...content('help'), version: 1 },
       tiles: {},
-      owned: false,
       version: 0,
     })
   })
 
   it('leaves out a row in no slot, and a Reference outside its parent’s Context', () => {
     const astray = [tile('nowhere', 'root', 13), reference('misplaced', 'root', 4, 'child')]
-    const system = systemFrom([...rows, ...astray], { owned: true })
+    const system = systemFrom([...rows, ...astray])
     expect(system?.tiles).not.toHaveProperty('nowhere')
     expect(system?.tiles).not.toHaveProperty('misplaced')
   })
 
   it('is none without a Root', () => {
-    expect(systemFrom([], { owned: true })).toBeUndefined()
-    expect(systemFrom([tile('orphan', 'gone', 1)], { owned: true })).toBeUndefined()
+    expect(systemFrom([])).toBeUndefined()
+    expect(systemFrom([tile('orphan', 'gone', 1)])).toBeUndefined()
   })
 })
 
 /** The flat System of these rows, owned by an Account. */
 function flat(held: ReadonlyArray<Row>): System {
-  const system = systemFrom(held, { owned: true })
+  const system = systemFrom(held)
   if (system === undefined) throw new Error('These rows hold a Root')
   return system
 }
@@ -164,7 +162,6 @@ describe('the tree of a System, a view built from it', () => {
       tiles: {
         'help/3': { _tag: 'Tile', ...content('help/3'), version: 1, parent: 'help', slot: 3 },
       },
-      owned: false,
       version: 0,
     }
     expect(systemOf(help)).toEqual({
@@ -223,7 +220,7 @@ describe('Leaves beside Branches', () => {
 })
 
 describe('reading a System, and its rows, by id and by slot', () => {
-  const system = systemFrom(rows, { owned: true })
+  const system = systemFrom(rows)
   if (system === undefined) throw new Error('These rows hold no Root')
 
   it('finds a Tile by its id, never a Reference', () => {

@@ -40,7 +40,6 @@ const system: System = {
     [id.work]: placed(id.work, id.root, 1),
     [id.notes]: placed(id.notes, id.root, { leaf: 2 }),
   },
-  owned: true,
   version: 3,
 }
 

@@ -7,16 +7,20 @@ import type {
   DirectionTaken,
   LeafHoldsNothing,
   MovedUnderItself,
+  NotAllowed,
   PreviewTooLong,
   RootFixed,
-  ShippedReadOnly,
+  Shipped,
   TileChanged,
   TileIdTaken,
   TileNotFound,
   TitleMissing,
 } from '#/domains/mapping/errors'
 import { systemOf } from '#/domains/mapping/entities'
-import { glimpses, ownTile } from '#/domains/mapping/mapping'
+import * as Service from '#/domains/mapping/mapping'
+import { EditTile } from '#/domains/mapping/operations'
+import { transactional } from '#/repositories/database/database'
+import { granted } from '#/repositories/database/tiles/testing'
 
 import type { Failure } from '../report/errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
@@ -43,8 +47,10 @@ type Program = Effect.Effect<unknown, Failure, Services>
  * A request from someone signed in as an Account no other test uses, by a Session or by one of their
  * Keys, or from nobody.
  */
-function request(signedIn: boolean | 'by key' = true): StartContext {
-  const account = { id: crypto.randomUUID(), email: 'someone@example.com' }
+function request(
+  signedIn: boolean | 'by key' = true,
+  account = { id: crypto.randomUUID(), email: 'someone@example.com' },
+): StartContext {
   const session: Session = { account, expiresAt: new Date(Date.now() + 60_000) }
   const key: KeyProof = { account, by: { _tag: 'Key', keyId: 'key-1' } }
   return {
@@ -71,9 +77,8 @@ async function value<A>(outcome: Promise<{ ok: true; value: A } | { ok: false }>
 }
 
 /** The Account's System, read flat through its server function, as its tree, as the client builds it. */
-async function systemTree(context: StartContext) {
-  return systemOf(await value(run(context, Mapping.system)))
-}
+const systemTree = async (context: StartContext) =>
+  systemOf(await value(run(context, Mapping.system)))
 
 /** Someone's System, read once so its Root exists, with a Child of the Root in Direction 1. */
 async function withAChild() {
@@ -92,8 +97,11 @@ describe('the System, read flat', () => {
     expect(first).toEqual({
       root: { _tag: 'Tile', id: first.root.id, title: '', preview: '', body: '', version: 1 },
       tiles: {},
-      owned: true,
       version: 0,
+      rights: { [first.root.id]: ['read', 'write', '@'] },
+      gaps: {},
+      pinned: {},
+      asOwner: true,
     })
     expect((await value(run(context, Mapping.system))).root.id).toBe(first.root.id)
   })
@@ -343,9 +351,12 @@ describe('a create under the id its caller chose', () => {
 })
 
 describe("the errors Mapping's server functions can fail with", () => {
-  it('are each listed by its type, a write refusing the Systems hexframe ships', () => {
+  it('are each listed by its type, a write refusing the Systems hexframe ships and what the actor may not do', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
-    expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
+    expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut | TileNotFound>()
+    expectTypeOf<ErrorOf<ReturnType<typeof Mapping.systemAt>>>().toEqualTypeOf<
+      SignedOut | TileNotFound
+    >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.shipped>>>().toEqualTypeOf<never>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
       | SignedOut
@@ -355,10 +366,11 @@ describe("the errors Mapping's server functions can fail with", () => {
       | DirectionTaken
       | TileIdTaken
       | LeafHoldsNothing
-      | ShippedReadOnly
+      | NotAllowed
+      | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.editTile>>>().toEqualTypeOf<
-      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | TileChanged | ShippedReadOnly
+      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | TileChanged | NotAllowed | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.moveTile>>>().toEqualTypeOf<
       | SignedOut
@@ -368,7 +380,8 @@ describe("the errors Mapping's server functions can fail with", () => {
       | MovedUnderItself
       | DirectionTaken
       | LeafHoldsNothing
-      | ShippedReadOnly
+      | NotAllowed
+      | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.swapTiles>>>().toEqualTypeOf<
       | SignedOut
@@ -377,16 +390,23 @@ describe("the errors Mapping's server functions can fail with", () => {
       | RootFixed
       | MovedUnderItself
       | LeafHoldsNothing
-      | ShippedReadOnly
+      | NotAllowed
+      | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteTile>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | TileChanged | RootFixed | ShippedReadOnly
+      SignedOut | TileNotFound | TileChanged | RootFixed | NotAllowed | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | TileChanged | DirectionTaken | LeafHoldsNothing | ShippedReadOnly
+      | SignedOut
+      | TileNotFound
+      | TileChanged
+      | DirectionTaken
+      | LeafHoldsNothing
+      | NotAllowed
+      | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | TileChanged | ShippedReadOnly
+      SignedOut | TileNotFound | TileChanged | NotAllowed | Shipped
     >()
   })
 })
@@ -528,7 +548,11 @@ describe('the Tiles a Turn is shown, as Mapping reads them', () => {
     const glimpsed = await value(
       run(
         context,
-        Effect.flatMap(signedInAccount, (id) => glimpses(id, ids)),
+        Effect.flatMap(signedInAccount, (id) =>
+          Effect.flatMap(Mapping.actingOnOwn(id, { session: true }), (acting) =>
+            Service.glimpses(acting, ids),
+          ),
+        ),
       ),
     )
     expect(glimpsed).toEqual([
@@ -537,13 +561,93 @@ describe('the Tiles a Turn is shown, as Mapping reads them', () => {
     ])
     const own = await run(
       context,
-      Effect.flatMap(signedInAccount, (id) => ownTile(id, child.id)),
+      Effect.flatMap(signedInAccount, (id) =>
+        Effect.flatMap(Mapping.actingOnOwn(id, { session: true }), (acting) =>
+          Service.ownTile(acting, child.id),
+        ),
+      ),
     )
     expect(own.ok).toBe(true)
     const theirs = await run(
       context,
-      Effect.flatMap(signedInAccount, (id) => ownTile(id, stranger.child.id)),
+      Effect.flatMap(signedInAccount, (id) =>
+        Effect.flatMap(Mapping.actingOnOwn(id, { session: true }), (acting) =>
+          Service.ownTile(acting, stranger.child.id),
+        ),
+      ),
     )
     expect(theirs).toMatchObject({ ok: false, failure: { _tag: 'TileNotFound' } })
+  })
+})
+
+describe('who acts, and on which System', () => {
+  it('lets no actor reach a System it does not own past its star’s card, even by naming its star', async () => {
+    const { context, root, child } = await withAChild()
+    const stranger = request()
+    const strangerId = await value(run(stranger, signedInAccount))
+    const named = (system: string): Service.Acting => ({
+      actor: { account: strangerId, groups: [], owners: [strangerId], session: true },
+      system,
+    })
+    const attempts = (acting: Service.Acting): ReadonlyArray<Program> => [
+      Service.ownTile(acting, child.id),
+      transactional(
+        Service.editTile(acting, new EditTile({ id: child.id, version: 1, title: 'Mine now' })),
+      ),
+      // The change that is no Operation, an import's, before it looks at a row.
+      transactional(
+        Service.changing(acting, [], () => Effect.succeed({ answer: null, events: [] })),
+      ),
+    ]
+    // The other Account's star, and a star that names no System at all, refused alike; and a read
+    // of the System, which shows anyone a star's card, and its Version, refused that one.
+    const nowhere = named(crypto.randomUUID())
+    for (const attempt of [
+      ...attempts(named(root.id)),
+      ...attempts(nowhere),
+      Service.system(nowhere),
+      Service.systemVersion(nowhere),
+    ]) {
+      expect(await run(stranger, attempt)).toMatchObject({
+        ok: false,
+        failure: { _tag: 'TileNotFound', kind: 'NotFound' },
+      })
+    }
+    // The other Account's star read: its card, untitled, and nothing below it; its Version is how
+    // that stands (`operations/rights/seen.test.ts`).
+    expect(await value(run(stranger, Service.system(named(root.id))))).toMatchObject({
+      root: { id: root.id, title: '', body: '' },
+      tiles: {},
+      rights: { [root.id]: [] },
+    })
+    // The Titles of what it may read: the star's alone, its card's, of the other Account's.
+    expect(await run(stranger, Service.titles(named(root.id), [root.id, child.id]))).toEqual({
+      ok: true,
+      value: { [root.id]: '' },
+    })
+    expect((await systemTree(context)).branches[1]).toMatchObject({ title: 'Child', version: 1 })
+  })
+})
+
+describe('a move that would open a Tile to someone', () => {
+  it('is the owner’s from a Session, and refused through one of their Keys', async () => {
+    const account = { id: crypto.randomUUID(), email: 'someone@example.com' }
+    const [bySession, byKey] = [request(true, account), request('by key', account)]
+    const root = await systemTree(bySession)
+    const kept = await value(
+      run(bySession, Mapping.createTile({ parent: root.id, slot: 1, ...content('Kept') })),
+    )
+    const open = await value(
+      run(bySession, Mapping.createTile({ parent: root.id, slot: 2, ...content('Open') })),
+    )
+    const everyone = { subject: 'everyone', subjectId: null, value: 'read' } as const
+    await value(run(bySession, transactional(granted(account.id, { tile: open.id, ...everyone }))))
+    // Under Open, Kept would be read by Everyone, which its star keeps it from.
+    const opening = Mapping.moveTile({ id: kept.id, version: 1, parent: open.id, slot: 1 })
+    expect(await run(byKey, opening)).toMatchObject({
+      ok: false,
+      failure: { _tag: 'NotAllowed', kind: 'Forbidden' },
+    })
+    expect(await run(bySession, opening)).toMatchObject({ ok: true })
   })
 })

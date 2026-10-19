@@ -64,7 +64,7 @@ const account = (async () => {
   const today = async () =>
     (await value(run(someone.signedIn, Assistant.conversationDay({ offset: 0 })))).entries
   /** What the page's poll sees running. */
-  const live = async () => (await value(run(someone.signedIn, Assistant.latest))).turn
+  const live = async () => (await value(run(someone.signedIn, Assistant.latestOf(undefined)))).turn
   return { ...someone, turn, today, live }
 })()
 

@@ -1,7 +1,8 @@
 // The System as the canvas draws it. Mapping keeps each Tile's Branches and Leaves by Direction and
 // its Context by slot, −1 to −6, where a slot holds a Tile of its own or a Reference; the canvas takes
 // TileNodes, with the same Branches and Leaves, a Leaf marked as one, and the Context keyed by
-// Direction, each marked with what its light shows: the Root, a file, a Reference, broken or not. Pure: what the canvas shows of a Tile is decided here.
+// Direction, each marked with what its light shows: the Root, a file, a Reference, broken or not, a
+// pin of another System's Tile from its star. Pure: what the canvas shows of a Tile is decided here.
 import { Result } from 'effect'
 
 import { isVerbatim } from '#/api/mapping/files/download'
@@ -35,8 +36,8 @@ export const titleOf = (title: string) => (title === '' ? m.system_untitled() : 
 /**
  * The System's Tiles as the canvas draws them, from its Root down. A Leaf that isn't Markdown is
  * marked as a file's. A Reference is drawn as the Tile it points at, under that Tile's id, so
- * centering on it and acting on it reach the Tile itself, with where that Tile stands; a broken one
- * says so, under an id no Tile has. With `yours`, the Root is the user's, the Account's System's
+ * centering on it and acting on it reach the Tile itself, with where that Tile stands, a pin's the
+ * star of the System holding it; a broken one, unavailable, says so, under an id no Tile has. With `yours`, the Root is the user's, the Account's System's
  * and not Help's: named, untitled, or an empty System's (Mapping's `isEmptySystem`); untitled, it
  * shows the pseudo the user is `naming` it with as they type it.
  */
@@ -86,13 +87,15 @@ function contextNode(entry: ContextEntry, slot: string, root: SystemTile): TileN
     case 'Tile':
       return nodeOf(entry, root)
     case 'Reference': {
-      // The Root stands under nothing: a Reference to it is from the Root itself.
+      // The Root stands under nothing: a Reference to it is from the Root itself. A pin is from the
+      // star of the System holding its Tile.
       const above = tileIn(root, entry.tile.id)?.parent ?? entry.tile
+      const from = entry.elsewhere?.starTitle ?? above.title
       return {
         id: entry.tile.id,
         title: titleOf(entry.tile.title),
         preview: entry.tile.preview,
-        reference: { from: titleOf(above.title) },
+        reference: { from: titleOf(from) },
       }
     }
     case 'BrokenReference':
@@ -174,20 +177,33 @@ export function standsFor(ring: FrameKind, direction: Direction, slot: Slot): bo
 
 /**
  * Where a Tile stands: a Leaf in its Direction under its parent, or a Tile with what it holds, under
- * its parent in a Branch's Direction or a Context slot, or the Root, under nothing.
+ * its parent in a Branch's Direction or a Context slot, or the Root, under nothing; or, on a System
+ * visited, a Tile hung from its star across a gap, under nothing the visitor is shown.
  */
 export type Located =
   | { kind: 'leaf'; tile: LeafTile; parent: SystemTile; direction: Direction }
   | { kind: 'branch'; tile: SystemTile; parent: SystemTile; direction: Direction }
   | { kind: 'context'; tile: SystemTile; parent: SystemTile; slot: ContextDirection }
   | { kind: 'root'; tile: SystemTile; parent: undefined }
+  | { kind: 'across'; tile: SystemTile; parent: undefined }
 
 /**
- * The Tile of this id, anywhere in the System, Leaves and Context Tiles included, and where it stands
- * (`Located`); `undefined` when no Tile has it, as for a broken Reference.
+ * The Tile of this id, anywhere in the System, Leaves and Context Tiles included, or anywhere across
+ * its gaps (`across`, each a tree from the Tile hung from the star there, Mapping's `acrossGaps`), and
+ * where it stands (`Located`); `undefined` when no Tile has it, as for a broken Reference.
  */
-export function tileIn(system: SystemTile, id: string): Located | undefined {
-  return system.id === id ? { kind: 'root', tile: system, parent: undefined } : below(system, id)
+export function tileIn(
+  system: SystemTile,
+  id: string,
+  across: ReadonlyArray<SystemTile> = [],
+): Located | undefined {
+  if (system.id === id) return { kind: 'root', tile: system, parent: undefined }
+  for (const tree of [system, ...across]) {
+    if (tree !== system && tree.id === id) return { kind: 'across', tile: tree, parent: undefined }
+    const found = below(tree, id)
+    if (found) return found
+  }
+  return undefined
 }
 
 /** The Tile of this id below `parent`, at any depth, and where it stands. */

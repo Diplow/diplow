@@ -181,7 +181,7 @@ export function TurnLines({
 }) {
   const lines = told === undefined ? [] : turnLines(told, tiles, at)
   const key: Happened = {
-    who: 'key',
+    who: 'outside',
     words: weave(m.conversation_edited_by, {
       actor: { name: keyName },
       title: { tile: tiles.notes },

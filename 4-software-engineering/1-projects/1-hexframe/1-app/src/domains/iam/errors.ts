@@ -60,6 +60,94 @@ export class EntitlementMissing extends Schema.TaggedError<EntitlementMissing>()
   { kind: kind('Forbidden'), entitlement: Entitlement },
 ) {}
 
+/**
+ * No Organization the Account belongs to has this star: none has it, or the Account is not one of its
+ * members. Which of the two is not said.
+ */
+export class OrganizationNotFound extends Schema.TaggedError<OrganizationNotFound>()(
+  'OrganizationNotFound',
+  { kind: kind('NotFound') },
+) {}
+
+/** The Account is a member of the Organization, not an admin: only an admin manages its members. */
+export class AdminRequired extends Schema.TaggedError<AdminRequired>()('AdminRequired', {
+  kind: kind('Forbidden'),
+}) {}
+
+/**
+ * The change would leave the Organization without an admin who joined it of their own accord: that
+ * last can neither leave, nor be removed, nor be made a member. An admin only added may always leave.
+ */
+export class LastAdmin extends Schema.TaggedError<LastAdmin>()('LastAdmin', {
+  kind: kind('Conflict'),
+}) {}
+
+/** The star named belongs to no Account: an Organization's, or none. Only an Account joins one. */
+export class AccountNotFound extends Schema.TaggedError<AccountNotFound>()('AccountNotFound', {
+  kind: kind('NotFound'),
+}) {}
+
+/** The Account named is a member of the Organization already. */
+export class AlreadyMember extends Schema.TaggedError<AlreadyMember>()('AlreadyMember', {
+  kind: kind('Conflict'),
+}) {}
+
+/** The Account named is no member of the Organization. */
+export class MemberNotFound extends Schema.TaggedError<MemberNotFound>()('MemberNotFound', {
+  kind: kind('NotFound'),
+}) {}
+
+/**
+ * A Group's name is blank, or longer than 40 characters, counted as a reader counts them
+ * (`groupNameBounds`).
+ */
+export class GroupNameInvalid extends Schema.TaggedError<GroupNameInvalid>()(
+  'GroupNameInvalid',
+  invalid,
+) {}
+
+/** Another Group of the Organization has this name already, whatever its case. */
+export class GroupNameTaken extends Schema.TaggedError<GroupNameTaken>()(
+  'GroupNameTaken',
+  invalid,
+) {}
+
+/**
+ * No Group of this id: none has it, it was deleted, or it belongs to no Organization the Account is
+ * a member of. Which is not said.
+ */
+export class GroupNotFound extends Schema.TaggedError<GroupNotFound>()('GroupNotFound', {
+  kind: kind('NotFound'),
+}) {}
+
+/** The Account is in this Group of the Organization already. */
+export class AlreadyInGroup extends Schema.TaggedError<AlreadyInGroup>()('AlreadyInGroup', {
+  kind: kind('Conflict'),
+}) {}
+
+/** The Account asked already to join this, and its request waits for an admin. */
+export class JoinRequestOpen extends Schema.TaggedError<JoinRequestOpen>()('JoinRequestOpen', {
+  kind: kind('Conflict'),
+}) {}
+
+/** An admin declined the Account's request for this a short while ago: it asks again tomorrow. */
+export class JoinRequestDeclined extends Schema.TaggedError<JoinRequestDeclined>()(
+  'JoinRequestDeclined',
+  { kind: kind('Conflict') },
+) {}
+
+/** No request to join the Organization has this id. */
+export class JoinRequestNotFound extends Schema.TaggedError<JoinRequestNotFound>()(
+  'JoinRequestNotFound',
+  { kind: kind('NotFound') },
+) {}
+
+/** The request to join was decided already, by another admin or in another tab. */
+export class JoinRequestDecided extends Schema.TaggedError<JoinRequestDecided>()(
+  'JoinRequestDecided',
+  { kind: kind('Conflict') },
+) {}
+
 export const iamFailures = [
   SignedOut,
   CredentialsRejected,
@@ -71,4 +159,18 @@ export const iamFailures = [
   KeyNameInvalid,
   KeyNotFound,
   EntitlementMissing,
+  OrganizationNotFound,
+  AdminRequired,
+  LastAdmin,
+  AccountNotFound,
+  AlreadyMember,
+  MemberNotFound,
+  GroupNameInvalid,
+  GroupNameTaken,
+  GroupNotFound,
+  AlreadyInGroup,
+  JoinRequestOpen,
+  JoinRequestDeclined,
+  JoinRequestNotFound,
+  JoinRequestDecided,
 ] as const

@@ -4,9 +4,9 @@
 // drafted into the Conversation's Proposal, decided by Mapping on the System the Proposal makes and
 // written nowhere. The reads made with that Key, and the files its Turn starts with, show the same
 // Proposal over the System. The user switches the Mode, and accepts a Proposal, its writes run by
-// Mapping in one transaction as the Assistant's, what undoes them kept, or discards it; and undoes an
-// applied Turn or an accepted Proposal, once, as themselves, from a Session. They sit in a module of
-// their own because they reach the domains and the database.
+// Mapping in one transaction as the user's, who decided them, what undoes them kept, or discards it;
+// and undoes an applied Turn or an accepted Proposal, once, as themselves, from a Session. They sit
+// in a module of their own because they reach the domains and the database.
 import { Effect, Schema } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
@@ -20,7 +20,7 @@ import { Batched, type Operation, Undo } from '#/domains/mapping/operations'
 import { transactional } from '#/repositories/database/database'
 
 import * as MappingPrograms from '../../mapping/programs'
-import { actingAs } from '../../server/bus'
+import * as Someone from '../someone/someone'
 
 const decodedBatch = Schema.decodeUnknownEffect(Schema.Array(Batched))
 
@@ -46,16 +46,13 @@ const batchOf = (open: OpenProposal | undefined) =>
   open === undefined ? Effect.succeed([]) : Effect.orDie(decodedBatch(writesOf(open)))
 
 /**
- * The batch one of the Account's Turns shows over the System, in its reads and its files, by
- * Assistant's `route`, as its writes are routed: its Conversation's open Proposal for a Turn that
- * drafts, none for one that applies.
+ * The batch one of the Account's Turns shows over the System, in its reads and its files, as its
+ * writes are routed (Assistant's `shownProposal`): its Conversation's open Proposal for a Turn that
+ * drafts, when it changes the System the Turn works in; none for one that applies, or one over
+ * another System, which the Turn drafts nothing into.
  */
 export const shownTo = (accountId: string, turnId: string) =>
-  Effect.flatMap(Assistant.route(accountId, turnId), (route) =>
-    route === 'apply'
-      ? Effect.succeed([])
-      : Effect.flatMap(Assistant.openProposal(accountId), batchOf),
-  )
+  Effect.flatMap(Assistant.shownProposal(accountId, turnId), batchOf)
 
 /**
  * The batch the request's reads show over the System: the Proposal its Turn drafts into, for a request
@@ -79,19 +76,24 @@ export const openTile = <F extends Field>(
 
 /**
  * Drafts an Operation into the Account's open Proposal, in one transaction, by Assistant's `draft`: the
- * Conversation locked, the Operation added by Mapping to the batch the Proposal keeps, refused as it
- * would be on the System that batch makes, and written into the Proposal, which the draft opens when
- * none is; Assistant's `TurnOver` should the Turn have ended since its Key was proven, nothing
- * drafted, so a write proven just before a Stop never lands in a Proposal the user decided on since,
- * nor opens another. Answers, for a create or an edit, the Tile as the Proposal makes it, with its
- * Version, as the write applied would.
+ * Conversation locked, the Operation added by Mapping to the batch the Proposal keeps, on the System
+ * the Turn works in (`acting`), refused as it would be on the System that batch makes, and as the
+ * Account may write there, and written into the Proposal, which the draft opens when none is;
+ * Assistant's `TurnOver` should the Turn have ended since its Key was proven, nothing drafted, so a
+ * write proven just before a Stop never lands in a Proposal the user decided on since, nor opens
+ * another; `ProposalElsewhere` when the one open changes another System. Answers, for a create or an
+ * edit, the Tile as the Proposal makes it, with its Version, as the write applied would.
  */
-const drafted = <O extends Operation>(accountId: string, turnId: string, operation: O) =>
+const drafted = <O extends Operation>(
+  { accountId, turnId }: { accountId: string; turnId: string },
+  acting: Mapping.Acting,
+  operation: O,
+) =>
   transactional(
     Effect.map(
       Assistant.draft(accountId, turnId, (open) =>
         Effect.gen(function* () {
-          const added = yield* Mapping.addToBatch(accountId, yield* batchOf(open), operation)
+          const added = yield* Mapping.addToBatch(acting, yield* batchOf(open), operation)
           const write = encodedBatched(added.batched)
           return { write, changes: added.changes, tile: added.tile }
         }),
@@ -108,12 +110,21 @@ const drafted = <O extends Operation>(accountId: string, turnId: string, operati
  * was proven, nothing run. Answers, for a create or an edit, the Tile as it now stands, with its
  * Version, as the write's own program would.
  */
-const ranForTurn = <O extends Operation>(accountId: string, turnId: string, operation: O) =>
+const ranForTurn = <O extends Operation>(
+  { accountId, turnId }: { accountId: string; turnId: string },
+  acting: Mapping.Acting,
+  operation: O,
+) =>
   transactional(
     Effect.map(
       AssistantUndo.applyInTurn(accountId, turnId, (soFar) =>
         Effect.gen(function* () {
-          const run = yield* Mapping.runOperation(accountId, operation, yield* keptUndo(soFar))
+          const run = yield* Mapping.runOperation(
+            acting,
+            operation,
+            // A Turn reads and writes the System it started in alone: it pins no Tile of another.
+            { earlier: yield* keptUndo(soFar), across: false },
+          )
           return { undo: encodedUndo(run.undo), changes: run.changes, tile: run.tile }
         }),
       ),
@@ -122,22 +133,52 @@ const ranForTurn = <O extends Operation>(accountId: string, turnId: string, oper
   )
 
 /**
+ * Runs an Operation a Turn in apply wrote in someone else's System, the one it started in, in one
+ * transaction, by `undo/`'s `writtenInTurnElsewhere`: both Conversations locked in one order, the
+ * Turn still running, else `TurnOver`, nothing run; then the write as someone else's there
+ * (`../someone/`'s `writtenInAnothers`), as Mapping decides the Account may make it, its owner told
+ * of it by the Account's star and its agent, offered its Undo, the Account's own timeline told of it
+ * as made elsewhere. Nothing is kept with the Turn, whose own System it never changed. Answers, for a
+ * create or an edit, the Tile as it now stands.
+ */
+const ranElsewhere = <O extends Operation>(
+  signed: Iam.SignedIn & { readonly by: { readonly _tag: 'TurnKey' } },
+  reach: MappingPrograms.Reach,
+  operation: O,
+) =>
+  transactional(
+    Effect.flatMap(Someone.toldOwner(reach.acting.system), (owner) =>
+      AssistantUndo.writtenInTurnElsewhere(
+        { accountId: signed.account.id, turnId: signed.by.turnId, owner },
+        Someone.writtenInAnothers(signed, reach, operation),
+      ),
+    ),
+  )
+
+/**
  * A write made through the MCP, routed by what Assistant decides: drafted into the Proposal when a
- * Turn's Key that drafts made it, applied with what undoes it kept when one that applies did, and
- * `apply`d otherwise, the write's own program given the same Operation. The tool table names the
- * Operation and its program, and never asks the Mode.
+ * Turn's Key that drafts made it, applied with what undoes it kept when one that applies did, on the
+ * System its Turn started in, someone else's applied as theirs to undo; and `apply`d otherwise, the
+ * write's own program given the same Operation. Where a Turn's Key's write works is where its
+ * request reaches (`mapping/programs.ts`'s `actingFor`), a Turn's resolving no pin. The tool table
+ * names the Operation and its program, and never asks the Mode.
  */
 export const written = <O extends Operation, A, E, R>(
   operation: O,
   apply: (operation: O) => Effect.Effect<A, E, R>,
 ) =>
   Effect.gen(function* () {
-    const { account, by } = yield* Iam.signedIn
+    const signed = yield* Iam.signedIn
+    const { account, by } = signed
     if (by._tag !== 'TurnKey') return yield* apply(operation)
+    const turn = { accountId: account.id, turnId: by.turnId }
+    const where = yield* MappingPrograms.actingFor(signed, undefined)
     if ((yield* Assistant.route(account.id, by.turnId)) === 'apply') {
-      return yield* ranForTurn(account.id, by.turnId, operation)
+      return where.acting.system === where.own.system
+        ? yield* ranForTurn(turn, where.acting, operation)
+        : yield* ranElsewhere({ account, by }, where, operation)
     }
-    return yield* drafted(account.id, by.turnId, operation)
+    return yield* drafted(turn, where.acting, operation)
   })
 
 /**
@@ -151,12 +192,20 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
 export const setMode = ({ mode }: { readonly mode: Mode }) =>
   forSession((accountId) => transactional(Assistant.setMode(accountId, mode)))
 
-/** An open Proposal as the page compares it, by its id and how many writes it holds. */
-const counted = (open: OpenProposal) => ({ id: open.id, drafts: open.drafts.length })
+/**
+ * An open Proposal as the page compares it, by its id and how many writes it holds, and the System it
+ * changes, someone else's by its star (`elsewhere`), none for the Account's own.
+ */
+const counted = (open: OpenProposal) => ({
+  id: open.id,
+  drafts: open.drafts.length,
+  ...(open.elsewhere !== undefined && { elsewhere: open.elsewhere }),
+})
 
 /**
- * The Account's Conversation as the page polls it: its Mode, and its open Proposal by its id and how
- * many writes it holds, none when none is open, so a draft reads the Conversation again. One read.
+ * The Account's Conversation as the page polls it: its Mode, and its open Proposal by its id, how
+ * many writes it holds and the System it changes, none when none is open, so a draft reads the
+ * Conversation again. One read.
  */
 export const conversationNow = (accountId: string) =>
   Effect.map(Assistant.conversationState(accountId), ({ mode, open }) => ({
@@ -166,9 +215,10 @@ export const conversationNow = (accountId: string) =>
 
 /**
  * The Account's open Proposal as a day of the Conversation answers it: its id, how many writes it
- * holds, and the writes themselves, as Mapping batched them, encoded, which the canvas folds over the
- * System the page shows to draw what the Proposal would do (HEX-109); none when none is open. One
- * read, so the writes are the ones counted.
+ * holds, the System it changes (`counted`), and the writes themselves, as Mapping batched them,
+ * encoded, which the canvas folds over that System to draw what the Proposal would do (HEX-109), the
+ * Account's own or the one it visits; none when none is open. One read, so the writes are the ones
+ * counted.
  */
 export const proposalNow = (accountId: string) =>
   Effect.flatMap(Assistant.openProposal(accountId), (open) =>
@@ -183,29 +233,46 @@ export const proposalNow = (accountId: string) =>
 /**
  * Accepts the Account's open Proposal of this id, whole, in one transaction: Assistant accepts it,
  * `ProposalClosed` once it is open no longer, then its writes run by Mapping on the System as it
- * stands, under the Root's lock, all of them or none, each event published as the Assistant's, by the
- * Turn whose write opened it, and what undoes them kept with it, which its Entry then offers;
+ * stands, under the Root's lock, all of them or none, each event published as the user's, who
+ * decided them, by the Session, and what undoes them kept with it, which its Entry then offers;
  * `BatchOutdated` once one of them no longer applies, a Tile changed since, by the Version it names,
- * or gone, the accept rolled back with it.
+ * or gone, the accept rolled back with it. A Proposal over someone else's System, a Turn's that
+ * worked there (HEX-134), runs there as the Account may write there, `NotAllowed` or `TileNotFound`
+ * once it may no longer, both Conversations locked first in one order (Assistant's
+ * `acceptProposal`), each write told to that System's owner, who is offered its Undo, so the
+ * Proposal's own Entry offers none (`../someone/`'s `batchInAnothers`).
  */
 export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
-  Effect.flatMap(Iam.sessionOnly, ({ account }) =>
-    transactional(
-      Effect.as(
-        Assistant.acceptProposal(account.id, proposal, (accepted) =>
-          Effect.gen(function* () {
-            const assistant: Iam.SignedIn = {
-              account,
-              by: { _tag: 'TurnKey', turnId: accepted.turn },
-            }
-            const batch = yield* batchOf(accepted)
-            const run = yield* actingAs(assistant)(Mapping.runBatch(account.id, batch))
-            return { undo: encodedUndo(run.undo), changes: run.changes }
-          }),
-        ),
-        null,
-      ),
-    ),
+  // From a Session only, which then proves the request: who acted, by IAM's rule, is that Session.
+  Effect.flatMap(Effect.andThen(Iam.sessionOnly, Iam.signedIn), (signed) =>
+    Effect.gen(function* () {
+      // The user decided the writes, so they are the user's, published as the Session's; the agent
+      // only drafted them, as the Proposal's own Entry tells. Mapping still takes them as no write of
+      // the Session's own: an agent's draft widens who reads no Tile.
+      const { account } = signed
+      const own = yield* MappingPrograms.actingOnOwn(account.id, { session: false })
+      yield* transactional(
+        Assistant.acceptProposal(account.id, proposal, {
+          own: (accepted) =>
+            Effect.gen(function* () {
+              const run = yield* Mapping.runBatch(own, yield* batchOf(accepted))
+              return { undo: encodedUndo(run.undo), changes: run.changes }
+            }),
+          elsewhere: {
+            owner: Someone.toldOwner,
+            run: (accepted, star) =>
+              Effect.flatMap(batchOf(accepted), (batch) =>
+                Someone.batchInAnothers(
+                  signed,
+                  { acting: MappingPrograms.actingAt(own, star), own },
+                  batch,
+                ),
+              ),
+          },
+        }),
+      )
+      return null
+    }),
   )
 
 /** Discards the Account's open Proposal of this id: `ProposalClosed` once it is open no longer. */
@@ -226,7 +293,11 @@ export const undo = ({ applied: id }: { readonly applied: string }) =>
     transactional(
       Effect.gen(function* () {
         const inverse = yield* Effect.orDie(decodedUndo(yield* AssistantUndo.undo(accountId, id)))
-        yield* Mapping.undo(accountId, inverse)
+        // The user's own Undo, from the Session that proves it.
+        yield* Mapping.undo(
+          yield* MappingPrograms.actingOnOwn(accountId, { session: true }),
+          inverse,
+        )
         return null
       }),
     ),

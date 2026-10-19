@@ -13,12 +13,14 @@ export class SetMode extends Schema.TaggedClass<SetMode>()('SetMode', { mode: Mo
 /**
  * Drafts a write a Turn's agent made in ask into the Conversation's open Proposal, opening one when
  * none is: the write as the API layer encoded it, opaque, and the changes it makes, as Mapping
- * summarized them on the System the Proposal makes.
+ * summarized them on the System the Proposal makes; and the star of that System when it is someone
+ * else's, the Turn's `elsewhere`, none for the Account's own.
  */
 export class Draft extends Schema.TaggedClass<Draft>()('Draft', {
   turn: Schema.String,
   write: Schema.Unknown,
   changes: Schema.Array(ProposedChange),
+  elsewhere: Schema.optionalKey(Schema.String),
 }) {}
 
 /** Accepts the Conversation's open Proposal of this id, whole. */
@@ -37,10 +39,15 @@ export type Operation = SetMode | Draft | AcceptProposal | DiscardProposal
 /** The Conversation's Mode is now this. */
 export class ModeSet extends Schema.TaggedClass<ModeSet>()('ModeSet', { mode: Mode }) {}
 
-/** A Proposal opened in the Conversation, under this id, by the Turn whose write it drafted first. */
+/**
+ * A Proposal opened in the Conversation, under this id, by the Turn whose write it drafted first,
+ * over the System that Turn works in: someone else's by its star (`elsewhere`), none for the
+ * Account's own.
+ */
 export class ProposalOpened extends Schema.TaggedClass<ProposalOpened>()('ProposalOpened', {
   id: Schema.String,
   turn: Schema.String,
+  elsewhere: Schema.optionalKey(Schema.String),
 }) {}
 
 /** A write was drafted into the open Proposal of this id, making these changes. */

@@ -8,7 +8,14 @@ import { TestDatabase } from '#/repositories/database/testing'
 import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import * as Mapping from '../mapping'
-import { previewLimit, type Row, shippedRoots, systemOf } from '../entities'
+import {
+  hexframeStar,
+  previewLimit,
+  type Row,
+  shippedOf,
+  shippedRoots,
+  systemOf,
+} from '../entities'
 import {
   CreateReference,
   CreateTile,
@@ -19,8 +26,9 @@ import {
   type Operation,
   SwapTiles,
 } from '../operations'
-import { shipped, shippedOf } from './shipped'
+import { shipped } from './shipped'
 import { vaultOf } from './vault'
+import { actingOnOwn } from '../testing'
 
 // The Systems hexframe ships, Help and the tutorial, as the build bundles them, read through Mapping's
 // `readTile` like a System, and refused to every write; then a vault folder read from notes made by
@@ -172,13 +180,13 @@ describe('a System hexframe ships, whole, as home draws it', () => {
 layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
   it.effect('opens its Root with its Children and its Context, to the depth asked', () =>
     Effect.gen(function* () {
-      const read = yield* Mapping.readTile(someone(), {
+      const read = yield* Mapping.readTile(yield* actingOnOwn(someone()), {
         language: 'en',
         id: 'help',
         depth: 1,
         fields: ['title', 'preview'],
       })
-      expect(read.parent).toBeNull()
+      expect(read.parent).toEqual({ id: hexframeStar, title: 'Hexframe' })
       expect(read.tile).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
       expect(read.tile).not.toHaveProperty('body')
       expect(Object.keys(read.tile.branches ?? {})).toEqual(['1', '2', '3', '4', '5', '6'])
@@ -190,7 +198,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
 
   it.effect('opens a Tile below with the fields asked, and names its parent', () =>
     Effect.gen(function* () {
-      const read = yield* Mapping.readTile(someone(), {
+      const read = yield* Mapping.readTile(yield* actingOnOwn(someone()), {
         language: 'en',
         id: 'help/3',
         depth: 1,
@@ -206,7 +214,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
 
   it.effect('opens the same Tile in French, at the same id', () =>
     Effect.gen(function* () {
-      const read = yield* Mapping.readTile(someone(), {
+      const read = yield* Mapping.readTile(yield* actingOnOwn(someone()), {
         id: 'help/3',
         depth: 1,
         fields: ['title'],
@@ -225,7 +233,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
   it.effect('finds no Tile at an id Help has none at, a path that climbs out included', () =>
     Effect.gen(function* () {
       for (const id of ['help/7', 'help/1/1/1', 'help/../../x', 'help/3/../../package.json']) {
-        const refused = yield* Mapping.readTile(someone(), {
+        const refused = yield* Mapping.readTile(yield* actingOnOwn(someone()), {
           language: 'en',
           id,
           depth: 0,
@@ -240,13 +248,13 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
 layer(TestTiles)("the tutorial, read through Mapping's readTile and openTile", (it) => {
   it.effect('opens its Root with its six steps, in the language asked', () =>
     Effect.gen(function* () {
-      const read = yield* Mapping.readTile(someone(), {
+      const read = yield* Mapping.readTile(yield* actingOnOwn(someone()), {
         language: 'fr',
         id: 'tutorial',
         depth: 1,
         fields: ['title', 'preview'],
       })
-      expect(read.parent).toBeNull()
+      expect(read.parent).toEqual({ id: hexframeStar, title: 'Hexframe' })
       expect(read.tile).toMatchObject({
         _tag: 'Tile',
         id: 'tutorial',
@@ -262,7 +270,7 @@ layer(TestTiles)("the tutorial, read through Mapping's readTile and openTile", (
 
   it.effect('opens a step, its Body when asked, its parent named', () =>
     Effect.gen(function* () {
-      const opened = yield* Mapping.openTile(someone(), {
+      const opened = yield* Mapping.openTile(yield* actingOnOwn(someone()), {
         language: 'en',
         id: 'tutorial/3',
         fields: ['title', 'body'],
@@ -280,7 +288,7 @@ layer(TestTiles)("the tutorial, read through Mapping's readTile and openTile", (
   it.effect('finds no Tile at an id that no slot gives, a path that climbs out included', () =>
     Effect.gen(function* () {
       for (const id of ['tutorial/7', 'tutorial/0', 'tutorial/x', 'tutorial/../help']) {
-        const refused = yield* Mapping.readTile(someone(), {
+        const refused = yield* Mapping.readTile(yield* actingOnOwn(someone()), {
           language: 'en',
           id,
           depth: 0,
@@ -308,10 +316,6 @@ function writesTo(root: string, { root: rootOfOwn, own }: { root: string; own: s
     new SwapTiles({ a: `${root}/-1`, aVersion: 1, b: own, bVersion: 1 }, unchecked),
     new DeleteTile({ id: `${root}/6/2`, version: 1 }, unchecked),
     new DeleteTile({ id: `${root}/../../x`, version: 1 }, unchecked),
-    new CreateReference(
-      { parent: own, parentVersion: 1, slot: -1, target: `${root}/2` },
-      unchecked,
-    ),
     new CreateReference({ parent: root, parentVersion: 1, slot: -2, target: own }, unchecked),
     new DeleteReference({ parent: root, parentVersion: 1, slot: -1 }, unchecked),
   ]
@@ -319,34 +323,34 @@ function writesTo(root: string, { root: rootOfOwn, own }: { root: string; own: s
 
 /** An Operation run by the service's own function for it, as its server function runs it. */
 function run(
-  accountId: string,
+  acting: Mapping.Acting,
   operation: Operation,
 ): Effect.Effect<unknown, { readonly _tag: string }, InTransaction | Tiles | Bus> {
   switch (operation._tag) {
     case 'CreateTile':
-      return Mapping.createTile(accountId, operation)
+      return Mapping.createTile(acting, operation)
     case 'EditTile':
-      return Mapping.editTile(accountId, operation)
+      return Mapping.editTile(acting, operation)
     case 'MoveTile':
-      return Mapping.moveTile(accountId, operation)
+      return Mapping.moveTile(acting, operation)
     case 'SwapTiles':
-      return Mapping.swapTiles(accountId, operation)
+      return Mapping.swapTiles(acting, operation)
     case 'DeleteTile':
-      return Mapping.deleteTile(accountId, operation)
+      return Mapping.deleteTile(acting, operation)
     case 'CreateReference':
-      return Mapping.createReference(accountId, operation)
+      return Mapping.createReference(acting, operation)
     case 'DeleteReference':
-      return Mapping.deleteReference(accountId, operation)
+      return Mapping.deleteReference(acting, operation)
   }
 }
 
 /** An Account no other test uses, with a Tile of its own under its Root, untouched since. */
 const withOwnTile = Effect.gen(function* () {
   const accountId = someone()
-  const { root } = yield* Mapping.system(accountId)
+  const { root } = yield* Mapping.system(yield* actingOnOwn(accountId))
   const own = yield* transactional(
     Mapping.createTile(
-      accountId,
+      yield* actingOnOwn(accountId),
       new CreateTile({
         parent: root.id,
         slot: 1,
@@ -360,7 +364,7 @@ const withOwnTile = Effect.gen(function* () {
 })
 
 /** What a write refused as a shipped System's is refused with. */
-const readOnly = { _tag: 'ShippedReadOnly', kind: 'Forbidden' }
+const readOnly = { _tag: 'Shipped', kind: 'Forbidden' }
 
 layer(TestTiles)('the Systems hexframe ships, refused to every write in Mapping itself', (it) => {
   it.effect(
@@ -370,7 +374,9 @@ layer(TestTiles)('the Systems hexframe ships, refused to every write in Mapping 
         const { accountId, root, own } = yield* withOwnTile
         for (const shippedRoot of ['help', 'tutorial']) {
           for (const operation of writesTo(shippedRoot, { root, own })) {
-            const refused = yield* Effect.flip(transactional(run(accountId, operation)))
+            const refused = yield* Effect.flip(
+              transactional(run(yield* actingOnOwn(accountId), operation)),
+            )
             expect(refused, `${operation._tag} on ${shippedRoot}`).toMatchObject(readOnly)
           }
         }
@@ -379,8 +385,10 @@ layer(TestTiles)('the Systems hexframe ships, refused to every write in Mapping 
           { id: 'help/3', version: 1, parent: 'tutorial', slot: 2 },
           unchecked,
         )
-        expect(yield* Effect.flip(transactional(run(accountId, across)))).toMatchObject(readOnly)
-        const after = systemOf(yield* Mapping.system(accountId))
+        expect(
+          yield* Effect.flip(transactional(run(yield* actingOnOwn(accountId), across))),
+        ).toMatchObject(readOnly)
+        const after = systemOf(yield* Mapping.system(yield* actingOnOwn(accountId)))
         expect(after.branches[1]).toMatchObject({ id: own, title: 'Own', context: {} })
         expect(Object.keys(after.branches)).toEqual(['1'])
       }),
@@ -395,14 +403,14 @@ layer(TestTiles)('the Systems hexframe ships, refused to every write in Mapping 
         { id: own, version: 1, parent: 'tutorial/1', slot: 3 },
         unchecked,
       )
-      expect(yield* Effect.flip(Mapping.addToBatch(accountId, [], intoTutorial))).toMatchObject(
-        readOnly,
-      )
+      expect(
+        yield* Effect.flip(Mapping.addToBatch(yield* actingOnOwn(accountId), [], intoTutorial)),
+      ).toMatchObject(readOnly)
       const batch = [{ operation: edit }, { operation: intoTutorial }]
-      expect(yield* Effect.flip(transactional(Mapping.runBatch(accountId, batch)))).toMatchObject(
-        readOnly,
-      )
-      const after = systemOf(yield* Mapping.system(accountId))
+      expect(
+        yield* Effect.flip(transactional(Mapping.runBatch(yield* actingOnOwn(accountId), batch))),
+      ).toMatchObject(readOnly)
+      const after = systemOf(yield* Mapping.system(yield* actingOnOwn(accountId)))
       expect(after.branches[1]).toMatchObject({ id: own, title: 'Own' })
     }),
   )

@@ -3,12 +3,14 @@
 // swaps. A line that changes the URL opens a form, an import or the move there (`withChange`); one
 // that writes sends its write at once, the change ending as it is sent: a Tile moved to a free place
 // of its ring, swapped, turned into the other kind, a Reference removed, a delete once the dialog is
-// confirmed. A copy goes to the clipboard, an export to the chat, and the agent's lines to the
-// composer, which names the Tile first (HEX-110). Lines that go somewhere are the canvas's own. A refusal takes its channel, a toast, or brings the move back (`useRefusalState`).
+// confirmed. Share opens who may see the Tile in the chat, through the URL, as a form does. A copy goes
+// to the clipboard, an export to the chat, and the agent's lines to the
+// composer, which names the Tile first (HEX-110). Ask to join, on an Organization's star, asks its
+// admins at once, a toast saying so (HEX-138). Lines that go somewhere are the canvas's own. A refusal takes its channel, a toast, or brings the move back (`useRefusalState`).
 import { useState } from 'react'
 
-import { tileLink } from '#/api/mapping/files/download'
 import { linkTo } from '#/domains/assistant/entities'
+import { useAskToJoin } from '#/front/client/iam/organizations'
 import {
   useDeleteReference,
   useDeleteTile,
@@ -16,7 +18,6 @@ import {
   useSwapTiles,
 } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import { localizeUrl } from '#/paraglide/runtime'
 import { toast } from '#/front/ui/atoms/Toaster'
 import type { Acting, Moving } from '#/front/ui/canvas/Canvas'
 import type { Direction } from '#/domains/mapping/entities'
@@ -27,14 +28,18 @@ import type { TileAct } from '#/front/ui/canvas/tile/menu/verbs'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 
 import {
+  addsAt,
   allows,
   framesOf,
   moveTo,
+  movesHere,
   referenceAt,
   subjectOf,
   swapAt,
+  tileOn,
   tradeOf,
   turnOf,
+  slotWithout,
   withoutOf,
   type Systems,
 } from '../acting'
@@ -46,7 +51,9 @@ import {
   type SearchChange,
   type SystemSearch,
 } from '../search/search'
-import { slotOf, tileIn } from '../tree'
+import { copy } from '../copy'
+import { slotOf } from '../tree'
+import { visitLinkOf } from '../visit/visit'
 import type { Exported } from '../widget/state/useTileWidgetsState'
 import { tilesBelow } from '../widget/place'
 
@@ -72,16 +79,9 @@ interface Deleting {
   cancel: () => void
 }
 
-/** Copies `text`, saying so; without a secure context there is no clipboard, which fails alike. */
-function copy(text: string) {
-  // Over plain HTTP there is no clipboard at all: that fails as a refused copy does.
-  void Promise.resolve(text)
-    .then((copied) => navigator.clipboard.writeText(copied))
-    .then(
-      () => toast(m.system_copied()),
-      () => toast.error(m.system_copy_failed()),
-    )
-}
+/** The move a Leaf takes to grow into a Branch before a Tile goes under it; none for any other. */
+const growing = (systems: Systems, hex: TileHex) =>
+  hex.tile.leaf === true ? turnOf(systems, tileOn(systems, hex.tile.id)) : undefined
 
 /** The slot an empty Direction stands for, for an import or the moving one; none takes no click. */
 function placeOf(target: EmptySlotTarget, going?: TileNode) {
@@ -100,13 +100,41 @@ function newTileOf(target: EmptySlotTarget) {
 }
 
 /**
- * What each of Copy's lines copies of a Tile: the link to home centered on it, in the page's
- * language; its title; the mention a Message links it by (Assistant's `linkTo`).
+ * What each of Copy's lines copies of a Tile: the link it is visited by, which leads whoever may
+ * read it there, in the page's language (`visitLinkOf`); its title; the mention a Message links it
+ * by (Assistant's `linkTo`).
  */
 const copied = {
-  'copy-link': ({ id }: TileNode) => localizeUrl(tileLink(location.href)(id)).href,
+  'copy-link': ({ id }: TileNode) => visitLinkOf(id, location.href),
   'copy-title': ({ title }: TileNode) => title,
   'copy-mention': ({ id }: TileNode) => linkTo(id),
+}
+
+/** What a free slot's new Tile is named by, by the ring it stands in. */
+const addLabels = {
+  children: m.system_add_child,
+  branches: m.system_add_child,
+  leaves: m.system_add_leaf,
+  context: m.system_add_context,
+}
+
+/**
+ * Asks to join the Organization a star names, by its id and Title, a toast saying so once asked
+ * (HEX-138).
+ */
+function useJoining() {
+  const asking = useAskToJoin()
+  return (star: string, title: string) => {
+    const named = title === '' ? m.system_untitled() : title
+    asking.mutate(
+      { star },
+      {
+        onSuccess: () => {
+          toast(m.organization_join_asked({ title: named }))
+        },
+      },
+    )
+  }
 }
 
 export function useActingState(input: ActingInput) {
@@ -115,6 +143,7 @@ export function useActingState(input: ActingInput) {
   const swap = useSwapTiles()
   const remove = useDeleteTile()
   const unlink = useDeleteReference()
+  const join = useJoining()
   const [deleting, setDeleting] = useState<TileNode>()
   const { root, flat, tree } = systems
   const begin = (change: Change) => {
@@ -130,7 +159,7 @@ export function useActingState(input: ActingInput) {
     switch (verb) {
       case 'add': {
         // A new Tile is a Leaf; under a Leaf, which grows into a Branch first, in its queue before it.
-        const grown = hex.tile.leaf === true ? turnOf(flat, tileIn(root, hex.tile.id)) : undefined
+        const grown = growing(systems, hex)
         if (grown !== undefined) move.mutate(grown)
         begin({ kind: 'add', parent: hex.tile.id, slot: { leaf: at } })
         return
@@ -156,13 +185,16 @@ export function useActingState(input: ActingInput) {
     const { id, title } = hex.tile
     switch (chosen.verb) {
       case 'edit':
-        begin({ kind: 'edit', id })
+      case 'share':
+      case 'members':
+      case 'groups':
+        begin({ kind: chosen.verb, id })
         return
       case 'make-leaf':
       case 'make-branch': {
         // Shown at once, offering the change back: a second one while the first is on its way would
         // undo it, so it waits.
-        const turned = turnOf(flat, tileIn(root, id))
+        const turned = turnOf(systems, tileOn(systems, id))
         if (turned !== undefined && !move.isPending) move.mutate(turned)
         return
       }
@@ -193,37 +225,42 @@ export function useActingState(input: ActingInput) {
       case 'ask-agent':
         onAsk(id)
         return
+      case 'join':
+        join(id, title)
+        return
       default:
         // Open, Go in, Show its Context and Back out are the canvas's.
         return
     }
   }
 
-  /** A click on a free slot, or New tile here: the new Tile's form, for that slot. */
+  /**
+   * A click on a free slot, or New tile here: the new Tile's form, for that slot; none where the
+   * user's rights hold it back.
+   */
   const addHere = (target: EmptySlotTarget): Action | undefined => {
     const place = newTileOf(target)
-    if (place === undefined) return undefined
-    const labels = {
-      children: m.system_add_child,
-      branches: m.system_add_child,
-      leaves: m.system_add_leaf,
-      context: m.system_add_context,
-    }
+    if (place === undefined || !addsAt(systems, place)) return undefined
     return {
-      label: labels[target.ring]({ title: target.parent.title }),
+      label: addLabels[target.ring]({ title: target.parent.title }),
       onSelect: () => {
         begin({ kind: 'add', ...place })
       },
     }
   }
 
-  /** A free slot's menu: a new Tile there, an import into it, or the agent asked for one. */
+  /**
+   * A free slot's menu: a new Tile there, an import into it, or the agent asked for one; none where
+   * the user's rights hold it back, and on a System visited, a new Tile and the agent alone, the
+   * agent where the user holds *@* under it, an import landing at home.
+   */
   const slotActing = (target: EmptySlotTarget): Acting | undefined => {
     const place = placeOf(target)
-    if (place === undefined) return undefined
+    if (place === undefined || !addsAt(systems, place)) return undefined
     const fresh = newTileOf(target) ?? place
     return {
       subject: { kind: 'slot', at: target.direction, parent: target.parent.title },
+      ...(systems.reach !== 'owned' && { without: slotWithout(systems, place.parent) }),
       onAct: ({ verb }) => {
         if (verb === 'new-tile') begin({ kind: 'add', ...fresh })
         if (verb === 'import') begin({ kind: 'import', place: { _tag: 'Slot', ...place } })
@@ -233,10 +270,11 @@ export function useActingState(input: ActingInput) {
   }
 
   const deleteOf = (gone: TileNode): Deleting | undefined => {
-    const found = tileIn(root, gone.id)
-    if (found?.parent === undefined) return undefined
+    const found = tileOn(systems, gone.id)
+    if (found === undefined || found.kind === 'root') return undefined
     const { version } = found.tile
-    const parent = found.parent.id
+    // A Tile across a gap hangs from the star, which is centered once it goes.
+    const parent = found.kind === 'across' ? root.id : found.parent.id
     return {
       title: gone.title,
       below: tilesBelow(flat, gone.id),
@@ -270,14 +308,13 @@ export function useActingState(input: ActingInput) {
       slot: slotActing,
     },
     deleting: deleting === undefined ? undefined : deleteOf(deleting),
-    ...movingOf({ tree, search, flat, begin, sent, move, swap, addHere }),
+    ...movingOf({ systems, search, begin, sent, move, swap, addHere }),
   }
 }
 
 interface MovingInput {
-  tree: TileNode
+  systems: Systems
   search: SystemSearch
-  flat: Systems['flat']
   begin: (change: Change) => void
   sent: () => void
   move: ReturnType<typeof useMoveTile>
@@ -288,14 +325,19 @@ interface MovingInput {
 /**
  * The move under way, the URL's: the Tile on the move, its free slots and its swaps, each sending
  * its write and ending the move as it is sent; a drag starting one, Escape or Stop ending it. A move
- * whose Tile is gone, deleted from another tab or an old link, is no move: the free slots add a Tile.
+ * whose Tile is gone, deleted from another tab or an old link, is no move: the free slots add a Tile;
+ * nor is one of a Tile the user's rights on a System visited keep where it is (`movesHere`).
  */
-function movingOf({ tree, search, flat, begin, sent, move, swap, addHere }: MovingInput) {
+function movingOf(input: MovingInput) {
+  const { systems, search, begin, sent, move, swap, addHere } = input
   const change = changeOf(search)
-  const tile = change.kind === 'move' ? findTile(tree, change.id) : undefined
+  const tile =
+    change.kind === 'move' && movesHere(systems, change.id)
+      ? findTile(systems.tree, change.id)
+      : undefined
   const moveHere = (going: TileNode) => (target: EmptySlotTarget) => {
     const place = placeOf(target, going)
-    const moved = place === undefined ? undefined : allows(flat, going.id, place)
+    const moved = place === undefined ? undefined : allows(systems, going.id, place)
     if (moved === undefined) return undefined
     const names = { tile: going.title, title: target.parent.title }
     return {
@@ -307,7 +349,7 @@ function movingOf({ tree, search, flat, begin, sent, move, swap, addHere }: Movi
     }
   }
   const swapWith = (going: TileNode) => (held: TileNode) => {
-    const swapped = tradeOf(flat, going, held)
+    const swapped = tradeOf(systems, going, held)
     return swapped !== undefined
       ? {
           label: m.system_swap_with({ title: held.title }),

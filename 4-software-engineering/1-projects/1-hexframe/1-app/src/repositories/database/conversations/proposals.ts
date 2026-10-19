@@ -10,12 +10,16 @@ import { Context, Effect, Layer } from 'effect'
 import { Database, InTransaction } from '../database'
 import { conversation, proposal } from '../schema'
 
-/** An open Proposal's row: its id, its Entry, the Turn that opened it, and its drafts, as encoded. */
+/**
+ * An open Proposal's row: its id, its Entry, the Turn that opened it, its drafts, as encoded, and the
+ * star of the System they change when it is someone else's, null otherwise.
+ */
 interface ProposalRow {
   readonly id: string
   readonly entryId: string
   readonly turnId: string
   readonly drafts: unknown
+  readonly elsewhere: string | null
 }
 
 /** A Conversation as a change decides on it: its Mode, as Assistant named it, and its open Proposal. */
@@ -24,12 +28,16 @@ export interface ConversationRow {
   readonly open: ProposalRow | undefined
 }
 
-/** A Proposal as it opens: its id, its Entry, the Turn whose write opened it, its drafts, and when. */
+/**
+ * A Proposal as it opens: its id, its Entry, the Turn whose write opened it, its drafts, the star of
+ * the System they change when it is someone else's, and when.
+ */
 export interface Opening {
   readonly id: string
   readonly entryId: string
   readonly turnId: string
   readonly drafts: unknown
+  readonly elsewhere?: string | undefined
   readonly at: Date
 }
 
@@ -77,6 +85,7 @@ const openColumns = {
   entryId: proposal.entryId,
   turnId: proposal.turnId,
   drafts: proposal.drafts,
+  elsewhere: proposal.elsewhere,
 }
 
 const make = Effect.gen(function* () {
@@ -137,7 +146,7 @@ const make = Effect.gen(function* () {
         .pipe(Effect.orDie, Effect.asVoid),
     )
 
-  const open = (accountId: string, { id, entryId, turnId, drafts, at }: Opening) =>
+  const open = (accountId: string, { id, entryId, turnId, drafts, elsewhere, at }: Opening) =>
     InTransaction.use(() =>
       Effect.gen(function* () {
         const [found] = yield* conversationOf(accountId).pipe(Effect.orDie)
@@ -146,7 +155,15 @@ const make = Effect.gen(function* () {
         }
         yield* database
           .insert(proposal)
-          .values({ id, conversationId: found.id, entryId, turnId, drafts, openedAt: at })
+          .values({
+            id,
+            conversationId: found.id,
+            entryId,
+            turnId,
+            drafts,
+            elsewhere: elsewhere ?? null,
+            openedAt: at,
+          })
           .pipe(Effect.orDie)
       }),
     )

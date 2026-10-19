@@ -16,7 +16,7 @@ import * as Proposal from './programs'
 // The Mode and the Proposal through the helper and `/mcp`, on the runtime's repositories over PGlite,
 // Better Auth for real: a Turn started in ask drafting its writes into the Proposal, which its reads
 // show and the System does not hold, refused as Mapping refuses them there, continued by the next
-// Turn; accepted whole as the Assistant's, refused once a Tile it names changed since, or discarded;
+// Turn; accepted whole as the user's, who decided it, refused once a Tile it names changed since, or discarded;
 // a Turn in apply, and an Account's Key, writing the System as it stands.
 
 /** Someone the allowlist names (`vitest.config.ts`), signed in, and their Root. */
@@ -126,7 +126,7 @@ describe('a Turn in ask', () => {
         { verb: 'TileCreated', tile: { id: team.id, title: 'Team' } },
       ],
     })
-    expect(await value(run(signedIn, Assistant.latest))).toMatchObject({
+    expect(await value(run(signedIn, Assistant.latestOf(undefined)))).toMatchObject({
       mode: 'ask',
       proposal: { id: proposal?.proposal, drafts: 2 },
     })
@@ -166,7 +166,7 @@ describe('a Turn in ask', () => {
     await end()
   })
 
-  it('is accepted whole, its writes landing as the Assistant’s, then open no longer', async () => {
+  it('is accepted whole, its writes landing as yours, who decided them, then open no longer', async () => {
     const { signedIn } = await someone
     const [open] = await proposals()
     if (open === undefined) throw new Error('No Proposal is open')
@@ -174,15 +174,15 @@ describe('a Turn in ask', () => {
     expect(await titlesHeld()).toEqual(['Job', 'Team'])
     const changes = await changesRecorded(3)
     expect(changes.map(({ verb, actor }) => `${actor._tag} ${verb}`)).toEqual([
-      'Assistant TileCreated',
-      'Assistant TileCreated',
-      'Assistant TileEdited',
+      'You TileCreated',
+      'You TileCreated',
+      'You TileEdited',
     ])
     expect((await proposals()).map(({ fate }) => fate)).toEqual(['accepted'])
     expect(await run(signedIn, Proposal.acceptProposal({ proposal: open.proposal }))).toMatchObject(
       { ok: false, failure: { _tag: 'ProposalClosed', kind: 'Conflict' } },
     )
-    expect(await value(run(signedIn, Assistant.latest))).not.toHaveProperty('proposal')
+    expect(await value(run(signedIn, Assistant.latestOf(undefined)))).not.toHaveProperty('proposal')
   })
 
   it('is refused whole once a Tile it names changed since, takes no more drafts, then is discarded', async () => {
@@ -244,7 +244,7 @@ describe('a Turn in ask', () => {
       failure: { _tag: 'TurnOver', kind: 'Unauthenticated' },
     })
     expect(await proposals()).toEqual(before)
-    expect(await value(run(signedIn, Assistant.latest))).not.toHaveProperty('proposal')
+    expect(await value(run(signedIn, Assistant.latestOf(undefined)))).not.toHaveProperty('proposal')
   })
 })
 

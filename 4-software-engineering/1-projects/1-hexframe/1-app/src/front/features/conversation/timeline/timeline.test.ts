@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Actor, Entry } from '#/domains/assistant/entities'
+import type { Entry, OwnActor } from '#/domains/assistant/entities'
 
 import { besideReceipt, dayOf, laterOf, latestUndoable, splitByDay } from './timeline'
 
@@ -81,7 +81,7 @@ describe('besideReceipt', () => {
     id: string,
     tile: string,
     verb: string,
-    actor: Actor = { _tag: 'You' },
+    actor: OwnActor = { _tag: 'You' },
   ): Entry => ({
     _tag: 'Change',
     id,
@@ -151,6 +151,20 @@ describe('latestUndoable', () => {
   it('undoes nothing when nothing offers its Undo', () => {
     expect(latestUndoable([message('a', now)])).toBeUndefined()
     expect(latestUndoable([])).toBeUndefined()
+  })
+
+  it("passes over someone else's change, which its own Entry undoes", () => {
+    const theirs: Entry = {
+      _tag: 'Change',
+      id: 'theirs',
+      at: now,
+      verb: 'TileEdited',
+      tile: { id: 'journal', title: 'Journal' },
+      actor: { _tag: 'Someone', star: 'Bob', by: { _tag: 'You' } },
+      undone: false,
+    }
+    expect(latestUndoable([applied('t1', false), theirs])).toBe('t1')
+    expect(latestUndoable([theirs])).toBeUndefined()
   })
 })
 

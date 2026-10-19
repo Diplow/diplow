@@ -42,7 +42,6 @@ const served: System = {
       slot: 1,
     },
   },
-  owned: true,
   version: 0,
 }
 
@@ -51,7 +50,10 @@ const nothing: Underway = { tiles: new Set(), slots: [] }
 const parent: TileNode = { id: id.b, title: 'B', preview: '' }
 
 function render(underway: Underway = nothing) {
-  vi.mocked(Mapping.system).mockResolvedValue({ ok: true, value: served })
+  vi.mocked(Mapping.system).mockResolvedValue({
+    ok: true,
+    value: { ...served, rights: {}, gaps: {}, pinned: {}, asOwner: true },
+  })
   const client = makeQueryClient()
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)

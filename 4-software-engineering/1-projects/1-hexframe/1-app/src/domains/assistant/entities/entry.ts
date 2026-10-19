@@ -1,7 +1,9 @@
 // The Conversation's Entries: what its timeline holds, oldest first. A Message between the user and the
 // agent; a change to the System, whoever made it; an import; where the user went, consecutive
-// navigations merged into one (./navigation.ts); how a Turn ended, when not by its answer; and a
-// Proposal, the changes its agent drafted in ask, and how the user decided it. A change and an import
+// navigations merged into one (./navigation.ts); how a Turn ended, when not by its answer; a
+// Proposal, the changes its agent drafted in ask, and how the user decided it; a Tile someone
+// shared with the user, which lives in their System, not the user's; and the user's place in an
+// Organization changed by one of its admins, or someone asking an admin to join it. A change and an import
 // are recorded as Mapping summarized them when they happened, with who acted, and never rebuilt: the
 // timeline is a record of the past; a Proposal's Entry alone follows it until the user decides it.
 // Assistant knows no Tile: a change names its verb and its Tiles as they came. Pure.
@@ -13,15 +15,37 @@ import { Fate } from './proposal/proposal'
 import { BadEnd } from './turn/turn'
 
 /**
- * Who acted, as the timeline shows it: the user themselves, at one of their Sessions ("you"); one of
- * their Keys, by its name, which a Key revoked before its write was recorded no longer has; or the
- * Assistant, in one of their Turns, by its Turn's Key.
+ * Who acted of an Account's own, as its timeline shows it: the user themselves, at one of their
+ * Sessions ("you"); one of their Keys, by its name, which a Key revoked before its write was recorded
+ * no longer has; or the Assistant, in one of their Turns, by its Turn's Key.
  */
-export const Actor = Schema.Union([
+export const OwnActor = Schema.Union([
   Schema.TaggedStruct('You', {}),
   Schema.TaggedStruct('Key', { name: Schema.optionalKey(Schema.String) }),
   Schema.TaggedStruct('Assistant', {}),
 ])
+
+export type OwnActor = typeof OwnActor.Type
+
+/**
+ * Someone else, writing in the user's System: another Account, by the Title its star had when the
+ * write was recorded, `''` for one not named yet, and who acted of theirs, the Account itself, one of
+ * its Keys, never by the name it gave it, which is its own, or its Assistant.
+ */
+const Someone = Schema.TaggedStruct('Someone', {
+  star: Schema.String,
+  by: Schema.Union([
+    Schema.TaggedStruct('You', {}),
+    Schema.TaggedStruct('Key', {}),
+    Schema.TaggedStruct('Assistant', {}),
+  ]),
+})
+
+/** Someone else, writing in the user's System. */
+export type Someone = typeof Someone.Type
+
+/** Who acted, as the timeline shows it: one of the user's own (`OwnActor`), or someone else. */
+export const Actor = Schema.Union([...OwnActor.members, Someone])
 
 export type Actor = typeof Actor.Type
 
@@ -62,8 +86,28 @@ const changed = {
   other: Schema.optionalKey(Named),
 }
 
-/** A change to the System, as Mapping summarized it, and who acted. */
-const Change = Schema.TaggedStruct('Change', { ...changed, actor: Actor })
+/**
+ * A change to a System the user's own made, as Mapping summarized it, and who of theirs acted. Made in
+ * someone else's System, it says so (`elsewhere`), its Tiles standing there, not in the user's.
+ */
+const OwnChange = Schema.TaggedStruct('Change', {
+  ...changed,
+  actor: OwnActor,
+  elsewhere: Schema.optionalKey(Schema.Literal(true)),
+})
+
+/**
+ * A change someone else made in the user's System, as Mapping summarized it, and who of theirs acted.
+ * It offers its Undo, once, what undoes it kept with it: `undone`, false until the user undid it.
+ */
+const TheirChange = Schema.TaggedStruct('Change', {
+  ...changed,
+  actor: Someone,
+  undone: Schema.Boolean,
+})
+
+/** Someone else's change in the user's System, which offers its Undo once. */
+export type TheirChange = typeof TheirChange.Type
 
 /**
  * A change an agent drafted into a Proposal, as Mapping summarized it on the System the Proposal
@@ -100,21 +144,79 @@ const TurnApplied = Schema.TaggedStruct('TurnApplied', {
 const Import = Schema.TaggedStruct('Import', {
   tile: Named,
   count: Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: 2_147_483_647 })),
-  actor: Actor,
+  actor: OwnActor,
 })
 
 /** A Turn that ended otherwise than by its answer, and how: a Stop, a limit, its time, its sandbox. */
 const TurnEnded = Schema.TaggedStruct('TurnEnded', { how: BadEnd })
 
+/**
+ * A right a Tile shared gives the user there, as the API layer hands it over: read it, write it, or
+ * run the agent at it, `@`.
+ */
+export const SharedRight = Schema.Literals(['read', 'write', '@'])
+
+export type SharedRight = typeof SharedRight.Type
+
+/**
+ * A Tile someone shared with the user, as the API layer told it when a Grant first opened it to
+ * them: who shared it, by the Title of their star then, the Tile, by its id and the Title it had
+ * then, in their System, and the rights the user has there, in order. Changing it later, or taking it
+ * back, says nothing.
+ */
+const Shared = Schema.TaggedStruct('Shared', {
+  by: Schema.String,
+  tile: Named,
+  rights: Schema.Array(SharedRight),
+})
+
+export type Shared = typeof Shared.Type
+
+/**
+ * The user's place in an Organization, changed by one of its admins, as the API layer told it: added
+ * without being asked first, taken out, or their request to join it, or one of its Groups, accepted
+ * or declined. Who acted, by the Title their star had then, `''` for one not named yet; the
+ * Organization by its star, its id and the Title it had then; the Group by the name it had then,
+ * none for the Organization's Members. Leaving says nothing: the user did it.
+ */
+const Membership = Schema.TaggedStruct('Membership', {
+  what: Schema.Literals(['added', 'removed', 'accepted', 'declined']),
+  by: Schema.String,
+  organization: Named,
+  group: Schema.optionalKey(Schema.String),
+})
+
+export type Membership = typeof Membership.Type
+
+/**
+ * Someone asking to join an Organization the user is an admin of, or one of its Groups, as the API
+ * layer told it: the request by its id, which the user accepts or declines; who asked (`by`), by the Title
+ * their star had then; the Organization by its star; the Group by the name it had then, none for its
+ * Members. How it stands, open or decided, by this admin or another, is read anew with the day,
+ * never kept here.
+ */
+const AskedToJoin = Schema.TaggedStruct('AskedToJoin', {
+  request: Schema.String,
+  by: Schema.String,
+  organization: Named,
+  group: Schema.optionalKey(Schema.String),
+})
+
+export type AskedToJoin = typeof AskedToJoin.Type
+
 /** What an Entry says, whichever kind it is: what is stored of it, and what it is decoded by. */
 export const EntryContent = Schema.Union([
   Message,
-  Change,
+  OwnChange,
+  TheirChange,
   Import,
   Navigation,
   TurnEnded,
   Proposal,
   TurnApplied,
+  Shared,
+  Membership,
+  AskedToJoin,
 ])
 
 export type EntryContent = typeof EntryContent.Type
@@ -126,7 +228,18 @@ export type Entry = EntryContent & { readonly id: string; readonly at: Date }
  * A change or an import as Mapping summarized it, before Assistant says who acted: the shape
  * Assistant reads Mapping's summary by, which Mapping's own satisfies.
  */
-export type Summarized = Omit<typeof Change.Type, 'actor'> | Omit<typeof Import.Type, 'actor'>
+export type Summarized =
+  Omit<typeof OwnChange.Type, 'actor' | 'elsewhere'> | Omit<typeof Import.Type, 'actor'>
+
+/**
+ * Whether an Entry is a change someone else made in the user's System, which offers its Undo once:
+ * told apart from the user's own by who acted.
+ */
+export const isTheirs = (content: EntryContent): content is TheirChange =>
+  content._tag === 'Change' && content.actor._tag === 'Someone'
+
+/** A change as Mapping summarized it, never an import: what a write someone else made changed. */
+export type SummarizedChange = Extract<Summarized, { readonly _tag: 'Change' }>
 
 /** The most an Entry may date back, in milliseconds: a day. */
 const longestAgo = 24 * 60 * 60_000
@@ -152,4 +265,9 @@ export const namedTiles = (entries: ReadonlyArray<Entry>): ReadonlyArray<string>
       return []
     }),
   ),
+]
+
+/** The requests to join some Entries name, each once: those whose state the day reads anew. */
+export const namedRequests = (entries: ReadonlyArray<Entry>): ReadonlyArray<string> => [
+  ...new Set(entries.flatMap((entry) => (entry._tag === 'AskedToJoin' ? [entry.request] : []))),
 ]

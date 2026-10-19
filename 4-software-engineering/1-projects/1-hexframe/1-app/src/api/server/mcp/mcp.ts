@@ -81,7 +81,8 @@ function resultOf(
 
 /**
  * What a client may tell its user of a tool before calling it: whether it only reads, whether it
- * erases what the user wrote, and that it reaches nothing but the user's System.
+ * erases what the user wrote, and that it reaches nothing outside hexframe: a read, the Systems the
+ * user may read, a write, the user's own.
  */
 const annotationsOf = (tool: Tool): ToolAnnotations => ({
   readOnlyHint: tool.kind === 'read',

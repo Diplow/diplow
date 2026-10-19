@@ -1,14 +1,25 @@
 // What a Turn's agent is told, appended to Claude Code's own system prompt: what it must know of the
 // Turn (its files are a read-only snapshot, in ask its writes are drafted into a Proposal, `@[<id>]`
 // links a Tile), how the System is read and written, as the API layer words it from the MCP's tools
-// and hands it in, where it starts, the Tiles the user's Message links and where each lives now, the
+// and hands it in, whose System it works in when not the user's own and what the user may do there,
+// where it starts, the Tiles the user's Message links and where each lives now, the
 // Tiles the user has on screen, and today's latest Entries of the Conversation, its only memory. Every
 // ancestor's `CLAUDE.md` loads by itself from its working folder, so the System's own words are not
 // repeated.
 // What the user's System and timeline say is quoted as data, each text one JSON string in a fenced
 // block, so no Title, Preview or Message reads as one of the Turn's rules. It holds no secret, ever:
 // the Turn's Key never reaches it. Pure.
-import type { Actor, Entry, Fate, Mode, ProposedChange } from '../entities'
+import {
+  type Actor,
+  type Entry,
+  type Fate,
+  isTheirs,
+  type Membership,
+  type Mode,
+  type ProposedChange,
+  type SharedRight,
+  type Someone,
+} from '../entities'
 
 /** A Tile as the user has it on screen: its id, its Title and its Preview, as Mapping reads them. */
 export interface Glimpse {
@@ -24,6 +35,18 @@ export interface Glimpse {
 export interface Linked {
   readonly id: string
   readonly place?: { readonly title: string; readonly file: string }
+}
+
+/**
+ * Someone else's System a Turn works in, as the API layer tells it: whose it is, by the Title of its
+ * star, `''` while it has none; what the user may do at the Tile the Turn starts in, Mapping's rights
+ * there; and, when its files hold Tiles the user may read whose place above is kept from them, the
+ * folder holding them, from the System folder.
+ */
+interface Elsewhere {
+  readonly starTitle: string
+  readonly rights: ReadonlyArray<SharedRight>
+  readonly across?: string | undefined
 }
 
 /** What a Turn's prompt is made of. */
@@ -42,6 +65,8 @@ export interface PromptOf {
   readonly systemRules: ReadonlyArray<string>
   /** The Mode the Turn started in: whether its writes are drafted into a Proposal or applied. */
   readonly mode: Mode
+  /** Someone else's System the Turn works in, none for the user's own. */
+  readonly elsewhere?: Elsewhere | undefined
 }
 
 /** A text of the user's System or timeline, quoted: one line, its quotes and breaks escaped. */
@@ -50,6 +75,12 @@ const quoted = (text: string) => JSON.stringify(text)
 /** A Tile named in the prompt: its Title, or "an untitled Tile", and its id, each quoted. */
 const named = (title: string | undefined, id: string) =>
   `${title === undefined || title === '' ? 'an untitled Tile' : quoted(title)} (id ${quoted(id)})`
+
+/** Another Account, as the agent reads it: by its star's Title, if it has one, never as a party. */
+const anotherOf = (star: string) =>
+  star === ''
+    ? 'another Account, whose star has no title'
+    : `another Account, whose star is titled ${quoted(star)}`
 
 /** Who acted, as the agent reads it. */
 const actorOf = (actor: Actor): string => {
@@ -60,6 +91,21 @@ const actorOf = (actor: Actor): string => {
       return 'You, the Assistant,'
     case 'Key':
       return actor.name === undefined ? 'A revoked key' : `The key ${quoted(actor.name)}`
+    case 'Someone':
+      return someoneOf(actor)
+  }
+}
+
+/** Someone else who wrote in the user's System, as the agent reads it: who of theirs acted. */
+function someoneOf({ star, by }: Someone): string {
+  const another = anotherOf(star)
+  switch (by._tag) {
+    case 'You':
+      return `${another.charAt(0).toUpperCase()}${another.slice(1)},`
+    case 'Assistant':
+      return `The agent of ${another},`
+    case 'Key':
+      return `A key of ${another},`
   }
 }
 
@@ -72,6 +118,40 @@ const ends = {
   sandbox: 'its sandbox failed',
 } as const
 
+/**
+ * Another Account who shared a Tile, acted on the user's place in an Organization, or asked to join
+ * one, as the agent reads it: by its star's Title, if it has one.
+ */
+const accountOf = (by: string) => someoneOf({ _tag: 'Someone', star: by, by: { _tag: 'You' } })
+
+/** What each right a Tile shared gives lets the user do there, as the agent reads it. */
+const sharedRights: Record<SharedRight, string> = {
+  read: 'read it',
+  write: 'write it',
+  '@': 'run you at it',
+}
+
+/** What the rights a Tile shared gives let the user do, as the agent reads it: "read it, write it". */
+const mayDo = (rights: ReadonlyArray<SharedRight>) =>
+  rights.length === 0 ? 'do nothing' : rights.map((right) => sharedRights[right]).join(', ')
+
+/**
+ * An Organization, or one of its Groups, as the agent reads it: by its star, or the Group's name and
+ * that star, quoted.
+ */
+const organizationOf = ({ organization, group }: Pick<Membership, 'organization' | 'group'>) => {
+  const star = `the Organization ${named(organization.title, organization.id)}`
+  return group === undefined ? star : `the group ${quoted(group)} of ${star}`
+}
+
+/** What one of an Organization's admins did to the user's place there, as the agent reads it. */
+const membershipSaid: Record<Membership['what'], (into: string) => string> = {
+  added: (into) => `added the user to ${into}, without asking first`,
+  removed: (into) => `took the user out of ${into}`,
+  accepted: (into) => `accepted the user's request to join ${into}`,
+  declined: (into) => `declined the user's request to join ${into}`,
+}
+
 /** How a Proposal stands, as the agent reads it. */
 const fates: Record<Fate, string> = {
   open: 'open, waiting for the user',
@@ -83,13 +163,25 @@ const fates: Record<Fate, string> = {
 const changeLine = ({ verb, tile, other }: ProposedChange) =>
   `${verb} ${named(tile.title, tile.id)}${other === undefined ? '' : `, with ${named(other.title, other.id)}`}`
 
+/**
+ * A change, as a line of the prompt, by who acted: made by the user in someone else's System, said
+ * so; made by someone else in the user's, whether the user undid it.
+ */
+function changeSaid(entry: Extract<Entry, { _tag: 'Change' }>): string {
+  const told = `${actorOf(entry.actor)} ${changeLine(entry)}`
+  if (isTheirs(entry)) return `${told}${entry.undone ? ', which the user undid' : ''}.`
+  return entry.elsewhere === true
+    ? `${told}, in another Account's System, not the user's.`
+    : `${told}.`
+}
+
 /** One Entry, as a line of the prompt. */
 function lineOf(entry: Entry, titles: PromptOf['titles']): string {
   switch (entry._tag) {
     case 'Message':
       return `${entry.author === 'user' ? 'User' : 'You'}: ${quoted(entry.text)}`
     case 'Change':
-      return `${actorOf(entry.actor)} ${changeLine(entry)}.`
+      return changeSaid(entry)
     case 'Proposal': {
       const changes =
         entry.changes.length === 0 ? 'nothing yet' : entry.changes.map(changeLine).join('; ')
@@ -110,6 +202,12 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
       const made = entry.changes === 1 ? '1 change' : `${String(entry.changes)} changes`
       return `A Turn of yours in apply made ${made}${entry.undone ? ', which the user undid' : ''}.`
     }
+    case 'Shared':
+      return `${accountOf(entry.by)} shared ${named(entry.tile.title, entry.tile.id)} with the user, who may ${mayDo(entry.rights)} there; it stands in that Account's System, not the user's.`
+    case 'Membership':
+      return `${accountOf(entry.by)} ${membershipSaid[entry.what](organizationOf(entry))}.`
+    case 'AskedToJoin':
+      return `${accountOf(entry.by)} asked to join ${organizationOf(entry)}, of which the user is an admin; the user accepts or declines it in the timeline, not you.`
   }
 }
 
@@ -145,6 +243,35 @@ const modes: Record<Mode, string> = {
   apply: '- This Turn is in apply Mode: your writes change the System as they come.',
 }
 
+/**
+ * What a Turn in someone else's System must know of it, as rules of the Turn: whose System it is, that
+ * it reads and writes there alone, with the user's rights, and what those let the user do where it
+ * starts; where the Tiles across a gap stand in its files; and, without *write* there, that it writes
+ * nothing. None for a Turn in the user's own System.
+ */
+function elsewhereRules(elsewhere: Elsewhere | undefined): ReadonlyArray<string> {
+  if (elsewhere === undefined) return []
+  const { starTitle, rights, across } = elsewhere
+  return [
+    `- This Turn works in the System of ${anotherOf(starTitle)}, not the user's own. You read and ` +
+      "write there alone, with the user's rights: the user's own System and any other are out of " +
+      `reach from here. Where you start, the user may ${mayDo(rights)}; a Tile below may differ, ` +
+      'and a write its owner does not let the user make is refused.',
+    '- The files around you hold what the user may read of that System, from its star, whose Title ' +
+      'and Preview anyone sees.' +
+      (across === undefined
+        ? ''
+        : ` The Tiles the user may read below a Tile kept from them stand in ${quoted(across)}, ` +
+          'each a folder of its own, since their place above is not the user’s to see.'),
+    ...(rights.includes('write')
+      ? []
+      : [
+          '- The user may not write where you start: every write there is refused, and no ' +
+            'Proposal is made either. Write nothing; answer from what you read.',
+        ]),
+  ]
+}
+
 /** The prompt appended to Claude Code's own, in Markdown. */
 export function promptOf({
   entries,
@@ -154,6 +281,7 @@ export function promptOf({
   links,
   systemRules,
   mode,
+  elsewhere,
 }: PromptOf): string {
   const folder = location.folder === '' ? 'the System folder itself' : quoted(location.folder)
   return [
@@ -167,6 +295,7 @@ export function promptOf({
     '- The files around you are a read-only snapshot of the System as this Turn started: read them ' +
       'to find your way, never write them.',
     ...systemRules,
+    ...elsewhereRules(elsewhere),
     modes[mode],
     '- In a Message, `@[<id>]` links a Tile by its id. A Message opening with a link starts you in ' +
       "that Tile's folder; every Tile the user's last Message links is listed below with its path.",

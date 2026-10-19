@@ -10,10 +10,18 @@ import type { Redacted } from 'effect'
 
 import * as Agent from '#/domains/assistant/agent/agent'
 import * as Assistant from '#/domains/assistant/assistant'
-import { linksOf, namedTiles, type TurnEnd, turnLocation } from '#/domains/assistant/entities'
+import {
+  linksOf,
+  namedRequests,
+  namedTiles,
+  type TurnEnd,
+  turnLocation,
+} from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
+import * as Joining from '#/domains/iam/organizations/joining'
 import type { Turn } from '#/domains/assistant/entities'
 import * as Spending from '#/domains/assistant/spending/admission'
+import type { Right } from '#/domains/mapping/entities'
 import * as Mapping from '#/domains/mapping/mapping'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
@@ -22,8 +30,9 @@ import { tileLink } from '../mapping/files/download'
 import { WaitUntil } from '../server/bus'
 import { systemRules } from '../server/mcp/tools'
 
-import type { DayAsked, MergedNavigation, SentMessage } from './assistant'
+import type { DayAsked, LatestAsked, MergedNavigation, SentMessage } from './assistant'
 import { conversationNow, proposalNow, shownTo } from './proposal/programs'
+import { actingAt, actingOnOwn } from '../mapping/programs'
 
 /**
  * Runs an operation for the Account the request's Session proves: the Conversation is the user's,
@@ -35,8 +44,12 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
 /**
  * A day of the Account's Conversation, today when no date is asked: the day, its Entries oldest
  * first, and the Titles of the Tiles its navigations went to and its Messages link, as the System
- * holds them now, by id. A navigation and a link keep a Tile's id alone; a Tile the System no longer
- * holds has no Title there. With them, `earlier`, the instant of the latest Entry before the day,
+ * holding each now shows it to the Account, its own or one it visited (Mapping's `titlesAcross`), by id. A
+ * navigation and a link keep a Tile's id alone; a Tile no System holds any longer, or one kept from
+ * the Account since, has no Title there. With them, `requests`, when it names any, how each request to join an
+ * Organization its Entries name stands now, by its id, for the requests of an Organization the
+ * Account is an admin of now (IAM's `requestsSeen`, HEX-138), so an admin's timeline offers Accept
+ * and Decline while it is open, whoever decided it since; `earlier`, the instant of the latest Entry before the day,
  * where a reader scrolling back goes next, and `lastEntry`, the Entry last recorded in the
  * Conversation, and `proposal`, its open Proposal, how many writes it holds, which the page's poll
  * compares with its own (`latest`), and the writes themselves, which the canvas draws (`proposalNow`).
@@ -50,12 +63,17 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
       const proposal = yield* proposalNow(accountId)
       const day = { date: date ?? (yield* Assistant.today(offsets.offset)).date, ...offsets }
       const entries = yield* Assistant.day(accountId, day)
-      const titles = yield* Mapping.titles(accountId, namedTiles(entries))
+      const titles = yield* Mapping.titlesAcross(
+        yield* actingOnOwn(accountId, { session: false }),
+        namedTiles(entries),
+      )
+      const requests = yield* Joining.requestsSeen(namedRequests(entries))
       const earlier = yield* Assistant.before(accountId, day)
       return {
         day,
         entries,
         titles,
+        ...(requests.size > 0 && { requests: Object.fromEntries(requests) }),
         ...(earlier !== undefined && { earlier }),
         ...(lastEntry !== undefined && { lastEntry }),
         ...(proposal !== undefined && { proposal }),
@@ -70,11 +88,27 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
  * step now, the Conversation's Mode, and its
  * open Proposal, by its id, with how many writes it holds. The page reads the System again once the
  * Version moved, and the Conversation once its last Entry or its Proposal is another, and follows
- * closely while a Turn runs.
+ * closely while a Turn runs. With the star of a System the page visits, someone else's, the Version
+ * of it the Account is shown (`visited`, Mapping's `systemVersion`, how what it sees there stands),
+ * none for a star that names no System or its own, so the visited System is followed as its own is
+ * (HEX-132).
  */
-export const latest = forSession((accountId) =>
+export const latestOf = (asked: typeof LatestAsked.Type | undefined) =>
+  forSession((accountId) =>
+    Effect.gen(function* () {
+      const own = yield* actingOnOwn(accountId, { session: false })
+      const [now, visited] = yield* Effect.all([
+        latestOwn(accountId, own),
+        visitedVersion(own, asked?.visiting),
+      ])
+      return { ...now, ...(visited !== undefined && { visited }) }
+    }),
+  )
+
+/** The latest of the Account's own System and Conversation, which `latestOf` answers. */
+const latestOwn = (accountId: string, own: Mapping.Acting) =>
   Effect.gen(function* () {
-    const version = yield* Mapping.systemVersion(accountId)
+    const version = yield* Mapping.systemVersion(own)
     const lastEntry = yield* Assistant.lastEntry(accountId)
     const live = yield* Assistant.liveTurn(accountId)
     const { mode, proposal } = yield* conversationNow(accountId)
@@ -93,8 +127,19 @@ export const latest = forSession((accountId) =>
       ...(turn !== undefined && { turn }),
       ...(proposal !== undefined && { proposal }),
     }
-  }),
-)
+  })
+
+/**
+ * The Version of a System the Account visits, by its star, as it is shown it (Mapping's
+ * `systemVersion`): none for no star, its own, whose Version the poll says already, or a star that
+ * names no System any longer.
+ */
+const visitedVersion = (own: Mapping.Acting, star: string | undefined) =>
+  star === undefined || star === own.system
+    ? Effect.succeed(undefined)
+    : Effect.catchTag(Mapping.systemVersion({ ...own, system: star }), 'TileNotFound', () =>
+        Effect.succeed(undefined),
+      )
 
 /**
  * Records where the user went, consecutive navigations merged into one Entry by the browser, dated
@@ -136,7 +181,10 @@ const revokingEnded = <A, E, R>(
  * then its Key, proving it until its maximum length has passed. Answers the Turn, its Key, and the
  * Turn ended by its time, if one was.
  */
-const turnStarted = (accountId: string, start: { message: string; location: string }) =>
+const turnStarted = (
+  accountId: string,
+  start: { message: string; location: string; elsewhere: string | undefined },
+) =>
   Effect.gen(function* () {
     const overdue = yield* revokingEnded(
       accountId,
@@ -151,22 +199,29 @@ const turnStarted = (accountId: string, start: { message: string; location: stri
 /**
  * Posts the user's Message in their Conversation and starts the Turn answering it in the Tile
  * `location` names, its Key issued: for an Account with the `assistant` Entitlement, else
- * `EntitlementMissing`; in a Tile of its own System, else Mapping's `TileNotFound`; then, in one
- * transaction (`turnStarted`), `AllowanceSpent` once the month's allowance is spent and `TurnRunning`
- * while another Turn runs, nothing posted. It checks what a Key needs itself, so no caller issues one
- * for an Account or a Tile it should not. What `sendMessage` runs for an Account it found entitled,
- * and what the tests start a Turn with, its Key in hand (`server/events/testing.ts`). Answers the
- * Message's Entry, the Turn, its Key, and the Turn ended by its time, if one was.
+ * `EntitlementMissing`; in a Tile of the System holding it, the Account's own or someone else's
+ * (`Mapping.holding`), once Mapping found the Account may run the agent there, its *@* (`agentAt`),
+ * else `TileNotFound` for a Tile it may not read, as for none, and `NotAllowed` without *@*; the Turn
+ * keeping that System, someone else's by its star (`elsewhere`), which its Key then reads and writes
+ * alone; then, in one transaction (`turnStarted`), `AllowanceSpent` once the month's allowance is
+ * spent and `TurnRunning` while another Turn runs, nothing posted. It checks what a Key needs itself,
+ * so no caller issues one for an Account or a Tile it should not. What `sendMessage` runs for an
+ * Account it found entitled, and what the tests start a Turn with, its Key in hand
+ * (`server/events/testing.ts`). Answers the Message's Entry, the Turn, its Key, the rights the
+ * Account has where it starts, and the Turn ended by its time, if one was.
  */
 export const messageAndTurn = (account: Iam.Session['account'], text: string, location: string) =>
   Effect.gen(function* () {
     yield* Iam.entitledOnly(account, 'assistant')
-    yield* Mapping.ownTile(account.id, location)
+    const own = yield* actingOnOwn(account.id, { session: false })
+    const acting = actingAt(own, yield* Mapping.holding(location))
+    const rights = yield* Mapping.agentAt(acting, location)
+    const elsewhere = acting.system === own.system ? undefined : acting.system
     return yield* transactional(
       Effect.gen(function* () {
         const posted = yield* Assistant.postMessage(account.id, text)
-        const start = { message: posted.id, location }
-        return { entry: posted, ...(yield* turnStarted(account.id, start)) }
+        const start = { message: posted.id, location, elsewhere }
+        return { entry: posted, rights, ...(yield* turnStarted(account.id, start)) }
       }),
     )
   })
@@ -196,37 +251,48 @@ const afterAnswering = <R>(work: Effect.Effect<void, never, R>) =>
  */
 const doors = { mcp: '/mcp', model: '/assistant/anthropic', events: '/assistant/events' }
 
-/** What a Turn's agent starts with, beside the Turn and its Key. */
-type Started = Pick<typeof SentMessage.Type, 'text' | 'view' | 'offset'>
+/**
+ * What a Turn's agent starts with, beside the Turn and its Key: the Message, the view it was sent
+ * from and the reader's offset, and the rights the Account has where the Turn starts.
+ */
+type Started = Pick<typeof SentMessage.Type, 'text' | 'view' | 'offset'> & {
+  readonly rights: ReadonlyArray<Right>
+}
 
 /**
- * Starts a Turn's agent in the Account's sandbox: the System written into it, Mapping's export of its
- * Root, with the open Proposal folded over it for a Turn that drafts, so its files and its reads
- * agree (`shownTo`), a Reference whose Tile is gone linked on the site the request reached
- * (`tileLink`), whatever the sandbox held gone; the Turn's prompt made of today's latest Entries and the Titles of the Tiles
- * they name, the Title and Preview of the Tiles on screen, and the Tiles the Message links, each with
- * its file where Mapping places it in the same export, none once deleted; its agent started in the
- * folder of the Turn's location, the Tile the Message opens with a link to or the centered one,
- * reaching the app at its doors where the sandbox reaches it.
+ * Starts a Turn's agent in the Account's sandbox: the System it started in written into it, the
+ * Account's own or someone else's (`elsewhere`), Mapping's export of its star as the Account may see
+ * it, with the open Proposal folded over it for a Turn that drafts, so its files and its reads agree
+ * (`shownTo`), a Reference whose Tile is gone linked on the site the request reached (`tileLink`),
+ * whatever the sandbox held gone; the Turn's prompt made of today's latest Entries and the Titles of
+ * the Tiles they name, the Title and Preview of the Tiles on screen, and the Tiles the Message links,
+ * each with its file where Mapping places it in the same export, none once deleted, all as that
+ * System holds them, and, someone else's, whose it is by its star's Title, what the Account may do
+ * where it starts, and where its files hold the Tiles across a gap; its agent started in the folder
+ * of the Turn's location, the Tile the Message opens with a link to or the centered one, reaching the
+ * app at its doors where the sandbox reaches it.
  */
 const agentStarted = (
   accountId: string,
   turn: Turn,
   key: Redacted.Redacted,
-  { text, view, offset }: Started,
+  { text, view, offset, rights }: Started,
 ) =>
   Effect.gen(function* () {
     const { url } = yield* HttpExchange
     const over = yield* shownTo(accountId, turn.id)
-    const { files, places } = yield* Mapping.systemFiles(accountId, tileLink(url), over)
+    const own = yield* actingOnOwn(accountId, { session: false })
+    const acting = actingAt(own, turn.elsewhere)
+    const { files, places, across } = yield* Mapping.systemFiles(acting, tileLink(url), over)
     const entries = yield* Agent.latestToday(accountId, offset)
     const linked = linksOf(text)
-    const titles = yield* Mapping.titles(accountId, [
+    const titles = yield* Mapping.titles(acting, [
       ...namedTiles(entries),
       ...linked,
       turn.location,
+      acting.system,
     ])
-    const onScreen = yield* Mapping.glimpses(accountId, [view.center, ...view.shown])
+    const onScreen = yield* Mapping.glimpses(acting, [view.center, ...view.shown])
     const placeOf = (id: string) => {
       const title = titles[id]
       const place = places.get(id)
@@ -251,6 +317,9 @@ const agentStarted = (
       conversation: { entries, titles },
       onScreen,
       systemRules,
+      ...(turn.elsewhere !== undefined && {
+        elsewhere: { starTitle: titles[acting.system] ?? '', rights, across },
+      }),
     })
   })
 
@@ -263,7 +332,9 @@ const agentStopped = (accountId: string, turnId: string) =>
 /**
  * Posts the user's Message in their Conversation and, when the Account may use the Assistant, starts a
  * Turn answering it, all in one transaction, in the Tile the Message opens with a link to, else the
- * centered one: refused with `TileNotFound` for a Tile its System does not hold, `AllowanceSpent` once the month's allowance is spent and
+ * centered one, of the Account's own System or of someone else's that lets it run the agent there:
+ * refused with `TileNotFound` for a Tile it may not read, `NotAllowed` for one without *@*,
+ * `AllowanceSpent` once the month's allowance is spent and
  * `TurnRunning` while another Turn runs, nothing posted. An Account without the `assistant`
  * Entitlement has its Message kept and no Turn, as the composer tells it. Its agent starts once the
  * answer has gone, through the platform's `waitUntil`; should it fail to, the Turn ends by its
@@ -276,11 +347,15 @@ export const sendMessage = (sent: typeof SentMessage.Type) =>
       return { entry: yield* transactional(Assistant.postMessage(account.id, sent.text)) }
     }
     const location = turnLocation(sent.text, sent.view.center)
-    const { entry, turn, key, overdue } = yield* messageAndTurn(account, sent.text, location)
+    const { entry, turn, key, rights, overdue } = yield* messageAndTurn(
+      account,
+      sent.text,
+      location,
+    )
     yield* afterAnswering(
       Effect.gen(function* () {
         if (overdue !== undefined) yield* agentStopped(account.id, overdue.id)
-        yield* agentStarted(account.id, turn, key.secret, sent).pipe(
+        yield* agentStarted(account.id, turn, key.secret, { ...sent, rights }).pipe(
           Effect.catchCause((cause) =>
             Effect.andThen(
               Effect.logError("A Turn's agent did not start", cause),

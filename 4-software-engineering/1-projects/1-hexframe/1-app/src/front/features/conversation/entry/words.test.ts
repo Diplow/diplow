@@ -1,10 +1,18 @@
 import { describe, expect, it } from 'vitest'
 
-import { type Entry, linkTo } from '#/domains/assistant/entities'
+import { type Entry, linkTo, type OwnActor, type Someone } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 import type { Word } from '#/front/ui/chat/text/words'
 
-import { blocksOf, happenedOf, messageWords, type Naming, proposedOf, type Told } from './words'
+import {
+  blocksOf,
+  happenedOf,
+  askedToJoinWords,
+  messageWords,
+  type Naming,
+  proposedOf,
+  type Told,
+} from './words'
 
 // What an Entry says as the chat's pieces take it, over Entries made by hand: who a line is by, a Tile
 // named as it stands now, a Message's links woven in, a Proposal's draft, and a day cut into blocks.
@@ -22,14 +30,11 @@ const tile = (word: Word | undefined) =>
 
 type Changed = Extract<Told, { _tag: 'Change' }>
 
-const change = (actor: Changed['actor'], verb = 'TileEdited'): Changed => ({
-  _tag: 'Change',
-  id: 'c',
-  at,
-  verb,
-  tile: games,
-  actor,
-})
+/** A change by one of the user's own, or by someone else, who offers its Undo until undone. */
+function change(actor: OwnActor | Someone, verb = 'TileEdited'): Changed {
+  const said = { _tag: 'Change', id: 'c', at, verb, tile: games } as const
+  return actor._tag === 'Someone' ? { ...said, actor, undone: false } : { ...said, actor }
+}
 
 describe('happenedOf', () => {
   it('tells a change by who made it, the agent without its name', () => {
@@ -40,7 +45,7 @@ describe('happenedOf', () => {
     expect(agents.who).toBe('agent')
     expect(agents.words[0]).toBe(m.conversation_edited_agent({ title: '' }))
     const keys = happenedOf(change({ _tag: 'Key', name: 'laptop' }), naming)
-    expect(keys.who).toBe('key')
+    expect(keys.who).toBe('outside')
     expect(keys.words[0]).toEqual({ name: m.conversation_key({ name: 'laptop' }) })
     expect(happenedOf(change({ _tag: 'Key' }), naming).words[0]).toBe(m.conversation_revoked_key())
   })
@@ -84,6 +89,134 @@ describe('happenedOf', () => {
     const ended = (how: 'stopped' | 'sandbox'): Told => ({ _tag: 'TurnEnded', id: 'e', at, how })
     expect(happenedOf(ended('stopped'), naming)).toMatchObject({ who: 'human' })
     expect(happenedOf(ended('sandbox'), naming)).toMatchObject({ who: 'app', state: 'failed' })
+  })
+
+  it('tells a Tile shared by whoever shared it, from outside, its Tile visited on a click, and what the user may do there', () => {
+    const visited: string[] = []
+    const shared = (by: string): Told => ({
+      _tag: 'Shared',
+      id: 's',
+      at,
+      by,
+      tile: { id: 'journal', title: 'Journal' },
+      rights: ['read', 'write'],
+    })
+    const told = happenedOf(shared('Ana Lima'), {
+      ...naming,
+      onCenter: (id) => {
+        visited.push(id)
+      },
+    })
+    expect(told).toMatchObject({ who: 'outside', detail: 'read, write' })
+    expect(told.words[0]).toEqual({ name: 'Ana Lima' })
+    // Not the user's own System's: shown as it was shared, never struck through, and visited.
+    const journal = told.words.find((word) => typeof word === 'object' && 'tile' in word)
+    expect(tile(journal)).toEqual({ title: 'Journal', standing: 'live' })
+    if (typeof journal === 'object' && 'tile' in journal) journal.tile.onCenter?.()
+    expect(visited).toEqual(['journal'])
+    expect(happenedOf(shared(''), naming).words[0]).toEqual({ name: m.conversation_someone() })
+  })
+
+  it('tells the user’s place in an Organization changed by an admin, from outside, its star visited', () => {
+    const visited: string[] = []
+    const atelier = { id: 'atelier', title: 'Atelier' }
+    const membership = (what: 'added' | 'declined', by: string, group?: string): Told => ({
+      _tag: 'Membership',
+      id: 'o',
+      at,
+      what,
+      by,
+      organization: atelier,
+      ...(group !== undefined && { group }),
+    })
+    const onCenter = (id: string) => {
+      visited.push(id)
+    }
+    const added = happenedOf(membership('added', 'Ana Lima'), { ...naming, onCenter })
+    expect(added.who).toBe('outside')
+    expect(added.words[0]).toEqual({ name: 'Ana Lima' })
+    const star = added.words.find((word) => typeof word === 'object' && 'tile' in word)
+    expect(tile(star)).toEqual({ title: 'Atelier', standing: 'live' })
+    if (typeof star === 'object' && 'tile' in star) star.tile.onCenter?.()
+    expect(visited).toEqual(['atelier'])
+    // A Group named in its own words, by no one named yet.
+    const declined = happenedOf(membership('declined', '', 'Design'), naming)
+    expect(declined.words[0]).toEqual({ name: m.conversation_someone() })
+    expect(declined.words).toContain('Design')
+    expect(declined.words).not.toEqual(added.words)
+  })
+
+  it('tells someone asking to join, by their star, the Organization and its Group', () => {
+    const asked = { _tag: 'AskedToJoin', id: 'j', at, request: 'r', by: 'Cleo Diaz' } as const
+    const organization = { id: 'atelier', title: 'Atelier' }
+    const toMembers = askedToJoinWords({ ...asked, organization }, naming)
+    expect(toMembers[0]).toEqual({ name: 'Cleo Diaz' })
+    expect(toMembers).not.toContain('Design')
+    expect(askedToJoinWords({ ...asked, organization, group: 'Design' }, naming)).toContain(
+      'Design',
+    )
+    expect(blocksOf([{ ...asked, organization }]).map(({ kind }) => kind)).toEqual(['asked'])
+  })
+
+  it('tells a change someone else made in the user’s System by their star, and who of theirs', () => {
+    const by = (of: Someone['by'], star = 'Bob Martin') =>
+      happenedOf(change({ _tag: 'Someone', star, by: of }), naming)
+    expect(by({ _tag: 'You' })).toMatchObject({ who: 'outside' })
+    expect(by({ _tag: 'You' }).words[0]).toEqual({ name: 'Bob Martin' })
+    expect(by({ _tag: 'Assistant' }).words[0]).toEqual({
+      name: m.conversation_someones_agent({ name: 'Bob Martin' }),
+    })
+    expect(by({ _tag: 'Key' }).words[0]).toEqual({
+      name: m.conversation_someones_key({ name: 'Bob Martin' }),
+    })
+    expect(by({ _tag: 'You' }, '').words[0]).toEqual({ name: m.conversation_someone() })
+    // In the user's own System: the Tile as it holds it.
+    expect(tile(by({ _tag: 'You' }).words.at(-1))).toEqual({ title: 'Games', standing: 'live' })
+  })
+
+  it('names the Tiles of a change made in someone else’s System as they were, visited on a click', () => {
+    const visited: string[] = []
+    const there: Changed = {
+      ...change({ _tag: 'You' }, 'TileDeleted'),
+      tile: drafts,
+      elsewhere: true,
+    }
+    const told = happenedOf(there, {
+      ...naming,
+      onCenter: (id) => {
+        visited.push(id)
+      },
+    })
+    expect(told.who).toBe('human')
+    // The user's own System never holds it: not struck through for that.
+    const named = told.words.at(-1)
+    expect(tile(named)).toEqual({ title: 'Drafts', standing: 'live' })
+    if (typeof named === 'object' && 'tile' in named) named.tile.onCenter?.()
+    expect(visited).toEqual(['drafts'])
+  })
+})
+
+describe('a pin in the timeline', () => {
+  it('names the Tile a Reference points at in another System as it was, visited on a click, never struck', () => {
+    const visited: string[] = []
+    const pinned: Changed = {
+      ...change({ _tag: 'You' }, 'ReferenceCreated'),
+      other: { id: 'journal', title: 'Journal' },
+    }
+    const told = happenedOf(pinned, {
+      ...naming,
+      onCenter: (id) => {
+        visited.push(id)
+      },
+    })
+    const words = told.words.filter((word) => typeof word === 'object' && 'tile' in word)
+    expect(words.map(tile)).toEqual([
+      { title: 'Journal', standing: 'live' },
+      { title: 'Games', standing: 'live' },
+    ])
+    const [journal] = words
+    if (typeof journal === 'object' && 'tile' in journal) journal.tile.onCenter?.()
+    expect(visited).toEqual(['journal'])
   })
 })
 
@@ -176,5 +309,18 @@ describe('blocksOf', () => {
       false,
       false,
     ])
+  })
+
+  it('draws a change someone else made in the user’s System apart, with its Undo', () => {
+    const theirs: Entry = {
+      ...change({ _tag: 'Someone', star: 'Bob', by: { _tag: 'You' } }),
+      id: 'c3',
+    }
+    const blocks = blocksOf([
+      change({ _tag: 'You' }),
+      theirs,
+      { ...change({ _tag: 'You' }), id: 'c4' },
+    ])
+    expect(blocks.map((block) => block.kind)).toEqual(['lines', 'theirs', 'lines'])
   })
 })

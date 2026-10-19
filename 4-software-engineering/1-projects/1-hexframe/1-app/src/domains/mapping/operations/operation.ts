@@ -4,7 +4,7 @@
 // Operation may do to a System is the service's to decide.
 import { Schema } from 'effect'
 
-import { ContextDirection, contentBounds, Slot, TileId, Version } from '../entities'
+import { AnyTileId, ContextDirection, contentBounds, Slot, TileId, Version } from '../entities'
 
 /**
  * What a Tile says, bounded so nothing unbounded reaches the service, which says what a Title and a
@@ -66,12 +66,14 @@ export class DeleteTile extends Schema.TaggedClass<DeleteTile>()('DeleteTile', {
 /**
  * Puts a Reference to `target` in a free Context slot of the Tile `parent`, named with the Version
  * read of it: a Reference has none of its own, so its writes count on the Tile whose slot they change.
+ * Its target is a Tile's id, or a Tile hexframe ships by its own (`ShippedId`), which anyone may pin
+ * as any Tile they read (`AnyTileId`, HEX-139).
  */
 export class CreateReference extends Schema.TaggedClass<CreateReference>()('CreateReference', {
   parent: TileId,
   parentVersion: Version,
   slot: ContextDirection,
-  target: TileId,
+  target: AnyTileId,
 }) {}
 
 /** Empties a Context slot of the Tile `parent`, named with the Version read of it, that holds a Reference. */
@@ -95,6 +97,48 @@ export const Operation = Schema.Union([
   DeleteReference,
 ])
 export type Operation = typeof Operation.Type
+
+/**
+ * The Tile an Operation is made at: the one it changes, the first a swap names, the one a create or a
+ * Reference goes under. Every Tile it names stands in one System, so the System holding this one is the
+ * System it changes, which the API layer names a write's System by, and the client the System it
+ * decides a write on.
+ */
+export function madeAt(operation: Operation): string {
+  switch (operation._tag) {
+    case 'CreateTile':
+    case 'CreateReference':
+    case 'DeleteReference':
+      return operation.parent
+    case 'EditTile':
+    case 'MoveTile':
+    case 'DeleteTile':
+      return operation.id
+    case 'SwapTiles':
+      return operation.a
+  }
+}
+
+/**
+ * The Tiles an Operation writes: those it changes, and those it puts something under or moves
+ * something to; a Reference's target is only pointed at. A change writing one hexframe ships is
+ * refused `Shipped` (`decide`, and the service before it locks anything), whoever makes it.
+ */
+export function writtenAt(operation: Operation): ReadonlyArray<string> {
+  switch (operation._tag) {
+    case 'CreateTile':
+    case 'CreateReference':
+    case 'DeleteReference':
+      return [operation.parent]
+    case 'EditTile':
+    case 'DeleteTile':
+      return [operation.id]
+    case 'MoveTile':
+      return [operation.id, operation.parent]
+    case 'SwapTiles':
+      return [operation.a, operation.b]
+  }
+}
 
 /**
  * An Operation by its name, its tag in camelCase (`swapTiles`): the application service's function

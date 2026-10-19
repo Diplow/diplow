@@ -75,7 +75,6 @@ const branch = (
 const served: System = {
   root: { _tag: 'Tile', id: id.root, title: 'Me', preview: '', body: '', version: 1 },
   tiles: { [id.a]: branch(id.a, 'A', 1), [id.b]: branch(id.b, 'B', 2) },
-  owned: true,
   version: 0,
 }
 
@@ -85,9 +84,10 @@ const servedWith = (...tiles: ReadonlyArray<PlacedTile>): System => ({
   tiles: { ...served.tiles, ...Object.fromEntries(tiles.map((tile) => [tile.id, tile])) },
 })
 
-/** The System's stand-in answers `system` from now on. */
+/** The System's stand-in answers `system` from now on, read by its owner: no gap. */
 function serving(system: System) {
-  vi.mocked(Mapping.system).mockImplementation(() => Promise.resolve({ ok: true, value: system }))
+  const seen = { ...system, rights: {}, gaps: {}, pinned: {}, asOwner: true }
+  vi.mocked(Mapping.system).mockImplementation(() => Promise.resolve({ ok: true, value: seen }))
 }
 
 /** A promise the case settles when it chooses, as a slow server would. */
@@ -568,5 +568,82 @@ describe('what the writes on their way change', () => {
     await waitFor(() => {
       expect(result.current.hook.underway?.tiles.size).toBe(0)
     })
+  })
+})
+
+describe("a write to someone else's System, visited", () => {
+  const ana = {
+    root: crypto.randomUUID(),
+    journal: crypto.randomUUID(),
+  }
+
+  /** Ana's System as Bob is shown it: her star's card, and Journal, which he writes. */
+  const hers = {
+    root: { _tag: 'Tile', id: ana.root, title: 'Ana', preview: '', body: '', version: 1 },
+    tiles: {
+      [ana.journal]: {
+        ...branch(ana.journal, 'Journal', 1, 3),
+        parent: ana.root,
+      },
+    },
+    version: 7,
+    rights: { [ana.root]: [], [ana.journal]: ['read', 'write'] },
+    gaps: {},
+  }
+
+  /** Bob's own System, and Ana's by her star, each answered by its read. */
+  function servingBoth() {
+    vi.mocked(Mapping.system).mockImplementation(
+      (options) =>
+        Promise.resolve({
+          ok: true,
+          value: options?.data?.system === undefined ? { ...served, rights: {}, gaps: {} } : hers,
+        }) as never,
+    )
+  }
+
+  async function renderedBoth() {
+    servingBoth()
+    const client = makeQueryClient()
+    const wrapper = ({ children }: { children: ReactNode }) =>
+      createElement(QueryClientProvider, { client }, children)
+    const { result } = renderHook(
+      () => ({
+        own: useSystem().data?.system,
+        visited: useSystem({ star: ana.root }).data?.system,
+        edit: useEditTile(),
+      }),
+      { wrapper },
+    )
+    await waitFor(() => {
+      expect([result.current.own, result.current.visited].every(Boolean)).toBe(true)
+    })
+    return result
+  }
+
+  it('shows the write on the System holding its Tile alone, and sends it', async () => {
+    const edited = later<unknown>()
+    vi.mocked(Mapping.editTile).mockReturnValue(edited.promise as never)
+    const result = await renderedBoth()
+    act(() => {
+      result.current.edit.mutate({ id: ana.journal, version: 3, title: 'Our journal' })
+    })
+    await waitFor(() => {
+      expect(result.current.visited?.tiles[ana.journal]).toMatchObject({ title: 'Our journal' })
+    })
+    expect(result.current.own).toEqual({ ...served, rights: {}, gaps: {} })
+    expect(Mapping.editTile).toHaveBeenCalledOnce()
+    edited.settle(ok)
+  })
+
+  it('foresees a refusal on that System, by the Version it shows there, and sends nothing', async () => {
+    const result = await renderedBoth()
+    act(() => {
+      result.current.edit.mutate({ id: ana.journal, version: 1, title: 'Stale' })
+    })
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(m.error_mapping_tile_changed())
+    })
+    expect(Mapping.editTile).not.toHaveBeenCalled()
   })
 })

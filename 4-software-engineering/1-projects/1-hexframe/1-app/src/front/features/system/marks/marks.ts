@@ -2,8 +2,8 @@
 // `tile/marks/`), built in HEX-109: the chat pointing at a Tile, lighting it or its way; a Tile the chat
 // centered, glinting as the canvas arrives; the agent's light running round the Tile its Turn works
 // in; a change the agent or a Key made since the page opened, glinting once as it comes, then a dot
-// until the user opens the Tile, and those the user's own acceptance of a Proposal made glinting in
-// their amber; and an open Proposal, its creates standing as ghosts in their slots, its edits, moves
+// until the user opens the Tile, and those the user's own acceptance of a Proposal made, theirs,
+// glinting in their amber; and an open Proposal, its creates standing as ghosts in their slots, its edits, moves
 // and deletions on the Tiles' rims, each move its arc. And what a Tile named in the chat says in its
 // card, as the canvas's card says it. Pure: `useMarksState` holds what changes.
 import type { Entry } from '#/domains/assistant/entities'
@@ -67,11 +67,11 @@ export function acceptedOf(
 
 /**
  * The changes to the System recorded since the page read today first (`known`, the Entries it held
- * then), by the agent or a Key, each Tile they name touched; the user's own are left out. A change
- * the user's acceptance of a Proposal made is recorded as the agent's: the first Change by the
- * Assistant after the Proposal's Entry that matches one of its changes is theirs (`accepted`), and
- * each of its changes is answered once, so a later change by the agent to the same Tile stays the
- * agent's.
+ * then), by the agent, a Key or someone else, each Tile they name touched, someone else's marked as a
+ * Key's, from outside; the user's own are left out, but those their acceptance of a Proposal made,
+ * which the user decided and the agent drafted: the first Change by the user after the Proposal's
+ * Entry that matches one of its changes is theirs (`accepted`), and each of its changes is answered
+ * once, so a later change of the user's own to the same Tile stays left out.
  */
 export function touchesOf(
   entries: ReadonlyArray<Entry>,
@@ -79,17 +79,32 @@ export function touchesOf(
 ): Touch[] {
   const owed = [...accepted]
   return entries.flatMap((entry, at) => {
-    if (entry._tag !== 'Change' || entry.actor._tag === 'You') return []
-    const landed =
-      entry.actor._tag === 'Assistant'
-        ? owed.findIndex(({ proposalAt, change }) => proposalAt < at && change === changeOf(entry))
-        : -1
-    if (landed !== -1) owed.splice(landed, 1)
+    if (entry._tag !== 'Change') return []
+    if (entry.actor._tag === 'You') {
+      const landed = owed.findIndex(
+        ({ proposalAt, change }) => proposalAt < at && change === changeOf(entry),
+      )
+      if (landed === -1) return []
+      owed.splice(landed, 1)
+    }
     if (known.has(entry.id)) return []
-    const by: By = entry.actor._tag === 'Key' ? 'key' : landed === -1 ? 'agent' : 'human'
+    const by = byOf(entry.actor)
     const tiles = [entry.tile.id, ...(entry.other === undefined ? [] : [entry.other.id])]
     return tiles.map((tile): Touch => ({ tile, by, entry: entry.id }))
   })
+}
+
+/** Who a change's mark says made it: the user, their agent, or, a Key or someone else, from outside. */
+const byOf = (actor: Extract<Entry, { _tag: 'Change' }>['actor']): By => {
+  switch (actor._tag) {
+    case 'You':
+      return 'human'
+    case 'Assistant':
+      return 'agent'
+    case 'Key':
+    case 'Someone':
+      return 'key'
+  }
 }
 
 /** What the canvas marks on home, as the page holds it. */

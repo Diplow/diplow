@@ -4,7 +4,12 @@ import { Effect, Exit, Layer, Option } from 'effect'
 import { CurrentKey, CurrentSession, type KeyProof } from '#/domains/iam/iam'
 import { MappingEvent, TileCreated, TileEdited, TilesImported } from '#/domains/mapping/operations'
 import { HttpExchange } from '#/repositories/auth/auth'
-import { TestDatabase } from '#/repositories/database/testing'
+import { TestAuth } from '#/repositories/auth/testing'
+import { layer as appliedLayer } from '#/repositories/database/conversations/applied'
+import { layer as conversationsLayer } from '#/repositories/database/conversations/conversations'
+import { layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
+import { layer as turnsLayer } from '#/repositories/database/conversations/turns'
+import { layer as organizationsLayer } from '#/repositories/database/organizations/organizations'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { archiveOf } from '#/repositories/zip/testing'
 import { layer as zipLayer } from '#/repositories/zip/zip'
@@ -21,12 +26,22 @@ import * as Mapping from './programs'
 /** Every envelope the bus carried since a test last asked. */
 const heard: Array<Envelope> = []
 
-const keep = on(MappingEvent, (event, actor) =>
-  Effect.sync(() => void heard.push({ event, actor })),
+const keep = on(MappingEvent, (event, actor, elsewhere) =>
+  Effect.sync(() => void heard.push({ event, actor, elsewhere })),
 )
 
+// A write may land in someone else's System, told in its owner's timeline (../assistant/someone/), and
+// a Turn's Key works where its Turn started, so its program needs the Conversation's repositories, the
+// Turns' and IAM's beside the tiles'.
 const TestLayer = Layer.mergeAll(
-  tilesLayer.pipe(Layer.provideMerge(TestDatabase)),
+  Layer.mergeAll(
+    tilesLayer,
+    conversationsLayer,
+    proposalsLayer,
+    appliedLayer,
+    turnsLayer,
+    organizationsLayer,
+  ).pipe(Layer.provideMerge(TestAuth)),
   zipLayer,
   serverBus([keep]),
 )
@@ -91,10 +106,18 @@ layer(TestLayer)("Mapping's events on the bus, over PGlite", (it) => {
           Mapping.editTile({ id: root, version, title: 'Ada Lovelace' })
         const event = new TileEdited({ id: root, title: 'Ada Lovelace' })
         expect((yield* asked(edit(1), bySession)).heard).toEqual([
-          { event, actor: Option.some({ account, by: { _tag: 'Session' } }) },
+          {
+            event,
+            actor: Option.some({ account, by: { _tag: 'Session' } }),
+            elsewhere: Option.none(),
+          },
         ])
         expect((yield* asked(edit(2), byKey('key-1'))).heard).toEqual([
-          { event, actor: Option.some({ account, by: { _tag: 'Key', keyId: 'key-1' } }) },
+          {
+            event,
+            actor: Option.some({ account, by: { _tag: 'Key', keyId: 'key-1' } }),
+            elsewhere: Option.none(),
+          },
         ])
       }),
   )
@@ -151,6 +174,7 @@ layer(TestLayer)("Mapping's events on the bus, over PGlite", (it) => {
           {
             event: new TilesImported({ id, count: 1 }),
             actor: Option.some({ account, by: { _tag: 'Session' } }),
+            elsewhere: Option.none(),
           },
         ])
         const taken = yield* asked(imported(1), bySession)

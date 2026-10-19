@@ -1,11 +1,14 @@
 // A fixture Conversation for /design-system, about the fixture System its canvas draws: four days of
 // Assistant's Entries, every kind at least once, a change by each kind of actor, a Message linking
 // Tiles, one of them deleted since, a Proposal accepted and one open, a Turn's change applied, which
-// it offers to undo, a Turn stopped, and the Titles of the Tiles its navigations went to and its
+// it offers to undo, a Turn stopped, a Tile someone shared with the user, which stands in their
+// System, the user's change there, someone else's change in the user's System, which offers its
+// Undo, and the Titles of the Tiles its navigations went to and its
 // Messages link; and the fixture System's Tiles, which its composer offers to `@`. Its days are
 // counted back from `now`, so the timeline always shows a today and a yesterday.
 // Like the System, its content is the user's own, so it is not translated.
 import { type Entry, linkTo } from '#/domains/assistant/entities'
+import type { JoinState } from '#/domains/iam/entities'
 import { ulysse } from '#/front/ui/canvas/fixtures'
 import { directions } from '#/front/ui/canvas/geometry/geometry'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
@@ -57,7 +60,80 @@ const openProposal = (at: Date): Entry => {
   }
 }
 
-export function conversationFixture(now: Date): { entries: Entry[]; titles: Titles } {
+/**
+ * The changes made across two Systems: the user's in Ana's Garden, shared with them, which stands in
+ * her System; and Ana's in the user's Games, which offers its Undo.
+ */
+const acrossSystems = (theirs: Date, yours: Date): ReadonlyArray<Entry> => [
+  {
+    _tag: 'Change',
+    id: 'c8',
+    at: theirs,
+    verb: 'TileEdited',
+    tile: { id: 'ana-garden', title: 'Garden, in spring' },
+    actor: you,
+    elsewhere: true,
+  },
+  {
+    _tag: 'Change',
+    id: 'c9',
+    at: yours,
+    verb: 'TileEdited',
+    tile: tile('games'),
+    actor: { _tag: 'Someone', star: 'Ana Lima', by: { _tag: 'You' } },
+    undone: false,
+  },
+]
+
+/** Atelier, an Organization of the fixture's, by its star. */
+const atelier = { id: 'atelier', title: 'Atelier' }
+
+/**
+ * The user's place in Atelier, at one instant (HEX-138): added by Ana, Cleo asking to join it, Dan
+ * one of its Groups, and the user's own request to join that Group accepted.
+ */
+const inAtelier = (at: Date): Entry[] => [
+  {
+    _tag: 'Membership',
+    id: 'o1',
+    at,
+    what: 'added',
+    by: 'Ana Lima',
+    organization: atelier,
+  },
+  {
+    _tag: 'AskedToJoin',
+    id: 'o2',
+    at,
+    request: 'cleo-asks',
+    by: 'Cleo Diaz',
+    organization: atelier,
+  },
+  {
+    _tag: 'AskedToJoin',
+    id: 'o3',
+    at,
+    request: 'dan-asks',
+    by: 'Dan Okafor',
+    organization: atelier,
+    group: 'Design',
+  },
+  {
+    _tag: 'Membership',
+    id: 'o4',
+    at,
+    what: 'accepted',
+    by: 'Ana Lima',
+    organization: atelier,
+    group: 'Design',
+  },
+]
+
+export function conversationFixture(now: Date): {
+  entries: Entry[]
+  titles: Titles
+  requests: Record<string, JoinState>
+} {
   const at = (daysAgo: number, hour: number, minute: number) =>
     new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysAgo, hour, minute)
   // Today's entries are counted back from now, never before midnight, so none is in the future.
@@ -159,6 +235,16 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
       steps: [{ gesture: 'center', tile: 'ulysse' }],
       gestures: 1,
     },
+    {
+      _tag: 'Shared',
+      id: 's1',
+      at: today(5),
+      by: 'Ana Lima',
+      tile: { id: 'ana-garden', title: 'Garden' },
+      rights: ['read', 'write'],
+    },
+    ...inAtelier(today(5)),
+    ...acrossSystems(today(5), today(4)),
     { _tag: 'Change', id: 'c6', at: today(4), verb: 'TileDeleted', tile: drafts, actor: you },
     said('m3', today(3), 'user', 'What would you add to Games?'),
     {
@@ -184,7 +270,8 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
     ),
     openProposal(today(0)),
   ]
-  return { entries, titles }
+  // Cleo's request waits; Dan's another admin accepted.
+  return { entries, titles, requests: { 'cleo-asks': 'open', 'dan-asks': 'accepted' } }
 }
 
 /** The fixture System's Tiles a composer offers to `@`, from its Root down, never a Reference. */

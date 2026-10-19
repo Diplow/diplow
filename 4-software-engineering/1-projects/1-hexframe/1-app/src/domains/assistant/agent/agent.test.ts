@@ -235,6 +235,66 @@ const entries: ReadonlyArray<Entry> = [
     id: 'e9',
     at,
   },
+  {
+    _tag: 'Shared',
+    by: 'hexframe',
+    tile: { id: 'journal', title: 'Journal' },
+    rights: ['read', 'write'],
+    id: 'e10',
+    at,
+  },
+  {
+    _tag: 'Shared',
+    by: '',
+    tile: { id: 'garden', title: 'Garden' },
+    rights: ['read'],
+    id: 'e11',
+    at,
+  },
+  {
+    _tag: 'Change',
+    verb: 'TileEdited',
+    tile: { id: 'journal', title: 'Our journal' },
+    actor: { _tag: 'You' },
+    elsewhere: true,
+    id: 'e12',
+    at,
+  },
+  {
+    _tag: 'Change',
+    verb: 'TileCreated',
+    tile: { id: 'note', title: 'Note' },
+    actor: { _tag: 'Someone', star: 'Bob', by: { _tag: 'Key' } },
+    undone: false,
+    id: 'e13',
+    at,
+  },
+  {
+    _tag: 'Change',
+    verb: 'TileEdited',
+    tile: { id: 'games', title: 'Games' },
+    actor: { _tag: 'Someone', star: '', by: { _tag: 'Assistant' } },
+    undone: true,
+    id: 'e14',
+    at,
+  },
+  {
+    _tag: 'Membership',
+    what: 'accepted',
+    by: 'Ana Lima',
+    organization: { id: 'atelier', title: 'Atelier' },
+    group: 'Design',
+    id: 'e15',
+    at,
+  },
+  {
+    _tag: 'AskedToJoin',
+    request: 'r1',
+    by: 'Cleo Diaz',
+    organization: { id: 'atelier', title: 'Atelier' },
+    id: 'e16',
+    at,
+  },
 ]
 
 describe("a Turn's prompt", () => {
@@ -297,6 +357,33 @@ describe("a Turn's prompt", () => {
     expect(plain).not.toContain('ask Mode')
   })
 
+  it('tells a Turn in someone else’s System whose it is, what the user may do there, and that it writes nothing without write', () => {
+    const elsewhere = (rights: ReadonlyArray<'read' | 'write' | '@'>, across?: string) =>
+      promptOf({
+        entries: [],
+        titles: {},
+        onScreen: [],
+        location: { id: 'journal', title: 'Journal', folder: '1-journal' },
+        links: [],
+        systemRules: [],
+        mode: 'apply',
+        elsewhere: { starTitle: 'Ana Lima', rights, across },
+      })
+    const reading = elsewhere(['read', '@'])
+    expect(reading).toContain(
+      'This Turn works in the System of another Account, whose star is titled "Ana Lima", not ' +
+        "the user's own.",
+    )
+    expect(reading).toContain('Where you start, the user may read it, run you at it;')
+    expect(reading).toContain('The user may not write where you start')
+    const writing = elsewhere(['read', 'write', '@'], '…')
+    expect(writing).toContain('the user may read it, write it, run you at it;')
+    expect(writing).not.toContain('The user may not write')
+    expect(writing).toContain('stand in "…", each a folder of its own')
+    // At home, none of it.
+    expect(prompt).not.toContain('This Turn works in the System of')
+  })
+
   it('tells a Turn in ask that its writes are drafted into a Proposal, and what a Proposal drafted', () => {
     expect(prompt).toContain(
       'This Turn is in ask Mode: your writes change nothing in the System yet.',
@@ -327,6 +414,13 @@ describe("a Turn's prompt", () => {
       '- 14:02 UTC: A Turn of yours in apply made 3 changes.',
       '- 14:02 UTC: A Turn of yours in apply made 1 change, which the user undid.',
       '- 14:02 UTC: You drafted a Proposal (the user accepted it, then undid it): TileDeleted "Old" (id "old").',
+      '- 14:02 UTC: Another Account, whose star is titled "hexframe", shared "Journal" (id "journal") with the user, who may read it, write it there; it stands in that Account\'s System, not the user\'s.',
+      '- 14:02 UTC: Another Account, whose star has no title, shared "Garden" (id "garden") with the user, who may read it there; it stands in that Account\'s System, not the user\'s.',
+      '- 14:02 UTC: The user TileEdited "Our journal" (id "journal"), in another Account\'s System, not the user\'s.',
+      '- 14:02 UTC: A key of another Account, whose star is titled "Bob", TileCreated "Note" (id "note").',
+      '- 14:02 UTC: The agent of another Account, whose star has no title, TileEdited "Games" (id "games"), which the user undid.',
+      '- 14:02 UTC: Another Account, whose star is titled "Ana Lima", accepted the user\'s request to join the group "Design" of the Organization "Atelier" (id "atelier").',
+      '- 14:02 UTC: Another Account, whose star is titled "Cleo Diaz", asked to join the Organization "Atelier" (id "atelier"), of which the user is an admin; the user accepts or declines it in the timeline, not you.',
     ])
   })
 
