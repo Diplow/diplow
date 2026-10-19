@@ -41,7 +41,7 @@ describe('the notes of the Systems hexframe ships, as the build bundles them', (
         '3-children-and-directions/.1-six-at-most',
       ]),
     )
-    expect(shippedNotes.help.en['']).toMatch(/^---\ntitle: Hexframe\n/)
+    expect(shippedNotes.help.en['']).toMatch(/^---\ntitle: Help\n/)
   })
 
   it("holds the tutorial's apart from Help's, its Root and its six numbered steps", () => {

@@ -5,10 +5,10 @@
 import { Schema } from 'effect'
 
 import { tilePage } from '#/api/mapping/files/download'
-import { acrossGaps } from '#/domains/mapping/entities'
+import { acrossGaps, hexframeStar, systemOf, type Seen } from '#/domains/mapping/entities'
 import type { SystemShown } from '#/front/client/mapping/queries'
 import { localizeUrl } from '#/paraglide/runtime'
-import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
+import { findTile, type SunLight, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { orDefault, readSearch, TileId, type ViewAction } from '#/front/ui/canvas/view/view'
 
 import { canvasTree } from '../tree'
@@ -53,6 +53,26 @@ export function visitTree({
   const tree: TileNode = { ...canvasTree(root), ...(across.length > 0 && { gaps: across }) }
   return tree
 }
+
+/**
+ * A System as anyone holding a link sees it (`publicSystem`), as the canvas and the corner draw it:
+ * from its star, its gaps hung from it, as a visit draws one.
+ */
+export const publicTree = (seen: Seen) =>
+  visitTree({
+    system: seen,
+    root: systemOf(seen, seen.pinned),
+    gaps: seen.gaps,
+    pinned: seen.pinned,
+  })
+
+/**
+ * The light of a star visited, by where the Account stands under it (`useStandingIn`, none for a star
+ * naming no Organization, nor while it is read): an Organization's, rose, where the Account stands
+ * somewhere in it, or hexframe's own; a person's, amber, otherwise.
+ */
+export const lightOf = (star: string | undefined, standing: string | null | undefined): SunLight =>
+  (standing !== undefined && standing !== null) || star === hexframeStar ? 'organization' : 'human'
 
 /** The gestures that take the canvas to a Tile: centering it, with its Context or not. */
 const following: ReadonlyArray<ViewAction['gesture']> = ['center', 'show-context']

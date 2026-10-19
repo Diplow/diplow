@@ -114,7 +114,7 @@ function insideKinds(kinds: readonly FrameKind[], frame: OuterKind | undefined):
  * alone unless the view opens a ring around it, one it doesn't offer opening its first, and so does a
  * view that names a ring inside it or a Branch open but no ring around, as links did when the first
  * ring was the default; an inner ring that can't sit beside the outer one falls back to none. Only a
- * Branch of the ring around the center opens, into a kind it offers, else into its first ring.
+ * Branch of the ring around the center opens, into a kind it offers but its Context, which the center alone shows, else into its first ring.
  */
 export function showView(system: TileNode, view: CanvasView): ShownView {
   const center = (view.center === undefined ? undefined : findTile(system, view.center)) ?? system
@@ -133,11 +133,59 @@ export function showView(system: TileNode, view: CanvasView): ShownView {
   return { center, frame, inner, expanded: expansionsOf(center, frame, view.expanded ?? {}) }
 }
 
+/**
+ * Whether the reader may add to a ring of a Tile, a free slot of it taking a new Tile: its Children,
+ * or its Context, a ring of its own, which may take a new Tile where its Children are all taken.
+ */
+export type Fills = (tile: TileNode, ring: 'children' | 'context') => boolean
+
+/**
+ * Whether a Tile opens onto something: a ring holding a Branch or a Leaf, or, holding neither, one
+ * the reader may add to (`fills`). Holding nothing the reader may add to, its ring would be six free
+ * slots that take nothing, so it opens nothing, as a Leaf.
+ */
+export function opens(tile: TileNode, fills: Fills): boolean {
+  if (firstKindOf(tile) === undefined) return false
+  const held = Object.keys({ ...tile.branches, ...tile.leaves }).length
+  return held > 0 || fills(tile, 'children')
+}
+
+/**
+ * Whether a Tile shows a Context: one it holds, or, holding none, a Context the reader may add to
+ * (`fills`).
+ * A Leaf has none; holding none the reader may add to, its Context would be six free slots that take
+ * nothing, so it shows none.
+ */
+export function showsContext(tile: TileNode, fills: Fills): boolean {
+  if (!kindsOf(tile).includes('context')) return false
+  return Object.keys(tile.context ?? {}).length > 0 || fills(tile, 'context')
+}
+
+/**
+ * The view shown, each ring that would open onto nothing folded (`opens`, `showsContext`): the
+ * center's Context hidden, the center alone unless its Context still shows inside it, and a Branch
+ * of its ring closed.
+ */
+export function withoutEmptyRings(shown: ShownView, fills: Fills): ShownView {
+  const { center } = shown
+  const inner = shown.inner === 'context' && !showsContext(center, fills) ? undefined : shown.inner
+  if (shown.frame !== undefined && inner === undefined && !opens(center, fills))
+    return { ...shown, frame: undefined, inner, expanded: {} }
+  const expanded: ShownView['expanded'] = {}
+  for (const direction of directions) {
+    const kind = shown.expanded[direction]
+    const branch = center.branches?.[direction]
+    if (kind === undefined || branch === undefined) continue
+    if (opens(branch, fills)) expanded[direction] = kind
+  }
+  return { ...shown, inner, expanded }
+}
+
 /** Whether a view opens something within the center's ring, a ring inside it or a Branch. */
 const opensWithin = (view: CanvasView) =>
   view.inner !== undefined || Object.keys(view.expanded ?? {}).length > 0
 
-/** The Branches of the ring `frame` around `center` that `wanted` opens, each into a kind it offers. */
+/** The Branches of the ring `frame` around `center` that `wanted` opens, each into a kind it offers but Context. */
 function expansionsOf(
   center: TileNode,
   frame: OuterKind | undefined,
@@ -150,7 +198,9 @@ function expansionsOf(
     const kind = wanted[direction]
     const branch = center.branches?.[direction]
     if (kind === undefined || branch === undefined) continue
-    expanded[direction] = kindsOf(branch).includes(kind) ? kind : firstKindOf(branch)
+    // Only the center shows its Context: a Branch asked for its own opens into its first ring.
+    const offered = kind !== 'context' && kindsOf(branch).includes(kind)
+    expanded[direction] = offered ? kind : firstKindOf(branch)
   }
   return expanded
 }
@@ -221,6 +271,23 @@ export function toggleExpanded(
 export function withContext(system: TileNode, view: CanvasView): CanvasView {
   const { center, frame } = showView(system, view)
   return tidy(system, { ...view, frame: frame ?? firstKindOf(center), inner: 'context' })
+}
+
+/**
+ * The gesture to the center's next view, as the C key cycles them: alone, then opened into its ring,
+ * then its Context shown inside it too, then alone again, on the view as it shows (`shown`). A step
+ * that would show nothing is skipped, a ring that opens onto nothing (`opens`) or a Context that shows
+ * none (`showsContext`); none where neither shows anything, the center staying alone.
+ */
+export function cycleOf(
+  shown: ShownView,
+  fills: Fills,
+): 'expand' | 'show-context' | 'collapse' | undefined {
+  const context = showsContext(shown.center, fills)
+  if (shown.inner === 'context') return 'collapse'
+  if (shown.frame !== undefined) return context ? 'show-context' : 'collapse'
+  if (opens(shown.center, fills)) return 'expand'
+  return context ? 'show-context' : undefined
 }
 
 /** The canvas's part of a page's search params. */

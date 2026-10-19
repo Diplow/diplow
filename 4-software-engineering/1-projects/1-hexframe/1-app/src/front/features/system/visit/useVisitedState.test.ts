@@ -71,6 +71,7 @@ describe('the System the URL visits', () => {
       star: undefined,
       tree: undefined,
       system: undefined,
+      light: 'human',
       titles: new Map(),
     })
     expect(Mapping.system).not.toHaveBeenCalledWith({ data: { system: 'bob' } })

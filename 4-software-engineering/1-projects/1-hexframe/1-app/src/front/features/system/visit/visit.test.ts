@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   type FoundTile,
+  hexframeStar,
   type PlacedTile,
   type Seen,
   type Slot,
@@ -12,6 +13,7 @@ import { centerOn, showView } from '#/front/ui/canvas/view/view'
 
 import {
   centeringOf,
+  lightOf,
   pinFollowed,
   readVisitSearch,
   titlesIn,
@@ -152,5 +154,19 @@ describe('a pin followed on the canvas', () => {
     expect(pinFollowed({}, { gesture: 'center', tile: 'shed' })).toBeUndefined()
     expect(pinFollowed(pinned, { gesture: 'expand', tile: 'shed' })).toBeUndefined()
     expect(pinFollowed(pinned, { gesture: 'show-context', tile: 'shed' })).toBe('shed')
+  })
+})
+
+describe('the light of a star visited', () => {
+  it('is an Organization’s, rose, where the Account stands in it, or on hexframe’s own star', () => {
+    expect(lightOf('acme', 'member')).toBe('organization')
+    expect(lightOf('acme', 'outside')).toBe('organization')
+    expect(lightOf(hexframeStar, undefined)).toBe('organization')
+  })
+
+  it('is a person’s, amber, on any other star, and on none', () => {
+    expect(lightOf('ana', undefined)).toBe('human')
+    expect(lightOf('ana', null)).toBe('human')
+    expect(lightOf(undefined, undefined)).toBe('human')
   })
 })

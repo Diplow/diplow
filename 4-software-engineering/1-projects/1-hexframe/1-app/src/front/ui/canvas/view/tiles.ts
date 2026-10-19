@@ -1,6 +1,6 @@
 // The System as the canvas reads it: each Tile with its Branches, its Leaves and its Context by
 // Direction, and the Frame kinds it offers, as the shape offers them for a folder. Pure.
-import { directions, type Direction } from '../geometry/geometry'
+import { directions, neighbor, type Direction, type Point } from '../geometry/geometry'
 
 export interface TileNode {
   id: string
@@ -103,4 +103,59 @@ export function pathTo(system: TileNode, id: string): TileNode[] {
 /** The Tile with this id, anywhere in the System, Leaves and Context Tiles included. */
 export function findTile(system: TileNode, id: string): TileNode | undefined {
   return pathTo(system, id).at(-1)
+}
+
+/** A star's light: a person's, amber, or an Organization's, rose. */
+export type SunLight = 'human' | 'organization'
+
+/**
+ * A System's star, the sun its light comes from (`SunLight`); and, where the root drawn hangs below
+ * that star rather than being it, the Directions from the star down to it (`rootAt`): the tutorial
+ * stands in the Hexframe Organization's Direction 2, so `[2]`.
+ */
+export interface Sun {
+  light: SunLight
+  rootAt?: readonly Direction[]
+}
+
+/**
+ * How much smaller each generation stands inside the one above it, for where a Tile stands from its
+ * star: the first step from the star says the most of the way back to it, as on the canvas, where a
+ * Tile's six stand around it and theirs around each of them, smaller.
+ */
+const generation = 1 / 3
+
+/**
+ * Which way the star lies from the centered Tile, a unit vector on the canvas (y grows downwards):
+ * back along every step from the star down to it, the nearer the star the more it weighs. None at the
+ * star itself, nor for a Tile the System doesn't hold.
+ */
+export function sunward(system: TileNode, center: string, rootAt: readonly Direction[] = []) {
+  const path = pathTo(system, center)
+  if (path.length === 0) return undefined
+  const steps = [...rootAt, ...stepsAlong(path)]
+  const at = steps.reduce<Point>(
+    (sum, direction, depth) => {
+      const { x, y } = neighbor({ center: { x: 0, y: 0 }, radius: 1 }, direction).center
+      const weight = generation ** depth
+      return { x: sum.x + x * weight, y: sum.y + y * weight }
+    },
+    { x: 0, y: 0 },
+  )
+  const length = Math.hypot(at.x, at.y)
+  return length < 1e-9 ? undefined : { x: -at.x / length, y: -at.y / length }
+}
+
+/**
+ * The Direction of each step down a path, a Branch's, a Leaf's or a Context Tile's; a Tile hung across
+ * a gap, whose place is not said, takes none.
+ */
+function stepsAlong(path: readonly TileNode[]): Direction[] {
+  return path.slice(1).flatMap((tile, index) => {
+    const above = path[index]
+    const direction = directions.find((one) =>
+      [above?.branches?.[one], above?.leaves?.[one], above?.context?.[one]].includes(tile),
+    )
+    return direction === undefined ? [] : [direction]
+  })
 }

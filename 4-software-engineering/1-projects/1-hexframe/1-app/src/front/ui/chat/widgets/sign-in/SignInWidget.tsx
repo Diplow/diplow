@@ -1,9 +1,10 @@
 // Signed out, the chat asks who you are where you would write: the sign-in widget takes the
 // Composer's place at the chat's foot, on the same zone, warm for you. The question in the agent's
-// mono, then an email and a password on their underlines, the one solid act, and the way to the other
-// of signing in and signing up, each row running on to the curve at its height, a field beside another
-// staying in its place. A refusal shows on the field at fault, or under the act when it names none.
-// Controlled: what is typed, which of the two it is and what the act does are its caller's.
+// mono, then an email and a password on their underlines, the one solid act and, beside it, the other
+// of signing in and signing up, the same hex in a tint, each row running on to the curve at its
+// height, a field beside another staying in its place. A refusal shows on the field at fault, or
+// under the act when it names none. Controlled: what is typed, which of the two it is and what the
+// act does are its caller's.
 import { cn } from 'cn'
 import { useId } from 'react'
 
@@ -39,7 +40,7 @@ const accesses = {
     submit: m.iam_sign_in_submit,
     password: 'current-password',
     rule: undefined,
-    other: { question: m.iam_to_sign_up, link: m.iam_to_sign_up_link, access: 'sign-up' },
+    other: { label: m.iam_to_sign_up, access: 'sign-up' },
   },
   'sign-up': {
     title: m.iam_sign_up_title,
@@ -47,7 +48,7 @@ const accesses = {
     submit: m.iam_sign_up_submit,
     password: 'new-password',
     rule: m.iam_password_rule,
-    other: { question: m.iam_to_sign_in, link: m.iam_to_sign_in_link, access: 'sign-in' },
+    other: { label: m.iam_to_sign_in, access: 'sign-in' },
   },
 } as const
 
@@ -112,7 +113,7 @@ export function SignInWidget({
           error={refused?.password}
         />
       </div>
-      <div ref={toCurve} className={cn(runsToCurve, 'flex flex-wrap items-center gap-x-6 gap-y-2')}>
+      <div ref={toCurve} className={cn(runsToCurve, 'flex flex-wrap items-center gap-x-3 gap-y-2')}>
         <Act
           type="submit"
           look="hex"
@@ -122,16 +123,14 @@ export function SignInWidget({
         >
           {words.submit()}
         </Act>
-        <span className="flex flex-wrap items-center gap-x-2 text-[0.8125rem] font-light text-muted-foreground">
-          {words.other.question()}
-          <Act
-            onClick={() => {
-              onAccessChange(words.other.access)
-            }}
-          >
-            {words.other.link()}
-          </Act>
-        </span>
+        <Act
+          look="hex"
+          onClick={() => {
+            onAccessChange(words.other.access)
+          }}
+        >
+          {words.other.label()}
+        </Act>
       </div>
       <p
         ref={toCurve}

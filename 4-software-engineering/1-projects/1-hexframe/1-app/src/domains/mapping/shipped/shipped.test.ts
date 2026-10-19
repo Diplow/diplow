@@ -63,7 +63,7 @@ describe('Help, as the build bundles it from the real folder', () => {
       expect.arrayContaining(['help', 'help/-1', 'help/1', 'help/3', 'help/3/-1', 'help/6/2']),
     )
     expect(shipped.help.en.rows.find(({ id }) => id === 'help')).toMatchObject({
-      title: 'Hexframe',
+      title: 'Help',
       target: null,
       parentId: null,
       direction: null,
@@ -143,7 +143,7 @@ describe('a System hexframe ships, whole, as home draws it', () => {
     Effect.gen(function* () {
       const english = yield* Mapping.shippedSystem('help', 'en')
       const french = yield* Mapping.shippedSystem('help', 'fr')
-      expect(english).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
+      expect(english).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Help' })
       expect(english.branches[2]).toMatchObject({ id: 'help/2', title: 'Tiles' })
       expect(french.branches[2]).toMatchObject({ id: 'help/2', title: 'Les tuiles' })
       expect(french.branches[2]?.body).toMatch(/Une tuile est l’unité d’un système/)
@@ -187,7 +187,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
         fields: ['title', 'preview'],
       })
       expect(read.parent).toEqual({ id: hexframeStar, title: 'Hexframe' })
-      expect(read.tile).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
+      expect(read.tile).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Help' })
       expect(read.tile).not.toHaveProperty('body')
       expect(Object.keys(read.tile.branches ?? {})).toEqual(['1', '2', '3', '4', '5', '6'])
       expect(read.tile.branches?.[3]).toMatchObject({ _tag: 'Tile', id: 'help/3' })
@@ -204,7 +204,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
         depth: 1,
         fields: ['body'],
       })
-      expect(read.parent).toEqual({ id: 'help', title: 'Hexframe' })
+      expect(read.parent).toEqual({ id: 'help', title: 'Help' })
       expect(read.tile).toMatchObject({ _tag: 'Tile', id: 'help/3' })
       expect(read.tile.body).toMatch(/Directions/)
       expect(read.tile).not.toHaveProperty('title')
@@ -220,7 +220,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
         fields: ['title'],
         language: 'fr',
       })
-      expect(read.parent).toEqual({ id: 'help', title: 'Hexframe' })
+      expect(read.parent).toEqual({ id: 'help', title: 'Aide' })
       expect(read.tile).toMatchObject({
         _tag: 'Tile',
         id: 'help/3',

@@ -10,6 +10,7 @@ import { useStandingIn } from '#/front/client/iam/organizations'
 import { useSystem } from '#/front/client/mapping/queries'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
+import type { SunLight } from '#/front/ui/canvas/view/tiles'
 import type { CanvasView, ViewAction } from '#/front/ui/canvas/view/view'
 
 import type { SearchChange, SystemSearch } from '../search/search'
@@ -19,6 +20,8 @@ import { visitTree } from './visit'
 export interface VisitPageProps {
   /** The star of the System visited, someone else's. */
   star: string
+  /** The light it glows in, the corner's too (`useVisitedState`'s). */
+  light: SunLight
   search: SystemSearch
   onSearchChange: (change: SearchChange) => void
   onViewChange: (view: CanvasView, action: ViewAction) => void
@@ -43,7 +46,7 @@ const none = () => undefined
  * skeleton while it is read.
  */
 export function VisitPage(props: VisitPageProps) {
-  const { star, search, onSearchChange, onViewChange, marks, onAsk } = props
+  const { star, light, search, onSearchChange, onViewChange, marks, onAsk } = props
   const { data } = useSystem({ star })
   // Where the Account stands in the Organization the star names, if any, read without throwing: a menu line.
   const { data: standing } = useStandingIn(star)
@@ -70,6 +73,7 @@ export function VisitPage(props: VisitPageProps) {
       marks={marks}
       onAsk={onAsk}
       onCarry={none}
+      sun={{ light }}
       className="min-h-0 flex-1"
     />
   )

@@ -387,11 +387,28 @@ interface ToolsProps {
   onDismiss?: () => void
 }
 
+/** A setting drawn as its own control beside fold and dismiss: a plain action, with its icon. */
+type ToolItem = Extract<MenuEntry, { onSelect: () => void }> & { icon: ReactNode }
+
+/** How many tools the head shows side by side at most; past it, they all wait in its menu. */
+const toolsAtMost = 3
+
+/** The settings drawn side by side with fold and dismiss, if they all fit: none where they don't. */
+function sideBySide(settings: readonly MenuEntry[], count: number): ToolItem[] | undefined {
+  if (count > toolsAtMost) return undefined
+  const items = settings.filter((entry) => entry !== 'separator')
+  const plain = items.filter(
+    (entry): entry is ToolItem => 'onSelect' in entry && entry.icon !== undefined,
+  )
+  return plain.length === items.length ? plain : undefined
+}
+
 /**
  * Settings, fold and dismiss, at the head's height, riding just inside the curve, so they slide along
  * it as the conversation scrolls (`useAlongCurve`); where the chat is not cut, at the end of its
- * lines. They show on hover or focus. A finger can't hover: under one, the settings' control alone
- * shows, a full target, and folding and dismissing wait in its menu.
+ * lines. They show on hover or focus, side by side while they are three at most, each a plain action
+ * with its icon, else all of them in the menu behind one control, which never shows beside them. A
+ * finger can't hover: under one, that control alone shows, a full target, every tool in its menu.
  */
 function Tools({ folded, held, onMenuOpenChange, settings, onFold, onDismiss }: ToolsProps) {
   const tools = useRef<HTMLDivElement>(null)
@@ -408,6 +425,7 @@ function Tools({ folded, held, onMenuOpenChange, settings, onFold, onDismiss }: 
       ? []
       : [{ label: m.ui_widget_dismiss(), icon: <X />, onSelect: onDismiss }]),
   ]
+  const shown = sideBySide(settings, entries.filter((entry) => entry !== 'separator').length)
   return (
     <div
       ref={tools}
@@ -422,21 +440,38 @@ function Tools({ folded, held, onMenuOpenChange, settings, onFold, onDismiss }: 
         entries={entries}
         onOpenChange={onMenuOpenChange}
         trigger={
-          <button type="button" aria-label={m.ui_widget_settings()} className={tool}>
+          <button
+            type="button"
+            aria-label={m.ui_widget_settings()}
+            className={cn(tool, shown && 'hidden pointer-coarse:grid')}
+          >
             <MoreHorizontal />
           </button>
         }
       />
-      <Collapsible.Trigger asChild>
+      {shown?.map((setting) => (
         <button
+          key={setting.label}
           type="button"
-          aria-label={folded ? m.ui_widget_unfold() : m.ui_widget_fold()}
+          aria-label={setting.label}
+          onClick={setting.onSelect}
           className={cn(tool, 'pointer-coarse:hidden')}
         >
-          <ChevronDown className="transition-transform duration-300 ease-glide group-data-[state=closed]/widget:-rotate-90" />
+          {setting.icon}
         </button>
-      </Collapsible.Trigger>
-      {onDismiss !== undefined && (
+      ))}
+      {shown && (
+        <Collapsible.Trigger asChild>
+          <button
+            type="button"
+            aria-label={folded ? m.ui_widget_unfold() : m.ui_widget_fold()}
+            className={cn(tool, 'pointer-coarse:hidden')}
+          >
+            <ChevronDown className="transition-transform duration-300 ease-glide group-data-[state=closed]/widget:-rotate-90" />
+          </button>
+        </Collapsible.Trigger>
+      )}
+      {shown && onDismiss !== undefined && (
         <button
           type="button"
           aria-label={m.ui_widget_dismiss()}

@@ -7,16 +7,17 @@
 // and a tile pointed at handed on, for the chat to light its line (HEX-122). In the chat,
 // under the agent's lines, its offer to read the centered topic of Help's page in full, in the help
 // widget. Like the canvas, it holds no state: the view is the URL's, and the route navigates.
+import { shippedOf } from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
 import { Act, voiceOf } from '#/front/ui/atoms/controls/act'
 import { Canvas, type PointAt } from '#/front/ui/canvas/Canvas'
 import type { ToldPart } from '#/front/ui/motion'
-import type { TileNode } from '#/front/ui/canvas/view/tiles'
+import type { Sun, TileNode } from '#/front/ui/canvas/view/tiles'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
 
 import type { TutorialRules } from './tutorial/rules'
 
-interface ShippedCanvasProps {
+export interface ShippedCanvasProps {
   /** The shipped System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   view: CanvasView
@@ -32,6 +33,8 @@ interface ShippedCanvasProps {
   pointed?: string | undefined
   /** A tile pointed at, or let go, for the chat to light the line naming it: the tutorial's. */
   onPoint?: PointAt | undefined
+  /** Its star's light: the Hexframe Organization's, rose, which it stands below. */
+  sun?: Sun | undefined
   className?: string
 }
 
@@ -44,16 +47,18 @@ interface ShippedCanvasProps {
  * lines lighting each other (HEX-122).
  */
 export function ShippedCanvas(props: ShippedCanvasProps) {
-  const { tree, view, onViewChange, rules, told, pointed, onPoint, className } = props
+  const { tree, view, onViewChange, rules, told, pointed, onPoint, sun, className } = props
   return (
     <Canvas
       system={tree}
+      cycles
       view={view}
       onViewChange={onViewChange}
       looking={rules?.looking ?? 'menu'}
       {...(rules && { lets: rules.lets, introducesOpening: rules.introducesOpening })}
       marks={{ told, pointed }}
       onPoint={onPoint}
+      sun={sun}
       className={className}
     />
   )
@@ -72,6 +77,8 @@ interface HelpReadProps {
  */
 export function HelpRead({ tree, view, onRead }: HelpReadProps) {
   const center = showView(tree, view).center
+  // Help is drawn from the Hexframe star: its star and the tutorial beside it have no page in Help.
+  if (shippedOf(center.id) !== 'help') return null
   return (
     <Act
       tone="voice"

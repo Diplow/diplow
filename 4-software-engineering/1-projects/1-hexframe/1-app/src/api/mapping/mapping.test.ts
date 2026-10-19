@@ -161,7 +161,7 @@ describe("Mapping's server functions", () => {
       run(request(false), Mapping.shipped({ root: 'help', language: 'en' })),
     )
     const french = await value(run(request(), Mapping.shipped({ root: 'help', language: 'fr' })))
-    expect(english).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
+    expect(english).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Help' })
     expect(english.branches[5]).toMatchObject({ id: 'help/5', title: 'Operations' })
     expect(french.branches[5]).toMatchObject({ id: 'help/5', title: 'Les opérations' })
     expect(french.branches[5]?.body).toMatch(/Déplacer/)

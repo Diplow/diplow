@@ -26,7 +26,7 @@ import { m } from '#/paraglide/messages'
 import { useLeaveGuard } from '#/front/ui/canvas/atoms/useLeaveGuard'
 import { Canvas, type CanvasMarks } from '#/front/ui/canvas/Canvas'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
-import type { TileNode } from '#/front/ui/canvas/view/tiles'
+import type { Sun, TileNode } from '#/front/ui/canvas/view/tiles'
 import type { CanvasView, ViewAction } from '#/front/ui/canvas/view/view'
 import { Dialog } from '#/front/ui/layouts/Dialog'
 
@@ -73,6 +73,8 @@ interface SystemProps {
   onAsk: (tile: string, place?: Direction) => void
   /** A Tile carried off the canvas, which the composer names where it is let go; none once let go. */
   onCarry: (tile: CarriedTile | undefined) => void
+  /** Its star's light: the user's, amber, someone's they visit, or an Organization's, rose. */
+  sun: Sun
   className?: string
 }
 
@@ -91,6 +93,7 @@ export function System({
   marks,
   onAsk,
   onCarry,
+  sun,
   className,
 }: SystemProps) {
   const router = useRouter()
@@ -107,6 +110,7 @@ export function System({
     <div className={cn('flex flex-col gap-2', className)}>
       <Canvas
         system={tree}
+        cycles
         view={viewOf(search)}
         onViewChange={(view, action) => {
           const pin = pinFollowed(pinned, action)
@@ -119,6 +123,7 @@ export function System({
         writes={writes}
         marks={marks}
         onCarry={onCarry}
+        sun={sun}
         className="min-h-0 w-full flex-1"
       />
       <Dialog

@@ -39,12 +39,17 @@ const open: CanvasView = { frame: 'children' }
 /** `a` centered, as a gesture leaves it: opened into its first ring, so its Tiles show around it. */
 const inA: CanvasView = { center: 'a', frame: 'children' }
 
-function render(
-  view: CanvasView,
-  { finger = false, lets }: { finger?: boolean; lets?: (hex: TileHex) => TileLets } = {},
-) {
+interface Hand {
+  finger?: boolean
+  lets?: (hex: TileHex) => TileLets
+  fills?: (tile: TileNode) => boolean
+}
+
+function render(view: CanvasView, { finger = false, lets, fills }: Hand = {}) {
   const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
-  const { result } = renderHook(() => useCanvasState({ system, view, onViewChange, finger, lets }))
+  const { result } = renderHook(() =>
+    useCanvasState({ system, view, onViewChange, finger, lets, fills }),
+  )
   return { ...result.current, onViewChange }
 }
 
@@ -56,7 +61,7 @@ function hexOf(hexes: ReturnType<typeof render>['state']['hexes'], key: string):
 }
 
 /** What a click does on each Tile drawn, by key. */
-function actions(view: CanvasView, hand = { finger: false }) {
+function actions(view: CanvasView, hand: Hand = {}) {
   const { state, actions: act } = render(view, hand)
   return Object.fromEntries(
     state.hexes.flatMap((hex) => (hex.kind === 'tile' ? [[hex.key, act.actionOf(hex)]] : [])),
@@ -100,6 +105,21 @@ describe('what a click on a Tile does', () => {
     expect(actions({ center: 'notes' })).toEqual({ 'tile:notes': undefined })
   })
 
+  it('opens nothing holding nothing the reader may add to: such a Branch is centered, and stands alone', () => {
+    const nobody = () => false
+    expect(actions(open, { fills: nobody })).toMatchObject({
+      'tile:a': 'expand',
+      'tile:many': 'expand',
+    })
+    const empty = render(inA, { fills: nobody })
+    expect(empty.actions.actionOf(hexOf(empty.state.hexes, 'tile:a3'))).toBe('center')
+    const alone = render({ center: 'a3', frame: 'children' }, { fills: nobody })
+    expect(alone.state.hexes.filter((hex) => hex.kind === 'empty')).toHaveLength(0)
+    expect(alone.actions.actionOf(hexOf(alone.state.hexes, 'tile:a3'))).toBeUndefined()
+    const added = render({ center: 'a3', frame: 'children' })
+    expect(added.state.hexes.filter((hex) => hex.kind === 'empty')).toHaveLength(6)
+  })
+
   it('does nothing on the untitled root, its lamp alone, not there yet', () => {
     const untitled = { ...system, title: '', root: 'untitled' as const }
     const { result } = renderHook(() =>
@@ -107,6 +127,17 @@ describe('what a click on a Tile does', () => {
     )
     const { state, actions: act } = result.current
     expect(act.actionOf(hexOf(state.hexes, 'tile:root'))).toBeUndefined()
+  })
+
+  it('takes no C on the untitled root, nor on an empty System’s, which nothing answers on', () => {
+    for (const root of ['untitled', 'empty'] as const) {
+      const onViewChange = vi.fn()
+      const { result } = renderHook(() =>
+        useCanvasState({ system: { ...system, root }, view: {}, onViewChange, finger: false }),
+      )
+      result.current.actions.cycle()
+      expect(onViewChange).not.toHaveBeenCalled()
+    }
   })
 
   it('goes into a Branch of the ring under a finger, which has no double click, and does the rest alike', () => {
@@ -149,13 +180,10 @@ describe("a line of a tile's menu that goes somewhere", () => {
     expect(onViewChange).toHaveBeenCalledOnce()
   })
 
-  it("shows a Tile's Context by centering it, and the center's inside it, opening it were it folded", () => {
+  it("shows the center's Context inside it, opening it were it folded, and no other Tile's", () => {
     const { state, actions: act, onViewChange } = render(open)
     act.go(hexOf(state.hexes, 'tile:a'), 'show-context')
-    expect(onViewChange).toHaveBeenLastCalledWith(
-      { center: 'a', frame: 'children', inner: 'context' },
-      { gesture: 'show-context', tile: 'a' },
-    )
+    expect(onViewChange).not.toHaveBeenCalled()
     act.go(hexOf(state.hexes, 'tile:root'), 'show-context')
     expect(onViewChange).toHaveBeenLastCalledWith(
       { ...open, inner: 'context' },
@@ -182,6 +210,48 @@ describe("a line of a tile's menu that goes somewhere", () => {
     const top = render({})
     top.actions.go(hexOf(top.state.hexes, 'tile:root'), 'back-out')
     expect(top.onViewChange).not.toHaveBeenCalled()
+  })
+})
+
+describe('the C key', () => {
+  it('cycles the center: alone, opened into its ring, its Context inside too, then alone again', () => {
+    const steps: [CanvasView, CanvasView, ViewAction['gesture']][] = [
+      [{}, open, 'expand'],
+      [open, { ...open, inner: 'context' }, 'show-context'],
+      [{ ...open, inner: 'context' }, {}, 'collapse'],
+    ]
+    for (const [from, to, gesture] of steps) {
+      const { actions: act, onViewChange } = render(from)
+      act.cycle()
+      expect(onViewChange).toHaveBeenLastCalledWith(to, { gesture, tile: 'root' })
+    }
+  })
+
+  it('keeps a Branch of the ring open as the Context shows inside the center', () => {
+    const { actions: act, onViewChange } = render({ ...open, expanded: { 1: 'children' } })
+    act.cycle()
+    expect(onViewChange).toHaveBeenLastCalledWith(
+      { ...open, inner: 'context', expanded: { 1: 'children' } },
+      { gesture: 'show-context', tile: 'root' },
+    )
+  })
+
+  it('skips a Context that shows nothing, folding the center back from its ring', () => {
+    const { actions: act, onViewChange } = render(inA, { fills: () => false })
+    act.cycle()
+    expect(onViewChange).toHaveBeenLastCalledWith(
+      { center: 'a' },
+      { gesture: 'collapse', tile: 'a' },
+    )
+  })
+
+  it('does nothing where the center holds its click back', () => {
+    const { actions: act, onViewChange } = render(
+      {},
+      { lets: () => ({ click: false, recenter: true }) },
+    )
+    act.cycle()
+    expect(onViewChange).not.toHaveBeenCalled()
   })
 })
 

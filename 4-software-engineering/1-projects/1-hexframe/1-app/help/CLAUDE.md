@@ -1,5 +1,5 @@
 ---
-title: Hexframe
+title: Help
 parent: 4-software-engineering/1-projects/1-hexframe/1-app/help
 owner: diplo
 preview: >-

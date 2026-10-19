@@ -85,7 +85,7 @@ function ringGroups(
   switch (kind) {
     case 'branch':
       return [
-        ['open', 'go-in', 'show-context'],
+        ['open', 'go-in'],
         ['edit', turns && 'make-leaf'],
         [holds && 'add', 'move'],
         ['ask-agent'],
@@ -94,7 +94,7 @@ function ringGroups(
       ]
     case 'leaf':
       return [
-        ['open', 'show-context'],
+        ['open'],
         ['edit', turns && 'make-branch'],
         [holds && 'add', 'move'],
         ['ask-agent'],

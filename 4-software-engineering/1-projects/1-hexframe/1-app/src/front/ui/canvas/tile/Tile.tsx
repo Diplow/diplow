@@ -1,7 +1,8 @@
 // A tile, drawn by its light alone (HEX-104's proposal, on the canvas since HEX-106). What it is,
 // where it stands, what happens to it and who touches it change that light, and never add a box: a
 // Branch fades toward its foot, where its frame shows in small; a Leaf is lit evenly; the Context
-// is teal; the root, the only warm tile, is you. Under the pointer the light rises; the keyboard's
+// is teal; a star, the root of its System, glows: amber, a person's, you on your own, or rose, an
+// Organization's. Under the pointer the light rises; the keyboard's
 // focus is the ring's amber line; the center keeps the one steady line. A write still on its way
 // sweeps a light over it; refused, it flares and its caller puts it back. Who touches it marks it
 // (`marks/`, HEX-108): the chat pointing at it, the agent at work, a change you haven't seen, what a
@@ -35,10 +36,12 @@ import {
   type Point,
 } from '../geometry/geometry'
 import { buttonKeys, type Action, type Hand } from '../keys'
+import type { SunLight } from '../view/tiles'
 import { BlurDef, FadeDef, points, proposedRim, Sweep, tint, type Fade } from './light'
 import { fitAlone, fitWords, linesThatFit } from '../geometry/words'
 import { MarkGlow, MarkLines } from './marks/Marks'
 import { markNote, type TileMark } from './marks/mark'
+import { useSettle } from './settle'
 
 /**
  * Where it stands: in a ring, at the center, alone at the center, folded, its words read rather than
@@ -138,6 +141,11 @@ export type TileProps = TileLook & {
    * rim in your amber, since the click is yours, breathing, held still with reduced motion (HEX-121).
    */
   invites?: boolean
+  /**
+   * A star, the root of its System, glowing in its light: a person's amber, or an Organization's
+   * rose. The user's own Root glows amber without it.
+   */
+  sun?: SunLight | undefined
 }
 
 /** What only one kind takes, read off any tile: none for the others. */
@@ -199,10 +207,25 @@ interface Lights {
 const evenly = (color: string): Fade => ({ top: color, foot: color })
 const between = (one: string, other: string, percent: number) =>
   `color-mix(in oklab, var(--${one}) ${String(percent)}%, var(--${other}))`
-const warm = (top: number, foot: number): Fade => ({
-  top: tint('glow', top),
-  foot: tint('glow-soft', foot),
+/** A star's glow, by its light: what `glow` is to a person, `organization` is to an Organization. */
+const glows: Record<SunLight, { glow: string; soft: string; halo: string; rim: string }> = {
+  human: { glow: 'glow', soft: 'glow-soft', halo: 'halo', rim: 'human' },
+  organization: {
+    glow: 'organization',
+    soft: 'organization-soft',
+    halo: 'organization-halo',
+    rim: 'organization',
+  },
+}
+const warm = (top: number, foot: number, light: SunLight = 'human'): Fade => ({
+  top: tint(glows[light].glow, top),
+  foot: tint(glows[light].soft, foot),
   diagonal: true,
+})
+/** A star's lights, a person's or an Organization's, as the named root's. */
+const starLights = (light: SunLight): Lights => ({
+  rest: warm(34, 6, light),
+  lit: warm(46, 12, light),
 })
 const tile: Lights = {
   rest: { top: 'var(--tile)', foot: 'var(--tile-fade)' },
@@ -274,6 +297,7 @@ export function Tile(props: TileProps) {
   const { hex, place = 'ring', write, held, motion, action, onGoIn } = props
   const { scale = 1, hand, mark } = props
   const id = useId()
+  const settling = useSettle(hex, place)
   const pending = write === 'pending'
   const sized = sizedOf(hex, scale, place)
   // At the center and at a heart, the ring around it says what the foot would; elsewhere the foot
@@ -316,6 +340,7 @@ export function Tile(props: TileProps) {
           aria-busy={pending || undefined}
         >
           <g
+            ref={settling}
             className={cn(
               'transition-[scale] duration-200 ease-glide motion-reduce:transition-none',
               action !== undefined && 'group-active:scale-[.965]',
@@ -391,7 +416,7 @@ function rimOf(props: TileProps, id: string): Rim | undefined {
   if (props.invites === true) return inviting
   const own = rims[kind]
   if (own !== undefined || !centered(place)) return own
-  if (rises(kind)) return { color: `url(#${id}-rim)`, unlit: kind === 'untitled' }
+  if (sunOf(props) !== undefined) return { color: `url(#${id}-rim)`, unlit: kind === 'untitled' }
   return { color: 'var(--input)' }
 }
 
@@ -405,14 +430,15 @@ function Light(props: TileProps & { id: string }) {
     held === 'pressed' ||
     mark?.pointed === 'tile'
   const rim = rimOf(props, id)
+  const glow = glows[sunOf(props) ?? 'human']
   return (
     <>
       <defs>
-        <FadeDef id={`${id}-rest`} fade={lights[props.kind].rest} rising={rises(props.kind)} />
-        <FadeDef id={`${id}-lit`} fade={lights[props.kind].lit} rising={rises(props.kind)} />
+        <FadeDef id={`${id}-rest`} fade={lightsOf(props).rest} rising={rises(props.kind)} />
+        <FadeDef id={`${id}-lit`} fade={lightsOf(props).lit} rising={rises(props.kind)} />
         <FadeDef
           id={`${id}-rim`}
-          fade={{ top: 'var(--glow-soft)', foot: tint('human', 20), diagonal: true }}
+          fade={{ top: `var(--${glow.soft})`, foot: tint(glow.rim, 20), diagonal: true }}
         />
       </defs>
       <Glows {...props} />
@@ -473,25 +499,37 @@ function Light(props: TileProps & { id: string }) {
  */
 const rises = (kind: TileKind) => kind === 'root' || kind === 'untitled'
 
+/** The light it glows in, a star's: the one its caller says, or, the user's own Root, theirs. */
+const sunOf = ({ kind, sun }: TileProps): SunLight | undefined =>
+  sun ?? (rises(kind) ? 'human' : undefined)
+
+/** Its fill, at rest and lit: a star's, in its light, or its kind's. */
+const lightsOf = (props: TileProps): Lights => {
+  const sun = sunOf(props)
+  return sun === undefined || props.kind === 'untitled' ? lights[props.kind] : starLights(sun)
+}
+
 /**
- * The lights behind it: the root's halo, small while it is untitled, a draft breathing in its
- * writer's voice, the breath round the rim of the one thing that answers, and the blur they, and who
- * touches it, glow by.
+ * The lights behind it: a star's halo, in its light, the user's own small while it is untitled, a
+ * draft breathing in its writer's voice, the breath round the rim of the one thing that answers, and
+ * the blur they, and who touches it, glow by.
  */
 function Glows(props: TileProps & { id: string }) {
   const { hex, kind, id, invites = false } = props
+  const sun = sunOf(props)
+  const halo = glows[sun ?? 'human'].halo
   return (
     <>
       <defs>
         <radialGradient id={`${id}-halo`}>
-          <stop offset="0" style={{ stopColor: tint('halo', 50) }} />
-          <stop offset=".42" style={{ stopColor: tint('halo', 30) }} />
-          <stop offset=".7" style={{ stopColor: tint('halo', 8) }} />
-          <stop offset="1" style={{ stopColor: tint('halo', 0) }} />
+          <stop offset="0" style={{ stopColor: tint(halo, 50) }} />
+          <stop offset=".42" style={{ stopColor: tint(halo, 30) }} />
+          <stop offset=".7" style={{ stopColor: tint(halo, 8) }} />
+          <stop offset="1" style={{ stopColor: tint(halo, 0) }} />
         </radialGradient>
         <BlurDef id={`${id}-blur`} />
       </defs>
-      {rises(kind) ? (
+      {sun !== undefined ? (
         <circle
           cx={hex.center.x}
           cy={hex.center.y}
@@ -568,11 +606,11 @@ const kindNames: Record<TileKind, () => string> = {
 
 /**
  * Its words, in the box its size on screen gives them (`fitWords`): the title, in italics at the
- * center, alone on a small tile; on a larger one the preview below it, as many lines as fit, then the
- * word under them.
+ * center, alone on a small tile; on a larger one, at the center alone, the preview below it, as many
+ * lines as fit, a tile anywhere else leaving it to its hover card; then the word under them.
  */
 function Words(props: TileProps & { sized: Sized }) {
-  const { hex, kind, words, place = 'ring', sized, mark } = props
+  const { hex, words, place = 'ring', sized, mark } = props
   const alone = sized.preview === undefined
   const label = useRef<HTMLDivElement>(null)
   const lines = usePreviewLines(label)
@@ -593,12 +631,11 @@ function Words(props: TileProps & { sized: Sized }) {
         <span className={cn(titleClass(props, alone), toldOf(mark?.told, 'title'))}>
           {words.title}
         </span>
-        {!alone && words.preview ? (
+        {!alone && centered(place) && words.preview ? (
           <span
             data-preview
             className={cn(
-              'mt-[.7em] max-w-[90%] shrink-0 overflow-hidden font-sans font-light leading-[1.4] text-muted-foreground',
-              (centered(place) || kind === 'root') && 'text-foreground/80',
+              'mt-[.7em] max-w-[90%] shrink-0 overflow-hidden font-sans font-light leading-[1.4] text-foreground/80',
               toldOf(mark?.told, 'preview'),
             )}
             style={{

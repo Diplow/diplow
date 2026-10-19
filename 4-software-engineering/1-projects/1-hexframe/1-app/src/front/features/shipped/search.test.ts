@@ -3,11 +3,16 @@ import { describe, expect, it } from 'vitest'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 
 import { tutorialRules } from './tutorial/rules'
+import { hexframeStar } from '#/domains/mapping/entities'
+
 import {
   fromHelpPage,
+  helpOnStar,
+  helpViewIn,
   readHelpSearch,
   readTutorialSearch,
   shippedOnCanvas,
+  shippedSun,
   shippedTells,
   topicOf,
   turnedTo,
@@ -184,5 +189,46 @@ describe("the System hexframe ships on home's canvas", () => {
 
   it("is none with neither named, the canvas the Account's System's", () => {
     expect(shippedOnCanvas({ ...view, help: undefined, tutorial: undefined })).toBeUndefined()
+  })
+})
+
+describe("Help's view, on the canvas drawn from the Hexframe star", () => {
+  it("opens on Help's Root where the URL names no center, the star never by default", () => {
+    expect(helpOnStar({})).toEqual({ center: 'help' })
+    expect(helpOnStar({ center: 'help/3', frame: 'children' })).toEqual({
+      center: 'help/3',
+      frame: 'children',
+    })
+    expect(helpOnStar({ center: hexframeStar })).toEqual({ center: hexframeStar })
+  })
+
+  it('names the star outright once the canvas centers it, so the URL tells it from Help', () => {
+    const shut = { help: undefined, center: 'help/3' }
+    expect(helpViewIn(shut, { frame: 'children' })).toMatchObject({
+      center: hexframeStar,
+      frame: 'children',
+      help: undefined,
+    })
+  })
+
+  it("turns the widget to a Tile of Help centered, and to Help's Root for the star or the tutorial", () => {
+    const open = { help: 'help/3', center: 'help/3' }
+    expect(helpViewIn(open, { center: 'help/2' })).toMatchObject({
+      center: 'help/2',
+      help: 'help/2',
+    })
+    expect(helpViewIn(open, {})).toMatchObject({ center: hexframeStar, help: true })
+    expect(helpViewIn(open, { center: 'tutorial' })).toMatchObject({
+      center: 'tutorial',
+      help: true,
+    })
+    expect(helpViewIn(open, { center: 'help/3' })).toMatchObject({ help: 'help/3' })
+  })
+})
+
+describe('the star a System hexframe ships stands under', () => {
+  it('glows rose, Help drawn from it, the tutorial from its own Root in its Direction 2', () => {
+    expect(shippedSun('help')).toEqual({ light: 'organization', rootAt: [] })
+    expect(shippedSun('tutorial')).toEqual({ light: 'organization', rootAt: [2] })
   })
 })

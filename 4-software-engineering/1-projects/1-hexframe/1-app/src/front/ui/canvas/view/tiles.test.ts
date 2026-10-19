@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { findTile, firstKindOf, kindsOf, pathTo, type TileNode } from './tiles'
+import { findTile, firstKindOf, kindsOf, pathTo, sunward, type TileNode } from './tiles'
 
 const tile = (id: string, more: Partial<TileNode> = {}): TileNode => ({
   id,
@@ -92,5 +92,43 @@ describe('kindsOf', () => {
 
   it('shows Children first where they are offered', () => {
     expect(firstKindOf(system)).toBe('children')
+  })
+})
+
+describe('sunward', () => {
+  /** The quarter of the canvas a vector points to, by the sign of each of its parts. */
+  const toward = (vector: { x: number; y: number } | undefined) =>
+    vector && { x: Math.sign(Math.round(vector.x * 1e6)), y: Math.sign(Math.round(vector.y * 1e6)) }
+
+  it('lights nothing at the star itself, nor for a Tile the System does not hold', () => {
+    expect(sunward(system, 'root')).toBeUndefined()
+    expect(sunward(system, 'nowhere')).toBeUndefined()
+  })
+
+  it('points back the way a Child stands from it: from its top left, to the bottom right', () => {
+    expect(toward(sunward(system, 'a'))).toEqual({ x: 1, y: 1 })
+    expect(toward(sunward(system, 'b'))).toEqual({ x: -1, y: -1 })
+    expect(toward(sunward(system, 'notes'))).toEqual({ x: -1, y: 1 })
+  })
+
+  it('weighs the first step from the star most, so a Child turning back does not hide it', () => {
+    const turning = tile('root', { branches: { 1: tile('a', { branches: { 4: tile('a4') } }) } })
+    expect(toward(sunward(turning, 'a4'))).toEqual({ x: 1, y: 1 })
+    expect(toward(sunward(system, 'a3b'))).toEqual(toward(sunward(system, 'a')))
+  })
+
+  it('counts a Context Tile by its Direction too', () => {
+    expect(toward(sunward(system, 'why'))).toEqual({ x: -1, y: 1 })
+  })
+
+  it('points to a star the root drawn stands below, from the root itself', () => {
+    // A root in its star's Direction 1: the star stands to its bottom right.
+    expect(toward(sunward(system, 'root', [1]))).toEqual({ x: 1, y: 1 })
+    expect(toward(sunward(system, 'b', [1]))).toEqual({ x: 1, y: 1 })
+  })
+
+  it('is a unit vector', () => {
+    const vector = sunward(system, 'a3b')
+    expect(Math.hypot(vector?.x ?? 0, vector?.y ?? 0)).toBeCloseTo(1)
   })
 })

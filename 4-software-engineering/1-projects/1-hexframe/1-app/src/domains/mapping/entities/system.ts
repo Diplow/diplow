@@ -86,6 +86,12 @@ export type ShippedRoot = (typeof shippedRoots)[number]
 export const hexframeStar = '1444d914-02ce-4951-84f5-5f344fd76718'
 
 /**
+ * Where each System hexframe ships stands under the Hexframe star: Help first, then the tutorial. The
+ * canvas reads it too, to light the way back to that star from either.
+ */
+export const mountedAt = { help: 1, tutorial: 2 } as const satisfies Record<ShippedRoot, Direction>
+
+/**
  * The System hexframe ships that an id names, by its Root: the Root or anything below it, well formed
  * or not, whether a Tile stands there or not; none for any other id. A change writing one is refused,
  * so `help/../x` is Help's too.

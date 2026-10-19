@@ -384,6 +384,28 @@ export function useShipped(
 }
 
 /**
+ * The System holding a Tile Everyone may read, as anyone sees it (`publicSystem`), in a language:
+ * the Hexframe Organization's, from its star's card, for a Tile of Help, which home draws from that
+ * star, so its corner names every ancestor. Signed in or not, as `useShipped` reads, with the same
+ * `throwing: false` for a reader beside the canvas, and `enabled: false` for one that reads none.
+ */
+export function usePublicSystem(
+  tile: string,
+  language: Locale,
+  { throwing = true, enabled = true }: { throwing?: boolean; enabled?: boolean } = {},
+) {
+  const query = {
+    ...read({
+      scope: 'publicSystem',
+      key: [tile, language],
+      call: () => publicSystem({ data: { tile, language } }),
+    }),
+    enabled,
+  }
+  return useQuery(throwing ? query : { ...query, throwOnError: false })
+}
+
+/**
  * A write to the System, scoped by the Operation it runs and queued behind the writes made before it.
  * Its turn come, it is decided on the System the client holds, which by then holds every write made
  * before it: a refusal foreseen there goes to its channel and nothing is sent. Settled, the System is

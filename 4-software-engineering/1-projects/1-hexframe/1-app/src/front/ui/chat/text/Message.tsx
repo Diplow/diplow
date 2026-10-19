@@ -315,8 +315,9 @@ function Copies({ words, copies = true, busy, className, children }: CopiesProps
         runsToCurve,
         copies && [
           'group/message relative isolate cursor-copy focus-visible:outline-1 focus-visible:outline-offset-4',
-          // Hovered, its ground lights from its mark, fading toward the curve and softly at its ends.
-          'before:absolute before:-inset-y-1 before:left-0 before:-right-2.5 before:-z-10 before:bg-linear-to-r before:from-foreground/8 before:via-foreground/5 before:via-70% before:to-transparent before:opacity-0 before:transition-opacity before:duration-400 before:[mask-image:linear-gradient(to_bottom,transparent,black_6px,black_calc(100%-6px),transparent)] hover:before:opacity-100',
+          // Hovered, its ground lights around it, a margin clear of its mark and its words, a soft
+          // light with no corner, feathered at every edge and fading toward the curve.
+          'before:absolute before:-inset-y-3 before:-left-3.5 before:-right-3 before:-z-10 before:rounded-[1.25rem] before:[mask-image:linear-gradient(to_bottom,transparent,black_10px,black_calc(100%-10px),transparent),linear-gradient(to_right,transparent,black_14px)] before:[mask-composite:intersect] before:bg-linear-to-r before:from-foreground/7 before:via-foreground/4 before:via-70% before:to-transparent before:opacity-0 before:transition-opacity before:duration-400 hover:before:opacity-100',
         ],
         className,
       )}

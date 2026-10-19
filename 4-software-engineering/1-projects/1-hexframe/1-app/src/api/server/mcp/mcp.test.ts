@@ -159,7 +159,7 @@ describe('Help, through the MCP endpoint', () => {
     const opened = await call(client, 'open_tile', { id: 'help' })
     expect(opened).toMatchObject({
       value: {
-        tile: { _tag: 'Tile', id: 'help', title: 'Hexframe' },
+        tile: { _tag: 'Tile', id: 'help', title: 'Help' },
         // Help stands under the Hexframe Organization's star, by its card (HEX-139).
         parent: { id: hexframeStar, title: 'Hexframe' },
         branches: { 1: { _tag: 'Tile', id: 'help/1' }, 6: { _tag: 'Tile', id: 'help/6' } },
@@ -170,7 +170,7 @@ describe('Help, through the MCP endpoint', () => {
     expect(await call(client, 'map', { id: 'help/3' })).toMatchObject({
       value: {
         tile: { _tag: 'Tile', id: 'help/3', context: { '-1': { _tag: 'Tile', id: 'help/3/-1' } } },
-        parent: { id: 'help', title: 'Hexframe' },
+        parent: { id: 'help', title: 'Help' },
       },
     })
     const { error } = await call(client, 'open_tile', { id: 'help/1/1' })

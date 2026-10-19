@@ -5,11 +5,8 @@
 // written to the database: whoever reads or locks that System's rows gets them beside its own, a
 // slot a mounted Root holds taken there as any. Being shipped, not a Grant, makes them read by
 // Everyone and written by nobody (`rightsOn`, `decide`).
-import { type Direction, hexframeStar, type Row, type ShippedRoot, shippedRoots } from '../entities'
+import { hexframeStar, mountedAt, type Row, shippedRoots } from '../entities'
 import { shipped, type ShippedLanguage } from './shipped'
-
-/** Where each System hexframe ships stands under the Hexframe star: Help first, then the tutorial. */
-export const mountedAt = { help: 1, tutorial: 2 } as const satisfies Record<ShippedRoot, Direction>
 
 /** The rows of every System hexframe ships in a language, each Root moved under the Hexframe star. */
 const mountedIn = (language: ShippedLanguage): ReadonlyArray<Row> =>
