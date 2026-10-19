@@ -1,0 +1,83 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/visit/visit.ts
+  s_26e824f9db9c89::t_0cc4bec3ec6919 11
+  s_26e824f9db9c89::t_5d8327f77eda5e 74
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/atoms/useCycleKey.test.ts
+  s_26e824f9db9c89::t_350d65754d4a03 1-105
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/Breadcrumb.tsx
+  s_26e824f9db9c89::t_61791c3ac6af51 21-22,27,37
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/layouts/Rail.tsx
+  s_26e824f9db9c89::t_23a0a778aa6fc6 16
+  s_26e824f9db9c89::t_0cc4bec3ec6919 38,121,126
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/tiles.test.ts
+  s_26e824f9db9c89::t_0cc4bec3ec6919 125
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_26e824f9db9c89::t_474b079aeffa28 45
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_26e824f9db9c89::t_474b079aeffa28 30-31,44
+  s_26e824f9db9c89::t_7606b0db42ea6e 42
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/light.tsx
+  s_26e824f9db9c89::t_0cc4bec3ec6919 8,111,141
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/view.ts
+  s_26e824f9db9c89::t_9cd082dd039741 137-141,147,150,154-155,159,161,169,284
+  s_26e824f9db9c89::t_a2359163375fc6 136
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/visit/useVisitedState.ts
+  s_26e824f9db9c89::t_23a0a778aa6fc6 9
+  s_26e824f9db9c89::t_0cc4bec3ec6919 22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_26e824f9db9c89::t_2b00803ce6a240 356,367
+  s_26e824f9db9c89::t_5d8327f77eda5e 116,700
+  s_26e824f9db9c89::t_61791c3ac6af51 66,302,376,450
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/view.test.ts
+  s_26e824f9db9c89::t_114af5e4f5fbdb 272-277
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/search.ts
+  s_26e824f9db9c89::t_61791c3ac6af51 10,19,100-106
+  s_26e824f9db9c89::t_8230e6f77192e6 107-108
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.ts
+  s_26e824f9db9c89::t_9cd082dd039741 86,95-97,99,212,351-352,358-359
+  s_26e824f9db9c89::t_54fad6d3c58aea 28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/atoms/useCycleKey.ts
+  s_26e824f9db9c89::t_51e9df0f9703e1 1-40
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Canvas.tsx
+  s_26e824f9db9c89::t_51e9df0f9703e1 35-36
+  s_26e824f9db9c89::t_23a0a778aa6fc6 59
+  s_26e824f9db9c89::t_134f09568c78f1 60
+  s_26e824f9db9c89::t_9cd082dd039741 401-402,407-408
+  s_26e824f9db9c89::t_5d8327f77eda5e 57
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/tiles.ts
+  s_26e824f9db9c89::t_0cc4bec3ec6919 108-110,112-114,117
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/t/$id.tsx
+  s_26e824f9db9c89::t_61791c3ac6af51 95,105,109
+  s_26e824f9db9c89::t_5d8327f77eda5e 27
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/search.test.ts
+  s_26e824f9db9c89::t_7f25078970bd03 15,228-232
+  s_26e824f9db9c89::t_a14c280afea790 233-234
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/keys.ts
+  s_26e824f9db9c89::t_51e9df0f9703e1 4,6
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/visit/VisitPage.tsx
+  s_26e824f9db9c89::t_61791c3ac6af51 18,23-24,76
+  s_26e824f9db9c89::t_5d8327f77eda5e 13,49
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.test.ts
+  s_26e824f9db9c89::t_114af5e4f5fbdb 132-142
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE.md
+  s_26e824f9db9c89::t_474b079aeffa28 22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/CLAUDE.md
+  s_26e824f9db9c89::t_474b079aeffa28 35
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/Tile.tsx
+  s_26e824f9db9c89::t_0cc4bec3ec6919 39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5190ca955f9f70518ccc8fd391011e80323034cb",
+  "prompts": {},
+  "sessions": {
+    "s_26e824f9db9c89": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d56935ef-25cc-4939-84f0-31661521d744",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
