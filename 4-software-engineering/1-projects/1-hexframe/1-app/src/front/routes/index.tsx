@@ -103,12 +103,11 @@ import {
 } from '#/front/features/system/widget/state/useTileWidgetsState'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
-import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { Told } from '#/front/ui/chat/text/Message'
 import { useTold } from '#/front/ui/motion'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
 import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
-import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
+import { CanvasLoading, type CanvasMarks } from '#/front/ui/canvas/Canvas'
 import { Journey } from '#/front/ui/canvas/layouts/Journey'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
@@ -778,7 +777,7 @@ function SystemPage(props: SystemPageProps) {
 function Loading() {
   return (
     <div className={side}>
-      <Skeleton className="min-h-0 flex-1" />
+      <CanvasLoading className="min-h-0 flex-1" />
     </div>
   )
 }

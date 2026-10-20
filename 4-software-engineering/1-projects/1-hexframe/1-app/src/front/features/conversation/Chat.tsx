@@ -38,7 +38,6 @@ import { useSignOut } from '#/front/client/iam/access'
 import { useDecideJoinRequest } from '#/front/client/iam/organizations'
 import { useSystem } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import { Skeleton } from '#/front/ui/atoms/skeleton'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 
 import { mentionablesOf } from './composer/mention'
@@ -149,7 +148,8 @@ export function ChatTimeline(props: ChatTimelineProps) {
   )
   const { messages, forget } = useMessagesOnTheirWay()
   const recording = useNavigationsOnTheirWay()
-  if (data === undefined) return <Skeleton className="h-40" />
+  // Nothing until today is read: the conversation rises from its foot, as an empty one shows.
+  if (data === undefined) return null
   const now = new Date()
   // The pages come today first; the timeline reads oldest first.
   const days = data.pages.map(({ day, entries, titles, requests }, index) =>
