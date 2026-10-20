@@ -124,6 +124,7 @@ export function System({
         marks={marks}
         onCarry={onCarry}
         sun={sun}
+        runsOn
         className="min-h-0 w-full flex-1"
       />
       <Dialog

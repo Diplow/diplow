@@ -5,19 +5,28 @@
 // that go somewhere, and the move's gestures through `useMove`.
 import type { PointerEvent, ReactElement } from 'react'
 
+import { m } from '#/paraglide/messages'
+
+import { directions } from './geometry/geometry'
 import type { EmptySlotTarget } from './geometry/shape'
 import type { Action, Hand } from './keys'
 import type { Target } from './state/move/useMove'
-import { isViewVerb, type Looking, type TileHex, type ViewVerb } from './state/useCanvasState'
+import {
+  isViewVerb,
+  type Looking,
+  type TileHex,
+  type useCanvasState,
+  type ViewVerb,
+} from './state/useCanvasState'
 import { TileMenu } from './tile/menu/TileMenu'
 import type { PickerFrame } from './tile/menu/Picker'
 import { groupsOf, slotPlace, type Subject, type TileAct, type Verb } from './tile/menu/verbs'
 import { markNote, type TileMark } from './tile/marks/mark'
 import { Aside, LandingSlot, Lifted, SwapDisc } from './tile/moving/Moving'
 import { Slot } from './tile/places'
-import { pathTo, type TileNode } from './view/tiles'
-import { cardOf, type CardWords } from './view/looks'
-import type { TileLook } from './tile/Tile'
+import { pathTo, type SunLight, type TileNode } from './view/tiles'
+import { cardOf, placeOf, type CardWords } from './view/looks'
+import { Tile, type TileLook } from './tile/Tile'
 
 /** What a Tile's or a free slot's menu says of it, and what its lines do. */
 export interface Acting {
@@ -71,14 +80,28 @@ export function lookingAt(
 ): Acting | undefined {
   const { kind } = look
   if (kind === 'list' || kind === 'ghost' || kind === 'writing') return undefined
-  const at = hex.role === 'center' ? undefined : hex.direction
-  const parent = at === undefined ? pathTo(system, hex.tile.id).at(-2) : hex.parent
+  const above = pathTo(system, hex.tile.id).at(-2)
+  // The Tile the center stands in, drawn around it, is told where it stands in its own.
+  const at =
+    hex.role === 'center'
+      ? undefined
+      : hex.role === 'above'
+        ? whereIn(above, hex.tile)
+        : hex.direction
+  const parent = at === undefined || hex.role === 'above' ? above : hex.parent
   const words = { title: hex.tile.title, ...(parent && { parent: parent.title }) }
   const looked = { without: acts, onAct: () => undefined, cardAlone: looking === 'card' }
   if (at === undefined) return { subject: { ...words, kind, at: 'center' }, ...looked }
   const own = kind === 'root' || kind === 'untitled' ? 'branch' : kind
   return { subject: { ...words, kind: own, at }, ...looked }
 }
+
+/** The Direction a Tile stands in, in the ring of the Tile above it; none for a Context Tile's. */
+const whereIn = (above: TileNode | undefined, tile: TileNode) =>
+  directions.find(
+    (direction) =>
+      above?.branches?.[direction]?.id === tile.id || above?.leaves?.[direction]?.id === tile.id,
+  )
 
 /** A Tile on the move, and which Tiles offer to trade places with it. */
 export interface Moving {
@@ -99,6 +122,8 @@ const moves = ({ subject, without = [] }: Acting) =>
 /** A Reference is drawn under its Tile's id, which stands elsewhere: it is never the one moving. */
 export const standsFor = (hex: TileHex, id: string | undefined) =>
   hex.tile.id === id && hex.tile.reference === undefined
+
+type CanvasActions = ReturnType<typeof useCanvasState>['actions']
 
 /** What the canvas hands a Tile's hex: its acting, the move, the gestures, how it is drawn. */
 export interface TileHexProps {
@@ -198,6 +223,60 @@ export function TileHexView(props: TileHexProps) {
         />
       )}
     </g>
+  )
+}
+
+/**
+ * A Tile around the drawing, the one the center stands in or one beside it, drawn by its light: its
+ * hover card alone, no menu, its click, a double click or Shift+Enter centering it; stepped back
+ * while a tile moves or another's menu is open.
+ */
+export function AroundHexView(
+  props: Pick<TileHexProps, 'hex' | 'look' | 'aside' | 'onPoint' | 'scale'> & {
+    system: TileNode
+    actions: Pick<CanvasActions, 'click' | 'center'>
+    /** The light it glows in, a star's. */
+    sun: SunLight | undefined
+  },
+) {
+  const { hex, look, actions } = props
+  const acting = lookingAt(props.system, hex, look, 'card')
+  const draw = (hand?: Hand) => (
+    <Tile
+      hex={hex.hex}
+      {...look}
+      place={placeOf(hex)}
+      scale={props.scale}
+      sun={props.sun}
+      action={{
+        label: m.hex_tile_center({ title: hex.tile.title }),
+        onSelect: () => {
+          actions.click(hex)
+        },
+      }}
+      onGoIn={(from) => {
+        actions.center(hex, from)
+      }}
+      {...(hand && { hand })}
+    />
+  )
+  return (
+    <Aside aside={props.aside}>
+      {acting === undefined ? (
+        draw()
+      ) : (
+        <TileMenu
+          subject={acting.subject}
+          card={cardOf(look)}
+          {...(acting.without && { without: acting.without })}
+          onPoint={props.onPoint}
+          cardAlone
+          onAct={acting.onAct}
+        >
+          {draw}
+        </TileMenu>
+      )}
+    </Aside>
   )
 }
 

@@ -35,15 +35,19 @@ export interface EmptySlotTarget {
 
 /**
  * What a hex holding a Tile stands for: the center, a member of a ring by kind, or `hub`, a Branch of
- * the ring around the center drawn at the heart of the Frame it opens into.
+ * the ring around the center drawn at the heart of the Frame it opens into; or, around the drawing,
+ * the Tile the center stands in (`above`) and a Tile of its ring beside the center (`beside`).
  */
-type TileRole = 'center' | 'hub' | MemberKind
+type TileRole = 'center' | 'hub' | MemberKind | 'above' | 'beside'
 
 interface Drawn {
   /** Unique on the canvas and stable across views, for React: a Tile keeps it when it opens. */
   key: string
   hex: Hex
-  /** 0 the center, 1 its rings' members, 2 the members of a Branch it opens. */
+  /**
+   * 0 the center, 1 its rings' members, 2 the members of a Branch it opens; around them, -1 the Tile
+   * the center stands in, 0 those beside it.
+   */
   generation: number
 }
 
@@ -67,10 +71,18 @@ export type CanvasHex =
       clash?: TileNode
       /** The center folded, no ring around it: the canvas's one tile, filling it. */
       alone?: true
+      /**
+       * The center's heart, as one world draws it: where its tile stands in its whole hex, its ring
+       * inside that hex once opened, its tile filling it a heart's share larger while folded; the
+       * Tiles beside it stand around that whole hex.
+       */
+      heart?: Hex
     })
   | (Drawn & { kind: 'ground'; ring: FrameKind })
   | (Drawn & { kind: 'empty'; slot: EmptySlotTarget })
   | (Drawn & { kind: 'list'; tile: TileNode; ring: FrameKind; names: string[] })
+
+type Of<Kind extends CanvasHex['kind']> = Extract<CanvasHex, { kind: Kind }>
 
 /** The canvas's units per unit of the shape's layout, where a ring's hex has a radius of 1. */
 const scale = 100
@@ -80,6 +92,15 @@ export const canvasSize = { width: viewWidth * scale, height: viewHeight * scale
 
 /** The gap a hex leaves to its neighbors, as a share of its radius: the layout's hexes touch. */
 const gap = 0.05
+
+/**
+ * A Tile's tile at the heart of its hex opened in place, as a share of that hex: the shape's Frame
+ * inside a hex takes its radius less a margin, its Tile a third of that (`layout.ts`).
+ */
+export const heartShare = 0.92 / 3
+
+/** The radius the center is drawn at once its ring shows around it, as is each hex of that ring. */
+const openedRadius = insetHex({ center: { x: 0, y: 0 }, radius: scale }, scale * gap).radius
 
 /**
  * The share of the canvas a folded center takes, alone: the shape fills the canvas with it, and the
@@ -104,6 +125,61 @@ export function layoutCanvas(shown: ShownView): CanvasHex[] {
   const ledger: Ledger = { tiles: new Map(), clashes: new Map() }
   const placements = layoutView(viewOf(shown, ledger))
   return placements.flatMap((placement) => hexOf(placement, placements, shown, ledger))
+}
+
+/**
+ * The Tiles around the center, as one world lays them: the Tile it stands in (`above`), and the
+ * other members of that Tile's ring (`beside`), each where it stands around the center's whole hex
+ * (`heart`), the center's hex in the ring around that Tile scaled to it, as the camera leaves them
+ * going into the center from there (`useCamera`), so they run on past the canvas. `above` is the view
+ * of the Tile the center stands in, opened as centering it opens it; none where the center is not
+ * in the ring around it, a Leaf inside it.
+ */
+export function surroundingsOf(above: ShownView, center: Of<'tile'>): Of<'tile'>[] {
+  const hexes = layoutCanvas(above)
+  const heart = framed(hexes, above.center.id)
+  if (heart === undefined || center.heart === undefined) return []
+  const whole = { center: center.heart.center, radius: center.heart.radius / heartShare }
+  const around = hexes.filter(
+    (hex): hex is Of<'tile'> =>
+      hex.kind === 'tile' &&
+      hex.generation === 1 &&
+      Math.hypot(hex.hex.center.x - heart.center.x, hex.hex.center.y - heart.center.y) >=
+        heart.radius,
+  )
+  const at = around.find(
+    (hex) => hex.tile.id === center.tile.id && hex.tile.reference === undefined,
+  )
+  if (at === undefined) return []
+  const share = whole.radius / at.hex.radius
+  const placed = ({ center: point, radius }: Hex): Hex => ({
+    center: {
+      x: whole.center.x + (point.x - at.hex.center.x) * share,
+      y: whole.center.y + (point.y - at.hex.center.y) * share,
+    },
+    radius: radius * share,
+  })
+  const parent = { kind: 'tile', tile: above.center, role: 'above', generation: -1 } as const
+  return [
+    { ...parent, key: `above:${above.center.id}`, hex: placed(heart) },
+    ...around
+      .filter((hex) => hex !== at)
+      .map((hex): Of<'tile'> => ({
+        ...hex,
+        key: `beside:${hex.key}`,
+        hex: placed(hex.hex),
+        role: 'beside',
+        generation: 0,
+      })),
+  ]
+}
+
+/** Where a Tile is framed: the hex it opens into while a ring shows inside it, else its own. */
+function framed(hexes: readonly CanvasHex[], id: string): Hex | undefined {
+  return (
+    hexes.find((hex) => hex.kind === 'ground' && hex.key === `ground:${id}`)?.hex ??
+    hexes.find((hex) => hex.kind === 'tile' && hex.role === 'center')?.hex
+  )
 }
 
 /** The shape's view of `shown`: a Frame of the center, and one of each Branch it opens. */
@@ -257,9 +333,20 @@ function hexOf(
  */
 function centerOf(drawn: Drawn & { tile: TileNode }, shown: ShownView): CanvasHex {
   const center = { ...drawn, kind: 'tile', role: 'center' } as const
-  if (shown.frame !== undefined || shown.inner !== undefined) return center
-  const hex = { center: drawn.hex.center, radius: drawn.hex.radius * aloneShare }
-  return { ...center, hex, alone: true }
+  const { hex } = drawn
+  if (shown.frame !== undefined || shown.inner !== undefined) {
+    // Its ring around it, the center's tile stands at its heart, as large as the ring's; a ring
+    // inside it alone, the hex that ring opens into is its heart.
+    const radius = shown.frame === undefined ? hex.radius : openedRadius
+    return { ...center, heart: { center: hex.center, radius } }
+  }
+  const alone = { center: hex.center, radius: hex.radius * aloneShare }
+  return {
+    ...center,
+    hex: alone,
+    alone: true,
+    heart: { center: hex.center, radius: alone.radius * heartShare },
+  }
 }
 
 type TileHex = Exclude<Placement, { kind: 'empty' }>

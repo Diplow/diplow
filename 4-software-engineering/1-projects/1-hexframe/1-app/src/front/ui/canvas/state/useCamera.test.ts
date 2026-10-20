@@ -2,19 +2,19 @@
 import { act as settled, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { layoutCanvas, type CanvasHex } from '../geometry/shape'
+import { heartShare, layoutCanvas, surroundingsOf, type CanvasHex } from '../geometry/shape'
 import { pathTo, type TileNode } from '../view/tiles'
 import { centerOn, showView, type CanvasView } from '../view/view'
 
 import {
   courseOf,
   flightFor,
-  heartShare,
   keyframesOf,
   placingAt,
   reframingOf,
   stillOf,
   useCamera,
+  wholeCourseOf,
   type Drawing,
 } from './useCamera'
 
@@ -46,6 +46,18 @@ function drawn(view: CanvasView): Drawing {
     center: shown.center.id,
     path: pathTo(system, shown.center.id).map(({ id }) => id),
     hexes: layoutCanvas(shown),
+  }
+}
+
+/** The canvas's drawing of a view, with the Tiles around it, as the canvas draws them. */
+function drawnAround(view: CanvasView): Drawing {
+  const drawing = drawn(view)
+  const above = pathTo(system, drawing.center).at(-2)
+  const center = drawing.hexes.find((hex) => hex.kind === 'tile' && hex.role === 'center')
+  if (above === undefined || center?.kind !== 'tile') return drawing
+  return {
+    ...drawing,
+    around: surroundingsOf(showView(system, centerOn(system, above.id)), center),
   }
 }
 
@@ -118,6 +130,59 @@ describe('courseOf', () => {
     const below = courseOf(inB, drawn(centerOn(system, 'a3')))
     expect(below.levels).toBe(1)
     expect(near(below.to.radius * heartShare, below.from.radius)).toBe(true)
+  })
+})
+
+describe('the Tiles around the center', () => {
+  const inA = drawnAround(centerOn(system, 'a'))
+  const around = (key: string) => {
+    const found = inA.around?.find((hex) => hex.key === key)
+    if (found === undefined) throw new Error(`Nothing is drawn around under ${key}`)
+    return found.hex
+  }
+
+  it('lands them where the camera leaves them, flying into a child', () => {
+    const root = drawn(centerOn(system, 'root'))
+    const course = courseOf(root, inA)
+    const scale = course.to.radius / course.from.radius
+    const b = hexIn(root, 'tile:b').hex
+    const placed = {
+      x: course.to.center.x + (b.center.x - course.from.center.x) * scale,
+      y: course.to.center.y + (b.center.y - course.from.center.y) * scale,
+    }
+    expect(near(around('beside:tile:b').center.x, placed.x)).toBe(true)
+    expect(near(around('beside:tile:b').center.y, placed.y)).toBe(true)
+    expect(near(around('beside:tile:b').radius, b.radius * scale)).toBe(true)
+  })
+
+  it('pans to a Tile beside the center, the same size', () => {
+    const course = courseOf(inA, drawnAround(centerOn(system, 'b')))
+    expect(course).toMatchObject({ levels: 0, arrived: true })
+    expect(course.from.center).toEqual(around('beside:tile:b').center)
+    expect(near(course.from.radius, course.to.radius)).toBe(true)
+  })
+
+  it('flies out to the Tile above from its hex around the center, whole', () => {
+    const course = courseOf(inA, drawnAround(centerOn(system, 'root')))
+    expect(course).toMatchObject({ levels: 1, arrived: true })
+    expect(course.from).toEqual(around('above:root'))
+  })
+
+  it('leaves them in the last drawing still, beneath, flying into a child', () => {
+    const still = stillOf(
+      drawn(centerOn(system, 'root')),
+      inA,
+      courseOf(drawn(centerOn(system, 'root')), inA),
+    )
+    expect(still.map(({ key }) => key)).toContain('tile:b')
+  })
+
+  it("moves them from the center's last heart to its next, as it opens or folds, and nowhere else", () => {
+    const folded = drawn({ center: 'a' }).hexes
+    const opened = drawn(centerOn(system, 'a')).hexes
+    const course = wholeCourseOf(folded, opened)
+    expect(course?.to.radius).toBeGreaterThan(course?.from.radius ?? Infinity)
+    expect(wholeCourseOf(opened, opened)).toBeUndefined()
   })
 })
 

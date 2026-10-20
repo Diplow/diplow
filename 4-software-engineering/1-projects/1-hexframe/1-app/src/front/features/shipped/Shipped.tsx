@@ -59,6 +59,7 @@ export function ShippedCanvas(props: ShippedCanvasProps) {
       marks={{ told, pointed }}
       onPoint={onPoint}
       sun={sun}
+      runsOn
       className={className}
     />
   )

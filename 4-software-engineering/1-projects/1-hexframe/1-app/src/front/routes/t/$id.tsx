@@ -103,6 +103,7 @@ function Public() {
         onViewChange={onViewChange}
         looking="card"
         sun={sun}
+        runsOn
         className="size-full"
       />
       <div className={cornerPlace}>

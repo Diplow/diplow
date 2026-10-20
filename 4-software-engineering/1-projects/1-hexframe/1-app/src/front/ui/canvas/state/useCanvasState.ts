@@ -11,7 +11,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { directions, type Point } from '../geometry/geometry'
-import { layoutCanvas, type CanvasHex } from '../geometry/shape'
+import { layoutCanvas, surroundingsOf, type CanvasHex } from '../geometry/shape'
 import type { TileMotion } from '../tile/Tile'
 import { movingFor } from '../../motion'
 import { pathTo, type TileNode } from '../view/tiles'
@@ -108,6 +108,8 @@ function tileAction(hex: TileHex, shown: ShownView, how: Deciding): TileAction |
       return hex.generation === 1 && !how.finger && opens(hex.tile, how.fills) ? 'expand' : 'center'
     case 'leaf':
     case 'context':
+    case 'above':
+    case 'beside':
       return 'center'
   }
 }
@@ -252,6 +254,8 @@ export function useCanvasState(input: CanvasInput) {
   const { fills = () => true } = input
   const shown = withoutEmptyRings(showView(system, view), fills)
   const hexes = layoutCanvas(shown)
+  const parent = pathTo(system, shown.center.id).at(-2)
+  const centered = hexes.find((hex): hex is TileHex => hex.kind === 'tile' && hex.role === 'center')
   const { inside, hubs } = openedIn(hexes)
   // The hex the last single click landed on: a double-click centers its Tile only if its first click
   // landed there too, since that click may have redrawn what lies under the pointer.
@@ -327,6 +331,14 @@ export function useCanvasState(input: CanvasInput) {
     state: {
       center: shown.center,
       hexes,
+      // The Tile the center stands in and those beside it, around the drawing, where a click on one
+      // centers it: none where it would not.
+      around:
+        parent === undefined || centered === undefined
+          ? []
+          : surroundingsOf(showView(system, centerOn(system, parent.id)), centered).filter(
+              (hex) => actionOf(hex) !== undefined,
+            ),
     },
     actions: {
       actionOf: (hex: TileHex) => actionOf(hex),

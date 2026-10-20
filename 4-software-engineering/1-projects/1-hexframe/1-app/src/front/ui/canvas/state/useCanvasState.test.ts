@@ -454,6 +454,35 @@ describe('centering', () => {
   })
 })
 
+describe('the Tiles around the center', () => {
+  const keys = (view: CanvasView, hand: Hand = {}) =>
+    render(view, hand).state.around.map(({ key }) => key)
+
+  it('draws the Tile it stands in and the rest of that ring, none around the Root', () => {
+    expect(keys(inA)).toEqual(['above:root', 'beside:tile:notes', 'beside:tile:many'])
+    expect(keys({ center: 'a' })).toEqual(keys(inA))
+    expect(keys(open)).toEqual([])
+  })
+
+  it('centers each by a click, opened as it arrives', () => {
+    const { state, actions: act, onViewChange } = render(inA)
+    const [root, notes] = state.around
+    if (root === undefined || notes === undefined) throw new Error('Nothing is drawn around a')
+    expect(state.around.map((hex) => act.actionOf(hex))).toEqual(['center', 'center', 'center'])
+    act.click(root)
+    expect(onViewChange).toHaveBeenLastCalledWith(open, { gesture: 'center', tile: 'root' })
+    act.center(notes, 'keyboard')
+    expect(onViewChange).toHaveBeenLastCalledWith(
+      { center: 'notes' },
+      { gesture: 'center', tile: 'notes' },
+    )
+  })
+
+  it('draws none where its caller holds moving the center back', () => {
+    expect(keys(inA, { lets: () => ({ click: true, recenter: false }) })).toEqual([])
+  })
+})
+
 describe('what its caller holds back', () => {
   const nothing = () => ({ click: false, recenter: false })
 
