@@ -4,7 +4,7 @@ import { firstKindOf, type TileNode } from '../view/tiles'
 import { showView, type CanvasView } from '../view/view'
 
 import { hexCorners } from './geometry'
-import { canvasSize, layoutCanvas, type CanvasHex } from './shape'
+import { aloneHex, canvasSize, layoutCanvas, type CanvasHex } from './shape'
 
 const tile = (id: string, more: Partial<TileNode> = {}): TileNode => ({
   id,
@@ -181,6 +181,11 @@ describe('layoutCanvas', () => {
     expect(hexes).toHaveLength(1)
     expect(hexes[0]).toMatchObject({ role: 'center', tile: { id: 'mixed' }, alone: true })
     expect(hexes[0]?.hex.radius).toBeCloseTo(layout({ center: 'l3' })[0]?.hex.radius ?? 0)
+  })
+
+  it('names where a center stands alone, folded or a Leaf, before any System is read', () => {
+    expect(layoutCanvas(showView(system, { center: 'mixed' }))[0]?.hex).toEqual(aloneHex)
+    expect(layout({ center: 'l3' })[0]?.hex).toEqual(aloneHex)
   })
 
   it('marks no center alone once its ring shows', () => {

@@ -21,7 +21,7 @@ import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
-import { canvasSize, layoutCanvas, type EmptySlotTarget } from './geometry/shape'
+import { aloneHex, canvasSize, type EmptySlotTarget } from './geometry/shape'
 import { directions, type Direction, type Point } from './geometry/geometry'
 import {
   lookingAt,
@@ -348,19 +348,11 @@ export function CanvasLoading({ className }: { className?: string }) {
   return (
     <div aria-busy className={cn('relative flex min-h-0 flex-col gap-2', className)}>
       <svg viewBox={viewBoxOf(canvasSize)} aria-hidden className="relative min-h-0 w-full flex-1">
-        {awaited && <Slot hex={awaited.hex} loading />}
+        <Slot hex={aloneHex} loading />
       </svg>
     </div>
   )
 }
-
-/** Where a center stands alone, whatever the System: the shape places it before reading it. */
-const awaited = layoutCanvas({
-  center: { id: '', title: '', preview: '' },
-  frame: undefined,
-  inner: undefined,
-  expanded: {},
-}).find(({ kind }) => kind === 'tile')
 
 /**
  * The light a Tile glows in, a star's: the root drawn, where the caller says it is the star itself,
