@@ -42,7 +42,7 @@ const none = () => undefined
 /**
  * The canvas side, someone else's System, thrown to the nearest boundary should its read fail: from
  * its star, its gaps hung from it, acted on as far as the Account's rights there let it (`Reach`); the
- * center's place waiting while it is read (`CanvasLoading`).
+ * place of a center alone waiting while it is read (`CanvasLoading`).
  */
 export function VisitPage(props: VisitPageProps) {
   const { star, light, search, onSearchChange, onViewChange, marks, onAsk } = props

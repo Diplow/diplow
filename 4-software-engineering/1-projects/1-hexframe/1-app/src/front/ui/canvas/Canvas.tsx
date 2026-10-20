@@ -341,8 +341,9 @@ export function Canvas(props: CanvasProps) {
 }
 
 /**
- * The canvas while its System is read: the center's place alone, where the center will stand, its
- * light sweeping as a free slot's does while tiles load into it, on the ground, never a box.
+ * The canvas while its System is read: the place of a center alone, where a plain URL's center will
+ * stand, its light sweeping as a free slot's does while tiles load into it, on the ground, never a
+ * box. A view opening the center draws it smaller once read, which only the System says it can.
  */
 export function CanvasLoading({ className }: { className?: string }) {
   return (
