@@ -1,0 +1,32 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.ts
+  s_fd302925ea23a0::t_48cd9015a7cfd7 342
+  s_fd302925ea23a0::t_20e7538091fa57 339-341
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/tiles.test.ts
+  s_fd302925ea23a0::t_13c6d393cf2547 3-11,76-86
+  s_fd302925ea23a0::t_3afd0da1f10423 87-88
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/hexes.tsx
+  s_fd302925ea23a0::t_b3ee866f936d40 26
+  s_fd302925ea23a0::t_e69205f137de5b 82-83,89
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/tiles.ts
+  s_fd302925ea23a0::t_b3ee866f936d40 155,159-169
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/geometry/shape.ts
+  s_fd302925ea23a0::t_20e7538091fa57 77-78,165
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCamera.ts
+  s_fd302925ea23a0::t_20e7538091fa57 66-68,75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2f231312cd7de920fc60167695c59f8a65557924",
+  "prompts": {},
+  "sessions": {
+    "s_fd302925ea23a0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d0b75946-0c94-41ac-9f6b-17b764e8877f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
