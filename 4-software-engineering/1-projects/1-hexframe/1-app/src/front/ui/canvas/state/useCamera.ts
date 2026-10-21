@@ -63,17 +63,16 @@ const isOpened = (hex: CanvasHex) =>
   hex.kind === 'tile' && (hex.role === 'hub' || (hex.role === 'center' && hex.alone !== true))
 
 /**
- * The heart of the Tile a drawn hex stands for, `levels` generations down from it: the center's, as one
- * world draws it (`heart`), and the Tile it stands in, drawn around it, its own hex, as it is drawn
- * centered and opened.
+ * The heart of the Tile a drawn hex stands for, `levels` generations down from it: the one it says
+ * (`heart`), the center's and the Tile's it stands in, else its own hex opened, a heart's share of it
+ * folded.
  */
 function heartOf(hex: CanvasHex | undefined, levels = 0): Heart {
   if (hex === undefined) {
     return { center: { x: canvasSize.width / 2, y: canvasSize.height / 2 }, radius: 100 }
   }
   const heart = hex.kind === 'tile' ? hex.heart : undefined
-  const share = isOpened(hex) || (hex.kind === 'tile' && hex.role === 'above') ? 1 : heartShare
-  const radius = heart === undefined ? hex.hex.radius * share : heart.radius
+  const radius = heart?.radius ?? hex.hex.radius * (isOpened(hex) ? 1 : heartShare)
   return { center: hex.hex.center, radius: radius * heartShare ** levels }
 }
 

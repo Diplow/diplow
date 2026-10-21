@@ -7,7 +7,6 @@ import type { PointerEvent, ReactElement } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { directions } from './geometry/geometry'
 import type { EmptySlotTarget } from './geometry/shape'
 import type { Action, Hand } from './keys'
 import type { Target } from './state/move/useMove'
@@ -24,7 +23,7 @@ import { groupsOf, slotPlace, type Subject, type TileAct, type Verb } from './ti
 import { markNote, type TileMark } from './tile/marks/mark'
 import { Aside, LandingSlot, Lifted, SwapDisc } from './tile/moving/Moving'
 import { Slot } from './tile/places'
-import { pathTo, type SunLight, type TileNode } from './view/tiles'
+import { directionIn, pathTo, type SunLight, type TileNode } from './view/tiles'
 import { cardOf, placeOf, type CardWords } from './view/looks'
 import { Tile, type TileLook } from './tile/Tile'
 
@@ -80,28 +79,21 @@ export function lookingAt(
 ): Acting | undefined {
   const { kind } = look
   if (kind === 'list' || kind === 'ghost' || kind === 'writing') return undefined
-  const above = pathTo(system, hex.tile.id).at(-2)
+  const parent =
+    hex.role === 'center' || hex.role === 'above' ? pathTo(system, hex.tile.id).at(-2) : hex.parent
   // The Tile the center stands in, drawn around it, is told where it stands in its own.
   const at =
     hex.role === 'center'
       ? undefined
       : hex.role === 'above'
-        ? whereIn(above, hex.tile)
+        ? directionIn(parent, hex.tile)
         : hex.direction
-  const parent = at === undefined || hex.role === 'above' ? above : hex.parent
   const words = { title: hex.tile.title, ...(parent && { parent: parent.title }) }
   const looked = { without: acts, onAct: () => undefined, cardAlone: looking === 'card' }
   if (at === undefined) return { subject: { ...words, kind, at: 'center' }, ...looked }
   const own = kind === 'root' || kind === 'untitled' ? 'branch' : kind
   return { subject: { ...words, kind: own, at }, ...looked }
 }
-
-/** The Direction a Tile stands in, in the ring of the Tile above it; none for a Context Tile's. */
-const whereIn = (above: TileNode | undefined, tile: TileNode) =>
-  directions.find(
-    (direction) =>
-      above?.branches?.[direction]?.id === tile.id || above?.leaves?.[direction]?.id === tile.id,
-  )
 
 /** A Tile on the move, and which Tiles offer to trade places with it. */
 export interface Moving {

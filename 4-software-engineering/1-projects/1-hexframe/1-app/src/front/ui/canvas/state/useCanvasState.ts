@@ -336,9 +336,10 @@ export function useCanvasState(input: CanvasInput) {
       around:
         parent === undefined || centered === undefined
           ? []
-          : surroundingsOf(showView(system, centerOn(system, parent.id)), centered).filter(
-              (hex) => actionOf(hex) !== undefined,
-            ),
+          : surroundingsOf(
+              withoutEmptyRings(showView(system, centerOn(system, parent.id)), fills),
+              centered,
+            ).filter((hex) => actionOf(hex) !== undefined),
     },
     actions: {
       actionOf: (hex: TileHex) => actionOf(hex),

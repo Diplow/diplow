@@ -74,7 +74,8 @@ export type CanvasHex =
       /**
        * The center's heart, as one world draws it: where its tile stands in its whole hex, its ring
        * inside that hex once opened, its tile filling it a heart's share larger while folded; the
-       * Tiles beside it stand around that whole hex.
+       * Tiles beside it stand around that whole hex. The Tile it stands in, drawn around it, is its
+       * own heart, drawn as it is centered and opened.
        */
       heart?: Hex
     })
@@ -161,7 +162,7 @@ export function surroundingsOf(above: ShownView, center: Of<'tile'>): Of<'tile'>
   })
   const parent = { kind: 'tile', tile: above.center, role: 'above', generation: -1 } as const
   return [
-    { ...parent, key: `above:${above.center.id}`, hex: placed(heart) },
+    { ...parent, key: `above:${above.center.id}`, hex: placed(heart), heart: placed(heart) },
     ...around
       .filter((hex) => hex !== at)
       .map((hex): Of<'tile'> => ({
