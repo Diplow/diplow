@@ -21,10 +21,18 @@ import type {
   SeatedRing,
   Tile,
 } from '../../../../../../2-claude-mod/hooks/shape/node'
-import type { ShownView } from '../view/view'
+import type { Expanded, ShownView } from '../view/view'
 import { kindsOf, type FrameKind, type TileNode } from '../view/tiles'
 
-import { directions, insetHex, neighbor, opposite, type Direction, type Hex } from './geometry'
+import {
+  directions,
+  insetHex,
+  neighbor,
+  opposite,
+  type Direction,
+  type Hex,
+  type Point,
+} from './geometry'
 
 /** A Direction of a ring that holds no Tile yet: the Tile at its heart, the ring's kind, the Direction. */
 export interface EmptySlotTarget {
@@ -34,9 +42,9 @@ export interface EmptySlotTarget {
 }
 
 /**
- * What a hex holding a Tile stands for: the center, a member of a ring by kind, or `hub`, a Branch of
- * the ring around the center drawn at the heart of the Frame it opens into; or, around the drawing,
- * the Tile the center stands in (`above`) and a Tile of its ring beside the center (`beside`).
+ * What a hex holding a Tile stands for: the center, a member of a ring by kind, or `hub`, a Branch
+ * drawn at the heart of the Frame it opens into; or, around the drawing, the Tile the center stands
+ * in (`above`) and a Tile of its ring beside the center (`beside`), folded, or a hub once opened.
  */
 type TileRole = 'center' | 'hub' | MemberKind | 'above' | 'beside'
 
@@ -46,7 +54,7 @@ interface Drawn {
   hex: Hex
   /**
    * 0 the center, 1 its rings' members, 2 the members of a Branch it opens; around them, -1 the Tile
-   * the center stands in, 0 those beside it.
+   * the center stands in, 0 those beside it, 1 and 2 what they open into.
    */
   generation: number
 }
@@ -111,47 +119,59 @@ const aloneShare = 0.82
 
 /**
  * What building the shape's Frames writes down, so the placements read back as the System's own:
- * each Tile by the path it stands under, and each clashing Leaf with the Branch it clashes with.
+ * each Tile by the path it stands under, each clashing Leaf with the Branch it clashes with, and each
+ * Branch opened with the kind of ring it opens into.
  */
 interface Ledger {
   tiles: Map<string, TileNode>
   clashes: Map<string, TileNode>
+  opened: Map<string, FrameKind>
 }
 
 /**
  * The hexes of the shown view, in the order to paint them: the center and its rings, every hex the
- * view opens followed by what it holds.
+ * view opens followed by what it holds; and inside each Branch it opens, the Branches `within` opens
+ * in turn, by that Branch's Direction, which only the Tiles around the center show, a magnitude larger.
  */
-export function layoutCanvas(shown: ShownView): CanvasHex[] {
-  const ledger: Ledger = { tiles: new Map(), clashes: new Map() }
-  const placements = layoutView(viewOf(shown, ledger))
+export function layoutCanvas(
+  shown: ShownView,
+  within: Partial<Record<Direction, Expanded>> = {},
+): CanvasHex[] {
+  const ledger: Ledger = { tiles: new Map(), clashes: new Map(), opened: new Map() }
+  const placements = layoutView(viewOf(shown, within, ledger))
   return placements.flatMap((placement) => hexOf(placement, placements, shown, ledger))
 }
 
 /**
  * The Tiles around the center, as one world lays them: the Tile it stands in (`above`), and the
- * other members of that Tile's ring (`beside`), each where it stands around the center's whole hex
- * (`heart`), the center's hex in the ring around that Tile scaled to it, as the camera leaves them
- * going into the center from there (`useCamera`), so they run on past the canvas. `above` is the view
- * of the Tile the center stands in, opened as centering it opens it; none where the center is not
- * in the ring around it, a Leaf inside it.
+ * other members of that Tile's ring (`beside`), each with what it opens into, where it stands around
+ * the center's whole hex (`heart`), the center's hex in the ring around that Tile scaled to it, as
+ * the camera leaves them going into the center from there (`useCamera`), so they run on past the
+ * canvas. `above` is the view of the Tile the center stands in, opened as centering it opens it, the
+ * Tiles beside the center it opens with theirs `within`, by Direction, a magnitude larger than a
+ * Branch of the center's own ring; none where the center is not in the ring around it, a Leaf inside
+ * it.
  */
-export function surroundingsOf(above: ShownView, center: Of<'tile'>): Of<'tile'>[] {
-  const hexes = layoutCanvas(above)
+export function surroundingsOf(
+  above: ShownView,
+  center: Of<'tile'>,
+  within: Partial<Record<Direction, Expanded>> = {},
+): CanvasHex[] {
+  const hexes = layoutCanvas(above, within)
   const heart = framed(hexes, above.center.id)
   if (heart === undefined || center.heart === undefined) return []
   const whole = { center: center.heart.center, radius: center.heart.radius / heartShare }
-  const around = hexes.filter(
-    (hex): hex is Of<'tile'> =>
-      hex.kind === 'tile' &&
-      hex.generation === 1 &&
-      Math.hypot(hex.hex.center.x - heart.center.x, hex.hex.center.y - heart.center.y) >=
-        heart.radius,
-  )
-  const at = around.find(
-    (hex) => hex.tile.id === center.tile.id && hex.tile.reference === undefined,
+  const away = (hex: CanvasHex) => distance(hex.hex.center, heart.center) >= heart.radius
+  // The ring around the Tile above: the center, and each Tile beside it, folded or opened.
+  const ring = hexes.filter((hex) => hex.generation === 1 && hex.kind !== 'empty' && away(hex))
+  const at = ring.find(
+    (hex) =>
+      hex.kind === 'tile' && hex.tile.id === center.tile.id && hex.tile.reference === undefined,
   )
   if (at === undefined) return []
+  // What stands in a hex of that ring, the hex itself included: none for the center's own.
+  const besideOf = (hex: CanvasHex) =>
+    ring.find((top) => distance(top.hex.center, hex.hex.center) < top.hex.radius && top !== at)
   const share = whole.radius / at.hex.radius
   const placed = ({ center: point, radius }: Hex): Hex => ({
     center: {
@@ -163,17 +183,21 @@ export function surroundingsOf(above: ShownView, center: Of<'tile'>): Of<'tile'>
   const parent = { kind: 'tile', tile: above.center, role: 'above', generation: -1 } as const
   return [
     { ...parent, key: `above:${above.center.id}`, hex: placed(heart), heart: placed(heart) },
-    ...around
-      .filter((hex) => hex !== at)
-      .map((hex): Of<'tile'> => ({
+    ...hexes
+      .filter((hex) => hex.generation >= 1 && besideOf(hex) !== undefined)
+      .map((hex): CanvasHex => ({
         ...hex,
         key: `beside:${hex.key}`,
         hex: placed(hex.hex),
-        role: 'beside',
-        generation: 0,
+        generation: hex.generation - 1,
+        ...(hex.kind === 'tile' &&
+          hex.generation === 1 &&
+          hex.role !== 'hub' && { role: 'beside' }),
       })),
   ]
 }
+
+const distance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y)
 
 /** Where a Tile is framed: the hex it opens into while a ring shows inside it, else its own. */
 function framed(hexes: readonly CanvasHex[], id: string): Hex | undefined {
@@ -183,19 +207,49 @@ function framed(hexes: readonly CanvasHex[], id: string): Hex | undefined {
   )
 }
 
-/** The shape's view of `shown`: a Frame of the center, and one of each Branch it opens. */
-function viewOf(shown: ShownView, ledger: Ledger): FrameView | CollapsedView {
+/**
+ * The shape's view of `shown`: a Frame of the center, and one of each Branch it opens, holding one of
+ * each Branch `within` opens inside it.
+ */
+function viewOf(
+  shown: ShownView,
+  within: Partial<Record<Direction, Expanded>>,
+  ledger: Ledger,
+): FrameView | CollapsedView {
   const frame = frameOf(shown.center, ledger)
   if (shown.frame === undefined) return { frame }
-  const expanded: Partial<Record<Direction, FrameView>> = {}
-  for (const direction of directions) {
-    const kind = shown.expanded[direction]
+  const expanded = framesOf(shown.center, shown.expanded, ledger, (direction) => {
     const branch = shown.center.branches?.[direction]
-    if (kind !== undefined && branch !== undefined) {
-      expanded[direction] = { frame: frameOf(branch, ledger), frameKind: kind }
+    return branch && framesOf(branch, within[direction] ?? {}, ledger)
+  })
+  return { frame, frameKind: shown.frame, ...(shown.inner && { inner: shown.inner }), expanded }
+}
+
+/**
+ * A Frame of each Branch of `tile` that `expanded` opens, written in the ledger with the kind it
+ * opens into, each with the Frames opened inside it (`inside`, by its Direction).
+ */
+function framesOf(
+  tile: TileNode,
+  expanded: Expanded,
+  ledger: Ledger,
+  inside: (direction: Direction) => Partial<Record<Direction, FrameView>> | undefined = () =>
+    undefined,
+): Partial<Record<Direction, FrameView>> {
+  const frames: Partial<Record<Direction, FrameView>> = {}
+  for (const direction of directions) {
+    const kind = expanded[direction]
+    const branch = tile.branches?.[direction]
+    if (kind === undefined || branch === undefined) continue
+    ledger.opened.set(branch.id, kind)
+    const opened = inside(direction)
+    frames[direction] = {
+      frame: frameOf(branch, ledger),
+      frameKind: kind,
+      ...(opened && { expanded: opened }),
     }
   }
-  return { frame, frameKind: shown.frame, ...(shown.inner && { inner: shown.inner }), expanded }
+  return frames
 }
 
 /**
@@ -285,7 +339,7 @@ function hexOf(
     const hub = hubOf(placement, placements)
     const parent = hub && ledger.tiles.get(hub.tile.path)
     if (hub === undefined || parent === undefined) return []
-    const ring = ringAround(hub, shown)
+    const ring = ringAround(hub, shown, ledger)
     const key = `empty:${hub.tile.path}:${ring}:${String(placement.direction)}`
     return [
       { ...drawn, kind: 'empty', key, slot: { parent, ring, direction: placement.direction } },
@@ -295,7 +349,8 @@ function hexOf(
   const tile = ledger.tiles.get(path)
   if (tile === undefined) return []
   if (placement.opened === true) {
-    return [{ ...drawn, kind: 'ground', key: `ground:${path}`, ring: openedInto(placement, shown) }]
+    const ring = openedInto(placement, shown, ledger)
+    return [{ ...drawn, kind: 'ground', key: `ground:${path}`, ring }]
   }
   if (placement.list !== undefined) {
     const names = placement.list.ring.candidates.map(
@@ -308,7 +363,7 @@ function hexOf(
   const key = `tile:${path}`
   if (placement.kind === 'center') return [centerOf({ ...drawn, key, tile }, shown)]
   const { direction, memberKind } = placement
-  const role = isOpenBranch(placement, shown) ? 'hub' : memberKind
+  const role = isOpenBranch(placement, ledger) ? 'hub' : memberKind
   const clash = memberKind === 'leaf' ? ledger.clashes.get(tile.id) : undefined
   // The center's rings, around it and inside it, stand in the center; a Branch's, opened in place,
   // a generation further, in the Branch at their heart.
@@ -352,28 +407,27 @@ function centerOf(drawn: Drawn & { tile: TileNode }, shown: ShownView): CanvasHe
 
 type TileHex = Exclude<Placement, { kind: 'empty' }>
 
-/** A Branch of the ring around the center, which the view opens: generation 1, a Direction open. */
-function isOpenBranch(placement: TileHex, shown: ShownView): boolean {
+/** A Branch the view opens, which the ledger holds with the kind it opens into. */
+function isOpenBranch(placement: TileHex, ledger: Ledger): boolean {
   return (
     placement.kind === 'member' &&
     placement.memberKind === 'branch' &&
-    placement.generation === 1 &&
-    shown.expanded[placement.direction] !== undefined
+    ledger.opened.has(placement.tile.path)
   )
 }
 
 /** The kind of ring an opened hex holds: the center's inner ring, or the kind its Branch opens into. */
-function openedInto(placement: TileHex, shown: ShownView): FrameKind {
+function openedInto(placement: TileHex, shown: ShownView, ledger: Ledger): FrameKind {
   if (placement.kind === 'center') return shown.inner ?? 'context'
-  return shown.expanded[placement.direction] ?? 'children'
+  return ledger.opened.get(placement.tile.path) ?? 'children'
 }
 
 /**
  * The kind of ring a hex at the heart of one shows: the center's inner ring when it is the center
  * drawn inside its own hex, its outer ring otherwise; a Branch's, the kind it opens into.
  */
-function ringAround(hub: TileHex, shown: ShownView): FrameKind {
-  if (hub.kind === 'member') return shown.expanded[hub.direction] ?? 'children'
+function ringAround(hub: TileHex, shown: ShownView, ledger: Ledger): FrameKind {
+  if (hub.kind === 'member') return ledger.opened.get(hub.tile.path) ?? 'children'
   const inside = shown.inner !== undefined && hub.opened !== true
   return (inside ? shown.inner : shown.frame) ?? 'children'
 }

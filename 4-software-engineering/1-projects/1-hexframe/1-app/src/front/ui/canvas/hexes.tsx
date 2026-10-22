@@ -226,7 +226,7 @@ export function TileHexView(props: TileHexProps) {
 export function AroundHexView(
   props: Pick<TileHexProps, 'hex' | 'look' | 'aside' | 'onPoint' | 'scale'> & {
     system: TileNode
-    actions: Pick<CanvasActions, 'click' | 'center'>
+    actions: Pick<CanvasActions, 'around'>
     /** The light it glows in, a star's. */
     sun: SunLight | undefined
   },
@@ -243,11 +243,11 @@ export function AroundHexView(
       action={{
         label: m.hex_tile_center({ title: hex.tile.title }),
         onSelect: () => {
-          actions.click(hex)
+          actions.around(hex)
         },
       }}
-      onGoIn={(from) => {
-        actions.center(hex, from)
+      onGoIn={() => {
+        actions.around(hex)
       }}
       {...(hand && { hand })}
     />

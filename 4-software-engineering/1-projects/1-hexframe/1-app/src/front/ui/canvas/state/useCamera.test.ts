@@ -12,6 +12,7 @@ import {
   keyframesOf,
   placingAt,
   reframingOf,
+  freshOf,
   stillOf,
   useCamera,
   wholeCourseOf,
@@ -168,13 +169,25 @@ describe('the Tiles around the center', () => {
     expect(course.from).toEqual(around('above:root'))
   })
 
-  it('leaves them in the last drawing still, beneath, flying into a child', () => {
-    const still = stillOf(
-      drawn(centerOn(system, 'root')),
-      inA,
-      courseOf(drawn(centerOn(system, 'root')), inA),
+  it('leaves them in the last drawing still, beneath, flying into a child, and none panning', () => {
+    const root = drawn(centerOn(system, 'root'))
+    expect(stillOf(root, inA, courseOf(root, inA)).map(({ key }) => key)).toContain('tile:b')
+    const inB = drawnAround(centerOn(system, 'b'))
+    const keys = stillOf(inA, inB, courseOf(inA, inB)).map(({ key }) => key)
+    expect(keys).not.toContain('beside:tile:b')
+    expect(keys).not.toContain('above:root')
+  })
+
+  it('keeps still what the next drawing no longer draws around it, and fades in what it draws anew', () => {
+    const inA3 = drawnAround(centerOn(system, 'a3'))
+    const course = courseOf(inA, inA3)
+    const keys = stillOf(inA, inA3, course).map(({ key }) => key)
+    // Going into a3, the Tiles beside a are no longer drawn: they stay still as the last drawing fades.
+    expect(keys).toContain('beside:tile:b')
+    expect(freshOf(inA, inA3)).toEqual(new Set())
+    expect(freshOf(inA3, inA)).toEqual(
+      new Set(['above:root', 'beside:tile:notes', 'beside:tile:b']),
     )
-    expect(still.map(({ key }) => key)).toContain('tile:b')
   })
 
   it("moves them from the center's last heart to its next, as it opens or folds, and nowhere else", () => {

@@ -53,7 +53,7 @@ import { Carried, MoveBanner } from './tile/moving/Moving'
 import { Arc } from './tile/marks/Marks'
 import type { ToldPart } from '../motion'
 import { wayTo, type TileMark } from './tile/marks/mark'
-import { Ground, Slot } from './tile/places'
+import { Ground, Moved, Slot } from './tile/places'
 import { SunEdge } from './tile/light'
 import { Tile, type StandingLook, type TileMotion, type TileWrite } from './tile/Tile'
 import { listOf, lookOf, placeOf } from './view/looks'
@@ -244,6 +244,7 @@ export function Canvas(props: CanvasProps) {
             write={writes?.tile(hex.tile.id)}
             mark={mark}
             motion={paced(actions.motionOf(hex.key), introduces)}
+            grown={actions.grownOf(hex.key)}
             invites={introduces && hex.role === 'center' && action === 'expand'}
             action={
               action && {
@@ -296,6 +297,7 @@ export function Canvas(props: CanvasProps) {
       >
         <Camera
           {...{ system, center, scale, sun, actions }}
+          offers={(slot) => emptySlots?.(slot) !== undefined}
           hexes={state.hexes}
           around={{ hexes: state.around, aside: moving !== undefined || menu !== undefined }}
           onPoint={props.onPoint}
@@ -310,19 +312,20 @@ export function Canvas(props: CanvasProps) {
                   const stands = standing?.(hex.slot)
                   if (stands !== undefined) return standingIn(hex, stands, scale, markOf(stands.id))
                   return (
-                    <SlotHexView
-                      key={hex.key}
-                      hex={hex}
-                      action={emptySlots?.(hex.slot)}
-                      landing={targetAt.get(hex.key)}
-                      loading={writes?.landing(hex.slot) ?? false}
-                      acting={acting?.slot(hex.slot)}
-                      moving={moving !== undefined}
-                      inTheAir={inTheAir}
-                      over={gesture.over === hex.key}
-                      onMenu={onMenu(hex.key)}
-                      land={gesture.land}
-                    />
+                    <Moved key={hex.key} motion={actions.motionOf(hex.key)}>
+                      <SlotHexView
+                        hex={hex}
+                        action={emptySlots?.(hex.slot)}
+                        landing={targetAt.get(hex.key)}
+                        loading={writes?.landing(hex.slot) ?? false}
+                        acting={acting?.slot(hex.slot)}
+                        moving={moving !== undefined}
+                        inTheAir={inTheAir}
+                        over={gesture.over === hex.key}
+                        onMenu={onMenu(hex.key)}
+                        land={gesture.land}
+                      />
+                    </Moved>
                   )
                 }
                 case 'list':
@@ -441,16 +444,18 @@ interface CameraProps {
   center: string
   hexes: Hexes
   /**
-   * The Tiles around the drawing, the one the center stands in and those beside it, and whether they
-   * step back, a tile moving or another's menu open.
+   * The Tiles around the drawing, the one the center stands in and those beside it, with what they
+   * open into, and whether they step back, a tile moving or another's menu open.
    */
-  around: { hexes: readonly TileHex[]; aside: boolean }
+  around: { hexes: Hexes; aside: boolean }
   /** What a click on a Tile around does, centering it, and going into it. */
   actions: ComponentProps<typeof AroundHexView>['actions']
   onPoint: PointAt | undefined
   scale: number
   /** The System's star, whose light the last drawing keeps as it fades, and a Tile around glows in. */
   sun: Sun | undefined
+  /** Whether a tile could be added in a free slot, which it shows wherever it is drawn. */
+  offers: (slot: EmptySlotTarget) => boolean
   /** The drawing, as the canvas draws it. */
   children: ReactNode
 }
@@ -469,15 +474,27 @@ function Camera(props: CameraProps) {
     <>
       <g ref={camera.around} className="origin-top-left ease-camera">
         {around.hexes.map((hex) => (
-          <AroundHexView
+          <g
             key={hex.key}
-            {...{ system, hex, scale }}
-            look={lookOf(hex)}
-            sun={sunOn(hex)}
-            actions={props.actions}
-            aside={around.aside}
-            onPoint={pointingAt(hex.tile.id, props.onPoint)}
-          />
+            // What the last drawing didn't draw around this one fades in as the camera flies.
+            {...(camera.fresh.has(hex.key) && {
+              className: 'motion-safe:animate-in motion-safe:fade-in-0',
+              style: { animationDuration: `${String(camera.duration)}ms` },
+            })}
+          >
+            {hex.kind === 'tile' ? (
+              <AroundHexView
+                {...{ system, hex, scale }}
+                look={lookOf(hex)}
+                sun={sunOn(hex)}
+                actions={props.actions}
+                aside={around.aside}
+                onPoint={pointingAt(hex.tile.id, props.onPoint)}
+              />
+            ) : (
+              <StillHex hex={hex} scale={scale} sun={undefined} offers={props.offers} />
+            )}
+          </g>
         ))}
       </g>
       {camera.still && (
@@ -487,7 +504,13 @@ function Camera(props: CameraProps) {
           className="pointer-events-none origin-top-left **:animate-none!"
         >
           {camera.still.map((hex) => (
-            <StillHex key={hex.key} hex={hex} scale={scale} sun={sunOn(hex)} />
+            <StillHex
+              key={hex.key}
+              hex={hex}
+              scale={scale}
+              sun={sunOn(hex)}
+              offers={props.offers}
+            />
           ))}
         </g>
       )}
@@ -498,21 +521,26 @@ function Camera(props: CameraProps) {
   )
 }
 
-/** A hex of the last drawing, as it was drawn, acting on nothing: a free slot dotted. */
+/**
+ * A hex drawn acting on nothing, as the last drawing was drawn or around the center: a free slot as
+ * it is drawn where it takes a click.
+ */
 function StillHex({
   hex,
   scale,
   sun,
+  offers,
 }: {
   hex: Hexes[number]
   scale: number
   sun: SunLight | undefined
+  offers: CameraProps['offers']
 }) {
   switch (hex.kind) {
     case 'ground':
       return <Ground hex={hex.hex} context={hex.ring === 'context'} />
     case 'empty':
-      return <Slot hex={hex.hex} />
+      return <Slot hex={hex.hex} offers={offers(hex.slot)} />
     case 'list':
       return <Tile hex={hex.hex} {...listOf(hex)} scale={scale} />
     case 'tile':
