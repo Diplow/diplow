@@ -16,7 +16,7 @@
 // its caller names the System's star, its sun, the star glows in its light, amber or rose, and, once
 // the center is below it, that light waits at the canvas's edge, on the side the star stands. Where
 // it cycles, the C key takes the center from alone to its ring, then its Context, then alone again.
-import { useRef, useState, type ReactNode, type RefObject } from 'react'
+import { useRef, useState, type ComponentProps, type ReactNode, type RefObject } from 'react'
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
@@ -24,6 +24,7 @@ import { m } from '#/paraglide/messages'
 import { canvasSize, type EmptySlotTarget } from './geometry/shape'
 import { directions, type Direction, type Point } from './geometry/geometry'
 import {
+  AroundHexView,
   lookingAt,
   SlotHexView,
   standsFor,
@@ -180,6 +181,12 @@ interface CanvasProps {
    * skipped (`cycleOf`). Without it, the key does nothing here, as on a page of several canvases.
    */
   cycles?: boolean
+  /**
+   * The Tiles around the drawing, the one the center stands in and those beside it, run on past the
+   * canvas's box, behind what stands beside it, the chat on the one screen. Without it, the box
+   * clips them, as on a specimen among others.
+   */
+  runsOn?: boolean
   className?: string
 }
 
@@ -285,9 +292,14 @@ export function Canvas(props: CanvasProps) {
         viewBox={viewBoxOf(canvasSize)}
         role="group"
         aria-label={m.hex_canvas_label({ title: state.center.title })}
-        className="relative min-h-0 w-full flex-1 select-none"
+        className={svgClassOf(props.runsOn)}
       >
-        <Camera system={system} center={center} hexes={state.hexes} scale={scale} sun={sun}>
+        <Camera
+          {...{ system, center, scale, sun, actions }}
+          hexes={state.hexes}
+          around={{ hexes: state.around, aside: moving !== undefined || menu !== undefined }}
+          onPoint={props.onPoint}
+        >
           {[...state.hexes]
             .sort((a, b) => dragged(a) - dragged(b))
             .map((hex) => {
@@ -296,17 +308,7 @@ export function Canvas(props: CanvasProps) {
                   return <Ground key={hex.key} hex={hex.hex} context={hex.ring === 'context'} />
                 case 'empty': {
                   const stands = standing?.(hex.slot)
-                  if (stands !== undefined) {
-                    return (
-                      <Tile
-                        key={hex.key}
-                        hex={hex.hex}
-                        {...stands.look}
-                        scale={scale}
-                        mark={markOf(stands.id)}
-                      />
-                    )
-                  }
+                  if (stands !== undefined) return standingIn(hex, stands, scale, markOf(stands.id))
                   return (
                     <SlotHexView
                       key={hex.key}
@@ -438,8 +440,16 @@ interface CameraProps {
   /** The centered Tile's id. */
   center: string
   hexes: Hexes
+  /**
+   * The Tiles around the drawing, the one the center stands in and those beside it, and whether they
+   * step back, a tile moving or another's menu open.
+   */
+  around: { hexes: readonly TileHex[]; aside: boolean }
+  /** What a click on a Tile around does, centering it, and going into it. */
+  actions: ComponentProps<typeof AroundHexView>['actions']
+  onPoint: PointAt | undefined
   scale: number
-  /** The System's star, whose light the last drawing keeps as it fades. */
+  /** The System's star, whose light the last drawing keeps as it fades, and a Tile around glows in. */
   sun: Sun | undefined
   /** The drawing, as the canvas draws it. */
   children: ReactNode
@@ -447,14 +457,29 @@ interface CameraProps {
 
 /**
  * The drawing under the camera (`useCamera`): in a group of its own, flying as the center changes,
- * at rest otherwise, and meanwhile the last drawing beneath it, still, which no pointer reaches and
- * no screen reader hears, nothing in it moving but the camera.
+ * at rest otherwise, the Tiles around it beneath it, flying with it as the center changes, staying
+ * as the center opens or folds, and meanwhile the last drawing between them, still, which no pointer
+ * reaches and no screen reader hears, nothing in it moving but the camera.
  */
-function Camera({ system, center, hexes, scale, sun, children }: CameraProps) {
-  const camera = useCamera({ system, center, hexes })
+function Camera(props: CameraProps) {
+  const { system, center, hexes, around, scale, sun, children } = props
+  const camera = useCamera({ system, center, hexes, around: around.hexes })
   const sunOn = sunOnOf(system, sun)
   return (
     <>
+      <g ref={camera.around} className="origin-top-left ease-camera">
+        {around.hexes.map((hex) => (
+          <AroundHexView
+            key={hex.key}
+            {...{ system, hex, scale }}
+            look={lookOf(hex)}
+            sun={sunOn(hex)}
+            actions={props.actions}
+            aside={around.aside}
+            onPoint={pointingAt(hex.tile.id, props.onPoint)}
+          />
+        ))}
+      </g>
       {camera.still && (
         <g
           ref={camera.last}
@@ -629,6 +654,18 @@ function actionLabel(action: TileAction, title: string): string {
       return m.hex_tile_center({ title })
   }
 }
+
+/** A tile standing in a free slot before it is there, drawn under its own id. */
+const standingIn = (
+  hex: Hexes[number],
+  stands: SlotStanding,
+  scale: number,
+  mark: TileMark | undefined,
+) => <Tile key={hex.key} hex={hex.hex} {...stands.look} scale={scale} mark={mark} />
+
+/** The `<svg>`'s class: the Tiles around the drawing running on past its box where they do. */
+const svgClassOf = (runsOn = false) =>
+  cn('relative min-h-0 w-full flex-1 select-none', runsOn && 'overflow-visible')
 
 /** The `<svg>`'s viewBox: the canvas's own coordinates. */
 const viewBoxOf = ({ width, height }: typeof canvasSize) => `0 0 ${String(width)} ${String(height)}`

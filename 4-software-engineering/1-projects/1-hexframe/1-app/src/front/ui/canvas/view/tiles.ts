@@ -152,10 +152,18 @@ export function sunward(system: TileNode, center: string, rootAt: readonly Direc
  */
 function stepsAlong(path: readonly TileNode[]): Direction[] {
   return path.slice(1).flatMap((tile, index) => {
-    const above = path[index]
-    const direction = directions.find((one) =>
-      [above?.branches?.[one], above?.leaves?.[one], above?.context?.[one]].includes(tile),
-    )
+    const direction = directionIn(path[index], tile)
     return direction === undefined ? [] : [direction]
   })
 }
+
+/**
+ * The Direction a Tile stands in under `above`, as a Branch, a Leaf or a Context Tile; none for one
+ * hung across a gap, nor for a Tile `above` doesn't hold.
+ */
+export const directionIn = (above: TileNode | undefined, tile: TileNode) =>
+  directions.find((one) =>
+    [above?.branches?.[one], above?.leaves?.[one], above?.context?.[one]].some(
+      (under) => under?.id === tile.id,
+    ),
+  )
