@@ -1,0 +1,115 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/Breadcrumb.tsx
+  s_447036b5ac59cb::t_608e34ce6e2eec 3-5,11,35-36
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.test.ts
+  s_447036b5ac59cb::t_e9673bc25e04c2 8-9,450-492,495,499-515,574
+  s_447036b5ac59cb::t_c0a307ff20667a 445-449
+  s_447036b5ac59cb::t_65af4363e18712 41,44-46,180,183,186-188,214,217-220,303-304,307,519,522-525,529,554,557-561,563,568-573
+  s_447036b5ac59cb::t_c8d2d67f5d91dd 493-494,496-498
+  s_447036b5ac59cb::t_862385e59ebecd 516-517,575
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/settle.ts
+  s_447036b5ac59cb::t_48bc97bec29a61 28,40
+  s_447036b5ac59cb::t_166d98b19dde4f 47
+  s_447036b5ac59cb::t_8b1b4dd46e82ae 1-7,9,11,110-137
+  s_447036b5ac59cb::t_9fd7bd5e8ec8cb 37-39
+  s_447036b5ac59cb::t_50473be659ff64 23-26,35-36,41
+  s_447036b5ac59cb::t_608e34ce6e2eec 75-77
+  s_447036b5ac59cb::t_8f75d9b12a8c27 52,55,78-81,90-93,95-96
+  s_447036b5ac59cb::t_ec72cf7e97a807 13-17,20-22,51,53-54,56-61,63-74,82-89,97-105,107-109
+  s_447036b5ac59cb::t_3f25e7601d133b 62,106
+  s_447036b5ac59cb::t_c0a307ff20667a 94
+  s_447036b5ac59cb::t_965f8b7b8ce87e 12
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/geometry/shape.ts
+  s_447036b5ac59cb::t_b7e1db6d18ade4 24,27-35,45-47,57,122-123,128,133-134,136-141,147-153,155-160,164-167,172-174,186-187,200-201,210-218,221,223-249,252,342,352-353,366,410-411,415,420,422,429-430
+  s_447036b5ac59cb::t_608e34ce6e2eec 168-169,188,192-195
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/geometry/shape.test.ts
+  s_447036b5ac59cb::t_f57bbf157f3abe 272-282,289-295
+  s_447036b5ac59cb::t_db986896daa861 257-259
+  s_447036b5ac59cb::t_aaa167580c2357 286-288
+  s_447036b5ac59cb::t_d82673b3e3a0d1 283-285
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/view.test.ts
+  s_447036b5ac59cb::t_a09b96fdbe7e29 5,10,249-348
+  s_447036b5ac59cb::t_65af4363e18712 76-84,411,421
+  s_447036b5ac59cb::t_54f13c69f66daf 349
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/view.ts
+  s_447036b5ac59cb::t_02b3f2fd292256 31,36,460,466,469-470
+  s_447036b5ac59cb::t_dc102c7ed181e2 152-153,155-159,191,222,271
+  s_447036b5ac59cb::t_23354340f1f062 551-552,557-558
+  s_447036b5ac59cb::t_83986783fefb07 2-5,16,23-28,30,37
+  s_447036b5ac59cb::t_c9de8be5a16b54 323,329
+  s_447036b5ac59cb::t_b9e4ddf7c5d903 429-432,435-438
+  s_447036b5ac59cb::t_7b541da5a328e5 150-151,154,160
+  s_447036b5ac59cb::t_8034a7dd6a5d8d 480-495
+  s_447036b5ac59cb::t_52b7997e7872cd 72-73
+  s_447036b5ac59cb::t_608e34ce6e2eec 32-35,63-70,192-199
+  s_447036b5ac59cb::t_3ea1adc7e81490 273-279,281-287,289-290,292,294
+  s_447036b5ac59cb::t_a995dd37790541 354-366,369-372,374,395-428,433-434,439-457,468,471-479,499,503-505
+  s_447036b5ac59cb::t_3faeb478fcfe04 458-459,461-465,467
+  s_447036b5ac59cb::t_0c646d9512a557 367,373,375-394
+  s_447036b5ac59cb::t_e5fc9c35058e5d 59,62,71,74-76,91-106
+  s_447036b5ac59cb::t_e15bc831a02b40 368
+  s_447036b5ac59cb::t_cf4f3483971c28 29,38
+  s_447036b5ac59cb::t_7059f627e45022 190,200-221,223-234
+  s_447036b5ac59cb::t_5dda72d2de0508 39
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/CLAUDE.md
+  s_447036b5ac59cb::t_43e29f9d2dbf7d 20-21
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCamera.test.ts
+  s_447036b5ac59cb::t_fbf5174ff48797 172,174-178
+  s_447036b5ac59cb::t_65af4363e18712 15,173,179-187
+  s_447036b5ac59cb::t_b9e4ddf7c5d903 188-189
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCamera.ts
+  s_447036b5ac59cb::t_fbf5174ff48797 219-223,227
+  s_447036b5ac59cb::t_60644528b0d1a4 206-218,226,230-233
+  s_447036b5ac59cb::t_914b88caa204b3 241,243-245,252,255-256,293-294,302-304,333-346
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/places.tsx
+  s_447036b5ac59cb::t_8b1b4dd46e82ae 12-13
+  s_447036b5ac59cb::t_c0a307ff20667a 6,124-140
+  s_447036b5ac59cb::t_30c56deedaf757 19-23,36,48-58,74,80-99
+  s_447036b5ac59cb::t_667fbe2b54cf3c 100-102,141-143
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_447036b5ac59cb::t_06ca1629ed801d 166
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_447036b5ac59cb::t_06ca1629ed801d 19
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/hexes.tsx
+  s_447036b5ac59cb::t_d0ac0f0e96fd7f 229,246,249-250
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.ts
+  s_447036b5ac59cb::t_c6ad5b5d637ecc 269,279-281,309-312,442-444
+  s_447036b5ac59cb::t_48bc97bec29a61 16,257-268,270-274,320-324,327,329,341,346,348,352,357,360,362,364,383,482-486
+  s_447036b5ac59cb::t_49ac0904fca106 447-456
+  s_447036b5ac59cb::t_9810060693d61d 282-286
+  s_447036b5ac59cb::t_3e02fb60299005 4-8,21,24,393,396,421
+  s_447036b5ac59cb::t_38b9efb9c3f6e3 221-224,226-228,231,235-236,238-239,245-247,251-252,275,326,338-340,342,344-345,347,349-351,353-354,356,361,382,431-433,463-465,477-481,487-489,530,538
+  s_447036b5ac59cb::t_608e34ce6e2eec 328,330-332
+  s_447036b5ac59cb::t_67f54f6d9595de 276-278,287-308,313-319,325,333-337,343,355,358-359,363,365,445
+  s_447036b5ac59cb::t_1bc7f28472baef 366,446
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Canvas.tsx
+  s_447036b5ac59cb::t_166d98b19dde4f 247
+  s_447036b5ac59cb::t_914b88caa204b3 477,479-497
+  s_447036b5ac59cb::t_d0ac0f0e96fd7f 315-328,447-448,450
+  s_447036b5ac59cb::t_c0a307ff20667a 56
+  s_447036b5ac59cb::t_30c56deedaf757 300,457-458,507-513,524-527,532,537,543
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/Tile.tsx
+  s_447036b5ac59cb::t_9a8ae6509cfcfe 17
+  s_447036b5ac59cb::t_166d98b19dde4f 118-122,297
+  s_447036b5ac59cb::t_8b1b4dd46e82ae 36
+  s_447036b5ac59cb::t_553787fab2eebe 298,319
+  s_447036b5ac59cb::t_e5929819754100 324,326
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_447036b5ac59cb::t_98a131475b4ec9 24-26
+  s_447036b5ac59cb::t_43e29f9d2dbf7d 40,42-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "42c8bbd8358fc8557dd5b25a237b39db4f96a40f",
+  "prompts": {},
+  "sessions": {
+    "s_447036b5ac59cb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f61e7818-9114-43ee-8fdf-2bc9aa8a89d0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
