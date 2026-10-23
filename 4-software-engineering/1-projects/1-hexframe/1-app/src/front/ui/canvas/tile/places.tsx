@@ -3,16 +3,24 @@
 // added, a dotted place and no plus; where tiles will be while they load, a sweep of light; and the
 // ground a hex gives way to when it opens in place, faint, or teal and dashed under the center's
 // Context.
+import type { ReactNode } from 'react'
 import { Slot as Handed } from 'radix-ui'
 
 import type { Hex } from '../geometry/geometry'
 import { buttonKeys, type Action, type Hand } from '../keys'
 import { points, Sweep, tint } from './light'
+import { movedAs, useFoldGivenUp } from './settle'
+import type { TileMotion } from './Tile'
 
 interface SlotProps {
   hex: Hex
   /** What a click on the slot does, and its name for a screen reader; without it, nothing can be added. */
   action?: Action | undefined
+  /**
+   * A tile could be added here, though not from where it is drawn, around the center or in the last
+   * drawing as the camera moves on: its plus, taking no click.
+   */
+  offers?: boolean
   /** Tiles will be here once they load. */
   loading?: boolean
   /** What its menu hands it, where a free slot has one. */
@@ -25,7 +33,7 @@ interface SlotProps {
 }
 
 /** A Direction that holds no tile: free, with a plus where a click adds one, dotted where none can. */
-export function Slot({ hex, action, loading = false, hand, place }: SlotProps) {
+export function Slot({ hex, action, loading = false, hand, place, offers = false }: SlotProps) {
   if (loading) {
     return (
       <g aria-hidden>
@@ -37,19 +45,21 @@ export function Slot({ hex, action, loading = false, hand, place }: SlotProps) {
   if (action === undefined) {
     return (
       <g aria-hidden>
-        <polygon
-          points={points(hex)}
-          fill="none"
-          strokeDasharray="1 4"
-          vectorEffect="non-scaling-stroke"
-          className="stroke-border"
-        />
+        {offers ? (
+          <Free hex={hex} />
+        ) : (
+          <polygon
+            points={points(hex)}
+            fill="none"
+            strokeDasharray="1 4"
+            vectorEffect="non-scaling-stroke"
+            className="stroke-border"
+          />
+        )}
       </g>
     )
   }
   const { label, onSelect } = action
-  const { center, radius } = hex
-  const arm = Math.min(radius * 0.12, 9)
   return (
     <Handed.Root {...hand}>
       <g
@@ -61,21 +71,32 @@ export function Slot({ hex, action, loading = false, hand, place }: SlotProps) {
         onClick={onSelect}
         {...buttonKeys({ onEnter: onSelect, onSpace: onSelect })}
       >
-        <polygon
-          points={points(hex)}
-          strokeDasharray="2 5"
-          vectorEffect="non-scaling-stroke"
-          className="fill-transparent stroke-border transition-colors group-hover:fill-foreground/4 group-hover:stroke-input group-focus-visible:fill-foreground/4 group-focus-visible:stroke-ring group-focus-visible:[stroke-dasharray:none]"
-        />
-        <path
-          d={`M${String(center.x - arm)},${String(center.y)}h${String(2 * arm)}M${String(center.x)},${String(center.y - arm)}v${String(2 * arm)}`}
-          strokeWidth={1.25}
-          strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-          className="stroke-faint transition-colors group-hover:stroke-muted-foreground group-focus-visible:stroke-muted-foreground"
-        />
+        <Free hex={hex} />
       </g>
     </Handed.Root>
+  )
+}
+
+/** A free slot a tile could be added to: dashed, its plus at its heart, lit under the hand. */
+function Free({ hex }: { hex: Hex }) {
+  const { center, radius } = hex
+  const arm = Math.min(radius * 0.12, 9)
+  return (
+    <>
+      <polygon
+        points={points(hex)}
+        strokeDasharray="2 5"
+        vectorEffect="non-scaling-stroke"
+        className="fill-transparent stroke-border transition-colors group-hover:fill-foreground/4 group-hover:stroke-input group-focus-visible:fill-foreground/4 group-focus-visible:stroke-ring group-focus-visible:[stroke-dasharray:none]"
+      />
+      <path
+        d={`M${String(center.x - arm)},${String(center.y)}h${String(2 * arm)}M${String(center.x)},${String(center.y - arm)}v${String(2 * arm)}`}
+        strokeWidth={1.25}
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+        className="stroke-faint transition-colors group-hover:stroke-muted-foreground group-focus-visible:stroke-muted-foreground"
+      />
+    </>
   )
 }
 
@@ -97,6 +118,26 @@ export function Ground({ hex, context = false }: { hex: Hex; context?: boolean }
             : { fill: tint('foreground', 3), stroke: 'none' }
         }
       />
+    </g>
+  )
+}
+
+/**
+ * A free slot, or anything drawn beside the tiles of a ring, blooming out of its parent's heart or
+ * folding back into it with them, a fold given up playing back to rest.
+ */
+export function Moved({
+  motion,
+  children,
+}: {
+  motion: TileMotion | undefined
+  children: ReactNode
+}) {
+  const { className, style } = movedAs(motion)
+  const moved = useFoldGivenUp(motion?.way === 'fold')
+  return (
+    <g ref={moved} className={className} style={style}>
+      {children}
     </g>
   )
 }

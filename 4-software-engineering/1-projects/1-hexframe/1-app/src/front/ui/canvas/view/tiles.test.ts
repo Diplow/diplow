@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest'
 
-import { findTile, firstKindOf, kindsOf, pathTo, sunward, type TileNode } from './tiles'
+import {
+  directionIn,
+  findTile,
+  firstKindOf,
+  kindsOf,
+  pathTo,
+  sunward,
+  type TileNode,
+} from './tiles'
 
 const tile = (id: string, more: Partial<TileNode> = {}): TileNode => ({
   id,
@@ -62,6 +70,19 @@ describe('pathTo', () => {
     expect(pathTo(visited, 'far2').map((found) => found.id)).toEqual(['star', 'far', 'far2'])
     expect(findTile(visited, 'far')?.across).toBe(true)
     expect(pathTo(visited, 'near').map((found) => found.id)).toEqual(['star', 'near'])
+  })
+})
+
+describe('directionIn', () => {
+  it('finds where a Tile stands under another, a Branch, a Leaf or a Context Tile', () => {
+    expect(directionIn(system, tile('a'))).toBe(1)
+    expect(directionIn(system, leaf('notes'))).toBe(2)
+    expect(directionIn(system, tile('why'))).toBe(2)
+  })
+
+  it('finds none for a Tile it does not hold, nor under no Tile', () => {
+    expect(directionIn(system, tile('a3'))).toBeUndefined()
+    expect(directionIn(undefined, tile('a'))).toBeUndefined()
   })
 })
 

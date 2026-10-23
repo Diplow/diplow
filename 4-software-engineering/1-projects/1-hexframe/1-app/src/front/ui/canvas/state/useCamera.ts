@@ -11,7 +11,7 @@
 // measures it in the canvas's units, a drag, reads it as drawn. What is pure here is tested beside it.
 import { useLayoutEffect, useRef, useState } from 'react'
 
-import { canvasSize, type CanvasHex } from '../geometry/shape'
+import { canvasSize, heartShare, type CanvasHex } from '../geometry/shape'
 import type { Point } from '../geometry/geometry'
 import { easingOf, movingFor } from '../../motion'
 import { pathTo, type TileNode } from '../view/tiles'
@@ -26,16 +26,14 @@ interface Heart {
 }
 
 /**
- * A Tile's tile at the heart of its hex opened in place, as a share of that hex: the shape's Frame
- * inside a hex takes its radius less a margin, its Tile a third of that (`layout.ts`).
+ * A drawing of the canvas: its center's id, the ids from the root down to it, its hexes, and the
+ * Tiles around them, the one the center stands in and those beside it (`surroundingsOf`).
  */
-export const heartShare = 0.92 / 3
-
-/** A drawing of the canvas: its center's id, the ids from the root down to it, and its hexes. */
 export interface Drawing {
   center: string
   path: readonly string[]
   hexes: readonly CanvasHex[]
+  around?: readonly CanvasHex[]
 }
 
 /**
@@ -64,14 +62,22 @@ function drawnAt(hexes: readonly CanvasHex[], id: string) {
 const isOpened = (hex: CanvasHex) =>
   hex.kind === 'tile' && (hex.role === 'hub' || (hex.role === 'center' && hex.alone !== true))
 
-/** The heart of the Tile a drawn hex stands for, `levels` generations down from it. */
+/**
+ * The heart of the Tile a drawn hex stands for, `levels` generations down from it: the one it says
+ * (`heart`), the center's and the Tile's it stands in, else its own hex opened, a heart's share of it
+ * folded.
+ */
 function heartOf(hex: CanvasHex | undefined, levels = 0): Heart {
   if (hex === undefined) {
     return { center: { x: canvasSize.width / 2, y: canvasSize.height / 2 }, radius: 100 }
   }
-  const share = isOpened(hex) ? 1 : heartShare
-  return { center: hex.hex.center, radius: hex.hex.radius * share * heartShare ** levels }
+  const heart = hex.kind === 'tile' ? hex.heart : undefined
+  const radius = heart?.radius ?? hex.hex.radius * (isOpened(hex) ? 1 : heartShare)
+  return { center: hex.hex.center, radius: radius * heartShare ** levels }
 }
+
+/** Every hex a drawing holds, the Tiles around it included. */
+const allOf = (drawing: Drawing) => [...drawing.hexes, ...(drawing.around ?? [])]
 
 /** Each Tile above the center, the nearest first, with the levels between it and the center. */
 function above(path: readonly string[]): [string, number][] {
@@ -91,18 +97,18 @@ export function courseOf(last: Drawing, next: Drawing): Course {
   const levels = Math.abs(next.path.length - last.path.length)
   const leaving = drawnAt(last.hexes, last.center)
   const arriving = drawnAt(next.hexes, next.center)
-  const was = drawnAt(last.hexes, next.center)
+  const was = drawnAt(allOf(last), next.center)
   if (was !== undefined) return { from: heartOf(was), to: heartOf(arriving), levels, arrived: true }
-  const is = drawnAt(next.hexes, last.center)
+  const is = drawnAt(allOf(next), last.center)
   if (is !== undefined) return { from: heartOf(leaving), to: heartOf(is), levels, arrived: false }
   for (const [id, below] of above(next.path)) {
-    const ancestor = drawnAt(last.hexes, id)
+    const ancestor = drawnAt(allOf(last), id)
     if (ancestor !== undefined) {
       return { from: heartOf(ancestor, below), to: heartOf(arriving), levels, arrived: false }
     }
   }
   for (const [id, below] of above(last.path)) {
-    const ancestor = drawnAt(next.hexes, id)
+    const ancestor = drawnAt(allOf(next), id)
     if (ancestor !== undefined) {
       return { from: heartOf(leaving), to: heartOf(ancestor, below), levels, arrived: false }
     }
@@ -197,75 +203,105 @@ export function flightFor(levels: number): number {
 }
 
 /**
- * What of the last drawing is drawn still beneath the next during a flight: all of it, but, where
- * the next center flies from where it was, the Tiles the next drawing draws too, which fly with it,
- * and the next center's own hex, which gives way to its ground where it arrives opened.
+ * What a hex stands for across drawings, whichever drawing holds it, the Tiles around included: a
+ * Tile by its id, the one above the center among them, a Reference, a ground or a free slot by its
+ * key in its own ring.
+ */
+function sameAs(hex: CanvasHex): string {
+  const key = hex.key.replace(/^beside:/, '')
+  if (hex.kind !== 'tile' && hex.kind !== 'list') return key
+  return hex.tile.reference === undefined ? `tile:${hex.tile.id}` : key
+}
+
+/**
+ * What of the last drawing is drawn still beneath the next during a flight, the Tiles around it
+ * included: all of it, but, where the next center flies from where it was, what the next drawing
+ * draws too, which flies with it, the last center's tile aside, which gives way to how it is drawn
+ * now as it fades; and the next center's own hex, which gives way to its ground where it arrives
+ * opened from folded. Panning, what the next drawing draws around it comes from the last drawing
+ * as it was, so none of it stays; going in or out, a Tile it draws around it stays too, fading as
+ * the words fitted to its next size come, so they don't jump to that size as the flight starts.
  */
 export function stillOf(last: Drawing, next: Drawing, course: Course): CanvasHex[] {
-  if (!course.arrived) return [...last.hexes]
-  const drawn = new Set(
-    next.hexes.flatMap((hex) =>
-      hex.kind === 'tile' && hex.tile.reference === undefined ? [hex.tile.id] : [],
-    ),
-  )
+  if (!course.arrived) return allOf(last)
+  const drawn = new Set((course.levels === 0 ? allOf(next) : next.hexes).map(sameAs))
   const arriving = drawnAt(next.hexes, next.center)
   const opened = arriving !== undefined && isOpened(arriving)
-  return last.hexes.flatMap((hex): CanvasHex[] => {
-    if (hex.kind !== 'tile' && hex.kind !== 'list') return [hex]
-    if (hex.tile.reference !== undefined || !drawn.has(hex.tile.id)) return [hex]
+  return allOf(last).flatMap((hex): CanvasHex[] => {
+    if (!drawn.has(sameAs(hex))) return [hex]
+    if (hex.kind !== 'tile') return []
+    if (hex.role === 'center' && hex.tile.id !== next.center) return [hex]
     if (hex.tile.id !== next.center || !opened || isOpened(hex)) return []
     const { key, generation } = hex
     return [{ kind: 'ground', key: `ground:${key}`, hex: hex.hex, generation, ring: 'children' }]
   })
 }
 
-/** A flight under way: its course, how long it lasts, and the last drawing as it is drawn still. */
+/**
+ * A flight under way: its course, how long it lasts, the last drawing as it is drawn still, the
+ * course of the Tiles around the drawing (`around`): the drawing's, as the center changes; from the
+ * center's last whole hex to its next, as its own hex opens or folds; none where they stay; and, by
+ * key, what stands around the next drawing that the last didn't draw, which fades in as it flies
+ * (`fresh`), where the rest of the next drawing was drawn already.
+ */
 interface Flight {
   course: Course
   duration: number
   still: CanvasHex[]
+  around: Course | undefined
+  fresh: ReadonlySet<string>
 }
+
+const none: ReadonlySet<string> = new Set()
 
 interface CameraInput {
   system: TileNode
   /** The centered Tile's id. */
   center: string
   hexes: readonly CanvasHex[]
+  /** The Tiles around the drawing, the one the center stands in and those beside it. */
+  around?: readonly CanvasHex[]
 }
 
 /**
- * The camera over the canvas's drawing: the group to draw it in (`drawing`), and, while a flight
- * is under way, the last drawing to draw still beneath it (`still`), in its own group (`last`),
- * which nothing can reach. A flight starts as the center changes, or its own hex as it opens or
- * folds, before the next view is painted.
+ * The camera over the canvas's drawing: the group to draw it in (`drawing`), the one to draw the
+ * Tiles around it in (`around`), beneath, and, while a flight is under way, the last drawing to draw
+ * still between them (`still`), in its own group (`last`), which nothing can reach. A flight starts
+ * as the center changes, the Tiles around flying with the drawing, or its own hex as it opens or
+ * folds, the Tiles around staying where they are, before the next view is painted.
  */
-export function useCamera({ system, center, hexes }: CameraInput) {
+export function useCamera({ system, center, hexes, around = [] }: CameraInput) {
   const drawing = useRef<SVGGElement>(null)
+  const surrounding = useRef<SVGGElement>(null)
   const last = useRef<SVGGElement>(null)
   const [flight, setFlight] = useState<Flight>()
   // The drawing last painted, with the System it was drawn from, to tell where its center stood.
-  const painted = useRef<{ system: TileNode; center: string; hexes: readonly CanvasHex[] }>(
-    undefined,
-  )
+  const painted = useRef<{
+    system: TileNode
+    center: string
+    hexes: readonly CanvasHex[]
+    around: readonly CanvasHex[]
+  }>(undefined)
   useLayoutEffect(() => {
     const before = painted.current
-    painted.current = { system, center, hexes }
+    painted.current = { system, center, hexes, around }
     if (before === undefined) return
     if (before.center === center) {
       const course = reframingOf(before.hexes, hexes, center)
       const duration = course === undefined ? 0 : flightFor(0)
-      if (course !== undefined && duration > 0) setFlight({ course, duration, still: [] })
+      if (course !== undefined && duration > 0) {
+        const around = wholeCourseOf(before.hexes, hexes)
+        setFlight({ course, duration, still: [], around, fresh: none })
+      }
       return
     }
     const lastDrawing = { ...before, path: idsTo(before.system, before.center) }
-    const nextDrawing = { center, hexes, path: idsTo(system, center) }
+    const nextDrawing = { center, hexes, around, path: idsTo(system, center) }
     const course = courseOf(lastDrawing, nextDrawing)
     const duration = flightFor(course.levels)
-    setFlight(
-      duration === 0
-        ? undefined
-        : { course, duration, still: stillOf(lastDrawing, nextDrawing, course) },
-    )
+    const still = stillOf(lastDrawing, nextDrawing, course)
+    const fresh = course.arrived ? freshOf(lastDrawing, nextDrawing) : none
+    setFlight(duration === 0 ? undefined : { course, duration, still, around: course, fresh })
   })
   useLayoutEffect(() => {
     if (flight === undefined) return
@@ -275,6 +311,11 @@ export function useCamera({ system, center, hexes }: CameraInput) {
         duration: flight.duration,
         easing,
       }),
+      flight.around &&
+        play(surrounding.current, keyframesOf(flight.around, 'next'), {
+          duration: flight.duration,
+          easing,
+        }),
       play(last.current, keyframesOf(flight.course, 'last'), {
         duration: flight.duration,
         easing,
@@ -289,7 +330,40 @@ export function useCamera({ system, center, hexes }: CameraInput) {
       for (const animation of flying) animation?.cancel()
     }
   }, [flight])
-  return { drawing, last, still: flight?.still }
+  return {
+    drawing,
+    around: surrounding,
+    last,
+    still: flight?.still,
+    fresh: flight?.fresh ?? none,
+    duration: flight?.duration ?? 0,
+  }
+}
+
+/** What stands around the next drawing that the last one didn't draw, by key. */
+export function freshOf(last: Drawing, next: Drawing): ReadonlySet<string> {
+  const drawn = new Set(allOf(last).map(sameAs))
+  return new Set((next.around ?? []).flatMap((hex) => (drawn.has(sameAs(hex)) ? [] : [hex.key])))
+}
+
+/** The center's heart, as a drawing draws it. */
+const heartIn = (hexes: readonly CanvasHex[]) =>
+  hexes.flatMap((hex) => (hex.kind === 'tile' && hex.role === 'center' && hex.heart) || [])[0]
+
+/**
+ * How the Tiles around a drawing move as the center's own hex opens or folds: from its last heart
+ * to its next, the whole hex they stand around with it; none where it stays as it was.
+ */
+export function wholeCourseOf(
+  last: readonly CanvasHex[],
+  next: readonly CanvasHex[],
+): Course | undefined {
+  const was = heartIn(last)
+  const is = heartIn(next)
+  if (was === undefined || is === undefined || Math.abs(was.radius - is.radius) < 1e-6) {
+    return undefined
+  }
+  return { from: was, to: is, levels: 0, arrived: true }
 }
 
 /** The ids from the System's root down to this Tile. */

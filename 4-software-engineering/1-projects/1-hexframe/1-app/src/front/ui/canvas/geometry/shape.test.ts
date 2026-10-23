@@ -1,10 +1,17 @@
 import { describe, expect, it } from 'vitest'
 
 import { firstKindOf, type TileNode } from '../view/tiles'
-import { showView, type CanvasView } from '../view/view'
+import { centerOn, showView, type CanvasView } from '../view/view'
 
-import { hexCorners } from './geometry'
-import { aloneHex, canvasSize, layoutCanvas, type CanvasHex } from './shape'
+import { hexCorners, neighbor, opposite, type Direction, type Hex } from './geometry'
+import {
+  aloneHex,
+  canvasSize,
+  heartShare,
+  layoutCanvas,
+  surroundingsOf,
+  type CanvasHex,
+} from './shape'
 
 const tile = (id: string, more: Partial<TileNode> = {}): TileNode => ({
   id,
@@ -216,5 +223,91 @@ describe('layoutCanvas', () => {
         expect(y).toBeLessThanOrEqual(canvasSize.height + 1e-9)
       }
     }
+  })
+})
+
+describe('surroundingsOf', () => {
+  /** The Tiles around `id` centered as this view shows it, from the view of the Tile above it. */
+  function around(view: CanvasView, above: string) {
+    const hexes = layoutCanvas(showView(system, view))
+    const center = only(hexes, 'tile').find((hex) => hex.role === 'center')
+    if (center === undefined) throw new Error('No center is drawn')
+    return { center, around: surroundingsOf(showView(system, centerOn(system, above)), center) }
+  }
+
+  /** The center's whole hex, its heart a heart's share of it. */
+  const wholeOf = (heart: Hex | undefined) =>
+    heart && { center: heart.center, radius: heart.radius / heartShare }
+
+  it('draws the Tile the center stands in and the rest of its ring, each where it stands to it', () => {
+    const { around: hexes } = around({ center: 'b2', frame: 'children' }, 'mixed')
+    expect(tiles(hexes)).toEqual({
+      'above:mixed': ['above', undefined, -1],
+      'beside:tile:b1': ['beside', 1, 0],
+      'beside:tile:l3': ['beside', 3, 0],
+      'beside:tile:b5': ['beside', 5, 0],
+      'beside:tile:l2': ['beside', 4, 0],
+    })
+  })
+
+  it("stands each against the center's whole hex, as large, in the Direction it stands to it", () => {
+    for (const view of [{ center: 'b2', frame: 'children' } as const, { center: 'b2' }]) {
+      const { center, around: hexes } = around(view, 'mixed')
+      const whole = wholeOf(center.heart)
+      if (whole === undefined) throw new Error('The center has no heart')
+      // b2 stands in Direction 2 of mixed's ring: mixed opposite it, b1, in Direction 1, beside it.
+      const away = (hex: Hex | undefined, direction: Direction) => {
+        if (hex === undefined) return undefined
+        const toward = neighbor(whole, direction).center
+        const [dx, dy] = [hex.center.x - whole.center.x, hex.center.y - whole.center.y]
+        const [tx, ty] = [toward.x - whole.center.x, toward.y - whole.center.y]
+        // Along that Direction, a gap more than a neighbor's distance away, as large.
+        expect(Math.abs(dx * ty - dy * tx)).toBeLessThan(1e-6)
+        expect(Math.abs(hex.radius - whole.radius)).toBeLessThan(1e-6)
+        return Math.hypot(dx, dy) / Math.hypot(tx, ty)
+      }
+      const drawn = only(hexes, 'tile')
+      const above = away(drawn.find((hex) => hex.role === 'above')?.hex, opposite(2))
+      const beside = away(drawn.find((hex) => hex.tile.id === 'b1')?.hex, 6)
+      expect(above).toBeGreaterThan(1)
+      expect(above).toBeLessThan(1.1)
+      expect(beside).toBeCloseTo(above ?? 0)
+    }
+  })
+
+  it('stands them a ring further from a center opened than from one folded, alone', () => {
+    const opened = around({ center: 'b2', frame: 'children' }, 'mixed').center.heart
+    const folded = around({ center: 'b2' }, 'mixed').center.heart
+    expect(opened && folded && opened.radius > folded.radius).toBe(true)
+  })
+
+  it('draws a Tile beside the center opened, its ring a magnitude smaller, as the center’s own', () => {
+    const shown = showView(system, { center: 'b2', frame: 'children' })
+    const center = only(layoutCanvas(shown), 'tile').find((hex) => hex.role === 'center')
+    if (center === undefined) throw new Error('No center is drawn')
+    const above = showView(system, { ...centerOn(system, 'mixed'), expanded: { 1: 'children' } })
+    const hexes = surroundingsOf(above, center, { 1: { 4: 'children' } })
+    const at = (key: string) => hexes.find((hex) => hex.key === key)
+    expect(at('beside:ground:b1')).toMatchObject({ kind: 'ground', generation: 0 })
+    expect(at('beside:tile:b1')).toMatchObject({ role: 'hub', generation: 0 })
+    expect(at('beside:tile:b1x')).toMatchObject({ role: 'hub', generation: 1 })
+    expect(at('beside:ground:b1x')).toMatchObject({ kind: 'ground', generation: 1 })
+    // b1 at its heart, as large as the center opened at its own and each hex of its ring: magnitude 2.
+    const ring = only(layoutCanvas(shown), 'empty')[0]
+    expect(at('beside:tile:b1')?.hex.radius).toBeCloseTo(center.hex.radius)
+    expect(at('beside:ground:b1x')?.hex.radius).toBeCloseTo(ring?.hex.radius ?? 0)
+    // b1x opened in turn: its own tile at its heart, the smallest drawn, magnitude 3.
+    expect(at('beside:tile:b1x')?.hex.radius).toBeCloseTo((ring?.hex.radius ?? 0) * heartShare, 1)
+    // Nothing of the center's own drawing, nor of the slots free in the ring above, comes twice.
+    expect(hexes.some((hex) => hex.key.includes('b2'))).toBe(false)
+    expect(hexes.filter((hex) => hex.kind === 'empty').every((hex) => hex.generation >= 1)).toBe(
+      true,
+    )
+  })
+
+  it('draws nothing around a Leaf shown inside the Tile it stands in', () => {
+    // Past six, many shows its Leaves inside it: ml1 is not in the ring around it.
+    expect(around({ center: 'ml1' }, 'many').around).toEqual([])
+    expect(around({ center: 'm1' }, 'many').around).not.toEqual([])
   })
 })

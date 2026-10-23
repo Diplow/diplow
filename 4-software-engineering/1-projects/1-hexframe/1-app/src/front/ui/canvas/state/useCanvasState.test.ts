@@ -5,6 +5,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { TileNode } from '../view/tiles'
 import type { CanvasView, ViewAction } from '../view/view'
 
+import { heartShare } from '../geometry/shape'
+
 import { useCanvasState, type TileHex, type TileLets } from './useCanvasState'
 
 // The canvas's state over a System made by hand: what each Tile's click does, and the next view each
@@ -36,8 +38,11 @@ const system = tile('root', {
 /** The root opened into its first ring, as a click on it leaves it. */
 const open: CanvasView = { frame: 'children' }
 
-/** `a` centered, as a gesture leaves it: opened into its first ring, so its Tiles show around it. */
+/** `a` centered, opened into its first ring, so its Tiles show around it. */
 const inA: CanvasView = { center: 'a', frame: 'children' }
+
+/** The root opened, `a` opened in place in its ring. */
+const aOpen: CanvasView = { ...open, expanded: { 1: 'children' } }
 
 interface Hand {
   finger?: boolean
@@ -172,12 +177,15 @@ describe("a line of a tile's menu that goes somewhere", () => {
     expect(onViewChange).toHaveBeenLastCalledWith(open, { gesture: 'expand', tile: 'root' })
   })
 
-  it('goes in, centering the Tile opened, and leaves the center where it is', () => {
+  it('goes in, centering the Tile as it is drawn, and leaves the center where it is', () => {
     const { state, actions: act, onViewChange } = render(open)
     act.go(hexOf(state.hexes, 'tile:a'), 'go-in')
-    expect(onViewChange).toHaveBeenLastCalledWith(inA, { gesture: 'center', tile: 'a' })
+    expect(onViewChange).toHaveBeenLastCalledWith({ center: 'a' }, { gesture: 'center', tile: 'a' })
     act.go(hexOf(state.hexes, 'tile:root'), 'go-in')
     expect(onViewChange).toHaveBeenCalledOnce()
+    const opened = render(aOpen)
+    opened.actions.go(hexOf(opened.state.hexes, 'tile:a'), 'go-in')
+    expect(opened.onViewChange).toHaveBeenLastCalledWith(inA, { gesture: 'center', tile: 'a' })
   })
 
   it("shows the center's Context inside it, opening it were it folded, and no other Tile's", () => {
@@ -203,10 +211,13 @@ describe("a line of a tile's menu that goes somewhere", () => {
     expect(onViewChange).not.toHaveBeenCalled()
   })
 
-  it('backs out to the Tile the center stands under, opened, and nowhere from the Root', () => {
+  it('backs out to the Tile the center stands under, opened, the center as it was, and nowhere from the Root', () => {
     const inside = render(inA)
     inside.actions.go(hexOf(inside.state.hexes, 'tile:a'), 'back-out')
-    expect(inside.onViewChange).toHaveBeenLastCalledWith(open, { gesture: 'center', tile: 'root' })
+    expect(inside.onViewChange).toHaveBeenLastCalledWith(aOpen, {
+      gesture: 'center',
+      tile: 'root',
+    })
     const top = render({})
     top.actions.go(hexOf(top.state.hexes, 'tile:root'), 'back-out')
     expect(top.onViewChange).not.toHaveBeenCalled()
@@ -289,11 +300,11 @@ describe('a click', () => {
     expect(opened.onViewChange).toHaveBeenLastCalledWith(open, { gesture: 'collapse', tile: 'a' })
   })
 
-  it('centers a Leaf, alone, and a Reference on the Tile it points at, opened', () => {
-    const { state, actions: act, onViewChange } = render({ ...open, inner: 'context' })
+  it('centers a Leaf, alone, and a Reference on the Tile it points at, as that one is drawn', () => {
+    const { state, actions: act, onViewChange } = render({ ...aOpen, inner: 'context' })
     act.click(hexOf(state.hexes, 'tile:notes'))
     expect(onViewChange).toHaveBeenLastCalledWith(
-      { center: 'notes' },
+      { center: 'notes', around: { 1: {} } },
       { gesture: 'center', tile: 'notes' },
     )
     act.click(hexOf(state.hexes, 'tile:root:context:2'))
@@ -431,15 +442,91 @@ describe('what an opened hex holds', () => {
   })
 })
 
+describe('what moves as the view changes', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+    document.documentElement.style.removeProperty('--duration-fold')
+  })
+
+  it('holds the fold until the view that closes it lands, then forgets it', () => {
+    vi.useFakeTimers()
+    document.documentElement.style.setProperty('--duration-fold', '500ms')
+    const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
+    const { result, rerender } = renderHook(
+      ({ view }: { view: CanvasView }) => useCanvasState({ system, view, onViewChange }),
+      { initialProps: { view: aOpen } },
+    )
+    settled(() => {
+      result.current.actions.click(hexOf(result.current.state.hexes, 'tile:a'))
+    })
+    settled(() => {
+      vi.advanceTimersByTime(500)
+    })
+    // The view it handed on has not landed yet: what folded stays folded meanwhile.
+    expect(result.current.actions.motionOf('tile:a3')).toMatchObject({ way: 'fold' })
+    rerender({ view: open })
+    rerender({ view: aOpen })
+    expect(result.current.actions.motionOf('tile:a3')).not.toMatchObject({ way: 'fold' })
+  })
+
+  it('blooms nothing where a fold was given up, which plays back to rest', () => {
+    vi.useFakeTimers()
+    document.documentElement.style.setProperty('--duration-fold', '500ms')
+    const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
+    const { result } = renderHook(() => useCanvasState({ system, view: aOpen, onViewChange }))
+    settled(() => {
+      result.current.actions.click(hexOf(result.current.state.hexes, 'tile:a'))
+    })
+    settled(() => {
+      result.current.actions.center(hexOf(result.current.state.hexes, 'tile:a'), 'pointer')
+    })
+    expect(result.current.actions.motionOf('tile:a3')).toBeUndefined()
+    expect(result.current.actions.motionOf('tile:notes')).toMatchObject({ way: 'bloom' })
+  })
+
+  it('blooms nothing the camera brings as the center changes, then what opens in place', () => {
+    const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
+    const { result, rerender } = renderHook(
+      ({ view }: { view: CanvasView }) => useCanvasState({ system, view, onViewChange }),
+      { initialProps: { view: inA } },
+    )
+    // a3 bloomed as a opened, and keeps that bloom, played once; notes and many come with the camera.
+    const bloomed = result.current.actions.motionOf('tile:a3')
+    rerender({ view: aOpen })
+    expect(result.current.actions.motionOf('tile:notes')).toBeUndefined()
+    expect(result.current.actions.motionOf('tile:many')).toBeUndefined()
+    expect(result.current.actions.motionOf('tile:a3')?.way).toBe(bloomed?.way)
+    rerender({ view: { ...aOpen, expanded: { 1: 'children', 4: 'branches' } } })
+    expect(result.current.actions.motionOf('tile:m1')).toMatchObject({ way: 'bloom' })
+  })
+
+  it('settles a Tile folded going out a level from the heart it was drawn at, and nothing else', () => {
+    const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
+    const { result, rerender } = renderHook(
+      ({ view }: { view: CanvasView }) => useCanvasState({ system, view, onViewChange }),
+      {
+        initialProps: { view: { center: 'many', frame: 'branches', expanded: { 1: 'children' } } },
+      },
+    )
+    rerender({ view: { frame: 'children', expanded: { 4: 'branches' } } })
+    expect(result.current.actions.grownOf('tile:m1')).toBeCloseTo(heartShare)
+    expect(result.current.actions.grownOf('tile:many')).toBeUndefined()
+    expect(result.current.actions.grownOf('tile:m2')).toBeUndefined()
+  })
+})
+
 describe('centering', () => {
-  it('centers from the keyboard at once, the Tile opened as it arrives', () => {
+  it('centers from the keyboard at once, the Tile as it is drawn, folded or opened', () => {
     const { state, actions: act, onViewChange } = render(open)
     act.center(hexOf(state.hexes, 'tile:a'), 'keyboard')
-    expect(onViewChange).toHaveBeenLastCalledWith(inA, { gesture: 'center', tile: 'a' })
+    expect(onViewChange).toHaveBeenLastCalledWith({ center: 'a' }, { gesture: 'center', tile: 'a' })
+    const opened = render(aOpen)
+    opened.actions.center(hexOf(opened.state.hexes, 'tile:a'), 'keyboard')
+    expect(opened.onViewChange).toHaveBeenLastCalledWith(inA, { gesture: 'center', tile: 'a' })
   })
 
   it('centers on a double-click only where its first click landed', () => {
-    const { state, actions: act, onViewChange } = render(open)
+    const { state, actions: act, onViewChange } = render(aOpen)
     act.center(hexOf(state.hexes, 'tile:a'), 'pointer')
     expect(onViewChange).not.toHaveBeenCalled()
     act.click(hexOf(state.hexes, 'tile:a'))
@@ -451,6 +538,43 @@ describe('centering', () => {
     const { state, actions: act, onViewChange } = render(open)
     act.center(hexOf(state.hexes, 'tile:root'), 'keyboard')
     expect(onViewChange).not.toHaveBeenCalled()
+  })
+})
+
+describe('the Tiles around the center', () => {
+  const keys = (view: CanvasView, hand: Hand = {}) =>
+    render(view, hand).state.around.map(({ key }) => key)
+
+  it('draws the Tile it stands in and the rest of that ring, none around the Root', () => {
+    expect(keys(inA)).toEqual(['above:root', 'beside:tile:notes', 'beside:tile:many'])
+    expect(keys({ center: 'a' })).toEqual(keys(inA))
+    expect(keys(open)).toEqual([])
+  })
+
+  it('centers each by a click or by going in, each Tile keeping its state', () => {
+    const { state, actions: act, onViewChange } = render(inA)
+    const [root, notes] = state.around
+    if (root?.kind !== 'tile' || notes?.kind !== 'tile')
+      throw new Error('Nothing is drawn around a')
+    act.around(root)
+    expect(onViewChange).toHaveBeenLastCalledWith(aOpen, { gesture: 'center', tile: 'root' })
+    act.around(notes)
+    expect(onViewChange).toHaveBeenLastCalledWith(
+      { center: 'notes', around: { 1: {} } },
+      { gesture: 'center', tile: 'notes' },
+    )
+  })
+
+  it('draws a Tile beside the center opened as the view says, with what it opens into', () => {
+    const opened = render({ ...inA, around: { 4: { 1: 'children' } } }).state.around
+    expect(opened.map(({ key }) => key)).toEqual(
+      expect.arrayContaining(['beside:ground:many', 'beside:tile:many', 'beside:tile:m1']),
+    )
+    expect(opened.find(({ key }) => key === 'beside:tile:many')).toMatchObject({ role: 'hub' })
+  })
+
+  it('draws none where its caller holds moving the center back', () => {
+    expect(keys(inA, { lets: () => ({ click: true, recenter: false }) })).toEqual([])
   })
 })
 

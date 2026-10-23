@@ -2,10 +2,12 @@ import { describe, expect, it } from 'vitest'
 
 import type { TileNode } from './tiles'
 import {
+  aboveOf,
   centerOn,
   cycleOf,
   opens,
   readCanvasView,
+  recenter,
   showView,
   showsContext,
   toggleCenter,
@@ -71,12 +73,15 @@ describe('readCanvasView', () => {
 
   it('sets every field, so a raw value the router keeps underneath is overwritten', () => {
     // Strict, so each key must be there, set to `undefined`, not merely absent.
-    expect(readCanvasView({ center: 3, frame: 5, inner: 5, expanded: 5 })).toStrictEqual({
-      center: undefined,
-      frame: undefined,
-      inner: undefined,
-      expanded: undefined,
-    })
+    expect(readCanvasView({ center: 3, frame: 5, inner: 5, expanded: 5, around: 5 })).toStrictEqual(
+      {
+        center: undefined,
+        frame: undefined,
+        inner: undefined,
+        expanded: undefined,
+        around: undefined,
+      },
+    )
   })
 })
 
@@ -241,6 +246,107 @@ describe('centerOn', () => {
   })
 })
 
+describe('the Tiles around the center', () => {
+  it('opens those the view names, each into its first ring, with the Branches theirs opens', () => {
+    const view: CanvasView = { center: 'a', around: { 1: {}, 4: {}, 5: { 1: 'children' } } }
+    // a stands in Direction 1 itself: only the others stand around it.
+    expect(showView(system, view).around).toEqual({ 4: {}, 5: { 1: 'children' } })
+    expect(readCanvasView({ around: { 5: { 1: 'children', 2: 'nothing' }, 9: {} } })).toEqual({
+      around: { 5: { 1: 'children' } },
+    })
+  })
+
+  it('stands nothing around a center in no ring: the root, a Context Tile', () => {
+    expect(showView(system, { around: { 4: {} } }).around).toEqual({})
+    expect(showView(system, { center: 'why', around: { 4: {} } }).around).toEqual({})
+  })
+
+  it('draws the Tile above opened, those the view opens beside the center opened in it', () => {
+    const shown = showView(system, { center: 'a', around: { 5: { 1: 'children' } } })
+    expect(aboveOf(system, shown)).toMatchObject({
+      center: { id: 'root' },
+      frame: 'children',
+      expanded: { 5: 'branches' },
+    })
+    expect(aboveOf(system, showView(system, {}))).toBeUndefined()
+  })
+
+  it('closes those holding nothing the reader may add to', () => {
+    const shown = showView(system, { center: 'a', around: { 4: {}, 5: {} } })
+    expect(withoutEmptyRings(shown, () => false).around).toEqual({ 5: {} })
+  })
+
+  it('stay as they are as the center opens or folds', () => {
+    const view: CanvasView = { center: 'a', around: { 5: {} } }
+    expect(toggleCenter(system, view)).toEqual({ ...view, frame: 'children' })
+    expect(toggleCenter(system, toggleCenter(system, view))).toEqual(view)
+  })
+})
+
+describe('recenter', () => {
+  it('goes into a child as it is drawn, the rest of its ring around it as it was', () => {
+    const view: CanvasView = { frame: 'children', expanded: { 1: 'children', 5: 'branches' } }
+    expect(recenter(system, view, 'a')).toEqual({
+      center: 'a',
+      frame: 'children',
+      around: { 5: {} },
+    })
+    expect(recenter(system, { frame: 'children' }, 'a')).toEqual({ center: 'a' })
+  })
+
+  it('goes out a level, the center opened in the ring of the Tile above, what would be drawn below magnitude 3 folded', () => {
+    const view: CanvasView = {
+      center: 'a',
+      frame: 'children',
+      expanded: { 3: 'children' },
+      around: { 5: { 1: 'children' } },
+    }
+    expect(recenter(system, view, 'root')).toEqual({
+      frame: 'children',
+      expanded: { 1: 'children', 5: 'branches' },
+    })
+  })
+
+  it('pans to a Tile beside the center, each keeping its state', () => {
+    const view: CanvasView = {
+      center: 'a',
+      frame: 'children',
+      expanded: { 3: 'children' },
+      around: { 5: { 1: 'children' } },
+    }
+    const panned = recenter(system, view, 'many')
+    expect(panned).toEqual({
+      center: 'many',
+      frame: 'branches',
+      expanded: { 1: 'children' },
+      around: { 1: { 3: 'children' } },
+    })
+    expect(recenter(system, panned, 'a')).toEqual(view)
+  })
+
+  it('centers a Tile drawn at magnitude 3 folded, as it was drawn', () => {
+    const view: CanvasView = { frame: 'children', expanded: { 1: 'children' } }
+    expect(recenter(system, view, 'a3')).toEqual({ center: 'a3' })
+  })
+
+  it('opens each Tile above the center onto the way down to it, going out further', () => {
+    expect(recenter(system, { center: 'a3', frame: 'children' }, 'root')).toEqual({
+      frame: 'children',
+      expanded: { 1: 'children' },
+    })
+    expect(recenter(system, { center: 'why' }, 'root')).toEqual({
+      frame: 'children',
+      inner: 'context',
+    })
+  })
+
+  it('lands a Tile the view does not draw as centerOn lands it, and leaves the center be', () => {
+    expect(recenter(system, {}, 'a3')).toEqual(centerOn(system, 'a3'))
+    const view: CanvasView = { center: 'a', around: { 5: {} } }
+    expect(recenter(system, view, 'a')).toEqual(view)
+  })
+})
+
 describe('opens, showsContext and withoutEmptyRings', () => {
   const nobody = () => false
   const anyone = () => true
@@ -302,6 +408,7 @@ describe('viewIn and withViewIn', () => {
       frame: 'children',
       inner: 'context',
       expanded: undefined,
+      around: undefined,
     })
   })
 
@@ -311,6 +418,7 @@ describe('viewIn and withViewIn', () => {
       frame: undefined,
       inner: undefined,
       expanded: { 1: 'children' },
+      around: undefined,
       open: 'why',
     })
   })
