@@ -8,8 +8,7 @@
 import { acrossGaps, type Direction } from '#/domains/mapping/entities'
 import { useStandingIn } from '#/front/client/iam/organizations'
 import { useSystem } from '#/front/client/mapping/queries'
-import { Skeleton } from '#/front/ui/atoms/skeleton'
-import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
+import { CanvasLoading, type CanvasMarks } from '#/front/ui/canvas/Canvas'
 import type { SunLight } from '#/front/ui/canvas/view/tiles'
 import type { CanvasView, ViewAction } from '#/front/ui/canvas/view/view'
 
@@ -42,15 +41,15 @@ const none = () => undefined
 
 /**
  * The canvas side, someone else's System, thrown to the nearest boundary should its read fail: from
- * its star, its gaps hung from it, acted on as far as the Account's rights there let it (`Reach`); a
- * skeleton while it is read.
+ * its star, its gaps hung from it, acted on as far as the Account's rights there let it (`Reach`); the
+ * place of a center alone waiting while it is read (`CanvasLoading`).
  */
 export function VisitPage(props: VisitPageProps) {
   const { star, light, search, onSearchChange, onViewChange, marks, onAsk } = props
   const { data } = useSystem({ star })
   // Where the Account stands in the Organization the star names, if any, read without throwing: a menu line.
   const { data: standing } = useStandingIn(star)
-  if (data === undefined) return <Skeleton className="min-h-0 flex-1" />
+  if (data === undefined) return <CanvasLoading className="min-h-0 flex-1" />
   return (
     <System
       system={data.system}

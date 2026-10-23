@@ -21,7 +21,7 @@ import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
-import { canvasSize, type EmptySlotTarget } from './geometry/shape'
+import { aloneHex, canvasSize, type EmptySlotTarget } from './geometry/shape'
 import { directions, type Direction, type Point } from './geometry/geometry'
 import {
   AroundHexView,
@@ -341,6 +341,21 @@ export function Canvas(props: CanvasProps) {
       {gesture.carried && (
         <Carried title={titleIn(state.hexes, gesture.carried.id)} at={gesture.carried.at} />
       )}
+    </div>
+  )
+}
+
+/**
+ * The canvas while its System is read: the place of a center alone, where a plain URL's center will
+ * stand, its light sweeping as a free slot's does while tiles load into it, on the ground, never a
+ * box. A view opening the center draws it smaller once read, which only the System says it can.
+ */
+export function CanvasLoading({ className }: { className?: string }) {
+  return (
+    <div aria-busy className={cn('relative flex min-h-0 flex-col gap-2', className)}>
+      <svg viewBox={viewBoxOf(canvasSize)} aria-hidden className="relative min-h-0 w-full flex-1">
+        <Slot hex={aloneHex} loading />
+      </svg>
     </div>
   )
 }

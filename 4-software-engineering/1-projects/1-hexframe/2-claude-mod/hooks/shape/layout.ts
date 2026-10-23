@@ -117,7 +117,7 @@ const padding = 0.08
 const frameRadius = 3
 
 /** The hex a collapsed center fills: the largest that fits the view. */
-const collapsedRadius = Math.min(viewHeight / 2, viewWidth / sqrt3)
+export const collapsedRadius = Math.min(viewHeight / 2, viewWidth / sqrt3)
 
 /**
  * The hexes of a view, centered in a box of `viewWidth` by `viewHeight`, in the order to paint

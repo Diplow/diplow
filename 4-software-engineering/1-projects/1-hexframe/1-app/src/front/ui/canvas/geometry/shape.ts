@@ -4,6 +4,7 @@
 // them to `layoutView`, and answers in the canvas's own words, scaled into its coordinates: the
 // shape's Tile, Frame and Placement go no further than this file. Pure.
 import {
+  collapsedRadius,
   layoutView,
   viewHeight,
   viewWidth,
@@ -396,7 +397,7 @@ function centerOf(drawn: Drawn & { tile: TileNode }, shown: ShownView): CanvasHe
     const radius = shown.frame === undefined ? hex.radius : openedRadius
     return { ...center, heart: { center: hex.center, radius } }
   }
-  const alone = { center: hex.center, radius: hex.radius * aloneShare }
+  const alone = aloneIn(hex)
   return {
     ...center,
     hex: alone,
@@ -404,6 +405,17 @@ function centerOf(drawn: Drawn & { tile: TileNode }, shown: ShownView): CanvasHe
     heart: { center: hex.center, radius: alone.radius * heartShare },
   }
 }
+
+/** A hex a center fills, as a center alone takes it, the ground left around it. */
+const aloneIn = ({ center, radius }: Hex): Hex => ({ center, radius: radius * aloneShare })
+
+/**
+ * Where a center stands alone, folded or a Leaf, whatever the System: the hex a collapsed view fills,
+ * at the view's middle, the ground left around it. The canvas waits there while its System is read.
+ */
+export const aloneHex: Hex = aloneIn(
+  scaled({ center: { x: viewWidth / 2, y: viewHeight / 2 }, radius: collapsedRadius }),
+)
 
 type TileHex = Exclude<Placement, { kind: 'empty' }>
 
@@ -454,7 +466,7 @@ function hubOf(
 }
 
 /** A placement in the canvas's coordinates, a gap short of its neighbors. */
-function scaled({ center, radius }: Placement): Hex {
+function scaled({ center, radius }: Pick<Placement, 'center' | 'radius'>): Hex {
   const hex = { center: { x: center.x * scale, y: center.y * scale }, radius: radius * scale }
   return insetHex(hex, hex.radius * gap)
 }
