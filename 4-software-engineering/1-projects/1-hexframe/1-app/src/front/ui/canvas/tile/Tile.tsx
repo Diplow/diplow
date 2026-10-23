@@ -14,15 +14,7 @@
 // does.
 import { Link } from 'lucide-react'
 import { Slot } from 'radix-ui'
-import {
-  useId,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type MouseEvent,
-  type RefObject,
-} from 'react'
+import { useId, useLayoutEffect, useRef, useState, type MouseEvent, type RefObject } from 'react'
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
@@ -41,7 +33,7 @@ import { BlurDef, FadeDef, points, proposedRim, Sweep, tint, type Fade } from '.
 import { fitAlone, fitWords, linesThatFit } from '../geometry/words'
 import { MarkGlow, MarkLines } from './marks/Marks'
 import { markNote, type TileMark } from './marks/mark'
-import { useSettle } from './settle'
+import { movedAs, origin, useFoldGivenUp, useSettle } from './settle'
 
 /**
  * Where it stands: in a ring, at the center, alone at the center, folded, its words read rather than
@@ -123,6 +115,11 @@ export type TileProps = TileLook & {
   write?: TileWrite
   held?: Held
   motion?: TileMotion
+  /**
+   * How much larger it was drawn, as the world goes, where it opened or folded as the camera moved:
+   * it settles from that size to its own.
+   */
+  grown?: number | undefined
   /** What a click does, and its name for a screen reader; without it, the tile is no button. */
   action?: Action
   /**
@@ -297,7 +294,8 @@ export function Tile(props: TileProps) {
   const { hex, place = 'ring', write, held, motion, action, onGoIn } = props
   const { scale = 1, hand, mark } = props
   const id = useId()
-  const settling = useSettle(hex, place)
+  const settling = useSettle(hex, place, props.grown)
+  const moved = useFoldGivenUp(motion?.way === 'fold')
   const pending = write === 'pending'
   const sized = sizedOf(hex, scale, place)
   // At the center and at a heart, the ring around it says what the foot would; elsewhere the foot
@@ -318,14 +316,14 @@ export function Tile(props: TileProps) {
     .join(', ')
   return (
     <g
+      ref={moved}
       className={cn(
         'transition-opacity duration-450',
         // A deletion proposed: the tile steps back, as what is going away, unless it is far already.
         mark?.proposed === 'delete' && place !== 'far' ? 'opacity-40' : opacities[place],
-        motion?.way === 'bloom' && 'motion-safe:animate-bloom',
-        motion?.way === 'fold' && 'motion-safe:animate-fold motion-reduce:opacity-0',
+        movedAs(motion).className,
       )}
-      style={motion && origin(motion.from, motion.order, motion.paced)}
+      style={movedAs(motion).style}
     >
       <Slot.Root {...hand}>
         <g
@@ -389,19 +387,6 @@ function pressable(action: Action, onGoIn: TileProps['onGoIn']) {
         },
       }),
     }),
-  }
-}
-
-/**
- * Where a transform starts, in the canvas's own coordinates, and how many siblings it waits for, each
- * a bloom's stagger apart, or a step's where it is paced.
- */
-function origin({ x, y }: Point, order?: number, paced = false): CSSProperties {
-  const stagger = paced ? '--stagger-step' : '--stagger-bloom'
-  return {
-    transformOrigin: `${String(x)}px ${String(y)}px`,
-    transformBox: 'view-box',
-    ...(order !== undefined && { animationDelay: `calc(var(${stagger}) * ${String(order)})` }),
   }
 }
 

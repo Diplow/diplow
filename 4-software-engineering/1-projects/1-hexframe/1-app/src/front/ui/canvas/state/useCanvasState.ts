@@ -1,9 +1,11 @@
 // The canvas's state, as it draws it: the view the URL holds resolved against the System, its hexes,
 // and what each gesture asks of the view. The view itself stays the URL's: every action hands the
 // next one to `onViewChange`, for the route to navigate to, with the gesture that asked for it and the
-// Tile it was made on. What it holds is the motion between two views: what an opened hex holds, the
-// center's ring included, blooms out of its heart, and folds back into it for `--duration-fold` before
-// the view that closes it is handed on, at once with reduced motion. Under a finger, a tap on a Branch
+// Tile it was made on. Centering moves the camera alone, every Tile keeping the state it is drawn in
+// (`recenter`). What it holds is the motion between two views: what a hex opened in place holds, the
+// center's ring included, blooms out of its heart, once, as it comes, never as the camera brings it,
+// and folds back into it for `--duration-fold` before the view that closes it is handed on, at once
+// with reduced motion. Under a finger, a tap on a Branch
 // of the ring goes in, opening it in place waiting in its menu; the menu's lines that go somewhere,
 // open, go in, show the center's Context, back out, are gestures too, and so is the C key, which
 // cycles the center's views. Where its caller holds a Tile's click or its going in back, that gesture
@@ -11,14 +13,15 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { directions, type Point } from '../geometry/geometry'
-import { layoutCanvas, surroundingsOf, type CanvasHex } from '../geometry/shape'
+import { heartShare, layoutCanvas, surroundingsOf, type CanvasHex } from '../geometry/shape'
 import type { TileMotion } from '../tile/Tile'
 import { movingFor } from '../../motion'
 import { pathTo, type TileNode } from '../view/tiles'
 import {
-  centerOn,
+  aboveOf,
   cycleOf,
   opens,
+  recenter,
   showView,
   toggleCenter,
   toggleExpanded,
@@ -215,38 +218,150 @@ interface CanvasInput {
 }
 
 /**
- * The ground whose six fold back into its heart, `folding`, while they do: `start`, a fold of that
- * ground for `--duration-fold`, then what it hands on, at once where nothing moves; `stop`, a fold
- * under way given up.
+ * The ground whose six fold back into its heart, `folding`, while they do and until the view that
+ * closes it lands, so they stay folded meanwhile: `start`, a fold of that ground for
+ * `--duration-fold`, then what it hands on, at once where nothing moves, the fold given up should it
+ * hand nothing on; `stop`, a fold under way given up. A view that changes otherwise ends it too.
  */
-function useFolding() {
-  const [folding, setFolding] = useState<string>()
-  const fold = useRef<ReturnType<typeof setTimeout>>(undefined)
+function useFolding(viewNow: string) {
+  const [fold, setFold] = useState<{ ground: string; view: string }>()
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
   useEffect(
     () => () => {
-      clearTimeout(fold.current)
+      clearTimeout(timer.current)
     },
     [],
   )
+  // A fold kept from a view since left is over: Back to that view must not find it folding.
+  if (fold !== undefined && fold.view !== viewNow) setFold(undefined)
   return {
-    folding,
-    start(ground: string | undefined, then: () => void) {
+    folding: fold?.view === viewNow ? fold.ground : undefined,
+    start(ground: string | undefined, then: () => boolean) {
       const duration = movingFor('--duration-fold')
       if (ground === undefined || duration === 0) {
         then()
         return
       }
-      setFolding(ground)
-      fold.current = setTimeout(() => {
-        setFolding(undefined)
-        then()
+      setFold({ ground, view: viewNow })
+      timer.current = setTimeout(() => {
+        if (!then()) setFold(undefined)
       }, duration)
     },
     stop() {
-      clearTimeout(fold.current)
-      setFolding(undefined)
+      clearTimeout(timer.current)
+      setFold(undefined)
     },
   }
+}
+
+/** Whether a drawn Tile stands opened, at the heart of its ring: the center opened, or a hub. */
+const standsOpened = (hex: CanvasHex) =>
+  hex.kind === 'tile' && (hex.role === 'hub' || (hex.role === 'center' && hex.alone !== true))
+
+const sameSet = (a: ReadonlySet<string>, b: ReadonlySet<string>) =>
+  a.size === b.size && [...a].every((key) => b.has(key))
+
+/** What the canvas drew last, by key, as `useArrivals` keeps it. */
+interface Arrived {
+  center: string
+  tiles: ReadonlySet<string>
+  opened: ReadonlySet<string>
+  framing: Framing
+  folding: ReadonlySet<string>
+  blooms: ReadonlyMap<string, boolean>
+  grown: ReadonlyMap<string, number>
+}
+
+/**
+ * How the center is framed: alone, folded; opened, a ring around it; or inside the hex it opens into,
+ * a ring inside it, its tile a heart's share of that hex.
+ */
+type Framing = 'alone' | 'opened' | 'inside'
+
+function framingOf(hexes: readonly CanvasHex[]): Framing {
+  const center = hexes.find((hex): hex is TileHex => hex.kind === 'tile' && hex.role === 'center')
+  if (center === undefined || center.alone === true) return 'alone'
+  const inside = hexes.some(
+    (hex) => hex.kind === 'ground' && hex.key === `ground:${center.tile.id}`,
+  )
+  return inside ? 'inside' : 'opened'
+}
+
+/**
+ * How much larger each Tile was drawn, as the world goes, by key, where it opened or folded as the
+ * camera moved: one opened or folded as the center changed, going out a level, which the camera
+ * carries by the heart of each; and the center itself, framed by the hex it opens into on one side
+ * of a flight and by its own on the other, as it folds from its Context or opens into it from alone.
+ */
+function grownOf(
+  seen: Arrived,
+  center: string,
+  now: Omit<Arrived, 'blooms' | 'grown' | 'center' | 'folding'>,
+) {
+  if (seen.center !== center) {
+    return new Map(
+      [...now.tiles].flatMap((key): [string, number][] => {
+        if (!seen.tiles.has(key) || seen.opened.has(key) === now.opened.has(key)) return []
+        return [[key, seen.opened.has(key) ? heartShare : 1 / heartShare]]
+      }),
+    )
+  }
+  const inside = (framing: Framing) => framing === 'inside'
+  const key = `tile:${center}`
+  if (inside(seen.framing) !== inside(now.framing) && now.tiles.has(key)) {
+    return new Map([[key, inside(seen.framing) ? heartShare : 1 / heartShare]])
+  }
+  return sameSet(seen.opened, now.opened) && seen.framing === now.framing
+    ? seen.grown
+    : new Map<string, number>()
+}
+
+/**
+ * How each hex drawn came, by key. Whether one inside a hex opened in place blooms (`blooms`): one
+ * that comes while the center stays, as a hex opens in place, does, once; one the camera brings, as
+ * the center changes, does not, nor one whose fold was given up, which plays back to rest instead
+ * (`tile/settle.ts`); each keeps its answer while it stays drawn, so a bloom never plays again as the
+ * view changes around it. And how much larger a Tile was drawn, as the world goes, where it opened
+ * or folded as the camera moved (`grownOf`), which it settles from, until the next change.
+ */
+function useArrivals(
+  center: string,
+  hexes: readonly CanvasHex[],
+  inside: ReadonlyMap<string, Inside>,
+  folding: string | undefined,
+) {
+  const now = {
+    tiles: new Set(hexes.flatMap((hex) => (hex.kind === 'tile' ? [hex.key] : []))),
+    opened: new Set(hexes.flatMap((hex) => (standsOpened(hex) ? [hex.key] : []))),
+    framing: framingOf(hexes),
+  }
+  const foldingNow = new Set(
+    [...inside].flatMap(([key, at]) => (folding === ring || at.ground === folding ? [key] : [])),
+  )
+  const [seen, setSeen] = useState<Arrived>(() => ({
+    center,
+    ...now,
+    folding: foldingNow,
+    blooms: new Map([...inside.keys()].map((key) => [key, true])),
+    grown: new Map(),
+  }))
+  const moved = seen.center !== center
+  const blooms = new Map(
+    [...inside.keys()].map((key) => {
+      const givenUp = seen.folding.has(key) && !foldingNow.has(key)
+      return [key, !givenUp && (seen.blooms.get(key) ?? !moved)]
+    }),
+  )
+  const grown = grownOf(seen, center, now)
+  const same =
+    grown === seen.grown &&
+    seen.framing === now.framing &&
+    sameSet(seen.tiles, now.tiles) &&
+    sameSet(seen.folding, foldingNow) &&
+    blooms.size === seen.blooms.size &&
+    [...blooms].every(([key, blooms]) => seen.blooms.get(key) === blooms)
+  if (!same) setSeen({ center, ...now, folding: foldingNow, blooms, grown })
+  return { blooms, grown }
 }
 
 export function useCanvasState(input: CanvasInput) {
@@ -254,18 +369,18 @@ export function useCanvasState(input: CanvasInput) {
   const { fills = () => true } = input
   const shown = withoutEmptyRings(showView(system, view), fills)
   const hexes = layoutCanvas(shown)
-  const parent = pathTo(system, shown.center.id).at(-2)
   const centered = hexes.find((hex): hex is TileHex => hex.kind === 'tile' && hex.role === 'center')
   const { inside, hubs } = openedIn(hexes)
   // The hex the last single click landed on: a double-click centers its Tile only if its first click
   // landed there too, since that click may have redrawn what lies under the pointer.
   const clicked = useRef<string | undefined>(undefined)
-  const { folding, ...folds } = useFolding()
   // The view as it stands, which a fold checks before handing its own on: a view changed meanwhile,
   // by a link or the browser's Back, gives the fold up rather than being overwritten. And the
   // caller's latest `onViewChange`, which the fold hands its view to, so what else the page changed
   // meanwhile, its search params beside the view, is kept.
   const viewNow = JSON.stringify(view)
+  const { folding, ...folds } = useFolding(viewNow)
+  const { blooms, grown } = useArrivals(shown.center.id, hexes, inside, folding)
   const latest = useRef({ view: viewNow, onViewChange })
   useEffect(() => {
     latest.current = { view: viewNow, onViewChange }
@@ -275,10 +390,10 @@ export function useCanvasState(input: CanvasInput) {
     latest.current.onViewChange(next, { gesture, tile })
   }
 
-  /** Centers the Tile of this id, a fold under way given up for it. */
+  /** Centers the Tile of this id, every Tile keeping its state, a fold under way given up for it. */
   function centerTile(tile: string) {
     folds.stop()
-    change(centerOn(system, tile), 'center', tile)
+    change(recenter(system, view, tile), 'center', tile)
   }
 
   /** A click, Enter or Space on `hex`, or what its menu's Open does without a finger's turn. */
@@ -303,7 +418,7 @@ export function useCanvasState(input: CanvasInput) {
         change(withContext(system, view), action, tile)
         return
       case 'center':
-        change(centerOn(system, tile), action, tile)
+        change(recenter(system, view, tile), action, tile)
     }
   }
 
@@ -313,7 +428,9 @@ export function useCanvasState(input: CanvasInput) {
    */
   function foldThen(hex: TileHex, action: TileAction) {
     folds.start(hex.role === 'center' ? ring : hubs.get(hex.key), () => {
-      if (latest.current.view === viewNow) act(hex, action)
+      if (latest.current.view !== viewNow) return false
+      act(hex, action)
+      return true
     })
   }
 
@@ -322,24 +439,30 @@ export function useCanvasState(input: CanvasInput) {
    * a centering where moving the center is.
    */
   const actionOf = (hex: TileHex, hand = finger) => {
-    const { click, recenter } = lets(hex)
-    const action = click ? tileAction(hex, shown, { finger: hand, fills }) : undefined
-    return action === 'center' && !recenter ? undefined : action
+    const through = lets(hex)
+    const action = through.click ? tileAction(hex, shown, { finger: hand, fills }) : undefined
+    return action === 'center' && !through.recenter ? undefined : action
+  }
+
+  /**
+   * The Tiles around the drawing, the one the center stands in and those beside it, each opened as
+   * the view says with what it opens into: none where moving the center from them is held back.
+   */
+  function aroundOf(): CanvasHex[] {
+    const above = aboveOf(system, shown)
+    if (above === undefined || centered === undefined) return []
+    const hexes = surroundingsOf(withoutEmptyRings(above, fills), centered, shown.around)
+    const held = hexes.some((hex) => hex.kind === 'tile' && (unborn(hex) || !lets(hex).recenter))
+    return held ? [] : hexes
   }
 
   return {
     state: {
       center: shown.center,
       hexes,
-      // The Tile the center stands in and those beside it, around the drawing, where a click on one
-      // centers it: none where it would not.
-      around:
-        parent === undefined || centered === undefined
-          ? []
-          : surroundingsOf(
-              withoutEmptyRings(showView(system, centerOn(system, parent.id)), fills),
-              centered,
-            ).filter((hex) => actionOf(hex) !== undefined),
+      // The Tile the center stands in and those beside it, with what they open into, around the
+      // drawing, where a click on a Tile centers it: none where moving the center is held back.
+      around: aroundOf(),
     },
     actions: {
       actionOf: (hex: TileHex) => actionOf(hex),
@@ -351,9 +474,19 @@ export function useCanvasState(input: CanvasInput) {
       motionOf: (key: string): TileMotion | undefined => {
         const at = inside.get(key)
         if (at === undefined) return undefined
-        return folding === ring || at.ground === folding
-          ? { way: 'fold', from: at.from }
-          : { way: 'bloom', from: at.from, order: at.order }
+        if (folding === ring || at.ground === folding) return { way: 'fold', from: at.from }
+        return blooms.get(key) === true
+          ? { way: 'bloom', from: at.from, order: at.order }
+          : undefined
+      },
+      /**
+       * How much larger a Tile was drawn, as the world goes, where it opened or folded as the camera
+       * moved, which it settles from; none for the others.
+       */
+      grownOf: (key: string) => grown.get(key),
+      /** A click, Enter or Space on a Tile around the drawing, or going into it: centers it. */
+      around: (hex: TileHex) => {
+        if (hex.tile.id !== shown.center.id && lets(hex).recenter) centerTile(hex.tile.id)
       },
       /** A click, Enter or Space on `hex`, a tap under a finger; none while a fold is under way. */
       click: (hex: TileHex) => {
@@ -389,13 +522,12 @@ export function useCanvasState(input: CanvasInput) {
       go: (hex: TileHex, verb: ViewVerb) => {
         const tile = hex.tile.id
         const centered = tile === shown.center.id
-        const { recenter } = lets(hex)
         switch (verb) {
           case 'open':
             press(hex, actionOf(hex, false))
             return
           case 'go-in':
-            if (!centered && recenter) centerTile(tile)
+            if (!centered && lets(hex).recenter) centerTile(tile)
             return
           case 'show-context':
             // The center's alone: another Tile is gone into first.
@@ -403,7 +535,7 @@ export function useCanvasState(input: CanvasInput) {
             return
           case 'back-out': {
             const parent = pathTo(system, shown.center.id).at(-2)
-            if (parent !== undefined && recenter) centerTile(parent.id)
+            if (parent !== undefined && lets(hex).recenter) centerTile(parent.id)
           }
         }
       },

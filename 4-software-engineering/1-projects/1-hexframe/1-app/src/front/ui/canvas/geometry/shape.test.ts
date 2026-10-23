@@ -254,8 +254,9 @@ describe('surroundingsOf', () => {
         expect(Math.abs(hex.radius - whole.radius)).toBeLessThan(1e-6)
         return Math.hypot(dx, dy) / Math.hypot(tx, ty)
       }
-      const above = away(hexes.find((hex) => hex.role === 'above')?.hex, opposite(2))
-      const beside = away(hexes.find((hex) => hex.tile.id === 'b1')?.hex, 6)
+      const drawn = only(hexes, 'tile')
+      const above = away(drawn.find((hex) => hex.role === 'above')?.hex, opposite(2))
+      const beside = away(drawn.find((hex) => hex.tile.id === 'b1')?.hex, 6)
       expect(above).toBeGreaterThan(1)
       expect(above).toBeLessThan(1.1)
       expect(beside).toBeCloseTo(above ?? 0)
@@ -266,6 +267,30 @@ describe('surroundingsOf', () => {
     const opened = around({ center: 'b2', frame: 'children' }, 'mixed').center.heart
     const folded = around({ center: 'b2' }, 'mixed').center.heart
     expect(opened && folded && opened.radius > folded.radius).toBe(true)
+  })
+
+  it('draws a Tile beside the center opened, its ring a magnitude smaller, as the center’s own', () => {
+    const shown = showView(system, { center: 'b2', frame: 'children' })
+    const center = only(layoutCanvas(shown), 'tile').find((hex) => hex.role === 'center')
+    if (center === undefined) throw new Error('No center is drawn')
+    const above = showView(system, { ...centerOn(system, 'mixed'), expanded: { 1: 'children' } })
+    const hexes = surroundingsOf(above, center, { 1: { 4: 'children' } })
+    const at = (key: string) => hexes.find((hex) => hex.key === key)
+    expect(at('beside:ground:b1')).toMatchObject({ kind: 'ground', generation: 0 })
+    expect(at('beside:tile:b1')).toMatchObject({ role: 'hub', generation: 0 })
+    expect(at('beside:tile:b1x')).toMatchObject({ role: 'hub', generation: 1 })
+    expect(at('beside:ground:b1x')).toMatchObject({ kind: 'ground', generation: 1 })
+    // b1 at its heart, as large as the center opened at its own and each hex of its ring: magnitude 2.
+    const ring = only(layoutCanvas(shown), 'empty')[0]
+    expect(at('beside:tile:b1')?.hex.radius).toBeCloseTo(center.hex.radius)
+    expect(at('beside:ground:b1x')?.hex.radius).toBeCloseTo(ring?.hex.radius ?? 0)
+    // b1x opened in turn: its own tile at its heart, the smallest drawn, magnitude 3.
+    expect(at('beside:tile:b1x')?.hex.radius).toBeCloseTo((ring?.hex.radius ?? 0) * heartShare, 1)
+    // Nothing of the center's own drawing, nor of the slots free in the ring above, comes twice.
+    expect(hexes.some((hex) => hex.key.includes('b2'))).toBe(false)
+    expect(hexes.filter((hex) => hex.kind === 'empty').every((hex) => hex.generation >= 1)).toBe(
+      true,
+    )
   })
 
   it('draws nothing around a Leaf shown inside the Tile it stands in', () => {
