@@ -11,4 +11,6 @@ status: accepted
 ---
 # Raws and their search live on Scaleway
 
-Raws are kept in Scaleway Object Storage, and searched through a Scaleway Serverless SQL database (PostgreSQL with pgvector) holding Publications, timestamped chunks of their Raws and the chunks' embeddings, made by a multilingual model of Scaleway's Generative APIs. A European provider is the point, and at this size it costs next to nothing: the database scales to zero, and embedding the whole corpus once costs about a euro. Neon, which already runs hexframe's databases, was rejected because it runs on AWS; Google Drive, where the Raws lived until now, because it can't be searched by meaning or by date.
+Raws are kept in Scaleway Object Storage, and searched through a Scaleway Serverless SQL database (PostgreSQL with pgvector) holding Publications, timestamped chunks of their Raws and the chunks' embeddings, made by a multilingual model of Scaleway's Generative APIs. A European provider is the point, and at this size it costs next to nothing: the database scales to zero, and embedding the whole corpus once costs about a euro. Neon, which already runs hexframe's databases, was rejected because it runs on AWS; Google Drive, where the Raws lived until now, because it can't search them by meaning, nor by the publication dates written inside them, only by its own file dates.
+
+Until WIK-2 lands, the Raws stay on Drive and wikipol's `CLAUDE.md` rightly says so: WIK-2 copies them into the bucket and rewrites that section, and from then on the bucket is their only home.

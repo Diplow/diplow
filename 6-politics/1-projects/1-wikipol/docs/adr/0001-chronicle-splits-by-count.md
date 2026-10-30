@@ -15,5 +15,5 @@ A Source files its Digests by date in its Chronicle, a tree of Periods, each a d
 
 ## Considered Options
 
-- **Calendar tree** (year, month, week): overflows at the month for any active Source.
+- **Calendar tree** (year, month, week): a year's twelve months already break the rule of 6, and a Source publishing more than six a month, as PaduTeam does, breaks it again under each month.
 - **Digests placed by theme**, the date only a field: a theme is a reading, and the Source's hexframe should stay neutral until a structure emerges; the other five slots of a Source are left free for it.
