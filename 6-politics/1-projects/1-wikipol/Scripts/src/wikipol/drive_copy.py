@@ -21,7 +21,7 @@ from pathlib import Path
 
 from wikipol.config import Source
 from wikipol.legacy_index import WATCH_URL, LegacyIndex, build_index, parse_date, split_frontmatter
-from wikipol.raw_store import YOUTUBE_ID, RawMeta, RawStore
+from wikipol.raw_store import YOUTUBE_ID, RawExists, RawMeta, RawStore
 
 DEFAULT_DRIVE_ROOT = "diplow:WikiPol/Sources"
 
@@ -112,8 +112,12 @@ def copy_source(
             elif dry_run:
                 report.copied.append(youtube_id)
             else:
-                store.put(source.slug, youtube_id, body, resolved.meta)
-                report.copied.append(youtube_id)
+                try:
+                    store.put(source.slug, youtube_id, body, resolved.meta)
+                    report.copied.append(youtube_id)
+                except RawExists:  # another writer got there between exists() and put()
+                    same = store.get(source.slug, youtube_id).body == body
+                    (report.already_there if same else report.conflicts).append(youtube_id)
     return report
 
 

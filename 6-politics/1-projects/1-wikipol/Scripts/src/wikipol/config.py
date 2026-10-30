@@ -91,13 +91,15 @@ def load_source(node: Path) -> Source:
     if not SLUG.fullmatch(str(slug)):
         raise ConfigError(f"{path}: source.slug {slug!r} is not lowercase letters, digits and -")
 
-    vault_rel = (data.get("legacy") or {}).get("vault")
-    vault = (node / vault_rel).resolve() if vault_rel else None
-    inventory_rel = (data.get("files") or {}).get("inventaire")
-    inventory = vault / inventory_rel if vault and inventory_rel else None
+    legacy, files = data.get("legacy") or {}, data.get("files") or {}
+    if not isinstance(legacy, dict) or not isinstance(files, dict):
+        raise ConfigError(f"{path}: `legacy:` and `files:` must be mappings")
+    vault_rel, inventory_rel = legacy.get("vault"), files.get("inventaire")
+    vault = (node / str(vault_rel)).resolve() if vault_rel else None
+    inventory = vault / str(inventory_rel) if vault and inventory_rel else None
     return Source(
-        name=name,
-        slug=slug,
+        name=str(name),
+        slug=str(slug),
         node=node.resolve(),
         legacy_vault=vault,
         legacy_inventory=inventory,
@@ -109,4 +111,9 @@ def load_sources(sources_dir: Path = DEFAULT_SOURCES_DIR) -> list[Source]:
     if not sources_dir.is_dir():
         raise ConfigError(f"no Sources folder at {sources_dir}")
     nodes = sorted(p.parent for p in sources_dir.glob("*/source.yaml"))
-    return [load_source(node) for node in nodes]
+    sources = [load_source(node) for node in nodes]
+    slugs = [s.slug for s in sources]
+    shared = sorted({slug for slug in slugs if slugs.count(slug) > 1})
+    if shared:
+        raise ConfigError(f"two Sources share the slug {', '.join(shared)}")
+    return sources

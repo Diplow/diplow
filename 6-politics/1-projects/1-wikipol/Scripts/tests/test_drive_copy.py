@@ -72,6 +72,20 @@ def test_a_different_raw_already_in_the_bucket_is_a_conflict_left_alone(demo, fa
     assert store.get("demo", "aaaaaaaaaaa").body == b"another text"
 
 
+def test_a_raw_another_writer_put_first_is_counted_not_raised(demo, fake_fetch):
+    class RacingStore(InMemoryRawStore):
+        def exists(self, source, youtube_id):
+            return False  # as if the other writer landed right after this check
+
+    store = RacingStore()
+    copy_source(demo, store, fake_fetch)
+
+    again = copy_source(demo, store, fake_fetch)
+
+    assert again.copied == []
+    assert len(again.already_there) == 4
+
+
 def test_two_files_with_one_id_copy_the_first_and_list_the_second(demo, demo_tree, fake_fetch):
     (demo_tree["drive"] / "Avec id (copie).md").write_bytes(
         (demo_tree["drive"] / "Avec id.md").read_bytes()

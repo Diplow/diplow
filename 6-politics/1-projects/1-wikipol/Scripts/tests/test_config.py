@@ -85,6 +85,7 @@ def test_a_source_without_a_slug_is_refused(tmp_path):
         ("source: [unclosed\n", "not valid YAML"),
         ("- a list\n", "no `source:` mapping"),
         ("source:\n  name: X\n  slug: Bad Slug\n", "is not lowercase"),
+        ("source:\n  name: X\n  slug: x\nlegacy: a string\n", "must be mappings"),
     ],
 )
 def test_a_malformed_source_yaml_is_a_config_error(tmp_path, text, complaint):
@@ -98,6 +99,22 @@ def test_a_malformed_source_yaml_is_a_config_error(tmp_path, text, complaint):
 def test_a_missing_sources_folder_is_a_config_error(tmp_path):
     with pytest.raises(ConfigError, match="no Sources folder"):
         load_sources(tmp_path / "nowhere")
+
+
+def test_two_sources_with_one_slug_are_refused(tmp_path):
+    for node in ("1-a", "2-b"):
+        (tmp_path / node).mkdir()
+        (tmp_path / node / "source.yaml").write_text("source:\n  name: A\n  slug: same\n")
+
+    with pytest.raises(ConfigError, match="share the slug same"):
+        load_sources(tmp_path)
+
+
+def test_a_numeric_name_is_read_as_text(tmp_path):
+    (tmp_path / "1-x").mkdir()
+    (tmp_path / "1-x" / "source.yaml").write_text("source:\n  name: 2024\n  slug: x\n")
+
+    assert load_source(tmp_path / "1-x").name == "2024"
 
 
 def test_the_repo_sources_load_in_node_order():
