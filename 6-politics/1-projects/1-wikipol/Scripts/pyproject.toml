@@ -1,0 +1,49 @@
+[project]
+name = "wikipol"
+version = "0.1.0"
+description = "wikipol's pipeline: Raws on Scaleway, Digests in each Source's Chronicle."
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.36",
+    "python-dotenv>=1.0",
+    "pyyaml>=6.0",
+]
+
+[project.scripts]
+wikipol = "wikipol.cli:main"
+
+[dependency-groups]
+dev = [
+    "moto[s3]>=5.0",
+    "pytest>=8.3",
+    "pytest-socket>=0.7",
+    "ruff>=0.8",
+]
+
+[build-system]
+requires = ["uv_build>=0.8,<0.13"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# No test reaches YouTube, Scaleway, Google Drive or Anthropic: sockets are off,
+# S3 runs on moto or the in-memory store, rclone on a fake.
+addopts = "--disable-socket"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+# The flat scripts beside src/ are the legacy pipeline, kept for reference and
+# not run on the frozen vaults (decisions.md#DEC-3). This package starts its
+# lint at src/ and tests/; the legacy files keep the shape they came with.
+extend-exclude = [
+    "batch_transcripts.py",
+    "generate_chronological.py",
+    "new_source.py",
+    "run_ingest.py",
+    "source_config.py",
+    "timestamp_to_seconds.py",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF"]

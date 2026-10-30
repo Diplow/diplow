@@ -75,7 +75,7 @@ Trois tiers structurent les fiches du vault. La distinction conditionne **quand*
 
 Données captées hors analyse de la source. Servent de matière première à l'ingestion.
 
-- **Transcripts** — transcripts `.md` des médias source (vidéos YouTube, podcasts, articles transcrits). Stockés sous `Sources/Transcripts/`, hors git : la copie de référence est sur Google Drive (voir `CLAUDE.md` de WikiPol § Transcripts).
+- **Transcripts** — transcripts `.md` des médias source (vidéos YouTube, podcasts, articles transcrits). Stockés sous `Sources/Transcripts/`, hors git. Depuis WIK-2, ce sont les Raws du bucket Scaleway ; Google Drive n'en garde qu'une archive, et les 12 transcripts que la copie n'a pas pu identifier (voir `CLAUDE.md` de WikiPol § Raws).
 
 ### Basic (atomique)
 
@@ -486,7 +486,7 @@ main                                ← état courant du vault ; jamais de push 
 ├── BUILD.md                      ← taxonomie locale
 ├── Sources/
 │   ├── Inventaire.md             ← table des vidéos (Dataview)
-│   └── Transcripts/              ← transcripts bruts (.md) — type raw, hors git (Google Drive)
+│   └── Transcripts/              ← transcripts bruts (.md) — type raw, hors git (les Raws du bucket)
 ├── Videos/                       ← basic (cas standard)
 ├── Livres/                       ← basic (chronique d'ouvrage, remplace Videos pour ce format)
 ├── Individus/                    ← basic

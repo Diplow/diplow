@@ -23,5 +23,5 @@ Thumbs.db
 # Scratch
 Legacy/*/Sources/.context-tmp.md
 
-# Transcripts (~30 Mo) : stockés sur Google Drive (WikiPol/Sources), voir CLAUDE.md
+# Transcripts (~30 Mo) : les Raws vivent dans le bucket Scaleway, voir CLAUDE.md § Raws
 Legacy/*/Sources/Transcripts/*.md
