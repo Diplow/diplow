@@ -1,0 +1,55 @@
+6-politics/1-projects/1-wikipol/Scripts/pyproject.toml
+  s_bffceea45dbe3a::t_eb2a23aaec6b90 10
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/fetcher.py
+  s_bffceea45dbe3a::t_eedd950bbdf775 1-35
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/captions.py
+  s_bffceea45dbe3a::t_e08e9e10f00269 1-3,6-67,70
+  s_bffceea45dbe3a::t_50f8b360fe54e5 4-5
+  s_bffceea45dbe3a::t_974e8cd68b402a 68-69
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/raw_store.py
+  s_bffceea45dbe3a::t_7cce9bdc45cf01 8-9
+  s_bffceea45dbe3a::t_281961023aa152 7,39-40,131-132,155,159
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/ytdlp.py
+  s_bffceea45dbe3a::t_1b0a25c71e46fd 102-113
+  s_bffceea45dbe3a::t_be2f6ab4bf62d5 1-101,114-130
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/transcript_api.py
+  s_bffceea45dbe3a::t_955574e9c3320e 1-51,53,55,63-66,70-80,86-106
+  s_bffceea45dbe3a::t_894c65a8003af5 52,54,56-62
+  s_bffceea45dbe3a::t_7cce9bdc45cf01 67-69
+  s_bffceea45dbe3a::t_e33ca91b05a691 81-85
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/run.py
+  s_bffceea45dbe3a::t_4439e6f4bf94e3 1-53,55-101
+  s_bffceea45dbe3a::t_7cce9bdc45cf01 54
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/__init__.py
+  s_bffceea45dbe3a::t_a0e5dfe266f0fc 1-4,6-14,17-18
+  s_bffceea45dbe3a::t_da3c995140534f 5,15-16
+6-politics/1-projects/1-wikipol/Scripts/tests/test_raw_store.py
+  s_bffceea45dbe3a::t_281961023aa152 44-54
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/config.py
+  s_bffceea45dbe3a::t_166f13a38dd186 131-134
+  s_bffceea45dbe3a::t_346e33eb69eb6b 110
+  s_bffceea45dbe3a::t_a0c1e5e52a157a 144
+  s_bffceea45dbe3a::t_d7f2959a3f4b6a 42-43,50-55,58,66,72-98
+  s_bffceea45dbe3a::t_e5ae03117a2fa0 99-100
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/cli.py
+  s_bffceea45dbe3a::t_7cce9bdc45cf01 10-18,20-22,41-52,57-61,89-111
+  s_bffceea45dbe3a::t_b5397ce3624bde 112-113
+6-politics/1-projects/1-wikipol/Scripts/uv.lock
+  s_bffceea45dbe3a::t_722cd5ebe42ca9 4-7,37-126,588-596,633-667,856-990,1011,1027,1046-1076
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "51b8621270e758128c73de6fd819f41cb8f1dcc2",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
