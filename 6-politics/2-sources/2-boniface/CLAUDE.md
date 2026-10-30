@@ -1,12 +1,15 @@
 ---
 title: Boniface
-parent: 6-politics/1-projects/1-wikipol/Sources/Boniface
+parent: 6-politics/2-sources/2-boniface
 owner: diplo
 preview: >-
-  The Boniface vault: a knowledge graph of the geopolitical analyses of Pascal
-  Boniface, founder of IRIS, from his YouTube channel. Gives the editorial
-  context (who speaks, tone, reading traps). Bootstrapped, one book ingested.
+  The Boniface Source: the geopolitical analyses of Pascal Boniface, founder of
+  IRIS, on his YouTube channel. Its editorial context (who speaks, tone, reading
+  traps), read by whoever digests its videos; its Chronicle files the Digests by
+  date. The vault this text was written for is frozen in wikipol/Legacy/Boniface.
 ---
+> **La Source Boniface.** Ses enfants : [[6-politics/2-sources/2-boniface/1-chronicle/CLAUDE|1-chronicle]], la Chronicle où le pipeline range ses Digests ; `source.yaml`, sa config. Le texte qui suit vient du vault Boniface, figé dans `wikipol/Legacy/Boniface/` depuis WIK-1 et lu en entrée, plus jamais écrit : ses chemins relatifs (`Individus/`, `Concepts/`, `Videos/`…) se lisent dans ce vault.
+
 # Boniface — Contexte éditorial
 
 ## Objectif
@@ -93,7 +96,7 @@ Dans le doute : terme définissable court → Concept. Thèse mobilisant plusieu
 
 Ce vault sert deux fonctions :
 
-1. **Construction** — ingérer des vidéos de la chaîne *Pascal Boniface* via les skills WikiPol (voir `../../CLAUDE.md` et `../../BUILD.md`)
+1. **Construction** — ingérer des vidéos de la chaîne *Pascal Boniface* via les skills WikiPol (voir `../../1-projects/1-wikipol/CLAUDE.md` et `../../1-projects/1-wikipol/BUILD.md`)
 2. **Consultation** — répondre à des questions de géopolitique en restituant l'analyse de Boniface
 
 Quand l'utilisateur pose une question géopolitique, chercher d'abord dans `Individus/`, `Organisations/`, `Concepts/`, `Videos/`, `Enjeux/`. Restituer l'analyse de Boniface, pas une synthèse généraliste.

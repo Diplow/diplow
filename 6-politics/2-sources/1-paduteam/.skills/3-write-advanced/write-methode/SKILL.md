@@ -10,6 +10,13 @@ description: >
 date created: 2026-04-25
 date modified: 2026-05-01
 skill_version: write-methode-2026-05-01
+title: write-methode
+parent: 6-politics/2-sources/1-paduteam/.skills/3-write-advanced/write-methode
+owner: diplo
+preview: >-
+  PaduTeam's override of write-methode: writes a Methodes/ note, a reusable
+  analytical procedure the PaduTeam uses. Writing only: no git, no context
+  gathering.
 ---
 
 # Skill : Write Méthode
@@ -23,7 +30,7 @@ Une **méthode** capture une procédure analytique mobilisée par la PaduTeam po
 Cette skill est appelée par `synthesize-couche` qui lui transmet :
 - `target_name` — nom de la méthode cible
 - Mode : création ou enrichissement
-- Chemin de `Sources/Paduteam/.context-tmp.md` (à lire intégralement)
+- Chemin de `Legacy/Paduteam/.context-tmp.md` (à lire intégralement)
 - Liste des chemins de fiches Vidéos lues par l'orchestrateur (à mobiliser comme matière première)
 - Liste des fiches pivots (Concepts/Individus/Organisations) à intégrer en priorité
 
@@ -37,7 +44,7 @@ Cette skill **ne fait que la rédaction**. Elle :
 ## Entrée / Sortie
 
 - **Entrée** : voir « Contrat » ci-dessus.
-- **Sortie** : fiche **`Sources/Paduteam/Methodes/{target_name}.md`** créée ou enrichie. Frontmatter `type: methode`.
+- **Sortie** : fiche **`Legacy/Paduteam/Methodes/{target_name}.md`** créée ou enrichie. Frontmatter `type: methode`.
 
 ## Sections attendues
 

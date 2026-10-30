@@ -8,6 +8,12 @@ description: >
   un combat. Déclencher quand l'utilisateur demande une fiche évènement.
 date created: 2026-04-25
 date modified: 2026-04-25
+title: write-evenement
+parent: 6-politics/2-sources/1-paduteam/.skills/2-write-basic/write-evenement
+owner: diplo
+preview: >-
+  PaduTeam's override of write-evenement: writes or enriches a dated event the
+  PaduTeam analyses in depth, in the Graphiked vault.
 ---
 
 # Skill : Write Évènement

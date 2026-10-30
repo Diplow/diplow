@@ -1,12 +1,15 @@
 ---
 title: PaduTeam
-parent: 6-politics/1-projects/1-wikipol/Sources/Paduteam
+parent: 6-politics/2-sources/1-paduteam
 owner: diplo
 preview: >-
-  Graphiked, the PaduTeam vault: a knowledge graph of the analyses of the
-  PaduTeam, a Marxist YouTube channel and the media arm of La Brèche. Gives the
-  editorial context (who speaks, tone, reading traps) and how its ingestion runs.
+  The PaduTeam Source: a Marxist YouTube channel, the media arm of La Brèche.
+  Its editorial context (who speaks, tone, reading traps), read by whoever
+  digests its videos; its Chronicle files the Digests by date. The Graphiked
+  vault this text was written for is frozen in wikipol/Legacy/Paduteam.
 ---
+> **La Source PaduTeam.** Ses enfants : [[6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE|1-chronicle]], la Chronicle où le pipeline range ses Digests ; `.skills/`, les skills propres à la source ; `source.yaml`, sa config. Le texte qui suit vient du vault Graphiked, figé dans `wikipol/Legacy/Paduteam/` depuis WIK-1 et lu en entrée, plus jamais écrit : ses chemins relatifs (`BUILD.md`, `Sources/`, `Videos/`, `PADUTEAM_CHRONOLOGIQUE.md`…) se lisent dans ce vault, et ses skills `Skills/` sont rangées ici dans `.skills/`.
+
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
@@ -115,11 +118,11 @@ Le fichier `PADUTEAM_CHRONOLOGIQUE.md` (à la racine) est le **tracker principal
 
 ### Scripts d'automatisation (`Scripts/` — racine WikiPol)
 
-Tous les scripts vivent à la racine WikiPol et prennent `--source Sources/Paduteam`.
+Tous les scripts vivent à la racine WikiPol et prennent `--source ../../2-sources/1-paduteam`.
 
 **Ingestion hebdomadaire (commande recommandée — usage typique) :**
 ```bash
-python Scripts/weekly_ingest.py --source Sources/Paduteam
+python Scripts/weekly_ingest.py --source ../../2-sources/1-paduteam
 ```
 Enchaîne fetch des dernières vidéos + extraction des transcripts + ajout d'un batch
 au tracker + commit/push + ingestion. Sortie propre si rien de nouveau. Options :
@@ -128,22 +131,22 @@ au tracker + commit/push + ingestion. Sortie propre si rien de nouveau. Options 
 
 **Ingérer un batch précis (déjà ⏳ dans le tracker) :**
 ```bash
-python Scripts/run_ingest.py --source Sources/Paduteam --batch N
-python Scripts/run_ingest.py --source Sources/Paduteam              # tous les batchs ⏳
-python Scripts/run_ingest.py --source Sources/Paduteam --from N     # depuis le batch N
-python Scripts/run_ingest.py --source Sources/Paduteam --dry-run    # afficher sans exécuter
+python Scripts/run_ingest.py --source ../../2-sources/1-paduteam --batch N
+python Scripts/run_ingest.py --source ../../2-sources/1-paduteam              # tous les batchs ⏳
+python Scripts/run_ingest.py --source ../../2-sources/1-paduteam --from N     # depuis le batch N
+python Scripts/run_ingest.py --source ../../2-sources/1-paduteam --dry-run    # afficher sans exécuter
 ```
 
 **Gestion fine des transcripts (rarement utile en standalone) :**
 ```bash
-python Scripts/batch_transcripts.py --source Sources/Paduteam --recent N    # N plus récentes
-python Scripts/batch_transcripts.py --source Sources/Paduteam --last N      # N sans transcript
-python Scripts/batch_transcripts.py --source Sources/Paduteam --full        # discover + fix + extract
+python Scripts/batch_transcripts.py --source ../../2-sources/1-paduteam --recent N    # N plus récentes
+python Scripts/batch_transcripts.py --source ../../2-sources/1-paduteam --last N      # N sans transcript
+python Scripts/batch_transcripts.py --source ../../2-sources/1-paduteam --full        # discover + fix + extract
 ```
 
 **Régénérer le tracker depuis zéro (destructif — perd les ✅) :**
 ```bash
-python Scripts/generate_chronological.py --source Sources/Paduteam --force
+python Scripts/generate_chronological.py --source ../../2-sources/1-paduteam --force
 ```
 
 **Helper timestamps (MM:SS → secondes pour les liens `&t=`) :**

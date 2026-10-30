@@ -8,6 +8,13 @@ description: >
   "quel contexte on a sur X", "qu'est-ce qu'on sait de X", "rassemble les infos sur X".
 date created: Sunday, April 12th 2026, 6:45:00 pm
 date modified: Monday, April 20th 2026, 1:27:51 pm
+title: gather-context
+parent: 6-politics/2-sources/1-paduteam/.skills/1-ingest/gather-context
+owner: diplo
+preview: >-
+  PaduTeam's override of gather-context: gathers what the Graphiked vault
+  already knows about a subject into a light navigation map, ahead of every
+  write-* skill.
 ---
 
 # Skill : Gather Context

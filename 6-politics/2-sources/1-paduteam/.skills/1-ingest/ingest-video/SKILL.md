@@ -10,6 +10,13 @@ description: >
 date created: Tuesday, March 31st 2026, 10:29:39 am
 date modified: Monday, April 20th 2026, 1:27:51 pm
 skill_version: ingest-video-2026-04-19
+title: ingest-video
+parent: 6-politics/2-sources/1-paduteam/.skills/1-ingest/ingest-video
+owner: diplo
+preview: >-
+  PaduTeam's override of ingest-video: ingests one PaduTeam transcript into the
+  Graphiked vault, chaining gather-context and the write-* skills, with its git
+  workflow.
 ---
 
 # Skill : Ingestion PaduTeam → Knowledge Vault (orchestrateur)
@@ -33,7 +40,7 @@ Cette skill orchestre l'ingestion d'un transcript de vidéo PaduTeam. Elle ne r�
 
 ### Étape 1 — Sélection de la vidéo
 
-**Récupérer les transcripts d'abord.** Ils sont hors git, sur Google Drive : si `Sources/Transcripts/` est vide ou absent (worktree, clone neuf), lancer `rclone copy diplow:WikiPol/Sources/<NomSource>/Sources/Transcripts Sources/<NomSource>/Sources/Transcripts` depuis la racine de WikiPol (voir `CLAUDE.md` de WikiPol § Transcripts).
+**Récupérer les transcripts d'abord.** Ils sont hors git, sur Google Drive : si `Sources/Transcripts/` est vide ou absent (worktree, clone neuf), lancer `rclone copy diplow:WikiPol/Sources/<NomSource>/Sources/Transcripts Legacy/<NomSource>/Sources/Transcripts` depuis la racine de WikiPol (voir `CLAUDE.md` de WikiPol § Transcripts).
 
 Si l'utilisateur ne fournit ni URL, ni titre, ni transcript :
 
@@ -58,7 +65,7 @@ Suivre `BUILD.md` de WikiPol § Workflow git, « En début d'ingestion » :
 
 1. Chercher un fichier correspondant au titre (correspondance partielle)
 2. Si trouvé → lire directement
-3. Si non trouvé → extraire via `paduteam-transcript`, sauvegarder dans `Sources/Transcripts/`, puis le pousser sur Google Drive (`rclone copy Sources diplow:WikiPol/Sources --include '/*/Sources/Transcripts/*.md'` depuis la racine de WikiPol). Il ne se commit pas.
+3. Si non trouvé → extraire via `paduteam-transcript`, sauvegarder dans `Sources/Transcripts/`, puis le pousser sur Google Drive (`rclone copy Legacy diplow:WikiPol/Sources --include '/*/Sources/Transcripts/*.md'` depuis la racine de WikiPol). Il ne se commit pas.
 
 Lire le transcript en entier.
 

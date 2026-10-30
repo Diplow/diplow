@@ -6,6 +6,12 @@ description: >
   Appelée par ingest-video pour chaque entité significative identifiée dans un transcript.
 date created: Sunday, April 12th 2026, 7:00:00 pm
 date modified: Monday, April 20th 2026, 1:27:51 pm
+title: write-entity
+parent: 6-politics/2-sources/1-paduteam/.skills/2-write-basic/write-entity
+owner: diplo
+preview: >-
+  PaduTeam's override of write-entity: writes or enriches an Individus/ or
+  Organisations/ note of the Graphiked vault.
 ---
 
 # Skill : Write Entity (Individus + Organisations)

@@ -11,6 +11,13 @@ description: >
 date created: 2026-04-12
 date modified: 2026-05-01
 skill_version: write-enjeu-2026-05-01
+title: write-enjeu
+parent: 6-politics/2-sources/1-paduteam/.skills/3-write-advanced/write-enjeu
+owner: diplo
+preview: >-
+  PaduTeam's override of write-enjeu: writes an Enjeux/ note in the militant
+  loadout format, a retrieval tool to argue with rather than an essay. Writing
+  only.
 ---
 
 # Skill : Write Enjeu (format loadout)
@@ -26,7 +33,7 @@ Différence avec un essai : on n'écrit pas des paragraphes denses, on écrit de
 Cette skill est appelée par `synthesize-couche` (workflow `synthesize`) ou par `ingest-batch` (consolidation finale). Dans les deux cas, elle reçoit :
 - `target_name` — nom de l'enjeu cible
 - Mode : création ou enrichissement
-- Chemin de `Sources/Paduteam/.context-tmp.md` (à lire intégralement)
+- Chemin de `Legacy/Paduteam/.context-tmp.md` (à lire intégralement)
 - Liste des chemins de fiches Vidéos lues par l'orchestrateur (à mobiliser comme matière première)
 - Liste des fiches pivots (Concepts/Individus/Organisations) à intégrer en priorité
 
@@ -39,7 +46,7 @@ Cette skill **ne fait que la rédaction**. Elle :
 ## Entrée / Sortie
 
 - **Entrée** : voir « Contrat » ci-dessus.
-- **Sortie** : fiche **`Sources/Paduteam/Enjeux/{target_name}.md`** créée ou enrichie. Si l'enjeu est massif (anti-impérialisme, palestine-libre…), le décomposer en sous-fiches `Cas/` n'est pas obligatoire mais peut s'envisager après itération.
+- **Sortie** : fiche **`Legacy/Paduteam/Enjeux/{target_name}.md`** créée ou enrichie. Si l'enjeu est massif (anti-impérialisme, palestine-libre…), le décomposer en sous-fiches `Cas/` n'est pas obligatoire mais peut s'envisager après itération.
 
 ## Sections attendues
 

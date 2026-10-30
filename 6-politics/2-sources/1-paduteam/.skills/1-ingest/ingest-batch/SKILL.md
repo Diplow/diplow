@@ -11,6 +11,13 @@ description: >
 date created: Monday, April 13th 2026, 12:00:00 pm
 date modified: Monday, April 20th 2026, 1:27:51 pm
 skill_version: ingest-batch-2026-04-19
+title: ingest-batch
+parent: 6-politics/2-sources/1-paduteam/.skills/1-ingest/ingest-batch
+owner: diplo
+preview: >-
+  PaduTeam's override of ingest-batch: ingests a batch of related transcripts
+  into the Graphiked vault, one subagent per video, then consolidates the Enjeux
+  from the video notes.
 ---
 
 # Skill : Ingestion Batch par sujet

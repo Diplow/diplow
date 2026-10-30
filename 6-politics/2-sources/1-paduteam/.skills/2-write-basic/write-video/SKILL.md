@@ -6,6 +6,12 @@ description: >
   Peut aussi être appelée directement pour réécrire/améliorer une fiche vidéo existante.
 date created: Sunday, April 12th 2026, 7:00:00 pm
 date modified: Monday, April 20th 2026, 1:27:51 pm
+title: write-video
+parent: 6-politics/2-sources/1-paduteam/.skills/2-write-basic/write-video
+owner: diplo
+preview: >-
+  PaduTeam's override of write-video: writes or enriches a Videos/ note of the
+  Graphiked vault from an analysed transcript.
 ---
 
 # Skill : Write Video
