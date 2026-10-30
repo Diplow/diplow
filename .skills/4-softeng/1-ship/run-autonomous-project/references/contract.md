@@ -56,9 +56,9 @@ Keys, when each is needed, and who reads them. `always` keys are needed by both 
 | Key | Needed | Read by | Meaning |
 |---|---|---|---|
 | `version` | always | top | must be `1`; anything else fails preflight |
-| `team` | always | all | Linear team, `Hexframe` here |
+| `team` | always | all | Linear team, such as `Hexframe` or `Wikipol`; its ticket key fills `{key}` |
 | `initiative` | initiative | root | Linear initiative name |
-| `repo.branch_pattern` | optional | project, unit | defaults to `{type}/hex-{ticket}-{slug}`. `{type}` is one of `feat`, `fix`, `refactor`, `docs`, `chore`, chosen from what the ticket asks. `{ticket}` is the ticket number without the team key, `{slug}` is 2 to 5 lowercase words from the title joined by `-` |
+| `repo.branch_pattern` | optional | project, unit | defaults to `{type}/{key}-{ticket}-{slug}`. `{type}` is one of `feat`, `fix`, `refactor`, `docs`, `chore`, chosen from what the ticket asks. `{key}` is the team's ticket key in lowercase (`hex` for `HEX-42`), `{ticket}` the ticket number without it, `{slug}` 2 to 5 lowercase words from the title joined by `-` |
 | `repo.target_branch` | optional | top | the branch every unit branches from and lands on, `main` when absent. Any other value is a project branch in a project run, or an initiative branch in an initiative run, created from `origin/main` by preflight if the remote lacks it (`references/top.md`). The top passes the resolved value down as `target` |
 | `repo.merge_strategy` | pr | unit, project | `merge` or `squash`, passed to `gh pr merge`. Never `rebase`: the path guard and state reads rely on one landing commit per pull request |
 | `repo.working_tree`, `parallelism` | always | project | `shared` and `1`: one working tree, one unit at a time |
@@ -204,11 +204,13 @@ The Linear tools are the personal Linear MCP's, with the prefix `mcp__hodor__Lin
 
 ## Branch names
 
-Fill `repo.branch_pattern` (or its default) with the ticket's type, number and a slug. To find a branch that may already exist, match on the ticket number, not on the type or slug, since two agents can derive two slugs from one title:
+Fill `repo.branch_pattern` (or its default) with the ticket's type, key, number and a slug. To find a branch that may already exist, match on the key and number, not on the type or slug, since two agents can derive two slugs from one title. Build the match from the pattern itself, whatever its shape: fill `{key}` and `{ticket}`, then replace `{type}` and `{slug}` with `*` for git's glob, or with `.*` for a regular expression, everything else escaped and the whole anchored with `^…$`. With the default pattern and WIK-3:
 
 ```bash
-git ls-remote --heads origin "*/hex-<ticket>-*"      # the pattern with {type} and {slug} replaced by *
+git ls-remote --heads origin "*/wik-3-*"             # the glob: {type} and {slug} replaced by *
 ```
+
+and `^.*/wik-3-.*$` as the regular expression `references/state.md` uses for pull requests. Built that way, a custom pattern finds its own branches, and a team other than Hexframe never matches another team's ticket of the same number.
 
 One match is the branch. Several matches is `halted` with the names listed.
 

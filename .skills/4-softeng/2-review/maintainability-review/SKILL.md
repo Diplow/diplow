@@ -66,7 +66,7 @@ Read everything around the change before the change itself, so the model you wri
 Delegate this sweep to one **fetch-tier** subagent (cheap read and summarize, Haiku on Claude Code; mapping in `.skills/model-tiers.md`) and work from the recap it returns, so the raw PR and ticket text stay out of your session. The subagent reads, in this order:
 
 1. **The stated intent.** For a PR, `gh pr view <PR#>`: title, body, linked ticket. For a branch or the workspace, the commit messages, `git log --format='%s%n%b' origin/main..<head>`.
-2. **The ticket.** The Linear key `HEX-123` comes from the branch name (`{type}/hex-{num}-{slug}`), the PR body or the commits. Fetch it with `mcp__hodor__Linear_mcp_Personal__get_issue`: the problem, the intent, what is out of scope. No key or no connector: one line saying so, and move on.
+2. **The ticket.** The Linear key `HEX-123` comes from the branch name (`{type}/{key}-{num}-{slug}`, `hex-123` for HEX-123), the PR body or the commits. Fetch it with `mcp__hodor__Linear_mcp_Personal__get_issue`: the problem, the intent, what is out of scope. No key or no connector: one line saying so, and move on.
 3. **The direction.** For each touched area, the `CLAUDE.md` chain from the repo root down to the touched directory, and a `STACK.md` on that path when there is one. Note whether the area has an enforced direction (a lint, an import boundary, a stated rule) or none.
 4. **The file list.** Names only.
 

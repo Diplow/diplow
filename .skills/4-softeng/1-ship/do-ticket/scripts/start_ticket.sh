@@ -5,7 +5,8 @@
 #   bash start_ticket.sh HEX-123 --type feat --slug "oauth-scopes" \
 #        [--repo DIR] [--worktrees-dir DIR]
 #
-# Names the work branch {type}/hex-{123}-{slug}, based on origin/main, and
+# Names the work branch {type}/{key}-{123}-{slug}, {key} the ticket's team key
+# in lowercase (hex for HEX-123, wik for WIK-4), based on origin/main, and
 # prints the directory to work in on the last line (WORKTREE=...).
 #
 # Inside a Conductor workspace (CONDUCTOR_WORKSPACE_PATH set) it never creates
@@ -14,7 +15,7 @@
 # origin/main, fast-forwards it there. --repo and --worktrees-dir are ignored.
 #
 # Outside Conductor it creates the branch off origin/main in a dedicated git
-# worktree (default <repo-parent>/worktrees/hex-{num}-{slug}).
+# worktree (default <repo-parent>/worktrees/{key}-{num}-{slug}).
 #
 # Idempotent: re-run safely after an interruption. An existing branch or
 # worktree is reused.
@@ -25,13 +26,14 @@ TYPES="feat fix refactor docs chore"
 BASE="main"
 
 usage() {
-  echo "usage: start_ticket.sh HEX-<n> --type {${TYPES// /|}} --slug <short-slug> [--repo DIR] [--worktrees-dir DIR]" >&2
+  echo "usage: start_ticket.sh <KEY>-<n> --type {${TYPES// /|}} --slug <short-slug> [--repo DIR] [--worktrees-dir DIR]" >&2
   exit 2
 }
 
 KEY="${1:-}"; shift || true
-[[ "$KEY" =~ ^[Hh][Ee][Xx]-[0-9]+$ ]] || usage
+[[ "$KEY" =~ ^[A-Za-z][A-Za-z0-9]*-[0-9]+$ ]] || usage
 NUM="${KEY#*-}"
+PREFIX="$(echo "${KEY%%-*}" | tr '[:upper:]' '[:lower:]')"
 
 TYPE="" SLUG="" REPO="" WT_DIR=""
 while [ $# -gt 0 ]; do
@@ -54,7 +56,7 @@ esac
 SLUG="$(echo "$SLUG" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g' | cut -c1-40 | sed -E 's/-+$//')"
 [ -n "$SLUG" ] || { echo "ERROR: slug empty after sanitizing" >&2; exit 2; }
 
-BRANCH="${TYPE}/hex-${NUM}-${SLUG}"
+BRANCH="${TYPE}/${PREFIX}-${NUM}-${SLUG}"
 
 # --- Conductor mode ----------------------------------------------------------
 # The workspace already IS a dedicated worktree (the app created it and tracks
@@ -100,7 +102,7 @@ fi
   || { echo "ERROR: not in a git repo (run from the repo or pass --repo)" >&2; exit 1; }
 
 WT_DIR="${WT_DIR:-$(dirname "$REPO")/worktrees}"
-DEST="$WT_DIR/hex-${NUM}-${SLUG}"
+DEST="$WT_DIR/${PREFIX}-${NUM}-${SLUG}"
 
 echo "repo:    $REPO"
 echo "branch:  $BRANCH  (from origin/$BASE)"
