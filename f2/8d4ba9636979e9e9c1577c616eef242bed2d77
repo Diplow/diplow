@@ -1,0 +1,62 @@
+6-politics/2-sources/1-paduteam/.skills/2-write-basic/write-video/SKILL.md
+  s_bffceea45dbe3a::t_825da66efe1cfb 9-14
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_bffceea45dbe3a::t_0c86f40226ecc1 1-13
+6-politics/2-sources/1-paduteam/.skills/3-write-advanced/write-conjoncture/SKILL.md
+  s_bffceea45dbe3a::t_825da66efe1cfb 13-19,33,47
+6-politics/2-sources/1-paduteam/.skills/2-write-basic/write-evenement/SKILL.md
+  s_bffceea45dbe3a::t_825da66efe1cfb 11-16
+6-politics/2-sources/1-paduteam/.skills/2-write-basic/write-entity/SKILL.md
+  s_bffceea45dbe3a::t_825da66efe1cfb 9-14
+6-politics/2-sources/1-paduteam/.skills/1-ingest/ingest-batch/SKILL.md
+  s_bffceea45dbe3a::t_825da66efe1cfb 14-20
+6-politics/2-sources/1-paduteam/.skills/2-write-basic/write-concept/SKILL.md
+  s_bffceea45dbe3a::t_825da66efe1cfb 10-15
+6-politics/2-sources/1-paduteam/.skills/3-write-advanced/write-possible/SKILL.md
+  s_bffceea45dbe3a::t_825da66efe1cfb 13-18,32,46
+6-politics/2-sources/CLAUDE.md
+  s_bffceea45dbe3a::t_349a866660324c 25
+  s_bffceea45dbe3a::t_0c86f40226ecc1 1-24,26-34
+6-politics/2-sources/1-paduteam/.skills/3-write-advanced/write-methode/SKILL.md
+  s_bffceea45dbe3a::t_825da66efe1cfb 13-19,33,47
+6-politics/2-sources/2-boniface/CLAUDE.md
+  s_bffceea45dbe3a::t_62c871f0014521 6-9,11-12
+  s_bffceea45dbe3a::t_0bf5cb130cdfff 3,99
+6-politics/2-sources/1-paduteam/.skills/1-ingest/ingest-video/SKILL.md
+  s_bffceea45dbe3a::t_825da66efe1cfb 13-19
+  s_bffceea45dbe3a::t_ea247ed7f229d4 43,68
+6-politics/2-sources/1-paduteam/CLAUDE.md
+  s_bffceea45dbe3a::t_0bf5cb130cdfff 3,6-9,11-12,121,125,134-137,142-144,149
+6-politics/2-sources/1-paduteam/.skills/3-write-advanced/write-enjeu/SKILL.md
+  s_bffceea45dbe3a::t_825da66efe1cfb 14-20,36,49
+6-politics/2-sources/1-paduteam/.skills/CLAUDE.md
+  s_bffceea45dbe3a::t_4ccd38d84dc1a5 21
+  s_bffceea45dbe3a::t_349a866660324c 1-20
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_bffceea45dbe3a::t_0c86f40226ecc1 1-13
+6-politics/2-sources/1-paduteam/.skills/1-ingest/CLAUDE.md
+  s_bffceea45dbe3a::t_349a866660324c 1-16
+6-politics/2-sources/1-paduteam/.skills/1-ingest/gather-context/SKILL.md
+  s_bffceea45dbe3a::t_825da66efe1cfb 11-17
+6-politics/2-sources/1-paduteam/.skills/2-write-basic/CLAUDE.md
+  s_bffceea45dbe3a::t_4ccd38d84dc1a5 11
+  s_bffceea45dbe3a::t_349a866660324c 1-10,12-18
+6-politics/2-sources/1-paduteam/.skills/3-write-advanced/CLAUDE.md
+  s_bffceea45dbe3a::t_349a866660324c 1-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f28d4ba9636979e9e9c1577c616eef242bed2d77",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
