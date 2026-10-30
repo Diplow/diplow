@@ -82,7 +82,8 @@ halting:
     - Never let a test or a gate reach YouTube, Scaleway, Google Drive or Anthropic; they run on fakes and fixtures.
     - Never put a secret, a token, a key or a .env file in a commit, a log, a comment or a pull request. Name the variable, never its value.
     - Never exceed the rule of 6 in a node this run creates (6-politics/2-sources and below); when a folder is full, regroup and record it in the register.
-    - Never change anything under 4-software-engineering/ but hexframe's vercel.json, and that only in WIK-11.
+    - Never change anything under 4-software-engineering/.
+    - Never change what a legacy note says, under wikipol/Sources/ or wikipol/Legacy/. WIK-1 moves the vaults to wikipol/Legacy/ with git mv, and moves each Source's source.yaml, editorial CLAUDE.md and Skills/ to its new node, and that is all; the rest of the run only reads them. The path guard can't hold this, since WIK-1 must move them.
     - Never edit wikipol's CONTEXT.md or docs/adr/; a new term or a hard decision goes to the register for Ulysse.
     - Never touch a ticket, branch or pull request of another project.
   # The repo's tooling and review setup, the decisions of the grill, and this config.
@@ -98,7 +99,7 @@ halting:
     - 6-politics/1-projects/1-wikipol/docs/**
     - 6-politics/1-projects/1-wikipol/.run/CLAUDE.md
     - 6-politics/1-projects/1-wikipol/.run/*.yaml
-  # Everything of mine that is not politics, but hexframe's vercel.json (the never list above).
+  # Everything of mine that is not politics.
   read_only_paths:
     - CLAUDE.md
     - STACK.md
@@ -107,8 +108,7 @@ halting:
     - 2-education/**
     - 3-games/**
     - 5-startups/**
-    - 4-software-engineering/-CLAUDE.md
-    - 4-software-engineering/2-principles/**
+    - 4-software-engineering/**
 
 registers:
   dir: 6-politics/1-projects/1-wikipol/.run/registers
