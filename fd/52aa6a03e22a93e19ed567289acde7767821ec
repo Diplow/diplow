@@ -1,0 +1,19 @@
+.skills/4-softeng/1-ship/do-ticket/SKILL.md
+  s_8be3e5225a372b::t_8a97434b5d0500 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fd52aa6a03e22a93e19ed567289acde7767821ec",
+  "prompts": {},
+  "sessions": {
+    "s_8be3e5225a372b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0c313a59-fe33-4654-bcc1-6ce63bb13579",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
