@@ -204,13 +204,13 @@ The Linear tools are the personal Linear MCP's, with the prefix `mcp__hodor__Lin
 
 ## Branch names
 
-Fill `repo.branch_pattern` (or its default) with the ticket's type, number and a slug. To find a branch that may already exist, match on the ticket number, not on the type or slug, since two agents can derive two slugs from one title:
+Fill `repo.branch_pattern` (or its default) with the ticket's type, key, number and a slug. To find a branch that may already exist, match on the key and number, not on the type or slug, since two agents can derive two slugs from one title. Build the match from the pattern itself, whatever its shape: fill `{key}` and `{ticket}`, then replace `{type}` and `{slug}` with `*` for git's glob, or with `.*` for a regular expression, everything else escaped and the whole anchored with `^…$`. With the default pattern and WIK-3:
 
 ```bash
-git ls-remote --heads origin "*/<key>-<ticket>-*"    # the pattern with {type} and {slug} replaced by *
+git ls-remote --heads origin "*/wik-3-*"             # the glob: {type} and {slug} replaced by *
 ```
 
-The match is always built from the pattern, `{key}` and `{ticket}` filled, so a team other than Hexframe finds its own branches and never another team's ticket of the same number.
+and `^.*/wik-3-.*$` as the regular expression `references/state.md` uses for pull requests. Built that way, a custom pattern finds its own branches, and a team other than Hexframe never matches another team's ticket of the same number.
 
 One match is the branch. Several matches is `halted` with the names listed.
 

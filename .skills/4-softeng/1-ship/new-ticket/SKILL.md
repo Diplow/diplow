@@ -85,5 +85,5 @@ Give back the ticket key and the URL the tool returned, and name the natural nex
 ## Notes
 
 - **Updating an existing ticket to the bar** is in scope: fetch it (`mcp__hodor__Linear_mcp_Personal__get_issue`), diff against the bar, propose the fixes, apply on approval (`save_issue` with its `id`). A French title or description counts as a miss. Propose the translation with the rest, and show it side by side so the author can check you kept the intent. Comments are not rewritten: they're a conversation that already happened.
-- Ticket keys are `HEX-XXX`; branch names derive from them (`{type}/hex-{xxx}-{slug}`, see `/softeng:ship:do-ticket`). That key, carried from ticket to branch to commit or PR, is what makes the work traceable in both directions.
+- Ticket keys are `HEX-XXX`; branch names derive from them (`{type}/hex-{xxx}-{slug}`, the key in lowercase, see `/softeng:ship:do-ticket`). That key, carried from ticket to branch to commit or PR, is what makes the work traceable in both directions.
 - Keep it proportionate. A ticket for a 30-minute fix still needs the bar (it's cheap), but its checklist can be one line.

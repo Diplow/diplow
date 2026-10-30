@@ -31,7 +31,7 @@ usage() {
 }
 
 KEY="${1:-}"; shift || true
-[[ "$KEY" =~ ^[A-Za-z]+-[0-9]+$ ]] || usage
+[[ "$KEY" =~ ^[A-Za-z][A-Za-z0-9]*-[0-9]+$ ]] || usage
 NUM="${KEY#*-}"
 PREFIX="$(echo "${KEY%%-*}" | tr '[:upper:]' '[:lower:]')"
 
