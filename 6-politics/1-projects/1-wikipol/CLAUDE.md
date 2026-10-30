@@ -76,6 +76,8 @@ Quand une skill est invoquée pendant un travail sur une source, regarder dans c
 1. **`6-politics/2-sources/<n>-<slug>/.skills/*/<skill-name>/SKILL.md`** — skill propre à la source, rangée dans un groupe (`1-ingest/`, `2-write-basic/`…) pour tenir la règle des six. Si elle existe, **elle l'emporte** sur la version générique (même nom = override).
 2. **`Skills/<skill-name>/SKILL.md`** à la racine de WikiPol — skill générique, valable pour toutes les sources.
 
+Les overrides de PaduTeam (`1-paduteam/.skills/`) portent les noms des skills du pipeline legacy et écrivent, comme elles, dans le vault figé : la règle les trouve, mais ni elles ni les génériques du même nom ne se lancent plus. `write-digest` n'a pas d'override.
+
 Le cas typique de skill source-spécifique : un format de fiche qui s'écarte trop du modèle générique pour être paramétrable (ex : un `write-enjeu` au format « loadout militant » plutôt que narratif). Tant que la signature de la skill (entrées, sortie, prérequis) reste la même, l'override est transparent pour les orchestrateurs (`ingest-video`, `ingest-batch`).
 
 Avant de créer une skill source-spécifique, vérifier que le besoin n'est pas paramétrable côté générique — un override coûte cher en maintenance.

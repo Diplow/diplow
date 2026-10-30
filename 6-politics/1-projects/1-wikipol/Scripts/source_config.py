@@ -161,20 +161,31 @@ def load_source(path: str | None = None) -> SourceConfig:
     )
 
 
-def require_vault(cfg: SourceConfig) -> None:
-    """Arrête un script du pipeline legacy si la source n'a pas de vault.
+LEGACY_DIR = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Legacy"))
+
+
+def require_writable_vault(cfg: SourceConfig) -> None:
+    """Arrête un script du pipeline legacy avant qu'il n'écrive quoi que ce soit.
 
     Ces scripts écrivent dans un vault (inventaire, tracker, transcripts, fiches).
-    Une source sans `legacy.vault` n'en a pas : rien ne doit s'écrire dans son nœud.
+    Une source sans `legacy.vault` n'a pas de vault : rien ne doit s'écrire dans son
+    nœud. Un vault rangé sous wikipol/Legacy/ est figé depuis WIK-1 : rien ne doit
+    s'y écrire non plus.
     """
     if not cfg.has_vault:
-        print(
-            f"ERREUR : la source {cfg.name!r} n'a pas de vault legacy (pas de clé "
-            f"legacy.vault dans {cfg.source_root}/source.yaml). Ce script fait partie "
-            "du pipeline legacy, qui n'écrit que dans un vault.",
-            file=sys.stderr,
+        reason = (
+            f"la source {cfg.name!r} n'a pas de vault legacy (pas de clé "
+            f"legacy.vault dans {cfg.source_root}/source.yaml)"
         )
-        sys.exit(1)
+    elif os.path.commonpath([cfg.vault_root, LEGACY_DIR]) == LEGACY_DIR:
+        reason = f"le vault de {cfg.name!r} ({cfg.vault_root}) est figé dans wikipol/Legacy/ depuis WIK-1"
+    else:
+        return
+    print(
+        f"ERREUR : {reason}. Ce script fait partie du pipeline legacy, qui écrit dans un vault.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 
 def parse_source_arg(argv: list[str]) -> SourceConfig:

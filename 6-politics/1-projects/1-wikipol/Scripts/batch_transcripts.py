@@ -37,7 +37,7 @@ from datetime import datetime, timedelta
 from difflib import SequenceMatcher
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from source_config import parse_source_arg, require_vault, SourceConfig  # noqa: E402
+from source_config import parse_source_arg, require_writable_vault, SourceConfig  # noqa: E402
 
 if sys.platform == 'win32':
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -1155,7 +1155,7 @@ def main():
     last_n = parse_int_arg(args, '--last')
     recent_n = parse_int_arg(args, '--recent')
     cfg = parse_source_arg(args)
-    require_vault(cfg)
+    require_writable_vault(cfg)
 
     if not cfg.channel_url:
         print(f"ERREUR: youtube.channel_url non défini dans {cfg.source_root}/source.yaml")
