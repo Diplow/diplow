@@ -41,7 +41,17 @@ def test_a_raw_comes_back_as_it_went_in(store):
 def test_a_raw_without_a_publication_date(store):
     store.put("paduteam", "ubfvCuQziRA", b"x", RawMeta("Sans date"))
 
-    assert store.get("paduteam", "ubfvCuQziRA").meta.published is None
+    meta = store.get("paduteam", "ubfvCuQziRA").meta
+    assert meta.published is None
+    assert meta.duration is None
+
+
+def test_a_fetched_raw_keeps_its_duration(store):
+    meta = RawMeta("Une vidéo", date(2026, 10, 30), duration=1834)
+
+    store.put("paduteam", "ubfvCuQziRA", b"x", meta)
+
+    assert store.get("paduteam", "ubfvCuQziRA").meta == meta
 
 
 def test_a_raw_is_never_replaced(store):

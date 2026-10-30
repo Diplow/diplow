@@ -39,17 +39,23 @@ class Settings:
     s3_secret_key: str = field(repr=False)
 
 
-def load_settings(environ: Mapping[str, str] | None = None) -> Settings:
-    """Read the pipeline's environment: the env file first, the process environment over it."""
+def read_environment(environ: Mapping[str, str] | None = None) -> tuple[dict[str, str], Path]:
+    """The pipeline's variables, stripped: the env file first, the process environment over it."""
     environ = os.environ if environ is None else environ
     env_path = Path(environ.get("WIKIPOL_ENV") or DEFAULT_ENV_PATH).expanduser()
     values: dict[str, str] = {}
     if env_path.is_file():
         values.update({k: v for k, v in dotenv_values(env_path).items() if v is not None})
     values.update({k: v for k, v in environ.items() if v})
+    return {k: v.strip() for k, v in values.items()}, env_path
+
+
+def load_settings(environ: Mapping[str, str] | None = None) -> Settings:
+    """The bucket and its credentials."""
+    values, env_path = read_environment(environ)
 
     def required(name: str) -> str:
-        value = values.get(name, "").strip()
+        value = values.get(name, "")
         if not value:
             raise ConfigError(f"{name} is not set, in {env_path} nor in the environment")
         return value
@@ -57,10 +63,39 @@ def load_settings(environ: Mapping[str, str] | None = None) -> Settings:
     return Settings(
         s3_bucket=required("WIKIPOL_S3_BUCKET"),
         s3_endpoint=required("WIKIPOL_S3_ENDPOINT"),
-        s3_region=values.get("WIKIPOL_S3_REGION", "").strip() or DEFAULT_S3_REGION,
+        s3_region=values.get("WIKIPOL_S3_REGION") or DEFAULT_S3_REGION,
         s3_access_key=required("SCW_ACCESS_KEY"),
         s3_secret_key=required("SCW_SECRET_KEY"),
     )
+
+
+FETCHERS = ("yt-dlp", "transcript-api")
+
+
+@dataclass(frozen=True)
+class FetcherSettings:
+    """Which Fetcher gets the Raws: yt-dlp, from the Mac's home IP, by default, since YouTube
+    blocks datacenter IPs; the transcript API for a runner that has no home IP."""
+
+    kind: str = "yt-dlp"
+    transcript_api_key: str | None = field(default=None, repr=False)
+
+
+def load_fetcher_settings(
+    environ: Mapping[str, str] | None = None, kind: str | None = None
+) -> FetcherSettings:
+    """`kind`, the command line's `--fetcher`, wins over `WIKIPOL_FETCHER`, which wins over
+    yt-dlp. The transcript API needs `WIKIPOL_TRANSCRIPT_API_KEY`."""
+    values, env_path = read_environment(environ)
+    kind = kind or values.get("WIKIPOL_FETCHER") or "yt-dlp"
+    if kind not in FETCHERS:
+        raise ConfigError(f"WIKIPOL_FETCHER must be one of {', '.join(FETCHERS)}, not {kind!r}")
+    api_key = values.get("WIKIPOL_TRANSCRIPT_API_KEY") or None
+    if kind == "transcript-api" and api_key is None:
+        raise ConfigError(
+            f"WIKIPOL_TRANSCRIPT_API_KEY is not set, in {env_path} nor in the environment"
+        )
+    return FetcherSettings(kind, api_key)
 
 
 @dataclass(frozen=True)
@@ -72,6 +107,7 @@ class Source:
     node: Path
     legacy_vault: Path | None
     legacy_inventory: Path | None
+    channel_url: str | None = None
 
 
 def load_source(node: Path) -> Source:
@@ -92,8 +128,10 @@ def load_source(node: Path) -> Source:
         raise ConfigError(f"{path}: source.slug {slug!r} is not lowercase letters, digits and -")
 
     legacy, files = data.get("legacy") or {}, data.get("files") or {}
-    if not isinstance(legacy, dict) or not isinstance(files, dict):
-        raise ConfigError(f"{path}: `legacy:` and `files:` must be mappings")
+    youtube = data.get("youtube") or {}
+    if not all(isinstance(block, dict) for block in (legacy, files, youtube)):
+        raise ConfigError(f"{path}: `legacy:`, `files:` and `youtube:` must be mappings")
+    channel_url = str(youtube.get("channel_url") or "").strip() or None
     vault_rel, inventory_rel = legacy.get("vault"), files.get("inventaire")
     vault = (node / str(vault_rel)).resolve() if vault_rel else None
     inventory = vault / str(inventory_rel) if vault and inventory_rel else None
@@ -103,6 +141,7 @@ def load_source(node: Path) -> Source:
         node=node.resolve(),
         legacy_vault=vault,
         legacy_inventory=inventory,
+        channel_url=channel_url,
     )
 
 
