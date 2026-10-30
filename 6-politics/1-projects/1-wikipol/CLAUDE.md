@@ -52,6 +52,8 @@ rclone copy Sources diplow:WikiPol/Sources --include '/*/Sources/Transcripts/*.m
 |--------|---------|----------|
 | WikiPol | `CLAUDE.md` (ce fichier) | Instructions méta : comment WikiPol fonctionne |
 | WikiPol | `BUILD.md` | Conventions universelles : nommage, wikilinks, frontmatter, git |
+| WikiPol | `CONTEXT.md` | Le glossaire : Source, Publication, Raw, Extract, Digest, Chronicle, Period |
+| WikiPol | `docs/adr/` | Les décisions difficiles à défaire, une par fichier |
 | WikiPol | `Skills/` | Skills d'ingestion et d'écriture génériques, agnostiques à la source |
 | WikiPol | `Scripts/` | Scripts Python (ingestion, bootstrap), lisent `source.yaml` |
 | Source | `CLAUDE.md` | Contexte éditorial spécifique : qui produit, ton, pièges |

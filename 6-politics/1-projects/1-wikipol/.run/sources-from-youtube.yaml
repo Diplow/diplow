@@ -1,0 +1,122 @@
+# The config of the "Sources from YouTube" project's autonomous run (team
+# Wikipol), read by run-autonomous-project
+# (.skills/4-softeng/1-ship/run-autonomous-project/references/contract.md
+# holds every key). It builds wikipol's pipeline: the legacy vaults frozen and
+# the Source nodes under 6-politics/2-sources, the Raws on Scaleway, the
+# Fetcher, write-digest and the Chronicle, the search index and its MCP, and
+# the daily runner. The design is in the project's "Decided" section in Linear
+# and in wikipol's CONTEXT.md and docs/adr/ (the grill of 2026-10-30).
+#
+# The run builds and tests; it never operates. What needs me (the Scaleway
+# account, reviewing sample Digests, the full backfills, installing launchd)
+# is the checklist of WIK-12, the phase-close ticket.
+#
+# Before launching, I create in Scaleway the bucket (versioning on), the
+# Serverless SQL database and an API key scoped to both, and write
+# WIKIPOL_S3_BUCKET, WIKIPOL_S3_ENDPOINT, SCW_ACCESS_KEY, SCW_SECRET_KEY,
+# SCW_DEFAULT_PROJECT_ID and WIKIPOL_DATABASE_URL to ~/.config/wikipol/.env,
+# outside the repo, where the pipeline reads them from any workspace and from
+# launchd. Every ticket lands on project/sources-from-youtube, which I merge
+# into main at the end:
+#
+#   /softeng:ship:run-autonomous-project "Sources from YouTube" --config 6-politics/1-projects/1-wikipol/.run/sources-from-youtube.yaml
+#
+# The run never edits this file.
+
+version: 1
+team: Wikipol
+
+repo:
+  target_branch: project/sources-from-youtube
+  merge_strategy: merge
+  working_tree: shared
+
+parallelism: 1
+
+# The tickets exist, so nothing is minted.
+projects:
+  - name: "Sources from YouTube"
+    on_exhausted: park
+    mint_tickets: false
+
+# Tiers from .skills/model-tiers.md: judge is the strongest, work the default, fetch the cheapest.
+# The Digests themselves are written by claude-sonnet-5-5, pinned in each source.yaml (WIK-4).
+models:
+  phase: opus
+  unit: opus
+  planner: opus
+  fixup: opus
+  reviewer: opus
+  fetch: haiku
+
+# Run from the repo root. The pipeline's uv project appears with WIK-3; until
+# then there is nothing to check. Tests run on fakes: no gate reaches YouTube,
+# Scaleway or Anthropic.
+gates:
+  unit:
+    - "cd 6-politics/1-projects/1-wikipol/Scripts && { [ ! -f pyproject.toml ] || { uv sync --frozen && uv run ruff check . && uv run ruff format --check . && uv run pytest -q; }; }"
+  phase:
+    - "cd 6-politics/1-projects/1-wikipol/Scripts && uv sync --frozen && uv run ruff check . && uv run ruff format --check . && uv run pytest -q"
+  fix_rounds_per_gate: 3
+
+# cubic, started by the run through its CLI on the Claude Code subscription.
+reviews:
+  automated: []
+  local:
+    name: cubic
+    command: "cubic review --base origin/{target} --json"
+  max_rounds: 3
+  must_fix: [P0, P1]
+  should_fix: [P2]
+
+halting:
+  never:
+    - Never push to main, open a pull request into main, or merge anything into main.
+    - Never create, delete or reconfigure a Scaleway resource (bucket, database, key, project), a Google Drive file, a YouTube account or a GitHub setting. The run reads and writes objects in the bucket and rows in the database it is given, and nothing else of those accounts.
+    - Never delete or overwrite a Raw on Google Drive or in the bucket; copying is the only move.
+    - Never write a Digest that cites a timestamp the Raw doesn't hold, or a quote that isn't in it.
+    - Never run more than the samples a ticket names through claude -p or the Fetcher. The full backfills are Ulysse's, listed on WIK-12.
+    - Never install, load or start a launchd job, a cron entry or anything else that keeps running after the run. WIK-9 commits the plist and the install script; Ulysse installs them.
+    - Never write a Digest with a model other than the one pinned in its Source's source.yaml, nor pass a model alias such as sonnet.
+    - Never weaken a gate to turn it green. No skipped or deleted test, no lowered lint rule, no --no-verify.
+    - Never let a test or a gate reach YouTube, Scaleway, Google Drive or Anthropic; they run on fakes and fixtures.
+    - Never put a secret, a token, a key or a .env file in a commit, a log, a comment or a pull request. Name the variable, never its value.
+    - Never exceed the rule of 6 in a node this run creates (6-politics/2-sources and below); when a folder is full, regroup and record it in the register.
+    - Never change anything under 4-software-engineering/.
+    - Never change what a legacy note says, under wikipol/Sources/ or wikipol/Legacy/. WIK-1 moves the vaults to wikipol/Legacy/ with git mv, and moves each Source's source.yaml, editorial CLAUDE.md and Skills/ to its new node, and that is all; the rest of the run only reads them. The path guard can't hold this, since WIK-1 must move them.
+    - Never edit wikipol's CONTEXT.md or docs/adr/; a new term or a hard decision goes to the register for Ulysse.
+    - Never touch a ticket, branch or pull request of another project.
+  # The repo's tooling and review setup, the decisions of the grill, and this config.
+  frozen_paths:
+    - .skills/**
+    - .claude/**
+    - .conductor/**
+    - .obsidian/**
+    - .github/**
+    - .gitattributes
+    - cubic.yaml
+    - 6-politics/1-projects/1-wikipol/CONTEXT.md
+    - 6-politics/1-projects/1-wikipol/docs/**
+    - 6-politics/1-projects/1-wikipol/.run/CLAUDE.md
+    - 6-politics/1-projects/1-wikipol/.run/*.yaml
+  # Everything of mine that is not politics.
+  read_only_paths:
+    - CLAUDE.md
+    - STACK.md
+    - .gitignore
+    - 1-leadership/**
+    - 2-education/**
+    - 3-games/**
+    - 5-startups/**
+    - 4-software-engineering/**
+
+registers:
+  dir: 6-politics/1-projects/1-wikipol/.run/registers
+  files: [decisions.md]
+
+summary_schema: [status, landed, register_entries, parked, interventions]
+
+linear:
+  state_in_progress: In Progress
+  state_in_review: In Review
+  state_done: Done
