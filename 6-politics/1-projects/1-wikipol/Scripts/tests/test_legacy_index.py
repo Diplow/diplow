@@ -46,3 +46,9 @@ def test_frontmatter_absent_or_broken_reads_as_empty():
     assert split_frontmatter("0:00\n\ntexte") == ({}, "0:00\n\ntexte")
     assert split_frontmatter("---\n: : :\n---\nbody")[0] == {}
     assert split_frontmatter("---\nyoutube_id: abc\n---\nbody") == ({"youtube_id": "abc"}, "\nbody")
+
+
+def test_a_frontmatter_yaml_refuses_still_gives_its_lines():
+    text = "---\ndate: 2025-02-30\nyoutube_id: 'aaaaaaaaaaa'\n---\nbody"
+
+    assert split_frontmatter(text)[0] == {"date": "2025-02-30", "youtube_id": "aaaaaaaaaaa"}

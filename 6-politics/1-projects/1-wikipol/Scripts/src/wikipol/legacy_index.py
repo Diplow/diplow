@@ -53,12 +53,23 @@ def split_frontmatter(text: str) -> tuple[dict, str]:
     end = text.find("\n---", 3)
     if end == -1:
         return {}, text
+    block = text[3:end]
     try:
-        data = yaml.safe_load(text[3:end])
-    except yaml.YAMLError:
-        data = None
+        data = yaml.safe_load(block)
+    except (yaml.YAMLError, ValueError):  # ValueError: a date YAML reads but can't build
+        data = _flat_frontmatter(block)
     body = text[end + 4 :].lstrip("-")
     return (data if isinstance(data, dict) else {}), body
+
+
+def _flat_frontmatter(block: str) -> dict:
+    """`key: value` lines as strings, for a frontmatter YAML refuses."""
+    data = {}
+    for line in block.splitlines():
+        match = re.match(r"^([\w][\w ]*):\s*(.*?)\s*$", line)
+        if match:
+            data[match.group(1)] = match.group(2).strip("\"'")
+    return data
 
 
 def parse_date(value: object) -> date | None:
