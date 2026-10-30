@@ -1,0 +1,37 @@
+6-politics/1-projects/1-wikipol/Scripts/generate_chronological.py
+  s_bffceea45dbe3a::t_d5077a33f648e8 8-12,14-17
+6-politics/1-projects/1-wikipol/.gitignore
+  s_bffceea45dbe3a::t_e6c9bdc60e2107 24,27
+6-politics/2-sources/2-boniface/source.yaml
+  s_bffceea45dbe3a::t_a3b3c1ed204a4e 14-17
+6-politics/1-projects/1-wikipol/Scripts/new_source.py
+  s_bffceea45dbe3a::t_1ba070b5f22809 14-15,18-21,34-36,81-96,99-102,104-106,115-116,119,126,133,135-136,140-145,148,151,180,183
+6-politics/2-sources/1-paduteam/source.yaml
+  s_bffceea45dbe3a::t_a3b3c1ed204a4e 11-14
+6-politics/1-projects/1-wikipol/Templates/chronicle_CLAUDE.md.tmpl
+  s_bffceea45dbe3a::t_9515d9b8cfecab 1-13
+6-politics/1-projects/1-wikipol/Scripts/source_config.py
+  s_bffceea45dbe3a::t_b0278e3f3c0f3d 4-11,16-17,47-48,50,121-124,147-150
+6-politics/1-projects/1-wikipol/Templates/source_CLAUDE.md.tmpl
+  s_bffceea45dbe3a::t_9515d9b8cfecab 1-9,58,64
+6-politics/1-projects/1-wikipol/Scripts/run_ingest.py
+  s_bffceea45dbe3a::t_d5077a33f648e8 9-13,15-19,164,178,206,220
+6-politics/1-projects/1-wikipol/Scripts/batch_transcripts.py
+  s_bffceea45dbe3a::t_d5077a33f648e8 7-11,13-22,894,970,1051
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aefb0aafe03f99181f6c7e50a8b63078506a6294",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
