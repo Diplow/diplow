@@ -5,11 +5,16 @@ Génère le fichier chronologique d'ingestion pour une source WikiPol.
 Liste chronologiquement les vidéos de la chaîne sur les N derniers mois,
 regroupées en batches de 2 semaines ISO (~10 vidéos/batch).
 
+Pipeline legacy : écrit dans le vault de la source, figé dans wikipol/Legacy/
+depuis WIK-1. Gardé pour référence ; ne plus le lancer sur un vault figé.
+`--source` désigne le nœud de la source (là où vit source.yaml), depuis la
+racine de WikiPol : ../../2-sources/<n>-<slug>.
+
 Usage:
-    python generate_chronological.py --source Sources/MaChaine
-    python generate_chronological.py --source Sources/MaChaine --dry-run
-    python generate_chronological.py --source Sources/MaChaine --force
-    python generate_chronological.py --source Sources/MaChaine --months 12
+    python generate_chronological.py --source ../../2-sources/1-machaine
+    python generate_chronological.py --source ../../2-sources/1-machaine --dry-run
+    python generate_chronological.py --source ../../2-sources/1-machaine --force
+    python generate_chronological.py --source ../../2-sources/1-machaine --months 12
 """
 import sys
 import os

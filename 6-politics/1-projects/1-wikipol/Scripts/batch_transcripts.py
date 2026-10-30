@@ -4,17 +4,22 @@ Gestion complète des transcripts et de l'inventaire d'une source WikiPol.
 
 Toutes les commandes prennent `--source <chemin>` (auto-détecté depuis cwd sinon).
 
+Pipeline legacy : écrit dans le vault de la source, figé dans wikipol/Legacy/
+depuis WIK-1. Gardé pour référence ; ne plus le lancer sur un vault figé.
+`--source` désigne le nœud de la source (là où vit source.yaml), depuis la
+racine de WikiPol : ../../2-sources/<n>-<slug>.
+
 Modes d'utilisation :
-    python batch_transcripts.py --source Sources/X                     # Extrait les transcripts manquants
-    python batch_transcripts.py --source Sources/X --dry-run            # Montre ce qui serait fait
-    python batch_transcripts.py --source Sources/X --discover          # Découvre les nouvelles vidéos
-    python batch_transcripts.py --source Sources/X --last 5             # 5 dernières vidéos sans transcript
-    python batch_transcripts.py --source Sources/X --recent 3           # 3 plus récentes de la chaîne
-    python batch_transcripts.py --source Sources/X --fix                # Corrige l'inventaire
-    python batch_transcripts.py --source Sources/X --full               # discover + fix + extraction
-    python batch_transcripts.py --source Sources/X --enrich-fiches      # youtube_id + dates dans Videos/
-    python batch_transcripts.py --source Sources/X --fix-fiche-dates    # corrige dates partielles
-    python batch_transcripts.py --source Sources/X --enrich-transcripts # youtube_id dans Transcripts/
+    python batch_transcripts.py --source ../../2-sources/1-x                     # Extrait les transcripts manquants
+    python batch_transcripts.py --source ../../2-sources/1-x --dry-run            # Montre ce qui serait fait
+    python batch_transcripts.py --source ../../2-sources/1-x --discover          # Découvre les nouvelles vidéos
+    python batch_transcripts.py --source ../../2-sources/1-x --last 5             # 5 dernières vidéos sans transcript
+    python batch_transcripts.py --source ../../2-sources/1-x --recent 3           # 3 plus récentes de la chaîne
+    python batch_transcripts.py --source ../../2-sources/1-x --fix                # Corrige l'inventaire
+    python batch_transcripts.py --source ../../2-sources/1-x --full               # discover + fix + extraction
+    python batch_transcripts.py --source ../../2-sources/1-x --enrich-fiches      # youtube_id + dates dans Videos/
+    python batch_transcripts.py --source ../../2-sources/1-x --fix-fiche-dates    # corrige dates partielles
+    python batch_transcripts.py --source ../../2-sources/1-x --enrich-transcripts # youtube_id dans Transcripts/
 
 Sécurités :
 - Pause de 8s entre chaque vidéo (anti-ban YouTube)
@@ -886,7 +891,7 @@ def update_fiche_frontmatter(fiche_path, youtube_id=None, date=None, dry_run=Fal
 
 
 def cmd_enrich_fiches(cfg: SourceConfig, dry_run=False):
-    videos_dir = os.path.join(cfg.source_root, "Videos")
+    videos_dir = os.path.join(cfg.vault_root, "Videos")
     print(f"\n{'='*60}")
     print(f"ENRICHISSEMENT DES FICHES VIDEOS/ — {cfg.name}")
     print(f"{'='*60}")
@@ -962,7 +967,7 @@ def cmd_enrich_fiches(cfg: SourceConfig, dry_run=False):
 
 
 def cmd_fix_fiche_dates(cfg: SourceConfig, dry_run=False):
-    videos_dir = os.path.join(cfg.source_root, "Videos")
+    videos_dir = os.path.join(cfg.vault_root, "Videos")
     if not os.path.isdir(videos_dir):
         print(f"ERREUR: dossier Videos/ introuvable : {videos_dir}")
         return
@@ -1043,7 +1048,7 @@ def add_youtube_id_to_transcript(transcript_path, youtube_id, dry_run=False):
 
 
 def cmd_enrich_transcripts(cfg: SourceConfig, dry_run=False):
-    videos_dir = os.path.join(cfg.source_root, "Videos")
+    videos_dir = os.path.join(cfg.vault_root, "Videos")
     if not os.path.isdir(videos_dir):
         print(f"ERREUR: dossier Videos/ introuvable : {videos_dir}")
         return

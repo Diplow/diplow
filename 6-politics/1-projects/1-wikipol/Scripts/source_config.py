@@ -1,14 +1,20 @@
 """
 Helper pour charger et résoudre la configuration d'une source WikiPol.
 
-Chaque source a un fichier source.yaml à sa racine. Ce module charge ce fichier
-et expose les chemins absolus, slugs, URLs, etc.
+Chaque source a un fichier source.yaml à la racine de son nœud
+(`6-politics/2-sources/<n>-<slug>/`). Ce module charge ce fichier et expose les
+chemins absolus, slugs, URLs, etc.
+
+Le vault Obsidian d'une source, quand elle en a un, est figé dans
+`wikipol/Legacy/<NomSource>/` : la clé `legacy.vault` du source.yaml le désigne
+(chemin relatif au source.yaml), et les chemins du vault (inventaire, fichier
+chronologique, transcripts) se résolvent depuis `vault_root`.
 
 Usage minimal :
     from source_config import load_source
 
-    cfg = load_source("Sources/MaChaine")
-    print(cfg.name, cfg.channel_url, cfg.tracking_file)
+    cfg = load_source("6-politics/2-sources/1-paduteam")
+    print(cfg.name, cfg.channel_url, cfg.vault_root)
 """
 import os
 import sys
@@ -38,8 +44,10 @@ class SourceConfig:
     channel_url: str
     channel_handle: str
 
-    # Chemins (absolus, résolus depuis la racine de la source)
+    # Chemins (absolus). source_root : le nœud de la source, qui tient source.yaml.
+    # vault_root : son vault legacy (legacy.vault), source_root s'il n'en a pas.
     source_root: str
+    vault_root: str
     inventaire_path: str
     tracking_file: str
     transcripts_dir: str
@@ -110,6 +118,10 @@ def load_source(path: str | None = None) -> SourceConfig:
     files = data.get("files", {})
     git = data.get("git", {})
     claude = data.get("claude", {})
+    legacy = data.get("legacy", {}) or {}
+
+    vault_rel = legacy.get("vault")
+    vault_root = os.path.normpath(os.path.join(source_root, vault_rel)) if vault_rel else source_root
 
     inventaire_rel = files.get("inventaire", "Sources/Inventaire.md")
     tracking_rel = files.get("chronologique", f"{src.get('slug', 'source').upper()}_CHRONOLOGIQUE.md")
@@ -132,9 +144,10 @@ def load_source(path: str | None = None) -> SourceConfig:
         channel_url=yt.get("channel_url", ""),
         channel_handle=yt.get("channel_handle", ""),
         source_root=source_root,
-        inventaire_path=os.path.join(source_root, inventaire_rel),
-        tracking_file=os.path.join(source_root, tracking_rel),
-        transcripts_dir=os.path.join(source_root, "Sources", "Transcripts"),
+        vault_root=vault_root,
+        inventaire_path=os.path.join(vault_root, inventaire_rel),
+        tracking_file=os.path.join(vault_root, tracking_rel),
+        transcripts_dir=os.path.join(vault_root, "Sources", "Transcripts"),
         git_repo=git.get("repo", ""),
         default_branch=git.get("default_branch", "main"),
         ingest_branch_prefix=git.get("ingest_branch_prefix", "ingest-batch/"),
