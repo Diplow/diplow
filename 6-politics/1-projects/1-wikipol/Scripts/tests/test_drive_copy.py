@@ -1,3 +1,4 @@
+import subprocess
 from datetime import date
 
 import pytest
@@ -139,3 +140,20 @@ def test_the_command_refuses_an_unknown_source(demo_tree, capsys):
 
     assert code == 2
     assert "nope" in capsys.readouterr().err
+
+
+def test_a_failing_rclone_is_reported_not_raised(demo_tree, monkeypatch, capsys):
+    def failing(remote, local):
+        raise subprocess.CalledProcessError(3, ["rclone", "copy", remote, str(local)])
+
+    monkeypatch.setattr(drive_copy, "rclone_copy", failing)
+    monkeypatch.setattr(cli.S3RawStore, "from_settings", classmethod(lambda cls, s: None))
+    monkeypatch.setenv("WIKIPOL_S3_BUCKET", "raws")
+    monkeypatch.setenv("WIKIPOL_S3_ENDPOINT", "https://s3.example.test")
+    monkeypatch.setenv("SCW_ACCESS_KEY", "fake")
+    monkeypatch.setenv("SCW_SECRET_KEY", "fake")
+
+    code = cli.main(["copy-from-drive", "--sources-dir", str(demo_tree["sources"])])
+
+    assert code == 2
+    assert "rclone exited with 3" in capsys.readouterr().err

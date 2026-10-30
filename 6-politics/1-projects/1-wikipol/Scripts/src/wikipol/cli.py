@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import subprocess
 import sys
 from pathlib import Path
 
@@ -32,6 +33,12 @@ def main(argv: list[str] | None = None) -> int:
             return copy_from_drive(args)
     except ConfigError as error:
         print(f"wikipol: {error}", file=sys.stderr)
+        return 2
+    except FileNotFoundError as error:
+        print(f"wikipol: {error.filename or error} not found", file=sys.stderr)
+        return 2
+    except subprocess.CalledProcessError as error:
+        print(f"wikipol: {error.cmd[0]} exited with {error.returncode}", file=sys.stderr)
         return 2
     return 1
 

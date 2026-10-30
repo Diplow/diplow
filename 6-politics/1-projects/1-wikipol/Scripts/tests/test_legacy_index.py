@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from wikipol.legacy_index import LegacyIndex, build_index, parse_date, split_frontmatter
 
@@ -19,6 +19,20 @@ def test_an_inventory_row_survives_a_bar_in_its_title(demo_tree):
     assert index.published_by_id["eeeeeeeeeee"] == date(2026, 4, 14)
 
 
+def test_an_inventory_fiche_link_is_not_taken_for_a_transcript(tmp_path):
+    inventory = tmp_path / "Inventaire.md"
+    inventory.write_text(
+        "| Titre | [YouTube](https://www.youtube.com/watch?v=fffffffffff) | 2026-04-10 "
+        "| | [[Une fiche]] |\n",
+        encoding="utf-8",
+    )
+
+    index = build_index(tmp_path, inventory)
+
+    assert index.id_by_transcript == {}
+    assert index.published_by_id == {"fffffffffff": date(2026, 4, 10)}
+
+
 def test_a_transcript_tied_to_two_ids_is_left_out():
     index = LegacyIndex()
     index.add("Doublon", "aaaaaaaaaaa", None)
@@ -35,6 +49,7 @@ def test_no_vault_no_index():
 
 def test_dates_in_the_shapes_the_vaults_use():
     assert parse_date(date(2025, 7, 27)) == date(2025, 7, 27)
+    assert parse_date(datetime(2025, 7, 27, 10, 0)) == date(2025, 7, 27)
     assert parse_date("2025-07-27") == date(2025, 7, 27)
     assert parse_date("30 mars 2026") == date(2026, 3, 30)
     assert parse_date("1er août 2025") == date(2025, 8, 1)

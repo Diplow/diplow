@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 import yaml
@@ -74,6 +74,8 @@ def _flat_frontmatter(block: str) -> dict:
 
 def parse_date(value: object) -> date | None:
     """A date written as YAML parses it, as `YYYY-MM-DD`, or in French (`30 mars 2026`)."""
+    if isinstance(value, datetime):  # YAML reads `2025-07-27 10:00` as a datetime
+        return value.date()
     if isinstance(value, date):
         return value
     if not isinstance(value, str):
@@ -153,10 +155,11 @@ def _index_inventory(index: LegacyIndex, text: str) -> None:
         url = WATCH_URL.search(line)
         if not line.lstrip().startswith("|") or not url:
             continue
-        # The title cell can hold a `|` of its own, so read the cells after the URL only.
-        after_url = line[url.end() :]
-        published_match = ISO_DATE.search(after_url)
-        link = WIKILINK.search(after_url)
+        # The title cell can hold a `|` of its own, so read the cells after the URL only:
+        # the rest of the URL cell, then Date, Transcript and Fiche.
+        cells = line[url.end() :].split("|")
+        published_match = ISO_DATE.search(cells[1]) if len(cells) > 1 else None
+        link = WIKILINK.search(cells[2]) if len(cells) > 2 else None
         index.add(
             transcript_stem(link.group(1)) if link else None,
             url.group(1),

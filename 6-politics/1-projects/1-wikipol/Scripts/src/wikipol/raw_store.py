@@ -1,9 +1,13 @@
 """The Raws' only home: one object per Publication, `<source-slug>/<youtube_id>.md`.
 
 A Raw is written once and never replaced (`put` refuses an existing key), so copying is the only
-move. Its metadata holds what the key lost: the original title and, when known, the publication
-date. S3 sends metadata as HTTP headers, which carry ASCII only, so the title is percent-encoded
-on the wire and decoded on the way back.
+move. The refusal is a check before the write, which holds for the one writer the pipeline runs
+at a time (the daily runner, or a command run by hand), not for two racing on the same key; the
+bucket's versioning keeps the first anyway.
+
+Its metadata holds what the key lost: the original title and, when known, the publication date.
+S3 sends metadata as HTTP headers, which carry ASCII only, so the title is percent-encoded on the
+wire and decoded on the way back.
 """
 
 from __future__ import annotations
