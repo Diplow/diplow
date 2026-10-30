@@ -7,7 +7,8 @@ preview: >-
   a ticket left room: how PaduTeam's eleven override skills regrouped by six,
   how a Source's config finds its frozen vault, what became of the legacy
   scripts and of new_source.py, how the moved editorial files were touched,
-  and what the frozen glossary still says that I should fix.
+  what the frozen glossary still says that I should fix, and how the Raws
+  reached the bucket: which ids and dates were found, which 12 stayed on Drive.
 ---
 # Decisions
 
@@ -38,3 +39,21 @@ WIK-1. The two editorial `CLAUDE.md` files and PaduTeam's eleven skills were wri
 ### DEC-5 For Ulysse: the glossary still places the legacy vaults at `wikipol/Sources/`
 
 WIK-1. `CONTEXT.md`'s **Source** entry says "the legacy vaults under `wikipol/Sources/` are not Sources". They are now under `wikipol/Legacy/`. The run doesn't edit `CONTEXT.md`, so the path is yours to update. The run config's comments name `wikipol/Sources/` too, for the rule that freezes the legacy notes there.
+
+### DEC-6 `copy-from-drive` finds a Raw's id and date beyond its frontmatter; 609 of the 621 Raws are in the bucket
+
+WIK-2. The ticket asked for the `youtube_id` from the transcript's frontmatter, the others listed. On Drive that left 38 of 621 without one: Boniface's five transcripts carry no frontmatter at all, and none of the 621 carries its publication date. So `copy-from-drive` looks, in order, at the frontmatter's `youtube_id`, its `url` (`watch?v=`), then, read-only, the frozen vault: a `Videos/` note's `youtube_id` and `date` for the transcript it links under `## Transcript`, and a row of the vault's inventory table (Boniface's), whose URL, date and transcript link sit on one line. A transcript two entries tie to different ids gets none.
+
+The copy of 2026-10-31: PaduTeam 604 of 616, Boniface 5 of 5, every object byte for byte its Drive file (a second run found all 609 already there, compared by content). Left on Drive, listed in the pull request: 11 PaduTeam transcripts with an English title (YouTube's translated title) and no id anywhere offline, and one duplicate, `THAÏS les VSS l'ont rendue NAZIE !.md`, a second transcript of `4MLEHjkr7Rs` in another format; the first by name went in. For Ulysse: the 11 ids can only come from YouTube, by hand or through the Fetcher once WIK-3 lands. 150 PaduTeam Raws have no `published` in their metadata; the index (WIK-7) searches by date, so the Fetcher's metadata will have to fill it.
+
+`~/.config/wikipol/.env` held neither `WIKIPOL_S3_BUCKET` nor `WIKIPOL_S3_ENDPOINT` at the time; the copy ran with them set in its process environment (`wikipol-raws`, `https://s3.fr-par.scw.cloud`). For Ulysse: add both lines to the file, or every later command needs them on its command line.
+
+### DEC-7 ruff covers the new package, not the legacy scripts beside it
+
+WIK-2. The gate runs `ruff check .` and `ruff format --check .` from `Scripts/`, where the six legacy scripts of DEC-3 also sit. Linting them would mean rewriting code kept for reference and never run, so `pyproject.toml` lists them in `extend-exclude`, by name: a new file in `Scripts/` is linted, and moving a legacy script into the package means removing its line. No rule is lowered for the code the run writes.
+
+### DEC-8 A Raw's metadata carries its Drive title, percent-encoded; four Raws don't use the `M:SS` blocks
+
+WIK-2. S3 metadata travels as HTTP headers, ASCII only, so the store percent-encodes `title` and decodes it on `get`. The title is the frontmatter's `titre` when there is one, else the Drive file's name, which is the video's title with `:`, `?` and `|` dropped; the true title comes with the Fetcher's metadata.
+
+Most Raws are 30-second blocks, a `M:SS` line then text. Four are not, and WIK-4 and WIK-7 must not assume it: `X0tXWZsjENQ`, `4MLEHjkr7Rs` and `mCek51AyK50` use `**[MM:SS](https://www.youtube.com/watch?v=ID&t=N)**` blocks under a title and URL header, and `wsiChBGb6T0` (BORIS VALLAUD N'A PAS DIT SON DERNIER MOT !) has no timestamp at all, so no Extract of it can carry one.

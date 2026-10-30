@@ -37,21 +37,19 @@ Lorsque l'utilisateur demande de travailler sur une Source ou de répondre à un
 3. **Lire la config**. Son `source.yaml` contient les paramètres techniques (URL chaîne, nom affiché, slug, modèle). Les scripts et skills s'y réfèrent via le helper `Scripts/source_config.py`, qui résout aussi les chemins de son vault legacy (`vault_root`).
 4. **Appliquer les conventions**. `BUILD.md` (ce dossier) pour les invariants universels, et `Legacy/<NomSource>/BUILD.md` pour la taxonomie de son vault figé.
 
-## Transcripts : sur Google Drive, hors git
+## Raws : dans le bucket Scaleway, hors git
 
-Les transcripts (`Legacy/<NomSource>/Sources/Transcripts/*.md`, ~30 Mo) ne sont pas versionnés : ils vivent sur Google Drive, sous `WikiPol/Sources`, avec l'arborescence de l'ancien dossier `Sources/`, aujourd'hui `Legacy/`. On y accède par le remote rclone `diplow`. Les scripts rangés dans ce dossier (`.py`, `.skill`) restent dans git.
+Les Raws (voir `CONTEXT.md` : les transcripts tels qu'ils ont été récupérés) vivent dans le bucket Scaleway Object Storage `wikipol-raws` (région `fr-par`, versionné), un objet par Publication : `<slug-de-la-source>/<youtube_id>.md`, ses octets inchangés. Les métadonnées de l'objet gardent ce que la clé perd : le titre d'origine (`title`, encodé en pourcent, car S3 n'admet que l'ASCII dans ses en-têtes) et la date de publication quand on la connaît (`published`, au format ISO). Le bucket est leur seul foyer (ADR 0003) : on y ajoute, on n'y remplace ni n'y efface rien.
 
-Une copie fraîche (worktree Conductor, nouveau clone, ou dossier d'origine après un pull qui les a retirés) n'a donc pas les transcripts. Depuis la racine de WikiPol :
+Le paquet uv de `Scripts/` les lit et les écrit à travers `wikipol.raw_store`. Ses réglages viennent de `~/.config/wikipol/.env`, hors du repo (`WIKIPOL_ENV` désigne un autre fichier), et l'environnement du processus passe devant : `WIKIPOL_S3_BUCKET`, `WIKIPOL_S3_ENDPOINT` (`https://s3.fr-par.scw.cloud`), `SCW_ACCESS_KEY`, `SCW_SECRET_KEY`, et `WIKIPOL_S3_REGION`, `fr-par` par défaut. Depuis `Scripts/` :
 
 ```bash
-# Récupérer les transcripts d'une source (ou de toutes : rclone copy diplow:WikiPol/Sources Legacy)
-rclone copy diplow:WikiPol/Sources/<NomSource>/Sources/Transcripts Legacy/<NomSource>/Sources/Transcripts
-
-# Pousser les transcripts nouveaux ou modifiés (après batch_transcripts.py --extract, --recent, --enrich-transcripts…)
-rclone copy Legacy diplow:WikiPol/Sources --include '/*/Sources/Transcripts/*.md'
+uv sync
+uv run pytest                                 # sur des fakes : ni Scaleway, ni Drive, ni réseau
+uv run wikipol copy-from-drive --dry-run      # ce que la copie depuis Drive ferait, sans rien écrire
 ```
 
-`rclone copy` n'efface jamais rien à destination ; ne pas utiliser `rclone sync`, qui supprimerait sur Drive ce qui manque en local.
+Jusqu'à WIK-2, les transcripts vivaient sur Google Drive, sous `diplow:WikiPol/Sources/<NomSource>/Sources/Transcripts/` (remote rclone `diplow`). `wikipol copy-from-drive` les a copiés dans le bucket le 2026-10-31 : 609 sur 621. Les 12 autres (11 sans `youtube_id` retrouvable, un doublon) sont listés dans la pull request de WIK-2. La commande prend l'identifiant dans le frontmatter du transcript, sinon dans les fiches `Videos/` et l'inventaire du vault figé ; relancée, elle ne copie que ce qui manque, et signale sans le remplacer un Raw du bucket qui diffère de Drive. Drive n'est plus qu'une archive : on n'y pousse plus rien.
 
 ## Répartition des responsabilités
 
@@ -62,7 +60,7 @@ rclone copy Legacy diplow:WikiPol/Sources --include '/*/Sources/Transcripts/*.md
 | WikiPol | `CONTEXT.md` | Le glossaire : Source, Publication, Raw, Extract, Digest, Chronicle, Period |
 | WikiPol | `docs/adr/` | Les décisions difficiles à défaire, une par fichier |
 | WikiPol | `Skills/` | Skills d'ingestion et d'écriture génériques, agnostiques à la source |
-| WikiPol | `Scripts/` | Scripts Python (ingestion, bootstrap), lisent `source.yaml` |
+| WikiPol | `Scripts/` | Le paquet uv `wikipol` du pipeline (`src/`, `tests/`), et les scripts Python legacy (ingestion, bootstrap), qui lisent `source.yaml` |
 | WikiPol | `Legacy/` | Les vaults d'avant, figés : taxonomie locale (`BUILD.md`), fiches (`Videos/`, `Individus/`, `Concepts/`…), tracker |
 | Source | `CLAUDE.md` | Contexte éditorial spécifique : qui produit, ton, pièges |
 | Source | `source.yaml` | Paramètres techniques, `content_types` activés (whitelist stricte), `legacy.vault` |
