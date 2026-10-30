@@ -2,7 +2,9 @@
 
 Ce fichier documente **comment** un vault WikiPol est construit : architecture des skills, invariants de nommage et de format, workflow git. Les skills individuelles (dans `Skills/`) décrivent leur workflow spécifique ; ce fichier contient les invariants communs à toutes les sources.
 
-La **taxonomie concrète** (domaines, thèmes, enjeux) n'est pas définie ici : elle est propre à chaque source et vit dans `Sources/<NomSource>/BUILD.md`.
+La **taxonomie concrète** (domaines, thèmes, enjeux) n'est pas définie ici : elle est propre à chaque source et vit dans `Legacy/<NomSource>/BUILD.md`.
+
+Depuis WIK-1, les vaults sont figés dans `Legacy/` et chaque Source est un nœud de `6-politics/2-sources/` (`CLAUDE.md` éditorial, `source.yaml`, `1-chronicle/`, `.skills/`). Ce fichier décrit donc comment les vaults legacy ont été construits : leurs chemins (`Sources/Transcripts/`, `Videos/`…) restent relatifs au dossier du vault.
 
 ---
 
@@ -103,7 +105,7 @@ Construits **à partir des fiches basic existantes**, par synthèse multi-vidéo
 
 ### Activation par source
 
-Toutes les sources n'utilisent pas tous les types. Le fichier `Sources/<NomSource>/source.yaml` déclare ses `content_types` activés (whitelist stricte). `Scripts/new_source.py` ne crée que les dossiers correspondants ; les skills `write-*` refusent d'écrire un type désactivé.
+Toutes les sources n'utilisent pas tous les types. Le `source.yaml` de la Source déclare ses `content_types` activés (whitelist stricte) ; les skills `write-*` refusent d'écrire un type désactivé.
 
 ---
 
@@ -113,7 +115,7 @@ Toutes les sources n'utilisent pas tous les types. Le fichier `Sources/<NomSourc
 
 L'attribution par défaut est collective — elle désigne la source (ex : "la chaîne", "les auteurs", nom collectif défini dans `source.yaml:source.attribution`). N'attribuer individuellement que quand c'est explicitement identifiable dans le transcript (segment solo, auto-identification, rôle reconnu).
 
-Le ton et les principes d'attribution spécifiques à une source sont définis dans `Sources/<NomSource>/CLAUDE.md`.
+Le ton et les principes d'attribution spécifiques à une source sont définis dans le `CLAUDE.md` de la Source (`6-politics/2-sources/<n>-<slug>/`).
 
 ### Noms de fichiers
 
@@ -352,7 +354,7 @@ skill_version: write-methode-2026-04-26
 
 ### Champ `content_types` du `source.yaml`
 
-Chaque source déclare ses types actifs dans `Sources/<NomSource>/source.yaml`. C'est une **whitelist stricte** : `Scripts/new_source.py` ne scaffolde que les dossiers correspondants, et les skills `write-*` refusent d'écrire un type désactivé.
+Chaque source déclare ses types actifs dans son `source.yaml` (`6-politics/2-sources/<n>-<slug>/source.yaml`). C'est une **whitelist stricte** : les skills `write-*` refusent d'écrire un type désactivé.
 
 ```yaml
 content_types:
@@ -392,7 +394,7 @@ Inclure uniquement domaine, thèmes et enjeux (pas format ni statut). Ces hashta
 2. **thèmes** — sujets spécifiques récurrents (vocabulaire contrôlé, extensible par la source)
 3. **enjeux** — combats stratégiques récurrents (définis par la source)
 
-Les valeurs concrètes de ces axes sont déclarées dans `Sources/<NomSource>/BUILD.md`. Elles croissent **par induction** au fil des ingestions : ajouter un nouveau thème si un sujet revient dans 2+ vidéos, un nouvel enjeu si un combat revient dans 3+ vidéos avec une position constante.
+Les valeurs concrètes de ces axes sont déclarées dans `Legacy/<NomSource>/BUILD.md`. Elles croissent **par induction** au fil des ingestions : ajouter un nouveau thème si un sujet revient dans 2+ vidéos, un nouvel enjeu si un combat revient dans 3+ vidéos avec une position constante.
 
 ### Sourcing YouTube
 
@@ -422,7 +424,7 @@ Pour les fiches non-vidéo (entités, concepts, enjeux), les footnotes référen
 - Ton analytique, pas encyclopédique
 - Fidélité à l'analyse de la source — restituer, pas neutraliser
 
-Les principes éditoriaux spécifiques (restituer sans challenger, nuancer, contextualiser, etc.) sont définis dans `Sources/<NomSource>/CLAUDE.md` selon la nature de la source.
+Les principes éditoriaux spécifiques (restituer sans challenger, nuancer, contextualiser, etc.) sont définis dans le `CLAUDE.md` de la Source (`6-politics/2-sources/<n>-<slug>/`) selon la nature de la source.
 
 ### Volume
 
@@ -452,7 +454,7 @@ main                                ← état courant du vault ; jamais de push 
 
 ### En fin d'ingestion
 
-1. Stage les fichiers modifiés/créés par nom, tous sous `Sources/<NomSource>/` (pas `git add -A`)
+1. Stage les fichiers modifiés/créés par nom, tous sous le dossier du vault (pas `git add -A`)
 2. Commit avec message structuré :
    ```
    ingest: TITRE ABRÉGÉ DE LA VIDÉO
@@ -470,15 +472,18 @@ main                                ← état courant du vault ; jamais de push 
 
 ---
 
-## Chemins d'un vault source
+## Chemins d'une Source et de son vault legacy
 
 ```
-Sources/<NomSource>/
+6-politics/2-sources/<n>-<slug>/  ← le nœud de la Source
 ├── CLAUDE.md                     ← contexte éditorial de la source
+├── source.yaml                   ← config paramétrique (content_types, git, model, legacy.vault)
+├── 1-chronicle/                  ← les Digests, rangés par date en Periods
+└── .skills/                      ← (optionnel) skills propres à la source qui surchargent
+    └── <groupe>/<skill-name>/SKILL.md  les skills génériques de WikiPol/Skills/
+
+6-politics/1-projects/1-wikipol/Legacy/<NomSource>/  ← le vault, figé
 ├── BUILD.md                      ← taxonomie locale
-├── source.yaml                   ← config paramétrique (content_types, git, model)
-├── Skills/                       ← (optionnel) skills propres à la source qui surchargent
-│   └── <skill-name>/SKILL.md     ←   les skills génériques de WikiPol/Skills/
 ├── Sources/
 │   ├── Inventaire.md             ← table des vidéos (Dataview)
 │   └── Transcripts/              ← transcripts bruts (.md) — type raw, hors git (Google Drive)
