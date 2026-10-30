@@ -1,0 +1,32 @@
+6-politics/1-projects/1-wikipol/BUILD.md
+  s_bffceea45dbe3a::t_bb8279d1097e90 5-7,108,118,357,397,427,457,475,478,480-485
+6-politics/1-projects/1-wikipol/README.md
+  s_bffceea45dbe3a::t_a9573f5e6ee1b3 5-7,12,17,20-21,25-40,47
+6-politics/1-projects/CLAUDE.md
+  s_bffceea45dbe3a::t_a49db65a5050ac 7-9,17,21,23,25
+6-politics/1-projects/1-wikipol/Skills/ingest-video/SKILL.md
+  s_bffceea45dbe3a::t_ea247ed7f229d4 45,70
+6-politics/1-projects/1-wikipol/Legacy/CLAUDE.md
+  s_bffceea45dbe3a::t_e6c9bdc60e2107 1-21
+6-politics/1-projects/1-wikipol/Skills/gather-context/SKILL.md
+  s_bffceea45dbe3a::t_ea247ed7f229d4 29
+6-politics/1-projects/1-wikipol/CLAUDE.md
+  s_bffceea45dbe3a::t_8674165ff679fe 42,47-48,51,66,68-70,76,85,96,100
+  s_bffceea45dbe3a::t_adc00722205f2a 6-9,17-21,23,25,27,29-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "60e55e223e5dd31c3d5edb897686e76aab45ccfe",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
