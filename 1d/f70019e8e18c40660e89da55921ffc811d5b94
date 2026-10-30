@@ -1,0 +1,26 @@
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/config.py
+  s_bffceea45dbe3a::t_cb524fa45e469f 94-99,101-102,114-119
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/drive_copy.py
+  s_bffceea45dbe3a::t_cb524fa45e469f 24,115-120
+6-politics/1-projects/1-wikipol/Scripts/tests/test_config.py
+  s_bffceea45dbe3a::t_cb524fa45e469f 88,104-117
+  s_bffceea45dbe3a::t_8cc2e709a2cbbe 118-119
+6-politics/1-projects/1-wikipol/Scripts/tests/test_drive_copy.py
+  s_bffceea45dbe3a::t_cb524fa45e469f 75-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1df70019e8e18c40660e89da55921ffc811d5b94",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
