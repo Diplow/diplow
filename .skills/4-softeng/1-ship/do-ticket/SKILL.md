@@ -1,11 +1,11 @@
 ---
 name: do-ticket
-description: Start work on a Linear ticket. Given HEX-123 (or words to find it), delegate the setup to a subagent that fetches the ticket and its comments, names the branch {feat|fix|refactor|docs|chore}/hex-123-slug off origin/main (renamed in place in a Conductor workspace, a new worktree elsewhere), moves the ticket to In Progress and assigns you, and returns just the ticket. Then delegate the context sweep (the repo's CLAUDE.md chain and docs, related Linear tickets, open PRs nearby) to a subagent that returns a recap, discuss that recap with the user, ask how to proceed in one of five modes (autonomous, plan together, research first, do together, do & learn) and work in that mode. Land the work the repo's way. Through a PR into main, come back once it has run and triage every review comment, human or bot, replying on each thread and resolving the ones you settled, until it is green and nothing is left unanswered. Where the repo lands directly on main, fast-forward main instead. Use when someone says "start HEX-12", "pick up this ticket", "let's work on the OAuth ticket", "/softeng:ship:do-ticket", or begins work that has (or should have) a Linear ticket. If no ticket exists yet, mint one first with new-ticket.
+description: Start work on a Linear ticket. Given HEX-123 (or words to find it), delegate the setup to a subagent that fetches the ticket and its comments, names the branch {feat|fix|refactor|docs|chore}/hex-123-slug (wik-4-slug for WIK-4: the ticket's own team key) off origin/main (renamed in place in a Conductor workspace, a new worktree elsewhere), moves the ticket to In Progress and assigns you, and returns just the ticket. Then delegate the context sweep (the repo's CLAUDE.md chain and docs, related Linear tickets, open PRs nearby) to a subagent that returns a recap, discuss that recap with the user, ask how to proceed in one of five modes (autonomous, plan together, research first, do together, do & learn) and work in that mode. Land the work the repo's way. Through a PR into main, come back once it has run and triage every review comment, human or bot, replying on each thread and resolving the ones you settled, until it is green and nothing is left unanswered. Where the repo lands directly on main, fast-forward main instead. Use when someone says "start HEX-12", "pick up this ticket", "let's work on the OAuth ticket", "/softeng:ship:do-ticket", or begins work that has (or should have) a Linear ticket. If no ticket exists yet, mint one first with new-ticket.
 title: do-ticket
 parent: .skills/4-softeng/1-ship/do-ticket
 owner: diplo
 preview: >-
-  Start work on a HEX ticket: fetch it, name the branch {type}/hex-{num}-{slug}
+  Start work on a HEX ticket: fetch it, name the branch {type}/{key}-{num}-{slug}
   off origin/main (renamed in place in Conductor), sweep context, agree a work
   mode, then land it. Through a PR with every review thread answered, or by
   fast-forwarding main where the repo lands there. Use on "start HEX-12" or
@@ -22,13 +22,13 @@ Starting a ticket is mechanical: fetch it, name the branch, flip the Linear stat
 
 Given nothing, or the ticket doesn't exist: **stop and mint one first with the `softeng:ship:new-ticket` skill**. Work without a ticket leaves no trace in Linear. Otherwise hand the subagent what the user said (the key, or their words if there is no key), the absolute path to `scripts/start_ticket.sh`, and this brief:
 
-1. **Resolve the ticket.** With a key: `mcp__hodor__Linear_mcp_Personal__get_issue` with `id: "HEX-123"`. With words ("the oauth scopes ticket"): `mcp__hodor__Linear_mcp_Personal__list_issues` with `team: "Hexframe"` and a `query`. If no single candidate is obviously right, **return the candidates and stop there**, changing nothing. Then read its comments (`mcp__hodor__Linear_mcp_Personal__list_comments` with `issueId`): the thread is where a scope cut or a decision that never made it into the description usually lives.
+1. **Resolve the ticket.** With a key: `mcp__hodor__Linear_mcp_Personal__get_issue` with `id: "HEX-123"`. With words ("the oauth scopes ticket"): `mcp__hodor__Linear_mcp_Personal__list_issues` with `team: "Hexframe"` (or the team the user names, such as `Wikipol`) and a `query`. If no single candidate is obviously right, **return the candidates and stop there**, changing nothing. Then read its comments (`mcp__hodor__Linear_mcp_Personal__list_comments` with `issueId`): the thread is where a scope cut or a decision that never made it into the description usually lives.
 2. **Derive the branch coordinates.** *type* comes from the work's nature (`feat`, `fix`, `refactor`, `docs`, `chore`). *slug* is 2 to 5 words from the title, kebab-case. Report both with a one-line rationale rather than asking: the caller can `git branch -m` if the user disagrees, and a rename costs nothing before the first push.
 3. **Name the branch** with the script, never by hand:
    ```bash
    bash "<skill-dir>/scripts/start_ticket.sh" HEX-123 --type feat --slug "oauth-scopes"
    ```
-   It names the branch `{type}/hex-{123}-{slug}`, based on `origin/main`, and prints `WORKTREE=…` on its last line. Idempotent: re-run it safely after an interruption. It reuses an existing branch or worktree.
+   It names the branch `{type}/{key}-{123}-{slug}`, `{key}` the ticket's team key in lowercase (`hex`, `wik`), based on `origin/main`, and prints `WORKTREE=…` on its last line. Idempotent: re-run it safely after an interruption. It reuses an existing branch or worktree.
 4. **Update the ticket state.** If the ticket isn't already yours and started: `mcp__hodor__Linear_mcp_Personal__save_issue` with `id`, `state: "In Progress"`, `assignee: "me"`. Linear should reflect reality now, not after the work lands.
 
 Require as its return: the **ticket verbatim** (key, title, URL, and the full description; that description *is* the plan, so it must not be summarized away), its **comments** condensed to the decisions and constraints they carry (author, date, point; no pleasantries), the branch name and its rationale, the `WORKTREE=` path, what it changed on the ticket, and anything that failed or it skipped.
@@ -38,9 +38,9 @@ Then work in the returned `WORKTREE=` directory. Everything below happens there.
 **Where the branch lives.** The rules are in `.skills/conductor-workspaces.md`. In short, the script checks `CONDUCTOR_WORKSPACE_PATH`:
 
 - **Inside a Conductor workspace** the workspace already is a worktree, tracked by its branch name. The script never nests another one. It **renames the workspace's branch in place** (`git branch -m`; invoking this skill is the user's go-ahead for the rename) and fast-forwards it onto `origin/main` when it has no commits of its own. `WORKTREE=` is the workspace itself, so you are already in the right place. If the branch already exists elsewhere, the script stops: open that branch in its own workspace instead.
-- **Outside Conductor** it cuts the branch off `origin/main` in a dedicated worktree (default `<repo-parent>/worktrees/hex-123-…`). Your main checkout stays on whatever you were doing, and parallel tickets never fight over one working tree.
+- **Outside Conductor** it cuts the branch off `origin/main` in a dedicated worktree (default `<repo-parent>/worktrees/hex-123-…`, or `wik-4-…`). Your main checkout stays on whatever you were doing, and parallel tickets never fight over one working tree.
 
-Convention note: `{type}/hex-{num}-{slug}` is the only branch shape. The key in the branch name is how a branch, and the PR or commits it produces, trace back to their ticket. **Do not deviate.** Keep the branch short-lived: if the ticket turns out large, land it in several small steps rather than one long branch.
+Convention note: `{type}/{key}-{num}-{slug}` is the only branch shape, `{key}` the ticket's team key in lowercase. The key in the branch name is how a branch, and the PR or commits it produces, trace back to their ticket. **Do not deviate.** Keep the branch short-lived: if the ticket turns out large, land it in several small steps rather than one long branch.
 
 ## 2. Gather context in a subagent, before writing anything
 

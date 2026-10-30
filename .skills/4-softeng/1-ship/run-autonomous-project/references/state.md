@@ -24,7 +24,7 @@ For a ticket, one **fetch-tier** helper call (`models.fetch`, the "project snaps
   ```bash
   gh pr list --state all --limit 1000 \
     --json number,url,state,baseRefName,headRefName,mergedAt,mergeCommit \
-    --jq '.[] | select(.headRefName | test("/hex-<ticket>-"))'
+    --jq '.[] | select(.headRefName | test("/<key>-<ticket>-"))'
   ```
 
   Several pull requests for one ticket means a repair happened: the newest one decides the row. The `landed` field of a closing comment is a second witness. When the two disagree, GitHub wins and the disagreement goes into the summary's `interventions`.
