@@ -8,7 +8,7 @@ preview: >-
   digests its videos; its Chronicle files the Digests by date. The Graphiked
   vault this text was written for is frozen in wikipol/Legacy/Paduteam.
 ---
-> **La Source PaduTeam.** Ses enfants : [[6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE|1-chronicle]], la Chronicle où le pipeline range ses Digests ; `.skills/`, les skills propres à la source ; `source.yaml`, sa config. Le texte qui suit vient du vault Graphiked, figé dans `wikipol/Legacy/Paduteam/` depuis WIK-1 et lu en entrée, plus jamais écrit : ses chemins relatifs (`BUILD.md`, `Sources/`, `Videos/`, `PADUTEAM_CHRONOLOGIQUE.md`…) se lisent dans ce vault, et ses skills `Skills/` sont rangées ici dans `.skills/`.
+> **La Source PaduTeam.** Ses enfants : [[6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE|1-chronicle]], la Chronicle où le pipeline range ses Digests ; `.skills/`, les skills propres à la source ; `source.yaml`, sa config. Le texte qui suit vient du vault Graphiked, figé dans `wikipol/Legacy/Paduteam/` depuis WIK-1 et lu en entrée, plus jamais écrit : ses chemins relatifs (`BUILD.md`, `Sources/`, `Videos/`, `PADUTEAM_CHRONOLOGIQUE.md`…) se lisent dans ce vault, et ses skills `Skills/` sont rangées ici dans `.skills/`. Les commandes d'ingestion plus bas (`weekly_ingest.py`, `run_ingest.py`, `batch_transcripts.py`, `generate_chronological.py`) et les skills d'ingestion écrivent dans ce vault figé : elles restent pour mémoire, **ne plus les lancer**. Les Digests viennent du pipeline de wikipol.
 
 # CLAUDE.md
 

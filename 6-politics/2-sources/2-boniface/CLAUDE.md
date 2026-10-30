@@ -8,7 +8,7 @@ preview: >-
   traps), read by whoever digests its videos; its Chronicle files the Digests by
   date. The vault this text was written for is frozen in wikipol/Legacy/Boniface.
 ---
-> **La Source Boniface.** Ses enfants : [[6-politics/2-sources/2-boniface/1-chronicle/CLAUDE|1-chronicle]], la Chronicle où le pipeline range ses Digests ; `source.yaml`, sa config. Le texte qui suit vient du vault Boniface, figé dans `wikipol/Legacy/Boniface/` depuis WIK-1 et lu en entrée, plus jamais écrit : ses chemins relatifs (`Individus/`, `Concepts/`, `Videos/`…) se lisent dans ce vault.
+> **La Source Boniface.** Ses enfants : [[6-politics/2-sources/2-boniface/1-chronicle/CLAUDE|1-chronicle]], la Chronicle où le pipeline range ses Digests ; `source.yaml`, sa config. Le texte qui suit vient du vault Boniface, figé dans `wikipol/Legacy/Boniface/` depuis WIK-1 et lu en entrée, plus jamais écrit : ses chemins relatifs (`Individus/`, `Concepts/`, `Videos/`…) se lisent dans ce vault. L'ingestion qu'il décrit écrit dans ce vault figé : elle reste pour mémoire, **ne plus la lancer**. Les Digests viennent du pipeline de wikipol.
 
 # Boniface — Contexte éditorial
 
