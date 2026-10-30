@@ -1,0 +1,21 @@
+6-politics/1-projects/1-wikipol/Scripts/pyproject.toml
+  s_bffceea45dbe3a::t_5b9852519919fa 7
+6-politics/1-projects/1-wikipol/Scripts/uv.lock
+  s_bffceea45dbe3a::t_1ccb6a7ab143f2 750
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "add2333588fba31fcb81a59570f52a66123e2d44",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
