@@ -1,0 +1,19 @@
+6-politics/1-projects/1-wikipol/.run/sources-from-youtube.yaml
+  s_8be3e5225a372b::t_6533ab224296e7 85-86,102,111
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d08d14393b68beff12121c81079dcce8f09c093e",
+  "prompts": {},
+  "sessions": {
+    "s_8be3e5225a372b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0c313a59-fe33-4654-bcc1-6ce63bb13579",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
