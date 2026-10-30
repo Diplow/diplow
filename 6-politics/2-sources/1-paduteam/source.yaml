@@ -1,0 +1,39 @@
+source:
+  name: PaduTeam
+  slug: paduteam
+  type: youtube
+  attribution: "la PaduTeam"
+
+youtube:
+  channel_url: https://www.youtube.com/@PaduTeam/videos
+  channel_handle: "@PaduTeam"
+
+# Le vault Obsidian de la source, figé (WIK-1) : lu en entrée, plus jamais écrit.
+# Chemin relatif à ce fichier ; les chemins de `files` se résolvent depuis lui.
+legacy:
+  vault: "../../1-projects/1-wikipol/Legacy/Paduteam"
+files:
+  inventaire: "Sources/Inventaire PaduTeam.md"
+  chronologique: "PADUTEAM_CHRONOLOGIQUE.md"
+
+git:
+  repo: "Diplow/diplow"
+  default_branch: main
+
+claude:
+  default_model: sonnet
+
+content_types:
+  raw:
+    Transcripts: true
+  basic:
+    Individus: true
+    Organisations: true
+    Concepts: true
+    Videos: true
+    Evenements: true
+  advanced:
+    Enjeux: true
+    Conjonctures: true
+    Possibles: true
+    Methodes: true

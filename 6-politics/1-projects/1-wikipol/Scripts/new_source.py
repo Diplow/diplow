@@ -11,16 +11,14 @@ Args optionnels :
     --attribution "la MaChaine"    # attribution collective dans les fiches
     --git-repo "user/repo"         # dépôt GitHub qui héberge WikiPol (défaut : Diplow/diplow)
 
-Résultat : Sources/MaChaine/ est créé avec :
+Résultat : un nœud de source est créé sous `6-politics/2-sources/`, au premier
+numéro libre (`<n>-machaine/`, six au plus : au-delà, regrouper d'abord), avec :
     - source.yaml                  (config paramétrique)
     - CLAUDE.md                    (contexte éditorial à remplir)
-    - BUILD.md                     (taxonomie locale à construire)
-    - MACHAINE_CHRONOLOGIQUE.md    (fichier de suivi vide)
-    - Sources/Inventaire.md        (inventaire vide)
-    - .obsidian/                   (pour qu'Obsidian reconnaisse le vault)
-    - Un dossier par type de fiche activé dans source.yaml:content_types
-      (par défaut : Videos, Individus, Organisations, Concepts, Enjeux,
-       Sources/Transcripts ; voir BUILD.md de WikiPol pour les types optionnels).
+    - 1-chronicle/CLAUDE.md        (la Chronicle, vide, où le pipeline range les Digests)
+
+Une source n'a plus de vault : les vaults Obsidian d'avant (PaduTeam, Boniface)
+sont figés dans wikipol/Legacy/ depuis WIK-1.
 """
 import os
 import re
@@ -33,19 +31,9 @@ if sys.platform == 'win32':
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 WIKIPOL_ROOT = os.path.normpath(os.path.join(SCRIPT_DIR, ".."))
 TEMPLATES_DIR = os.path.join(WIKIPOL_ROOT, "Templates")
-SOURCES_DIR = os.path.join(WIKIPOL_ROOT, "Sources")
-
-# Types activés par défaut pour une nouvelle source. Doit rester aligné avec
-# le bloc `content_types:` de Templates/source.yaml.tmpl.
-# Voir BUILD.md de WikiPol pour la classification raw/basic/advanced.
-DEFAULT_ENABLED_TYPES = [
-    "Transcripts",   # raw
-    "Individus",     # basic
-    "Organisations", # basic
-    "Concepts",      # basic
-    "Videos",        # basic
-    "Enjeux",        # advanced
-]
+REPO_ROOT = os.path.normpath(os.path.join(WIKIPOL_ROOT, "..", "..", ".."))
+SOURCES_DIR = os.path.join(REPO_ROOT, "6-politics", "2-sources")
+MAX_SOURCES = 6
 
 
 def parse_args(argv):
@@ -90,14 +78,32 @@ def render_template(template_path: str, out_path: str, values: dict):
         f.write(content)
 
 
+def next_free_number(sources_dir: str) -> int:
+    """Le premier numéro de 1 à 6 qu'aucun nœud de `sources_dir` ne porte."""
+    taken = set()
+    if os.path.isdir(sources_dir):
+        for entry in os.listdir(sources_dir):
+            m = re.match(r'^(\d+)-', entry)
+            if m and os.path.isdir(os.path.join(sources_dir, entry)):
+                taken.add(int(m.group(1)))
+    for n in range(1, MAX_SOURCES + 1):
+        if n not in taken:
+            return n
+    print(f"ERREUR : {sources_dir} tient déjà {MAX_SOURCES} sources. "
+          "Les regrouper d'abord (règle des six, voir son CLAUDE.md).")
+    sys.exit(1)
+
+
 def create_source(name: str, slug: str, channel_url: str, handle: str,
                   attribution: str, git_repo: str):
-    source_dir = os.path.join(SOURCES_DIR, name)
-    if os.path.exists(source_dir):
-        print(f"ERREUR : {source_dir} existe déjà. Supprimer ou choisir un autre nom.")
-        sys.exit(1)
+    for entry in os.listdir(SOURCES_DIR) if os.path.isdir(SOURCES_DIR) else []:
+        if re.sub(r'^\d+-', '', entry) == slug:
+            print(f"ERREUR : la source {slug!r} existe déjà ({os.path.join(SOURCES_DIR, entry)}).")
+            sys.exit(1)
 
-    slug_upper = slug.upper().replace("-", "_")
+    node = f"{next_free_number(SOURCES_DIR)}-{slug}"
+    source_dir = os.path.join(SOURCES_DIR, node)
+    node_path = os.path.relpath(source_dir, REPO_ROOT).replace(os.sep, "/")
 
     values = {
         "SOURCE_NAME": name,
@@ -106,96 +112,43 @@ def create_source(name: str, slug: str, channel_url: str, handle: str,
         "CHANNEL_URL": channel_url,
         "CHANNEL_HANDLE": handle,
         "GIT_REPO": git_repo,
-        "SLUG_UPPER": slug_upper,
+        "SLUG_UPPER": slug.upper().replace("-", "_"),
+        "NODE_PATH": node_path,
     }
 
-    # 1. Dossiers : un par type activé (sauf Transcripts → Sources/Transcripts).
-    #    + `Sources/` pour Inventaire et Transcripts ; `.obsidian/` pour le vault.
-    os.makedirs(os.path.join(source_dir, "Sources"), exist_ok=True)
-    os.makedirs(os.path.join(source_dir, ".obsidian"), exist_ok=True)
-    for type_name in DEFAULT_ENABLED_TYPES:
-        if type_name == "Transcripts":
-            os.makedirs(os.path.join(source_dir, "Sources", "Transcripts"), exist_ok=True)
-        else:
-            os.makedirs(os.path.join(source_dir, type_name), exist_ok=True)
-
-    # 2. source.yaml
+    # 1. source.yaml
     render_template(
         os.path.join(TEMPLATES_DIR, "source.yaml.tmpl"),
         os.path.join(source_dir, "source.yaml"),
         values,
     )
 
-    # 3. CLAUDE.md (contexte éditorial)
+    # 2. CLAUDE.md (contexte éditorial)
     render_template(
         os.path.join(TEMPLATES_DIR, "source_CLAUDE.md.tmpl"),
         os.path.join(source_dir, "CLAUDE.md"),
         values,
     )
 
-    # 4. BUILD.md (taxonomie locale)
+    # 3. La Chronicle, vide
     render_template(
-        os.path.join(TEMPLATES_DIR, "source_BUILD.md.tmpl"),
-        os.path.join(source_dir, "BUILD.md"),
+        os.path.join(TEMPLATES_DIR, "chronicle_CLAUDE.md.tmpl"),
+        os.path.join(source_dir, "1-chronicle", "CLAUDE.md"),
         values,
     )
 
-    # 5. Fichier de suivi chronologique vide
-    tracking_filename = f"{slug_upper}_CHRONOLOGIQUE.md"
-    tracking_path = os.path.join(source_dir, tracking_filename)
-    with open(tracking_path, 'w', encoding='utf-8') as f:
-        f.write(
-            f"# {name} — Ingestion chronologique\n\n"
-            f"Fichier de suivi vide. Générer les batches avec :\n\n"
-            f"```\npython Scripts/generate_chronological.py --source Sources/{name}\n```\n"
-        )
-
-    # 6. Inventaire vide
-    inventaire_path = os.path.join(source_dir, "Sources", "Inventaire.md")
-    with open(inventaire_path, 'w', encoding='utf-8') as f:
-        f.write(
-            f"# Inventaire {name}\n\n"
-            f"> 0 vidéos extraites depuis la page YouTube [{handle}]({channel_url})\n"
-            f"> Dernière mise à jour : (jamais)\n\n"
-            f"| Titre | URL | Date | Transcript | Fiche |\n"
-            f"| ----- | --- | ---- | ---------- | ----- |\n"
-        )
-
-    # 7. .obsidian/ minimal (pour reconnaissance du vault)
-    with open(os.path.join(source_dir, ".obsidian", "app.json"), 'w', encoding='utf-8') as f:
-        f.write("{}\n")
-
-    return source_dir, tracking_filename
+    return source_dir
 
 
-def print_next_steps(source_dir: str, name: str, tracking_filename: str):
-    rel = os.path.relpath(source_dir, WIKIPOL_ROOT).replace(os.sep, "/")
-    print(f"\n✓ Source créée : {source_dir}\n")
-    print(f"  Types activés (content_types dans source.yaml) :")
-    print(f"    {', '.join(DEFAULT_ENABLED_TYPES)}")
-    print(f"  Pour activer Livres / Evenements / Conjonctures / Possibles / Methodes,")
-    print(f"  passer le type à `true` dans {rel}/source.yaml et créer le dossier.")
-    print()
+def print_next_steps(source_dir: str):
+    rel = os.path.relpath(source_dir, REPO_ROOT).replace(os.sep, "/")
+    print(f"\n✓ Source créée : {rel}\n")
     print("Prochaines étapes :")
     print()
-    print(f"1. Remplir le contexte éditorial")
+    print("1. Remplir le contexte éditorial")
     print(f"   $EDITOR {rel}/CLAUDE.md")
     print()
-    print(f"2. Initialiser la taxonomie (optionnel — se construit aussi par induction)")
-    print(f"   $EDITOR {rel}/BUILD.md")
-    print()
-    print(f"3. Découvrir les vidéos et peupler l'inventaire")
-    print(f"   python Scripts/batch_transcripts.py --source {rel} --discover")
-    print()
-    print(f"4. Extraire quelques transcripts (tester d'abord)")
-    print(f"   python Scripts/batch_transcripts.py --source {rel} --last 3")
-    print()
-    print(f"5. Générer le fichier chronologique")
-    print(f"   python Scripts/generate_chronological.py --source {rel}")
-    print()
-    print(f"6. Lancer l'ingestion")
-    print(f"   python Scripts/run_ingest.py --source {rel} --batch 1 --dry-run")
-    print(f"   python Scripts/run_ingest.py --source {rel} --batch 1")
+    print("2. Ajouter la source à la liste de 6-politics/2-sources/CLAUDE.md")
     print()
 
 
@@ -224,10 +177,10 @@ def main():
     print(f"  git_repo    : {git_repo or '(non défini)'}")
     print()
 
-    source_dir, tracking_filename = create_source(
+    source_dir = create_source(
         name, slug, channel_url, handle, attribution, git_repo
     )
-    print_next_steps(source_dir, name, tracking_filename)
+    print_next_steps(source_dir)
 
 
 if __name__ == "__main__":

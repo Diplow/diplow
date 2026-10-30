@@ -5,11 +5,16 @@ Génère le fichier chronologique d'ingestion pour une source WikiPol.
 Liste chronologiquement les vidéos de la chaîne sur les N derniers mois,
 regroupées en batches de 2 semaines ISO (~10 vidéos/batch).
 
+Pipeline legacy : écrit dans le vault de la source, figé dans wikipol/Legacy/
+depuis WIK-1. Gardé pour référence ; ne plus le lancer sur un vault figé.
+`--source` désigne le nœud de la source (là où vit source.yaml), depuis la
+racine de WikiPol : ../../2-sources/<n>-<slug>.
+
 Usage:
-    python generate_chronological.py --source Sources/MaChaine
-    python generate_chronological.py --source Sources/MaChaine --dry-run
-    python generate_chronological.py --source Sources/MaChaine --force
-    python generate_chronological.py --source Sources/MaChaine --months 12
+    python generate_chronological.py --source ../../2-sources/1-machaine
+    python generate_chronological.py --source ../../2-sources/1-machaine --dry-run
+    python generate_chronological.py --source ../../2-sources/1-machaine --force
+    python generate_chronological.py --source ../../2-sources/1-machaine --months 12
 """
 import sys
 import os
@@ -19,7 +24,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from source_config import parse_source_arg, SourceConfig  # noqa: E402
+from source_config import parse_source_arg, require_writable_vault, SourceConfig  # noqa: E402
 
 if sys.platform == 'win32':
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -307,6 +312,7 @@ def main():
     months   = parse_int_arg(args, '--months', DEFAULT_MONTHS_BACK)
 
     cfg = parse_source_arg(args)
+    require_writable_vault(cfg)
 
     if not cfg.channel_url:
         print(f"ERREUR : youtube.channel_url non défini dans {cfg.source_root}/source.yaml")
