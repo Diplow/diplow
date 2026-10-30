@@ -16,6 +16,8 @@ from pathlib import Path
 import yaml
 from dotenv import dotenv_values
 
+from wikipol.raw_store import SLUG
+
 DEFAULT_ENV_PATH = Path("~/.config/wikipol/.env")
 DEFAULT_S3_REGION = "fr-par"
 
@@ -76,11 +78,18 @@ def load_source(node: Path) -> Source:
     path = node / "source.yaml"
     if not path.is_file():
         raise ConfigError(f"no source.yaml in {node}")
-    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    source = data.get("source") or {}
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError as error:
+        raise ConfigError(f"{path} is not valid YAML: {error}") from error
+    source = data.get("source") if isinstance(data, dict) else None
+    if not isinstance(source, dict):
+        raise ConfigError(f"{path} has no `source:` mapping")
     name, slug = source.get("name"), source.get("slug")
     if not name or not slug:
         raise ConfigError(f"{path} lacks source.name or source.slug")
+    if not SLUG.fullmatch(str(slug)):
+        raise ConfigError(f"{path}: source.slug {slug!r} is not lowercase letters, digits and -")
 
     vault_rel = (data.get("legacy") or {}).get("vault")
     vault = (node / vault_rel).resolve() if vault_rel else None
@@ -97,5 +106,7 @@ def load_source(node: Path) -> Source:
 
 def load_sources(sources_dir: Path = DEFAULT_SOURCES_DIR) -> list[Source]:
     """Every Source under `sources_dir`, in the order of their numbered nodes."""
+    if not sources_dir.is_dir():
+        raise ConfigError(f"no Sources folder at {sources_dir}")
     nodes = sorted(p.parent for p in sources_dir.glob("*/source.yaml"))
     return [load_source(node) for node in nodes]

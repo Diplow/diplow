@@ -33,6 +33,16 @@ def test_an_inventory_fiche_link_is_not_taken_for_a_transcript(tmp_path):
     assert index.published_by_id == {"fffffffffff": date(2026, 4, 10)}
 
 
+def test_a_repeated_date_keeps_the_full_one(tmp_path):
+    note = tmp_path / "Videos" / "Deux dates.md"
+    note.parent.mkdir()
+    note.write_text(
+        "---\ndate: 2025-04-25\nyoutube_id: ggggggggggg\ndate: 2025-04\n---\n", encoding="utf-8"
+    )
+
+    assert build_index(tmp_path).published_by_id == {"ggggggggggg": date(2025, 4, 25)}
+
+
 def test_a_transcript_tied_to_two_ids_is_left_out():
     index = LegacyIndex()
     index.add("Doublon", "aaaaaaaaaaa", None)

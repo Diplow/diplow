@@ -1,9 +1,8 @@
 """The Raws' only home: one object per Publication, `<source-slug>/<youtube_id>.md`.
 
 A Raw is written once and never replaced (`put` refuses an existing key), so copying is the only
-move. The refusal is a check before the write, which holds for the one writer the pipeline runs
-at a time (the daily runner, or a command run by hand), not for two racing on the same key; the
-bucket's versioning keeps the first anyway.
+move. On S3 the write itself carries the refusal (`If-None-Match: *`, which Scaleway honors), so
+two writers racing on one key can't both win.
 
 Its metadata holds what the key lost: the original title and, when known, the publication date.
 S3 sends metadata as HTTP headers, which carry ASCII only, so the title is percent-encoded on the
@@ -21,8 +20,8 @@ from urllib.parse import quote, unquote
 if TYPE_CHECKING:
     from wikipol.config import Settings
 
-YOUTUBE_ID = re.compile(r"^[A-Za-z0-9_-]{11}$")
-SLUG = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+YOUTUBE_ID = re.compile(r"[A-Za-z0-9_-]{11}")
+SLUG = re.compile(r"[a-z0-9][a-z0-9-]*")
 
 
 class RawExists(Exception):
@@ -48,9 +47,9 @@ class Raw:
 
 
 def raw_key(source: str, youtube_id: str) -> str:
-    if not SLUG.match(source):
+    if not SLUG.fullmatch(source):
         raise ValueError(f"not a Source slug: {source!r}")
-    if not YOUTUBE_ID.match(youtube_id):
+    if not YOUTUBE_ID.fullmatch(youtube_id):
         raise ValueError(f"not a YouTube id: {youtube_id!r}")
     return f"{source}/{youtube_id}.md"
 
@@ -121,19 +120,26 @@ class S3RawStore:
         return cls(client, settings.s3_bucket)
 
     def put(self, source: str, youtube_id: str, body: bytes, meta: RawMeta) -> None:
+        from botocore.exceptions import ClientError
+
         key = raw_key(source, youtube_id)
-        if self.exists(source, youtube_id):
-            raise RawExists(key)
         metadata = {"title": quote(meta.title, safe="")}
         if meta.published:
             metadata["published"] = meta.published.isoformat()
-        self.client.put_object(
-            Bucket=self.bucket,
-            Key=key,
-            Body=body,
-            ContentType="text/markdown; charset=utf-8",
-            Metadata=metadata,
-        )
+        try:
+            self.client.put_object(
+                Bucket=self.bucket,
+                Key=key,
+                Body=body,
+                ContentType="text/markdown; charset=utf-8",
+                Metadata=metadata,
+                IfNoneMatch="*",
+            )
+        except ClientError as error:
+            code = error.response.get("Error", {}).get("Code")
+            if code in {"PreconditionFailed", "ConditionalRequestConflict", "412", "409"}:
+                raise RawExists(key) from error
+            raise
 
     def get(self, source: str, youtube_id: str) -> Raw:
         key = raw_key(source, youtube_id)

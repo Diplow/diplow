@@ -75,7 +75,7 @@ Trois tiers structurent les fiches du vault. La distinction conditionne **quand*
 
 Données captées hors analyse de la source. Servent de matière première à l'ingestion.
 
-- **Transcripts** — transcripts `.md` des médias source (vidéos YouTube, podcasts, articles transcrits). Stockés sous `Sources/Transcripts/`, hors git. Depuis WIK-2, ce sont les Raws du bucket Scaleway, leur seul foyer ; Google Drive n'en garde qu'une archive (voir `CLAUDE.md` de WikiPol § Raws).
+- **Transcripts** — transcripts `.md` des médias source (vidéos YouTube, podcasts, articles transcrits). Stockés sous `Sources/Transcripts/`, hors git. Depuis WIK-2, ce sont les Raws du bucket Scaleway ; Google Drive n'en garde qu'une archive, et les 12 transcripts que la copie n'a pas pu identifier (voir `CLAUDE.md` de WikiPol § Raws).
 
 ### Basic (atomique)
 

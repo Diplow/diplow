@@ -136,9 +136,10 @@ def build_index(vault: Path | None, inventory: Path | None = None) -> LegacyInde
 def _index_video_note(index: LegacyIndex, text: str) -> None:
     frontmatter, body = split_frontmatter(text)
     youtube_id = str(frontmatter.get("youtube_id") or "").strip()
-    if not YOUTUBE_ID.match(youtube_id):
+    if not YOUTUBE_ID.fullmatch(youtube_id):
         return
-    published = parse_date(frontmatter.get("date"))
+    # Some notes repeat `date:`, a full one then a partial one (`2025-04`); YAML keeps the last.
+    published = parse_date(frontmatter.get("date")) or _first_date_line(text)
     section = re.search(r"^## Transcript\s*$(.*?)(?=^## |\Z)", body, re.M | re.S)
     links: set[str] = set()
     if section:
@@ -148,6 +149,15 @@ def _index_video_note(index: LegacyIndex, text: str) -> None:
         index.add(None, youtube_id, published)
     for link in links:
         index.add(link, youtube_id, published)
+
+
+def _first_date_line(text: str) -> date | None:
+    end = text.find("\n---", 3)
+    for value in re.findall(r"^date:\s*(.+)$", text[: max(end, 0)], re.M):
+        published = parse_date(value.strip().strip("\"'"))
+        if published:
+            return published
+    return None
 
 
 def _index_inventory(index: LegacyIndex, text: str) -> None:

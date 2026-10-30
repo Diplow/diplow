@@ -79,6 +79,27 @@ def test_a_source_without_a_slug_is_refused(tmp_path):
         load_source(tmp_path / "1-x")
 
 
+@pytest.mark.parametrize(
+    ("text", "complaint"),
+    [
+        ("source: [unclosed\n", "not valid YAML"),
+        ("- a list\n", "no `source:` mapping"),
+        ("source:\n  name: X\n  slug: Bad Slug\n", "is not lowercase"),
+    ],
+)
+def test_a_malformed_source_yaml_is_a_config_error(tmp_path, text, complaint):
+    (tmp_path / "1-x").mkdir()
+    (tmp_path / "1-x" / "source.yaml").write_text(text)
+
+    with pytest.raises(ConfigError, match=complaint):
+        load_source(tmp_path / "1-x")
+
+
+def test_a_missing_sources_folder_is_a_config_error(tmp_path):
+    with pytest.raises(ConfigError, match="no Sources folder"):
+        load_sources(tmp_path / "nowhere")
+
+
 def test_the_repo_sources_load_in_node_order():
     sources = load_sources(DEFAULT_SOURCES_DIR)
 

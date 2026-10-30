@@ -74,7 +74,13 @@ def test_the_key_is_the_source_slug_and_the_youtube_id():
 
 @pytest.mark.parametrize(
     ("source", "youtube_id"),
-    [("paduteam", "too-short"), ("paduteam", "../escape.md"), ("Padu Team", "ubfvCuQziRA")],
+    [
+        ("paduteam", "too-short"),
+        ("paduteam", "../escape.md"),
+        ("paduteam", "ubfvCuQziRA\n"),
+        ("paduteam\n", "ubfvCuQziRA"),
+        ("Padu Team", "ubfvCuQziRA"),
+    ],
 )
 def test_a_malformed_key_is_refused(source, youtube_id):
     with pytest.raises(ValueError):

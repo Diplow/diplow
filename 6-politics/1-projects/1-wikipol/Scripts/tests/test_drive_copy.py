@@ -26,7 +26,12 @@ def test_every_raw_with_an_id_lands_under_it_bytes_unchanged(demo, demo_tree, fa
     report = copy_source(demo, store, fake_fetch)
 
     assert store.list("demo") == ["aaaaaaaaaaa", "bbbbbbbbbbb", "ccccccccccc", "ddddddddddd"]
-    for name, youtube_id in [("Avec id.md", "aaaaaaaaaaa"), ("Sans frontmatter.md", "ccccccccccc")]:
+    for name, youtube_id in [
+        ("Avec id.md", "aaaaaaaaaaa"),
+        ("Avec url.md", "bbbbbbbbbbb"),
+        ("Sans frontmatter.md", "ccccccccccc"),
+        ("Lie par une fiche.md", "ddddddddddd"),
+    ]:
         assert store.get("demo", youtube_id).body == (demo_tree["drive"] / name).read_bytes()
     assert report.on_drive == 5
     assert report.in_bucket == 4
@@ -157,3 +162,9 @@ def test_a_failing_rclone_is_reported_not_raised(demo_tree, monkeypatch, capsys)
 
     assert code == 2
     assert "rclone exited with 3" in capsys.readouterr().err
+
+
+def test_a_dry_run_report_says_the_bucket_count_is_projected(demo, fake_fetch):
+    report = copy_source(demo, InMemoryRawStore(), fake_fetch, dry_run=True)
+
+    assert "5 on Drive, 4 would be in the bucket (would copy 4," in format_report([report], True)

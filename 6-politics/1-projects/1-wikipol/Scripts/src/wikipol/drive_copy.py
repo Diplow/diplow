@@ -49,7 +49,7 @@ class Resolved:
 def resolve(stem: str, text: str, index: LegacyIndex) -> Resolved:
     frontmatter, _ = split_frontmatter(text)
     youtube_id = str(frontmatter.get("youtube_id") or "").strip()
-    if not YOUTUBE_ID.match(youtube_id):
+    if not YOUTUBE_ID.fullmatch(youtube_id):
         url = WATCH_URL.search(str(frontmatter.get("url") or ""))
         youtube_id = url.group(1) if url else index.id_by_transcript.get(stem, "")
     published: date | None = parse_date(frontmatter.get("date"))
@@ -118,11 +118,13 @@ def copy_source(
 
 
 def format_report(reports: list[SourceReport], dry_run: bool = False) -> str:
-    verb = "would copy" if dry_run else "copied"
+    verb, where = (
+        ("would copy", "would be in the bucket") if dry_run else ("copied", "in the bucket")
+    )
     lines = []
     for r in reports:
         lines.append(
-            f"{r.source}: {r.on_drive} on Drive, {r.in_bucket} in the bucket "
+            f"{r.source}: {r.on_drive} on Drive, {r.in_bucket} {where} "
             f"({verb} {len(r.copied)}, {len(r.already_there)} already there, "
             f"{len(r.conflicts)} conflicts), {len(r.duplicates)} duplicates, "
             f"{len(r.missing_id)} without a YouTube id, "
