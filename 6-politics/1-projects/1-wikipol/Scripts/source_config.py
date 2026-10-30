@@ -64,6 +64,11 @@ class SourceConfig:
     # Conserve la casse du yaml ("Individus", "Enjeux", …).
     enabled_content_types: list[str]
 
+    @property
+    def has_vault(self) -> bool:
+        """True si la source a un vault legacy (clé `legacy.vault` du source.yaml)."""
+        return self.vault_root != self.source_root
+
     def content_type_enabled(self, name: str) -> bool:
         """Renvoie True si le type `name` est activé pour cette source.
 
@@ -154,6 +159,22 @@ def load_source(path: str | None = None) -> SourceConfig:
         default_model=claude.get("default_model", "sonnet"),
         enabled_content_types=enabled,
     )
+
+
+def require_vault(cfg: SourceConfig) -> None:
+    """Arrête un script du pipeline legacy si la source n'a pas de vault.
+
+    Ces scripts écrivent dans un vault (inventaire, tracker, transcripts, fiches).
+    Une source sans `legacy.vault` n'en a pas : rien ne doit s'écrire dans son nœud.
+    """
+    if not cfg.has_vault:
+        print(
+            f"ERREUR : la source {cfg.name!r} n'a pas de vault legacy (pas de clé "
+            f"legacy.vault dans {cfg.source_root}/source.yaml). Ce script fait partie "
+            "du pipeline legacy, qui n'écrit que dans un vault.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
 
 
 def parse_source_arg(argv: list[str]) -> SourceConfig:
