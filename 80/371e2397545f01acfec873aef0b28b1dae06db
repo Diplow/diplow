@@ -1,0 +1,22 @@
+6-politics/1-projects/1-wikipol/Scripts/tests/test_backfill.py
+  s_bffceea45dbe3a::t_50fea363c49912 203-206,321
+  s_bffceea45dbe3a::t_c20df75accc11c 322-324,328-329
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/backfill.py
+  s_bffceea45dbe3a::t_ba501b256416f2 40,162-177,188,236-238,240
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "80371e2397545f01acfec873aef0b28b1dae06db",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
