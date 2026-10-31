@@ -80,7 +80,8 @@ class BackfillReport:
     resumed: list[str] = field(default_factory=list)
     """Digests a stopped run had written, taken back from staging."""
     filed: list[str] = field(default_factory=list)
-    """Repo paths of the Digests filed this run."""
+    """The Digests filed this run, as repo paths where the run left them: a later batch may
+    have moved one filed earlier."""
     summarized: int = 0
     failed: list[tuple[str, str]] = field(default_factory=list)
     rejected_drafts: Path | None = None
@@ -218,10 +219,13 @@ def backfill(
         else chronicle.as_posix()
     )
     pending: list[tuple[str, str]] = []
+    filed: list[str] = []
     tried = failures_in_a_row = 0
 
     def file_pending() -> bool:
         """Files the pending Digests; False, with the reason in the report, when it couldn't."""
+        if not pending:
+            return True
         try:
             filing = plan_filing(source, [text for _, text in pending], repo_root=repo_root)
             filing.summarize(
@@ -235,7 +239,7 @@ def backfill(
             log(f"  {why}")
             return False
         report.summarized += len(filing.touched())
-        report.filed.extend(f"{leaf.path}.md" for leaf in filing.filed)
+        filed.extend(leaf.youtube_id for leaf in filing.filed)
         for youtube_id, _ in pending:
             (staging / f"{youtube_id}.md").unlink(missing_ok=True)
         log(f"  filed {len(pending)}, {len(filing.touched())} Periods summarized")
@@ -269,8 +273,9 @@ def backfill(
                     linkable=links,
                 )
             except (DigestRejected, WriterFailed) as error:
-                report.failed.append((youtube_id, str(error)))
-                log(f"  {youtube_id}: failed, {error}")
+                reason = "; ".join([str(error), *getattr(error, "problems", [])])
+                report.failed.append((youtube_id, reason))
+                log(f"  {youtube_id}: failed, {reason}")
                 if isinstance(error, DigestRejected):
                     report.rejected_drafts = staging / "rejected"
                     report.rejected_drafts.mkdir(exist_ok=True)
@@ -280,6 +285,7 @@ def backfill(
                 failures_in_a_row += 1
                 if failures_in_a_row >= MAX_FAILURES_IN_A_ROW:
                     report.stopped = f"{MAX_FAILURES_IN_A_ROW} failures in a row"
+                    file_pending()  # what the model wrote before them is filed all the same
                     break
                 continue
             failures_in_a_row = 0
@@ -290,11 +296,13 @@ def backfill(
         pending.append((youtube_id, text))
         if len(pending) >= batch:
             if not file_pending():
-                return report
+                break  # the batch stays in staging, for the next run
             filed_before = chronicle_digests(source, repo_root)
             linkable = linkable_digests(source, repo_root)
-    if pending:
+    else:
         file_pending()
+    where = chronicle_digests(source, repo_root)
+    report.filed = [f"{where[youtube_id][0]}.md" for youtube_id in filed if youtube_id in where]
     return report
 
 

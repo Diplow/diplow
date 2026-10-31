@@ -73,8 +73,10 @@ def store():
 class FakeWriter:
     """Writes a Digest that passes the check, or a Period summary, as the prompt asks."""
 
-    def __init__(self, digest_ok: bool = True, summary_ok: bool = True) -> None:
-        self.digest_ok, self.summary_ok = digest_ok, summary_ok
+    def __init__(
+        self, digest_ok: bool = True, summary_ok: bool = True, refused: frozenset = frozenset()
+    ) -> None:
+        self.digest_ok, self.summary_ok, self.refused = digest_ok, summary_ok, refused
         self.digests: list[str] = []
         self.periods = 0
         self.models: set[str] = set()
@@ -84,7 +86,8 @@ class FakeWriter:
         if "# Le Raw" in prompt:
             youtube_id = re.search(r"^- youtube_id : (\S+)$", prompt, re.M).group(1)
             self.digests.append(youtube_id)
-            quote = "la gauche doit aller chercher" if self.digest_ok else "rien de tout cela ici"
+            ok = self.digest_ok and youtube_id not in self.refused
+            quote = "la gauche doit aller chercher" if ok else "rien de tout cela ici"
             url = f"https://www.youtube.com/watch?v={youtube_id}&t=0s"
             return (
                 "---\npreview: >-\n  La Démo soutient que la gauche doit aller aux campagnes.\n"
@@ -128,6 +131,7 @@ def test_the_raws_are_digested_oldest_first_and_filed(source, store, repo, tmp_p
     assert report.no_date == [UNDATED]
     assert report.no_captions == [SILENT]
     assert len(report.filed) == 9
+    assert all((repo / path).is_file() for path in report.filed)  # where the run left them
     assert report.left == 0
     assert report.failed == [] and report.stopped is None
     assert staged(tmp_path) == []  # filed Digests leave the staging folder
@@ -278,3 +282,13 @@ def test_the_command_backfills_with_the_bucket_and_claude(
     assert out.startswith("demo: 11 Raws, 0 with an up-to-date Digest, 1 without a date")
     assert "written 2, taken back from staging 0, filed 2" in out
     assert "7 left for a later run" in out
+
+
+def test_what_was_written_before_three_failures_is_still_filed(source, store, repo, tmp_path):
+    writer = FakeWriter(refused=frozenset(OLDEST_FIRST[1:4]))
+
+    report = run(source, store, writer, repo, tmp_path)
+
+    assert report.stopped == "3 failures in a row"
+    assert set(digests_in(repo)) == {FROM_NOTE, OLDEST_FIRST[0]}
+    assert staged(tmp_path) == []
