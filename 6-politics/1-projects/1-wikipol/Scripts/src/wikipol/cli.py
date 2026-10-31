@@ -33,12 +33,14 @@ from wikipol.drive_copy import DEFAULT_DRIVE_ROOT, copy_source, format_report
 from wikipol.fetch.fetcher import FetchFailed
 from wikipol.fetch.run import fetch_source
 from wikipol.fetch.run import format_report as format_fetch_report
-from wikipol.index.embed import ScalewayEmbedder
+from wikipol.index.embed import EmbeddingFailed, ScalewayEmbedder
 from wikipol.index.run import IndexReport, index_source
 from wikipol.index.run import format_report as format_index_report
-from wikipol.index.store import PostgresIndex, SchemaNotApplied
+from wikipol.index.store import Hit, PostgresIndex, SchemaNotApplied
 from wikipol.legacy_index import find_video_note
 from wikipol.raw_store import YOUTUBE_ID, RawNotFound, RawStore, S3RawStore
+from wikipol.search.extracts import Extract, SearchFailed, find_extracts
+from wikipol.search.mcp import Server
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -124,6 +126,11 @@ def main(argv: list[str] | None = None) -> int:
         help="apply the search index's schema; needs a database key that may create tables",
     )
 
+    mcp = commands.add_parser(
+        "mcp", help="serve the search index to an agent: an MCP server on stdin and stdout"
+    )
+    mcp.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
+
     args = parser.parse_args(argv)
     try:
         if args.command == "copy-from-drive":
@@ -142,6 +149,8 @@ def main(argv: list[str] | None = None) -> int:
             return index_raws(args)
         if args.command == "migrate":
             return migrate_index()
+        if args.command == "mcp":
+            return serve_search(args)
     except (WriterFailed, RawNotFound, IndexUnreachable, SchemaNotApplied) as error:
         print(f"wikipol: {error}", file=sys.stderr)
         return 2
@@ -427,6 +436,57 @@ def index_raws(args: argparse.Namespace) -> int:
         index.close()
     print(format_index_report(reports, dry_run=args.dry_run))
     return 1 if any(r.stopped for r in reports) else 0
+
+
+def serve_search(args: argparse.Namespace) -> int:
+    """Serves until the client closes stdin. Settings are read at each search, not at start, so
+    the server starts, and says what is missing, without them."""
+    slugs = [source.slug for source in load_sources(args.sources_dir)]
+
+    def search(query: str, **options: object) -> list[Extract]:
+        try:
+            settings = load_index_settings()
+        except ConfigError as error:
+            raise SearchFailed(str(error)) from error
+        embedder = ScalewayEmbedder(settings.embedding_key or "", settings.project_id)
+        try:
+            return find_extracts(
+                query, embedder, OneSearchIndex(settings.database_url), sources=slugs, **options
+            )
+        except EmbeddingFailed as error:
+            raise SearchFailed(f"the query could not be embedded: {error}") from error
+
+    for stream in (sys.stdin, sys.stdout):
+        stream.reconfigure(encoding="utf-8")  # MCP's messages are UTF-8, whatever the locale
+    Server(search, slugs).serve()
+    return 0
+
+
+class OneSearchIndex:
+    """The index, connected for one search and closed after it: Serverless SQL drops idle
+    connections, and an agent may leave the server idle for hours."""
+
+    def __init__(self, database_url: str) -> None:
+        self._database_url = database_url
+
+    def nearest(self, *args: object, **kwargs: object) -> list[Hit]:
+        import psycopg
+
+        try:
+            index = open_index(self._database_url)
+        except IndexUnreachable as error:
+            raise SearchFailed(str(error)) from error
+        try:
+            return index.nearest(*args, **kwargs)
+        except psycopg.errors.UndefinedTable as error:
+            raise SearchFailed(
+                "the index has no tables yet: its schema is applied by `wikipol migrate`, with a "
+                "database key that may create tables"
+            ) from error
+        except psycopg.Error as error:
+            raise SearchFailed(f"the index's database failed: {error}") from error
+        finally:
+            index.close()
 
 
 if __name__ == "__main__":
