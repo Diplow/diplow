@@ -1,0 +1,31 @@
+6-politics/1-projects/1-wikipol/.run/registers/sources-from-youtube/decisions.md
+  s_bffceea45dbe3a::t_297e5f6c400784 208,215,231
+6-politics/1-projects/1-wikipol/Scripts/launchd/install-runner.sh
+  s_bffceea45dbe3a::t_297e5f6c400784 62-67,104-108,141-142
+6-politics/1-projects/1-wikipol/CLAUDE.md
+  s_bffceea45dbe3a::t_297e5f6c400784 114,117,120,122,124
+6-politics/1-projects/1-wikipol/Scripts/launchd/uninstall-runner.sh
+  s_bffceea45dbe3a::t_297e5f6c400784 35-39
+6-politics/1-projects/1-wikipol/Scripts/tests/test_runner_install.py
+  s_bffceea45dbe3a::t_817c45cb6f7258 173-193
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/runner/repo.py
+  s_bffceea45dbe3a::t_297e5f6c400784 113-114,174,177-181,215
+6-politics/1-projects/1-wikipol/Scripts/tests/test_runner_repo.py
+  s_bffceea45dbe3a::t_817c45cb6f7258 163,186-201
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a7820596c07c9df79464aa3bad705b400dfc627d",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
