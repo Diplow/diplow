@@ -20,7 +20,6 @@ from wikipol.digest.format import (
     OWNER,
     PREVIEW_MAX_CHARS,
     PROSE_QUOTE,
-    WIKILINK,
     folded_preview,
     split_digest,
 )
@@ -31,6 +30,9 @@ SKILL_PATH = Path(__file__).resolve().parents[4] / "Skills" / "write-period" / "
 ATTEMPTS = 2
 CONTENTS = "## Contenu"
 MAX_PARAGRAPHS = 3
+# `[[target]]`, `[[target.md]]`, `[[target|label]]`, `[[target#heading]]`, `![[...]]`, and
+# `[[target\|label]]`, the pipe escaped inside a Markdown table.
+LINK = re.compile(r"\[\[([^\]|#]+?)(\.md)?(\\?[#|][^\]]*)?\]\]")
 
 
 class PeriodRejected(Exception):
@@ -119,9 +121,9 @@ def check_summary(preview: str, body: str, period: Period) -> list[str]:
         elif line.startswith(">"):
             problems.append(f"body line {number}: no Extract, they stay in the Digests")
     children = {link(child) for child in period.children}
-    for target in WIKILINK.findall(body):
-        if target.strip() not in children:
-            problems.append(f"wikilink to [[{target}]], which is not one of the Period's children")
+    for match in LINK.finditer(body):
+        if match.group(1).strip() not in children:
+            problems.append(f"{match.group(0)} links something other than the Period's children")
     # Words in guillemets quote the Source; a Period knows it only through its children.
     known = f" {words(' '.join(text for child in period.children for text in heard(child)))} "
     for quote in PROSE_QUOTE.findall(f"{preview}\n{body}"):

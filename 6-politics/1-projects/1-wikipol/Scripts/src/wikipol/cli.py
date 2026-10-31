@@ -246,6 +246,15 @@ def check_one_digest(path: Path, store: RawStore, sources_dir: Path) -> list[str
     return check_digest(text, raw_text, expected, linkable)
 
 
+def repo_of(sources_dir: Path) -> Path:
+    """The repo a Sources folder belongs to: it sits at <repo>/6-politics/2-sources, as
+    config.REPO_ROOT has it. Anywhere else, links would be followed in the wrong tree."""
+    sources_dir = sources_dir.resolve()
+    if (sources_dir.parent.name, sources_dir.name) != ("6-politics", "2-sources"):
+        raise ConfigError(f"{sources_dir} is not a repo's 6-politics/2-sources")
+    return sources_dir.parents[1]
+
+
 def file_digests(args: argparse.Namespace) -> int:
     source = source_by_slug(args.sources_dir, args.source)
     for path in args.digests:
@@ -254,8 +263,7 @@ def file_digests(args: argparse.Namespace) -> int:
     filing = plan_filing(
         source,
         [path.read_text(encoding="utf-8") for path in args.digests],
-        # The Sources sit at <repo>/6-politics/2-sources, as config.REPO_ROOT has it.
-        repo_root=args.sources_dir.resolve().parents[1],
+        repo_root=repo_of(args.sources_dir),
     )
     writer = ClaudeCli()
     try:

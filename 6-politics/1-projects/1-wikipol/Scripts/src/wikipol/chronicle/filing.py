@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from datetime import date, datetime
 from pathlib import Path
 
-from wikipol.chronicle.period import read_period, render_period
+from wikipol.chronicle.period import LINK, read_period, render_period
 from wikipol.chronicle.tree import (
     MAX_CHILDREN,
     FilingConflict,
@@ -33,9 +33,6 @@ from wikipol.digest.format import split_digest
 from wikipol.raw_store import YOUTUBE_ID
 
 CHRONICLE_TITLE = "Chronicle"
-# `[[target]]`, `[[target.md]]`, `[[target|label]]`, `[[target#heading]]`, `![[...]]`, and
-# `[[target\|label]]`, the pipe escaped inside a Markdown table.
-LINK = re.compile(r"\[\[([^\]|#]+?)(\.md)?(\\?[#|][^\]]*)?\]\]")
 # Never read for links: tooling, dependencies, and the frozen vaults, which link no Digest.
 SKIPPED_FOLDERS = {"node_modules", "Legacy"}
 
@@ -166,12 +163,13 @@ class Filing:
         """Writes the Chronicle and follows the moves in the rest of the repo; returns the files
         it changed outside the Chronicle."""
         files = self.files()  # before anything is touched: it fails on a Period left unsummarized
-        for stale in self.found - files.keys():
-            stale.unlink()
+        # Every new file first, the stale ones after: a write that fails deletes nothing.
         for path, text in files.items():
             if not path.is_file() or path.read_text(encoding="utf-8") != text:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(text, encoding="utf-8")
+        for stale in self.found - files.keys():
+            stale.unlink()
         remove_empty_folders(self.source.chronicle)
         return rewrite_repo_links(self.repo_root, self.moved, skip=self.source.chronicle)
 
@@ -217,12 +215,14 @@ def changed(period: Period) -> bool:
 
 
 def remove_empty_folders(top: Path) -> None:
-    """Removes the folders under `top` left empty, or holding only a Finder `.DS_Store`."""
+    """Removes the folders under `top` left empty, or holding only dot files, which the
+    Chronicle never reads (a Finder `.DS_Store`, an editor's swap file)."""
     for folder, _, names in os.walk(top, topdown=False):
         path = Path(folder)
         if path == top:
             continue
-        if set(names) <= {".DS_Store"} and not any(p.is_dir() for p in path.iterdir()):
+        hidden = all(name.startswith(".") for name in names)
+        if hidden and not any(p.is_dir() for p in path.iterdir()):
             for name in names:
                 (path / name).unlink()
             path.rmdir()

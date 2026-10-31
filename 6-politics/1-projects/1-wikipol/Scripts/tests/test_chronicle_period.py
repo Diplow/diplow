@@ -125,7 +125,7 @@ def test_a_source_with_an_alias_writes_no_summary(source, tmp_path):
         ("x" * 351, "Un corps.", "preview is 351 characters, 350 at most"),
         ("Un Preview.", "  ", "the body is empty"),
         ("Un Preview.", "Un.\n\nDeux.\n\nTrois.\n\nQuatre.", "the body has 4 paragraphs"),
-        ("Un Preview.", "Voir [[ailleurs|là]].", "wikilink to [[ailleurs]]"),
+        ("Un Preview.", "Voir [[ailleurs|là]].", "[[ailleurs|là]] links something other"),
         ("Un Preview.", "La Démo dit « reculer partout ».", "« reculer partout » is quoted"),
         ("« Le RN gagne ».", "Un corps.", "« Le RN gagne » is quoted"),
     ],
@@ -142,6 +142,7 @@ def test_a_summary_may_link_its_children_and_quote_their_previews():
     body = f"La Démo veut « aller chercher » les gens, voir [[{link}|la gauche]]."
 
     assert check_summary("Un Preview.", body, inner) == []
+    assert check_summary("Un Preview.", f"| [[{link}.md\\|la gauche]] |", inner) == []
 
 
 def test_a_period_file_reads_back_its_title_and_summary():

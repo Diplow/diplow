@@ -1,5 +1,6 @@
 """Filing Digests in a Chronicle on disk, and `wikipol file`, on a fake writer: no claude."""
 
+import shutil
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -284,6 +285,28 @@ def test_wikipol_file_files_and_summarizes_on_the_pinned_model(source, repo, mon
     out = capsys.readouterr().out
     assert f"{CHRONICLE}/1-video-1.md" in out
     assert "1 Period summarized by claude-sonnet-5-5" in out
+
+
+def test_wikipol_file_refuses_a_sources_folder_outside_a_repo_s_layout(repo, capsys, tmp_path):
+    given = write(repo / "tmp" / "vid00000001.md", digest(1, DAYS[0]))
+    elsewhere = tmp_path / "sources"
+    shutil.copytree(repo / "6-politics" / "2-sources", elsewhere)
+
+    code = cli.main(["file", "--source", "demo", "--sources-dir", str(elsewhere), str(given)])
+
+    assert code == 2
+    assert "is not a repo's 6-politics/2-sources" in capsys.readouterr().err
+
+
+def test_a_period_folder_left_with_only_hidden_files_goes(source, repo):
+    file_digests(source, repo, [digest(n, DAYS[n - 1]) for n in range(1, 8)])
+    write(repo / CHRONICLE / "2-2026-01-05" / ".obsidian-swap", "x")
+
+    # Three older Digests split the first Period: the second one becomes 3-2026-01-05.
+    file_digests(source, repo, [digest(n, date(2025, 12, n)) for n in (10, 11, 12)])
+
+    assert not (repo / CHRONICLE / "2-2026-01-05").exists()
+    file_digests(source, repo, [digest(9, DAYS[7])])  # and the next filing still reads it
 
 
 def test_wikipol_file_refuses_a_digest_already_in_the_chronicle(source, repo, capsys):
