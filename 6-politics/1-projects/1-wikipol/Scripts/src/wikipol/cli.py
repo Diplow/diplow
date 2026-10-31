@@ -34,7 +34,7 @@ from wikipol.drive_copy import DEFAULT_DRIVE_ROOT, copy_source, format_report
 from wikipol.fetch.fetcher import FetchFailed
 from wikipol.fetch.run import fetch_source
 from wikipol.fetch.run import format_report as format_fetch_report
-from wikipol.raw_store import YOUTUBE_ID, RawNotFound, S3RawStore
+from wikipol.raw_store import YOUTUBE_ID, RawNotFound, RawStore, S3RawStore
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -175,7 +175,12 @@ def write_one_digest(args: argparse.Namespace) -> int:
             ClaudeCli(),
             parent=parent,
             today=date.today(),
-            linkable=linkable_digests(source),
+            # Not itself, when it replaces a Digest already in the Chronicle.
+            linkable={
+                target: title
+                for target, title in linkable_digests(source).items()
+                if target != repo_path(args.out.with_suffix(""))
+            },
         )
     except DigestRejected as rejected:
         kept = Path(tempfile.mkdtemp(prefix="wikipol-rejected-")) / f"{args.youtube_id}.md"
@@ -195,31 +200,40 @@ def check_digests(args: argparse.Namespace) -> int:
     store = S3RawStore.from_settings(load_settings())
     failed = 0
     for path in args.digests:
-        text = path.read_text(encoding="utf-8")
-        frontmatter, _ = split_digest(text)
-        if frontmatter is None:
-            problems = ["no readable YAML frontmatter"]
-        else:
-            source = source_by_slug(args.sources_dir, str(frontmatter.get("source")))
-            youtube_id = str(frontmatter.get("youtube_id"))
-            raw = store.get(source.slug, youtube_id)
-            expected = DigestFields(
-                title=str(frontmatter.get("title")),
-                parent=repo_path(path.parent) or str(frontmatter.get("parent")),
-                source=source.slug,
-                youtube_id=youtube_id,
-                published=frontmatter.get("published"),
-                duration=raw.meta.duration or frontmatter.get("duration"),
-                ingested=frontmatter.get("ingested"),
-                model=pinned_model(source),
-            )
-            linkable = set(linkable_digests(source)) - {repo_path(path.with_suffix(""))}
-            problems = check_digest(text, parse_raw(raw.body.decode("utf-8")), expected, linkable)
+        problems = check_one_digest(path, store, args.sources_dir)
         print(f"{path}: {'ok' if not problems else f'{len(problems)} problems'}")
         for problem in problems:
             print(f"  - {problem}")
         failed += bool(problems)
     return 1 if failed else 0
+
+
+def check_one_digest(path: Path, store: RawStore, sources_dir: Path) -> list[str]:
+    """What is wrong with one Digest file, read against its Raw; a file the check can't even
+    place (no Source, no Raw) says so in its problems, and the next file is still checked."""
+    text = path.read_text(encoding="utf-8")
+    frontmatter, _ = split_digest(text)
+    if frontmatter is None:
+        return ["no readable YAML frontmatter"]
+    youtube_id = str(frontmatter.get("youtube_id") or "")
+    try:
+        source = source_by_slug(sources_dir, str(frontmatter.get("source") or ""))
+        raw = store.get(source.slug, youtube_id)
+        model = pinned_model(source)
+    except (ConfigError, RawNotFound, ValueError) as error:
+        return [f"can't be checked: {error}"]
+    expected = DigestFields(
+        title=str(frontmatter.get("title")),
+        parent=repo_path(path.parent) or str(frontmatter.get("parent")),
+        source=source.slug,
+        youtube_id=youtube_id,
+        published=frontmatter.get("published"),
+        duration=raw.meta.duration or frontmatter.get("duration"),
+        ingested=frontmatter.get("ingested"),
+        model=model,
+    )
+    linkable = set(linkable_digests(source)) - {repo_path(path.with_suffix(""))}
+    return check_digest(text, parse_raw(raw.body.decode("utf-8")), expected, linkable)
 
 
 if __name__ == "__main__":

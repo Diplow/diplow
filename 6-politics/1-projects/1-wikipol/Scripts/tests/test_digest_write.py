@@ -263,3 +263,37 @@ def test_a_claude_timeout_is_a_writer_failure():
 
     with pytest.raises(WriterFailed, match="timed out"):
         ClaudeCli(hang)("s", "p", MODEL)
+
+
+def test_check_digest_reads_a_file_against_its_raw(source, store, tmp_path):
+    from wikipol.cli import check_one_digest
+
+    good = tmp_path / "good.md"
+    good.write_text(digest(source, store, FakeWriter(GOOD_DRAFT)).text, encoding="utf-8")
+    sources_dir = source.node.parent
+
+    assert check_one_digest(good, store, sources_dir) == []
+
+
+@pytest.mark.parametrize(
+    ("change", "complaint"),
+    [
+        (('youtube_id: "aaaaaaaaaaa"\n', ""), "not a YouTube id"),
+        (("source: demo", "source: autre"), "no Source with slug autre"),
+        (('youtube_id: "aaaaaaaaaaa"', 'youtube_id: "bbbbbbbbbbb"'), "demo/bbbbbbbbbbb.md"),
+    ],
+)
+def test_a_digest_the_check_cannot_place_is_one_more_problem(
+    source, store, tmp_path, change, complaint
+):
+    from wikipol.cli import check_one_digest
+
+    path = tmp_path / "bad.md"
+    text = digest(source, store, FakeWriter(GOOD_DRAFT)).text
+    path.write_text(text.replace(*change), encoding="utf-8")
+
+    problems = check_one_digest(path, store, source.node.parent)
+
+    assert len(problems) == 1
+    assert problems[0].startswith("can't be checked: ")
+    assert complaint in problems[0]

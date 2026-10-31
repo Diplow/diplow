@@ -84,7 +84,10 @@ class DigestFields:
 
 def render(fields: DigestFields, preview: str, claims: str) -> str:
     """The Digest file: the frontmatter, the title as a heading, then the claims as written."""
-    preview_lines = textwrap.wrap(" ".join(preview.split()), width=76) or [""]
+    # Folded YAML joins lines with a space: a break after `peut-` would read back `peut- être`.
+    preview_lines = textwrap.wrap(
+        " ".join(preview.split()), width=76, break_on_hyphens=False, break_long_words=False
+    ) or [""]
     frontmatter = [
         f"title: {json.dumps(fields.title, ensure_ascii=False)}",
         f"parent: {fields.parent}",

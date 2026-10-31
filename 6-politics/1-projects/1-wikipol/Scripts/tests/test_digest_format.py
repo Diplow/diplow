@@ -243,3 +243,11 @@ def test_the_title_survives_yaml_quoting():
 
     assert yaml.safe_load(render(fields, PREVIEW, CLAIMS).split("---")[1])["title"] == title
     assert check_digest(render(fields, PREVIEW, CLAIMS), RAW, expected=fields) == []
+
+
+def test_a_hyphenated_word_survives_the_folded_preview():
+    preview = "La PaduTeam soutient peut-être " + "une ligne anti-libérale " * 6 + "fin."
+
+    frontmatter, _ = split_digest(digest(preview=preview))
+
+    assert frontmatter["preview"] == " ".join(preview.split())
