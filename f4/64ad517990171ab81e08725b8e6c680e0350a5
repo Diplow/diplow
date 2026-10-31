@@ -1,0 +1,24 @@
+6-politics/2-sources/2-boniface/CLAUDE.md
+  s_bffceea45dbe3a::t_d441aa78f7f9a2 11,15-25
+  s_bffceea45dbe3a::t_78369090514d7c 26
+6-politics/1-projects/1-wikipol/Skills/write-period/SKILL.md
+  s_bffceea45dbe3a::t_83494dc5229d6f 56
+6-politics/1-projects/1-wikipol/Skills/write-digest/SKILL.md
+  s_bffceea45dbe3a::t_83494dc5229d6f 70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f464ad517990171ab81e08725b8e6c680e0350a5",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
