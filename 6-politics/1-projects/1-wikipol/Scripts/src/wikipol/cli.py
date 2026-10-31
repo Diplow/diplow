@@ -10,6 +10,8 @@ from datetime import date
 from pathlib import Path
 
 from wikipol import fetch
+from wikipol.backfill import backfill, default_staging
+from wikipol.backfill import format_report as format_backfill_report
 from wikipol.chronicle.filing import FilingError, plan_filing
 from wikipol.chronicle.period import PeriodRejected, write_period
 from wikipol.claude import ClaudeCli, WriterFailed
@@ -82,6 +84,23 @@ def main(argv: list[str] | None = None) -> int:
     filing.add_argument("digests", nargs="+", type=Path, help="Digest files, outside the Chronicle")
     filing.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
 
+    back = commands.add_parser(
+        "backfill",
+        help="digest the Raws without an up-to-date Digest, oldest first, and file them; "
+        "resumes where it stopped",
+    )
+    back.add_argument("--source", required=True, help="the Source's slug")
+    back.add_argument("--limit", type=positive_int, help="hand at most N Raws to write-digest")
+    back.add_argument(
+        "--staging",
+        type=Path,
+        help="where Digests wait to be filed; default: ~/.cache/wikipol/backfill/<slug>",
+    )
+    back.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
+    back.add_argument(
+        "--dry-run", action="store_true", help="only list the Raws it would digest, oldest first"
+    )
+
     args = parser.parse_args(argv)
     try:
         if args.command == "copy-from-drive":
@@ -94,6 +113,8 @@ def main(argv: list[str] | None = None) -> int:
             return check_digests(args)
         if args.command == "file":
             return file_digests(args)
+        if args.command == "backfill":
+            return backfill_source(args)
     except (WriterFailed, RawNotFound) as error:
         print(f"wikipol: {error}", file=sys.stderr)
         return 2
@@ -284,6 +305,23 @@ def file_digests(args: argparse.Namespace) -> int:
         f"{len(filing.moved)} paths moved, {len(relinked)} files outside the Chronicle relinked"
     )
     return 0
+
+
+def backfill_source(args: argparse.Namespace) -> int:
+    source = source_by_slug(args.sources_dir, args.source)
+    report = backfill(
+        source,
+        S3RawStore.from_settings(load_settings()),
+        ClaudeCli(),
+        staging=args.staging or default_staging(source.slug),
+        today=date.today(),
+        limit=args.limit,
+        dry_run=args.dry_run,
+        repo_root=repo_of(args.sources_dir),
+        log=lambda line: print(line, file=sys.stderr, flush=True),
+    )
+    print(format_backfill_report(report, limit=args.limit, dry_run=args.dry_run))
+    return 1 if report.failed or report.stopped else 0
 
 
 if __name__ == "__main__":

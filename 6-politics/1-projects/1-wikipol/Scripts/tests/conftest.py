@@ -20,8 +20,10 @@ PIPELINE_VARIABLES = (
 
 @pytest.fixture(autouse=True)
 def isolated_environment(monkeypatch, tmp_path):
-    """Points WIKIPOL_ENV at a file that doesn't exist, so ~/.config/wikipol/.env is never read."""
+    """Points WIKIPOL_ENV at a file that doesn't exist, so ~/.config/wikipol/.env is never read,
+    and the cache at the test's own folder."""
     monkeypatch.setenv("WIKIPOL_ENV", str(tmp_path / "no-such.env"))
+    monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path / "cache"))  # backfill's staging folder
     for name in PIPELINE_VARIABLES:
         monkeypatch.delenv(name, raising=False)
     monkeypatch.setenv("AWS_ACCESS_KEY_ID", "testing")

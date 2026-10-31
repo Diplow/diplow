@@ -186,14 +186,36 @@ class LegacyNote:
     published: date | None
 
 
+def read_video_note(path: Path) -> tuple[str, LegacyNote] | None:
+    """A Videos note and the `youtube_id` its frontmatter names; None when it names none."""
+    text = path.read_text(encoding="utf-8")
+    frontmatter, _ = split_frontmatter(text)
+    youtube_id = str(frontmatter.get("youtube_id") or "").strip()
+    if not youtube_id:
+        return None
+    published = parse_date(frontmatter.get("date")) or _first_date_line(text)
+    return youtube_id, LegacyNote(path, text, published)
+
+
 def find_video_note(vault: Path | None, youtube_id: str) -> LegacyNote | None:
     """The vault's Videos note whose frontmatter names `youtube_id`, if there is one."""
     if vault is None:
         return None
-    for note in sorted((vault / "Videos").glob("*.md")):
-        text = note.read_text(encoding="utf-8")
-        frontmatter, _ = split_frontmatter(text)
-        if str(frontmatter.get("youtube_id") or "").strip() == youtube_id:
-            published = parse_date(frontmatter.get("date")) or _first_date_line(text)
-            return LegacyNote(note, text, published)
+    for path in sorted((vault / "Videos").glob("*.md")):
+        found = read_video_note(path)
+        if found and found[0] == youtube_id:
+            return found[1]
     return None
+
+
+def video_notes(vault: Path | None) -> dict[str, LegacyNote]:
+    """Every Videos note of the vault by the `youtube_id` it names, read once: what
+    `find_video_note` gives, for a whole Source. Of two notes naming one id, the first by name."""
+    notes: dict[str, LegacyNote] = {}
+    if vault is None:
+        return notes
+    for path in sorted((vault / "Videos").glob("*.md")):
+        found = read_video_note(path)
+        if found:
+            notes.setdefault(*found)
+    return notes
