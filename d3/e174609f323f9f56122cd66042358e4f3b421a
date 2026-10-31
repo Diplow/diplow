@@ -1,0 +1,21 @@
+6-politics/1-projects/1-wikipol/.run/registers/sources-from-youtube/decisions.md
+  s_bffceea45dbe3a::t_49f53ced4925a8 251,253
+6-politics/2-sources/2-boniface/CLAUDE.md
+  s_bffceea45dbe3a::t_87a617452d2b0b 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d3e174609f323f9f56122cd66042358e4f3b421a",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
