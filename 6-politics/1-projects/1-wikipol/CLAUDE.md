@@ -98,6 +98,16 @@ Relancée, la commande n'indexe que ce qui manque : une Publication déjà index
 
 Le schéma est dans `Scripts/src/wikipol/index/migrations/`, un fichier SQL par migration, appliqué une fois et noté dans `schema_migration`. La clé du pipeline n'écrit que des lignes (`role_readwrite`, la permission `ServerlessSQLDatabaseDataReadWrite`) : `wikipol migrate` se lance avec la chaîne de connexion d'une clé qui a `ServerlessSQLDatabaseReadWrite`, écrite comme `WIKIPOL_DATABASE_URL` dans un fichier d'environnement à part que désigne `WIKIPOL_ENV` (pas sur la ligne de commande, où l'historique du shell garderait son mot de passe), et la migration donne les lignes à `role_readwrite`. `wikipol index` applique lui-même une migration en attente quand sa clé le peut, et sinon s'arrête en le disant.
 
+### Chercher : le serveur MCP `wikipol mcp`
+
+```bash
+uv run wikipol mcp     # un serveur MCP sur stdin et stdout ; le .mcp.json du dépôt le lance depuis la racine
+```
+
+Un agent qui travaille sur un hexframe politique demande ce qu'une Source a dit d'un sujet sur une période avec l'outil `search(query, source?, from?, to?, limit?)`. La requête est embeddée avec l'instruction de `qwen3-embedding-8b`, puis l'index garde les chunks de la Source et de la période demandées, et seulement ensuite les classe par similarité cosinus : une période étroite rend quand même ses `limit` Extracts (8 par défaut, 25 au plus). `from` et `to` prennent une année, un mois ou un jour (`2025`, `2025-03`, `2025-03-14`) : `from` part du premier jour, `to` finit au dernier. Une Publication sans date n'est trouvée que par une recherche sans période. Chaque Extract rendu donne le passage (le chunk, environ deux minutes de parole), son lien `watch?v=ID&t=Ns`, son moment (`12:30`), le titre et la date de la Publication, sa Source, sa similarité, et le chemin de son Digest quand la Chronicle en a un.
+
+Le serveur lit ses réglages à chaque recherche, dans `~/.config/wikipol/.env` comme `wikipol index` (`WIKIPOL_DATABASE_URL`, `WIKIPOL_EMBEDDING_API_KEY` sinon `SCW_SECRET_KEY`, `SCW_DEFAULT_PROJECT_ID`), et ouvre une connexion à la base pour chaque recherche, puisque Serverless SQL coupe celles qui dorment. Il démarre donc sans eux, et une recherche qui échoue (un réglage manquant, une clé refusée, une base sans tables) rend son explication à l'agent au lieu d'arrêter le serveur.
+
 ## Répartition des responsabilités
 
 | Niveau | Fichier | Contient |
