@@ -6,7 +6,8 @@ import argparse
 import subprocess
 import sys
 import tempfile
-from datetime import date
+from collections.abc import Callable
+from datetime import date, datetime
 from pathlib import Path
 
 from wikipol import fetch
@@ -39,6 +40,8 @@ from wikipol.index.run import format_report as format_index_report
 from wikipol.index.store import Hit, PostgresIndex, SchemaNotApplied
 from wikipol.legacy_index import find_video_note
 from wikipol.raw_store import YOUTUBE_ID, RawNotFound, RawStore, S3RawStore
+from wikipol.runner.repo import GhCli, Git, RunnerRepo
+from wikipol.runner.run import Pipeline, daily_run, default_log_dir, format_summary, log_path
 from wikipol.search.extracts import (
     QUERY_RETRY_PAUSES,
     QUERY_TIMEOUT_SECONDS,
@@ -127,6 +130,29 @@ def main(argv: list[str] | None = None) -> int:
         help="read the bucket and the index, embed and write nothing; estimates the tokens",
     )
 
+    daily = commands.add_parser(
+        "run",
+        help="the daily run: fetch, digest and file, index, then merge one pull request of what "
+        "changed; in the runner's clone only",
+    )
+    daily.add_argument("--source", action="append", help="a Source slug; every Source when absent")
+    daily.add_argument(
+        "--limit", type=positive_int, help="fetch and digest at most N videos per Source"
+    )
+    daily.add_argument("--base", default="main", help="the branch the run lands on; default: main")
+    daily.add_argument("--fetcher", choices=FETCHERS, help="default: WIKIPOL_FETCHER, else yt-dlp")
+    daily.add_argument(
+        "--log-dir",
+        type=Path,
+        help="where each run writes its log; default: ~/Library/Logs/wikipol on a Mac",
+    )
+    daily.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
+    daily.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="list what each step would do; fetch, digest, index and publish nothing",
+    )
+
     commands.add_parser(
         "migrate",
         help="apply the search index's schema; needs a database key that may create tables",
@@ -155,6 +181,8 @@ def main(argv: list[str] | None = None) -> int:
             return index_raws(args)
         if args.command == "migrate":
             return migrate_index()
+        if args.command == "run":
+            return run_daily(args)
         if args.command == "mcp":
             return serve_search(args)
     except (WriterFailed, RawNotFound, IndexUnreachable, SchemaNotApplied) as error:
@@ -176,12 +204,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def copy_from_drive(args: argparse.Namespace) -> int:
-    sources = load_sources(args.sources_dir)
-    if args.source:
-        unknown = set(args.source) - {s.slug for s in sources}
-        if unknown:
-            raise ConfigError(f"no Source with slug {', '.join(sorted(unknown))}")
-        sources = [s for s in sources if s.slug in args.source]
+    sources = select_sources(args.sources_dir, args.source)
     store = S3RawStore.from_settings(load_settings())
     reports = [
         copy_source(s, store, drive_root=args.drive_root, dry_run=args.dry_run) for s in sources
@@ -369,6 +392,10 @@ def backfill_source(args: argparse.Namespace) -> int:
 class IndexUnreachable(Exception):
     """The index's database refused the connection or a statement."""
 
+    def __init__(self, message: str, reports: list[IndexReport] | None = None) -> None:
+        super().__init__(message)
+        self.reports = reports or []
+
 
 def open_index(database_url: str) -> PostgresIndex:
     import psycopg
@@ -399,25 +426,60 @@ def migrate_index() -> int:
     return 0
 
 
-def index_raws(args: argparse.Namespace) -> int:
-    import psycopg
-
-    sources = load_sources(args.sources_dir)
-    if args.source:
-        unknown = set(args.source) - {s.slug for s in sources}
+def select_sources(sources_dir: Path, slugs: list[str] | None) -> list[Source]:
+    """The Sources named, or every Source when none is."""
+    sources = load_sources(sources_dir)
+    if slugs:
+        unknown = set(slugs) - {s.slug for s in sources}
         if unknown:
             raise ConfigError(f"no Source with slug {', '.join(sorted(unknown))}")
-        sources = [s for s in sources if s.slug in args.source]
+        sources = [s for s in sources if s.slug in slugs]
+    return sources
+
+
+def index_raws(args: argparse.Namespace) -> int:
+    sources = select_sources(args.sources_dir, args.source)
     repo_root = repo_of(args.sources_dir)  # before the database: a wrong folder writes nothing
-    settings = load_index_settings(need_embedding=not args.dry_run)
     store = S3RawStore.from_settings(load_settings())
+    try:
+        reports = index_sources(
+            sources,
+            store,
+            repo_root=repo_root,
+            limit=args.limit,
+            dry_run=args.dry_run,
+            log=lambda line: print(line, file=sys.stderr, flush=True),
+        )
+    except IndexUnreachable as error:
+        if error.reports:  # what the Sources before it committed
+            print(format_index_report(error.reports, dry_run=args.dry_run))
+        raise
+    print(format_index_report(reports, dry_run=args.dry_run))
+    return 1 if any(r.stopped for r in reports) else 0
+
+
+def index_sources(
+    sources: list[Source],
+    store: RawStore,
+    *,
+    repo_root: Path,
+    limit: int | None,
+    dry_run: bool,
+    log: Callable[[str], None],
+) -> list[IndexReport]:
+    """Indexes the Sources' Raws the index lacks, applying a pending migration first when the
+    key may. Raises ConfigError for a missing setting, IndexUnreachable when the database fails,
+    with the reports of the Sources it committed before."""
+    import psycopg
+
+    settings = load_index_settings(need_embedding=not dry_run)
     embedder = ScalewayEmbedder(settings.embedding_key or "", settings.project_id)
     index = open_index(settings.database_url)
     reports: list[IndexReport] = []
     try:
-        if not args.dry_run:
+        if not dry_run:
             for name in index.migrate():
-                print(f"migration applied: {name}", file=sys.stderr)
+                log(f"migration applied: {name}")
         for source in sources:
             report = index_source(
                 source,
@@ -425,23 +487,62 @@ def index_raws(args: argparse.Namespace) -> int:
                 embedder,
                 index,
                 repo_root=repo_root,
-                limit=args.limit,
-                dry_run=args.dry_run,
-                log=lambda line: print(line, file=sys.stderr, flush=True),
+                limit=limit,
+                dry_run=dry_run,
+                log=log,
             )
             reports.append(report)
-            if (
-                report.stopped
-            ):  # a refused key or a failing API: the next Source would fare no better
+            if report.stopped:  # a refused key or a failing API: the next Source fares no better
                 break
     except psycopg.Error as error:
-        if reports:  # what the Sources before it committed
-            print(format_index_report(reports, dry_run=args.dry_run))
-        raise IndexUnreachable(f"the index's database failed: {error}") from error
+        raise IndexUnreachable(f"the index's database failed: {error}", reports) from error
     finally:
         index.close()
-    print(format_index_report(reports, dry_run=args.dry_run))
-    return 1 if any(r.stopped for r in reports) else 0
+    return reports
+
+
+def run_daily(args: argparse.Namespace) -> int:
+    """The run's log goes to a file of its own, every line of it, and to a terminal when there is
+    one; its summary to stdout too. Under launchd stderr is a file that keeps only what fails before
+    the log opens. A run that can't even start (a setting missing) logs why."""
+    started = datetime.now()
+    path = log_path(args.log_dir or default_log_dir(), started)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    echo = sys.stderr.isatty()
+    with path.open("a", encoding="utf-8") as log_file:
+
+        def log(line: str) -> None:
+            if echo:
+                print(line, file=sys.stderr, flush=True)
+            print(line, file=log_file, flush=True)
+
+        log(f"wikipol run, log in {path}")
+        try:
+            sources = select_sources(args.sources_dir, args.source)
+            repo_root = repo_of(args.sources_dir)
+            store = S3RawStore.from_settings(load_settings())
+            fetcher = fetch.make_fetcher(load_fetcher_settings(kind=args.fetcher))
+        except ConfigError as error:
+            log(f"wikipol: {error}")
+            return 2
+        git = Git(repo_root)
+        pipeline = Pipeline(
+            store,
+            fetcher,
+            ClaudeCli(),
+            index=lambda chosen, dry_run: index_sources(
+                chosen, store, repo_root=repo_root, limit=args.limit, dry_run=dry_run, log=log
+            ),
+            repo_root=repo_root,
+            limit=args.limit,
+            log=log,
+        )
+        repo = RunnerRepo(git, GhCli(git), args.base)
+        report = daily_run(sources, pipeline, repo, started, dry_run=args.dry_run)
+        summary = format_summary(report)
+        print(summary, file=log_file, flush=True)
+    print(summary)
+    return 1 if report.failures else 0
 
 
 def serve_search(args: argparse.Namespace) -> int:
