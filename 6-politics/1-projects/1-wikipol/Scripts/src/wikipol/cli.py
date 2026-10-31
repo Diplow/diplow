@@ -46,9 +46,7 @@ def main(argv: list[str] | None = None) -> int:
     get.add_argument("--limit", type=positive_int, help="try at most N videos")
     get.add_argument("--fetcher", choices=FETCHERS, help="default: WIKIPOL_FETCHER, else yt-dlp")
     get.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
-    get.add_argument(
-        "--dry-run", action="store_true", help="list what is missing, fetch and write nothing"
-    )
+    get.add_argument("--dry-run", action="store_true", help="only list the videos without a Raw")
 
     args = parser.parse_args(argv)
     try:

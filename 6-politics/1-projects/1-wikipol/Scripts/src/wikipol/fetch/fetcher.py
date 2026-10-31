@@ -9,7 +9,12 @@ from wikipol.raw_store import RawMeta
 
 
 class FetchFailed(Exception):
-    """One Publication's Raw couldn't be fetched: no French captions, a refusal, a timeout."""
+    """One Publication's Raw couldn't be fetched: a refusal, a timeout, output we can't read."""
+
+
+class NoCaptions(FetchFailed):
+    """YouTube has no French captions for the video, or not yet: its speech recognition can
+    take hours after an upload. Says nothing about the Fetcher's health."""
 
 
 @dataclass(frozen=True)

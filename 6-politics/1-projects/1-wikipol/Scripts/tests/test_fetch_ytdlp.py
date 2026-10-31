@@ -1,5 +1,6 @@
 """The yt-dlp Fetcher on recorded yt-dlp output: a fake runner plays yt-dlp's part."""
 
+import json
 import shutil
 import subprocess
 from datetime import date
@@ -7,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from wikipol.fetch.fetcher import FetchFailed
+from wikipol.fetch.fetcher import FetchFailed, NoCaptions
 from wikipol.fetch.ytdlp import YtDlpFetcher
 from wikipol.raw_store import RawMeta
 
@@ -18,8 +19,11 @@ VIDEO = "ubfvCuQziRA"
 class FakeYtDlp:
     """Answers a listing with channel.json, and a fetch by writing the files yt-dlp would."""
 
-    def __init__(self, writes=("info.json", "captions.fr.json3"), returncode=0, stderr=""):
+    def __init__(
+        self, writes=("info.json", "captions.fr.json3"), returncode=0, stderr="", info=None
+    ):
         self.writes, self.returncode, self.stderr = writes, returncode, stderr
+        self.info = info  # fields to change in the recorded info file
         self.commands: list[list[str]] = []
 
     def __call__(self, command, timeout):
@@ -34,6 +38,10 @@ class FakeYtDlp:
             for name in self.writes:
                 target = name.replace("captions", video).replace("info", f"{video}.info")
                 shutil.copy(FIXTURES / name, folder / target)
+            if self.info is not None:
+                path = folder / f"{video}.info.json"
+                info = json.loads(path.read_text(encoding="utf-8"))
+                path.write_text(json.dumps({**info, **self.info}), encoding="utf-8")
         return subprocess.CompletedProcess(command, self.returncode, stdout, self.stderr)
 
 
@@ -73,9 +81,41 @@ def test_a_fetch_falls_back_on_webvtt():
     assert "\n0:31\n\nle gouvernement recule\n" in fetched.body.decode("utf-8")
 
 
-def test_a_video_without_french_captions_fails():
-    with pytest.raises(FetchFailed, match="no French captions"):
+def test_a_video_youtube_has_no_french_captions_for_is_told_apart():
+    fake = FakeYtDlp(writes=("info.json",), info={"automatic_captions": {"en": []}})
+
+    with pytest.raises(NoCaptions):
+        YtDlpFetcher(fake).fetch(VIDEO)
+
+
+def test_french_captions_listed_but_not_written_are_a_failure():
+    # What a refused caption download looks like: YouTube lists them, no file came.
+    with pytest.raises(FetchFailed, match="lists French captions") as error:
         YtDlpFetcher(FakeYtDlp(writes=("info.json",))).fetch(VIDEO)
+    assert not isinstance(error.value, NoCaptions)
+
+
+def test_a_malformed_upload_date_leaves_the_date_unknown():
+    fake = FakeYtDlp(info={"upload_date": "20261399", "duration": None})
+
+    meta = YtDlpFetcher(fake).fetch(VIDEO).meta
+
+    assert (meta.published, meta.duration) == (None, None)
+
+
+@pytest.mark.parametrize(
+    "captions", ['{"events": [{"segs": 5}]}', '{"events": [{"segs": [{"utf8": null}]}]}', "[1]"]
+)
+def test_captions_yt_dlp_wrote_in_an_unexpected_shape_fail_this_video_only(captions):
+    class Odd(FakeYtDlp):
+        def __call__(self, command, timeout):
+            result = super().__call__(command, timeout)
+            folder = Path(command[command.index("--paths") + 1])
+            (folder / f"{VIDEO}.fr.json3").write_text(captions, encoding="utf-8")
+            return result
+
+    with pytest.raises(FetchFailed, match="unreadable"):
+        YtDlpFetcher(Odd(writes=("info.json",))).fetch(VIDEO)
 
 
 def test_a_yt_dlp_error_fails_with_its_last_line():

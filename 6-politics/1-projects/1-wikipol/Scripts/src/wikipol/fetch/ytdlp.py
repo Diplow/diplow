@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 from wikipol.fetch.captions import build_raw, parse_json3, parse_vtt
-from wikipol.fetch.fetcher import Fetched, FetchFailed, watch_url
+from wikipol.fetch.fetcher import Fetched, FetchFailed, NoCaptions, watch_url
 from wikipol.raw_store import YOUTUBE_ID, RawMeta
 
 CAPTION_LANGUAGE = "fr"
@@ -101,27 +101,39 @@ class YtDlpFetcher:
             vtt = folder / f"{youtube_id}.{CAPTION_LANGUAGE}.vtt"
             if not info_path.is_file():
                 raise FetchFailed("yt-dlp wrote no info file")
+            # JSON yt-dlp wrote but that doesn't read as expected fails this video only.
             try:
                 info = json.loads(info_path.read_text(encoding="utf-8"))
+                meta = meta_from_info(info)
                 if json3.is_file():
                     segments = parse_json3(json3.read_text(encoding="utf-8"))
                 elif vtt.is_file():
                     segments = parse_vtt(vtt.read_text(encoding="utf-8"))
+                elif offers_captions(info):
+                    raise FetchFailed("YouTube lists French captions, yt-dlp wrote none")
                 else:
-                    raise FetchFailed("no French captions")
-            except (ValueError, AttributeError) as error:  # JSON yt-dlp wrote but we can't read
-                raise FetchFailed(f"unreadable yt-dlp output: {error}") from error
+                    raise NoCaptions("no French captions on YouTube yet")
+            except (ValueError, TypeError, KeyError, AttributeError) as error:
+                raise FetchFailed(f"unreadable yt-dlp output: {error!r}") from error
         if not segments:
             raise FetchFailed("the French captions are empty")
-        body = build_raw(youtube_id, segments).encode("utf-8")
-        return Fetched(youtube_id, body, meta_from_info(info))
+        return Fetched(youtube_id, build_raw(youtube_id, segments).encode("utf-8"), meta)
+
+
+def offers_captions(info: dict[str, Any]) -> bool:
+    """Whether YouTube lists French captions, written by a person or by its speech recognition."""
+    return any(
+        CAPTION_LANGUAGE in (info.get(kind) or {}) for kind in ("subtitles", "automatic_captions")
+    )
 
 
 def meta_from_info(info: dict[str, Any]) -> RawMeta:
     upload_date = str(info.get("upload_date") or "")
     published: date | None = None
-    if len(upload_date) == 8 and upload_date.isdigit():
+    try:
         published = datetime.strptime(upload_date, "%Y%m%d").date()
+    except ValueError:
+        published = None
     duration = info.get("duration")
     return RawMeta(
         title=str(info.get("title") or "").strip(),

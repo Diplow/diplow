@@ -6,9 +6,19 @@
   "duration": 3734,
   "duration_string": "1:02:14",
   "upload_date": "20261029",
-  "timestamp": 1761753600,
+  "timestamp": 1793293206,
   "live_status": "not_live",
   "availability": "public",
+  "subtitles": {},
+  "automatic_captions": {
+    "fr": [
+      {"ext": "json3", "url": "https://www.youtube.com/api/timedtext?v=ubfvCuQziRA&lang=fr&fmt=json3", "name": "French"},
+      {"ext": "vtt", "url": "https://www.youtube.com/api/timedtext?v=ubfvCuQziRA&lang=fr&fmt=vtt", "name": "French"}
+    ],
+    "en": [
+      {"ext": "json3", "url": "https://www.youtube.com/api/timedtext?v=ubfvCuQziRA&lang=fr&tlang=en&fmt=json3", "name": "English"}
+    ]
+  },
   "webpage_url": "https://www.youtube.com/watch?v=ubfvCuQziRA",
   "extractor": "youtube",
   "_type": "video"

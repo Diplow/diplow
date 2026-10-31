@@ -7,7 +7,7 @@ from urllib.parse import parse_qs, urlparse
 
 import pytest
 
-from wikipol.fetch.fetcher import FetchFailed
+from wikipol.fetch.fetcher import FetchFailed, NoCaptions
 from wikipol.fetch.transcript_api import TranscriptApiFetcher
 from wikipol.raw_store import RawMeta
 
@@ -41,10 +41,21 @@ def test_the_listing_is_the_channels_videos_without_shorts():
     ids = TranscriptApiFetcher("k", api).list_channel("https://www.youtube.com/@PaduTeam/videos")
 
     assert ids == [VIDEO, "b5CY98TXYZk", "WTrg8i2HfP0"]
-    path, query, headers = api.requests[0]
+    [(path, query, headers)] = api.requests
     assert path == "youtube/channel/videos"
-    assert query["type"] == ["video"]
+    assert query == {
+        "id": ["https://www.youtube.com/@PaduTeam/videos"],
+        "type": ["video"],
+        "limit": ["5000"],
+    }
     assert headers["x-api-key"] == "k"
+
+
+def test_a_listing_without_its_video_list_fails_rather_than_reads_as_empty():
+    api = FakeApi({"youtube/channel/videos": (200, {"shortIds": []})})
+
+    with pytest.raises(FetchFailed, match="videoIds"):
+        TranscriptApiFetcher("k", api).list_channel("https://www.youtube.com/@PaduTeam/videos")
 
 
 def test_a_fetch_builds_the_raw_as_the_yt_dlp_fetcher_does():
@@ -64,22 +75,38 @@ def test_a_fetch_builds_the_raw_as_the_yt_dlp_fetcher_does():
         published=date(2026, 10, 29),
         duration=3734,
     )
-    transcript_query = next(q for p, q, _ in api.requests if p == "transcript")
-    assert transcript_query["mode"] == ["native"]
-    assert transcript_query["lang"] == ["fr"]
+    watch = [f"https://www.youtube.com/watch?v={VIDEO}"]
+    assert [(path, query) for path, query, _ in api.requests] == [
+        ("metadata", {"url": watch}),
+        ("transcript", {"url": watch, "lang": ["fr"], "mode": ["native"]}),
+    ]
 
 
-def test_a_transcript_in_another_language_fails():
-    api = FakeApi({"transcript": (200, {"content": [], "lang": "en", "availableLangs": ["en"]})})
+@pytest.mark.parametrize(
+    "answer",
+    [
+        (200, {"content": [], "lang": "en", "availableLangs": ["en"]}),
+        (206, {"error": "transcript-unavailable", "message": "m", "details": "d"}),
+    ],
+)
+def test_a_video_without_a_french_transcript_is_told_apart(answer):
+    with pytest.raises(NoCaptions):
+        TranscriptApiFetcher("k", FakeApi({"transcript": answer})).fetch(VIDEO)
 
-    with pytest.raises(FetchFailed, match="no French transcript"):
+
+@pytest.mark.parametrize(
+    "chunk", [{"text": None, "offset": 0}, {"text": "x"}, {"text": "x", "offset": "soon"}]
+)
+def test_a_chunk_without_its_text_or_offset_fails(chunk):
+    api = FakeApi({"transcript": (200, {"content": [chunk], "lang": "fr"})})
+
+    with pytest.raises(FetchFailed, match="lacks its offset or text"):
         TranscriptApiFetcher("k", api).fetch(VIDEO)
 
 
 @pytest.mark.parametrize(
     ("status", "answer", "reason"),
     [
-        (206, {"error": "transcript-unavailable", "message": "m", "details": "d"}, "206"),
         (202, {"jobId": "j"}, "asynchronous"),
         (429, {"error": "limit-exceeded", "message": "m", "details": "d"}, "limit-exceeded"),
         (500, "<html>oops</html>", "500: no detail"),

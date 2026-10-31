@@ -127,8 +127,10 @@ def load_source(node: Path) -> Source:
     if not SLUG.fullmatch(str(slug)):
         raise ConfigError(f"{path}: source.slug {slug!r} is not lowercase letters, digits and -")
 
-    legacy, files = data.get("legacy") or {}, data.get("files") or {}
-    youtube = data.get("youtube") or {}
+    # An absent or empty block is {}; anything else that isn't a mapping is refused.
+    legacy, files, youtube = (
+        {} if data.get(name) is None else data[name] for name in ("legacy", "files", "youtube")
+    )
     if not all(isinstance(block, dict) for block in (legacy, files, youtube)):
         raise ConfigError(f"{path}: `legacy:`, `files:` and `youtube:` must be mappings")
     channel_url = str(youtube.get("channel_url") or "").strip() or None

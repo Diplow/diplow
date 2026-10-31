@@ -27,6 +27,14 @@ def test_vtt_drops_the_word_timings_and_the_blank_cues():
     ]
 
 
+def test_vtt_cues_may_leave_out_the_hours():
+    text = (
+        "WEBVTT\n\n00:31.200 --> 00:35.300\nle gouvernement\n\n1:02:05.010 --> 1:02:09.000\nfin\n"
+    )
+
+    assert parse_vtt(text) == [(31200, "le gouvernement"), (3725010, "fin")]
+
+
 def test_a_block_runs_until_a_caption_starts_30_seconds_after_it():
     segments = [(160, "a"), (2480, "b"), (30159, "c"), (30160, "d"), (45020, "e")]
 

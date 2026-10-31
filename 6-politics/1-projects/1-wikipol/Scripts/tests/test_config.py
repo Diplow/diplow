@@ -88,6 +88,7 @@ def test_a_source_without_a_slug_is_refused(tmp_path):
         ("source:\n  name: X\n  slug: Bad Slug\n", "is not lowercase"),
         ("source:\n  name: X\n  slug: x\nlegacy: a string\n", "must be mappings"),
         ("source:\n  name: X\n  slug: x\nyoutube: a string\n", "must be mappings"),
+        ("source:\n  name: X\n  slug: x\nyoutube: []\n", "must be mappings"),
     ],
 )
 def test_a_malformed_source_yaml_is_a_config_error(tmp_path, text, complaint):

@@ -9,6 +9,7 @@ only serve later (a 202 and a job id) counts as a failure.
 
 from __future__ import annotations
 
+import http.client
 import json
 import urllib.error
 import urllib.request
@@ -18,7 +19,7 @@ from typing import Any
 from urllib.parse import urlencode
 
 from wikipol.fetch.captions import Segment, build_raw
-from wikipol.fetch.fetcher import Fetched, FetchFailed, watch_url
+from wikipol.fetch.fetcher import Fetched, FetchFailed, NoCaptions, watch_url
 from wikipol.raw_store import YOUTUBE_ID, RawMeta
 
 API_ROOT = "https://api.supadata.ai/v1"
@@ -33,12 +34,14 @@ HttpGet = Callable[[str, dict[str, str]], tuple[int, bytes]]
 def http_get(url: str, headers: dict[str, str]) -> tuple[int, bytes]:
     request = urllib.request.Request(url, headers=headers)
     try:
-        with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
-            return response.status, response.read()
-    except urllib.error.HTTPError as error:
-        return error.code, error.read()
-    except (urllib.error.URLError, TimeoutError) as error:
-        raise FetchFailed(f"transcript API unreachable: {error}") from error
+        try:
+            with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
+                return response.status, response.read()
+        except urllib.error.HTTPError as error:
+            return error.code, error.read()
+    # URLError, timeouts and resets are OSErrors; a body cut short is an HTTPException.
+    except (OSError, http.client.HTTPException) as error:
+        raise FetchFailed(f"transcript API unreachable: {error!r}") from error
 
 
 class TranscriptApiFetcher:
@@ -56,6 +59,8 @@ class TranscriptApiFetcher:
             payload = None
         if status == 202:
             raise FetchFailed(f"transcript API /{path}: an asynchronous job, not fetched")
+        if status == 206:  # the API's "transcript-unavailable"
+            raise NoCaptions(f"transcript API /{path}: no transcript for this video")
         if status != 200:
             reason = (payload or {}).get("error") or "no detail"
             raise FetchFailed(f"transcript API /{path} answered {status}: {reason}")
@@ -67,21 +72,24 @@ class TranscriptApiFetcher:
         payload = self._call(
             "youtube/channel/videos", id=channel_url, type="video", limit=CHANNEL_LIMIT
         )
-        return [str(i) for i in payload.get("videoIds") or [] if YOUTUBE_ID.fullmatch(str(i))]
+        ids = payload.get("videoIds")
+        if not isinstance(ids, list):
+            raise FetchFailed("transcript API listed the channel without a videoIds list")
+        return [str(i) for i in ids if YOUTUBE_ID.fullmatch(str(i))]
 
     def fetch(self, youtube_id: str) -> Fetched:
         url = watch_url(youtube_id)
         metadata = self._call("metadata", url=url)
         transcript = self._call("transcript", url=url, lang=CAPTION_LANGUAGE, mode="native")
         if transcript.get("lang") != CAPTION_LANGUAGE:
-            raise FetchFailed(f"no French transcript (the API offered {transcript.get('lang')})")
+            raise NoCaptions(f"no French transcript (the API offered {transcript.get('lang')})")
         content = transcript.get("content")
         if not isinstance(content, list):
             raise FetchFailed("the transcript API returned no timed chunks")
         try:
-            chunks = [(int(c["offset"]), " ".join(str(c["text"]).split())) for c in content]
-        except (TypeError, KeyError, ValueError) as error:
-            raise FetchFailed(f"a transcript chunk lacks its offset or text: {error}") from error
+            chunks = [(int(c["offset"]), " ".join(c["text"].split())) for c in content]
+        except (TypeError, KeyError, ValueError, AttributeError) as error:
+            raise FetchFailed(f"a transcript chunk lacks its offset or text: {error!r}") from error
         segments: list[Segment] = [(start, text) for start, text in chunks if text]
         if not segments:
             raise FetchFailed("the French transcript is empty")

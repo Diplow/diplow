@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from wikipol.config import ConfigError, Source
-from wikipol.fetch.fetcher import Fetched, FetchFailed
+from wikipol.fetch.fetcher import Fetched, FetchFailed, NoCaptions
 from wikipol.fetch.run import PAUSE_SECONDS, fetch_source, format_report
 from wikipol.raw_store import InMemoryRawStore, RawExists, RawMeta
 
@@ -15,10 +15,11 @@ SOURCE = Source("Demo", "demo", Path("/nowhere"), None, None, channel_url=CHANNE
 
 
 class FakeFetcher:
-    """A channel of 11-character ids, newest first; `failing` ids raise FetchFailed."""
+    """A channel of 11-character ids, newest first; `failing` ids raise FetchFailed, `silent`
+    ones NoCaptions."""
 
-    def __init__(self, channel, failing=()):
-        self.channel, self.failing = channel, set(failing)
+    def __init__(self, channel, failing=(), silent=()):
+        self.channel, self.failing, self.silent = channel, set(failing), set(silent)
         self.fetched: list[str] = []
 
     def list_channel(self, channel_url):
@@ -27,8 +28,10 @@ class FakeFetcher:
 
     def fetch(self, youtube_id):
         self.fetched.append(youtube_id)
+        if youtube_id in self.silent:
+            raise NoCaptions("no French captions on YouTube yet")
         if youtube_id in self.failing:
-            raise FetchFailed("no French captions")
+            raise FetchFailed("yt-dlp exited with 1: ERROR: Sign in to confirm")
         meta = RawMeta(f"Titre {youtube_id}", date(2026, 10, 30), 600)
         return Fetched(youtube_id, f"raw of {youtube_id}".encode(), meta)
 
@@ -74,7 +77,7 @@ def test_the_limit_caps_the_videos_tried_failures_included(pauses):
 
     assert fetcher.fetched == [vid(1), vid(2), vid(3)]
     assert report.stored == [vid(2), vid(3)]
-    assert report.failed == [(vid(1), "no French captions")]
+    assert report.failed == [(vid(1), "yt-dlp exited with 1: ERROR: Sign in to confirm")]
     assert "1 left for a later run" in format_report(report)
 
 
@@ -88,6 +91,31 @@ def test_three_failures_in_a_row_stop_the_run(pauses):
     assert fetcher.fetched == [vid(n) for n in range(1, 6)]
     assert report.stopped
     assert "stopped after 3 failures in a row" in format_report(report)
+
+
+def test_videos_without_french_captions_neither_stop_the_run_nor_break_a_streak(pauses):
+    channel = [vid(n) for n in range(1, 8)]
+    fetcher = FakeFetcher(
+        channel, failing=[vid(1), vid(3), vid(5)], silent=[vid(2), vid(4), vid(6)]
+    )
+
+    report = run(fetcher, InMemoryRawStore(), pauses, limit=6)
+
+    # 1, 3 and 5 fail with 2 and 4 between them, silent: the third failure in a row stops it.
+    assert fetcher.fetched == [vid(n) for n in range(1, 6)]
+    assert report.no_captions == [vid(2), vid(4)]
+    assert report.stopped
+    assert "no French captions yet: video000002" in format_report(report)
+
+
+def test_only_videos_without_captions_never_stop_the_run(pauses):
+    channel = [vid(n) for n in range(1, 6)]
+    fetcher = FakeFetcher(channel, silent=channel[:4])
+
+    report = run(fetcher, InMemoryRawStore(), pauses)
+
+    assert not report.stopped
+    assert report.stored == [vid(5)]
 
 
 def test_a_raw_another_writer_stored_meanwhile_is_left_as_it_is(pauses):

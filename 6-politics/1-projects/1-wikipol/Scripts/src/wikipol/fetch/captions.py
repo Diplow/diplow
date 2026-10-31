@@ -15,7 +15,8 @@ Segment = tuple[int, str]
 
 BLOCK_SECONDS = 30
 
-VTT_CUE = re.compile(r"(\d+):(\d{2}):(\d{2})\.(\d{3})\s*-->")
+# A cue start: hh:mm:ss.ttt, or mm:ss.ttt, which WebVTT allows under an hour.
+VTT_CUE = re.compile(r"(?:(\d+):)?(\d{2}):(\d{2})\.(\d{3})\s*-->")
 VTT_TAG = re.compile(r"<[^>]+>")
 
 
@@ -40,7 +41,7 @@ def parse_vtt(text: str) -> list[Segment]:
         for i, line in enumerate(lines):
             cue = VTT_CUE.match(line)
             if cue:
-                h, m, s, ms = (int(part) for part in cue.groups())
+                h, m, s, ms = (int(part or 0) for part in cue.groups())
                 caption = " ".join(VTT_TAG.sub("", " ".join(lines[i + 1 :])).split())
                 if caption:
                     segments.append(((h * 3600 + m * 60 + s) * 1000 + ms, caption))
