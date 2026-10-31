@@ -1,0 +1,46 @@
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 2,6-8,12,14-19
+6-politics/1-projects/1-wikipol/.run/registers/sources-from-youtube/decisions.md
+  s_bffceea45dbe3a::t_426db0da3c9a4c 235-253
+  s_bffceea45dbe3a::t_d216365b31ea94 11-12
+6-politics/2-sources/2-boniface/1-chronicle/1-2026-10-13/5-un-maire-francais-agresse-en-palestine.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-44
+6-politics/2-sources/2-boniface/1-chronicle/1-2026-10-13/4-elections-israel-rien-a-signaler-pour.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-54
+6-politics/2-sources/2-boniface/1-chronicle/1-2026-10-13/1-j-ai-lu-le-triangle-du.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-53
+6-politics/2-sources/2-boniface/1-chronicle/1-2026-10-13/2-la-chine-a-t-elle-plie.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-63
+6-politics/2-sources/2-boniface/1-chronicle/2-2026-10-21/4-l-ocs-une-otan-asiatique-expliquez.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-60
+6-politics/2-sources/2-boniface/1-chronicle/2-2026-10-21/CLAUDE.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-25
+6-politics/2-sources/2-boniface/1-chronicle/2-2026-10-21/2-lula-reelu-surprise-politique-choc-geopolitique.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-60
+6-politics/2-sources/2-boniface/1-chronicle/1-2026-10-13/3-j-ai-lu-comprendre-la-question.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-58
+6-politics/2-sources/2-boniface/1-chronicle/2-2026-10-21/5-j-ai-lu-israel-s-lobby.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-63
+6-politics/2-sources/2-boniface/1-chronicle/1-2026-10-13/CLAUDE.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-23
+6-politics/2-sources/2-boniface/1-chronicle/2-2026-10-21/1-gaza-dialogue-entre-un-humanitaire-et.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-65
+6-politics/2-sources/2-boniface/1-chronicle/2-2026-10-21/3-le-japon-face-au-defi-trump.md
+  s_bffceea45dbe3a::t_c6e5e02f5e3de1 1-68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "61ed44de70294faa354880ad000fb339af1c52f1",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
