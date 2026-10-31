@@ -75,6 +75,34 @@ def load_settings(environ: Mapping[str, str] | None = None) -> Settings:
     )
 
 
+@dataclass(frozen=True)
+class IndexSettings:
+    """The search index's database, and the key of the Generative APIs that embed into it."""
+
+    database_url: str = field(repr=False)
+    embedding_key: str | None = field(default=None, repr=False)
+    project_id: str | None = None
+
+
+def load_index_settings(
+    environ: Mapping[str, str] | None = None, need_embedding: bool = True
+) -> IndexSettings:
+    """`WIKIPOL_DATABASE_URL`, and the Generative APIs key: `WIKIPOL_EMBEDDING_API_KEY` when the
+    pipeline's own key (`SCW_SECRET_KEY`) may not call them, else that one. `SCW_DEFAULT_PROJECT_ID`
+    bills the calls to the project. A dry run embeds nothing and needs no key."""
+    values, env_path = read_environment(environ)
+    database_url = values.get("WIKIPOL_DATABASE_URL", "")
+    if not database_url:
+        raise ConfigError(f"WIKIPOL_DATABASE_URL is not set, in {env_path} nor in the environment")
+    key = values.get("WIKIPOL_EMBEDDING_API_KEY") or values.get("SCW_SECRET_KEY") or None
+    if need_embedding and key is None:
+        raise ConfigError(
+            "neither WIKIPOL_EMBEDDING_API_KEY nor SCW_SECRET_KEY is set, "
+            f"in {env_path} nor in the environment"
+        )
+    return IndexSettings(database_url, key, values.get("SCW_DEFAULT_PROJECT_ID") or None)
+
+
 FETCHERS = ("yt-dlp", "transcript-api")
 
 

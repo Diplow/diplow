@@ -22,6 +22,7 @@ from wikipol.config import (
     ConfigError,
     Source,
     load_fetcher_settings,
+    load_index_settings,
     load_settings,
     load_sources,
 )
@@ -32,6 +33,10 @@ from wikipol.drive_copy import DEFAULT_DRIVE_ROOT, copy_source, format_report
 from wikipol.fetch.fetcher import FetchFailed
 from wikipol.fetch.run import fetch_source
 from wikipol.fetch.run import format_report as format_fetch_report
+from wikipol.index.embed import ScalewayEmbedder
+from wikipol.index.run import IndexReport, index_source
+from wikipol.index.run import format_report as format_index_report
+from wikipol.index.store import PostgresIndex, SchemaNotApplied
 from wikipol.legacy_index import find_video_note
 from wikipol.raw_store import YOUTUBE_ID, RawNotFound, RawStore, S3RawStore
 
@@ -101,6 +106,24 @@ def main(argv: list[str] | None = None) -> int:
         "--dry-run", action="store_true", help="only list the Raws it would digest, oldest first"
     )
 
+    search = commands.add_parser(
+        "index",
+        help="put the Raws the search index lacks in it, as Publications and embedded chunks",
+    )
+    search.add_argument("--source", action="append", help="a Source slug; every Source when absent")
+    search.add_argument("--limit", type=positive_int, help="index at most N Raws per Source")
+    search.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
+    search.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="read the bucket and the index, embed and write nothing; estimates the tokens",
+    )
+
+    commands.add_parser(
+        "migrate",
+        help="apply the search index's schema; needs a database key that may create tables",
+    )
+
     args = parser.parse_args(argv)
     try:
         if args.command == "copy-from-drive":
@@ -115,7 +138,11 @@ def main(argv: list[str] | None = None) -> int:
             return file_digests(args)
         if args.command == "backfill":
             return backfill_source(args)
-    except (WriterFailed, RawNotFound) as error:
+        if args.command == "index":
+            return index_raws(args)
+        if args.command == "migrate":
+            return migrate_index()
+    except (WriterFailed, RawNotFound, IndexUnreachable, SchemaNotApplied) as error:
         print(f"wikipol: {error}", file=sys.stderr)
         return 2
     except FetchFailed as error:
@@ -322,6 +349,84 @@ def backfill_source(args: argparse.Namespace) -> int:
     )
     print(format_backfill_report(report, limit=args.limit, dry_run=args.dry_run))
     return 1 if report.failed or report.stopped else 0
+
+
+class IndexUnreachable(Exception):
+    """The index's database refused the connection or a statement."""
+
+
+def open_index(database_url: str) -> PostgresIndex:
+    import psycopg
+
+    try:
+        return PostgresIndex.connect(database_url)
+    except psycopg.ProgrammingError as error:
+        # A connection string libpq can't parse: its message may quote any part, the password too.
+        raise IndexUnreachable(
+            "WIKIPOL_DATABASE_URL is not a connection string libpq reads"
+        ) from error
+    except psycopg.Error as error:
+        # The server's answer: the host and the user, never the password.
+        raise IndexUnreachable(f"the index's database refused the connection: {error}") from error
+
+
+def migrate_index() -> int:
+    import psycopg
+
+    index = open_index(load_index_settings(need_embedding=False).database_url)
+    try:
+        applied = index.migrate()
+    except psycopg.Error as error:
+        raise IndexUnreachable(f"the index's database failed: {error}") from error
+    finally:
+        index.close()
+    print("\n".join(f"migration applied: {name}" for name in applied) or "the schema is up to date")
+    return 0
+
+
+def index_raws(args: argparse.Namespace) -> int:
+    import psycopg
+
+    sources = load_sources(args.sources_dir)
+    if args.source:
+        unknown = set(args.source) - {s.slug for s in sources}
+        if unknown:
+            raise ConfigError(f"no Source with slug {', '.join(sorted(unknown))}")
+        sources = [s for s in sources if s.slug in args.source]
+    repo_root = repo_of(args.sources_dir)  # before the database: a wrong folder writes nothing
+    settings = load_index_settings(need_embedding=not args.dry_run)
+    store = S3RawStore.from_settings(load_settings())
+    embedder = ScalewayEmbedder(settings.embedding_key or "", settings.project_id)
+    index = open_index(settings.database_url)
+    reports: list[IndexReport] = []
+    try:
+        if not args.dry_run:
+            for name in index.migrate():
+                print(f"migration applied: {name}", file=sys.stderr)
+        for source in sources:
+            report = index_source(
+                source,
+                store,
+                embedder,
+                index,
+                repo_root=repo_root,
+                limit=args.limit,
+                dry_run=args.dry_run,
+                log=lambda line: print(line, file=sys.stderr, flush=True),
+            )
+            reports.append(report)
+            if (
+                report.stopped
+            ):  # a refused key or a failing API: the next Source would fare no better
+                break
+    except psycopg.Error as error:
+        if reports:  # what the Sources before it committed
+            print(format_index_report(reports, dry_run=args.dry_run))
+        raise IndexUnreachable(f"the index's database failed: {error}") from error
+    finally:
+        index.close()
+    print(format_index_report(reports, dry_run=args.dry_run))
+    return 1 if any(r.stopped for r in reports) else 0
 
 
 if __name__ == "__main__":
