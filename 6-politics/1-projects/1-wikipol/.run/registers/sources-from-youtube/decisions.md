@@ -3,13 +3,11 @@ title: decisions, Sources from YouTube
 parent: 6-politics/1-projects/1-wikipol/.run/registers/sources-from-youtube
 owner: diplo
 preview: >-
-  The choices the autonomous run made while building wikipol's pipeline, where
-  a ticket left room: how PaduTeam's eleven override skills regrouped by six,
-  how a Source's config finds its frozen vault, what became of the legacy
-  scripts and of new_source.py, how the moved editorial files were touched,
-  what the frozen glossary still says that I should fix, how the Raws
-  reached the bucket: which ids and dates were found, which 12 stayed on Drive,
-  and how the Fetcher picks, paces and stores the Raws still missing.
+  The choices the autonomous run made building wikipol's pipeline where a ticket
+  left room: the Source nodes and their frozen vaults, how the Raws reached the
+  bucket and which stayed on Drive, how the Fetcher picks and paces videos, and
+  how a Digest is shared between Python and the write-digest skill, formatted
+  and checked.
 ---
 # Decisions
 
@@ -72,3 +70,34 @@ WIK-3. `wikipol fetch --source <slug> [--limit N]` lists the channel, keeps the 
 - **`batch_transcripts.py` keeps its copy** of the discovery and parsing code: it is the legacy pipeline of DEC-3, kept for reference, and the package's version now lives in `wikipol/fetch/`.
 
 The real run of 2026-10-31, `--limit 3` on PaduTeam: the channel lists 1173 videos, 569 of them without a Raw; the three newest (`URonNSP0qM0`, `9aqNacmyf0c`, `hDtlb7vMGvo`, published 2026-10-28 to 30) were stored with their title, date and duration, 566 left. For Ulysse: those 566 are PaduTeam's backfill on WIK-12, about 75 minutes of pauses alone. The Fetcher does not fill the `published` date of the 150 Raws of DEC-6: their objects can't be rewritten, so WIK-7 has to take those dates from the Fetcher's metadata into its index.
+
+### DEC-10 Python fills a Digest's fields, the skill writes its Preview and claims, the checker decides
+
+WIK-4. The ticket asked for `claude -p` with the `write-digest` skill to turn a Raw into a Digest. `wikipol digest --source <slug> --id=<id> --out <file>` splits the work so that the model never writes a fact the pipeline already holds:
+
+- **Python** reads the Raw from the bucket, the Source's editorial `CLAUDE.md` and the frozen vault's `Videos/` note on the Publication when there is one (`legacy_index.find_video_note`), then fills the whole frontmatter and the `# <title>` heading. The model writes the Preview and the claims only, in a small frontmatter-and-body draft.
+- **`claude -p`** gets the skill as its system prompt (`--system-prompt`), the inputs on stdin, `--model` from `claude.default_model`, no tool (`--tools ""`), no MCP server, no session kept, and an empty temporary folder as its working directory, so neither this repo's `CLAUDE.md` nor its hooks join in. Its JSON answer is refused when `modelUsage` lists models and none is the pinned one (an extra entry, such as a small model Claude Code calls on its own, is let through; an answer without `modelUsage` is trusted to the `--model` flag), a check the halting rules called for.
+- **The checker** (`wikipol.digest.format.check_digest`) runs on the assembled file. A refused draft goes back once with the problems listed; a second refusal writes nothing and leaves the draft in a temporary folder for a human. `wikipol check-digest <files>` runs the same check on files already written, against their Raw in the bucket.
+- **Filing** is not done here: `--out` is any path, and `parent` is the folder it is written in when that is inside the repo, the Source's Chronicle otherwise. Numbering `N-<slug>.md` and placing it in a Period is WIK-5's.
+- **An alias is refused when `source.yaml` is read**, not only when a Digest is written: `load_source` raises on `claude.default_model: sonnet`. The two Sources and the template now pin `claude-sonnet-5-5`; the legacy `source_config.py` still defaults to `sonnet` when the key is missing, for the legacy scripts only.
+
+### DEC-11 The Digest's shape where the project description left room
+
+WIK-4. The project fixed the fields and the limits; the rest, as `BUILD.md` ("Le Digest") now writes it:
+
+- **A claim is a `## <n>. <claim>` heading**, numbered from 1, with up to three sentences of development under it; nothing else goes under the title, so the Body splits into claims without guessing.
+- **An Extract is one line**, `> [<clock>](https://www.youtube.com/watch?v=<id>&t=<n>s) « <quote> »`, Extracts a blank line apart. Its link opens the video at the start of the 30-second block the quote begins in, a second the Raw itself carries.
+- **A Raw without any timestamp gives Extracts without a link**, `> « <quote> »`. DEC-8 named one such Raw, `wsiChBGb6T0`; reading all 612 Raws of the bucket found a second, `xnU_T2a6Nz0` (BACKSEAT vs PADUTEAM : COMMENT EMPÊCHER LE RN EN RURALITÉ ?!), and every other one timed.
+- **`published` and `duration` may be `null`.** `published` comes from the Raw's metadata, else from the legacy note's `date`; DEC-6's 150 PaduTeam Raws without a date may still lack one. `duration` is known only for Raws the Fetcher stored (3 today); the 609 copied from Drive have none until something reads it from YouTube.
+- **`raw` is the bucket key**, `<source>/<youtube_id>.md`, not a URL, so the field survives a change of bucket or endpoint.
+- **`digest_version` is an integer, `1`**, a constant of `wikipol/digest/format.py`, bumped when the format or the skill changes what a Digest says; the legacy notes' `skill_version: write-video-<date>` named a skill, not a format.
+- **`title` is the Raw's metadata title.** For Raws copied from Drive that is DEC-8's approximation, the file name with `:`, `?` and `|` dropped and sometimes a letter lost (`MEYER HABIB  LE PEUPLE PALSTINIEN EST UN CANCER !!`). For Ulysse: the true titles come with YouTube's metadata, which the Fetcher reads for new videos only.
+- **Wikilinks go only to Digests that exist** in the Source's Chronicle, listed to the model with their titles; with an empty Chronicle, a Digest carries none. A link to a legacy note is refused.
+
+### DEC-12 What the checker holds a quote to
+
+WIK-4, for the rule "never a timestamp the Raw doesn't hold, nor a quote that isn't in it". A quote is matched on its words: lowercased, accents normalized, punctuation and apostrophes turned into spaces, since captions punctuate loosely and the model tidies them. The words must follow each other in the Raw, the first one inside the block the link points to; the quote may run on into the next blocks. A cut (`[…]`) fails, as does a changed word. Words in guillemets elsewhere, in the Preview or a claim's development, quote the Source too: they must be in the Raw, anywhere in it, and may be a single word (« cancer », « dictateur » in the samples), since they back no claim on their own. Five words at least, so a quote can't be two common words found anywhere. The link's second must open a block of the Raw, its label must read as that second, and it must fall before the video's `duration` when that is known. The Raw reader takes the three shapes of DEC-8: `m:ss` lines, `**[MM:SS](…&t=N)**` lines (whose `t` it trusts), and none.
+
+### DEC-13 Five sample Digests of PaduTeam, all checked; for Ulysse to review on WIK-12
+
+WIK-4, 2026-10-31, five runs of `wikipol digest` on `claude-sonnet-5-5`, chosen to cover what differs between Raws: `URonNSP0qM0` (a capsule fetched by WIK-3, with its duration, no legacy note), `X0tXWZsjENQ` (a Graphomarxisme lesson, an old `**[MM:SS]**` Raw, with a legacy note), `wsiChBGb6T0` (commentary from a Raw without timestamps), `ADd-wfitfm8` (an eight-minute reaction) and `bfgICs0Y6y0` (a two-hour debate with guests). Four passed the checker on the first draft, `bfgICs0Y6y0` on the second; `wikipol check-digest` passes all five against the bucket. They are pasted in WIK-4's pull request and not committed: filing them in the Chronicle is WIK-5's. For Ulysse: whether the claims restitute PaduTeam faithfully, whether six claims for a two-hour debate is enough, and whether the Preview reads as a thesis, are the review WIK-12 lists.

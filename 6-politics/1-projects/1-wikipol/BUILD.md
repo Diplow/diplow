@@ -4,7 +4,91 @@ Ce fichier documente **comment** un vault WikiPol est construit : architecture d
 
 La **taxonomie concrète** (domaines, thèmes, enjeux) n'est pas définie ici : elle est propre à chaque source et vit dans `Legacy/<NomSource>/BUILD.md`.
 
-Depuis WIK-1, les vaults sont figés dans `Legacy/` et chaque Source est un nœud de `6-politics/2-sources/` (`CLAUDE.md` éditorial, `source.yaml`, `1-chronicle/`, `.skills/`). Ce fichier décrit donc comment les vaults legacy ont été construits : leurs chemins (`Sources/Transcripts/`, `Videos/`…) restent relatifs au dossier du vault.
+Depuis WIK-1, les vaults sont figés dans `Legacy/` et chaque Source est un nœud de `6-politics/2-sources/` (`CLAUDE.md` éditorial, `source.yaml`, `1-chronicle/`, `.skills/`). La section « Le Digest » ci-dessous décrit ce que le pipeline de wikipol écrit dans une Chronicle. Le reste du fichier décrit comment les vaults legacy ont été construits : leurs chemins (`Sources/Transcripts/`, `Videos/`…) restent relatifs au dossier du vault.
+
+---
+
+## Le Digest
+
+Un Digest résume une Publication : sa thèse, ses affirmations, chacune appuyée par des Extracts de son Raw (les mots sont ceux de `CONTEXT.md`). C'est une Leaf de sa Period, un fichier `N-<slug>.md` de la Chronicle de la Source, en français. `wikipol digest` l'écrit avec la skill [[6-politics/1-projects/1-wikipol/Skills/write-digest/SKILL|write-digest]] et le vérifie avant de le garder ; `wikipol check-digest` revérifie un fichier existant contre son Raw. Le format est tenu par `Scripts/src/wikipol/digest/format.py` : ce qui suit et ce module disent la même chose.
+
+### Forme fichier
+
+```markdown
+---
+title: "MBAPPÉ TRAITE MAO DE DICTATEUR ET SE FAIT PURGER DU RÉAL (basé) !!"
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/<la Period>
+owner: diplo
+preview: >-
+  La thèse, en une ou deux phrases, 350 caractères au plus.
+source: paduteam
+url: https://www.youtube.com/watch?v=URonNSP0qM0
+youtube_id: "URonNSP0qM0"
+published: 2026-10-30
+duration: 3447
+raw: paduteam/URonNSP0qM0.md
+ingested: 2026-10-31
+digest_version: 1
+model: claude-sonnet-5-5
+---
+# MBAPPÉ TRAITE MAO DE DICTATEUR ET SE FAIT PURGER DU RÉAL (basé) !!
+
+## 1. Une affirmation de la Source, en une phrase.
+
+Une à trois phrases qui la développent, facultatives, avec au besoin un [[chemin/d-un/autre-digest|lien vers un autre Digest]].
+
+> [1:35](https://www.youtube.com/watch?v=URonNSP0qM0&t=95s) « les mots exacts du Raw »
+
+> [5:12](https://www.youtube.com/watch?v=URonNSP0qM0&t=312s) « une deuxième citation »
+
+## 2. ...
+```
+
+Le frontmatter porte les quatre champs du dépôt (`title`, `parent`, `owner`, `preview`), puis ceux du Digest, tous présents :
+
+| Champ | Contient |
+|---|---|
+| `title` | Le titre de la vidéo, celui des métadonnées du Raw ; c'est aussi le titre `#` du corps |
+| `parent` | Le dossier de la Period qui le contient, depuis la racine du dépôt |
+| `preview` | La thèse de la Publication, 350 caractères au plus |
+| `source` | Le slug de la Source |
+| `url` | `https://www.youtube.com/watch?v=<youtube_id>` |
+| `youtube_id` | L'identifiant YouTube, entre guillemets (il peut commencer par `-`) |
+| `published` | La date de publication, ou `null` quand ni le Raw ni la fiche legacy ne la connaissent |
+| `duration` | La durée en secondes, ou `null` : seuls les Raws du Fetcher la connaissent |
+| `raw` | La clé du Raw dans le bucket, `<source>/<youtube_id>.md` |
+| `ingested` | La date d'écriture du Digest |
+| `digest_version` | La version du format et de la skill, un entier ; `1` aujourd'hui, incrémenté quand ce qu'un Digest dit change |
+| `model` | Le modèle qui l'a écrit : l'identifiant épinglé dans le `source.yaml` de la Source |
+
+Le corps : le titre, puis **une à six affirmations** `## <n>. <affirmation>`, numérotées dans l'ordre, rien d'autre sous le titre. Chacune porte **une à trois Extracts**, une ligne chacune, séparées par une ligne vide : `> [<horodatage>](<url>&t=<secondes>s) « <citation> »`. La citation est un passage continu du Raw, cinq mots au moins ; le lien ouvre la vidéo au début du bloc de 30 s où elle commence, une seconde que le Raw porte, avant la fin de la vidéo. Un Raw sans horodatage (deux aujourd'hui, `wsiChBGb6T0` et `xnU_T2a6Nz0`) donne des Extracts sans lien : `> « <citation> »`. Des mots entre « » ailleurs, dans le Preview ou un développement, citent aussi la Source et doivent être dans le Raw. Un Digest en cite un autre de sa Source par wikilink, `[[<chemin du Digest sans .md>|<libellé>]]`, et seulement un Digest qui existe.
+
+### Forme app
+
+Dans hexframe, un Digest est un Tile : `title` et `preview` deviennent son titre et son Preview, et son Body s'ouvre sur les champs du Digest en bloc YAML, avant les affirmations :
+
+````markdown
+```yaml
+source: paduteam
+url: https://www.youtube.com/watch?v=URonNSP0qM0
+youtube_id: "URonNSP0qM0"
+published: 2026-10-30
+duration: 3447
+raw: paduteam/URonNSP0qM0.md
+ingested: 2026-10-31
+digest_version: 1
+model: claude-sonnet-5-5
+```
+
+## 1. Une affirmation de la Source, en une phrase.
+...
+````
+
+`parent` et `owner` ne passent pas : la place du Tile dans la carte les remplace. La synchronisation du dépôt vers l'app viendra hors de ce projet.
+
+### Le modèle, épinglé
+
+`claude.default_model` du `source.yaml` de chaque Source (et du gabarit `Templates/source.yaml.tmpl`) donne l'identifiant du modèle qui écrit ses Digests, `claude-sonnet-5-5` aujourd'hui. `wikipol digest` le passe tel quel à `claude -p --model` et le recopie dans le champ `model`. Un alias (`sonnet`, `opus`) ou un `-latest` est refusé dès la lecture du `source.yaml` : il glisserait vers un modèle plus récent sans prévenir, et un Digest doit dire ce qui l'a écrit. Changer de modèle, c'est changer cette ligne, et les Digests écrits avant gardent leur `model`.
 
 ---
 

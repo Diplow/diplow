@@ -21,7 +21,10 @@ git:
   default_branch: main
 
 claude:
-  default_model: sonnet
+  # L'identifiant épinglé du modèle qui écrit les Digests de la Source, passé tel quel à
+  # `claude -p --model` et recopié dans le champ `model` de chaque Digest. Jamais un alias
+  # (`sonnet`, `opus`) ni un `-latest` : ils glissent vers un modèle plus récent sans prévenir.
+  default_model: claude-sonnet-5-5
 
 content_types:
   raw:

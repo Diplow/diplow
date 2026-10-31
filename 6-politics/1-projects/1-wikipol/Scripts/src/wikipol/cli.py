@@ -5,22 +5,37 @@ from __future__ import annotations
 import argparse
 import subprocess
 import sys
+import tempfile
+from datetime import date
 from pathlib import Path
 
 from wikipol import fetch
 from wikipol.config import (
     DEFAULT_SOURCES_DIR,
     FETCHERS,
+    REPO_ROOT,
     ConfigError,
+    Source,
     load_fetcher_settings,
     load_settings,
     load_sources,
+)
+from wikipol.digest.format import check_digest, split_digest
+from wikipol.digest.raw_text import parse_raw
+from wikipol.digest.write import (
+    ClaudeCli,
+    DigestRejected,
+    WriterFailed,
+    digest_fields,
+    linkable_digests,
+    write_digest,
 )
 from wikipol.drive_copy import DEFAULT_DRIVE_ROOT, copy_source, format_report
 from wikipol.fetch.fetcher import FetchFailed
 from wikipol.fetch.run import fetch_source
 from wikipol.fetch.run import format_report as format_fetch_report
-from wikipol.raw_store import S3RawStore
+from wikipol.legacy_index import find_video_note
+from wikipol.raw_store import YOUTUBE_ID, RawNotFound, RawStore, S3RawStore
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -48,12 +63,34 @@ def main(argv: list[str] | None = None) -> int:
     get.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
     get.add_argument("--dry-run", action="store_true", help="only list the videos without a Raw")
 
+    digest = commands.add_parser(
+        "digest",
+        help="write one Publication's Digest with the write-digest skill, checked before kept",
+    )
+    digest.add_argument("--source", required=True, help="the Source's slug")
+    digest.add_argument("--id", required=True, dest="youtube_id", help="the video's YouTube id")
+    digest.add_argument("--out", required=True, type=Path, help="the Digest file to write")
+    digest.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
+
+    check = commands.add_parser(
+        "check-digest", help="check Digest files against their Raw in the bucket"
+    )
+    check.add_argument("digests", nargs="+", type=Path)
+    check.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
+
     args = parser.parse_args(argv)
     try:
         if args.command == "copy-from-drive":
             return copy_from_drive(args)
         if args.command == "fetch":
             return fetch_raws(args)
+        if args.command == "digest":
+            return write_one_digest(args)
+        if args.command == "check-digest":
+            return check_digests(args)
+    except (WriterFailed, RawNotFound) as error:
+        print(f"wikipol: {error}", file=sys.stderr)
+        return 2
     except FetchFailed as error:
         print(f"wikipol: {error}", file=sys.stderr)
         return 2
@@ -107,6 +144,100 @@ def fetch_raws(args: argparse.Namespace) -> int:
     )
     print(format_fetch_report(report, dry_run=args.dry_run))
     return 1 if report.stopped else 0
+
+
+def source_by_slug(sources_dir: Path, slug: str) -> Source:
+    by_slug = {s.slug: s for s in load_sources(sources_dir)}
+    if slug not in by_slug:
+        raise ConfigError(f"no Source with slug {slug}")
+    return by_slug[slug]
+
+
+def repo_path(path: Path) -> str | None:
+    """`path` relative to the repo root, or None when it lies outside the repo."""
+    try:
+        return path.resolve().relative_to(REPO_ROOT).as_posix()
+    except ValueError:
+        return None
+
+
+def write_one_digest(args: argparse.Namespace) -> int:
+    source = source_by_slug(args.sources_dir, args.source)
+    if not YOUTUBE_ID.fullmatch(args.youtube_id):
+        raise ConfigError(f"{args.youtube_id!r} is not a YouTube id")
+    # The Digest's parent is the Period it is written in; outside the repo, the Chronicle.
+    parent = repo_path(args.out.parent) or repo_path(source.chronicle) or "1-chronicle"
+    store = S3RawStore.from_settings(load_settings())
+    try:
+        digest = write_digest(
+            source,
+            args.youtube_id,
+            store,
+            ClaudeCli(),
+            parent=parent,
+            today=date.today(),
+            # Not itself, when it replaces a Digest already in the Chronicle.
+            linkable={
+                target: title
+                for target, title in linkable_digests(source).items()
+                if target != repo_path(args.out.with_suffix(""))
+            },
+        )
+    except DigestRejected as rejected:
+        kept = Path(tempfile.mkdtemp(prefix="wikipol-rejected-")) / f"{args.youtube_id}.md"
+        kept.write_text(rejected.draft, encoding="utf-8")
+        print(f"wikipol: the Digest of {args.youtube_id} was rejected twice:", file=sys.stderr)
+        for problem in rejected.problems:
+            print(f"  - {problem}", file=sys.stderr)
+        print(f"  last draft: {kept}", file=sys.stderr)
+        return 1
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text(digest.text, encoding="utf-8")
+    print(f"{args.out}: written by {digest.fields.model} in {digest.drafts} draft(s)")
+    return 0
+
+
+def check_digests(args: argparse.Namespace) -> int:
+    store = S3RawStore.from_settings(load_settings())
+    failed = 0
+    for path in args.digests:
+        problems = check_one_digest(path, store, args.sources_dir)
+        print(f"{path}: {'ok' if not problems else f'{len(problems)} problems'}")
+        for problem in problems:
+            print(f"  - {problem}")
+        failed += bool(problems)
+    return 1 if failed else 0
+
+
+def check_one_digest(path: Path, store: RawStore, sources_dir: Path) -> list[str]:
+    """What is wrong with one Digest file, read against its Raw; a file the check can't even
+    place (no Source, no Raw) says so in its problems, and the next file is still checked."""
+    try:
+        text = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as error:
+        return [f"can't be read: {error}"]
+    frontmatter, _ = split_digest(text)
+    if frontmatter is None:
+        return ["no readable YAML frontmatter"]
+    youtube_id = str(frontmatter.get("youtube_id") or "")
+    try:
+        source = source_by_slug(sources_dir, str(frontmatter.get("source") or ""))
+        raw = store.get(source.slug, youtube_id)
+        raw_text = parse_raw(raw.body.decode("utf-8"))
+    except (ConfigError, RawNotFound, ValueError) as error:  # UnicodeDecodeError included
+        return [f"can't be checked: {error}"]
+    # What the pipeline would write today, but for the model that wrote the Digest, which may
+    # predate today's pin (only an alias is refused), and the day it was written.
+    expected = digest_fields(
+        source,
+        raw,
+        find_video_note(source.legacy_vault, youtube_id),
+        parent=repo_path(path.parent) or str(frontmatter.get("parent")),
+        ingested=frontmatter.get("ingested"),
+        model=frontmatter.get("model"),
+    )
+    linkable = set(linkable_digests(source)) - {repo_path(path.with_suffix(""))}
+    return check_digest(text, raw_text, expected, linkable)
 
 
 if __name__ == "__main__":

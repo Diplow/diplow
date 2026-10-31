@@ -9,6 +9,7 @@ node under `6-politics/2-sources/`.
 from __future__ import annotations
 
 import os
+import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -23,6 +24,11 @@ DEFAULT_S3_REGION = "fr-par"
 
 # src/wikipol/config.py -> parents: wikipol, src, Scripts, 1-wikipol, 1-projects, 6-politics
 DEFAULT_SOURCES_DIR = Path(__file__).resolve().parents[5] / "2-sources"
+REPO_ROOT = DEFAULT_SOURCES_DIR.parents[1]
+
+# A model id that names one model for good, such as claude-sonnet-5-5. An alias (`sonnet`) or a
+# `-latest` id moves to a newer model without notice, and a Digest must say what wrote it.
+PINNED_MODEL = re.compile(r"claude-[a-z0-9]+(?:-[a-z0-9]+)+")
 
 
 class ConfigError(Exception):
@@ -108,6 +114,27 @@ class Source:
     legacy_vault: Path | None
     legacy_inventory: Path | None
     channel_url: str | None = None
+    attribution: str | None = None
+    """How a Digest names the Source as a speaker: `la PaduTeam`."""
+    model: str | None = None
+    """`claude.default_model`: the model that writes the Source's Digests, a pinned id."""
+
+    @property
+    def chronicle(self) -> Path:
+        return self.node / "1-chronicle"
+
+
+def is_pinned_model(model: str) -> bool:
+    return bool(PINNED_MODEL.fullmatch(model)) and not model.endswith("-latest")
+
+
+def pinned_model(source: Source) -> str:
+    """The model that writes the Source's Digests; a Source without one writes none."""
+    if source.model is None:
+        raise ConfigError(f"{source.slug}: source.yaml has no claude.default_model")
+    if not is_pinned_model(source.model):
+        raise ConfigError(f"{source.slug}: {source.model!r} is an alias, not a pinned model id")
+    return source.model
 
 
 def load_source(node: Path) -> Source:
@@ -128,12 +155,20 @@ def load_source(node: Path) -> Source:
         raise ConfigError(f"{path}: source.slug {slug!r} is not lowercase letters, digits and -")
 
     # An absent or empty block is {}; anything else that isn't a mapping is refused.
-    legacy, files, youtube = (
-        {} if data.get(name) is None else data[name] for name in ("legacy", "files", "youtube")
+    blocks = ("legacy", "files", "youtube", "claude")
+    legacy, files, youtube, claude = (
+        {} if data.get(name) is None else data[name] for name in blocks
     )
-    if not all(isinstance(block, dict) for block in (legacy, files, youtube)):
-        raise ConfigError(f"{path}: `legacy:`, `files:` and `youtube:` must be mappings")
+    if not all(isinstance(block, dict) for block in (legacy, files, youtube, claude)):
+        raise ConfigError(f"{path}: `legacy:`, `files:`, `youtube:` and `claude:` must be mappings")
     channel_url = str(youtube.get("channel_url") or "").strip() or None
+    model = str(claude.get("default_model") or "").strip() or None
+    if model is not None and not is_pinned_model(model):
+        raise ConfigError(
+            f"{path}: claude.default_model {model!r} is an alias; pin a model id such as "
+            "claude-sonnet-5-5"
+        )
+    attribution = str(source.get("attribution") or "").strip() or None
     vault_rel, inventory_rel = legacy.get("vault"), files.get("inventaire")
     vault = (node / str(vault_rel)).resolve() if vault_rel else None
     inventory = vault / str(inventory_rel) if vault and inventory_rel else None
@@ -144,6 +179,8 @@ def load_source(node: Path) -> Source:
         legacy_vault=vault,
         legacy_inventory=inventory,
         channel_url=channel_url,
+        attribution=attribution,
+        model=model,
     )
 
 
