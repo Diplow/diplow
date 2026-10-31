@@ -1,0 +1,28 @@
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/cli.py
+  s_bffceea45dbe3a::t_f1312f6a5bc369 249-257,266
+6-politics/1-projects/1-wikipol/Scripts/tests/test_chronicle_period.py
+  s_bffceea45dbe3a::t_f1312f6a5bc369 128,145
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/chronicle/filing.py
+  s_bffceea45dbe3a::t_f1312f6a5bc369 19,166,171-172,218-219,224-225
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/chronicle/period.py
+  s_bffceea45dbe3a::t_f1312f6a5bc369 33-35,124-126
+6-politics/1-projects/1-wikipol/Scripts/tests/test_chronicle_filing.py
+  s_bffceea45dbe3a::t_f1312f6a5bc369 290-292,294-304,307-311
+  s_bffceea45dbe3a::t_932a25df9900cc 3,293,305-306
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5e34a909f4110645b996c5e0b21603f1fa84f195",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
