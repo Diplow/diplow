@@ -4,7 +4,7 @@ Ce fichier documente **comment** un vault WikiPol est construit : architecture d
 
 La **taxonomie concrète** (domaines, thèmes, enjeux) n'est pas définie ici : elle est propre à chaque source et vit dans `Legacy/<NomSource>/BUILD.md`.
 
-Depuis WIK-1, les vaults sont figés dans `Legacy/` et chaque Source est un nœud de `6-politics/2-sources/` (`CLAUDE.md` éditorial, `source.yaml`, `1-chronicle/`, `.skills/`). La section « Le Digest » ci-dessous décrit ce que le pipeline de wikipol écrit dans une Chronicle. Le reste du fichier décrit comment les vaults legacy ont été construits : leurs chemins (`Sources/Transcripts/`, `Videos/`…) restent relatifs au dossier du vault.
+Depuis WIK-1, les vaults sont figés dans `Legacy/` et chaque Source est un nœud de `6-politics/2-sources/` (`CLAUDE.md` éditorial, `source.yaml`, `1-chronicle/`, `.skills/`). Les sections « Le Digest » et « La Chronicle » ci-dessous décrivent ce que le pipeline de wikipol écrit dans une Chronicle. Le reste du fichier décrit comment les vaults legacy ont été construits : leurs chemins (`Sources/Transcripts/`, `Videos/`…) restent relatifs au dossier du vault.
 
 ---
 
@@ -89,6 +89,49 @@ model: claude-sonnet-5-5
 ### Le modèle, épinglé
 
 `claude.default_model` du `source.yaml` de chaque Source (et du gabarit `Templates/source.yaml.tmpl`) donne l'identifiant du modèle qui écrit ses Digests, `claude-sonnet-5-5` aujourd'hui. `wikipol digest` le passe tel quel à `claude -p --model` et le recopie dans le champ `model`. Un alias (`sonnet`, `opus`) ou un `-latest` est refusé dès la lecture du `source.yaml` : il glisserait vers un modèle plus récent sans prévenir, et un Digest doit dire ce qui l'a écrit. Changer de modèle, c'est changer cette ligne, et les Digests écrits avant gardent leur `model`.
+
+---
+
+## La Chronicle
+
+La Chronicle d'une Source, `1-chronicle/`, range ses Digests par date en un arbre de Periods qui se divisent par nombre ([[6-politics/1-projects/1-wikipol/docs/adr/0001-chronicle-splits-by-count|ADR 0001]]). `wikipol file` y range des Digests et fait réécrire par la skill [[6-politics/1-projects/1-wikipol/Skills/write-period/SKILL|write-period]] chaque Period touchée. Les règles sont tenues par `Scripts/src/wikipol/chronicle/` : ce qui suit et ce paquet disent la même chose.
+
+### La forme de l'arbre
+
+- **Une Period** est un dossier et son `CLAUDE.md`. Elle tient soit jusqu'à six Digests, soit jusqu'à six Periods plus courtes, jamais les deux. La Chronicle elle-même en est la racine.
+- **Ranger un Digest** descend vers la Period dont les dates l'accueillent : la dernière qui commence au plus tard à sa date, sinon la première. Il y prend sa place par date (puis par `youtube_id` entre deux Digests du même jour).
+- **Une Period qui déborde** (sept enfants) se coupe en deux, de quatre et trois, au milieu ; quand l'autre milieu tombe entre deux dates différentes et celui-là non, c'est l'autre. La seconde moitié devient une Period sœur, juste après ; le parent peut déborder à son tour. La Chronicle n'a pas de sœur : quand elle déborde, ses enfants descendent dans deux nouvelles Periods sous elle. Tous les Digests restent ainsi à la même profondeur, et les dates de deux Periods sœurs ne se chevauchent pas.
+- **Un Digest sans date** (`published: null`) n'a pas de place : `wikipol file` le refuse. Un Digest déjà rangé et rangé de nouveau à la même date remplace l'ancien ; à une autre date, il est refusé.
+
+### Noms, titres, liens
+
+Les enfants sont numérotés de 1 à 6 dans l'ordre des dates. Un Digest est le fichier `N-<slug>.md`, le slug fait des six premiers mots de son titre, sans accents ; une Period est le dossier `N-<sa première date>`, par exemple `2-2026-01-05/`. Le titre d'une Period est sa plage de dates, `2026-01-05 → 2026-01-07` (une seule date quand tous ses Digests sont du même jour) ; la Chronicle garde le sien.
+
+Ranger un Digest peut en déplacer d'autres : une coupe, une renumérotation. Le `parent` de chaque fichier déplacé suit, et chaque wikilink qui nommait un Digest ou une Period déplacée (par son `CLAUDE`) est réécrit : dans la Chronicle, et dans tous les fichiers Markdown du dépôt, hors dossiers cachés, `node_modules/` et les vaults figés de `Legacy/`.
+
+### Le fichier d'une Period
+
+```markdown
+---
+title: "2026-01-05 → 2026-01-07"
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2026-01-05
+owner: diplo
+preview: >-
+  Ce que la Source a soutenu pendant ces dates, 350 caractères au plus.
+---
+# 2026-01-05 → 2026-01-07
+
+Un à trois paragraphes : le résumé de la Period.
+
+## Contenu
+
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2026-01-05/1-titre-de-la-video|TITRE DE LA VIDÉO]] (2026-01-05)
+2. ...
+```
+
+Le pipeline écrit le frontmatter, le titre et la liste `## Contenu` (pour une Period de Periods : `[[<dossier>/CLAUDE|<plage>]] (<n> Digests)`). `write-period` écrit le Preview et le résumé, à partir des titres et des Previews de ses enfants seulement, via `claude -p` sur le modèle épinglé dans le `source.yaml`. Le résumé est refusé s'il est vide, dépasse trois paragraphes, porte un titre ou une citation en bloc, lie autre chose qu'un enfant, ou met entre « » des mots qu'aucun titre ni Preview d'enfant ne contient ; refusé, il revient une fois au modèle, et un second refus n'écrit rien.
+
+Les Periods touchées sont celles dont les enfants ont changé : celles au-dessus du Digest rangé, et celles qu'une coupe a créées. Elles sont résumées de la plus profonde à la Chronicle, pour qu'un parent lise les Previews déjà réécrits de ses enfants. Tout est calculé avant d'écrire : un résumé qui échoue laisse la Chronicle telle qu'elle était. Une Period que le rangement n'a pas touchée garde son résumé.
 
 ---
 

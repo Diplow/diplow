@@ -5,9 +5,8 @@ owner: diplo
 preview: >-
   The choices the autonomous run made building wikipol's pipeline where a ticket
   left room: the Source nodes and their frozen vaults, how the Raws reached the
-  bucket and which stayed on Drive, how the Fetcher picks and paces videos, and
-  how a Digest is shared between Python and the write-digest skill, formatted
-  and checked.
+  bucket, how the Fetcher picks videos, how a Digest is written and checked, and
+  how the Chronicle splits its Periods and files Digests in them.
 ---
 # Decisions
 
@@ -101,3 +100,39 @@ WIK-4, for the rule "never a timestamp the Raw doesn't hold, nor a quote that is
 ### DEC-13 Five sample Digests of PaduTeam, all checked; for Ulysse to review on WIK-12
 
 WIK-4, 2026-10-31, five runs of `wikipol digest` on `claude-sonnet-5-5`, chosen to cover what differs between Raws: `URonNSP0qM0` (a capsule fetched by WIK-3, with its duration, no legacy note), `X0tXWZsjENQ` (a Graphomarxisme lesson, an old `**[MM:SS]**` Raw, with a legacy note), `wsiChBGb6T0` (commentary from a Raw without timestamps), `ADd-wfitfm8` (an eight-minute reaction) and `bfgICs0Y6y0` (a two-hour debate with guests). Four passed the checker on the first draft, `bfgICs0Y6y0` on the second; `wikipol check-digest` passes all five against the bucket. They are pasted in WIK-4's pull request and not committed: filing them in the Chronicle is WIK-5's. For Ulysse: whether the claims restitute PaduTeam faithfully, whether six claims for a two-hour debate is enough, and whether the Preview reads as a thesis, are the review WIK-12 lists.
+
+### DEC-14 The Chronicle splits like a B-tree: halves of four and three, siblings, the root going down a level
+
+WIK-5. ADR 0001 says a full Period splits by count; the ticket asked for contiguous, balanced date ranges. A Period that overflows to seven splits into two of four and three, the second half becoming a new sibling right after it, and the parent may overflow in turn. The Chronicle has no sibling: when it overflows, its children go down into two new Periods under it. So every Digest sits at the same depth and two sibling Periods never overlap. Where the ticket left room:
+
+- **Two halves, not six parts, and siblings, not children.** Splitting a Period into sub-Periods inside itself would make the newest branch one level deeper at every overflow, since Digests arrive in date order: a chain, not a tree. Splitting upward keeps the depth logarithmic: 283 Digests in one year sit three Periods deep (`test_283_digests_in_one_year_keep_the_rule_of_6_at_one_depth`).
+- **Balanced, as the ticket asks, so a Period holds three to six.** Appending in date order leaves each older Period with four or three Digests, so a year of PaduTeam takes about 90 Periods. Cutting 6 + 1 on an append would fill them, but it is not balanced; for Ulysse, if summaries of three Digests read thin.
+- **The cut falls between two dates when it can**: of the two middles, the one between different days, so two siblings share a day only when the day itself holds more than one half.
+- **A Digest goes into the last Period starting on or before its date**, else the first; between two Digests of one day, the `youtube_id` decides. Out-of-order inserts end in date order (`test_digests_filed_out_of_order_end_in_date_order`).
+- **A Digest without a date has no place**, so `wikipol file` refuses it. For Ulysse and WIK-6: DEC-6's 150 PaduTeam Raws without `published` give Digests without one (DEC-11), and they can't be filed until a date reaches them (the Fetcher's metadata, DEC-9).
+- **A Digest filed again on the same date replaces itself in place**, so a Digest rewritten after a `digest_version` bump keeps its place; on another date it is refused, since moving it would mean removing it from its old Period, which the split rules don't cover.
+
+### DEC-15 A Period's names: `N-<first date>/`, a date-range title, and the Chronicle as the root Period
+
+WIK-5. The ticket said a Period's title is its date range; the rest was open.
+
+- **The folder is `N-<first date>`**, such as `2-2026-01-05/`, not the range: the newest Period's last date changes with every Digest, and a folder named by it would move, with every link into it, every day. Its first date changes only on a split or an older Digest filed at its head.
+- **The title is the range**, `2026-01-05 → 2026-01-07`, or one date when every Digest is of the same day, in ISO like the Digests' `published`.
+- **A Digest is `N-<slug>.md`**, the slug the first six words of its title, lowercase ASCII, accents dropped, every other sign a `-`; the `youtube_id` when the title leaves nothing. Children are numbered by date, so filing an older Digest renumbers the ones after it.
+- **The Chronicle is the root Period**: it holds up to six Digests or Periods like any other, and `write-period` rewrites its Preview and Body whenever a filing touches it, which is every filing. It keeps its own title, `Chronicle`. The two Chronicles' hand-written text ("Vide pour l'instant") goes at the first filing, replaced by a summary of everything filed: for Ulysse, if the Chronicle should rather keep a fixed text and only list its Periods.
+- **Python writes a Period's frontmatter, title and `## Contenu`**, the list of its children with a wikilink each (a Period's as `<folder>/CLAUDE`, the repo's way to link a node); the skill writes only the Preview and the summary above it. A Period's file reads back by splitting at `## Contenu`.
+
+### DEC-16 `wikipol file` files, summarizes, then writes, and follows every move across the repo
+
+WIK-5. `wikipol file --source <slug> <Digest files>` reads the Chronicle into a tree, files the Digests, numbers everything again and works out what moved, in memory. Then `write-period` summarizes every touched Period, deepest first, and only then is anything written: the Chronicle's files, the `parent` of every moved file, and the wikilinks that named a moved Digest or Period. A summary refused twice leaves the disk as it was, like a Digest refused twice.
+
+- **Touched** is every Period whose children changed: those above the new Digest and those a split created. A Period that only moved (renumbered, or one level down after the Chronicle split) keeps its summary; its file is written again only for its new `parent` and links.
+- **Links are followed in every Markdown file of the repo**, outside dot folders, `node_modules/` and `Legacy/`: later hexframes will cite Digests from anywhere, and the frozen vaults link none. Only links that named a moved path change, so a file elsewhere is untouched unless it cites a Digest.
+- **The Digest files given stay where they are**: filing copies them, and one already inside the Chronicle is refused, since the tree would read it twice.
+- **`claude -p` moved to `wikipol/claude.py`** with the draft splitter and the retry prompt, now shared by `write-digest` and `write-period`; `wikipol digest` is unchanged.
+
+### DEC-17 `write-period` reads only its children's titles and Previews; it has not run on the model yet
+
+WIK-5. `Skills/write-period/SKILL.md` sits beside `write-digest`, under wikipol's `Skills/` (where WIK-4 put its skill, outside the frozen root `.skills/`). It gets the Source's editorial `CLAUDE.md`, the Period's range and size, and each child's link, title, date and Preview, never a Raw or a Digest's body: a Period is a summary of summaries, and its cost stays flat however long its Digests are. It returns a Preview (350 characters at most) and one to three paragraphs; the checker refuses a heading, a block quote, a link to anything but a child, and words in « » that no child's title or Preview holds, the rule of DEC-12 carried one level up. It runs on `claude.default_model`, like `write-digest`.
+
+The ticket named no sample for `claude -p`, so the run never called it: `write-period` is tested on a fake writer only, and WIK-4's five sample Digests (DEC-13) are not filed, since filing them means summarizing their Periods. For Ulysse and WIK-6: its run on 20 PaduTeam Raws is the skill's first real run; read the Periods it writes before the backfill.
