@@ -10,6 +10,7 @@ from datetime import date
 from pathlib import Path
 
 from wikipol import fetch
+from wikipol.claude import ClaudeCli, WriterFailed
 from wikipol.config import (
     DEFAULT_SOURCES_DIR,
     FETCHERS,
@@ -22,14 +23,7 @@ from wikipol.config import (
 )
 from wikipol.digest.format import check_digest, split_digest
 from wikipol.digest.raw_text import parse_raw
-from wikipol.digest.write import (
-    ClaudeCli,
-    DigestRejected,
-    WriterFailed,
-    digest_fields,
-    linkable_digests,
-    write_digest,
-)
+from wikipol.digest.write import DigestRejected, digest_fields, linkable_digests, write_digest
 from wikipol.drive_copy import DEFAULT_DRIVE_ROOT, copy_source, format_report
 from wikipol.fetch.fetcher import FetchFailed
 from wikipol.fetch.run import fetch_source
