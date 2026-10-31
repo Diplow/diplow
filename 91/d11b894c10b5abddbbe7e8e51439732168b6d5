@@ -1,0 +1,25 @@
+6-politics/1-projects/1-wikipol/Scripts/tests/test_runner_repo.py
+  s_bffceea45dbe3a::t_4fcd6e0758302e 171-175
+6-politics/1-projects/1-wikipol/Scripts/launchd/install-runner.sh
+  s_bffceea45dbe3a::t_b7d6fcf0136d3f 66-78,108-110,128-137
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/runner/repo.py
+  s_bffceea45dbe3a::t_b7d6fcf0136d3f 70-71,100-104,169-172
+6-politics/1-projects/1-wikipol/Scripts/tests/test_runner_install.py
+  s_bffceea45dbe3a::t_4fcd6e0758302e 141-142,144,149-166
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "91d11b894c10b5abddbbe7e8e51439732168b6d5",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
