@@ -36,7 +36,7 @@ from wikipol.fetch.run import format_report as format_fetch_report
 from wikipol.index.embed import ScalewayEmbedder
 from wikipol.index.run import format_report as format_index_report
 from wikipol.index.run import index_source
-from wikipol.index.store import PostgresIndex
+from wikipol.index.store import PostgresIndex, SchemaNotApplied
 from wikipol.legacy_index import find_video_note
 from wikipol.raw_store import YOUTUBE_ID, RawNotFound, RawStore, S3RawStore
 
@@ -119,6 +119,11 @@ def main(argv: list[str] | None = None) -> int:
         help="read the bucket and the index, embed and write nothing; estimates the tokens",
     )
 
+    commands.add_parser(
+        "migrate",
+        help="apply the search index's schema; needs a database key that may create tables",
+    )
+
     args = parser.parse_args(argv)
     try:
         if args.command == "copy-from-drive":
@@ -135,7 +140,9 @@ def main(argv: list[str] | None = None) -> int:
             return backfill_source(args)
         if args.command == "index":
             return index_raws(args)
-    except (WriterFailed, RawNotFound, IndexUnreachable) as error:
+        if args.command == "migrate":
+            return migrate_index()
+    except (WriterFailed, RawNotFound, IndexUnreachable, SchemaNotApplied) as error:
         print(f"wikipol: {error}", file=sys.stderr)
         return 2
     except FetchFailed as error:
@@ -348,6 +355,30 @@ class IndexUnreachable(Exception):
     """The index's database refused the connection or a statement."""
 
 
+def open_index(database_url: str) -> PostgresIndex:
+    import psycopg
+
+    try:
+        return PostgresIndex.connect(database_url)
+    except psycopg.Error as error:
+        # psycopg's message may quote the connection string's host, never its password.
+        raise IndexUnreachable(f"the index's database refused the connection: {error}") from error
+
+
+def migrate_index() -> int:
+    import psycopg
+
+    index = open_index(load_index_settings(need_embedding=False).database_url)
+    try:
+        applied = index.migrate()
+    except psycopg.Error as error:
+        raise IndexUnreachable(f"the index's database failed: {error}") from error
+    finally:
+        index.close()
+    print("\n".join(f"migration applied: {name}" for name in applied) or "the schema is up to date")
+    return 0
+
+
 def index_raws(args: argparse.Namespace) -> int:
     import psycopg
 
@@ -360,11 +391,7 @@ def index_raws(args: argparse.Namespace) -> int:
     settings = load_index_settings(need_embedding=not args.dry_run)
     store = S3RawStore.from_settings(load_settings())
     embedder = ScalewayEmbedder(settings.embedding_key or "", settings.project_id)
-    try:
-        index = PostgresIndex.connect(settings.database_url)
-    except psycopg.Error as error:
-        # psycopg's message may quote the connection string's host, never its password.
-        raise IndexUnreachable(f"the index's database refused the connection: {error}") from error
+    index = open_index(settings.database_url)
     try:
         if not args.dry_run:
             for name in index.migrate():

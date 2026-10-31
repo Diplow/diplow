@@ -41,3 +41,15 @@ CREATE TABLE chunk (
 );
 
 CREATE INDEX chunk_embedding ON chunk USING hnsw (embedding vector_cosine_ops);
+
+-- On Serverless SQL the pipeline's key (ServerlessSQLDatabaseDataReadWrite) connects as
+-- role_readwrite, which reads and writes rows but may create no table; the schema is applied by a
+-- key that may (role_admin), and hands the rows over.
+DO $$
+BEGIN
+    IF EXISTS (SELECT FROM pg_roles WHERE rolname = 'role_readwrite') THEN
+        GRANT SELECT, INSERT, UPDATE, DELETE ON publication, chunk TO role_readwrite;
+        GRANT SELECT ON schema_migration TO role_readwrite;
+    END IF;
+END
+$$;

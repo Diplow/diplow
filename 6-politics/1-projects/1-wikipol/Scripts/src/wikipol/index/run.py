@@ -24,7 +24,7 @@ from wikipol.index.store import EmbeddedChunk, IndexStore, Publication
 from wikipol.legacy_index import video_notes
 from wikipol.raw_store import RawStore, raw_key
 
-TOKENS_PER_WORD = 1.6
+TOKENS_PER_WORD = 1.42
 """What a dry run estimates the API would count per word of French captions. Measured with
 qwen3-embedding-8b's tokenizer on PaduTeam's Raws (decisions.md#DEC-20)."""
 

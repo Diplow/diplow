@@ -83,6 +83,21 @@ uv run wikipol backfill --source paduteam --limit 20             # en digère 20
 
 Elle saute, et liste dans son rapport, un Raw sans date, qui n'a pas de place dans la Chronicle (ni `published` dans ses métadonnées, ni `date` dans sa fiche legacy), et un Raw sans sous-titres utilisables, qui n'a pas assez de mots prononcés pour un Extract. Un Digest refusé deux fois, ou un `claude -p` sans réponse, est un échec ; son dernier brouillon reste dans `rejected/` du dossier d'attente, et trois échecs de suite arrêtent la commande. `--limit N` borne les Raws confiés au modèle, échecs compris ; les Digests repris du dossier d'attente ne comptent pas. Une Period se résume à chaque lot qui la touche : les 20 premiers Digests de PaduTeam ont demandé 11 résumés de Periods, à peu près un appel de `write-period` pour deux Digests, en plus de l'appel (ou des deux) de chaque Digest.
 
+## La recherche : `wikipol index`
+
+```bash
+uv run wikipol migrate                         # applique le schéma de l'index, une fois, avec une clé qui peut créer des tables
+uv run wikipol index --dry-run                 # ce qu'il indexerait : Publications, chunks, mots, tokens et coût estimés
+uv run wikipol index --source paduteam --limit 5   # indexe 5 Raws de PaduTeam qui manquent à l'index
+uv run wikipol index                           # indexe tout ce qui manque, toutes Sources confondues
+```
+
+L'index vit dans la base Serverless SQL `wikipol`, PostgreSQL avec pgvector (ADR 0003), à l'adresse `WIKIPOL_DATABASE_URL`. Chaque Raw du bucket y est une Publication (`publication` : Source, `youtube_id`, titre, date, durée, clé du Raw, chemin de son Digest dans la Chronicle quand il en a un) et une suite de chunks (`chunk`) d'environ deux minutes, coupés sur ses blocs de 30 s, deux voisins partageant un bloc, chacun avec ses secondes de début et de fin et son embedding. Un Raw sans timestamp est coupé par mots, et ses chunks n'ont pas de secondes. Les embeddings viennent de `qwen3-embedding-8b`, sur les Generative APIs de Scaleway, en 1024 dimensions, par lots de 16 chunks ; la clé est `WIKIPOL_EMBEDDING_API_KEY`, sinon `SCW_SECRET_KEY`, et `SCW_DEFAULT_PROJECT_ID` facture les appels au projet. Une requête de recherche, de l'autre côté, prend le préfixe `Instruct: …\nQuery: …` du modèle.
+
+Relancée, la commande n'indexe que ce qui manque : une Publication déjà indexée avec le même modèle et le même découpage est sautée, et seul le chemin de son Digest est mis à jour, puisqu'il bouge quand la Chronicle range et coupe. Chaque Publication est écrite avec ses chunks dans une transaction, si bien qu'un arrêt (une API qui refuse, Ctrl-C) n'en laisse aucune à moitié. La date d'une Publication est celle de son Digest : le `published` du Raw, sinon la `date` de sa fiche legacy, sinon inconnue, et une Publication sans date est indexée quand même. Le rapport donne les tokens comptés par l'API et le coût, environ 0,10 € par million de tokens ; `--dry-run` les estime, à 1,42 token par mot.
+
+Le schéma est dans `Scripts/src/wikipol/index/migrations/`, un fichier SQL par migration, appliqué une fois et noté dans `schema_migration`. La clé du pipeline n'écrit que des lignes (`role_readwrite`, la permission `ServerlessSQLDatabaseDataReadWrite`) : `wikipol migrate` se lance avec la chaîne de connexion d'une clé qui a `ServerlessSQLDatabaseReadWrite`, dans `WIKIPOL_DATABASE_URL` sur la ligne de commande, et la migration donne les lignes à `role_readwrite`. `wikipol index` applique lui-même une migration en attente quand sa clé le peut, et sinon s'arrête en le disant.
+
 ## Répartition des responsabilités
 
 | Niveau | Fichier | Contient |

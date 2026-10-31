@@ -4,6 +4,10 @@ A Publication and its chunks are written in one transaction, replacing what the 
 it, so a run stopped halfway leaves every Publication either whole or absent, and the next run
 takes up the absent ones. The schema is the SQL files of `migrations/`, applied once each, in
 the order of their names, and recorded in `schema_migration`.
+
+Applying it takes a role that may create tables. On Serverless SQL the pipeline's key connects as
+`role_readwrite`, which only writes rows, so `wikipol migrate` runs once with a key that may, and
+the migration grants the rows to `role_readwrite`; `wikipol index` then finds nothing pending.
 """
 
 from __future__ import annotations
@@ -18,6 +22,10 @@ from wikipol.index.chunks import Chunk
 
 # Taken for the length of a migration, so two runs starting together don't both apply one.
 MIGRATION_LOCK = 0x77696B69
+
+
+class SchemaNotApplied(Exception):
+    """The database lacks a migration, and the role connected may not apply it."""
 
 
 @dataclass(frozen=True)
@@ -99,22 +107,50 @@ class PostgresIndex:
     def close(self) -> None:
         self.connection.close()
 
+    def _applied(self) -> set[str]:
+        exists = self.connection.execute("SELECT to_regclass('schema_migration')").fetchone()
+        if exists is None or exists[0] is None:
+            return set()
+        return {row[0] for row in self.connection.execute("SELECT name FROM schema_migration")}
+
+    def pending(self) -> list[str]:
+        """The migrations the database lacks, read without writing anything, so a key that may
+        only write rows can still tell that the schema is up to date."""
+        with self.connection.transaction():
+            applied = self._applied()
+        return [name for name, _ in migrations() if name not in applied]
+
     def migrate(self) -> list[str]:
         """Apply the migrations the database lacks; returns their names."""
+        import psycopg
+
+        if not self.pending():
+            return []
         applied: list[str] = []
-        with self.connection.transaction():
-            self.connection.execute("SELECT pg_advisory_xact_lock(%s)", (MIGRATION_LOCK,))
-            self.connection.execute(
-                "CREATE TABLE IF NOT EXISTS schema_migration ("
-                " name text PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT now())"
-            )
-            done = {row[0] for row in self.connection.execute("SELECT name FROM schema_migration")}
-            for name, sql in migrations():
-                if name in done:
-                    continue
-                self.connection.execute(sql)
-                self.connection.execute("INSERT INTO schema_migration (name) VALUES (%s)", (name,))
-                applied.append(name)
+        try:
+            with self.connection.transaction():
+                self.connection.execute("SELECT pg_advisory_xact_lock(%s)", (MIGRATION_LOCK,))
+                self.connection.execute(
+                    "CREATE TABLE IF NOT EXISTS schema_migration ("
+                    " name text PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT now())"
+                )
+                done = self._applied()
+                for name, sql in migrations():
+                    if name in done:
+                        continue
+                    self.connection.execute(sql)
+                    self.connection.execute(
+                        "INSERT INTO schema_migration (name) VALUES (%s)", (name,)
+                    )
+                    applied.append(name)
+        except psycopg.errors.InsufficientPrivilege as error:
+            raise SchemaNotApplied(
+                "the database's role may not create the index's tables "
+                f"({error.diag.message_primary}); apply the schema once with a key that may, "
+                "`WIKIPOL_DATABASE_URL=<its connection string> uv run wikipol migrate`: on "
+                "Serverless SQL, a key holding ServerlessSQLDatabaseReadWrite, where the "
+                "pipeline's DataReadWrite only writes rows"
+            ) from error
         return applied
 
     def indexed(self, source: str) -> dict[str, Publication]:
