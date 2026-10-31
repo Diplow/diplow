@@ -8,16 +8,10 @@ from pathlib import Path
 import pytest
 from conftest import write
 
+from wikipol.claude import ClaudeCli, WriterFailed, split_draft
 from wikipol.config import ConfigError, load_source
 from wikipol.digest.format import split_digest
-from wikipol.digest.write import (
-    ClaudeCli,
-    DigestRejected,
-    WriterFailed,
-    linkable_digests,
-    split_draft,
-    write_digest,
-)
+from wikipol.digest.write import DigestRejected, linkable_digests, write_digest
 from wikipol.raw_store import InMemoryRawStore, RawMeta
 
 VIDEO = "aaaaaaaaaaa"

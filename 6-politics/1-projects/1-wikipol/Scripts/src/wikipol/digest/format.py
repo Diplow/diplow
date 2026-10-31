@@ -83,18 +83,22 @@ class DigestFields:
         return raw_key(self.source, self.youtube_id)
 
 
-def render(fields: DigestFields, preview: str, claims: str) -> str:
-    """The Digest file: the frontmatter, the title as a heading, then the claims as written."""
+def folded_preview(preview: str) -> list[str]:
+    """`preview: >-` and its lines, as a frontmatter folds it."""
     # Folded YAML joins lines with a space: a break after `peut-` would read back `peut- être`.
-    preview_lines = textwrap.wrap(
+    lines = textwrap.wrap(
         " ".join(preview.split()), width=76, break_on_hyphens=False, break_long_words=False
     ) or [""]
+    return ["preview: >-", *(f"  {line}" for line in lines)]
+
+
+def render(fields: DigestFields, preview: str, claims: str) -> str:
+    """The Digest file: the frontmatter, the title as a heading, then the claims as written."""
     frontmatter = [
         f"title: {json.dumps(fields.title, ensure_ascii=False)}",
         f"parent: {fields.parent}",
         f"owner: {OWNER}",
-        "preview: >-",
-        *(f"  {line}" for line in preview_lines),
+        *folded_preview(preview),
         f"source: {fields.source}",
         f"url: {fields.url}",
         f"youtube_id: {json.dumps(fields.youtube_id)}",

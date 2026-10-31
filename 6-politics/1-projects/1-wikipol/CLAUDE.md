@@ -26,7 +26,7 @@ Les skills Claude (`Skills/`), les scripts Python (`Scripts/`) et les convention
 
 Avant WIK-1, chaque chaîne était un vault Obsidian dans `Sources/<NomSource>/`. Ces vaults sont figés dans `Legacy/` (`Legacy/Paduteam/`, le vault Graphiked, et `Legacy/Boniface/`) : lus en entrée, jamais écrits, jamais migrés. Leur taxonomie locale (`Legacy/<NomSource>/BUILD.md`), leurs fiches et leur tracker `_CHRONOLOGIQUE.md` y restent.
 
-Les skills d'ingestion (`ingest-*`, `gather-context`, `write-*` hors `write-digest`) et les scripts `run_ingest.py`, `generate_chronological.py` et `batch_transcripts.py` écrivent dans un vault : c'est le pipeline legacy, gardé pour référence. Ne plus le lancer sur un vault figé.
+Les skills d'ingestion (`ingest-*`, `gather-context`, `write-*` hors `write-digest` et `write-period`) et les scripts `run_ingest.py`, `generate_chronological.py` et `batch_transcripts.py` écrivent dans un vault : c'est le pipeline legacy, gardé pour référence. Ne plus le lancer sur un vault figé.
 
 ## Comment travailler sur une Source
 
@@ -62,7 +62,15 @@ uv run wikipol digest --source paduteam --id=URonNSP0qM0 --out /tmp/URonNSP0qM0.
 uv run wikipol check-digest <fichiers…>                                          # revérifie des Digests contre leur Raw
 ```
 
-`wikipol digest` lit le Raw dans le bucket, le `CLAUDE.md` éditorial de la Source et, quand le vault figé en a une, la fiche `Videos/` de la Publication. Il remplit lui-même le frontmatter et le titre du Digest, et fait écrire le Preview et les affirmations par la skill `Skills/write-digest/SKILL.md`, via `claude -p --model <claude.default_model du source.yaml>`, sans outil ni serveur MCP, depuis un dossier vide. Le résultat est vérifié (format, Preview, nombre d'affirmations et d'Extracts, chaque citation retrouvée dans le Raw au bloc lié) ; un brouillon refusé revient une fois au modèle avec la liste des problèmes, un second refus n'écrit rien et laisse le brouillon dans un dossier temporaire. Le format est dans `BUILD.md`, « Le Digest ». `--id=` avec un signe égal, car un identifiant YouTube peut commencer par `-`. Ranger le Digest dans sa Period est le travail de `write-period` (WIK-5) ; écrit hors du dépôt, son `parent` est la Chronicle.
+`wikipol digest` lit le Raw dans le bucket, le `CLAUDE.md` éditorial de la Source et, quand le vault figé en a une, la fiche `Videos/` de la Publication. Il remplit lui-même le frontmatter et le titre du Digest, et fait écrire le Preview et les affirmations par la skill `Skills/write-digest/SKILL.md`, via `claude -p --model <claude.default_model du source.yaml>`, sans outil ni serveur MCP, depuis un dossier vide. Le résultat est vérifié (format, Preview, nombre d'affirmations et d'Extracts, chaque citation retrouvée dans le Raw au bloc lié) ; un brouillon refusé revient une fois au modèle avec la liste des problèmes, un second refus n'écrit rien et laisse le brouillon dans un dossier temporaire. Le format est dans `BUILD.md`, « Le Digest ». `--id=` avec un signe égal, car un identifiant YouTube peut commencer par `-`. Écrit hors du dépôt, son `parent` est la Chronicle, jusqu'à ce que `wikipol file` le range.
+
+## La Chronicle : `wikipol file`
+
+```bash
+uv run wikipol file --source paduteam /tmp/URonNSP0qM0.md …   # range des Digests et résume les Periods touchées
+```
+
+`wikipol file` range des Digests, écrits hors de la Chronicle, dans la Period de leur date, coupe les Periods qui débordent, renumérote, et réécrit le `parent` et les wikilinks de ce qui a bougé, dans tout le dépôt sauf `Legacy/`. Puis la skill `Skills/write-period/SKILL.md`, via `claude -p --model <claude.default_model du source.yaml>`, réécrit le Preview et le résumé de chaque Period touchée, des plus profondes à la Chronicle, à partir des titres et des Previews de leurs enfants. Rien n'est écrit avant que tous les résumés soient acceptés ; un résumé refusé deux fois laisse la Chronicle telle qu'elle était. Le fichier d'origine reste où il est. Un Digest sans date de publication n'a pas de place et est refusé. La forme de l'arbre et d'une Period est dans `BUILD.md`, « La Chronicle ».
 
 ## Répartition des responsabilités
 
@@ -87,7 +95,7 @@ Quand une skill est invoquée pendant un travail sur une source, regarder dans c
 1. **`6-politics/2-sources/<n>-<slug>/.skills/*/<skill-name>/SKILL.md`** — skill propre à la source, rangée dans un groupe (`1-ingest/`, `2-write-basic/`…) pour tenir la règle des six. Si elle existe, **elle l'emporte** sur la version générique (même nom = override).
 2. **`Skills/<skill-name>/SKILL.md`** à la racine de WikiPol — skill générique, valable pour toutes les sources.
 
-Les overrides de PaduTeam (`1-paduteam/.skills/`) portent les noms des skills du pipeline legacy et écrivent, comme elles, dans le vault figé : la règle les trouve, mais ni elles ni les génériques du même nom ne se lancent plus. `write-digest` n'a pas d'override.
+Les overrides de PaduTeam (`1-paduteam/.skills/`) portent les noms des skills du pipeline legacy et écrivent, comme elles, dans le vault figé : la règle les trouve, mais ni elles ni les génériques du même nom ne se lancent plus. `write-digest` et `write-period` n'ont pas d'override.
 
 Le cas typique de skill source-spécifique : un format de fiche qui s'écarte trop du modèle générique pour être paramétrable (ex : un `write-enjeu` au format « loadout militant » plutôt que narratif). Tant que la signature de la skill (entrées, sortie, prérequis) reste la même, l'override est transparent pour les orchestrateurs (`ingest-video`, `ingest-batch`).
 
