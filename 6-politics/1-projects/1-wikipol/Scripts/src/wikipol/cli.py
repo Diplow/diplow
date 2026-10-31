@@ -22,6 +22,7 @@ from wikipol.config import (
     ConfigError,
     Source,
     load_fetcher_settings,
+    load_index_settings,
     load_settings,
     load_sources,
 )
@@ -32,6 +33,10 @@ from wikipol.drive_copy import DEFAULT_DRIVE_ROOT, copy_source, format_report
 from wikipol.fetch.fetcher import FetchFailed
 from wikipol.fetch.run import fetch_source
 from wikipol.fetch.run import format_report as format_fetch_report
+from wikipol.index.embed import ScalewayEmbedder
+from wikipol.index.run import format_report as format_index_report
+from wikipol.index.run import index_source
+from wikipol.index.store import PostgresIndex
 from wikipol.legacy_index import find_video_note
 from wikipol.raw_store import YOUTUBE_ID, RawNotFound, RawStore, S3RawStore
 
@@ -101,6 +106,19 @@ def main(argv: list[str] | None = None) -> int:
         "--dry-run", action="store_true", help="only list the Raws it would digest, oldest first"
     )
 
+    search = commands.add_parser(
+        "index",
+        help="put the Raws the search index lacks in it, as Publications and embedded chunks",
+    )
+    search.add_argument("--source", action="append", help="a Source slug; every Source when absent")
+    search.add_argument("--limit", type=positive_int, help="index at most N Raws per Source")
+    search.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
+    search.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="read the bucket and the index, embed and write nothing; estimates the tokens",
+    )
+
     args = parser.parse_args(argv)
     try:
         if args.command == "copy-from-drive":
@@ -115,7 +133,9 @@ def main(argv: list[str] | None = None) -> int:
             return file_digests(args)
         if args.command == "backfill":
             return backfill_source(args)
-    except (WriterFailed, RawNotFound) as error:
+        if args.command == "index":
+            return index_raws(args)
+    except (WriterFailed, RawNotFound, IndexUnreachable) as error:
         print(f"wikipol: {error}", file=sys.stderr)
         return 2
     except FetchFailed as error:
@@ -322,6 +342,52 @@ def backfill_source(args: argparse.Namespace) -> int:
     )
     print(format_backfill_report(report, limit=args.limit, dry_run=args.dry_run))
     return 1 if report.failed or report.stopped else 0
+
+
+class IndexUnreachable(Exception):
+    """The index's database refused the connection or a statement."""
+
+
+def index_raws(args: argparse.Namespace) -> int:
+    import psycopg
+
+    sources = load_sources(args.sources_dir)
+    if args.source:
+        unknown = set(args.source) - {s.slug for s in sources}
+        if unknown:
+            raise ConfigError(f"no Source with slug {', '.join(sorted(unknown))}")
+        sources = [s for s in sources if s.slug in args.source]
+    settings = load_index_settings(need_embedding=not args.dry_run)
+    store = S3RawStore.from_settings(load_settings())
+    embedder = ScalewayEmbedder(settings.embedding_key or "", settings.project_id)
+    try:
+        index = PostgresIndex.connect(settings.database_url)
+    except psycopg.Error as error:
+        # psycopg's message may quote the connection string's host, never its password.
+        raise IndexUnreachable(f"the index's database refused the connection: {error}") from error
+    try:
+        if not args.dry_run:
+            for name in index.migrate():
+                print(f"migration applied: {name}", file=sys.stderr)
+        reports = [
+            index_source(
+                source,
+                store,
+                embedder,
+                index,
+                repo_root=repo_of(args.sources_dir),
+                limit=args.limit,
+                dry_run=args.dry_run,
+                log=lambda line: print(line, file=sys.stderr, flush=True),
+            )
+            for source in sources
+        ]
+    except psycopg.Error as error:
+        raise IndexUnreachable(f"the index's database failed: {error}") from error
+    finally:
+        index.close()
+    print(format_index_report(reports, dry_run=args.dry_run))
+    return 1 if any(r.stopped for r in reports) else 0
 
 
 if __name__ == "__main__":
