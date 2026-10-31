@@ -1,0 +1,19 @@
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/runner/repo.py
+  s_bffceea45dbe3a::t_b69bd4b062e9d3 226-227
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8e33750903cc8d0b5440c548dfb350778b8c15c0",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
