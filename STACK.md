@@ -67,7 +67,7 @@ Children sit on a ring: neighbors share an edge, and the child across the ring i
 | `.conductor/` | Inner child: Conductor settings; the setup script installs hexframe's dependencies in each new workspace | exists |
 | `.github/` | Inner child: GitHub Actions, one workflow per project, path-filtered to it so a note never triggers one. The exception is `hexframe-previews.yml`, which deletes a branch's Neon branch once its pull request closes or the branch is deleted: Vercel deploys a preview, and Neon forks a branch, for notes too | exists |
 | `cubic.yaml` | cubic's review config: three custom agents on hexframe pull requests, whose briefs live in [[4-software-engineering/1-projects/1-hexframe/.cubic/CLAUDE\|hexframe's .cubic]]. cubic reads it from `main` only | exists |
-| `.mcp.json` | MCP servers for this repo only; the `X-Project` header on `hodor` gives it an OAuth login separate from other projects' `hodor` | exists |
+| `.mcp.json` | MCP servers for this repo only: `hodor`, whose `X-Project` header gives it an OAuth login separate from other projects' `hodor`, and `wikipol`, the local stdio search over wikipol's index (credentials read from `~/.config/wikipol/.env`) | exists |
 | `.gitignore` | Paths kept out of git | exists |
 | `.gitattributes` | Marks `-` files and folders for encryption | exists |
 
