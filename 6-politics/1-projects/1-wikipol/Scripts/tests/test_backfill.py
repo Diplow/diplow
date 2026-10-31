@@ -320,3 +320,15 @@ def test_a_staged_digest_no_raw_needs_any_more_is_cleared(source, store, repo, t
     run(source, store, FakeWriter(), repo, tmp_path)
 
     assert staged(tmp_path) == []
+
+
+def test_a_staged_digest_with_another_parent_is_written_again(source, store, repo, tmp_path):
+    run(source, store, FakeWriter(summary_ok=False), repo, tmp_path, limit=1)
+    path = tmp_path / "staging" / f"{FROM_NOTE}.md"
+    path.write_text(path.read_text().replace(f"parent: {CHRONICLE}", "parent: ailleurs"))
+    writer = FakeWriter()
+
+    report = run(source, store, writer, repo, tmp_path, limit=1)
+
+    assert report.resumed == []
+    assert writer.digests == [FROM_NOTE]

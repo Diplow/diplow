@@ -160,7 +160,12 @@ def select(
 
 
 def take_staged(
-    path: Path, source: Source, candidate: Candidate, model: str, linkable: dict[str, str]
+    path: Path,
+    source: Source,
+    candidate: Candidate,
+    model: str,
+    parent: str,
+    linkable: dict[str, str],
 ) -> str | None:
     """The Digest a stopped run left in staging, when it still passes the check against its Raw
     and the Chronicle as it is now; anything else is dropped, to be written again."""
@@ -175,7 +180,7 @@ def take_staged(
             source,
             candidate.raw,
             candidate.note,
-            parent=str(frontmatter.get("parent")),
+            parent=parent,
             ingested=frontmatter.get("ingested"),
             model=model,
         )
@@ -285,7 +290,7 @@ def backfill(
         own = filed_before[youtube_id][0] if youtube_id in filed_before else None
         links = {target: title for target, title in linkable.items() if target != own}
         staged = staging / f"{youtube_id}.md"
-        text = take_staged(staged, source, candidate, model, links)
+        text = take_staged(staged, source, candidate, model, parent, links)
         if text is not None:
             report.resumed.append(youtube_id)
             log(f"  {youtube_id}: taken back from staging")
