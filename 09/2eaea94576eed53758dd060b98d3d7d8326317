@@ -1,0 +1,21 @@
+6-politics/1-projects/1-wikipol/CONTEXT.md
+  s_bffceea45dbe3a::t_2c0658e8803df1 20
+STACK.md
+  s_bffceea45dbe3a::t_8c0ffe6903d4c1 70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "092eaea94576eed53758dd060b98d3d7d8326317",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
