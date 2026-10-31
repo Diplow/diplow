@@ -39,7 +39,13 @@ from wikipol.index.run import format_report as format_index_report
 from wikipol.index.store import Hit, PostgresIndex, SchemaNotApplied
 from wikipol.legacy_index import find_video_note
 from wikipol.raw_store import YOUTUBE_ID, RawNotFound, RawStore, S3RawStore
-from wikipol.search.extracts import Extract, SearchFailed, find_extracts
+from wikipol.search.extracts import (
+    QUERY_RETRY_PAUSES,
+    QUERY_TIMEOUT_SECONDS,
+    Extract,
+    SearchFailed,
+    find_extracts,
+)
 from wikipol.search.mcp import Server
 
 
@@ -448,7 +454,12 @@ def serve_search(args: argparse.Namespace) -> int:
             settings = load_index_settings()
         except ConfigError as error:
             raise SearchFailed(str(error)) from error
-        embedder = ScalewayEmbedder(settings.embedding_key or "", settings.project_id)
+        embedder = ScalewayEmbedder(
+            settings.embedding_key or "",
+            settings.project_id,
+            timeout=QUERY_TIMEOUT_SECONDS,
+            retry_pauses=QUERY_RETRY_PAUSES,
+        )
         try:
             return find_extracts(
                 query, embedder, OneSearchIndex(settings.database_url), sources=slugs, **options

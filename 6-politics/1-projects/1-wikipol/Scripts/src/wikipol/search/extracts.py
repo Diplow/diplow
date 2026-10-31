@@ -29,6 +29,10 @@ QUERY_INSTRUCTION = (
 """qwen3-embedding-8b's queries take a one-line task, in English whatever their language."""
 DEFAULT_LIMIT = 8
 MAX_LIMIT = 25
+QUERY_TIMEOUT_SECONDS = 20
+QUERY_RETRY_PAUSES = (2,)
+"""An agent waits on the query's embedding: two tries of 20 s at most, where indexing waits out
+a busy API for minutes."""
 PERIOD_BOUND = re.compile(r"(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?")
 
 
