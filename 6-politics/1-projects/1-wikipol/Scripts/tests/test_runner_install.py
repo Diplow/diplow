@@ -132,3 +132,15 @@ def test_the_uninstall_dry_run_only_prints_what_it_would_do(env, home):
     agent = home / "Library" / "LaunchAgents" / f"{LABEL}.plist"
     assert f"+ launchctl bootout gui/{os.getuid()}/{LABEL} (when loaded)" in result.stdout
     assert f"+ rm -f {agent}" in result.stdout
+
+
+def test_the_install_names_each_setting_the_env_file_lacks(env, home):
+    env_file = home / ".config" / "wikipol" / ".env"
+    env_file.parent.mkdir(parents=True)
+    env_file.write_text("SCW_ACCESS_KEY=x\nSCW_SECRET_KEY=y\nWIKIPOL_S3_ENDPOINT=\n")
+
+    result = script("install-runner.sh", env, "--dry-run")
+
+    assert f"warning: {env_file} sets no WIKIPOL_S3_BUCKET" in result.stdout
+    assert f"warning: {env_file} sets no WIKIPOL_S3_ENDPOINT" in result.stdout
+    assert "sets no SCW_" not in result.stdout

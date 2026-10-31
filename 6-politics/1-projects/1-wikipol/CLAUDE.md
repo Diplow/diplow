@@ -108,6 +108,23 @@ Un agent qui travaille sur un hexframe politique demande ce qu'une Source a dit 
 
 Le serveur lit ses réglages à chaque recherche, dans `~/.config/wikipol/.env` comme `wikipol index` (`WIKIPOL_DATABASE_URL`, `WIKIPOL_EMBEDDING_API_KEY` sinon `SCW_SECRET_KEY`, `SCW_DEFAULT_PROJECT_ID`), et ouvre une connexion à la base pour chaque recherche, puisque Serverless SQL coupe celles qui dorment. Il démarre donc sans eux, et une recherche qui échoue (un réglage manquant, une clé refusée, une base sans tables) rend son explication à l'agent au lieu d'arrêter le serveur.
 
+## Le run quotidien : `wikipol run`
+
+```bash
+uv run wikipol run --dry-run                 # ce que chaque étape ferait, depuis n'importe quel clone ; n'écrit rien
+uv run wikipol run                           # le run : seulement dans le clone du runner
+Scripts/launchd/install-runner.sh --dry-run  # ce que l'installation ferait, sans rien installer
+Scripts/launchd/install-runner.sh            # installe le runner sur ce Mac ; uninstall-runner.sh le retire
+```
+
+`wikipol run` enchaîne, pour chaque Source, `fetch` (les Raws des nouvelles vidéos dans le bucket) et `backfill` (les Digests des Raws qui n'en ont pas, rangés dans la Chronicle), puis `index` sur toutes les Sources, puis publie : ce que les étapes ont changé est commité sur une branche `wikipol/run-<date>-<heure>`, poussé via `gh auth git-credential`, et une pull request vers `main` (`--base` en désigne une autre) est ouverte avec `gh pr create` et fusionnée par le run, `gh pr merge --squash`. Un jour sans vidéo nouvelle n'écrit rien et n'ouvre aucune pull request. Chaque étape est la commande du même nom, idempotente : relancé, le run reprend ce qui manque. `--limit N` borne les vidéos récupérées et les Raws digérés par Source.
+
+Trois échecs de suite arrêtent une étape pour une Source, comme dans chaque commande, et le run saute alors cette étape pour les Sources suivantes (YouTube qui refuse le Mac, `claude` qui échoue), sans arrêter les autres : les Digests déjà rangés sont publiés. L'index vient après les Digests, pour qu'une Publication porte le chemin du sien, et son échec (un réglage manquant, une clé refusée, une base sans tables) n'arrête rien. Une étape qui lève une exception est comptée comme un échec, sa trace dans le journal. Quand la publication échoue (un push refusé, GitHub en panne), le run reprend son commit dans l'arbre de travail, ferme ce qu'il a ouvert, et le run suivant porte ces fichiers dans son propre commit.
+
+Chaque run écrit son journal dans `~/Library/Logs/wikipol/run-<date>T<heure>.log` (`--log-dir` en désigne un autre) et affiche son résumé : Raws récupérés, Digests écrits et rangés, Publications indexées, la pull request, les échecs. Le résumé est aussi le corps de la pull request. Le run sort avec 1 quand quelque chose a échoué, 2 quand un réglage manque.
+
+Le runner est un clone dédié, `~/wikipol-runner`, jamais le dossier Obsidian : `install-runner.sh` le clone, le marque (`git config wikipol.runner true`, sans quoi `wikipol run` refuse d'écrire), y lance `uv sync --frozen`, et charge l'agent launchd `com.diplow.wikipol.runner` (le modèle est `Scripts/launchd/com.diplow.wikipol.runner.plist`) dans `~/Library/LaunchAgents` avec `launchctl bootstrap`. launchd lance le run chaque jour à 7 h, ou au réveil quand le Mac dormait à cette heure ; éteint, le Mac le manque jusqu'au lendemain. Un seul run à la fois tient le clone. Le runner lit `~/.config/wikipol/.env` comme toutes les commandes, et appelle `claude -p` sur l'abonnement, `gh` et `git` avec les identifiants de la session.
+
 ## Répartition des responsabilités
 
 | Niveau | Fichier | Contient |
@@ -117,7 +134,7 @@ Le serveur lit ses réglages à chaque recherche, dans `~/.config/wikipol/.env` 
 | WikiPol | `CONTEXT.md` | Le glossaire : Source, Publication, Raw, Extract, Digest, Chronicle, Period |
 | WikiPol | `docs/adr/` | Les décisions difficiles à défaire, une par fichier |
 | WikiPol | `Skills/` | Skills d'ingestion et d'écriture génériques, agnostiques à la source |
-| WikiPol | `Scripts/` | Le paquet uv `wikipol` du pipeline (`src/`, `tests/`), et les scripts Python legacy (ingestion, bootstrap), qui lisent `source.yaml` |
+| WikiPol | `Scripts/` | Le paquet uv `wikipol` du pipeline (`src/`, `tests/`), l'agent launchd du run quotidien et ses scripts d'installation (`launchd/`), et les scripts Python legacy (ingestion, bootstrap), qui lisent `source.yaml` |
 | WikiPol | `Legacy/` | Les vaults d'avant, figés : taxonomie locale (`BUILD.md`), fiches (`Videos/`, `Individus/`, `Concepts/`…), tracker |
 | Source | `CLAUDE.md` | Contexte éditorial spécifique : qui produit, ton, pièges |
 | Source | `source.yaml` | Paramètres techniques, `content_types` activés (whitelist stricte), `legacy.vault` |

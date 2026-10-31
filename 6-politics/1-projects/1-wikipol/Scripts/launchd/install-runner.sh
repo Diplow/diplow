@@ -96,8 +96,15 @@ if [ "$DRY_RUN" = 1 ]; then
 	say "filled plist: $rendered"
 fi
 
-[ -f "${WIKIPOL_ENV:-$HOME/.config/wikipol/.env}" ] ||
-	say "warning: ${WIKIPOL_ENV:-$HOME/.config/wikipol/.env} is missing; every run will stop on it"
+# launchd's runs read their settings from the env file only: say what a run would stop on.
+env_file="${WIKIPOL_ENV:-$HOME/.config/wikipol/.env}"
+if [ ! -f "$env_file" ]; then
+	say "warning: $env_file is missing; every run will stop on it"
+else
+	for name in WIKIPOL_S3_BUCKET WIKIPOL_S3_ENDPOINT SCW_ACCESS_KEY SCW_SECRET_KEY; do
+		grep -q "^$name=." "$env_file" || say "warning: $env_file sets no $name; every run will stop on it"
+	done
+fi
 
 agent="$AGENTS_DIR/$LABEL.plist"
 domain="gui/$(id -u)"
