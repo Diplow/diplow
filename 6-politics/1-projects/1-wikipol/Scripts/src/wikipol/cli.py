@@ -137,7 +137,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     daily.add_argument("--source", action="append", help="a Source slug; every Source when absent")
     daily.add_argument(
-        "--limit", type=positive_int, help="fetch and digest at most N videos per Source"
+        "--limit", type=positive_int, help="fetch, digest and index at most N videos per Source"
     )
     daily.add_argument("--base", default="main", help="the branch the run lands on; default: main")
     daily.add_argument("--fetcher", choices=FETCHERS, help="default: WIKIPOL_FETCHER, else yt-dlp")
