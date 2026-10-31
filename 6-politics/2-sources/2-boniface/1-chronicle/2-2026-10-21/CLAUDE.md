@@ -3,18 +3,16 @@ title: "2026-10-21 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2026-10-21
 owner: diplo
 preview: >-
-  Boniface applique ses grilles à l'actualité : le multi-alignement plutôt que
-  la logique des blocs, un Japon sans alternative à Washington, le poids du
-  lobby pro-israélien aux États-Unis. Il donne aussi la parole à des invités
-  sur Gaza et sur la victoire de Lula.
+  Boniface soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un
+  multi-alignement. Il reçoit des invités sur Gaza, Lula et le Japon, et juge
+  passionnant un livre sur le lobby pro-israélien, dont les arguments marchent
+  de moins en moins.
 ---
 # 2026-10-21 → 2026-10-30
 
-Cette Period est dominée par les entretiens. Boniface reçoit Jean-François Corty et la rabbine Nava Hefetz sur Gaza : tous deux condamnent le 7 octobre et défendent les civils, mais divergent sur le mot génocide et sur le boycott. Il interroge ensuite Christophe Ventura sur la réélection de Lula, que celui-ci attribue à la campagne de l'entre-deux-tours et lit comme un revers pour Trump et pour Netanyahu. Avec Robert Dujarric, l'entretien porte sur un Japon dont la garantie américaine est devenue douteuse : faute d'alternative crédible, et poussé par une Chine trop agressive, il se rapproche de Washington tout en ouvrant le débat nucléaire et en gérant son déclin.
+Boniface applique à l'actualité asiatique et américaine une grille de lecture qui s'éloigne de la logique des blocs. Pour lui, l'OCS n'est pas une OTAN asiatique : sans garantie de défense mutuelle, élargie à des puissances rivales, elle gagne en poids mais perd en cohésion, et illustre le multi-alignement (voir [[6-politics/2-sources/2-boniface/1-chronicle/2-2026-10-21/4-l-ocs-une-otan-asiatique-expliquez|L'OCS, une OTAN asiatique ? - Expliquez-moi...]]). En fin de période, il lit *Israel's Lobby* d'Eli Clifton et Ian Lustick, dont les auteurs soutiennent que le lobby pro-israélien oriente la politique américaine, parfois contre les intérêts des États-Unis. Il juge l'ouvrage passionnant et relève que ces arguments marchent de moins en moins.
 
-Boniface parle en son nom dans le format court sur l'OCS. Pour lui, ce n'est pas une OTAN asiatique : sans garantie de défense mutuelle, élargie à des puissances rivales, elle gagne en poids mais perd en cohésion. Il y voit l'illustration du multi-alignement plutôt que de la logique des blocs, une grille qui rejoint le regard porté sur le Japon et sur le Brésil.
-
-La Period se clôt sur une chronique d'ouvrage, [[6-politics/2-sources/2-boniface/1-chronicle/2-2026-10-21/5-j-ai-lu-israel-s-lobby|J'ai lu...« Israel's Lobby: America in the Grip of a Foreign Power » d'Eli Clifton et Ian Lustick]]. Selon ces auteurs, le lobby pro-israélien oriente la politique américaine au profit d'Israël, parfois contre les intérêts des États-Unis. Boniface juge le livre passionnant et note que ces arguments marchent de moins en moins.
+Le reste de la période prend la forme d'entretiens, où les thèses restent à ceux qui les portent. Sur Gaza, Jean-François Corty et la rabbine Nava Hefetz condamnent tous deux le 7 octobre et défendent les civils, mais divergent sur le mot génocide et sur le boycott. Pour Christophe Ventura, la réélection inattendue de Lula tient à sa campagne de l'entre-deux-tours et constitue un revers pour Trump et pour Netanyahu. Pour Robert Dujarric, le Japon, face à une garantie américaine devenue douteuse, n'a pas d'alternative crédible à Washington, et il gère son déclin.
 
 ## Contenu
 

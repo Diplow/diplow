@@ -3,15 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit un monde en recomposition : un Occident affaibli par son deux
-  poids deux mesures, une Chine à parité avec les États-Unis, un Sud global
-  qui décidera du nouvel ordre. Il applique ensuite ces grilles à l'actualité.
+  Boniface soutient que l'occupation israélienne reste inadmissible, avec ou
+  sans Netanyahou, et que l'OCS n'est pas une OTAN asiatique mais le signe
+  d'un multi-alignement. Il chronique des livres et reçoit des invités sur la
+  Chine, les Kurdes, Gaza, Lula et le Japon.
 ---
 # Chronicle
 
-Pascal Boniface décrit un monde en recomposition. Pour lui, l'Occident s'affaiblit à cause de son deux poids deux mesures, la Chine est désormais à parité avec les États-Unis, et le Sud global décidera du nouvel ordre. Sur Israël et la Palestine, il juge l'occupation inadmissible, y compris après un éventuel départ de Netanyahou ([[6-politics/2-sources/2-boniface/1-chronicle/1-2026-10-13/CLAUDE|2026-10-13 → 2026-10-19]]).
+Sur ces dix-huit jours, Boniface revient sur Israël et la Palestine : pour lui, l'occupation reste inadmissible, avec ou sans Netanyahou. Il soutient aussi que l'Organisation de coopération de Shanghai n'est pas une OTAN asiatique mais le signe d'un multi-alignement.
 
-Dans la seconde moitié de la Chronicle, Boniface applique ces mêmes grilles à l'actualité. Il oppose le multi-alignement à la logique des blocs, voit dans le Japon un pays sans alternative à Washington et souligne le poids du lobby pro-israélien aux États-Unis. Il donne aussi la parole à des invités, sur Gaza et sur la victoire de Lula ([[6-politics/2-sources/2-boniface/1-chronicle/2-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]]).
+La première moitié de la période, [[6-politics/2-sources/2-boniface/1-chronicle/1-2026-10-13/CLAUDE|2026-10-13 → 2026-10-19]], est tournée vers le Sud global et l'Asie. Il chronique le livre de Stubb, pour qui l'Occident doit montrer l'exemple au Sud global. Il reçoit Sylvie Bermann sur la Chine et Didier Billion sur les Kurdes.
+
+La seconde moitié, [[6-politics/2-sources/2-boniface/1-chronicle/2-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]], donne la parole à des invités sur Gaza, Lula et le Japon. Boniface y juge passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins.
 
 ## Contenu
 
