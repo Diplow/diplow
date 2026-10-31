@@ -67,6 +67,8 @@ class Git:
             result = self.run(command, self.root)
         except subprocess.TimeoutExpired as error:
             raise GitFailed(f"{' '.join(command[:3])} timed out") from error
+        except OSError as error:  # gh or git missing from launchd's PATH, most likely
+            raise GitFailed(f"{command[0]} could not start: {error}") from error
         if result.returncode != 0:
             raise GitFailed(
                 f"{' '.join(command[:3])} exited with {result.returncode}: "
@@ -95,7 +97,11 @@ class Git:
         """Holds the clone for one run: launchd's catch-up after a sleep and a run started by hand
         must not write the same tree. Raises GitFailed when another run holds it."""
         path = Path(self("rev-parse", "--absolute-git-dir").strip()) / "wikipol-run.lock"
-        with path.open("w") as lock:
+        try:
+            lock = path.open("w")
+        except OSError as error:
+            raise GitFailed(f"{path} can't be opened: {error}") from error
+        with lock:
             try:
                 fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             except BlockingIOError as error:
@@ -160,7 +166,10 @@ class GhCli:
         out = self.git.command(
             "gh", "pr", "list", "--head", head, "--state", state, "--json", "url,state"
         )
-        return json.loads(out or "[]")
+        try:
+            return json.loads(out or "[]")
+        except json.JSONDecodeError as error:
+            raise GitFailed(f"gh pr list answered no JSON: {tail(out)}") from error
 
 
 @dataclass

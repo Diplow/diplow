@@ -63,10 +63,19 @@ REPO_URL=${WIKIPOL_RUNNER_REPO:-$(git -C "$HERE" remote get-url origin)}
 if [ -d "$RUNNER_DIR/.git" ]; then
 	origin=$(git -C "$RUNNER_DIR" remote get-url origin)
 	[ "$origin" = "$REPO_URL" ] || fail "$RUNNER_DIR is a clone of $origin, not $REPO_URL"
-	say "$RUNNER_DIR exists: fast-forwarding it to origin/$BASE"
-	run git -C "$RUNNER_DIR" fetch origin
-	run git -C "$RUNNER_DIR" switch "$BASE"
-	run git -C "$RUNNER_DIR" merge --ff-only "origin/$BASE"
+	branch=$(git -C "$RUNNER_DIR" rev-parse --abbrev-ref HEAD)
+	case "$branch" in
+	wikipol/run-*)
+		# A run killed while publishing: the next run takes its files back (or sees it merged).
+		say "$RUNNER_DIR is on $branch, a run that stopped while publishing; the next run recovers it"
+		;;
+	*)
+		say "$RUNNER_DIR exists: fast-forwarding it to origin/$BASE"
+		run git -C "$RUNNER_DIR" fetch origin
+		run git -C "$RUNNER_DIR" switch "$BASE"
+		run git -C "$RUNNER_DIR" merge --ff-only "origin/$BASE"
+		;;
+	esac
 elif [ -e "$RUNNER_DIR" ]; then
 	fail "$RUNNER_DIR exists and is not a clone"
 else
@@ -96,8 +105,9 @@ if [ "$DRY_RUN" = 1 ]; then
 	say "filled plist: $rendered"
 fi
 
-# launchd's runs read their settings from the env file only: say what a run would stop on.
-env_file="${WIKIPOL_ENV:-$HOME/.config/wikipol/.env}"
+# launchd's runs read their settings from the default env file only (the plist sets no
+# WIKIPOL_ENV): say what a run would stop on.
+env_file="$HOME/.config/wikipol/.env"
 if [ ! -f "$env_file" ]; then
 	say "warning: $env_file is missing; every run will stop on it"
 else
@@ -115,7 +125,16 @@ else
 	launchctl bootout "$domain/$LABEL" 2>/dev/null || true
 fi
 run cp "$rendered" "$agent"
-run launchctl bootstrap "$domain" "$agent"
+if [ "$DRY_RUN" = 1 ]; then
+	printf '+ %s\n' "launchctl bootstrap $domain $agent"
+else
+	# bootout may return before the agent is gone, and bootstrap then fails: try a few times.
+	for attempt in 1 2 3 4 5; do
+		launchctl bootstrap "$domain" "$agent" 2>/dev/null && break
+		[ "$attempt" = 5 ] && { rm -f "$rendered"; fail "launchctl bootstrap $domain $agent failed"; }
+		sleep 1
+	done
+fi
 if [ "$DRY_RUN" = 1 ]; then
 	say "dry run: nothing was cloned, synced, copied or loaded"
 	exit 0

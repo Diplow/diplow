@@ -168,3 +168,8 @@ def test_one_run_at_a_time(clone):
         Git(clone).locked(),
     ):
         pass
+
+
+def test_a_tool_missing_from_path_is_a_git_failure_not_a_crash(clone):
+    with pytest.raises(GitFailed, match="could not start"):
+        Git(clone).command("wikipol-no-such-tool", "pr", "list")

@@ -138,9 +138,29 @@ def test_the_install_names_each_setting_the_env_file_lacks(env, home):
     env_file = home / ".config" / "wikipol" / ".env"
     env_file.parent.mkdir(parents=True)
     env_file.write_text("SCW_ACCESS_KEY=x\nSCW_SECRET_KEY=y\nWIKIPOL_S3_ENDPOINT=\n")
+    elsewhere = home / "elsewhere.env"  # launchd's runs never see WIKIPOL_ENV
+    elsewhere.write_text("WIKIPOL_S3_BUCKET=b\nWIKIPOL_S3_ENDPOINT=e\n")
 
-    result = script("install-runner.sh", env, "--dry-run")
+    result = script("install-runner.sh", {**env, "WIKIPOL_ENV": str(elsewhere)}, "--dry-run")
 
     assert f"warning: {env_file} sets no WIKIPOL_S3_BUCKET" in result.stdout
     assert f"warning: {env_file} sets no WIKIPOL_S3_ENDPOINT" in result.stdout
     assert "sets no SCW_" not in result.stdout
+
+
+def test_a_reinstall_leaves_a_run_stopped_while_publishing_to_the_next_run(env, home):
+    runner = home / "wikipol-runner"
+    runner.mkdir()
+    for args in (
+        ["init", "--quiet"],
+        ["remote", "add", "origin", REPO_URL],
+        ["commit", "--quiet", "--allow-empty", "-m", "seed"],
+        ["switch", "--quiet", "-c", "wikipol/run-2026-10-31-070000"],
+    ):
+        subprocess.run(["git", *args], cwd=runner, check=True, capture_output=True)
+
+    result = script("install-runner.sh", env, "--dry-run")
+
+    assert result.returncode == 0, result.stderr
+    assert "on wikipol/run-2026-10-31-070000" in result.stdout
+    assert "switch" not in result.stdout and "merge --ff-only" not in result.stdout
