@@ -17,7 +17,7 @@ wikipol turns what political media publish into Tiles of my System, so my own he
 ### What comes in
 
 **Source**:
-A media outlet whose content I find worth following: a YouTube channel today, a newspaper or a website tomorrow. Its Tile, under Sources, bears its name; the legacy vaults under `wikipol/Sources/` are not Sources.
+A media outlet whose content I find worth following: a YouTube channel today, a newspaper or a website tomorrow. Its Tile, under Sources, bears its name; the legacy vaults under `wikipol/Legacy/` are not Sources.
 _Avoid_: channel, vault, media
 
 **Publication**:
