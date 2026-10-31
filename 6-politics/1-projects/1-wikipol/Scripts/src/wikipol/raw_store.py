@@ -4,9 +4,9 @@ A Raw is written once and never replaced (`put` refuses an existing key), so cop
 move. On S3 the write itself carries the refusal (`If-None-Match: *`, which Scaleway honors), so
 two writers racing on one key can't both win.
 
-Its metadata holds what the key lost: the original title and, when known, the publication date.
-S3 sends metadata as HTTP headers, which carry ASCII only, so the title is percent-encoded on the
-wire and decoded on the way back.
+Its metadata holds what the key lost: the original title and, when known, the publication date
+and the duration in seconds. S3 sends metadata as HTTP headers, which carry ASCII only, so the
+title is percent-encoded on the wire and decoded on the way back.
 """
 
 from __future__ import annotations
@@ -36,6 +36,8 @@ class RawNotFound(Exception):
 class RawMeta:
     title: str
     published: date | None = None
+    duration: int | None = None
+    """Seconds. The Fetcher knows it; a Raw copied from Drive doesn't."""
 
 
 @dataclass(frozen=True)
@@ -126,6 +128,8 @@ class S3RawStore:
         metadata = {"title": quote(meta.title, safe="")}
         if meta.published:
             metadata["published"] = meta.published.isoformat()
+        if meta.duration is not None:
+            metadata["duration"] = str(meta.duration)
         try:
             self.client.put_object(
                 Bucket=self.bucket,
@@ -148,10 +152,11 @@ class S3RawStore:
         except self.client.exceptions.NoSuchKey as error:
             raise RawNotFound(key) from error
         metadata = response.get("Metadata", {})
-        published = metadata.get("published")
+        published, duration = metadata.get("published"), metadata.get("duration")
         meta = RawMeta(
             title=unquote(metadata.get("title", "")),
             published=date.fromisoformat(published) if published else None,
+            duration=int(duration) if duration else None,
         )
         return Raw(source, youtube_id, response["Body"].read(), meta)
 

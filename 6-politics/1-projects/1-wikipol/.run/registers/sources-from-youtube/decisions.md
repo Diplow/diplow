@@ -7,8 +7,9 @@ preview: >-
   a ticket left room: how PaduTeam's eleven override skills regrouped by six,
   how a Source's config finds its frozen vault, what became of the legacy
   scripts and of new_source.py, how the moved editorial files were touched,
-  what the frozen glossary still says that I should fix, and how the Raws
-  reached the bucket: which ids and dates were found, which 12 stayed on Drive.
+  what the frozen glossary still says that I should fix, how the Raws
+  reached the bucket: which ids and dates were found, which 12 stayed on Drive,
+  and how the Fetcher picks, paces and stores the Raws still missing.
 ---
 # Decisions
 
@@ -57,3 +58,17 @@ WIK-2. The gate runs `ruff check .` and `ruff format --check .` from `Scripts/`,
 WIK-2. S3 metadata travels as HTTP headers, ASCII only, so the store percent-encodes `title` and decodes it on `get`. The title is the frontmatter's `titre` when there is one, else the Drive file's name, which is the video's title with `:`, `?` and `|` dropped; the true title comes with the Fetcher's metadata.
 
 Most Raws are 30-second blocks, a `M:SS` line then text. Four are not, and WIK-4 and WIK-7 must not assume it: `X0tXWZsjENQ`, `4MLEHjkr7Rs` and `mCek51AyK50` use `**[MM:SS](https://www.youtube.com/watch?v=ID&t=N)**` blocks under a title and URL header, and `wsiChBGb6T0` (BORIS VALLAUD N'A PAS DIT SON DERNIER MOT !) has no timestamp at all, so no Extract of it can carry one.
+
+### DEC-9 The Fetcher: `--limit` counts videos tried, one yt-dlp call per video, Supadata behind the flag
+
+WIK-3. `wikipol fetch --source <slug> [--limit N]` lists the channel, keeps the videos whose Raw the bucket lacks, and fetches them newest first, 8 s apart, stopping after 3 failures in a row. Where the ticket left room:
+
+- **`--limit` counts the videos tried, failures included**, not the Raws stored, so a sample named on a ticket never grows into more videos than it says.
+- **A video YouTube has no French captions for is not a failure.** It is skipped, counted against `--limit`, and tried again next run, since YouTube's speech recognition can take hours after an upload; only real failures (a refusal, a timeout, captions YouTube lists but yt-dlp didn't write) count toward the stop after 3 in a row. Counting it, as `batch_transcripts.py` did, would let three captionless videos at the top of the channel stop every daily run before it reached a fetchable one. Each one costs a yt-dlp call and a pause per run until it gets captions. A video that fails every time for another reason (age-restricted, login-gated) still counts: for Ulysse and WIK-9, three of those at the top of the channel would stop each daily run, and the run's report names them.
+- **One yt-dlp call per video** writes the French captions (json3, else WebVTT) and the info file, instead of the legacy script's two caption calls and a third for the date. The info file gives the title, the publication date (`upload_date`) and the duration. The listing skips an upcoming or running live and a members-only video, which have no captions for us and would count as failures each day.
+- **A fetched Raw is today's format and nothing more**: a frontmatter holding only `youtube_id`, then the 30-second blocks, two blank lines apart, as `batch_transcripts.py` wrote them. Title, date and duration go to the object's metadata; `RawMeta` gains `duration`, in seconds, absent on the Raws copied from Drive.
+- **The Fetcher is picked by `WIKIPOL_FETCHER`** (`yt-dlp` by default, or `transcript-api`), and `--fetcher` on the command line wins over it.
+- **The transcript API is Supadata**, the ticket naming none: `/youtube/channel/videos` lists, `/metadata` gives title, date and duration, `/transcript` in `native` mode returns the video's own captions, never an AI transcription, and a video with no French transcript is treated as one without French captions. It is tested on answers shaped like its documentation, never against the service: the run had no key. For Ulysse: to use it, add `WIKIPOL_TRANSCRIPT_API_KEY` to `~/.config/wikipol/.env`, and check its answers on one video before trusting it; another vendor means another class with the same two methods.
+- **`batch_transcripts.py` keeps its copy** of the discovery and parsing code: it is the legacy pipeline of DEC-3, kept for reference, and the package's version now lives in `wikipol/fetch/`.
+
+The real run of 2026-10-31, `--limit 3` on PaduTeam: the channel lists 1173 videos, 569 of them without a Raw; the three newest (`URonNSP0qM0`, `9aqNacmyf0c`, `hDtlb7vMGvo`, published 2026-10-28 to 30) were stored with their title, date and duration, 566 left. For Ulysse: those 566 are PaduTeam's backfill on WIK-12, about 75 minutes of pauses alone. The Fetcher does not fill the `published` date of the 150 Raws of DEC-6: their objects can't be rewritten, so WIK-7 has to take those dates from the Fetcher's metadata into its index.
