@@ -94,8 +94,8 @@ class RawText:
 
 
 def parse_raw(body: str) -> RawText:
-    """The Raw's blocks, its frontmatter left out."""
-    _, text = split_frontmatter(body.replace("\r\n", "\n"))
+    """The Raw's blocks, its frontmatter left out, and the NUL bytes a few synced files end with."""
+    _, text = split_frontmatter(body.replace("\r\n", "\n").replace("\x00", ""))
     blocks: list[Block] = []
     start: int | None = None
     lines: list[str] = []
