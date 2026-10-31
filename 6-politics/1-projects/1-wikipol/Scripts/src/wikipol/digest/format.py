@@ -53,6 +53,7 @@ TIMED_EXTRACT = re.compile(
 )
 UNTIMED_EXTRACT = re.compile(r"^> « (?P<quote>.+) »$")
 WIKILINK = re.compile(r"\[\[([^\]|#]+)")
+PROSE_QUOTE = re.compile(r"«\s*([^«»]+?)\s*»")
 
 
 def watch_url(youtube_id: str, seconds: int | None = None) -> str:
@@ -117,7 +118,7 @@ def split_digest(text: str) -> tuple[dict | None, str]:
         return None, text
     try:
         data = yaml.safe_load(text[4:end])
-    except yaml.YAMLError:
+    except (yaml.YAMLError, ValueError):  # ValueError: a date YAML reads but can't build
         return None, text[end + 5 :]
     return (data if isinstance(data, dict) else None), text[end + 5 :]
 
@@ -139,11 +140,19 @@ def check_digest(
     problems = _check_fields(frontmatter, expected)
     youtube_id = str(frontmatter.get("youtube_id") or "")
     duration = frontmatter.get("duration")
-    duration = duration if isinstance(duration, int) else None
+    duration = duration if isinstance(duration, int) and not isinstance(duration, bool) else None
     problems += _check_body(body, str(frontmatter.get("title") or ""), youtube_id, duration, raw)
     for target in WIKILINK.findall(body):
         if target.strip() not in linkable:
             problems.append(f"wikilink to [[{target}]], which is not a Digest it may cite")
+    # Words in guillemets outside an Extract quote the Source too, and must be in the Raw; the
+    # title is the video's, not a quote.
+    prose = [str(frontmatter.get("preview") or "")]
+    prose += [line for line in body.split("\n") if not line.startswith((">", "# "))]
+    for line in prose:
+        for quote in PROSE_QUOTE.findall(line):
+            if not raw.holds(quote):
+                problems.append(f"« {quote} » is quoted outside an Extract and is not in the Raw")
     return problems
 
 
@@ -158,6 +167,8 @@ def _check_fields(data: dict, expected: DigestFields | None) -> list[str]:
     for name in ("title", "parent", "owner", "source", "model"):
         if name in data and not (isinstance(data[name], str) and data[name].strip()):
             problems.append(f"{name} must be a non-empty string")
+    if "owner" in data and data["owner"] != OWNER:
+        problems.append(f"owner must be {OWNER}")
 
     preview = data.get("preview")
     if not isinstance(preview, str) or not preview.strip():
@@ -180,7 +191,9 @@ def _check_fields(data: dict, expected: DigestFields | None) -> list[str]:
     if data.get("published") is not None and not isinstance(data.get("published"), date):
         problems.append("published must be a date (YYYY-MM-DD) or null")
     duration = data.get("duration")
-    if duration is not None and (not isinstance(duration, int) or duration <= 0):
+    if duration is not None and (
+        not isinstance(duration, int) or isinstance(duration, bool) or duration <= 0
+    ):
         problems.append("duration must be a number of seconds or null")
     if not isinstance(data.get("ingested"), date):
         problems.append("ingested must be a date (YYYY-MM-DD)")

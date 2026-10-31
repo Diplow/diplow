@@ -321,7 +321,7 @@ def test_an_unreadable_digest_file_is_one_more_problem(source, store, tmp_path):
     )
 
 
-def test_check_digest_holds_title_and_date_to_the_raw_and_the_legacy_note(source, store, tmp_path):
+def test_check_digest_holds_the_date_to_the_raw_and_the_legacy_note(source, store, tmp_path):
     from wikipol.cli import check_one_digest
 
     path = tmp_path / "edited.md"
@@ -336,3 +336,24 @@ def test_check_digest_holds_title_and_date_to_the_raw_and_the_legacy_note(source
 def test_a_json_answer_that_is_not_an_object_is_a_writer_failure():
     with pytest.raises(WriterFailed, match="answered list"):
         ClaudeCli(FakeClaude([1, 2]))("s", "p", MODEL)
+
+
+def test_an_untimed_raw_asks_for_extracts_without_a_link(source):
+    store = InMemoryRawStore()
+    body = "---\nyoutube_id: aaaaaaaaaaa\n---\n\nLa guerre au Parti socialiste commence vraiment.\n"
+    store.put("demo", VIDEO, body.encode(), RawMeta("SANS HORODATAGE", None, None))
+    draft = "---\npreview: La guerre commence.\n---\n## 1. La guerre.\n\n"
+    draft += "> « La guerre au Parti socialiste commence »\n"
+    writer = FakeWriter(draft)
+
+    result = digest(source, store, writer)
+
+    assert "aucun : les Extracts n'ont pas de lien" in writer.calls[0][1]
+    assert result.drafts == 1
+
+
+def test_a_source_built_with_an_alias_writes_no_digest(source, store):
+    from dataclasses import replace
+
+    with pytest.raises(ConfigError, match="is an alias"):
+        digest(replace(source, model="sonnet"), store, FakeWriter(GOOD_DRAFT))

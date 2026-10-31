@@ -132,6 +132,8 @@ def pinned_model(source: Source) -> str:
     """The model that writes the Source's Digests; a Source without one writes none."""
     if source.model is None:
         raise ConfigError(f"{source.slug}: source.yaml has no claude.default_model")
+    if not is_pinned_model(source.model):
+        raise ConfigError(f"{source.slug}: {source.model!r} is an alias, not a pinned model id")
     return source.model
 
 

@@ -30,7 +30,7 @@ def clock_seconds(label: str) -> int | None:
     if not match:
         return None
     hours, minutes, seconds = (int(part or 0) for part in match.groups())
-    if seconds >= 60 or (hours and minutes >= 60):
+    if seconds >= 60 or (match.group(1) is not None and minutes >= 60):
         return None
     return hours * 3600 + minutes * 60 + seconds
 

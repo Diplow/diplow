@@ -117,7 +117,7 @@ class Digest:
 
 
 def linkable_digests(source: Source, repo_root: Path = REPO_ROOT) -> dict[str, str]:
-    """The Source's Digests a new one may cite: repo path without `.md` -> title. None for a
+    """The Source's Digests a new one may cite: repo path without `.md` -> title. Nothing for a
     Source outside the repo, whose Digests have no repo path to link."""
     found: dict[str, str] = {}
     if not source.chronicle.resolve().is_relative_to(repo_root.resolve()):

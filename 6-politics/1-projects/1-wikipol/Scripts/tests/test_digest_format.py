@@ -251,3 +251,35 @@ def test_a_hyphenated_word_survives_the_folded_preview():
     frontmatter, _ = split_digest(digest(preview=preview))
 
     assert frontmatter["preview"] == " ".join(preview.split())
+
+
+def test_words_in_guillemets_outside_an_extract_must_be_in_the_raw():
+    held = CLAIMS.replace("Elle coupe ses contrats.", "Ses « contrats sont coupés ».")
+    invented = CLAIMS.replace("Elle coupe ses contrats.", "Un « boycott total » selon elle.")
+
+    assert check_digest(digest(held, preview="Une « sauce monumentale »."), RAW) == []
+    assert check_digest(digest(invented), RAW) == [
+        "« boycott total » is quoted outside an Extract and is not in the Raw"
+    ]
+    assert check_digest(digest(preview="La « guerre totale » de la Chine."), RAW) == [
+        "« guerre totale » is quoted outside an Extract and is not in the Raw"
+    ]
+
+
+def test_owner_is_diplo_and_duration_is_no_boolean():
+    text = (
+        digest()
+        .replace("owner: diplo", "owner: quelquun")
+        .replace("duration: 90", "duration: true")
+    )
+
+    assert check_digest(text, RAW) == [
+        "owner must be diplo",
+        "duration must be a number of seconds or null",
+    ]
+
+
+def test_an_impossible_date_is_an_unreadable_frontmatter():
+    assert check_digest(digest().replace("2026-10-31", "2026-02-30"), RAW) == [
+        "no readable YAML frontmatter"
+    ]

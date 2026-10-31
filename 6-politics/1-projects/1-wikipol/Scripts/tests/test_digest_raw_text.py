@@ -129,3 +129,8 @@ def test_an_empty_block_does_not_part_a_quote_running_across_it():
     )
 
     assert raw.holds("le début de la phrase continue ici", at=0)
+
+
+def test_an_hour_label_with_sixty_minutes_is_no_clock():
+    assert clock_seconds("0:60:00") is None
+    assert clock_seconds("0:59:00") == 3540

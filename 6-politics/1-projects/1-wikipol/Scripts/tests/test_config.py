@@ -168,4 +168,16 @@ def test_every_repo_source_pins_the_model_that_writes_its_digests():
 
 def test_the_source_template_pins_a_model_too():
     template = DEFAULT_SOURCES_DIR.parent / "1-projects" / "1-wikipol" / "Templates"
-    assert "default_model: claude-sonnet-5-5" in (template / "source.yaml.tmpl").read_text()
+    lines = (template / "source.yaml.tmpl").read_text().splitlines()
+    assert "  default_model: claude-sonnet-5-5" in lines
+
+
+def test_a_latest_id_moves_and_is_refused_too(tmp_path):
+    node = tmp_path / "1-demo"
+    node.mkdir()
+    (node / "source.yaml").write_text(
+        "source:\n  name: Demo\n  slug: demo\nclaude:\n  default_model: claude-sonnet-latest\n"
+    )
+
+    with pytest.raises(ConfigError, match="is an alias"):
+        load_source(node)

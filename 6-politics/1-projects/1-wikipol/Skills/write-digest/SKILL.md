@@ -71,6 +71,7 @@ La thèse, pas le sujet. « La PaduTeam soutient que le PS prépare 2027 en se r
 - **Ordre** : celui de l'argument, le plus central d'abord.
 - **Le développement** sous l'affirmation est facultatif : une à trois phrases, quand l'affirmation a besoin de son mécanisme ou de son exemple. Pas de sous-titre, pas de liste.
 - **Un chiffre, un sondage, une date** : seulement s'ils sont dans le Raw.
+- **Des guillemets « » hors d'un Extract** citent eux aussi la Source : seulement autour de mots qui sont dans le Raw, tels quels. Pour une formule à toi, pas de guillemets.
 
 ### Les Extracts
 
@@ -94,7 +95,7 @@ Les Digests se citent par wikilink, `[[chemin|titre court]]`, dans le développe
 - il n'y a aucune affirmation, plus de six, ou une numérotation qui saute ;
 - une affirmation a zéro ou plus de trois Extracts ;
 - un Extract est mal formé, a moins de cinq mots, lie un autre `youtube_id`, un horodatage qui n'ouvre aucun bloc du Raw, une étiquette qui ne vaut pas ses secondes, ou une seconde au-delà de la durée ;
-- une citation n'est pas dans le Raw à partir du bloc lié ;
+- une citation n'est pas dans le Raw à partir du bloc lié, ou des mots entre « » dans le Preview ou un développement n'y sont pas ;
 - un wikilink vise autre chose qu'un Digest de la liste ;
 - du texte apparaît avant la première affirmation, ou un titre autre que `## <n>. <affirmation>`.
 
