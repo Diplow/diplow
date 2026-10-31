@@ -211,6 +211,11 @@ def backfill(
         return report
 
     staging.mkdir(parents=True, exist_ok=True)
+    # A staged Digest of a Raw that needs none any more (filed by a run stopped before it cleared
+    # its staging, or from another clone) would sit there for good.
+    for path in staging.glob("*.md"):
+        if path.stem not in report.to_digest:
+            path.unlink()
     # Until it is filed, a Digest's parent is the Chronicle, as `wikipol digest` has it.
     chronicle = source.chronicle.resolve()
     parent = (
@@ -222,12 +227,38 @@ def backfill(
     filed: list[str] = []
     tried = failures_in_a_row = 0
 
+    def refuse(youtube_id: str, reason: str, draft: str) -> None:
+        report.failed.append((youtube_id, reason))
+        log(f"  {youtube_id}: failed, {reason}")
+        report.rejected_drafts = staging / "rejected"
+        report.rejected_drafts.mkdir(exist_ok=True)
+        (report.rejected_drafts / f"{youtube_id}.md").write_text(draft, encoding="utf-8")
+
+    def drop_unfileable() -> None:
+        """Takes out of the batch, and out of staging, each Digest the Chronicle refuses on its
+        own (a Digest filed before on another date, decisions.md#DEC-14), so one such Digest
+        doesn't hold back the others at every run."""
+        for youtube_id, text in list(pending):
+            try:
+                plan_filing(source, [text], repo_root=repo_root)
+            except FilingError as error:
+                pending.remove((youtube_id, text))
+                (staging / f"{youtube_id}.md").unlink(missing_ok=True)
+                refuse(youtube_id, f"can't be filed: {error}", text)
+
     def file_pending() -> bool:
         """Files the pending Digests; False, with the reason in the report, when it couldn't."""
+        try:
+            filing = plan_filing(source, [text for _, text in pending], repo_root=repo_root)
+        except FilingError:
+            drop_unfileable()
+            filing = None
         if not pending:
             return True
         try:
-            filing = plan_filing(source, [text for _, text in pending], repo_root=repo_root)
+            filing = filing or plan_filing(
+                source, [text for _, text in pending], repo_root=repo_root
+            )
             filing.summarize(
                 lambda period, whole: write_period(source, period, writer, chronicle=whole)
             )
@@ -272,23 +303,21 @@ def backfill(
                     today=today,
                     linkable=links,
                 )
-            except (DigestRejected, WriterFailed) as error:
-                reason = "; ".join([str(error), *getattr(error, "problems", [])])
-                report.failed.append((youtube_id, reason))
-                log(f"  {youtube_id}: failed, {reason}")
-                if isinstance(error, DigestRejected):
-                    report.rejected_drafts = staging / "rejected"
-                    report.rejected_drafts.mkdir(exist_ok=True)
-                    (report.rejected_drafts / f"{youtube_id}.md").write_text(
-                        error.draft, encoding="utf-8"
-                    )
+            except DigestRejected as error:
+                refuse(youtube_id, "; ".join([str(error), *error.problems]), error.draft)
                 failures_in_a_row += 1
+            except WriterFailed as error:
+                report.failed.append((youtube_id, str(error)))
+                log(f"  {youtube_id}: failed, {error}")
+                failures_in_a_row += 1
+            else:
+                failures_in_a_row = 0
+            if failures_in_a_row:
                 if failures_in_a_row >= MAX_FAILURES_IN_A_ROW:
                     report.stopped = f"{MAX_FAILURES_IN_A_ROW} failures in a row"
                     file_pending()  # what the model wrote before them is filed all the same
                     break
                 continue
-            failures_in_a_row = 0
             text = digest.text
             staged.write_text(text, encoding="utf-8")
             report.written.append(youtube_id)

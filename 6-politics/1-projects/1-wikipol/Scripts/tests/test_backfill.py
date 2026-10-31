@@ -292,3 +292,31 @@ def test_what_was_written_before_three_failures_is_still_filed(source, store, re
     assert report.stopped == "3 failures in a row"
     assert set(digests_in(repo)) == {FROM_NOTE, OLDEST_FIRST[0]}
     assert staged(tmp_path) == []
+
+
+def test_a_digest_the_chronicle_refuses_doesn_t_hold_back_its_batch(source, store, repo, tmp_path):
+    run(source, store, FakeWriter(), repo, tmp_path)
+    # Rewritten by a new model with another date, it can't take its old place (DEC-14).
+    yaml_path = repo / "6-politics" / "2-sources" / "1-demo" / "source.yaml"
+    yaml_path.write_text(yaml_path.read_text().replace(MODEL, "claude-sonnet-6-0"))
+    note = repo / "6-politics" / "Legacy" / "Demo" / "Videos" / "Une fiche.md"
+    note.write_text(note.read_text().replace("2025-12-31", "2026-06-01"))
+
+    report = run(load_source(yaml_path.parent), store, FakeWriter(), repo, tmp_path)
+
+    assert [youtube_id for youtube_id, _ in report.failed] == [FROM_NOTE]
+    assert "can't be filed" in report.failed[0][1]
+    assert (report.rejected_drafts / f"{FROM_NOTE}.md").is_file()
+    models = {youtube_id: fm["model"] for youtube_id, fm in digests_in(repo).items()}
+    assert models.pop(FROM_NOTE) == MODEL  # left as it was
+    assert set(models.values()) == {"claude-sonnet-6-0"}
+    assert staged(tmp_path) == []
+
+
+def test_a_staged_digest_no_raw_needs_any_more_is_cleared(source, store, repo, tmp_path):
+    run(source, store, FakeWriter(), repo, tmp_path)
+    write(tmp_path / "staging" / f"{FROM_NOTE}.md", "un Digest déjà rangé\n")
+
+    run(source, store, FakeWriter(), repo, tmp_path)
+
+    assert staged(tmp_path) == []
