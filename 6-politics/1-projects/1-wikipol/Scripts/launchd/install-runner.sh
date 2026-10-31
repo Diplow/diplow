@@ -97,7 +97,7 @@ done
 path="$path:/usr/bin:/bin:/usr/sbin:/sbin"
 rendered=$(mktemp "${TMPDIR:-/tmp}/$LABEL.XXXXXX")
 sed -e "s|@UV@|$(command -v uv)|g" -e "s|@RUNNER_DIR@|$RUNNER_DIR|g" \
-	-e "s|@HOME@|$HOME|g" -e "s|@PATH@|$path|g" "$TEMPLATE" >"$rendered"
+	-e "s|@HOME@|$HOME|g" -e "s|@PATH@|$path|g" -e "s|@BASE@|$BASE|g" "$TEMPLATE" >"$rendered"
 if command -v plutil >/dev/null; then
 	plutil -lint "$rendered" >/dev/null || fail "the filled plist doesn't lint: $rendered"
 fi

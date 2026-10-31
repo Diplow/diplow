@@ -4,8 +4,9 @@
   wikipol's daily run, as a launchd agent of the logged-in user. A template: install-runner.sh
   fills the @...@ fields and puts the result in ~/Library/LaunchAgents. Every day at 07:00, or
   at the next wake when the Mac slept through it, launchd starts `wikipol run` in the runner's
-  clone. Each run writes its own log in ~/Library/Logs/wikipol; the two files below only catch
-  what happens before it opens one.
+  clone, onto the branch the install followed. Each run writes its own log in
+  ~/Library/Logs/wikipol, its summary included, so stdout goes nowhere and the stderr file keeps
+  only what fails before the log opens.
 -->
 <plist version="1.0">
 <dict>
@@ -21,6 +22,8 @@
 		<string>--quiet</string>
 		<string>wikipol</string>
 		<string>run</string>
+		<string>--base</string>
+		<string>@BASE@</string>
 	</array>
 	<key>WorkingDirectory</key>
 	<string>@RUNNER_DIR@</string>
@@ -43,7 +46,7 @@
 	<key>ProcessType</key>
 	<string>Background</string>
 	<key>StandardOutPath</key>
-	<string>@HOME@/Library/Logs/wikipol/launchd.out.log</string>
+	<string>/dev/null</string>
 	<key>StandardErrorPath</key>
 	<string>@HOME@/Library/Logs/wikipol/launchd.err.log</string>
 </dict>

@@ -36,6 +36,7 @@ from wikipol.fetch.run import FetchReport, fetch_source
 from wikipol.fetch.run import format_report as format_fetch_report
 from wikipol.index.run import IndexReport
 from wikipol.index.run import format_report as format_index_report
+from wikipol.index.store import IndexUnreachable
 from wikipol.raw_store import RawStore
 from wikipol.runner.repo import RUN_BRANCH_PREFIX, GitFailed, RunnerRepo
 
@@ -172,7 +173,11 @@ def run_steps(sources: list[Source], pipeline: Pipeline, report: RunReport) -> N
                 digest_stopped = True
 
     def search_index() -> None:
-        report.indexed = p.index(sources, dry_run)
+        try:
+            report.indexed = p.index(sources, dry_run)
+        except IndexUnreachable as error:
+            report.indexed = error.reports  # what the Sources before the failure committed
+            raise
         log(format_index_report(report.indexed, dry_run=dry_run))
 
     if step("index", search_index):

@@ -15,7 +15,7 @@ from wikipol import cli
 from wikipol.config import ConfigError, load_sources
 from wikipol.fetch.fetcher import Fetched, FetchFailed
 from wikipol.index.run import index_source
-from wikipol.index.store import InMemoryIndex
+from wikipol.index.store import IndexUnreachable, InMemoryIndex
 from wikipol.raw_store import InMemoryRawStore, RawMeta
 from wikipol.runner.repo import Git, RunnerRepo
 from wikipol.runner.run import Pipeline, daily_run, format_summary
@@ -305,3 +305,42 @@ def test_the_command_logs_to_a_file_and_stops_on_a_missing_setting(tmp_path, cap
     assert status == 2
     (log,) = (tmp_path / "logs").glob("run-*.log")
     assert "WIKIPOL_S3_BUCKET is not set" in log.read_text()
+
+
+def test_what_the_index_committed_before_its_database_failed_is_reported(
+    tmp_path, clone, github, store, index
+):
+    def half(chosen, dry_run):
+        done = [index_source(chosen[0], store, FakeEmbedder(), index, repo_root=clone)]
+        raise IndexUnreachable("the index's database failed: connection lost", done)
+
+    fetcher = FakeFetcher({DEMO: ["newvideo001"], AUTRE: []})
+
+    report = run(clone, tmp_path, store, fetcher, github, index, index_step=half)
+
+    assert report.failures == [
+        "index: IndexUnreachable: the index's database failed: connection lost"
+    ]
+    assert "- index: 1 Publications indexed" in format_summary(report)
+
+
+def test_a_dry_run_outside_a_clone_says_so(tmp_path, monkeypatch, capsys):
+    sources = tmp_path / "copy" / "6-politics" / "2-sources"
+    write(sources / "1-demo" / "source.yaml", source_yaml("Demo", "demo"))
+    for name, value in {
+        "WIKIPOL_S3_BUCKET": "bucket",
+        "WIKIPOL_S3_ENDPOINT": "https://s3.example.invalid",
+        "SCW_ACCESS_KEY": "x",
+        "SCW_SECRET_KEY": "y",
+        "GIT_CEILING_DIRECTORIES": str(tmp_path),
+    }.items():
+        monkeypatch.setenv(name, value)
+    monkeypatch.setattr(cli.S3RawStore, "from_settings", lambda settings: InMemoryRawStore())
+
+    status = cli.main(
+        ["run", "--dry-run", "--sources-dir", str(sources), "--log-dir", str(tmp_path / "logs")]
+    )
+
+    assert status == 2
+    err = capsys.readouterr().err
+    assert "not a git repository" in err, err

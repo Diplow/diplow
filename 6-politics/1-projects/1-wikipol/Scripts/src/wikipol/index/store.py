@@ -33,6 +33,15 @@ class SchemaNotApplied(Exception):
     """The database lacks a migration, and the role connected may not apply it."""
 
 
+class IndexUnreachable(Exception):
+    """The index's database refused the connection or a statement. `reports` holds what the
+    Sources before the failure committed (wikipol.index.run.IndexReport)."""
+
+    def __init__(self, message: str, reports: list | None = None) -> None:
+        super().__init__(message)
+        self.reports = reports or []
+
+
 @dataclass(frozen=True)
 class Publication:
     source: str

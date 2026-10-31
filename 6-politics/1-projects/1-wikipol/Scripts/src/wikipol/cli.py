@@ -37,10 +37,10 @@ from wikipol.fetch.run import format_report as format_fetch_report
 from wikipol.index.embed import EmbeddingFailed, ScalewayEmbedder
 from wikipol.index.run import IndexReport, index_source
 from wikipol.index.run import format_report as format_index_report
-from wikipol.index.store import Hit, PostgresIndex, SchemaNotApplied
+from wikipol.index.store import Hit, IndexUnreachable, PostgresIndex, SchemaNotApplied
 from wikipol.legacy_index import find_video_note
 from wikipol.raw_store import YOUTUBE_ID, RawNotFound, RawStore, S3RawStore
-from wikipol.runner.repo import GhCli, Git, RunnerRepo
+from wikipol.runner.repo import GhCli, Git, GitFailed, RunnerRepo
 from wikipol.runner.run import Pipeline, daily_run, default_log_dir, format_summary, log_path
 from wikipol.search.extracts import (
     QUERY_RETRY_PAUSES,
@@ -185,7 +185,7 @@ def main(argv: list[str] | None = None) -> int:
             return run_daily(args)
         if args.command == "mcp":
             return serve_search(args)
-    except (WriterFailed, RawNotFound, IndexUnreachable, SchemaNotApplied) as error:
+    except (WriterFailed, RawNotFound, IndexUnreachable, SchemaNotApplied, GitFailed) as error:
         print(f"wikipol: {error}", file=sys.stderr)
         return 2
     except FetchFailed as error:
@@ -387,14 +387,6 @@ def backfill_source(args: argparse.Namespace) -> int:
     )
     print(format_backfill_report(report, limit=args.limit, dry_run=args.dry_run))
     return 1 if report.failed or report.stopped else 0
-
-
-class IndexUnreachable(Exception):
-    """The index's database refused the connection or a statement."""
-
-    def __init__(self, message: str, reports: list[IndexReport] | None = None) -> None:
-        super().__init__(message)
-        self.reports = reports or []
 
 
 def open_index(database_url: str) -> PostgresIndex:

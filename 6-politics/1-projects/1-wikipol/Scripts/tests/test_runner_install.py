@@ -88,6 +88,8 @@ def test_the_filled_plist_runs_wikipol_run_daily_in_the_runners_clone(env, home,
         "--quiet",
         "wikipol",
         "run",
+        "--base",
+        "main",
     ]
     assert agent["WorkingDirectory"] == str(runner)
     # A calendar interval: launchd runs a job missed during sleep at the next wake.
@@ -97,6 +99,7 @@ def test_the_filled_plist_runs_wikipol_run_daily_in_the_runners_clone(env, home,
     assert str(tmp_path / "bin") in path and "/usr/bin" in path
     assert agent["EnvironmentVariables"]["HOME"] == str(home)
     assert agent["StandardErrorPath"] == f"{home}/Library/Logs/wikipol/launchd.err.log"
+    assert agent["StandardOutPath"] == "/dev/null"  # the summary is in the run's own log
     assert "@" not in rendered.read_text().split("<plist", 1)[1]  # every field filled
 
 
@@ -105,6 +108,9 @@ def test_the_install_follows_another_base_when_told(env, home):
 
     assert result.returncode == 0, result.stderr
     assert f"+ git clone --branch project/sources-from-youtube {REPO_URL}" in result.stdout
+    rendered = Path(re.search(r"filled plist: (\S+)", result.stdout).group(1))
+    arguments = plistlib.loads(rendered.read_bytes())["ProgramArguments"]
+    assert arguments[-2:] == ["--base", "project/sources-from-youtube"]  # the runs land there too
 
 
 def test_the_install_refuses_a_folder_that_isnt_a_clone(env, home):

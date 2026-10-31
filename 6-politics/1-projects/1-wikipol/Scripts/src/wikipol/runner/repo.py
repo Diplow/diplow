@@ -150,7 +150,10 @@ class GhCli:
                 if not found:
                     raise
                 return found[0]["url"]
-        return out.strip().splitlines()[-1]
+        lines = out.strip().splitlines()
+        if not lines:
+            raise GitFailed("gh pr create printed no pull request URL")
+        return lines[-1]
 
     def merge(self, url: str) -> None:
         # No --delete-branch: in a clone, gh would also switch branches and delete the local one.

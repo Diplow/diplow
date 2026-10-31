@@ -3,12 +3,13 @@ that merges with --squash as GitHub does: no network."""
 
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
 
 import pytest
 from conftest import FakeGitHub, git
 
-from wikipol.runner.repo import RUN_BRANCH_PREFIX, Git, GitFailed, RunnerRepo
+from wikipol.runner.repo import RUN_BRANCH_PREFIX, GhCli, Git, GitFailed, RunnerRepo
 
 
 @pytest.fixture
@@ -173,3 +174,11 @@ def test_one_run_at_a_time(clone):
 def test_a_tool_missing_from_path_is_a_git_failure_not_a_crash(clone):
     with pytest.raises(GitFailed, match="could not start"):
         Git(clone).command("wikipol-no-such-tool", "pr", "list")
+
+
+def test_a_pull_request_gh_names_no_url_for_is_a_failure(clone):
+    def silent(command, cwd):
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    with pytest.raises(GitFailed, match="no pull request URL"):
+        GhCli(Git(clone, run=silent)).open_pull_request("main", "wikipol/run-x", "title", "body")
