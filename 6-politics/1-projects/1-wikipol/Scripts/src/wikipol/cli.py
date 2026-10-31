@@ -19,7 +19,6 @@ from wikipol.config import (
     load_fetcher_settings,
     load_settings,
     load_sources,
-    pinned_model,
 )
 from wikipol.digest.format import DigestFields, check_digest, split_digest
 from wikipol.digest.raw_text import parse_raw
@@ -211,7 +210,10 @@ def check_digests(args: argparse.Namespace) -> int:
 def check_one_digest(path: Path, store: RawStore, sources_dir: Path) -> list[str]:
     """What is wrong with one Digest file, read against its Raw; a file the check can't even
     place (no Source, no Raw) says so in its problems, and the next file is still checked."""
-    text = path.read_text(encoding="utf-8")
+    try:
+        text = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError) as error:
+        return [f"can't be read: {error}"]
     frontmatter, _ = split_digest(text)
     if frontmatter is None:
         return ["no readable YAML frontmatter"]
@@ -219,7 +221,6 @@ def check_one_digest(path: Path, store: RawStore, sources_dir: Path) -> list[str
     try:
         source = source_by_slug(sources_dir, str(frontmatter.get("source") or ""))
         raw = store.get(source.slug, youtube_id)
-        model = pinned_model(source)
     except (ConfigError, RawNotFound, ValueError) as error:
         return [f"can't be checked: {error}"]
     expected = DigestFields(
@@ -230,7 +231,8 @@ def check_one_digest(path: Path, store: RawStore, sources_dir: Path) -> list[str
         published=frontmatter.get("published"),
         duration=raw.meta.duration or frontmatter.get("duration"),
         ingested=frontmatter.get("ingested"),
-        model=model,
+        # The model that wrote it, which may predate today's pin: only an alias is refused.
+        model=frontmatter.get("model"),
     )
     linkable = set(linkable_digests(source)) - {repo_path(path.with_suffix(""))}
     return check_digest(text, parse_raw(raw.body.decode("utf-8")), expected, linkable)

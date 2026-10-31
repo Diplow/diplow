@@ -121,3 +121,11 @@ def test_clock_labels_and_seconds():
 
 def test_words_drop_case_and_punctuation():
     assert words("« L'État, c'est MOI ! »") == "l état c est moi"
+
+
+def test_an_empty_block_does_not_part_a_quote_running_across_it():
+    raw = parse_raw(
+        "0:00\n\nle début de la phrase\n\n\n0:30\n\n\n1:00\n\ncontinue ici sans coupure\n"
+    )
+
+    assert raw.holds("le début de la phrase continue ici", at=0)

@@ -297,3 +297,25 @@ def test_a_digest_the_check_cannot_place_is_one_more_problem(
     assert len(problems) == 1
     assert problems[0].startswith("can't be checked: ")
     assert complaint in problems[0]
+
+
+def test_a_digest_written_before_a_model_change_still_checks(source, store, tmp_path):
+    from wikipol.cli import check_one_digest
+
+    path = tmp_path / "older.md"
+    text = digest(source, store, FakeWriter(GOOD_DRAFT)).text
+    path.write_text(text.replace(f"model: {MODEL}", "model: claude-sonnet-4-5"), encoding="utf-8")
+
+    assert check_one_digest(path, store, source.node.parent) == []
+
+
+def test_an_unreadable_digest_file_is_one_more_problem(source, store, tmp_path):
+    from wikipol.cli import check_one_digest
+
+    path = tmp_path / "latin1.md"
+    path.write_bytes("---\ntitle: é\n".encode("latin-1"))
+
+    assert check_one_digest(path, store, source.node.parent)[0].startswith("can't be read: ")
+    assert check_one_digest(tmp_path / "absent.md", store, source.node.parent)[0].startswith(
+        "can't be read: "
+    )

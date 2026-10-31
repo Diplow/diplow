@@ -76,6 +76,8 @@ class RawText:
         spans, parts, offset = [], [], 1
         for block in self.blocks:
             text = words(block.text)
+            if not text:  # an empty block holds no word, and must not part its neighbors
+                continue
             spans.append((offset, offset + len(text), block.start))
             parts.append(text)
             offset += len(text) + 1

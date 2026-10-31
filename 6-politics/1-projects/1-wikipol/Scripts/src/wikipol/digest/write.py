@@ -115,14 +115,17 @@ class Digest:
 
 
 def linkable_digests(source: Source, repo_root: Path = REPO_ROOT) -> dict[str, str]:
-    """The Source's Digests a new one may cite: repo path without `.md` -> title."""
-    found = {}
-    for path in sorted(source.chronicle.rglob("*.md")):
+    """The Source's Digests a new one may cite: repo path without `.md` -> title. None for a
+    Source outside the repo, whose Digests have no repo path to link."""
+    found: dict[str, str] = {}
+    if not source.chronicle.resolve().is_relative_to(repo_root.resolve()):
+        return found
+    for path in sorted(source.chronicle.resolve().rglob("*.md")):
         if path.name == "CLAUDE.md":
             continue
         frontmatter, _ = split_digest(path.read_text(encoding="utf-8"))
         if frontmatter and "digest_version" in frontmatter:
-            target = path.relative_to(repo_root).with_suffix("").as_posix()
+            target = path.relative_to(repo_root.resolve()).with_suffix("").as_posix()
             found[target] = str(frontmatter.get("title") or "")
     return found
 
