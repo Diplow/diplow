@@ -17,7 +17,7 @@ def test_json3_gives_one_segment_per_caption_event():
     ]
 
 
-def test_vtt_drops_the_word_timings_and_the_blank_cues():
+def test_vtt_drops_the_word_timings_and_the_lines_scrolling_cues_repeat():
     segments = parse_vtt((FIXTURES / "captions.fr.vtt").read_text(encoding="utf-8"))
 
     assert segments == [

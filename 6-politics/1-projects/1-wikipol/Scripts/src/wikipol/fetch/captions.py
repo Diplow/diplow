@@ -34,17 +34,27 @@ def parse_json3(text: str) -> list[Segment]:
 
 
 def parse_vtt(text: str) -> list[Segment]:
-    """WebVTT, the fallback when YouTube serves no json3: one cue per blank-line block."""
+    """WebVTT, the fallback when YouTube serves no json3: one cue per blank-line block.
+
+    YouTube's speech-recognition cues scroll: each one repeats the line shown before it above
+    the new one. A line equal to the last line kept is that repeat, and is dropped.
+    """
     segments = []
+    last_line = None
     for block in re.split(r"\n\n+", text.replace("\r\n", "\n")):
-        lines = block.strip().split("\n")
+        lines = block.split("\n")
         for i, line in enumerate(lines):
-            cue = VTT_CUE.match(line)
+            cue = VTT_CUE.match(line.strip())
             if cue:
                 h, m, s, ms = (int(part or 0) for part in cue.groups())
-                caption = " ".join(VTT_TAG.sub("", " ".join(lines[i + 1 :])).split())
-                if caption:
-                    segments.append(((h * 3600 + m * 60 + s) * 1000 + ms, caption))
+                new_lines = []
+                for caption_line in lines[i + 1 :]:
+                    caption = " ".join(VTT_TAG.sub("", caption_line).split())
+                    if caption and caption != last_line:
+                        new_lines.append(caption)
+                        last_line = caption
+                if new_lines:
+                    segments.append(((h * 3600 + m * 60 + s) * 1000 + ms, " ".join(new_lines)))
                 break
     return segments
 
