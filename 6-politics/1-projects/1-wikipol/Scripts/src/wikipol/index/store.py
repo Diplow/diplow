@@ -272,10 +272,11 @@ class PostgresIndex:
     ) -> list[Hit]:
         """The `limit` chunks nearest the embedding among those of the Source and the period.
 
-        The filter runs first, in a materialized CTE, and the ranking is exact over what it keeps:
-        ordered straight on `embedding <=> …`, the HNSW index would pick its nearest chunks
-        before filtering, and a narrow period would come back with fewer than `limit` or none.
-        Only chunks embedded by `model` compare with its query.
+        The filter runs first, in a materialized CTE that also measures each kept chunk's
+        distance, and the ranking orders on that column, exact over what the filter kept.
+        Ordered on `embedding <=> …` itself, the planner may walk the HNSW index for the nearest
+        chunks of all and filter after, and a narrow period would come back with fewer than
+        `limit` or none. Only chunks embedded by `model` compare with its query.
         """
         with self.connection.transaction():
             rows = self.connection.execute(
@@ -301,7 +302,7 @@ class PostgresIndex:
 
 SEARCH_SQL = """
 WITH candidate AS MATERIALIZED (
-    SELECT c.source, c.youtube_id, c.position
+    SELECT c.source, c.youtube_id, c.position, c.embedding <=> %(embedding)s::vector AS distance
     FROM chunk c JOIN publication p USING (source, youtube_id)
     WHERE p.embedding_model = %(model)s
       AND (%(source)s::text IS NULL OR p.source = %(source)s::text)
@@ -310,10 +311,10 @@ WITH candidate AS MATERIALIZED (
 )
 SELECT p.source, p.youtube_id, p.title, p.published, p.duration, p.raw_key, p.digest_path,
        p.embedding_model, p.chunking, c.position, c.start_seconds, c.end_seconds, c.text,
-       c.embedding <=> %(embedding)s::vector AS distance
+       candidate.distance
 FROM candidate
 JOIN chunk c USING (source, youtube_id, position)
 JOIN publication p USING (source, youtube_id)
-ORDER BY distance
+ORDER BY candidate.distance
 LIMIT %(limit)s
 """

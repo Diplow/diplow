@@ -92,7 +92,7 @@ def test_a_search_answers_extracts_as_json_text(server):
         "published": "2025-03-14",
         "digest": "6-politics/x/1-a.md",
         "source": "paduteam",
-        "similarity": extract["similarity"],
+        "similarity": 1.0,  # the query names the chunk's one topic as often as it does
     }
 
 
@@ -109,6 +109,7 @@ def test_the_answer_is_one_utf8_line_per_message(server):
     [
         ({"query": "x", "source": "inconnue"}, "no Source 'inconnue'"),
         ({"query": "x", "from": "hier"}, "'hier' is not a date"),
+        ({"query": "x", "from": ""}, "'' is not a date"),
         ({"query": "x", "limit": "5"}, "limit must be an integer"),
         ({"query": "x", "limit": True}, "limit must be an integer"),
         ({"query": 3}, "query must be a string"),
@@ -155,10 +156,22 @@ def test_protocol_mistakes_get_json_rpc_errors(server):
         request(2, "resources/list"),
         request(3, "tools/call", {"name": "fetch", "arguments": {}}),
         request(4, "tools/call", ["search"]),
+        {**request(5, "tools/call"), "params": None},
+        {"jsonrpc": "1.0", "id": 6, "method": "ping"},
+        {"id": 7, "method": "ping"},
     )
 
-    assert [a["error"]["code"] for a in answers] == [-32700, -32600, -32601, -32602, -32602]
-    assert [a["id"] for a in answers] == [None, None, 2, 3, 4]
+    assert [a["error"]["code"] for a in answers] == [
+        -32700,
+        -32600,
+        -32601,
+        -32602,
+        -32602,
+        -32602,
+        -32600,
+        -32600,
+    ]
+    assert [a["id"] for a in answers] == [None, None, 2, 3, 4, 5, 6, 7]
 
 
 def test_notifications_and_client_responses_get_no_answer(server):

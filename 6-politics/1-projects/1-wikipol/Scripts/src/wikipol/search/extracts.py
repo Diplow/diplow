@@ -117,8 +117,8 @@ def find_extracts(
         raise SearchRefused("the query is empty")
     if source is not None and source not in sources:
         raise SearchRefused(f"no Source {source!r}; the Sources are {', '.join(sources)}")
-    first = period_bound(start, last=False) if start else None
-    last = period_bound(end, last=True) if end else None
+    first = None if start is None else period_bound(start, last=False)
+    last = None if end is None else period_bound(end, last=True)
     if first and last and first > last:
         raise SearchRefused(f"the period ends ({end}) before it starts ({start})")
     limit = DEFAULT_LIMIT if limit is None else limit

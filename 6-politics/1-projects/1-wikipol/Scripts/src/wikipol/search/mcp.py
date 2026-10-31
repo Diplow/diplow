@@ -126,7 +126,9 @@ class Server:
         if "id" not in message:
             return None
         request_id = message["id"]
-        params = message.get("params") or {}
+        if message.get("jsonrpc") != "2.0":
+            return error_answer(request_id, INVALID_REQUEST, "not a JSON-RPC 2.0 request")
+        params = message.get("params", {})
         try:
             if not isinstance(params, dict):
                 raise ProtocolError(INVALID_PARAMS, "params must be an object")

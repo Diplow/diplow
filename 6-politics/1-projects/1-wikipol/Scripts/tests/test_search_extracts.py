@@ -163,6 +163,8 @@ def test_a_period_bound_is_a_year_a_month_or_a_day(text, last, day):
         ({"source": "inconnue"}, "no Source 'inconnue'; the Sources are paduteam, boniface"),
         ({"start": "mars 2025"}, "is not a date"),
         ({"end": "2025-02-30"}, "is not a date"),
+        ({"start": ""}, "'' is not a date"),
+        ({"end": "  "}, "is not a date"),
         ({"start": "2025-06", "end": "2025-05"}, "ends (2025-05) before it starts (2025-06)"),
         ({"limit": 0}, "limit must be between 1 and 25"),
         ({"limit": 26}, "limit must be between 1 and 25"),
