@@ -1,0 +1,31 @@
+6-politics/1-projects/1-wikipol/.run/registers/sources-from-youtube/decisions.md
+  s_bffceea45dbe3a::t_65cf318f5f3fcd 9-10
+  s_bffceea45dbe3a::t_711a514f719775 156,161
+  s_bffceea45dbe3a::t_12b9990ed7e10f 153-155,157-160
+  s_bffceea45dbe3a::t_b538faf1e78503 140-152
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/backfill.py
+  s_bffceea45dbe3a::t_cef75ae21fb632 83-84,222,242,304-305
+  s_bffceea45dbe3a::t_b335a1bad38dc2 227-228,288,299,302
+  s_bffceea45dbe3a::t_44bacc14ad4f83 276-278
+6-politics/1-projects/1-wikipol/Scripts/tests/test_backfill.py
+  s_bffceea45dbe3a::t_cfb91ca4e29979 76-79,89-90,134,285-294
+6-politics/1-projects/1-wikipol/CLAUDE.md
+  s_bffceea45dbe3a::t_fb03da43193bbb 75-83,85
+  s_bffceea45dbe3a::t_2017f003b855e4 84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4b23ece6392bccf9cb73ede2be5ebc004808e806",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
