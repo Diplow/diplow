@@ -33,8 +33,9 @@ from wikipol.digest.format import split_digest
 from wikipol.raw_store import YOUTUBE_ID
 
 CHRONICLE_TITLE = "Chronicle"
-# `[[target]]`, `[[target.md]]`, `[[target|label]]`, `[[target#heading]]`, and `![[...]]` too.
-LINK = re.compile(r"\[\[([^\]|#]+?)(\.md)?([#|][^\]]*)?\]\]")
+# `[[target]]`, `[[target.md]]`, `[[target|label]]`, `[[target#heading]]`, `![[...]]`, and
+# `[[target\|label]]`, the pipe escaped inside a Markdown table.
+LINK = re.compile(r"\[\[([^\]|#]+?)(\.md)?(\\?[#|][^\]]*)?\]\]")
 # Never read for links: tooling, dependencies, and the frozen vaults, which link no Digest.
 SKIPPED_FOLDERS = {"node_modules", "Legacy"}
 
@@ -149,8 +150,13 @@ class Filing:
         out: dict[Path, str] = {}
         for period in self.root.periods():
             claude = self.repo_root / str(period.path) / "CLAUDE.md"
-            # A Period the filing left as it was keeps its file as written, even by hand.
-            out[claude] = render_period(period) if changed(period) else claude.read_text("utf-8")
+            # A Period the filing left as it was keeps its file as written, even by hand, but
+            # for a link to something that moved.
+            out[claude] = (
+                render_period(period)
+                if changed(period)
+                else rewrite_links(claude.read_text("utf-8"), self.moved)
+            )
             for child in period.children:
                 if isinstance(child, Leaf):
                     out[self.repo_root / f"{child.path}.md"] = set_parent(child.text, period.path)

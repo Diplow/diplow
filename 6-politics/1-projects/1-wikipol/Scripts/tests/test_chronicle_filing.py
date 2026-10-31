@@ -170,6 +170,21 @@ def test_a_period_the_filing_did_not_touch_keeps_its_file_and_its_summary(source
     assert calls == ["2026-01-05 → 2026-01-08", "Chronicle"]
 
 
+def test_a_period_left_as_it_was_still_follows_a_link_to_what_moved(source, repo):
+    file_digests(source, repo, [digest(n, DAYS[n - 1]) for n in range(1, 8)])
+    first = repo / CHRONICLE / "1-2026-01-01" / "CLAUDE.md"
+    link = "|la sixième]]"
+    old_link = f"[[{CHRONICLE}/2-2026-01-05/2-video-6{link}"
+    first.write_text(first.read_text().replace("## Contenu", f"Voir {old_link}.\n\n## Contenu"))
+    calls: list[str] = []
+
+    # Filed between the fifth and the sixth: the sixth becomes 3-video-6, the first Period stays.
+    file_digests(source, repo, [digest(0, DAYS[5])], calls)
+
+    assert f"Voir [[{CHRONICLE}/2-2026-01-05/3-video-6{link}." in first.read_text()
+    assert "2026-01-01 → 2026-01-04" not in calls
+
+
 def test_a_summary_that_fails_leaves_the_chronicle_as_it_was(source, repo):
     file_digests(source, repo, [digest(n, DAYS[n - 1]) for n in range(1, 7)])
     chronicle = repo / CHRONICLE
@@ -240,6 +255,8 @@ def test_a_folder_without_its_claude_file_is_not_a_period(source, repo):
         ("[[a/b|libellé]]", "[[x/y|libellé]]"),
         ("![[a/b.md#Titre]]", "![[x/y.md#Titre]]"),
         ("[[a/bc]] [[ a/b ]]", "[[a/bc]] [[x/y]]"),
+        ("| [[a/b\\|libellé]] |", "| [[x/y\\|libellé]] |"),
+        ("| [[a/b.md\\|libellé]] |", "| [[x/y.md\\|libellé]] |"),
     ],
 )
 def test_a_wikilink_follows_a_move_whatever_its_form(text, expected):
