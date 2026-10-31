@@ -1,6 +1,13 @@
 from datetime import date, datetime
 
-from wikipol.legacy_index import LegacyIndex, build_index, parse_date, split_frontmatter
+from wikipol.legacy_index import (
+    LegacyIndex,
+    build_index,
+    find_video_note,
+    parse_date,
+    split_frontmatter,
+    video_notes,
+)
 
 
 def test_a_videos_note_ties_its_transcript_to_its_id_and_date(demo_tree):
@@ -77,3 +84,13 @@ def test_a_frontmatter_yaml_refuses_still_gives_its_lines():
     text = "---\ndate: 2025-02-30\nyoutube_id: 'aaaaaaaaaaa'\n---\nbody"
 
     assert split_frontmatter(text)[0] == {"date": "2025-02-30", "youtube_id": "aaaaaaaaaaa"}
+
+
+def test_video_notes_reads_the_vault_once_as_find_video_note_would(demo_tree):
+    notes = video_notes(demo_tree["vault"])
+
+    assert set(notes) == {"aaaaaaaaaaa", "ddddddddddd"}
+    for youtube_id, note in notes.items():
+        assert note == find_video_note(demo_tree["vault"], youtube_id)
+    assert notes["ddddddddddd"].published == date(2025, 8, 1)
+    assert video_notes(None) == {}

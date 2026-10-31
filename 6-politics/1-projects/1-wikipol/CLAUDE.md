@@ -72,6 +72,17 @@ uv run wikipol file --source paduteam /tmp/URonNSP0qM0.md …   # range des Dige
 
 `wikipol file` range des Digests, écrits hors de la Chronicle, dans la Period de leur date, coupe les Periods qui débordent, renumérote, et réécrit le `parent` et les wikilinks de ce qui a bougé, dans tout le dépôt sauf `Legacy/`. Puis la skill `Skills/write-period/SKILL.md`, via `claude -p --model <claude.default_model du source.yaml>`, réécrit le Preview et le résumé de chaque Period touchée, des plus profondes à la Chronicle, à partir des titres et des Previews de leurs enfants. Rien n'est écrit avant que tous les résumés soient acceptés ; un résumé refusé deux fois laisse la Chronicle telle qu'elle était. Le fichier d'origine reste où il est. Un Digest sans date de publication n'a pas de place et est refusé. La forme de l'arbre et d'une Period est dans `BUILD.md`, « La Chronicle ».
 
+## L'historique d'une Source : `wikipol backfill`
+
+```bash
+uv run wikipol backfill --source paduteam --dry-run --limit 20   # les Raws qu'il digérerait, des plus anciens aux plus récents
+uv run wikipol backfill --source paduteam --limit 20             # en digère 20 et les range dans la Chronicle
+```
+
+`wikipol backfill` digère les Raws du bucket qui n'ont pas de Digest à jour dans la Chronicle (au `digest_version` d'aujourd'hui et au modèle épinglé dans le `source.yaml`), des plus anciens aux plus récents, avec la skill `write-digest` comme `wikipol digest`, et les range six par six comme `wikipol file` : chaque lot est rangé, ses Periods touchées résumées par `write-period`, et la Chronicle écrite avant que le lot suivant soit digéré, qui peut alors citer les Digests du précédent. Un Digest vérifié attend son rangement dans un dossier hors du dépôt, `~/.cache/wikipol/backfill/<slug>/` (`--staging` en désigne un autre) ; relancée après un arrêt (un plantage, un résumé refusé deux fois, Ctrl-C), la commande revérifie ces Digests contre leur Raw et la Chronicle et les range sans redemander le modèle. Relancée sur un historique fini, elle n'écrit rien.
+
+Elle saute, et liste dans son rapport, un Raw sans date, qui n'a pas de place dans la Chronicle (ni `published` dans ses métadonnées, ni `date` dans sa fiche legacy), et un Raw sans sous-titres utilisables, qui n'a pas assez de mots prononcés pour un Extract. Un Digest refusé deux fois, ou un `claude -p` sans réponse, est un échec ; son dernier brouillon reste dans `rejected/` du dossier d'attente, et trois échecs de suite arrêtent la commande. `--limit N` borne les Raws confiés au modèle, échecs compris ; les Digests repris du dossier d'attente ne comptent pas. Une Period se résume à chaque lot qui la touche : les 20 premiers Digests de PaduTeam ont demandé 11 résumés de Periods, à peu près un appel de `write-period` pour deux Digests, en plus de l'appel (ou des deux) de chaque Digest.
+
 ## Répartition des responsabilités
 
 | Niveau | Fichier | Contient |
