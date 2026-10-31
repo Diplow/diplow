@@ -5,7 +5,7 @@ from datetime import date
 import pytest
 import yaml
 
-from wikipol.digest.format import DigestFields, check_digest, render, split_digest
+from wikipol.digest.format import DIGEST_VERSION, DigestFields, check_digest, render, split_digest
 from wikipol.digest.raw_text import parse_raw
 
 VIDEO = "aaaaaaaaaaa"
@@ -87,7 +87,7 @@ def test_a_rendered_digest_reads_back_with_every_field():
         "duration": 90,
         "raw": f"paduteam/{VIDEO}.md",
         "ingested": date(2026, 10, 31),
-        "digest_version": 1,
+        "digest_version": DIGEST_VERSION,
         "model": "claude-sonnet-5-5",
     }
     assert body.startswith(f"# {FIELDS.title}\n\n## 1. ")

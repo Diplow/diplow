@@ -24,7 +24,7 @@ from wikipol.config import is_pinned_model
 from wikipol.digest.raw_text import RawText, clock_seconds, words
 from wikipol.raw_store import YOUTUBE_ID, raw_key
 
-DIGEST_VERSION = 1
+DIGEST_VERSION = 2
 """Bumped when the format or the write-digest skill changes what a Digest says."""
 
 OWNER = "diplo"
