@@ -88,7 +88,9 @@ def index_source(
 
     notes = video_notes(source.legacy_vault) if todo else {}
     for done, youtube_id in enumerate(todo):
-        if limit is not None and len(report.indexed) + len(report.empty) >= limit:
+        # The limit counts Raws embedded: one without words costs no call, and would otherwise
+        # take a place under the limit on every run, never being indexed.
+        if limit is not None and len(report.indexed) >= limit:
             report.left = len(todo) - done
             break
         raw = raws.get(source.slug, youtube_id)

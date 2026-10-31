@@ -360,8 +360,13 @@ def open_index(database_url: str) -> PostgresIndex:
 
     try:
         return PostgresIndex.connect(database_url)
+    except psycopg.ProgrammingError as error:
+        # A connection string libpq can't parse: its message may quote any part, the password too.
+        raise IndexUnreachable(
+            "WIKIPOL_DATABASE_URL is not a connection string libpq reads"
+        ) from error
     except psycopg.Error as error:
-        # psycopg's message may quote the connection string's host, never its password.
+        # The server's answer: the host and the user, never the password.
         raise IndexUnreachable(f"the index's database refused the connection: {error}") from error
 
 
@@ -396,8 +401,9 @@ def index_raws(args: argparse.Namespace) -> int:
         if not args.dry_run:
             for name in index.migrate():
                 print(f"migration applied: {name}", file=sys.stderr)
-        reports = [
-            index_source(
+        reports = []
+        for source in sources:
+            report = index_source(
                 source,
                 store,
                 embedder,
@@ -407,8 +413,11 @@ def index_raws(args: argparse.Namespace) -> int:
                 dry_run=args.dry_run,
                 log=lambda line: print(line, file=sys.stderr, flush=True),
             )
-            for source in sources
-        ]
+            reports.append(report)
+            if (
+                report.stopped
+            ):  # a refused key or a failing API: the next Source would fare no better
+                break
     except psycopg.Error as error:
         raise IndexUnreachable(f"the index's database failed: {error}") from error
     finally:

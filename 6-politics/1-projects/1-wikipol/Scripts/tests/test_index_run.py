@@ -159,6 +159,14 @@ def test_limit_caps_the_raws_read_and_leaves_the_rest(source, raws):
     assert run(source, raws, index).indexed == [FROM_NOTE]  # the silent one has no words
 
 
+def test_a_raw_without_words_takes_no_place_under_the_limit(source, raws):
+    index = InMemoryIndex()
+    run(source, raws, index, limit=3)
+    assert run(source, raws, index, limit=1).empty == [SILENT]  # read again, never indexed
+    raws.put("demo", "zzzzzzzzzz1", raw("zzzzzzzzzz1"), RawMeta("After the silent one"))
+    assert run(source, raws, index, limit=1).indexed == ["zzzzzzzzzz1"]
+
+
 def test_a_failed_embedding_stops_the_run_and_keeps_what_was_indexed(source, raws):
     index = InMemoryIndex()
     report = run(source, raws, index, FakeEmbedder(fail_on=FROM_NOTE))
@@ -205,3 +213,29 @@ def test_the_command_refuses_an_unknown_source_before_reaching_anything(repo, ca
     sources = repo / "6-politics" / "2-sources"
     assert cli.main(["index", "--source", "nope", "--sources-dir", str(sources)]) == 2
     assert "no Source with slug nope" in capsys.readouterr().err
+
+
+def test_the_command_stops_at_the_first_source_whose_embedding_fails(
+    repo, raws, monkeypatch, capsys
+):
+    sources = repo / "6-politics" / "2-sources"
+    write(sources / "2-other" / "source.yaml", "source:\n  name: Other\n  slug: other\n")
+    index = InMemoryIndex()
+    index.migrate = lambda: []
+    index.close = lambda: None
+    monkeypatch.setattr(cli.PostgresIndex, "connect", classmethod(lambda cls, url: index))
+    monkeypatch.setattr(cli.S3RawStore, "from_settings", classmethod(lambda cls, s: raws))
+    monkeypatch.setattr(cli, "ScalewayEmbedder", lambda key, project: FakeEmbedder(fail_on="vidéo"))
+    for name, value in {
+        "WIKIPOL_DATABASE_URL": "postgresql://h/db",
+        "SCW_SECRET_KEY": "k",
+        "SCW_ACCESS_KEY": "a",
+        "WIKIPOL_S3_BUCKET": "b",
+        "WIKIPOL_S3_ENDPOINT": "https://s3.example",
+    }.items():
+        monkeypatch.setenv(name, value)
+    assert cli.main(["index", "--sources-dir", str(sources)]) == 1
+    out = capsys.readouterr().out
+    assert "stopped: fetched0001: Generative APIs answered 503" in out
+    assert "other:" not in out  # the next Source wasn't tried
+    assert index.publications == {}
