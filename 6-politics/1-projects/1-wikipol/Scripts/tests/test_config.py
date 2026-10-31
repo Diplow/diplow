@@ -123,10 +123,12 @@ def test_a_numeric_name_is_read_as_text(tmp_path):
 def test_the_repo_sources_load_in_node_order():
     sources = load_sources(DEFAULT_SOURCES_DIR)
 
-    assert [s.slug for s in sources] == ["paduteam", "boniface"]
+    assert [s.slug for s in sources] == ["paduteam", "boniface", "osonscauser", "blast"]
     assert sources[0].channel_url == "https://www.youtube.com/@PaduTeam/videos"
     for source in sources:
         assert source.channel_url
+    # Only the first two came from a vault, now frozen in Legacy/.
+    for source in sources[:2]:
         assert source.legacy_vault is not None
         assert source.legacy_vault.is_dir()
         assert Path(source.legacy_vault).parent.name == "Legacy"
@@ -163,6 +165,8 @@ def test_every_repo_source_pins_the_model_that_writes_its_digests():
     assert {s.slug: s.model for s in load_sources(DEFAULT_SOURCES_DIR)} == {
         "paduteam": "claude-sonnet-5-5",
         "boniface": "claude-sonnet-5-5",
+        "osonscauser": "claude-sonnet-5-5",
+        "blast": "claude-sonnet-5-5",
     }
 
 

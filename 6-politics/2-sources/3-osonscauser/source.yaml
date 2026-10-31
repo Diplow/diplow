@@ -1,0 +1,48 @@
+# Configuration de la source — paramètre unique d'entrée
+# pour les scripts (Scripts/*.py) et les skills (Skills/*).
+
+source:
+  name: "Osons Causer"                # nom affiché (commits, logs, docs)
+  slug: "osonscauser"                # préfixe branches git, nom court
+  type: "youtube"                        # unique type supporté pour l'instant
+  attribution: "Osons Causer"  # phrase utilisée dans les fiches (ex: "la PaduTeam")
+
+youtube:
+  channel_url: "https://www.youtube.com/@Osonscauser/videos"
+  channel_handle: "@Osonscauser"
+
+files:
+  inventaire: "Sources/Inventaire.md"
+  chronologique: "OSONSCAUSER_CHRONOLOGIQUE.md"
+
+git:
+  repo: "Diplow/diplow"                   # dépôt qui héberge WikiPol (GitHub)
+  default_branch: "main"
+  ingest_branch_prefix: "ingest-batch/"
+
+claude:
+  # L'identifiant épinglé du modèle qui écrit les Digests de la Source, passé tel quel à
+  # `claude -p --model` et recopié dans le champ `model` de chaque Digest. Jamais un alias
+  # (`sonnet`, `opus`) ni un `-latest` : ils glissent vers un modèle plus récent sans prévenir.
+  default_model: claude-sonnet-5-5
+
+# Whitelist stricte des types de fiches activés pour cette source.
+# - Les skills write-* refusent d'écrire un type désactivé.
+# - Pour activer un type plus tard : passer à `true` ici et créer le dossier
+#   à la main (ou via un script utilitaire).
+# Voir BUILD.md de WikiPol pour la spec frontmatter de chaque type.
+content_types:
+  raw:
+    Transcripts: true
+  basic:
+    Individus: true
+    Organisations: true
+    Concepts: true
+    Videos: true
+    Livres: false
+    Evenements: false
+  advanced:
+    Enjeux: true
+    Conjonctures: false
+    Possibles: false
+    Methodes: false
