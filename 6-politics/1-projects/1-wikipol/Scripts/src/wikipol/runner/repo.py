@@ -221,10 +221,10 @@ class RunnerRepo:
         """Commits every change on `branch`, opens its pull request into the base and merges it.
         Returns the pull request's URL. Raises GitFailed with the changes back in the tree."""
         self.git("switch", "-c", branch)
-        self.git("add", "-A")
-        self.git("commit", "--quiet", "-m", title, "-m", body)
         url = None
         try:
+            self.git("add", "-A")
+            self.git("commit", "--quiet", "-m", title, "-m", body)
             self._push("-u", "origin", branch)
             url = self.github.open_pull_request(self.base, branch, title, body)
             self.github.merge(url)
