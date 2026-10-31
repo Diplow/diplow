@@ -1,0 +1,14 @@
+{
+  "id": "UCxxxxxxxxxxxxxxxxxxxxxx",
+  "channel": "PaduTeam",
+  "title": "PaduTeam - Videos",
+  "_type": "playlist",
+  "webpage_url": "https://www.youtube.com/@PaduTeam/videos",
+  "entries": [
+    {"_type": "url", "ie_key": "Youtube", "id": "upcomingAAA", "url": "https://www.youtube.com/watch?v=upcomingAAA", "title": "EN DIRECT CE SOIR", "duration": null, "live_status": "is_upcoming", "availability": null},
+    {"_type": "url", "ie_key": "Youtube", "id": "ubfvCuQziRA", "url": "https://www.youtube.com/watch?v=ubfvCuQziRA", "title": "LE BUDGET : LE GOUVERNEMENT RECULE ENCORE !", "duration": 3734.0, "live_status": null, "availability": null},
+    {"_type": "url", "ie_key": "Youtube", "id": "membersBBBB", "url": "https://www.youtube.com/watch?v=membersBBBB", "title": "RÉSERVÉ AUX MEMBRES", "duration": 900.0, "live_status": null, "availability": "subscriber_only"},
+    {"_type": "url", "ie_key": "Youtube", "id": "b5CY98TXYZk", "url": "https://www.youtube.com/watch?v=b5CY98TXYZk", "title": "ALICE COFFIN DÉVOILE L'ENFER DU SYSTÈME EMMANUEL GRÉGOIRE !!", "duration": 1520.0, "live_status": null, "availability": null},
+    {"_type": "url", "ie_key": "Youtube", "id": "WTrg8i2HfP0", "url": "https://www.youtube.com/watch?v=WTrg8i2HfP0", "title": "ANTOINE DANIEL DÉRAPE COMPLÈTEMENT AU SUJET DES MILLIARDAIRES !!", "duration": 1210.0, "live_status": "was_live", "availability": null}
+  ]
+}

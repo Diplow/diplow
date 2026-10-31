@@ -35,13 +35,13 @@ def parse_json3(text: str) -> list[Segment]:
 def parse_vtt(text: str) -> list[Segment]:
     """WebVTT, the fallback when YouTube serves no json3: one cue per blank-line block."""
     segments = []
-    for block in re.split(r"\n\s*\n", text.replace("\r\n", "\n")):
+    for block in re.split(r"\n\n+", text.replace("\r\n", "\n")):
         lines = block.strip().split("\n")
         for i, line in enumerate(lines):
             cue = VTT_CUE.match(line)
             if cue:
                 h, m, s, ms = (int(part) for part in cue.groups())
-                caption = VTT_TAG.sub("", " ".join(lines[i + 1 :])).strip()
+                caption = " ".join(VTT_TAG.sub("", " ".join(lines[i + 1 :])).split())
                 if caption:
                     segments.append(((h * 3600 + m * 60 + s) * 1000 + ms, caption))
                 break

@@ -5,6 +5,7 @@ import pytest
 from wikipol.config import (
     DEFAULT_SOURCES_DIR,
     ConfigError,
+    load_fetcher_settings,
     load_settings,
     load_source,
     load_sources,
@@ -86,6 +87,7 @@ def test_a_source_without_a_slug_is_refused(tmp_path):
         ("- a list\n", "no `source:` mapping"),
         ("source:\n  name: X\n  slug: Bad Slug\n", "is not lowercase"),
         ("source:\n  name: X\n  slug: x\nlegacy: a string\n", "must be mappings"),
+        ("source:\n  name: X\n  slug: x\nyoutube: a string\n", "must be mappings"),
     ],
 )
 def test_a_malformed_source_yaml_is_a_config_error(tmp_path, text, complaint):
@@ -121,7 +123,36 @@ def test_the_repo_sources_load_in_node_order():
     sources = load_sources(DEFAULT_SOURCES_DIR)
 
     assert [s.slug for s in sources] == ["paduteam", "boniface"]
+    assert sources[0].channel_url == "https://www.youtube.com/@PaduTeam/videos"
     for source in sources:
+        assert source.channel_url
         assert source.legacy_vault is not None
         assert source.legacy_vault.is_dir()
         assert Path(source.legacy_vault).parent.name == "Legacy"
+
+
+def test_the_fetcher_is_yt_dlp_unless_told_otherwise():
+    assert load_fetcher_settings({}).kind == "yt-dlp"
+
+
+def test_the_command_line_wins_over_the_environment_for_the_fetcher():
+    environ = {"WIKIPOL_FETCHER": "transcript-api", "WIKIPOL_TRANSCRIPT_API_KEY": FAKE_KEY}
+
+    assert load_fetcher_settings(environ).kind == "transcript-api"
+    assert load_fetcher_settings(environ, kind="yt-dlp").kind == "yt-dlp"
+    assert FAKE_KEY not in repr(load_fetcher_settings(environ))
+
+
+def test_the_transcript_api_needs_its_key_from_the_env_file(tmp_path):
+    env = tmp_path / "wikipol.env"
+
+    with pytest.raises(ConfigError, match="WIKIPOL_TRANSCRIPT_API_KEY"):
+        load_fetcher_settings({"WIKIPOL_ENV": str(env)}, kind="transcript-api")
+    env.write_text("WIKIPOL_TRANSCRIPT_API_KEY=" + FAKE_KEY)
+    settings = load_fetcher_settings({"WIKIPOL_ENV": str(env)}, kind="transcript-api")
+    assert settings.transcript_api_key == FAKE_KEY
+
+
+def test_an_unknown_fetcher_is_a_config_error():
+    with pytest.raises(ConfigError, match="WIKIPOL_FETCHER"):
+        load_fetcher_settings({"WIKIPOL_FETCHER": "curl"})

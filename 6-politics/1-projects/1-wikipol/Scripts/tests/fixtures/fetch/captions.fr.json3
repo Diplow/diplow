@@ -1,0 +1,44 @@
+{
+  "wireMagic": "pb3",
+  "pens": [ {} ],
+  "wsWinStyles": [ {}, { "mhModeHint": 2, "juJustifCode": 0, "sdScrollDir": 3 } ],
+  "wpWinPositions": [ {}, { "apPoint": 6, "ahHorPos": 20, "avVerPos": 100, "rcRows": 2, "ccCols": 40 } ],
+  "events": [ {
+    "tStartMs": 0,
+    "dDurationMs": 3734160,
+    "id": 1,
+    "wpWinPosId": 1,
+    "wsWinStyleId": 1
+  }, {
+    "tStartMs": 160,
+    "dDurationMs": 4640,
+    "wWinId": 1,
+    "segs": [ { "utf8": "Bonjour", "acAsrConf": 0 }, { "utf8": " à", "tOffsetMs": 400, "acAsrConf": 0 }, { "utf8": " tous", "tOffsetMs": 720, "acAsrConf": 0 } ]
+  }, {
+    "tStartMs": 2470,
+    "dDurationMs": 2330,
+    "wWinId": 1,
+    "aAppend": 1,
+    "segs": [ { "utf8": "\n" } ]
+  }, {
+    "tStartMs": 2480,
+    "dDurationMs": 5200,
+    "wWinId": 1,
+    "segs": [ { "utf8": "aujourd'hui", "acAsrConf": 0 }, { "utf8": " on", "tOffsetMs": 560, "acAsrConf": 0 }, { "utf8": " parle", "tOffsetMs": 880, "acAsrConf": 0 }, { "utf8": " du", "tOffsetMs": 1200, "acAsrConf": 0 }, { "utf8": " budget", "tOffsetMs": 1520, "acAsrConf": 0 } ]
+  }, {
+    "tStartMs": 31200,
+    "dDurationMs": 4100,
+    "wWinId": 1,
+    "segs": [ { "utf8": "le", "acAsrConf": 0 }, { "utf8": " gouvernement", "tOffsetMs": 320, "acAsrConf": 0 }, { "utf8": " recule", "tOffsetMs": 960, "acAsrConf": 0 } ]
+  }, {
+    "tStartMs": 45020,
+    "dDurationMs": 3900,
+    "wWinId": 1,
+    "segs": [ { "utf8": "encore", "acAsrConf": 0 }, { "utf8": " une", "tOffsetMs": 480, "acAsrConf": 0 }, { "utf8": " fois", "tOffsetMs": 720, "acAsrConf": 0 } ]
+  }, {
+    "tStartMs": 3725010,
+    "dDurationMs": 9150,
+    "wWinId": 1,
+    "segs": [ { "utf8": "à", "acAsrConf": 0 }, { "utf8": " demain", "tOffsetMs": 300, "acAsrConf": 0 } ]
+  } ]
+}
