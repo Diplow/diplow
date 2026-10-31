@@ -1,0 +1,56 @@
+6-politics/1-projects/1-wikipol/Scripts/launchd/com.diplow.wikipol.runner.plist
+  s_bffceea45dbe3a::t_564352d1dac191 1-50
+6-politics/1-projects/1-wikipol/Scripts/tests/test_runner_repo.py
+  s_bffceea45dbe3a::t_386fb166d5d9f9 120-122,165-170
+  s_bffceea45dbe3a::t_4266a026c04ea4 1-119,123-164
+6-politics/1-projects/1-wikipol/Scripts/launchd/install-runner.sh
+  s_bffceea45dbe3a::t_d0960a38243d2a 112-116
+  s_bffceea45dbe3a::t_9d701e572c04bd 1-111,117-118
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/runner/repo.py
+  s_bffceea45dbe3a::t_636c92b50edf54 18,212,214-218,228,239
+  s_bffceea45dbe3a::t_f5179620abff6e 19,23,92-103
+  s_bffceea45dbe3a::t_2c0796ecad6008 1-17,20-22,24-80,104-208,219-227,229-238,240-242
+  s_bffceea45dbe3a::t_ee32e2fcc98d33 81-91
+  s_bffceea45dbe3a::t_58629938d06bb4 209-211,213
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/runner/__init__.py
+  s_bffceea45dbe3a::t_b0e89296ff4521 1
+6-politics/1-projects/1-wikipol/Scripts/tests/test_runner_install.py
+  s_bffceea45dbe3a::t_b9ad22ebac1521 1-134
+6-politics/1-projects/1-wikipol/Scripts/launchd/uninstall-runner.sh
+  s_bffceea45dbe3a::t_d0960a38243d2a 1-37
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/runner/run.py
+  s_bffceea45dbe3a::t_6d556f3829b981 1-20,23-26,28-73,91-92,94-98,100-101,106,120,131-137,139-144,150,152-153,155-174,176-178,182,186-188,191,193-194,197-248,258-261
+  s_bffceea45dbe3a::t_9cf71f0b7fceb6 74-90,93,99,102,109-110,112-113,116-119,121-130,138,145-149,151,154,175,183-185,189-190,192,195-196
+  s_bffceea45dbe3a::t_c8274d1298af04 21-22,249-257
+  s_bffceea45dbe3a::t_f5179620abff6e 103-105,107-108,111,114-115
+  s_bffceea45dbe3a::t_b0e89296ff4521 27
+  s_bffceea45dbe3a::t_636c92b50edf54 179-181
+6-politics/1-projects/1-wikipol/Scripts/tests/test_runner_run.py
+  s_bffceea45dbe3a::t_f8377c002f7f9e 159,216
+  s_bffceea45dbe3a::t_f240ee2873703d 1-158,160-215,217-230,232-307
+  s_bffceea45dbe3a::t_c4ad0701ce06f8 231
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/cli.py
+  s_bffceea45dbe3a::t_49be4ac0594e2f 505-507,511,515-516
+  s_bffceea45dbe3a::t_46ea815967f6ad 9-10,43,133-155,184-185,207,502-504,508-510,512-514,517-528,533-539,542-545
+  s_bffceea45dbe3a::t_9bd50e35532d07 44,529-532,540-541
+  s_bffceea45dbe3a::t_71fef926781793 395-398,429-433,436-441,444-475,480,482,490-492,498,501
+  s_bffceea45dbe3a::t_636c92b50edf54 495
+6-politics/1-projects/1-wikipol/Scripts/tests/conftest.py
+  s_bffceea45dbe3a::t_e74f6e2f0a3a41 6,12-13,155-207
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f5c29d957ebe13cb1dafe679b107b335b3725026",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
