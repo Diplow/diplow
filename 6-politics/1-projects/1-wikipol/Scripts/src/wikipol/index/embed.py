@@ -11,6 +11,7 @@ is retried with a growing pause; a refusal (401, 403) is not, since no wait will
 
 from __future__ import annotations
 
+import functools
 import http.client
 import json
 import time
@@ -55,11 +56,13 @@ class Embedder(Protocol):
     def embed(self, texts: Sequence[str]) -> Embeddings: ...
 
 
-def http_post(url: str, headers: dict[str, str], body: bytes) -> tuple[int, bytes]:
+def http_post(
+    url: str, headers: dict[str, str], body: bytes, timeout: float = TIMEOUT_SECONDS
+) -> tuple[int, bytes]:
     request = urllib.request.Request(url, data=body, headers=headers, method="POST")
     try:
         try:
-            with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
                 return response.status, response.read()
         except urllib.error.HTTPError as error:
             return error.code, error.read()
@@ -78,9 +81,14 @@ class ScalewayEmbedder:
         self,
         api_key: str,
         project_id: str | None = None,
-        post: HttpPost = http_post,
+        post: HttpPost | None = None,
         sleep: Callable[[float], None] = time.sleep,
+        *,
+        timeout: float = TIMEOUT_SECONDS,
+        retry_pauses: Sequence[float] = RETRY_PAUSES,
     ) -> None:
+        """`timeout` bounds each call, `retry_pauses` the waits between tries: indexing can
+        afford to wait out a busy API, a search an agent waits on can't."""
         # Under the project's path, the calls are billed to it rather than to the key's default.
         root = f"{API_ROOT}/{project_id}/v1" if project_id else f"{API_ROOT}/v1"
         self._url = f"{root}/embeddings"
@@ -89,8 +97,9 @@ class ScalewayEmbedder:
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
-        self._post = post
+        self._post = post or functools.partial(http_post, timeout=timeout)
         self._sleep = sleep
+        self._retry_pauses = tuple(retry_pauses)
 
     def embed(self, texts: Sequence[str]) -> Embeddings:
         vectors: list[list[float]] = []
@@ -111,7 +120,7 @@ class ScalewayEmbedder:
             }
         ).encode("utf-8")
         status, answer = 0, b""
-        for pause in (*RETRY_PAUSES, None):
+        for pause in (*self._retry_pauses, None):
             try:
                 status, answer = self._post(self._url, self._headers, body)
             except OSError as error:

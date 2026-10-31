@@ -13,6 +13,7 @@ the migration grants the rows to `role_readwrite`; `wikipol index` then finds no
 
 from __future__ import annotations
 
+import math
 from collections.abc import Sequence
 from dataclasses import dataclass, replace
 from datetime import date
@@ -23,6 +24,9 @@ from wikipol.index.chunks import Chunk
 
 # Taken for the length of a migration, so two runs starting together don't both apply one.
 MIGRATION_LOCK = 0x77696B69
+CONNECT_TIMEOUT_SECONDS = 30
+"""Long enough for Serverless SQL to wake from zero, short enough that a stalled endpoint fails."""
+SEARCH_TIMEOUT = "60s"
 
 
 class SchemaNotApplied(Exception):
@@ -46,6 +50,16 @@ class Publication:
 class EmbeddedChunk:
     chunk: Chunk
     embedding: list[float]
+
+
+@dataclass(frozen=True)
+class Hit:
+    """A chunk a search found, with its Publication and how far it lies from the query."""
+
+    publication: Publication
+    chunk: Chunk
+    distance: float
+    """Cosine distance: 0 for a chunk pointing the query's way, 2 for the opposite way."""
 
 
 class IndexStore(Protocol):
@@ -79,6 +93,40 @@ class InMemoryIndex:
         key = (source, youtube_id)
         self.publications[key] = replace(self.publications[key], digest_path=digest_path)
 
+    def nearest(
+        self,
+        embedding: Sequence[float],
+        model: str,
+        *,
+        source: str | None = None,
+        start: date | None = None,
+        end: date | None = None,
+        limit: int,
+    ) -> list[Hit]:
+        hits = [
+            Hit(publication, c.chunk, cosine_distance(embedding, c.embedding))
+            for key, publication in self.publications.items()
+            if publication.embedding_model == model
+            and (source is None or publication.source == source)
+            and within(publication.published, start, end)
+            for c in self.chunks[key]
+        ]
+        return sorted(hits, key=lambda hit: hit.distance)[:limit]
+
+
+def within(published: date | None, start: date | None, end: date | None) -> bool:
+    """Whether a Publication falls in the period; one without a date falls in no bounded one."""
+    if start is None and end is None:
+        return True
+    if published is None:
+        return False
+    return (start is None or published >= start) and (end is None or published <= end)
+
+
+def cosine_distance(a: Sequence[float], b: Sequence[float]) -> float:
+    """pgvector's `<=>`."""
+    return 1 - sum(x * y for x, y in zip(a, b, strict=True)) / (math.hypot(*a) * math.hypot(*b))
+
 
 def migrations() -> list[tuple[str, str]]:
     """The schema's SQL files, (name, SQL), in the order they apply."""
@@ -103,7 +151,7 @@ class PostgresIndex:
     def connect(cls, database_url: str) -> PostgresIndex:
         import psycopg
 
-        return cls(psycopg.connect(database_url))
+        return cls(psycopg.connect(database_url, connect_timeout=CONNECT_TIMEOUT_SECONDS))
 
     def close(self) -> None:
         self.connection.close()
@@ -214,3 +262,64 @@ class PostgresIndex:
                 "UPDATE publication SET digest_path = %s WHERE source = %s AND youtube_id = %s",
                 (digest_path, source, youtube_id),
             )
+
+    def nearest(
+        self,
+        embedding: Sequence[float],
+        model: str,
+        *,
+        source: str | None = None,
+        start: date | None = None,
+        end: date | None = None,
+        limit: int,
+    ) -> list[Hit]:
+        """The `limit` chunks nearest the embedding among those of the Source and the period.
+
+        The filter runs first, in a materialized CTE that also measures each kept chunk's
+        distance, and the ranking orders on that column, exact over what the filter kept.
+        Ordered on `embedding <=> …` itself, the planner may walk the HNSW index for the nearest
+        chunks of all and filter after, and a narrow period would come back with fewer than
+        `limit` or none. Only chunks embedded by `model` compare with its query.
+        """
+        with self.connection.transaction():
+            # An exact scan of a large index, or a stalled server, fails rather than hangs.
+            self.connection.execute(f"SET LOCAL statement_timeout = '{SEARCH_TIMEOUT}'")
+            rows = self.connection.execute(
+                SEARCH_SQL,
+                {
+                    "embedding": vector_literal(embedding),
+                    "model": model,
+                    "source": source,
+                    "start": start,
+                    "end": end,
+                    "limit": limit,
+                },
+            ).fetchall()
+        return [
+            Hit(
+                Publication(*row[:9]),
+                Chunk(row[9], row[10], row[11], row[12]),
+                float(row[13]),
+            )
+            for row in rows
+        ]
+
+
+SEARCH_SQL = """
+WITH candidate AS MATERIALIZED (
+    SELECT c.source, c.youtube_id, c.position, c.embedding <=> %(embedding)s::vector AS distance
+    FROM chunk c JOIN publication p USING (source, youtube_id)
+    WHERE p.embedding_model = %(model)s
+      AND (%(source)s::text IS NULL OR p.source = %(source)s::text)
+      AND (%(start)s::date IS NULL OR p.published >= %(start)s::date)
+      AND (%(end)s::date IS NULL OR p.published <= %(end)s::date)
+)
+SELECT p.source, p.youtube_id, p.title, p.published, p.duration, p.raw_key, p.digest_path,
+       p.embedding_model, p.chunking, c.position, c.start_seconds, c.end_seconds, c.text,
+       candidate.distance
+FROM candidate
+JOIN chunk c USING (source, youtube_id, position)
+JOIN publication p USING (source, youtube_id)
+ORDER BY candidate.distance
+LIMIT %(limit)s
+"""

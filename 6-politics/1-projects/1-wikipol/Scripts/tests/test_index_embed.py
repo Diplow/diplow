@@ -82,6 +82,15 @@ def test_an_api_busy_through_every_retry_fails():
     assert sleeps == list(RETRY_PAUSES)
 
 
+def test_a_search_s_embedder_gives_up_after_its_own_few_retries():
+    api, sleeps = FakeApi([503, 503, 200]), []
+    impatient = ScalewayEmbedder("k", post=api.post, sleep=sleeps.append, retry_pauses=(2,))
+    with pytest.raises(EmbeddingFailed, match="503"):
+        impatient.embed(["chunk 1"])
+    assert sleeps == [2]
+    assert len(api.calls) == 2
+
+
 def test_a_dropped_connection_is_retried():
     calls = []
 
