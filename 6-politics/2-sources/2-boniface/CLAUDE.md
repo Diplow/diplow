@@ -21,7 +21,7 @@ preview: >-
 - **Ses nuances font partie de la thèse.** Ses réserves et ses mises en contexte se restituent avec l'affirmation ; ne pas durcir son analyse en slogan, ni lui prêter une nuance qu'il ne fait pas.
 - **La grille sous l'événement.** Pour une réaction à l'actualité, l'affirmation centrale est la grille de lecture qu'il applique à l'événement (un deux-poids-deux-mesures, le multilatéralisme, le Sud global…), dans ses mots, plutôt que le récit de l'événement.
 - **« J'ai lu ».** Pour une chronique d'ouvrage, le Preview nomme le livre et son auteur ; chaque affirmation dit à qui elle est : une thèse du livre telle que Boniface la retient (*Selon Boniface, X montre que…*, *Pour les auteurs, …*), puis son appréciation à lui, réserves comprises.
-- **La promotion n'est pas une affirmation.** Une lecture de ses propres livres, l'annonce d'une parution ou d'un événement, un appel à s'abonner ne donnent ni affirmation ni Extract. Quand il présente l'un de ses livres, ce sont les analyses qu'il y développe qui comptent.
+- **La promotion n'est pas une affirmation.** Une lecture de ses propres livres, l'annonce d'une parution ou d'un événement, un appel à s'abonner ne donnent ni affirmation ni Extract. Quand il présente l'un de ses livres, ce sont les analyses qu'il y développe qui comptent : une vidéo qui n'est que la présentation d'un livre a pour affirmations les thèses que Boniface y défend, puisqu'un Digest en porte au moins une.
 - **Format court, peu d'affirmations.** Une analyse de cinq à quinze minutes en porte souvent deux ou trois : une même grille appliquée à un cas, pas six thèses.
 
 ## Objectif
