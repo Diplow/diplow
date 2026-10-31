@@ -175,3 +175,25 @@ def _index_inventory(index: LegacyIndex, text: str) -> None:
             url.group(1),
             parse_date(published_match.group(1)) if published_match else None,
         )
+
+
+@dataclass(frozen=True)
+class LegacyNote:
+    """A frozen vault's Videos note on one Publication: extra input for its Digest."""
+
+    path: Path
+    text: str
+    published: date | None
+
+
+def find_video_note(vault: Path | None, youtube_id: str) -> LegacyNote | None:
+    """The vault's Videos note whose frontmatter names `youtube_id`, if there is one."""
+    if vault is None:
+        return None
+    for note in sorted((vault / "Videos").glob("*.md")):
+        text = note.read_text(encoding="utf-8")
+        frontmatter, _ = split_frontmatter(text)
+        if str(frontmatter.get("youtube_id") or "").strip() == youtube_id:
+            published = parse_date(frontmatter.get("date")) or _first_date_line(text)
+            return LegacyNote(note, text, published)
+    return None

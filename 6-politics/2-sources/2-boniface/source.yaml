@@ -25,7 +25,10 @@ git:
   ingest_branch_prefix: "ingest-batch/"
 
 claude:
-  default_model: "sonnet"                # "sonnet" ou "opus"
+  # L'identifiant épinglé du modèle qui écrit les Digests de la Source, passé tel quel à
+  # `claude -p --model` et recopié dans le champ `model` de chaque Digest. Jamais un alias
+  # (`sonnet`, `opus`) ni un `-latest` : ils glissent vers un modèle plus récent sans prévenir.
+  default_model: claude-sonnet-5-5
 
 # Whitelist stricte des types de fiches activés pour cette source.
 # - Scripts/new_source.py scaffolde les dossiers correspondants.
