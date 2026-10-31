@@ -67,7 +67,7 @@ La thèse, pas le sujet : *La PaduTeam soutient que le PS prépare 2027 en se re
 
 - **De une à six**, numérotées `## 1.`, `## 2.`… dans l'ordre. Six est un plafond, pas un but : une capsule de cinq minutes en porte souvent deux ou trois.
 - **Chacune est une thèse de la Source**, formulée dans ses termes, pas un thème (*Le RN progresse dans les campagnes parce que les services publics s'en retirent*, pas *Le RN et la ruralité*). Restituer, pas neutraliser : ne challenge pas, ne nuance pas ce que la Source ne nuance pas. Le `CLAUDE.md` de la Source précise comment.
-- **Attribution collective par défaut** (*la PaduTeam*). Nomme un intervenant seulement quand le Raw l'identifie clairement : il se présente, on l'appelle par son nom, ou le contexte éditorial le désigne.
+- **Attribution : celle de la Source par défaut**, reçue avec la Publication : collective pour *la PaduTeam*, une personne pour *Pascal Boniface*. Nomme un autre intervenant seulement quand le Raw l'identifie clairement : il se présente, on l'appelle par son nom, ou le contexte éditorial le désigne.
 - **Ordre** : celui de l'argument, le plus central d'abord.
 - **Le développement** sous l'affirmation est facultatif : une à trois phrases, quand l'affirmation a besoin de son mécanisme ou de son exemple. Pas de sous-titre, pas de liste.
 - **Un chiffre, un sondage, une date** : seulement s'ils sont dans le Raw.

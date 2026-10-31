@@ -8,9 +8,21 @@ preview: >-
   traps), read by whoever digests its videos; its Chronicle files the Digests by
   date. The vault this text was written for is frozen in wikipol/Legacy/Boniface.
 ---
-> **La Source Boniface.** Ses enfants : [[6-politics/2-sources/2-boniface/1-chronicle/CLAUDE|1-chronicle]], la Chronicle où le pipeline range ses Digests ; `source.yaml`, sa config. Le texte qui suit vient du vault Boniface, figé dans `wikipol/Legacy/Boniface/` depuis WIK-1 et lu en entrée, plus jamais écrit : ses chemins relatifs (`Individus/`, `Concepts/`, `Videos/`…) se lisent dans ce vault. L'ingestion qu'il décrit écrit dans ce vault figé : elle reste pour mémoire, **ne plus la lancer**. Les Digests viennent du pipeline de wikipol.
+> **La Source Boniface.** Ses enfants : [[6-politics/2-sources/2-boniface/1-chronicle/CLAUDE|1-chronicle]], la Chronicle où le pipeline range ses Digests ; `source.yaml`, sa config. Le texte qui suit vient du vault Boniface, figé dans `wikipol/Legacy/Boniface/` depuis WIK-1 et lu en entrée, plus jamais écrit : ses chemins relatifs (`Individus/`, `Concepts/`, `Videos/`…) se lisent dans ce vault. L'ingestion qu'il décrit écrit dans ce vault figé : elle reste pour mémoire, **ne plus la lancer**. Les Digests viennent du pipeline de wikipol : la section « Pour le Digest » dit comment ce texte s'y applique.
 
 # Boniface — Contexte éditorial
+
+## Pour le Digest
+
+`wikipol digest` et `wikipol backfill` lisent ce fichier avant chaque Digest de Boniface (skill `write-digest`), et `wikipol file` avant chaque résumé de Period (skill `write-period`). Ce qui suit dit comment ses principes s'y appliquent. Les sections plus bas sur les fiches (`Videos/`, `Livres/`, `Concepts/`, `Enjeux/`) et l'usage du vault décrivent le vault figé : un Digest n'écrit ni fiche ni lien vers elles.
+
+- **Attribution individuelle.** Le Preview et les affirmations parlent de « Pascal Boniface » ou de « Boniface », jamais de « la Source », d'un collectif, ni de l'IRIS à sa place : *Boniface soutient que…*.
+- **Un invité n'est pas Boniface.** Dans une interview ou une émission longue, une affirmation est par défaut une thèse de Boniface. Une thèse de l'invité n'est retenue que nommée à l'invité (*Pour X, …*, quand le Raw le nomme ; sinon *son invité*), et seulement si elle porte la Publication. Les sous-titres ne disent pas qui parle : un passage dont on ne sait pas qui le prononce n'appuie pas une thèse attribuée à Boniface.
+- **Ses nuances font partie de la thèse.** Ses réserves et ses mises en contexte se restituent avec l'affirmation ; ne pas durcir son analyse en slogan, ni lui prêter une nuance qu'il ne fait pas.
+- **La grille sous l'événement.** Pour une réaction à l'actualité, l'affirmation centrale est la grille de lecture qu'il applique à l'événement (un deux-poids-deux-mesures, le multilatéralisme, le Sud global…), dans ses mots, plutôt que le récit de l'événement.
+- **« J'ai lu ».** Pour une chronique d'ouvrage, le Preview nomme le livre et son auteur ; les affirmations restituent les thèses du livre telles que Boniface les retient (*Selon Boniface, X montre que…*), puis son appréciation, réserves comprises.
+- **La promotion n'est pas une affirmation.** Une lecture de ses propres livres, l'annonce d'une parution ou d'un événement, un appel à s'abonner ne donnent ni affirmation ni Extract. Quand il présente l'un de ses livres, ce sont les analyses qu'il y développe qui comptent.
+- **Format court, peu d'affirmations.** Une analyse de cinq à quinze minutes en porte souvent deux ou trois : une même grille appliquée à un cas, pas six thèses.
 
 ## Objectif
 

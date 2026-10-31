@@ -53,7 +53,7 @@ Ce que la Source a soutenu, pas la liste de ses sujets : *La PaduTeam pousse la 
 
 - **Un à trois paragraphes**, sans titre, sans liste, sans citation en bloc : les Extracts restent dans les Digests.
 - **Une synthèse, pas un sommaire.** Ne parcours pas les enfants un par un : dis les thèses qui reviennent, ce qui change d'un bout à l'autre de la Period, ce qui la distingue. Un enfant qui ne rejoint aucun fil peut rester hors du résumé : la liste `## Contenu` le montre de toute façon.
-- **Restituer, pas neutraliser** : formule les thèses dans les termes de la Source, sans les nuancer ni les challenger. Le `CLAUDE.md` de la Source précise comment. Attribution collective par défaut ; un intervenant nommé seulement si un Preview le nomme.
+- **Restituer, pas neutraliser** : formule les thèses dans les termes de la Source, sans les nuancer ni les challenger. Le `CLAUDE.md` de la Source précise comment. Attribution : celle de la Source par défaut, reçue avec la Period (collective pour *la PaduTeam*, une personne pour *Pascal Boniface*) ; un autre intervenant nommé seulement si un Preview le nomme.
 - **Rien de plus que les Previews.** Un fait, un chiffre, un nom, une date : seulement s'ils sont dans un titre ou un Preview reçu.
 - **Des guillemets « »** citent la Source : seulement autour de mots qui sont, tels quels, dans un titre ou un Preview reçu. Pour une formule à toi, pas de guillemets.
 - **Des wikilinks** vers les enfants, si tu veux pointer celui qui porte une thèse : recopie le lien reçu, `[[chemin|libellé]]`. Aucun lien vers autre chose.
