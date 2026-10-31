@@ -1,0 +1,23 @@
+6-politics/1-projects/1-wikipol/.run/registers/sources-from-youtube/decisions.md
+  s_bffceea45dbe3a::t_6ac4cbc0454598 67,71
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/transcript_api.py
+  s_bffceea45dbe3a::t_6ac4cbc0454598 62,84
+6-politics/1-projects/1-wikipol/Scripts/tests/test_fetch_transcript_api.py
+  s_bffceea45dbe3a::t_6ac4cbc0454598 97-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "de93e02bc2baa1dbf83b961f08f45a0eac5342be",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
