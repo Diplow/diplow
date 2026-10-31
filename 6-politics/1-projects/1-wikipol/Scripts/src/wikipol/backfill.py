@@ -37,7 +37,7 @@ from wikipol.digest.format import DIGEST_VERSION, MIN_QUOTE_WORDS, check_digest,
 from wikipol.digest.raw_text import RawText, parse_raw, words
 from wikipol.digest.write import DigestRejected, digest_fields, linkable_digests, write_digest
 from wikipol.legacy_index import LegacyNote, video_notes
-from wikipol.raw_store import Raw, RawStore
+from wikipol.raw_store import YOUTUBE_ID, Raw, RawStore
 
 FILING_BATCH = 6
 MAX_FAILURES_IN_A_ROW = 3
@@ -159,6 +159,22 @@ def select(
     return candidates
 
 
+def is_staged_digest(path: Path, slug: str) -> bool:
+    """Whether the file is a Digest of the Source named by its youtube_id, as staging holds."""
+    if not YOUTUBE_ID.fullmatch(path.stem):
+        return False
+    try:
+        frontmatter, _ = split_digest(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError):
+        return False
+    return bool(
+        frontmatter
+        and "digest_version" in frontmatter
+        and frontmatter.get("source") == slug
+        and str(frontmatter.get("youtube_id")) == path.stem
+    )
+
+
 def take_staged(
     path: Path,
     source: Source,
@@ -169,7 +185,7 @@ def take_staged(
 ) -> str | None:
     """The Digest a stopped run left in staging, when it still passes the check against its Raw
     and the Chronicle as it is now; anything else is dropped, to be written again."""
-    if not path.is_file():
+    if not path.is_file() or not is_staged_digest(path, source.slug):
         return None
     text = path.read_text(encoding="utf-8")
     frontmatter, _ = split_digest(text)
@@ -217,9 +233,11 @@ def backfill(
 
     staging.mkdir(parents=True, exist_ok=True)
     # A staged Digest of a Raw that needs none any more (filed by a run stopped before it cleared
-    # its staging, or from another clone) would sit there for good.
+    # its staging, or from another clone) would sit there for good. Only what this command
+    # writes is cleared: `--staging` may name a folder holding other files.
+    wanted = set(report.to_digest)
     for path in staging.glob("*.md"):
-        if path.stem not in report.to_digest:
+        if path.stem not in wanted and is_staged_digest(path, source.slug):
             path.unlink()
     # Until it is filed, a Digest's parent is the Chronicle, as `wikipol digest` has it.
     chronicle = source.chronicle.resolve()

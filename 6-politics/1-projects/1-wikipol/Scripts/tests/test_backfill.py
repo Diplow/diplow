@@ -200,7 +200,10 @@ def test_a_run_stopped_by_a_refused_summary_resumes_without_writing_twice(
 
 
 def test_a_staged_digest_that_no_longer_checks_is_written_again(source, store, repo, tmp_path):
-    write(tmp_path / "staging" / f"{FROM_NOTE}.md", "---\ntitle: abîmé\n---\nRien.\n")
+    run(source, store, FakeWriter(summary_ok=False), repo, tmp_path, limit=1)
+    path = tmp_path / "staging" / f"{FROM_NOTE}.md"
+    quote = "la gauche doit aller chercher"
+    path.write_text(path.read_text().replace(quote, "un tout autre texte"))
     writer = FakeWriter()
 
     report = run(source, store, writer, repo, tmp_path, limit=1)
@@ -315,11 +318,15 @@ def test_a_digest_the_chronicle_refuses_doesn_t_hold_back_its_batch(source, stor
 
 def test_a_staged_digest_no_raw_needs_any_more_is_cleared(source, store, repo, tmp_path):
     run(source, store, FakeWriter(), repo, tmp_path)
-    write(tmp_path / "staging" / f"{FROM_NOTE}.md", "un Digest déjà rangé\n")
+    filed = next(p for p in (repo / CHRONICLE).rglob("*.md") if f"v={FROM_NOTE}" in p.read_text())
+    write(tmp_path / "staging" / f"{FROM_NOTE}.md", filed.read_text())
+    unrelated = write(tmp_path / "staging" / "notes.md", "Mes notes.\n")
+    other = write(tmp_path / "staging" / f"{OLDEST_FIRST[0]}.md", "Pas un Digest.\n")
 
     run(source, store, FakeWriter(), repo, tmp_path)
 
-    assert staged(tmp_path) == []
+    assert staged(tmp_path) == sorted(["notes", OLDEST_FIRST[0]])
+    assert unrelated.is_file() and other.is_file()  # only what the command writes is cleared
 
 
 def test_a_staged_digest_with_another_parent_is_written_again(source, store, repo, tmp_path):
