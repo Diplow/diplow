@@ -20,12 +20,13 @@ from wikipol.config import (
     load_settings,
     load_sources,
 )
-from wikipol.digest.format import DigestFields, check_digest, split_digest
+from wikipol.digest.format import check_digest, split_digest
 from wikipol.digest.raw_text import parse_raw
 from wikipol.digest.write import (
     ClaudeCli,
     DigestRejected,
     WriterFailed,
+    digest_fields,
     linkable_digests,
     write_digest,
 )
@@ -33,6 +34,7 @@ from wikipol.drive_copy import DEFAULT_DRIVE_ROOT, copy_source, format_report
 from wikipol.fetch.fetcher import FetchFailed
 from wikipol.fetch.run import fetch_source
 from wikipol.fetch.run import format_report as format_fetch_report
+from wikipol.legacy_index import find_video_note
 from wikipol.raw_store import YOUTUBE_ID, RawNotFound, RawStore, S3RawStore
 
 
@@ -221,21 +223,21 @@ def check_one_digest(path: Path, store: RawStore, sources_dir: Path) -> list[str
     try:
         source = source_by_slug(sources_dir, str(frontmatter.get("source") or ""))
         raw = store.get(source.slug, youtube_id)
-    except (ConfigError, RawNotFound, ValueError) as error:
+        raw_text = parse_raw(raw.body.decode("utf-8"))
+    except (ConfigError, RawNotFound, ValueError) as error:  # UnicodeDecodeError included
         return [f"can't be checked: {error}"]
-    expected = DigestFields(
-        title=str(frontmatter.get("title")),
+    # What the pipeline would write today, but for the model that wrote the Digest, which may
+    # predate today's pin (only an alias is refused), and the day it was written.
+    expected = digest_fields(
+        source,
+        raw,
+        find_video_note(source.legacy_vault, youtube_id),
         parent=repo_path(path.parent) or str(frontmatter.get("parent")),
-        source=source.slug,
-        youtube_id=youtube_id,
-        published=frontmatter.get("published"),
-        duration=raw.meta.duration or frontmatter.get("duration"),
         ingested=frontmatter.get("ingested"),
-        # The model that wrote it, which may predate today's pin: only an alias is refused.
         model=frontmatter.get("model"),
     )
     linkable = set(linkable_digests(source)) - {repo_path(path.with_suffix(""))}
-    return check_digest(text, parse_raw(raw.body.decode("utf-8")), expected, linkable)
+    return check_digest(text, raw_text, expected, linkable)
 
 
 if __name__ == "__main__":

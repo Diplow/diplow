@@ -26,8 +26,8 @@ from wikipol.digest.format import (
     split_digest,
 )
 from wikipol.digest.raw_text import clock, parse_raw
-from wikipol.legacy_index import find_video_note
-from wikipol.raw_store import RawStore
+from wikipol.legacy_index import LegacyNote, find_video_note
+from wikipol.raw_store import Raw, RawStore
 
 # src/wikipol/digest/write.py -> parents: digest, wikipol, src, Scripts, 1-wikipol
 SKILL_PATH = Path(__file__).resolve().parents[4] / "Skills" / "write-digest" / "SKILL.md"
@@ -99,6 +99,8 @@ class ClaudeCli:
                 f"claude exited with {result.returncode}, no JSON answer: "
                 f"{(result.stderr or result.stdout).strip()[-300:]}"
             ) from error
+        if not isinstance(answer, dict):
+            raise WriterFailed(f"claude answered {type(answer).__name__}, not a JSON object")
         if result.returncode != 0 or answer.get("is_error") or "result" not in answer:
             raise WriterFailed(f"claude failed: {str(answer.get('result', ''))[:300]}")
         used = set(answer.get("modelUsage") or {})
@@ -198,6 +200,23 @@ def split_draft(draft: str) -> tuple[str, str]:
     return " ".join(preview.split()), body.strip()
 
 
+def digest_fields(
+    source: Source, raw: Raw, note: LegacyNote | None, parent: str, ingested: date, model: str
+) -> DigestFields:
+    """What the pipeline knows of a Digest from its Raw and its legacy note: the title and the
+    duration from the Raw's metadata, the date from it or else from the note."""
+    return DigestFields(
+        title=raw.meta.title or raw.youtube_id,
+        parent=parent,
+        source=source.slug,
+        youtube_id=raw.youtube_id,
+        published=raw.meta.published or (note.published if note else None),
+        duration=raw.meta.duration,
+        ingested=ingested,
+        model=model,
+    )
+
+
 def write_digest(
     source: Source,
     youtube_id: str,
@@ -215,16 +234,7 @@ def write_digest(
     raw_body = raw.body.decode("utf-8")
     raw_text = parse_raw(raw_body)
     note = find_video_note(source.legacy_vault, youtube_id)
-    fields = DigestFields(
-        title=raw.meta.title or youtube_id,
-        parent=parent,
-        source=source.slug,
-        youtube_id=youtube_id,
-        published=raw.meta.published or (note.published if note else None),
-        duration=raw.meta.duration,
-        ingested=today,
-        model=model,
-    )
+    fields = digest_fields(source, raw, note, parent=parent, ingested=today, model=model)
     linkable = {} if linkable is None else linkable
     skill = skill_path.read_text(encoding="utf-8")
     prompt = build_prompt(

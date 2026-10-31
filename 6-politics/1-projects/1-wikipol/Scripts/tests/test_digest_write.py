@@ -319,3 +319,20 @@ def test_an_unreadable_digest_file_is_one_more_problem(source, store, tmp_path):
     assert check_one_digest(tmp_path / "absent.md", store, source.node.parent)[0].startswith(
         "can't be read: "
     )
+
+
+def test_check_digest_holds_title_and_date_to_the_raw_and_the_legacy_note(source, store, tmp_path):
+    from wikipol.cli import check_one_digest
+
+    path = tmp_path / "edited.md"
+    text = digest(source, store, FakeWriter(GOOD_DRAFT)).text
+    path.write_text(text.replace("published: 2026-03-28", "published: 2026-03-29"), "utf-8")
+
+    assert check_one_digest(path, store, source.node.parent) == [
+        "published is datetime.date(2026, 3, 29), expected datetime.date(2026, 3, 28)"
+    ]
+
+
+def test_a_json_answer_that_is_not_an_object_is_a_writer_failure():
+    with pytest.raises(WriterFailed, match="answered list"):
+        ClaudeCli(FakeClaude([1, 2]))("s", "p", MODEL)
