@@ -186,6 +186,16 @@ def test_a_period_left_as_it_was_still_follows_a_link_to_what_moved(source, repo
     assert "2026-01-01 → 2026-01-04" not in calls
 
 
+def test_a_digest_named_in_capitals_by_hand_is_renamed_not_lost(source, repo):
+    write(repo / CHRONICLE / "1-VIDEO-1.md", digest(1, DAYS[0]))
+
+    file_digests(source, repo, [digest(2, DAYS[1])])
+
+    chronicle = repo / CHRONICLE
+    assert files_of(chronicle) == ["1-video-1.md", "2-video-2.md", "CLAUDE.md"]
+    assert "VIDÉO 1 !" in (chronicle / "1-video-1.md").read_text()
+
+
 def test_a_summary_that_fails_leaves_the_chronicle_as_it_was(source, repo):
     file_digests(source, repo, [digest(n, DAYS[n - 1]) for n in range(1, 7)])
     chronicle = repo / CHRONICLE

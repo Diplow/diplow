@@ -168,8 +168,14 @@ class Filing:
             if not path.is_file() or path.read_text(encoding="utf-8") != text:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(text, encoding="utf-8")
+        written = {(stat.st_dev, stat.st_ino): path for path in files if (stat := path.stat())}
         for stale in self.found - files.keys():
-            stale.unlink()
+            stat = stale.stat()
+            same = written.get((stat.st_dev, stat.st_ino))
+            if same is None:
+                stale.unlink()
+            else:  # a name differing only in case, one file on a case-insensitive disk
+                stale.rename(same)
         remove_empty_folders(self.source.chronicle)
         return rewrite_repo_links(self.repo_root, self.moved, skip=self.source.chronicle)
 

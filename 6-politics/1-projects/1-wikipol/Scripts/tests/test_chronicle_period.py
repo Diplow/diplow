@@ -126,6 +126,8 @@ def test_a_source_with_an_alias_writes_no_summary(source, tmp_path):
         ("Un Preview.", "  ", "the body is empty"),
         ("Un Preview.", "Un.\n\nDeux.\n\nTrois.\n\nQuatre.", "the body has 4 paragraphs"),
         ("Un Preview.", "Voir [[ailleurs|là]].", "[[ailleurs|là]] links something other"),
+        ("Un Preview.", "Deux thèses :\n- la première", "body line 2: no list"),
+        ("Un Preview.", "1. La première.", "body line 1: no list"),
         ("Un Preview.", "La Démo dit « reculer partout ».", "« reculer partout » is quoted"),
         ("« Le RN gagne ».", "Un corps.", "« Le RN gagne » is quoted"),
     ],

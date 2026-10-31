@@ -30,6 +30,7 @@ SKILL_PATH = Path(__file__).resolve().parents[4] / "Skills" / "write-period" / "
 ATTEMPTS = 2
 CONTENTS = "## Contenu"
 MAX_PARAGRAPHS = 3
+LIST_ITEM = re.compile(r"\s*(?:[-*+]|\d+[.)])\s")
 # `[[target]]`, `[[target.md]]`, `[[target|label]]`, `[[target#heading]]`, `![[...]]`, and
 # `[[target\|label]]`, the pipe escaped inside a Markdown table.
 LINK = re.compile(r"\[\[([^\]|#]+?)(\.md)?(\\?[#|][^\]]*)?\]\]")
@@ -120,6 +121,8 @@ def check_summary(preview: str, body: str, period: Period) -> list[str]:
             problems.append(f"body line {number}: no heading, the contents list is added after")
         elif line.startswith(">"):
             problems.append(f"body line {number}: no Extract, they stay in the Digests")
+        elif LIST_ITEM.match(line):
+            problems.append(f"body line {number}: no list, paragraphs only")
     children = {link(child) for child in period.children}
     for match in LINK.finditer(body):
         if match.group(1).strip() not in children:
