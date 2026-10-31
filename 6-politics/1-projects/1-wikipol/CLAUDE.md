@@ -39,7 +39,7 @@ Lorsque l'utilisateur demande de travailler sur une Source ou de répondre à un
 
 ## Raws : dans le bucket Scaleway, hors git
 
-Les Raws (voir `CONTEXT.md` : les transcripts tels qu'ils ont été récupérés) vivent dans le bucket Scaleway Object Storage `wikipol-raws` (région `fr-par`, versionné), un objet par Publication : `<slug-de-la-source>/<youtube_id>.md`, ses octets inchangés. Les métadonnées de l'objet gardent ce que la clé perd : le titre d'origine (`title`, encodé en pourcent, car S3 n'admet que l'ASCII dans ses en-têtes) et la date de publication quand on la connaît (`published`, au format ISO). Le bucket est leur seul foyer (ADR 0003) : on y ajoute, on n'y remplace ni n'y efface rien.
+Les Raws (voir `CONTEXT.md` : les transcripts tels qu'ils ont été récupérés) vivent dans le bucket Scaleway Object Storage `wikipol-raws` (région `fr-par`, versionné), un objet par Publication : `<slug-de-la-source>/<youtube_id>.md`, ses octets inchangés. Les métadonnées de l'objet gardent ce que la clé perd : le titre d'origine (`title`, encodé en pourcent, car S3 n'admet que l'ASCII dans ses en-têtes) la date de publication quand on la connaît (`published`, au format ISO) et, pour un Raw récupéré par le Fetcher, la durée en secondes (`duration`). Le bucket est leur seul foyer (ADR 0003) : on y ajoute, on n'y remplace ni n'y efface rien.
 
 Le paquet uv de `Scripts/` les lit et les écrit à travers `wikipol.raw_store`. Ses réglages viennent de `~/.config/wikipol/.env`, hors du repo (`WIKIPOL_ENV` désigne un autre fichier), et l'environnement du processus passe devant : `WIKIPOL_S3_BUCKET`, `WIKIPOL_S3_ENDPOINT` (`https://s3.fr-par.scw.cloud`), `SCW_ACCESS_KEY`, `SCW_SECRET_KEY`, et `WIKIPOL_S3_REGION`, `fr-par` par défaut. Depuis `Scripts/` :
 
@@ -47,7 +47,11 @@ Le paquet uv de `Scripts/` les lit et les écrit à travers `wikipol.raw_store`.
 uv sync
 uv run pytest                                 # sur des fakes : ni Scaleway, ni Drive, ni réseau
 uv run wikipol copy-from-drive --dry-run      # ce que la copie depuis Drive ferait, sans rien écrire
+uv run wikipol fetch --source paduteam --dry-run   # les vidéos de la chaîne sans Raw, des plus récentes aux plus anciennes
+uv run wikipol fetch --source paduteam --limit 3   # récupère les Raws des 3 plus récentes qui en manquent
 ```
+
+`wikipol fetch` liste la chaîne de la Source (`youtube.channel_url` de son `source.yaml`), garde les vidéos dont le bucket n'a pas le Raw, et les récupère des plus récentes aux plus anciennes : un frontmatter avec `youtube_id`, puis les sous-titres français par blocs de 30 s (`m:ss`), comme les Raws venus de Drive. Il attend 8 s entre deux vidéos et s'arrête après 3 échecs de suite ; `--limit N` borne les vidéos essayées, échecs compris. Le Fetcher par défaut est yt-dlp, lancé depuis le Mac, car YouTube bloque les IP de datacenter ; `--fetcher transcript-api` (ou `WIKIPOL_FETCHER=transcript-api`) passe par l'API de Supadata, qui demande `WIKIPOL_TRANSCRIPT_API_KEY`.
 
 Jusqu'à WIK-2, les transcripts vivaient sur Google Drive, sous `diplow:WikiPol/Sources/<NomSource>/Sources/Transcripts/` (remote rclone `diplow`). `wikipol copy-from-drive` les a copiés dans le bucket le 2026-10-31 : 609 sur 621. Les 12 autres (11 sans `youtube_id` retrouvable, un doublon) sont listés dans la pull request de WIK-2. La commande prend l'identifiant dans le frontmatter du transcript, sinon dans les fiches `Videos/` et l'inventaire du vault figé ; relancée, elle ne copie que ce qui manque, et signale sans le remplacer un Raw du bucket qui diffère de Drive. Drive n'est plus qu'une archive : on n'y pousse plus rien.
 
