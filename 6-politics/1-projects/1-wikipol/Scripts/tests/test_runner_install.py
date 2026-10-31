@@ -170,3 +170,24 @@ def test_a_reinstall_leaves_a_run_stopped_while_publishing_to_the_next_run(env, 
     assert result.returncode == 0, result.stderr
     assert "on wikipol/run-2026-10-31-070000" in result.stdout
     assert "switch" not in result.stdout and "merge --ff-only" not in result.stdout
+
+
+def test_the_install_refuses_this_repo_or_its_worktrees(env):
+    this_repo = subprocess.run(
+        ["git", "rev-parse", "--show-toplevel"], cwd=LAUNCHD, capture_output=True, text=True
+    ).stdout.strip()
+
+    result = script("install-runner.sh", {**env, "WIKIPOL_RUNNER_DIR": this_repo}, "--dry-run")
+
+    assert result.returncode == 1
+    assert "is this repo or one of its worktrees" in result.stderr
+
+
+def test_paths_with_sed_and_xml_characters_fill_the_plist_as_written(env, home, tmp_path):
+    runner = tmp_path / "a&b|c<d>"
+
+    result = script("install-runner.sh", {**env, "WIKIPOL_RUNNER_DIR": str(runner)}, "--dry-run")
+
+    assert result.returncode == 0, result.stderr
+    rendered = Path(re.search(r"filled plist: (\S+)", result.stdout).group(1))
+    assert plistlib.loads(rendered.read_bytes())["WorkingDirectory"] == str(runner)

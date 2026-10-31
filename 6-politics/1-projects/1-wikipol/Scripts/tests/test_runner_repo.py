@@ -160,6 +160,7 @@ def test_a_run_killed_after_its_merge_leaves_nothing_to_carry(remote, clone, git
     assert leftovers == []
     assert (clone / "new digest.md").read_text() == "a Digest\n"
     assert git(clone, "rev-parse", "HEAD") == git(remote, "rev-parse", "main")
+    assert branch not in remote_branches(remote)
 
 
 def test_one_run_at_a_time(clone):
@@ -182,3 +183,19 @@ def test_a_pull_request_gh_names_no_url_for_is_a_failure(clone):
 
     with pytest.raises(GitFailed, match="no pull request URL"):
         GhCli(Git(clone, run=silent)).open_pull_request("main", "wikipol/run-x", "title", "body")
+
+
+def test_a_global_mark_makes_no_clone_the_runners(clone, github, tmp_path):
+    git(clone, "config", "--unset", "wikipol.runner")
+    git(clone, "config", "--global", "wikipol.runner", "true")
+
+    with pytest.raises(GitFailed, match="not the runner's clone"):
+        runner(clone, github).prepare()
+
+
+def test_gh_answering_json_that_lists_no_pull_requests_is_a_failure(clone):
+    def odd(command, cwd):
+        return subprocess.CompletedProcess(command, 0, stdout='{"url": 1}', stderr="")
+
+    with pytest.raises(GitFailed, match="no list of pull requests"):
+        GhCli(Git(clone, run=odd)).merged("wikipol/run-x")

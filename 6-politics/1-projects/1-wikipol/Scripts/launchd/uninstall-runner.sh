@@ -32,6 +32,10 @@ if [ "$DRY_RUN" = 1 ]; then
 	printf 'uninstall-runner: dry run: nothing was unloaded or deleted\n'
 	exit 0
 fi
-launchctl bootout "$domain/$LABEL" 2>/dev/null || true
+# Not loaded is fine; loaded and refusing to unload is not: the plist stays, for a second try.
+if launchctl print "$domain/$LABEL" >/dev/null 2>&1; then
+	error=$(launchctl bootout "$domain/$LABEL" 2>&1) ||
+		{ printf 'uninstall-runner: launchctl bootout failed: %s\n' "$error" >&2; exit 1; }
+fi
 rm -f "$agent"
 printf 'uninstall-runner: %s unloaded; the clone and the logs stay\n' "$LABEL"

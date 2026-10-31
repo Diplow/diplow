@@ -59,7 +59,12 @@ for tool in git gh uv claude; do
 done
 REPO_URL=${WIKIPOL_RUNNER_REPO:-$(git -C "$HERE" remote get-url origin)}
 
-# 1. The clone.
+# 1. The clone: never this repo, nor a worktree of it, where a human works.
+if [ -e "$RUNNER_DIR/.git" ]; then
+	here_git=$(cd "$(git -C "$HERE" rev-parse --git-common-dir)" && pwd -P)
+	runner_git=$(cd "$RUNNER_DIR" && cd "$(git rev-parse --git-common-dir)" && pwd -P)
+	[ "$here_git" != "$runner_git" ] || fail "$RUNNER_DIR is this repo or one of its worktrees, not a clone of its own"
+fi
 if [ -d "$RUNNER_DIR/.git" ]; then
 	origin=$(git -C "$RUNNER_DIR" remote get-url origin)
 	[ "$origin" = "$REPO_URL" ] || fail "$RUNNER_DIR is a clone of $origin, not $REPO_URL"
@@ -96,8 +101,11 @@ for tool in uv gh claude git; do
 done
 path="$path:/usr/bin:/bin:/usr/sbin:/sbin"
 rendered=$(mktemp "${TMPDIR:-/tmp}/$LABEL.XXXXXX")
-sed -e "s|@UV@|$(command -v uv)|g" -e "s|@RUNNER_DIR@|$RUNNER_DIR|g" \
-	-e "s|@HOME@|$HOME|g" -e "s|@PATH@|$path|g" -e "s|@BASE@|$BASE|g" "$TEMPLATE" >"$rendered"
+# A value as sed's replacement, then as plist text: \ & | for sed, & < > for XML.
+fill() { printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e 's/[\\&|]/\\&/g'; }
+sed -e "s|@UV@|$(fill "$(command -v uv)")|g" -e "s|@RUNNER_DIR@|$(fill "$RUNNER_DIR")|g" \
+	-e "s|@HOME@|$(fill "$HOME")|g" -e "s|@PATH@|$(fill "$path")|g" -e "s|@BASE@|$(fill "$BASE")|g" \
+	"$TEMPLATE" >"$rendered"
 if command -v plutil >/dev/null; then
 	plutil -lint "$rendered" >/dev/null || fail "the filled plist doesn't lint: $rendered"
 fi
@@ -130,8 +138,8 @@ if [ "$DRY_RUN" = 1 ]; then
 else
 	# bootout may return before the agent is gone, and bootstrap then fails: try a few times.
 	for attempt in 1 2 3 4 5; do
-		launchctl bootstrap "$domain" "$agent" 2>/dev/null && break
-		[ "$attempt" = 5 ] && { rm -f "$rendered"; fail "launchctl bootstrap $domain $agent failed"; }
+		error=$(launchctl bootstrap "$domain" "$agent" 2>&1) && break
+		[ "$attempt" = 5 ] && { rm -f "$rendered"; fail "launchctl bootstrap $domain $agent failed: $error"; }
 		sleep 1
 	done
 fi

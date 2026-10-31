@@ -110,7 +110,8 @@ class Git:
 
     def is_runner(self) -> bool:
         try:
-            return self("config", "--bool", RUNNER_MARK).strip() == "true"
+            # The clone's own config only: a global mark would let every clone pass.
+            return self("config", "--local", "--bool", RUNNER_MARK).strip() == "true"
         except GitFailed:  # unset: git config exits with 1
             return False
 
@@ -170,9 +171,14 @@ class GhCli:
             "gh", "pr", "list", "--head", head, "--state", state, "--json", "url,state"
         )
         try:
-            return json.loads(out or "[]")
+            found = json.loads(out or "[]")
         except json.JSONDecodeError as error:
             raise GitFailed(f"gh pr list answered no JSON: {tail(out)}") from error
+        if not isinstance(found, list) or not all(
+            isinstance(pr, dict) and isinstance(pr.get("url"), str) for pr in found
+        ):
+            raise GitFailed(f"gh pr list answered no list of pull requests: {tail(out)}")
+        return found
 
 
 @dataclass
@@ -206,6 +212,7 @@ class RunnerRepo:
         if self.github.merged(branch):
             log(f"{branch}: merged by a run that stopped after; back to {self.base}")
             self.git("switch", self.base)
+            self._discard_remote(branch)
         else:
             log(f"{branch}: never merged; its files go back to the working tree")
             self._take_back(branch)
