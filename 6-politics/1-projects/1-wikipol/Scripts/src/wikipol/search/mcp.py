@@ -24,9 +24,9 @@ from typing import IO, Any
 
 from wikipol.search.extracts import DEFAULT_LIMIT, MAX_LIMIT, Extract, SearchFailed
 
-PROTOCOL_VERSIONS = ("2025-06-18", "2025-03-26", "2024-11-05")
+PROTOCOL_VERSIONS = ("2025-06-18", "2024-11-05")
 """The MCP revisions this server speaks, newest first; a client asking for another gets the
-newest, and decides."""
+newest, and decides. Not 2025-03-26, the one revision that requires JSON-RPC batches."""
 TOOL = "search"
 
 Search = Callable[..., list[Extract]]

@@ -24,6 +24,9 @@ from wikipol.index.chunks import Chunk
 
 # Taken for the length of a migration, so two runs starting together don't both apply one.
 MIGRATION_LOCK = 0x77696B69
+CONNECT_TIMEOUT_SECONDS = 30
+"""Long enough for Serverless SQL to wake from zero, short enough that a stalled endpoint fails."""
+SEARCH_TIMEOUT = "60s"
 
 
 class SchemaNotApplied(Exception):
@@ -148,7 +151,7 @@ class PostgresIndex:
     def connect(cls, database_url: str) -> PostgresIndex:
         import psycopg
 
-        return cls(psycopg.connect(database_url))
+        return cls(psycopg.connect(database_url, connect_timeout=CONNECT_TIMEOUT_SECONDS))
 
     def close(self) -> None:
         self.connection.close()
@@ -279,6 +282,8 @@ class PostgresIndex:
         `limit` or none. Only chunks embedded by `model` compare with its query.
         """
         with self.connection.transaction():
+            # An exact scan of a large index, or a stalled server, fails rather than hangs.
+            self.connection.execute(f"SET LOCAL statement_timeout = '{SEARCH_TIMEOUT}'")
             rows = self.connection.execute(
                 SEARCH_SQL,
                 {

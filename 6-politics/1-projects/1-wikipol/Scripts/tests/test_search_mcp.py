@@ -52,13 +52,13 @@ def server():
 def test_the_handshake_agrees_on_a_revision_and_offers_one_read_only_tool(server):
     init, tools = exchange(
         server,
-        request(1, "initialize", {"protocolVersion": "2025-03-26", "capabilities": {}}),
+        request(1, "initialize", {"protocolVersion": "2024-11-05", "capabilities": {}}),
         {"jsonrpc": "2.0", "method": "notifications/initialized"},
         request(2, "tools/list"),
     )
 
     assert init["id"] == 1
-    assert init["result"]["protocolVersion"] == "2025-03-26"
+    assert init["result"]["protocolVersion"] == "2024-11-05"
     assert init["result"]["capabilities"] == {"tools": {"listChanged": False}}
     assert init["result"]["serverInfo"]["name"] == "wikipol"
     [tool] = tools["result"]["tools"]
@@ -69,8 +69,10 @@ def test_the_handshake_agrees_on_a_revision_and_offers_one_read_only_tool(server
     assert tool["annotations"]["readOnlyHint"] is True
 
 
-def test_a_client_asking_for_an_unknown_revision_is_offered_the_newest(server):
-    [init] = exchange(server, request(1, "initialize", {"protocolVersion": "1999-01-01"}))
+@pytest.mark.parametrize("asked", ["1999-01-01", "2025-03-26"])
+def test_a_client_asking_for_a_revision_it_does_not_speak_is_offered_the_newest(server, asked):
+    """2025-03-26 requires JSON-RPC batches, which this server refuses."""
+    [init] = exchange(server, request(1, "initialize", {"protocolVersion": asked}))
 
     assert init["result"]["protocolVersion"] == PROTOCOL_VERSIONS[0]
 
