@@ -94,6 +94,22 @@ def test_a_video_without_a_french_transcript_is_told_apart(answer):
         TranscriptApiFetcher("k", FakeApi({"transcript": answer})).fetch(VIDEO)
 
 
+def test_a_206_from_another_endpoint_is_a_failure_not_missing_captions():
+    with pytest.raises(FetchFailed, match="/metadata answered 206") as error:
+        TranscriptApiFetcher("k", FakeApi({"metadata": (206, {"error": "x"})})).fetch(VIDEO)
+    assert not isinstance(error.value, NoCaptions)
+
+
+def test_a_regional_french_transcript_is_french():
+    answer = json.loads((FIXTURES / "supadata" / "transcript.json").read_text(encoding="utf-8"))
+
+    fetched = TranscriptApiFetcher(
+        "k", FakeApi({"transcript": (200, {**answer, "lang": "fr-FR"})})
+    ).fetch(VIDEO)
+
+    assert b"Bonjour" in fetched.body
+
+
 @pytest.mark.parametrize(
     "chunk", [{"text": None, "offset": 0}, {"text": "x"}, {"text": "x", "offset": "soon"}]
 )

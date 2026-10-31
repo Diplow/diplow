@@ -59,7 +59,7 @@ class TranscriptApiFetcher:
             payload = None
         if status == 202:
             raise FetchFailed(f"transcript API /{path}: an asynchronous job, not fetched")
-        if status == 206:  # the API's "transcript-unavailable"
+        if status == 206 and path == "transcript":  # the API's "transcript-unavailable"
             raise NoCaptions(f"transcript API /{path}: no transcript for this video")
         if status != 200:
             reason = (payload or {}).get("error") or "no detail"
@@ -81,7 +81,7 @@ class TranscriptApiFetcher:
         url = watch_url(youtube_id)
         metadata = self._call("metadata", url=url)
         transcript = self._call("transcript", url=url, lang=CAPTION_LANGUAGE, mode="native")
-        if transcript.get("lang") != CAPTION_LANGUAGE:
+        if str(transcript.get("lang") or "").split("-")[0] != CAPTION_LANGUAGE:  # fr, fr-FR
             raise NoCaptions(f"no French transcript (the API offered {transcript.get('lang')})")
         content = transcript.get("content")
         if not isinstance(content, list):
