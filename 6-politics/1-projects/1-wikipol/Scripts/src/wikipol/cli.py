@@ -10,6 +10,8 @@ from datetime import date
 from pathlib import Path
 
 from wikipol import fetch
+from wikipol.chronicle.filing import FilingError, plan_filing
+from wikipol.chronicle.period import PeriodRejected, write_period
 from wikipol.claude import ClaudeCli, WriterFailed
 from wikipol.config import (
     DEFAULT_SOURCES_DIR,
@@ -72,6 +74,14 @@ def main(argv: list[str] | None = None) -> int:
     check.add_argument("digests", nargs="+", type=Path)
     check.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
 
+    filing = commands.add_parser(
+        "file",
+        help="file Digests in their Source's Chronicle; write-period rewrites every Period touched",
+    )
+    filing.add_argument("--source", required=True, help="the Source's slug")
+    filing.add_argument("digests", nargs="+", type=Path, help="Digest files, outside the Chronicle")
+    filing.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
+
     args = parser.parse_args(argv)
     try:
         if args.command == "copy-from-drive":
@@ -82,13 +92,15 @@ def main(argv: list[str] | None = None) -> int:
             return write_one_digest(args)
         if args.command == "check-digest":
             return check_digests(args)
+        if args.command == "file":
+            return file_digests(args)
     except (WriterFailed, RawNotFound) as error:
         print(f"wikipol: {error}", file=sys.stderr)
         return 2
     except FetchFailed as error:
         print(f"wikipol: {error}", file=sys.stderr)
         return 2
-    except ConfigError as error:
+    except (ConfigError, FilingError) as error:
         print(f"wikipol: {error}", file=sys.stderr)
         return 2
     except FileNotFoundError as error:
@@ -232,6 +244,38 @@ def check_one_digest(path: Path, store: RawStore, sources_dir: Path) -> list[str
     )
     linkable = set(linkable_digests(source)) - {repo_path(path.with_suffix(""))}
     return check_digest(text, raw_text, expected, linkable)
+
+
+def file_digests(args: argparse.Namespace) -> int:
+    source = source_by_slug(args.sources_dir, args.source)
+    for path in args.digests:
+        if path.resolve().is_relative_to(source.chronicle.resolve()):
+            raise ConfigError(f"{path} is already in the Chronicle: file a copy from outside it")
+    filing = plan_filing(
+        source,
+        [path.read_text(encoding="utf-8") for path in args.digests],
+        # The Sources sit at <repo>/6-politics/2-sources, as config.REPO_ROOT has it.
+        repo_root=args.sources_dir.resolve().parents[1],
+    )
+    writer = ClaudeCli()
+    try:
+        filing.summarize(
+            lambda period, whole: write_period(source, period, writer, chronicle=whole)
+        )
+    except PeriodRejected as rejected:
+        print(f"wikipol: {rejected}; the Chronicle is unchanged:", file=sys.stderr)
+        for problem in rejected.problems:
+            print(f"  - {problem}", file=sys.stderr)
+        return 1
+    relinked = filing.apply()
+    for leaf in filing.filed:
+        print(f"{leaf.path}.md")
+    summarized = len(filing.touched())
+    print(
+        f"{summarized} Period{'s' if summarized > 1 else ''} summarized by {source.model}, "
+        f"{len(filing.moved)} paths moved, {len(relinked)} files outside the Chronicle relinked"
+    )
+    return 0
 
 
 if __name__ == "__main__":

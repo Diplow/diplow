@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 
-from wikipol.claude import Writer, split_draft
+from wikipol.claude import Writer, retry_prompt, split_draft
 from wikipol.config import REPO_ROOT, Source, pinned_model
 from wikipol.digest.format import (
     DigestFields,
@@ -104,15 +104,6 @@ def build_prompt(
         raw_body,
     ]
     return "\n".join(sections)
-
-
-def retry_prompt(prompt: str, draft: str, problems: list[str]) -> str:
-    listed = "\n".join(f"- {problem}" for problem in problems)
-    return (
-        f"{prompt}\n\n# Ta version précédente, refusée par le validateur\n\n"
-        f"Le validateur a relevé :\n\n{listed}\n\nTa version :\n\n{draft}\n\n"
-        "Réécris le document entier en corrigeant chacun de ces points."
-    )
 
 
 def digest_fields(

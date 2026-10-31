@@ -96,3 +96,12 @@ def split_draft(draft: str) -> tuple[str, str]:
     if body.startswith("# "):
         body = body.split("\n", 1)[1] if "\n" in body else ""
     return " ".join(preview.split()), body.strip()
+
+
+def retry_prompt(prompt: str, draft: str, problems: list[str]) -> str:
+    listed = "\n".join(f"- {problem}" for problem in problems)
+    return (
+        f"{prompt}\n\n# Ta version précédente, refusée par le validateur\n\n"
+        f"Le validateur a relevé :\n\n{listed}\n\nTa version :\n\n{draft}\n\n"
+        "Réécris le document entier en corrigeant chacun de ces points."
+    )
