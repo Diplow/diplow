@@ -16,10 +16,11 @@ SOURCE = Source("Demo", "demo", Path("/nowhere"), None, None, channel_url=CHANNE
 
 class FakeFetcher:
     """A channel of 11-character ids, newest first; `failing` ids raise FetchFailed, `silent`
-    ones NoCaptions."""
+    ones NoCaptions, and `published` dates some, the others 2026-10-30."""
 
-    def __init__(self, channel, failing=(), silent=()):
+    def __init__(self, channel, failing=(), silent=(), published=None):
         self.channel, self.failing, self.silent = channel, set(failing), set(silent)
+        self.published = published or {}
         self.fetched: list[str] = []
 
     def list_channel(self, channel_url):
@@ -32,7 +33,8 @@ class FakeFetcher:
             raise NoCaptions("no French captions on YouTube yet")
         if youtube_id in self.failing:
             raise FetchFailed("yt-dlp exited with 1: ERROR: Sign in to confirm")
-        meta = RawMeta(f"Titre {youtube_id}", date(2026, 10, 30), 600)
+        published = self.published.get(youtube_id, date(2026, 10, 30))
+        meta = RawMeta(f"Titre {youtube_id}", published, 600)
         return Fetched(youtube_id, f"raw of {youtube_id}".encode(), meta)
 
 
@@ -79,6 +81,31 @@ def test_the_limit_caps_the_videos_tried_failures_included(pauses):
     assert report.stored == [vid(2), vid(3)]
     assert report.failed == [(vid(1), "yt-dlp exited with 1: ERROR: Sign in to confirm")]
     assert "1 left for a later run" in format_report(report)
+
+
+def test_three_videos_in_a_row_published_before_since_end_the_run_unstored(pauses):
+    channel = [vid(n) for n in range(1, 7)]
+    old = {vid(n): date(2023, 5, 1) for n in range(2, 7)}
+    fetcher = FakeFetcher(channel, published=old)
+
+    report = run(fetcher, InMemoryRawStore(), pauses, since=date(2023, 10, 31))
+
+    assert fetcher.fetched == [vid(1), vid(2), vid(3), vid(4)]
+    assert report.stored == [vid(1)]
+    assert report.older == [vid(2), vid(3), vid(4)]
+    assert report.reached_since and not report.stopped
+    assert "and the 2 after them are older still" in format_report(report)
+
+
+def test_one_old_video_out_of_order_does_not_end_the_run(pauses):
+    channel = [vid(n) for n in range(1, 5)]
+    fetcher = FakeFetcher(channel, published={vid(2): date(2019, 1, 1)})
+
+    report = run(fetcher, InMemoryRawStore(), pauses, since=date(2023, 10, 31))
+
+    assert report.stored == [vid(1), vid(3), vid(4)]
+    assert report.older == [vid(2)]
+    assert not report.reached_since
 
 
 def test_three_failures_in_a_row_stop_the_run(pauses):

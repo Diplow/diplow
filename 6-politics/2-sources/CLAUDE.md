@@ -3,8 +3,8 @@ title: Sources
 parent: 6-politics/2-sources
 owner: diplo
 preview: >-
-  The political media I follow, one numbered node per Source: PaduTeam and
-  Boniface for now. Each holds its config, its editorial context and its
+  The political media I follow, one numbered node per Source: PaduTeam,
+  Boniface, Osons Causer and Blast for now. Each holds its config, its editorial context and its
   Chronicle, where wikipol's pipeline files one Digest per Publication by date.
   Six Sources at most here; past six, they get grouped.
 ---
@@ -16,6 +16,8 @@ The media whose output I want to argue from, each one a **Source** in the sense 
 |---|---|---|
 | 1 | [[6-politics/2-sources/1-paduteam/CLAUDE\|PaduTeam]] | A Marxist YouTube channel, the media arm of La Brèche |
 | 2 | [[6-politics/2-sources/2-boniface/CLAUDE\|Boniface]] | Pascal Boniface's geopolitics channel; he founded IRIS |
+| 3 | [[6-politics/2-sources/3-osonscauser/CLAUDE\|Osons Causer]] | A YouTube channel that explains politics and ideas; its editorial context is still to write |
+| 4 | [[6-politics/2-sources/4-blast/CLAUDE\|Blast]] | An independent online news outlet, *le souffle de l'info*; its editorial context is still to write |
 
 ## A Source node
 

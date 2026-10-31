@@ -73,6 +73,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     get.add_argument("--source", required=True, help="the Source's slug")
     get.add_argument("--limit", type=positive_int, help="try at most N videos")
+    get.add_argument(
+        "--since",
+        type=date.fromisoformat,
+        help="YYYY-MM-DD: store no video published before it, and end after 3 in a row",
+    )
     get.add_argument("--fetcher", choices=FETCHERS, help="default: WIKIPOL_FETCHER, else yt-dlp")
     get.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
     get.add_argument("--dry-run", action="store_true", help="only list the videos without a Raw")
@@ -231,6 +236,7 @@ def fetch_raws(args: argparse.Namespace) -> int:
         store,
         fetcher,
         limit=args.limit,
+        since=args.since,
         dry_run=args.dry_run,
         log=lambda line: print(line, file=sys.stderr, flush=True),
     )
