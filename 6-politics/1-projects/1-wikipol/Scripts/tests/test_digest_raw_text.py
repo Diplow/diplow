@@ -62,6 +62,13 @@ def test_the_linked_blocks_of_old_raws_start_at_their_t_parameter():
     assert [block.start for block in raw.blocks[1:]] == [0, 30]
 
 
+def test_the_nul_bytes_a_synced_raw_ends_with_are_left_out():
+    raw = parse_raw(UNTIMED + "\x00" * 466)
+
+    assert "\x00" not in raw.blocks[-1].text
+    assert raw.blocks == parse_raw(UNTIMED).blocks
+
+
 def test_a_raw_without_timestamps_is_one_untimed_block():
     raw = parse_raw(UNTIMED)
 
