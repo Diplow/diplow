@@ -14,7 +14,7 @@ preview: >-
 
 ## Pour le Digest
 
-`wikipol digest` et `wikipol backfill` lisent ce fichier avant chaque Digest de Boniface (skill `write-digest`), et `wikipol file` avant chaque résumé de Period (skill `write-period`). Ce qui suit dit comment ses principes s'y appliquent. Les sections plus bas sur les fiches (`Videos/`, `Livres/`, `Concepts/`, `Enjeux/`) et l'usage du vault décrivent le vault figé : un Digest n'écrit ni fiche ni lien vers elles.
+`wikipol digest` et `wikipol backfill` lisent ce fichier avant chaque Digest de Boniface (skill `write-digest`), et `wikipol file` avant chaque résumé de Period (skill `write-period`) ; le run quotidien, `wikipol run`, passe par les mêmes étapes. Ce qui suit dit comment ses principes s'y appliquent. Les sections plus bas sur les fiches (`Videos/`, `Livres/`, `Concepts/`, `Enjeux/`) et l'usage du vault décrivent le vault figé : un Digest n'écrit ni fiche ni lien vers elles.
 
 - **Attribution individuelle.** Le Preview et les affirmations parlent de « Pascal Boniface » ou de « Boniface », jamais de « la Source », d'un collectif, ni de l'IRIS à sa place : *Boniface soutient que…*.
 - **Un invité n'est pas Boniface.** Dans une interview ou une émission longue, une affirmation est par défaut une thèse de Boniface. Une thèse de l'invité n'est retenue que nommée à l'invité (*Pour X, …*, quand le Raw le nomme ; sinon *son invité*), et seulement si elle porte la Publication. Les sous-titres ne disent pas qui parle : un passage dont on ne sait pas qui le prononce n'appuie pas une thèse attribuée à Boniface.
