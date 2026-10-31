@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  wikipol's daily run, as a launchd agent of the logged-in user. A template: install-runner.sh
+  fills the @...@ fields and puts the result in ~/Library/LaunchAgents. Every day at 07:00, or
+  at the next wake when the Mac slept through it, launchd starts `wikipol run` in the runner's
+  clone, onto the branch the install followed. Each run writes its own log in
+  ~/Library/Logs/wikipol, its summary included, so stdout goes nowhere and the stderr file keeps
+  only what fails before the log opens.
+-->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.diplow.wikipol.runner</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>@UV@</string>
+		<string>--directory</string>
+		<string>@RUNNER_DIR@/6-politics/1-projects/1-wikipol/Scripts</string>
+		<string>run</string>
+		<string>--frozen</string>
+		<string>--quiet</string>
+		<string>wikipol</string>
+		<string>run</string>
+		<string>--base</string>
+		<string>@BASE@</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>@RUNNER_DIR@</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>HOME</key>
+		<string>@HOME@</string>
+		<key>PATH</key>
+		<string>@PATH@</string>
+	</dict>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>7</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
+	<key>RunAtLoad</key>
+	<false/>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>StandardOutPath</key>
+	<string>/dev/null</string>
+	<key>StandardErrorPath</key>
+	<string>@HOME@/Library/Logs/wikipol/launchd.err.log</string>
+</dict>
+</plist>
