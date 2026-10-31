@@ -209,21 +209,22 @@ def _check_body(
 ) -> list[str]:
     problems = []
     lines = body.strip("\n").split("\n")
-    if not lines or lines[0] != f"# {title}":
+    first = 1  # body lines are numbered from the title's
+    if lines[0] != f"# {title}":
         problems.append("the body must open with the title as its heading, `# <title>`")
     else:
-        lines = lines[1:]
+        lines, first = lines[1:], 2
 
     claims: list[tuple[int, list[str]]] = []
-    for number, line in enumerate(lines, start=1):
+    for number, line in enumerate(lines, start=first):
         claim = CLAIM.match(line)
         if claim:
             claims.append((int(claim.group(1)), []))
         elif line.startswith("#"):
-            problems.append(f"line {number}: only claims `## <n>. <claim>` go under the title")
+            problems.append(f"body line {number}: only claims `## <n>. <claim>` go under the title")
         elif not claims:
             if line.strip():
-                problems.append(f"line {number}: text before the first claim")
+                problems.append(f"body line {number}: text before the first claim")
         else:
             claims[-1][1].append(line)
 

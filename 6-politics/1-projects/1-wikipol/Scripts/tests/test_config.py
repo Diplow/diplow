@@ -157,3 +157,15 @@ def test_the_transcript_api_needs_its_key_from_the_env_file(tmp_path):
 def test_an_unknown_fetcher_is_a_config_error():
     with pytest.raises(ConfigError, match="WIKIPOL_FETCHER"):
         load_fetcher_settings({"WIKIPOL_FETCHER": "curl"})
+
+
+def test_every_repo_source_pins_the_model_that_writes_its_digests():
+    assert {s.slug: s.model for s in load_sources(DEFAULT_SOURCES_DIR)} == {
+        "paduteam": "claude-sonnet-5-5",
+        "boniface": "claude-sonnet-5-5",
+    }
+
+
+def test_the_source_template_pins_a_model_too():
+    template = DEFAULT_SOURCES_DIR.parent / "1-projects" / "1-wikipol" / "Templates"
+    assert "default_model: claude-sonnet-5-5" in (template / "source.yaml.tmpl").read_text()
