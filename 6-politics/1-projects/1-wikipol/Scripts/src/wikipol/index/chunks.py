@@ -8,12 +8,14 @@ Raws in the `**[MM:SS]**` shape don't keep to 30 s (decisions.md#DEC-8). Text be
 Raw's first timestamp is the title-and-URL header of that shape, not speech, and is left out.
 
 A Raw without any timestamp (one untimed block) is cut by words instead, UNTIMED_WORDS at a time
-with UNTIMED_OVERLAP_WORDS shared, and its chunks carry no seconds.
+with UNTIMED_OVERLAP_WORDS shared, and its chunks carry no seconds. So is a timed chunk past
+MAX_WORDS, a block whose timestamps are too sparse for two minutes to stay short: its pieces keep
+the chunk's seconds, so no input outgrows what the embedding model reads.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from wikipol.digest.raw_text import Block, RawText
 
@@ -25,6 +27,9 @@ BLOCK_SECONDS = 30
 # About two minutes and thirty seconds of speech: a 30-second block holds about 110 words.
 UNTIMED_WORDS = 440
 UNTIMED_OVERLAP_WORDS = 110
+MAX_WORDS = 2000
+"""About 2 800 tokens, far under qwen3-embedding-8b's 32k; the longest chunk of the bucket on
+2026-10-31 held 641 words."""
 
 
 @dataclass(frozen=True)
@@ -40,9 +45,16 @@ class Chunk:
 def chunk_raw(raw_text: RawText, duration: int | None = None) -> list[Chunk]:
     """The Raw's chunks, in order; none when it holds no words."""
     timed = [block for block in raw_text.blocks if block.start is not None]
-    if timed:
-        return _timed_chunks(timed, duration)
-    return _untimed_chunks(" ".join(block.text for block in raw_text.blocks))
+    if not timed:
+        return _untimed_chunks(" ".join(block.text for block in raw_text.blocks))
+    pieces = [
+        replace(piece, start=chunk.start, end=chunk.end)
+        for chunk in _timed_chunks(timed, duration)
+        for piece in (
+            _untimed_chunks(chunk.text) if len(chunk.text.split()) > MAX_WORDS else [chunk]
+        )
+    ]
+    return [replace(piece, position=n) for n, piece in enumerate(pieces)]
 
 
 def _timed_chunks(blocks: list[Block], duration: int | None) -> list[Chunk]:

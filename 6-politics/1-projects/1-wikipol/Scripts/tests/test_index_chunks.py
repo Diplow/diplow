@@ -2,7 +2,13 @@
 decisions.md#DEC-8."""
 
 from wikipol.digest.raw_text import clock, parse_raw
-from wikipol.index.chunks import BLOCK_SECONDS, UNTIMED_OVERLAP_WORDS, UNTIMED_WORDS, chunk_raw
+from wikipol.index.chunks import (
+    BLOCK_SECONDS,
+    MAX_WORDS,
+    UNTIMED_OVERLAP_WORDS,
+    UNTIMED_WORDS,
+    chunk_raw,
+)
 
 
 def blocks_raw(starts: list[int]) -> str:
@@ -83,3 +89,13 @@ def test_a_raw_without_timestamps_is_cut_by_words_and_carries_no_seconds():
 def test_a_raw_without_words_has_no_chunk():
     assert chunk_raw(parse_raw("---\nyoutube_id: aaaaaaaaaaa\n---\n\n")) == []
     assert chunk_raw(parse_raw("0:00\n\n\n0:30\n\n")) == []
+
+
+def test_a_timed_chunk_past_the_word_cap_is_cut_by_words_keeping_its_seconds():
+    long_block = " ".join(f"mot{n}" for n in range(MAX_WORDS + 1))
+    raw = f"0:00\n\ncourt.\n\n0:30\n\n{long_block}\n\n10:00\n\nfin.\n"
+    chunks = chunk_raw(parse_raw(raw), duration=630)
+    assert [c.position for c in chunks] == list(range(len(chunks)))
+    assert all(len(c.text.split()) <= max(UNTIMED_WORDS, MAX_WORDS) for c in chunks)
+    assert {(c.start, c.end) for c in chunks[:-1]} == {(0, 600)}
+    assert (chunks[-1].start, chunks[-1].end, chunks[-1].text) == (600, 630, "fin.")

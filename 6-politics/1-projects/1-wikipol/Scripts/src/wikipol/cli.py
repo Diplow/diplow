@@ -34,8 +34,8 @@ from wikipol.fetch.fetcher import FetchFailed
 from wikipol.fetch.run import fetch_source
 from wikipol.fetch.run import format_report as format_fetch_report
 from wikipol.index.embed import ScalewayEmbedder
+from wikipol.index.run import IndexReport, index_source
 from wikipol.index.run import format_report as format_index_report
-from wikipol.index.run import index_source
 from wikipol.index.store import PostgresIndex, SchemaNotApplied
 from wikipol.legacy_index import find_video_note
 from wikipol.raw_store import YOUTUBE_ID, RawNotFound, RawStore, S3RawStore
@@ -398,11 +398,11 @@ def index_raws(args: argparse.Namespace) -> int:
     store = S3RawStore.from_settings(load_settings())
     embedder = ScalewayEmbedder(settings.embedding_key or "", settings.project_id)
     index = open_index(settings.database_url)
+    reports: list[IndexReport] = []
     try:
         if not args.dry_run:
             for name in index.migrate():
                 print(f"migration applied: {name}", file=sys.stderr)
-        reports = []
         for source in sources:
             report = index_source(
                 source,
@@ -420,6 +420,8 @@ def index_raws(args: argparse.Namespace) -> int:
             ):  # a refused key or a failing API: the next Source would fare no better
                 break
     except psycopg.Error as error:
+        if reports:  # what the Sources before it committed
+            print(format_index_report(reports, dry_run=args.dry_run))
         raise IndexUnreachable(f"the index's database failed: {error}") from error
     finally:
         index.close()
