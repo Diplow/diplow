@@ -1,0 +1,50 @@
+6-politics/1-projects/1-wikipol/Scripts/tests/fixtures/fetch/info.json
+  s_bffceea45dbe3a::t_9b46daa50a2ab7 9,12-21
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/transcript_api.py
+  s_bffceea45dbe3a::t_88c25f9f80d7fa 12,22,37-44,62-63,75-78,85,90-92
+6-politics/1-projects/1-wikipol/Scripts/tests/test_config.py
+  s_bffceea45dbe3a::t_4640f9d93d8fdd 91
+6-politics/1-projects/1-wikipol/Scripts/tests/test_fetch_run.py
+  s_bffceea45dbe3a::t_4640f9d93d8fdd 9,18-19,21-22,31-32,34,80,96-118
+  s_bffceea45dbe3a::t_26439279f3e8e5 119-120
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/ytdlp.py
+  s_bffceea45dbe3a::t_5b888a03a2de06 20,104,107,112-113,115-117,120-127,133,135-136
+6-politics/1-projects/1-wikipol/CLAUDE.md
+  s_bffceea45dbe3a::t_1f278dc1e899a7 54
+6-politics/1-projects/1-wikipol/Scripts/tests/test_fetch_transcript_api.py
+  s_bffceea45dbe3a::t_4640f9d93d8fdd 10,44,46-50,54-60,78-82,85-101,103
+6-politics/1-projects/1-wikipol/Scripts/tests/test_fetch_captions.py
+  s_bffceea45dbe3a::t_4640f9d93d8fdd 30-37
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/cli.py
+  s_bffceea45dbe3a::t_88c25f9f80d7fa 49
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/captions.py
+  s_bffceea45dbe3a::t_88c25f9f80d7fa 18-19,44
+6-politics/1-projects/1-wikipol/.run/registers/sources-from-youtube/decisions.md
+  s_bffceea45dbe3a::t_1f278dc1e899a7 67
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/run.py
+  s_bffceea45dbe3a::t_f6d2cd1bd548a8 5-7,17,32,69-72,102-103,106
+  s_bffceea45dbe3a::t_4640f9d93d8fdd 39
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/fetch/fetcher.py
+  s_bffceea45dbe3a::t_5b888a03a2de06 12-17
+6-politics/1-projects/1-wikipol/Scripts/tests/test_fetch_ytdlp.py
+  s_bffceea45dbe3a::t_4640f9d93d8fdd 3,11,22-24,26,41-44,84-93,95-108,110-118
+  s_bffceea45dbe3a::t_1f278dc1e899a7 109
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/config.py
+  s_bffceea45dbe3a::t_88c25f9f80d7fa 130-133
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a5061fb8364fc82c25ceb9fe973515411a8f842f",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
