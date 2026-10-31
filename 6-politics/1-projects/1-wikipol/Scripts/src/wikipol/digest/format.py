@@ -146,11 +146,11 @@ def check_digest(
         if target.strip() not in linkable:
             problems.append(f"wikilink to [[{target}]], which is not a Digest it may cite")
     # Words in guillemets outside an Extract quote the Source too, and must be in the Raw; the
-    # title is the video's, not a quote.
-    prose = [str(frontmatter.get("preview") or "")]
-    prose += [line for line in body.split("\n") if not line.startswith((">", "# "))]
-    for line in prose:
-        for quote in PROSE_QUOTE.findall(line):
+    # title is the video's, not a quote. The prose is read as one text, so a quote a line break
+    # cuts is still read whole; a stray « pairs with a later » and fails, never passes.
+    lines = [line for line in body.split("\n") if not line.startswith((">", "# "))]
+    for text in (str(frontmatter.get("preview") or ""), " ".join(lines)):
+        for quote in PROSE_QUOTE.findall(text):
             if not raw.holds(quote):
                 problems.append(f"« {quote} » is quoted outside an Extract and is not in the Raw")
     return problems

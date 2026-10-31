@@ -283,3 +283,11 @@ def test_an_impossible_date_is_an_unreadable_frontmatter():
     assert check_digest(digest().replace("2026-10-31", "2026-02-30"), RAW) == [
         "no readable YAML frontmatter"
     ]
+
+
+def test_a_quote_cut_by_a_line_break_is_still_checked():
+    cut = CLAIMS.replace("Elle coupe ses contrats.", "Un « boycott\ntotal » selon elle.")
+
+    assert check_digest(digest(cut), RAW) == [
+        "« boycott total » is quoted outside an Extract and is not in the Raw"
+    ]

@@ -25,7 +25,7 @@ Un lecteur pressé lit le Preview et doit savoir ce que la Source soutient. Un l
 
 `wikipol digest` te donne tout dans le message, en sections :
 
-1. **La Publication** : la Source et son attribution (« la PaduTeam »), le titre, le `youtube_id`, la date, la durée, et si le Raw est horodaté. Le pipeline remplit lui-même le frontmatter du Digest et son titre à partir de ces champs : tu ne les écris pas.
+1. **La Publication** : la Source et son attribution (*la PaduTeam*), le titre, le `youtube_id`, la date, la durée, et si le Raw est horodaté. Le pipeline remplit lui-même le frontmatter du Digest et son titre à partir de ces champs : tu ne les écris pas.
 2. **Le contexte éditorial de la Source**, son `CLAUDE.md` : qui parle, le ton, les pièges de lecture. Lis-le en premier : il dit comment restituer cette Source. Ses consignes sur un vault, des fiches ou des commandes d'ingestion décrivent l'ancien pipeline et ne te concernent pas.
 3. **La fiche legacy** de la Publication, quand le vault figé en a une. Elle aide à repérer les intervenants et les thèses, mais elle a pu se tromper : ne recopie ni ses wikilinks, ni ses notes de bas de page, ni ses horodatages. Toute affirmation que tu en tires doit être retrouvée et citée dans le Raw.
 4. **Les Digests de la Source que tu peux lier**, s'il y en a.
@@ -61,17 +61,17 @@ Pour un Raw sans horodatage, un Extract n'a pas de lien : `> « les mots exacts 
 
 ### Le Preview
 
-La thèse, pas le sujet. « La PaduTeam soutient que le PS prépare 2027 en se recentrant, et que la gauche radicale doit l'en empêcher » plutôt que « Une vidéo sur le PS ». Une ou deux phrases, 350 caractères au plus, espaces comprises.
+La thèse, pas le sujet : *La PaduTeam soutient que le PS prépare 2027 en se recentrant, et que la gauche radicale doit l'en empêcher*, plutôt que *Une vidéo sur le PS*. Une ou deux phrases, 350 caractères au plus, espaces comprises.
 
 ### Les affirmations
 
 - **De une à six**, numérotées `## 1.`, `## 2.`… dans l'ordre. Six est un plafond, pas un but : une capsule de cinq minutes en porte souvent deux ou trois.
-- **Chacune est une thèse de la Source**, formulée dans ses termes, pas un thème (« Le RN progresse dans les campagnes parce que les services publics s'en retirent », pas « Le RN et la ruralité »). Restituer, pas neutraliser : ne challenge pas, ne nuance pas ce que la Source ne nuance pas. Le `CLAUDE.md` de la Source précise comment.
-- **Attribution collective par défaut** (« la PaduTeam »). Nomme un intervenant seulement quand le Raw l'identifie clairement : il se présente, on l'appelle par son nom, ou le contexte éditorial le désigne.
+- **Chacune est une thèse de la Source**, formulée dans ses termes, pas un thème (*Le RN progresse dans les campagnes parce que les services publics s'en retirent*, pas *Le RN et la ruralité*). Restituer, pas neutraliser : ne challenge pas, ne nuance pas ce que la Source ne nuance pas. Le `CLAUDE.md` de la Source précise comment.
+- **Attribution collective par défaut** (*la PaduTeam*). Nomme un intervenant seulement quand le Raw l'identifie clairement : il se présente, on l'appelle par son nom, ou le contexte éditorial le désigne.
 - **Ordre** : celui de l'argument, le plus central d'abord.
 - **Le développement** sous l'affirmation est facultatif : une à trois phrases, quand l'affirmation a besoin de son mécanisme ou de son exemple. Pas de sous-titre, pas de liste.
 - **Un chiffre, un sondage, une date** : seulement s'ils sont dans le Raw.
-- **Des guillemets « » hors d'un Extract** citent eux aussi la Source : seulement autour de mots qui sont dans le Raw, tels quels. Pour une formule à toi, pas de guillemets.
+- **Des guillemets « » hors d'un Extract** citent eux aussi la Source : seulement autour de mots qui sont dans le Raw, tels quels. Pour une formule à toi, pas de guillemets, et une citation entre « » tient sur une seule ligne.
 
 ### Les Extracts
 
