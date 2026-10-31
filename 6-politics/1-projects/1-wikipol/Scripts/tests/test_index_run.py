@@ -132,7 +132,7 @@ def test_a_rerun_indexes_only_what_is_new_and_follows_a_moved_digest(source, raw
     report = run(source, raws, index, embedder)
     assert report.indexed == ["newnewnew01"]
     assert all("newnewnew01" in text for text in embedder.texts)
-    assert report.up_to_date == 3
+    assert report.up_to_date == 4  # the silent one too, a Publication without chunks
     assert report.relinked == 1
     assert index.publications[("demo", FETCHED)].digest_path == (
         f"{CHRONICLE}/2-2026-01-02/{old.name}"
@@ -159,12 +159,18 @@ def test_limit_caps_the_raws_read_and_leaves_the_rest(source, raws):
     assert run(source, raws, index).indexed == [FROM_NOTE]  # the silent one has no words
 
 
-def test_a_raw_without_words_takes_no_place_under_the_limit(source, raws):
+def test_a_raw_without_words_is_a_publication_without_chunks_outside_the_limit(source, raws):
     index = InMemoryIndex()
-    run(source, raws, index, limit=3)
-    assert run(source, raws, index, limit=1).empty == [SILENT]  # read again, never indexed
     raws.put("demo", "zzzzzzzzzz1", raw("zzzzzzzzzz1"), RawMeta("After the silent one"))
-    assert run(source, raws, index, limit=1).indexed == ["zzzzzzzzzz1"]
+    report = run(source, raws, index, limit=3)  # the silent one, fourth by id, isn't counted
+    assert report.indexed == [FETCHED, UNDATED, FROM_NOTE]
+    assert report.empty == []
+    report = run(source, raws, index, limit=1)
+    assert (report.empty, report.indexed) == ([SILENT], ["zzzzzzzzzz1"])
+    assert index.publications[("demo", SILENT)].title == "Silent"
+    assert index.chunks[("demo", SILENT)] == []
+    report = run(source, raws, index)
+    assert (report.empty, report.indexed, report.up_to_date) == ([], [], 5)
 
 
 def test_a_failed_embedding_stops_the_run_and_keeps_what_was_indexed(source, raws):

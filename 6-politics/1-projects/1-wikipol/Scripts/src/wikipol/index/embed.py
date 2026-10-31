@@ -137,12 +137,15 @@ def parse_embeddings(answer: bytes, expected: int) -> Embeddings:
     try:
         payload = json.loads(answer)
         rows = sorted(payload["data"], key=lambda row: row["index"])
+        indexes = [row["index"] for row in rows]
         vectors = [[float(x) for x in row["embedding"]] for row in rows]
         tokens = int(payload.get("usage", {}).get("total_tokens") or 0)
     except (ValueError, TypeError, KeyError, AttributeError) as error:
         raise EmbeddingFailed(f"an embeddings answer it can't read: {error!r}") from error
     if len(vectors) != expected:
         raise EmbeddingFailed(f"{len(vectors)} vectors for {expected} chunks")
+    if indexes != list(range(expected)):  # a vector given twice, another missing
+        raise EmbeddingFailed(f"vectors for the inputs {indexes}, not 0 to {expected - 1}")
     if any(len(vector) != EMBEDDING_DIMENSIONS for vector in vectors):
         raise EmbeddingFailed(f"a vector is not {EMBEDDING_DIMENSIONS}-dimensional")
     return Embeddings(vectors, tokens)

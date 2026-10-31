@@ -6,7 +6,8 @@ takes up the absent ones. The schema is the SQL files of `migrations/`, applied 
 the order of their names, and recorded in `schema_migration`.
 
 Applying it takes a role that may create tables. On Serverless SQL the pipeline's key connects as
-`role_readwrite`, which only writes rows, so `wikipol migrate` runs once with a key that may, and
+`role_readwrite`, which only writes rows, so `wikipol migrate` runs once with a key that may (its
+connection string in an env file of its own, named by `WIKIPOL_ENV`, not on a command line), and
 the migration grants the rows to `role_readwrite`; `wikipol index` then finds nothing pending.
 """
 
@@ -146,10 +147,11 @@ class PostgresIndex:
         except psycopg.errors.InsufficientPrivilege as error:
             raise SchemaNotApplied(
                 "the database's role may not create the index's tables "
-                f"({error.diag.message_primary}); apply the schema once with a key that may, "
-                "`WIKIPOL_DATABASE_URL=<its connection string> uv run wikipol migrate`: on "
-                "Serverless SQL, a key holding ServerlessSQLDatabaseReadWrite, where the "
-                "pipeline's DataReadWrite only writes rows"
+                f"({error.diag.message_primary}); apply the schema once with a key that may: "
+                "write its connection string as WIKIPOL_DATABASE_URL in an env file of its own, "
+                "then `WIKIPOL_ENV=<that file> uv run wikipol migrate`. On Serverless SQL, a key "
+                "holding ServerlessSQLDatabaseReadWrite; the pipeline's DataReadWrite only "
+                "writes rows"
             ) from error
         return applied
 

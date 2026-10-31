@@ -48,7 +48,7 @@ def chunk_raw(raw_text: RawText, duration: int | None = None) -> list[Chunk]:
 def _timed_chunks(blocks: list[Block], duration: int | None) -> list[Chunk]:
     blocks = sorted(blocks, key=lambda block: block.start or 0)
     last_start = blocks[-1].start or 0
-    video_end = duration if duration is not None and duration > last_start else None
+    video_end = duration if duration is not None and duration >= last_start else None
     raw_end = video_end if video_end is not None else last_start + BLOCK_SECONDS
 
     def end_of(index: int) -> int:

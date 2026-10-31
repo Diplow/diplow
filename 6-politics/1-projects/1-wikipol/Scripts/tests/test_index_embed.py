@@ -91,8 +91,10 @@ def test_a_dropped_connection_is_retried():
             raise OSError("connection reset")
         return FakeApi().post(url, headers, body)
 
-    result = ScalewayEmbedder("k", post=post, sleep=lambda s: None).embed(["chunk 2"])
+    sleeps = []
+    result = ScalewayEmbedder("k", post=post, sleep=sleeps.append).embed(["chunk 2"])
     assert result.vectors[0][0] == 2
+    assert sleeps == [RETRY_PAUSES[0]]
 
 
 def test_a_refused_key_fails_at_once_naming_the_variables_not_the_key():
@@ -113,6 +115,14 @@ def test_an_answer_with_the_wrong_vectors_fails():
         ScalewayEmbedder("k", post=short).embed(["chunk 1"])
     with pytest.raises(EmbeddingFailed, match="1 vectors for 2"):
         ScalewayEmbedder("k", post=short).embed(["a 1", "b 2"])
+
+    def twice(url, headers, body):
+        vector = [0.0] * EMBEDDING_DIMENSIONS
+        data = [{"index": 0, "embedding": vector}, {"index": 0, "embedding": vector}]
+        return 200, json.dumps({"data": data}).encode()
+
+    with pytest.raises(EmbeddingFailed, match="not 0 to 1"):
+        ScalewayEmbedder("k", post=twice).embed(["a 1", "b 2"])
 
 
 def test_the_chunk_column_holds_the_vectors_the_embedder_asks_for():

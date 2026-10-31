@@ -6,7 +6,8 @@ already indexed with today's model and chunking, so re-running indexes only what
 updates their Digest path, which moves as the Chronicle files and splits.
 
 The date is the one a Digest carries: the Raw's `published`, else its legacy note's `date`, else
-unknown. A Publication without a date is still indexed, and found by meaning, not by date.
+unknown. A Publication without a date is still indexed, and found by meaning, not by date. A Raw
+without a word to index is a Publication without chunks.
 """
 
 from __future__ import annotations
@@ -45,7 +46,7 @@ class IndexReport:
     undated: list[str] = field(default_factory=list)
     """Of `indexed`, those without a known date."""
     empty: list[str] = field(default_factory=list)
-    """Raws without a word to index, or not readable as UTF-8."""
+    """Raws without a word to index, or not readable as UTF-8: Publications without chunks."""
     left: int = 0
     """Raws still to index after the run, when `limit` or a failure stopped it."""
     stopped: str | None = None
@@ -88,8 +89,7 @@ def index_source(
 
     notes = video_notes(source.legacy_vault) if todo else {}
     for done, youtube_id in enumerate(todo):
-        # The limit counts Raws embedded: one without words costs no call, and would otherwise
-        # take a place under the limit on every run, never being indexed.
+        # The limit counts Raws embedded: one without words costs no call.
         if limit is not None and len(report.indexed) >= limit:
             report.left = len(todo) - done
             break
@@ -98,9 +98,6 @@ def index_source(
             chunks = chunk_raw(parse_raw(raw.body.decode("utf-8")), raw.meta.duration)
         except UnicodeDecodeError:
             chunks = []
-        if not chunks:
-            report.empty.append(youtube_id)
-            continue
         note = notes.get(youtube_id)
         publication = Publication(
             source=source.slug,
@@ -113,6 +110,12 @@ def index_source(
             embedding_model=embedder.model,
             chunking=CHUNKING,
         )
+        if not chunks:
+            # A Publication all the same, so the next run doesn't read its Raw again.
+            if not dry_run:
+                index.put(publication, [])
+            report.empty.append(youtube_id)
+            continue
         words = sum(len(chunk.text.split()) for chunk in chunks)
         if not dry_run:
             try:

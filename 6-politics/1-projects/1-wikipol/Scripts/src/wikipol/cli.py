@@ -393,6 +393,7 @@ def index_raws(args: argparse.Namespace) -> int:
         if unknown:
             raise ConfigError(f"no Source with slug {', '.join(sorted(unknown))}")
         sources = [s for s in sources if s.slug in args.source]
+    repo_root = repo_of(args.sources_dir)  # before the database: a wrong folder writes nothing
     settings = load_index_settings(need_embedding=not args.dry_run)
     store = S3RawStore.from_settings(load_settings())
     embedder = ScalewayEmbedder(settings.embedding_key or "", settings.project_id)
@@ -408,7 +409,7 @@ def index_raws(args: argparse.Namespace) -> int:
                 store,
                 embedder,
                 index,
-                repo_root=repo_of(args.sources_dir),
+                repo_root=repo_root,
                 limit=args.limit,
                 dry_run=args.dry_run,
                 log=lambda line: print(line, file=sys.stderr, flush=True),

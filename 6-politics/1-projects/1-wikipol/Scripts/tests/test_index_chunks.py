@@ -35,6 +35,8 @@ def test_the_last_block_ends_at_the_duration_or_thirty_seconds_later():
     starts = [0, 30, 60]
     assert spans(chunk_raw(parse_raw(blocks_raw(starts)), duration=75)) == [(0, 75)]
     assert spans(chunk_raw(parse_raw(blocks_raw(starts)))) == [(0, 60 + BLOCK_SECONDS)]
+    # A last block opening on the video's end ends there.
+    assert spans(chunk_raw(parse_raw(blocks_raw(starts)), duration=60)) == [(0, 60)]
     # A duration that doesn't reach the last block is not believed.
     assert spans(chunk_raw(parse_raw(blocks_raw(starts)), duration=50)) == [(0, 90)]
 
