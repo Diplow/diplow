@@ -1,6 +1,6 @@
 ---
 title: "NETANYAHOU en ROUE LIBRE sur TF1LCI  à RAFAH c'est COMME le DÉBARQUEMENT en NORMANDIE !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31
 owner: diplo
 preview: >-
   La PaduTeam soutient que recevoir Netanyahou en grande écoute sur TF1 et LCI

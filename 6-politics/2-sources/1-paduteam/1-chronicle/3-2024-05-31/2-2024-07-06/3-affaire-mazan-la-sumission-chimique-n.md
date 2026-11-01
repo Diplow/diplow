@@ -1,6 +1,6 @@
 ---
 title: "AFFAIRE MAZAN  LA SUMISSION CHIMIQUE N'EST PAS CE QUE VOUS PENSEZ !! (X @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/6-2024-07-06
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/2-2024-07-06
 owner: diplo
 preview: >-
   Zoé soutient que l'affaire Mazan n'est pas un fait divers mais un fait

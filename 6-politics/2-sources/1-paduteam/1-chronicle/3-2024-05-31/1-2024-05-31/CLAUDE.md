@@ -1,6 +1,6 @@
 ---
 title: "2024-05-31 → 2024-06-28"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31
 owner: diplo
 preview: >-
   La PaduTeam démonte en juin les discours qui blanchissent Israël à la
@@ -18,7 +18,7 @@ Le mois se clôt sur le féminisme, avec Dr Zoé qui recadre Alice Cordier et N�
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31/1-netanyahou-en-roue-libre-sur-tf1lci|NETANYAHOU en ROUE LIBRE sur TF1LCI  à RAFAH c'est COMME le DÉBARQUEMENT en NORMANDIE !!]] (2024-05-31)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31/2-la-soiree-de-bhl-derape-taxer|La SOIRÉE de BHL DÉRAPE  TAXER LES RICHES VEUT DIRE TAXER LES JUIFS !!]] (2024-06-06)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31/3-tpmp-polska-detruit-nadine-morano-sur|TPMP  POLSKA DÉTRUIT NADINE MORANO SUR GAZA EN DIRECT !!]] (2024-06-09)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31/4-dr-zoe-recadre-alice-cordier-et|DR ZOÉ RECADRE ALICE CORDIER ET LES CHOUINEUSES DE NÉMÉSIS !!]] (2024-06-28)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31/1-netanyahou-en-roue-libre-sur-tf1lci|NETANYAHOU en ROUE LIBRE sur TF1LCI  à RAFAH c'est COMME le DÉBARQUEMENT en NORMANDIE !!]] (2024-05-31)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31/2-la-soiree-de-bhl-derape-taxer|La SOIRÉE de BHL DÉRAPE  TAXER LES RICHES VEUT DIRE TAXER LES JUIFS !!]] (2024-06-06)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31/3-tpmp-polska-detruit-nadine-morano-sur|TPMP  POLSKA DÉTRUIT NADINE MORANO SUR GAZA EN DIRECT !!]] (2024-06-09)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31/4-dr-zoe-recadre-alice-cordier-et|DR ZOÉ RECADRE ALICE CORDIER ET LES CHOUINEUSES DE NÉMÉSIS !!]] (2024-06-28)

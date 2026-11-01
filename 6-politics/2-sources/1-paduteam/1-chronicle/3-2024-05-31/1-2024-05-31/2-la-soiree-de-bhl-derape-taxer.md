@@ -1,6 +1,6 @@
 ---
 title: "La SOIRÉE de BHL DÉRAPE  TAXER LES RICHES VEUT DIRE TAXER LES JUIFS !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31
 owner: diplo
 preview: >-
   La PaduTeam soutient que la soirée de BHL contre l'antisémitisme révèle une

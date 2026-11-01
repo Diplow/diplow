@@ -1,6 +1,6 @@
 ---
 title: "LA BRÈCHE - FRONT POPULAIRE VS BARRAGE RÉPUBLICAIN (avec Stathis Kouvelakis)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/6-2024-07-06
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/2-2024-07-06
 owner: diplo
 preview: >-
   La PaduTeam et Stathis Kouvelakis soutiennent que la gauche plafonne à 30 %
