@@ -62,7 +62,16 @@ uv run wikipol digest --source paduteam --id=URonNSP0qM0 --out /tmp/URonNSP0qM0.
 uv run wikipol check-digest <fichiers…>                                          # revérifie des Digests contre leur Raw
 ```
 
-`wikipol digest` lit le Raw dans le bucket, le `CLAUDE.md` éditorial de la Source et, quand le vault figé en a une, la fiche `Videos/` de la Publication. Il remplit lui-même le frontmatter et le titre du Digest, et fait écrire le Preview et les affirmations par la skill `Skills/write-digest/SKILL.md`, via `claude -p --model <claude.default_model du source.yaml>`, sans outil ni serveur MCP, depuis un dossier vide. Le résultat est vérifié (format, Preview, nombre d'affirmations et d'Extracts, chaque citation retrouvée dans le Raw au bloc lié) ; un brouillon refusé revient une fois au modèle avec la liste des problèmes, un second refus n'écrit rien et laisse le brouillon dans un dossier temporaire. Le format est dans `BUILD.md`, « Le Digest » ; un Digest qui porte des `mentions` ou des `relations` est vérifié aussi contre le vocabulaire de `.vocabulaire/`, que `check-digest` lit à chaque lancement. `--id=` avec un signe égal, car un identifiant YouTube peut commencer par `-`. Écrit hors du dépôt, son `parent` est la Chronicle, jusqu'à ce que `wikipol file` le range.
+`wikipol digest` lit le Raw dans le bucket, le `CLAUDE.md` éditorial de la Source et, quand le vault figé en a une, la fiche `Videos/` de la Publication. Il remplit lui-même le frontmatter et le titre du Digest, et fait écrire le Preview et les affirmations par la skill `Skills/write-digest/SKILL.md`, via `claude -p --model <claude.default_model du source.yaml>`, sans outil ni serveur MCP, depuis un dossier vide. Le résultat est vérifié (format, Preview, nombre d'affirmations et d'Extracts, chaque citation retrouvée dans le Raw au bloc lié) ; un brouillon refusé revient une fois au modèle avec la liste des problèmes, un second refus n'écrit rien et laisse le brouillon dans un dossier temporaire. Le format est dans `BUILD.md`, « Le Digest ». La skill écrit aussi les mentions du Digest (`mentions`, `relations`) : le prompt lui donne le vocabulaire de `.vocabulaire/vocabulaire.yaml`, les animateurs de la Source (`source.hosts` de son `source.yaml`) et, de `.vocabulaire/noms.yaml`, les noms connus dont le Raw ou le titre dit une forme, pour qu'elle écrive le nom canonique là où les sous-titres l'écorchent. Un Digest qui porte des mentions est vérifié contre le vocabulaire, que `check-digest` lit à chaque lancement ; un terme que le modèle propose faute d'en trouver un (`new_terms` de son brouillon) entre dans le vocabulaire, `proposé`, quand le Digest est accepté. `--id=` avec un signe égal, car un identifiant YouTube peut commencer par `-`. Écrit hors du dépôt, son `parent` est la Chronicle, jusqu'à ce que `wikipol file` le range.
+
+Les noms connus ont été tirés des fiches `Individus/` et `Organisations/` des vaults figés :
+
+```bash
+uv run wikipol seed-names --dry-run   # combien de noms les vaults figés ajouteraient
+uv run wikipol seed-names             # les ajoute à .vocabulaire/noms.yaml, sans toucher aux noms déjà là
+```
+
+Le nom d'une fiche est son titre `#`, qui garde les accents que le nom du fichier perd, ou un alias qui ne fait qu'y ajouter des accents ; ses autres formes deviennent des `aliases`. Un nom déjà dans `noms.yaml` sous l'une de ses formes l'emporte sur la fiche : relancée, la commande garde les corrections faites à la main. On ajoute ensuite à la main les noms que les Digests confirment.
 
 ## La Chronicle : `wikipol file`
 
@@ -133,12 +142,12 @@ Le runner est un clone dédié, `~/wikipol-runner`, jamais le dossier Obsidian :
 | WikiPol | `BUILD.md` | Conventions universelles : nommage, wikilinks, frontmatter, git |
 | WikiPol | `CONTEXT.md` | Le glossaire : Source, Publication, Raw, Extract, Digest, Chronicle, Period |
 | WikiPol | `docs/adr/` | Les décisions difficiles à défaire, une par fichier |
-| WikiPol | `.vocabulaire/` | Le vocabulaire vivant des mentions d'un Digest : kinds, labels, qualifiers, relations ; je l'édite à la main |
+| WikiPol | `.vocabulaire/` | Le vocabulaire vivant des mentions d'un Digest (`vocabulaire.yaml` : kinds, labels, qualifiers, relations) et les noms connus (`noms.yaml`) ; je les édite à la main, le pipeline y ajoute les termes proposés |
 | WikiPol | `Skills/` | Skills d'ingestion et d'écriture génériques, agnostiques à la source |
 | WikiPol | `Scripts/` | Le paquet uv `wikipol` du pipeline (`src/`, `tests/`), l'agent launchd du run quotidien et ses scripts d'installation (`launchd/`), et les scripts Python legacy (ingestion, bootstrap), qui lisent `source.yaml` |
 | WikiPol | `Legacy/` | Les vaults d'avant, figés : taxonomie locale (`BUILD.md`), fiches (`Videos/`, `Individus/`, `Concepts/`…), tracker |
 | Source | `CLAUDE.md` | Contexte éditorial spécifique : qui produit, ton, pièges |
-| Source | `source.yaml` | Paramètres techniques, `content_types` activés (whitelist stricte), `legacy.vault` |
+| Source | `source.yaml` | Paramètres techniques, `content_types` activés (whitelist stricte), `legacy.vault`, ses animateurs (`source.hosts`) |
 | Source | `1-chronicle/` | La Chronicle : les Digests rangés par date, en Periods |
 | Source | `.skills/` (optionnel) | Skills propres à la source qui surchargent les skills génériques par même nom, regroupées par six |
 

@@ -351,3 +351,119 @@ def test_a_source_built_with_an_alias_writes_no_digest(source, store):
 
     with pytest.raises(ConfigError, match="is an alias"):
         digest(replace(source, model="sonnet"), store, FakeWriter(GOOD_DRAFT))
+
+
+MENTIONS_DRAFT = GOOD_DRAFT.replace(
+    "---\n## 1.",
+    """mentions:
+  - {name: Jean Hôte, kind: personne, labels: [humoriste], qualifiers: [animateur]}
+  - {name: Rassemblement national, kind: organisation, labels: [parti], qualifiers: [sujet],
+     heard_as: Rassemblement national}
+new_terms:
+  - {label: humoriste, kind: personne, definition: "Fait rire, sur scène ou en ligne."}
+---
+## 1.""",
+    1,
+)
+
+
+@pytest.fixture
+def vocabulary_path(tmp_path):
+    from wikipol.digest.mentions import VOCABULARY_PATH
+
+    path = tmp_path / ".vocabulaire" / "vocabulaire.yaml"
+    path.parent.mkdir()
+    path.write_text(VOCABULARY_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    return path
+
+
+@pytest.fixture
+def names_path(tmp_path):
+    return write(
+        tmp_path / ".vocabulaire" / "noms.yaml",
+        """
+        personne:
+          - {name: Jean Hôte}
+          - {name: Personne Absente}
+        organisation:
+          - {name: Rassemblement national, aliases: [RN, Front national]}
+        """,
+    )
+
+
+def test_the_mentions_are_written_and_a_proposed_term_joins_the_vocabulary(
+    source, store, vocabulary_path, names_path
+):
+    from dataclasses import replace
+
+    from wikipol.digest.mentions import load_vocabulary
+
+    hosted = replace(source, hosts=("Jean Hôte",))
+    writer = FakeWriter(MENTIONS_DRAFT)
+
+    result = digest(hosted, store, writer, vocabulary_path=vocabulary_path, names_path=names_path)
+
+    frontmatter, _ = split_digest(result.text)
+    assert frontmatter["mentions"][0] == {
+        "name": "Jean Hôte",
+        "kind": "personne",
+        "labels": ["humoriste"],
+        "qualifiers": ["animateur"],
+    }
+    assert "new_terms" not in frontmatter
+    assert "\n  - {name: Jean Hôte, kind: personne, labels: [humoriste]," in result.text
+    term = load_vocabulary(vocabulary_path).kinds["personne"].labels["humoriste"]
+    assert (term.status, term.introduced_by) == ("proposé", f"demo/{VIDEO}.md")
+    prompt = writer.calls[0][1]
+    assert "# Les animateurs de la Source\n\n- Jean Hôte\n" in prompt
+    assert "chef-d-état: {définition:" in prompt  # the vocabulary
+    assert "- Rassemblement national (organisation ; aussi : RN, Front national)" in prompt
+    assert "Personne Absente" not in prompt  # a known name the Publication doesn't say
+
+
+def test_a_rejected_draft_proposes_nothing(source, store, vocabulary_path, names_path):
+    before = vocabulary_path.read_text(encoding="utf-8")
+
+    with pytest.raises(DigestRejected) as rejected:
+        digest(  # Jean Hôte is no host of this Source, and the Raw never names him
+            source,
+            store,
+            FakeWriter(MENTIONS_DRAFT, MENTIONS_DRAFT),
+            vocabulary_path=vocabulary_path,
+            names_path=names_path,
+        )
+
+    assert rejected.value.problems == [
+        "mention 'Jean Hôte': 'Jean Hôte' is in neither the Raw nor the title; "
+        "heard_as gives the captions' spelling"
+    ]
+    assert vocabulary_path.read_text(encoding="utf-8") == before
+
+
+def test_a_source_s_hosts_are_read_from_source_yaml(tmp_path):
+    write(
+        tmp_path / "1-demo" / "source.yaml",
+        "source:\n  name: Demo\n  slug: demo\n  hosts: [Pascal Boniface]\n",
+    )
+    assert load_source(tmp_path / "1-demo").hosts == ("Pascal Boniface",)
+
+    write(tmp_path / "2-demo" / "source.yaml", "source:\n  name: D\n  slug: d\n  hosts: x\n")
+    with pytest.raises(ConfigError, match=r"source\.hosts must list names"):
+        load_source(tmp_path / "2-demo")
+
+
+def test_a_frontmatter_yaml_can_t_read_is_named(source, store, vocabulary_path, names_path):
+    broken = GOOD_DRAFT.replace(
+        "---\n## 1.", "mentions:\n  - {name: Le Monde: le journal}\n---\n## 1."
+    )
+
+    with pytest.raises(DigestRejected) as rejected:
+        digest(
+            source,
+            store,
+            FakeWriter(broken, broken),
+            vocabulary_path=vocabulary_path,
+            names_path=names_path,
+        )
+
+    assert "the draft's frontmatter is not YAML that reads" in rejected.value.problems[0]

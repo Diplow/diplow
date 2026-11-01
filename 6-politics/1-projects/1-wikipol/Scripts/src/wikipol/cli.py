@@ -29,6 +29,7 @@ from wikipol.config import (
 )
 from wikipol.digest.format import check_digest, split_digest
 from wikipol.digest.mentions import Vocabulary, load_vocabulary
+from wikipol.digest.names import NAMES_PATH, load_names, render_names, seed_names
 from wikipol.digest.raw_text import parse_raw
 from wikipol.digest.write import DigestRejected, digest_fields, linkable_digests, write_digest
 from wikipol.drive_copy import DEFAULT_DRIVE_ROOT, copy_source, format_report
@@ -97,6 +98,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     check.add_argument("digests", nargs="+", type=Path)
     check.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
+
+    seed = commands.add_parser(
+        "seed-names",
+        help="add the frozen vaults' people and organisations to the known names, "
+        "keeping every name already there",
+    )
+    seed.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)
+    seed.add_argument("--dry-run", action="store_true", help="count the names, write nothing")
 
     filing = commands.add_parser(
         "file",
@@ -179,6 +188,8 @@ def main(argv: list[str] | None = None) -> int:
             return write_one_digest(args)
         if args.command == "check-digest":
             return check_digests(args)
+        if args.command == "seed-names":
+            return seed_known_names(args)
         if args.command == "file":
             return file_digests(args)
         if args.command == "backfill":
@@ -339,7 +350,18 @@ def check_one_digest(
         model=frontmatter.get("model"),
     )
     linkable = set(linkable_digests(source)) - {repo_path(path.with_suffix(""))}
-    return check_digest(text, raw_text, expected, linkable, vocabulary)
+    return check_digest(text, raw_text, expected, linkable, vocabulary, source.hosts)
+
+
+def seed_known_names(args: argparse.Namespace) -> int:
+    kept = load_names() if NAMES_PATH.is_file() else []
+    vaults = [s.legacy_vault for s in load_sources(args.sources_dir) if s.legacy_vault]
+    names = seed_names(vaults, kept=kept)
+    if not args.dry_run:
+        NAMES_PATH.write_text(render_names(names), encoding="utf-8")
+    added = len(names) - len(kept)
+    print(f"{NAMES_PATH}: {len(kept)} names kept, {added} added from {len(vaults)} vaults")
+    return 0
 
 
 def repo_of(sources_dir: Path) -> Path:

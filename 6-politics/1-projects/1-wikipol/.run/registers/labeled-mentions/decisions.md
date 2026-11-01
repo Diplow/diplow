@@ -5,8 +5,9 @@ owner: diplo
 preview: >-
   The choices made giving a Digest its mentions and relations where the tickets
   left room: the vocabulary as wikipol's Context, the rules check-digest holds a
-  mention to, the seed terms, the Mention glossary entry for Ulysse, and the
-  host the Raw never names, left to WIK-14.
+  mention to, the seed terms, the Mention glossary entry for Ulysse, a Source's
+  hosts in its source.yaml, how a draft proposes a term, the known names and how
+  they were seeded, and the samples of WIK-14.
 ---
 # Decisions
 
@@ -45,3 +46,28 @@ WIK-13. The project description gave the six kinds and a handful of examples, no
 ### DEC-5 For Ulysse and WIK-14: the host the Raw never names
 
 WIK-13, found on Boniface's "J'ai lu…" video: he hosts it and never says his own name, nor does the title. A `Pascal Boniface` mention with `animateur` is refused today, and `heard_as` can't help. Two ways for WIK-14: list a Source's hosts in its `source.yaml` (beside `attribution`) and accept their names, or exempt an `animateur` from the Raw check. The first keeps the check's guarantee; the second trusts the model with a qualifier.
+
+### DEC-6 A Source's hosts are in its `source.yaml`
+
+WIK-14, answering DEC-5 with its first way. `source.hosts` lists who leads every Publication of a Source, and a mention with one of those names passes without the Raw or the title saying it; every other name keeps the check's guarantee, and no qualifier is trusted on its own. Boniface declares `Pascal Boniface`. PaduTeam declares none: its members (Padu, Chris, Zoé, in its editorial `CLAUDE.md`) are not all in every video, and the captions don't say who speaks, so a member is a mention only when the Raw or the title names them. The prompt passes the hosts to the model under their own heading.
+
+### DEC-7 How a draft proposes a term, and where it lands
+
+WIK-14. The draft's frontmatter, beside `preview`, holds `mentions`, `relations` and `new_terms`, one `{label|qualifier|relation: <term>, kind | from + to, definition}` per term. The pipeline reads the new terms, checks the Digest against the vocabulary with them added, and once the Digest is accepted, writes each at the end of its group in `vocabulaire.yaml`, `proposé`, every other line left as it was (the file is hand-written, with comments and one-line terms that a YAML dump would reflow). The file is written beside itself and read back before it replaces the old one, so a term that would break it (`yes`, which YAML reads as a boolean, is refused at the draft already) leaves it unchanged. A term the vocabulary already has is left out silently, a retired one is refused with its replacement. `new_terms` never reaches the Digest file.
+
+- **A departure: `introduit_par` is the Raw's key** (`paduteam/URonNSP0qM0.md`, the Digest's `raw` field), not the Digest's path, which `.vocabulaire/CLAUDE.md` said. A Digest is written outside the Chronicle, and filing moves and renumbers it later; the Raw's key never moves, and finds the Digest by its `raw` field.
+- **No lock on the file.** Runs are sequential (one backfill at a time, one runner), and a term is inserted by reading the file just before writing it. Two `wikipol digest` started side by side could lose one term; the Digest would then fail `check-digest`, which says so.
+- **Mentions stay optional at version 3.** The skill asks for them, the check doesn't require them: a capsule can name no one the Raw lets us name.
+
+### DEC-8 The known names, `noms.yaml`, and what the prompt carries of them
+
+WIK-14. A second file in `.vocabulaire/`, beside the vocabulary: it is how wikipol spells things, about the node like the vocabulary (DEC-2). One line per name, by kind, `{name, aliases}`. `wikipol seed-names` drew 1 113 names from the frozen vaults (PaduTeam's 875 `Individus/` and 271 `Organisations/`, Boniface's 3), merging those that share a form:
+
+- **The name is the note's heading**, which keeps the accents its file name dropped (`Le Média TV` for `Le Media TV.md`), or an alias that only adds accents to it (`Confédération Paysanne`). The file name and the other aliases become aliases; a form that is the name with other accents is left out, since a name is matched accents aside.
+- **Some headings were captions' misspellings**, the right name sitting in an alias. The 16 notes whose accented alias differed from their heading were read by hand; five were swapped: Adama Traoré, Claude Guéant, Daniel Křetínský, Gisèle Pelicot, France Télévisions. The others are right as they are (Gaspard Koenig, Stephen Miller) or name another thing (`Pôle Emploi` for France Travail). Re-seeding keeps them: a name already in the file under any form wins over the note.
+- **Only the names the Publication says go into the prompt**: those a form of which is in the Raw or the title, case, accents and punctuation aside, as check-digest finds a mention. All 1 113 would be some 15 000 tokens per Digest, mostly noise. A name the captions mangle beyond every known form is left to the model's knowledge, `unsure` when it doubts.
+- Some aliases are descriptions the legacy pipeline kept (`chef de HTS`, `président PRG`); they only widen which names reach the prompt.
+
+### DEC-9 The pull request goes to `main`
+
+WIK-14 said "into the project branch", but `project/sources-from-youtube` merged into `main` (#185) and Labeled Mentions has no branch of its own nor a run config. The ticket's PR targets `main`, before the PaduTeam backfill resumes: `DIGEST_VERSION` is now 3, so the next backfill rewrites the 30 Digests in the Chronicles (all at version 1) with their mentions.

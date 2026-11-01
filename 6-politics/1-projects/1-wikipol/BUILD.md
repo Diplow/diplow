@@ -28,7 +28,7 @@ published: 2026-10-30
 duration: 3447
 raw: paduteam/URonNSP0qM0.md
 ingested: 2026-10-31
-digest_version: 2
+digest_version: 3
 model: claude-sonnet-5-5
 ---
 # MBAPPÉ TRAITE MAO DE DICTATEUR ET SE FAIT PURGER DU RÉAL (basé) !!
@@ -44,7 +44,7 @@ Une à trois phrases qui la développent, facultatives, avec au besoin un [[chem
 ## 2. ...
 ```
 
-Le frontmatter porte les quatre champs du dépôt (`title`, `parent`, `owner`, `preview`), puis ceux du Digest, tous présents, et peut finir sur ses mentions (« Les mentions », plus bas) :
+Le frontmatter porte les quatre champs du dépôt (`title`, `parent`, `owner`, `preview`), puis ceux du Digest, tous présents, et finit sur ses mentions quand il en a (« Les mentions », plus bas) :
 
 | Champ | Contient |
 |---|---|
@@ -58,14 +58,14 @@ Le frontmatter porte les quatre champs du dépôt (`title`, `parent`, `owner`, `
 | `duration` | La durée en secondes, ou `null` : seuls les Raws du Fetcher la connaissent |
 | `raw` | La clé du Raw dans le bucket, `<source>/<youtube_id>.md` |
 | `ingested` | La date d'écriture du Digest |
-| `digest_version` | La version du format et de la skill, un entier ; `2` aujourd'hui, incrémenté quand ce qu'un Digest dit change |
+| `digest_version` | La version du format et de la skill, un entier ; `3` aujourd'hui, depuis que la skill écrit les mentions, incrémenté quand ce qu'un Digest dit change |
 | `model` | Le modèle qui l'a écrit : l'identifiant épinglé dans le `source.yaml` de la Source |
 
 Le corps : le titre, puis **une à six affirmations** `## <n>. <affirmation>`, numérotées dans l'ordre, rien d'autre sous le titre. Chacune porte **une à trois Extracts**, une ligne chacune, séparées par une ligne vide : `> [<horodatage>](<url>&t=<secondes>s) « <citation> »`. La citation est un passage continu du Raw, cinq mots au moins ; le lien ouvre la vidéo au début du bloc de 30 s où elle commence, une seconde que le Raw porte, avant la fin de la vidéo. Un Raw sans horodatage (deux aujourd'hui, `wsiChBGb6T0` et `xnU_T2a6Nz0`) donne des Extracts sans lien : `> « <citation> »`. Des mots entre « » ailleurs, dans le Preview ou un développement, citent aussi la Source et doivent être dans le Raw. Un Digest en cite un autre de sa Source par wikilink, `[[<chemin du Digest sans .md>|<libellé>]]`, et seulement un Digest qui existe.
 
 ### Les mentions
 
-Un Digest peut dire qui et quoi sa Publication mentionne, à la fin de son frontmatter : `mentions`, puis `relations`. Les deux sont facultatifs, et `wikipol check-digest` les vérifie contre le vocabulaire, [[6-politics/1-projects/1-wikipol/.vocabulaire/CLAUDE|.vocabulaire]], que j'édite à la main.
+Un Digest dit qui et quoi sa Publication mentionne, à la fin de son frontmatter : `mentions`, puis `relations`. La skill write-digest les écrit depuis `digest_version: 3` ; les deux restent facultatifs (une capsule peut ne nommer personne, et un Digest plus ancien n'en a pas), et `wikipol check-digest` les vérifie contre le vocabulaire, [[6-politics/1-projects/1-wikipol/.vocabulaire/CLAUDE|.vocabulaire]], que j'édite à la main.
 
 ```yaml
 mentions:
@@ -86,7 +86,9 @@ relations:
 | `heard_as` | L'orthographe des sous-titres, quand elle diffère du nom (`Adam Traore`) |
 | `unsure` | `true` quand le nom canonique n'est pas sûr ; absent sinon |
 
-Une relation, `{from, relation, to}`, relie deux mentions du même Digest, nommées par leur `name`, d'un kind que la relation admet (`dirige` va d'une personne à une organisation). Le vocabulaire est vivant : un terme `proposé` vaut un terme `accepté`, un terme retiré (`remplacé_par`) est refusé avec son remplaçant. Un nom est cherché dans le Raw, ou à défaut dans le titre de la vidéo, à la casse, aux accents et à la ponctuation près : le `heard_as` quand il y en a un, le `name` sinon. La même mention deux fois, au même nom à la casse, aux accents et à la ponctuation près, est refusée, comme deux fois la même relation.
+Une relation, `{from, relation, to}`, relie deux mentions du même Digest, nommées par leur `name`, d'un kind que la relation admet (`dirige` va d'une personne à une organisation). Le vocabulaire est vivant : un terme `proposé` vaut un terme `accepté`, un terme retiré (`remplacé_par`) est refusé avec son remplaçant. Quand aucun terme ne convient, le modèle en propose un avec sa définition, et `wikipol digest` l'ajoute au vocabulaire, `proposé`, une fois le Digest accepté. Un nom est cherché dans le Raw, ou à défaut dans le titre de la vidéo, à la casse, aux accents et à la ponctuation près : le `heard_as` quand il y en a un, le `name` sinon. Seuls les animateurs que le `source.yaml` de la Source déclare (`source.hosts`, Pascal Boniface pour Boniface) passent sans que le Raw ni le titre les nomment : ils mènent chaque Publication et ne disent pas toujours leur nom.
+
+Le `name` est canonique : le modèle le corrige des sous-titres à partir des noms connus, `.vocabulaire/noms.yaml` (le nom canonique d'une personne ou d'une organisation et les formes déjà vues), du titre, du contexte éditorial, de la fiche legacy et de ce qu'il sait ; il garde l'orthographe des sous-titres dans `heard_as`, et marque `unsure: true` un nom qu'il n'est pas sûr de corriger. La même mention deux fois, au même nom à la casse, aux accents et à la ponctuation près, est refusée, comme deux fois la même relation.
 
 ### Forme app
 
@@ -101,7 +103,7 @@ published: 2026-10-30
 duration: 3447
 raw: paduteam/URonNSP0qM0.md
 ingested: 2026-10-31
-digest_version: 2
+digest_version: 3
 model: claude-sonnet-5-5
 ```
 

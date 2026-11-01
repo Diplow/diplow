@@ -5,12 +5,13 @@ owner: diplo
 preview: >-
   Le vocabulaire vivant des mentions d'un Digest : six kinds, les labels et les
   qualifiers de chacun, les relations et les kinds qu'elles relient, chaque
-  terme accepté ou proposé. Je l'édite à la main ; check-digest refuse un
-  Digest qui en sort.
+  terme accepté ou proposé ; et les noms connus, canoniques, des personnes et
+  des organisations. Je les édite à la main ; check-digest refuse un Digest qui
+  sort du vocabulaire.
 ---
 # vocabulaire
 
-Un enfant intérieur de wikipol : les mots avec lesquels un Digest dit qui et quoi sa Publication mentionne. `vocabulaire.yaml` les tient ; `wikipol check-digest` refuse une mention ou une relation qui n'y est pas, et `BUILD.md`, « Les mentions », dit la forme d'une mention dans un Digest.
+Un enfant intérieur de wikipol : les mots avec lesquels un Digest dit qui et quoi sa Publication mentionne, et les noms sous lesquels il les écrit. `vocabulaire.yaml` tient les mots ; `wikipol check-digest` refuse une mention ou une relation qui n'y est pas, et `BUILD.md`, « Les mentions », dit la forme d'une mention dans un Digest. `noms.yaml` tient les noms connus.
 
 | Clé | Ce qu'elle tient |
 |---|---|
@@ -22,7 +23,20 @@ Un enfant intérieur de wikipol : les mots avec lesquels un Digest dit qui et qu
 Chaque terme porte une `définition` d'une ligne et un `statut` :
 
 - `accepté` : un terme que j'ai gardé.
-- `proposé` : un terme que le modèle a ajouté faute d'en trouver un qui convienne, avec `introduit_par`, le chemin du Digest qui l'a introduit. Un Digest peut s'en servir, et je l'accepte, le renomme ou le retire plus tard.
+- `proposé` : un terme que le modèle a ajouté faute d'en trouver un qui convienne, avec `introduit_par`, la clé du Raw de la Publication dont le Digest l'a introduit (`paduteam/URonNSP0qM0.md`, le champ `raw` de ce Digest) : elle ne bouge pas quand la Chronicle range et renumérote. `wikipol digest` et `wikipol backfill` l'écrivent à la fin de son groupe quand le Digest est accepté, sans toucher aux autres lignes. Un Digest peut s'en servir, et je l'accepte, le renomme ou le retire plus tard.
 - Un terme retiré garde sa ligne et porte `remplacé_par`, le terme du même groupe qui le remplace. Un Digest qui s'en sert encore est refusé jusqu'à ce qu'il soit réécrit sans lui : ce sera le travail de `wikipol relabel`, que WIK-15 ajoute.
 
 Les termes s'écrivent en minuscules, les mots liés par des tirets : `chef-d-état`, `projet-de-loi`.
+
+## Les noms connus, `noms.yaml`
+
+Par kind (`personne`, `organisation`), une ligne par nom : le nom canonique, bien orthographié, et ses `aliases`, les autres façons dont on l'a écrit ou entendu (un nom de famille seul, un sigle, une faute des sous-titres : `Bezano` pour Besancenot).
+
+```yaml
+personne:
+  - {name: Adama Traoré, aliases: [Adam Traore]}
+organisation:
+  - {name: Confédération Paysanne, aliases: [Conf paysanne, La Conf]}
+```
+
+`wikipol digest` donne au modèle les noms dont le Raw ou le titre dit une forme, à la casse, aux accents et à la ponctuation près, et le modèle écrit le `name` d'une mention à partir d'eux. La liste a été tirée des fiches `Individus/` et `Organisations/` des vaults figés par `wikipol seed-names`, qui garde les noms déjà là ; le titre d'une fiche, parfois une faute de sous-titres lui-même, a été corrigé à la main quand un alias était le bon nom (Adama Traoré, Claude Guéant, Daniel Křetínský, Gisèle Pelicot, France Télévisions). J'y ajoute les noms que les Digests confirment, et je corrige un nom canonique en le mettant dans `name` et l'ancien dans `aliases`.
