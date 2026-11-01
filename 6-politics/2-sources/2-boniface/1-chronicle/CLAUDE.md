@@ -3,16 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit l'actualité avec les mêmes grilles : un Trump unilatéraliste
-  qui isole les États-Unis, un multilatéralisme imparfait mais indispensable,
-  la négociation plutôt que le refus de discuter, l'autonomie stratégique
-  européenne, puis Israël et le multi-alignement.
+  Boniface applique les mêmes grilles à dix ans d'actualité : défendre le
+  multilatéralisme face à l'unilatéralisme américain, négocier plutôt que
+  confronter, croire l'Europe capable de contester l'ordre unipolaire,
+  constater l'érosion du crédit d'Israël.
 ---
 # Chronicle
 
-De 2016 à 2018, Boniface lit l'actualité à travers Trump. Il tient le bilan d'Obama pour meilleur qu'on ne le dit et Trump pour promis à la déception. Il juge son pari risqué pour l'intérêt américain, sa course aux armements productrice d'insécurité, et il voit les États-Unis s'isoler, ce qui ouvre une fenêtre à l'autonomie stratégique européenne. Face à cet unilatéralisme, il défend le multilatéralisme : l'ONU est imparfaite mais indispensable, et le refus de négocier se retourne contre ceux qui le pratiquent. La Corée en donne l'application : la participation nord-coréenne aux JO ouvre une trêve, et le sommet Trump–Kim est bon pour la paix, sans excès d'optimisme.
+Dans la durée, Boniface mobilise les mêmes outils de lecture. Il refuse l'indignation sélective, juge les acteurs à leur rationalité et à leur intérêt, et défend le multilatéralisme : l'ONU est imparfaite mais indispensable, et refuser de négocier se retourne contre ceux qui le pratiquent. Les premières années sont dominées par Trump, qu'il juge promis à la déception, dont le pari est risqué pour l'intérêt américain et dont la course aux armements produit de l'insécurité. Il tient en revanche le bilan d'Obama pour meilleur qu'on ne le dit et voit en Xi Jinping le plus puissant des dirigeants.
 
-Sa lecture reste celle d'un analyste qui refuse l'indignation sélective et note un monde moins en guerre mais moins supportable. Il suit Macron dans la ligne gaullo-mitterrandiste, juge la guerre d'Afghanistan perdue et voit en Xi Jinping le plus puissant des dirigeants. La suite de la Chronicle applique les mêmes grilles au Proche-Orient : un Israël protégé diplomatiquement mais qui perd l'opinion, un départ de Netanyahou qui ne changerait presque rien pour les Palestiniens, l'OCS comme signe d'un multi-alignement. Tout au long, ses invités élargissent le propos, de la France à la Chine, du chiisme à l'Arabie saoudite, et il chronique des livres.
+Le deuxième fil est européen et français. Boniface décrit une diplomatie de Macron qui prolonge la ligne gaullo-mitterrandiste, et un isolement américain qui ouvre une fenêtre à l'autonomie stratégique de l'Europe. Dans la dernière période, il lit l'actualité à travers le refus de l'ordre unipolaire américain, que l'Europe a selon lui les moyens de contester, et à travers l'érosion du crédit d'Israël dans les opinions.
+
+Les dossiers changent, de la Corée aux JO et au sommet Trump–Kim, jugé bon pour la paix sans excès d'optimisme, à l'Afghanistan, guerre qu'il estime perdue. La chaîne s'ouvre aussi à de nombreux invités, qui élargissent le propos à la France, à la Chine, au chiisme, à l'Arabie saoudite, à l'Asie, au Moyen-Orient et à la sécurité, et elle accueille des chroniques de livres.
 
 ## Contenu
 
@@ -21,4 +23,4 @@ Sa lecture reste celle d'un analyste qui refuse l'indignation sélective et note
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/CLAUDE|2017-04-24 → 2017-09-06]] (18 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/CLAUDE|2017-09-14 → 2017-12-19]] (24 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/CLAUDE|2017-12-20 → 2018-03-28]] (18 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2018-04-04/CLAUDE|2018-04-04 → 2026-10-30]] (17 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2018-04-04/CLAUDE|2018-04-04 → 2026-10-30]] (23 Digests)

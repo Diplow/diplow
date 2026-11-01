@@ -203,6 +203,7 @@ kinds:
       déclaration: {définition: "Prise de position publique et officielle d'un gouvernement ou d'une autorité.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
       résolution: {définition: "Texte adopté par le vote d'une assemblée ou d'une organisation internationale.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
       paquet-législatif: {définition: "Ensemble de textes législatifs adoptés ensemble pour atteindre un même objectif.", statut: proposé, introduit_par: osonscauser/e4ep4Ky23hI.md}
+      accord: {définition: "Accord conclu entre parties, États ou non, qui fixe un processus politique.", statut: proposé, introduit_par: boniface/GJeVOIsPrtU.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
