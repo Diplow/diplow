@@ -1,6 +1,6 @@
 ---
 title: "2023-12-23 → 2023-12-25"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23
 owner: diplo
 preview: >-
   Blast soutient que la crise politique née du rejet de la loi immigration est
@@ -16,7 +16,7 @@ Le reste de la Period quitte l'actualité parlementaire. Nora Bouazzouni soutien
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23/1-crise-politique-loi-immigration-la-fabrique|CRISE POLITIQUE, LOI IMMIGRATION : LA FABRIQUE DU MONSTRE]] (2023-12-23)
-2. [[6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23/2-comment-se-rearmer-face-au-danger|COMMENT SE RÉARMER FACE AU DANGER DE L’EXTRÊME DROITE ?]] (2023-12-23)
-3. [[6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23/3-inflation-mangez-les-riches-surtout-a|INFLATION : MANGEZ LES RICHES, SURTOUT À NOËL !]] (2023-12-24)
-4. [[6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23/4-marie-madeleine-ou-comment-l-eglise|MARIE-MADELEINE, OU COMMENT L’ÉGLISE EST DEVENUE L’EMPIRE - ÉPISODE 3]] (2023-12-25)
+1. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23/1-crise-politique-loi-immigration-la-fabrique|CRISE POLITIQUE, LOI IMMIGRATION : LA FABRIQUE DU MONSTRE]] (2023-12-23)
+2. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23/2-comment-se-rearmer-face-au-danger|COMMENT SE RÉARMER FACE AU DANGER DE L’EXTRÊME DROITE ?]] (2023-12-23)
+3. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23/3-inflation-mangez-les-riches-surtout-a|INFLATION : MANGEZ LES RICHES, SURTOUT À NOËL !]] (2023-12-24)
+4. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23/4-marie-madeleine-ou-comment-l-eglise|MARIE-MADELEINE, OU COMMENT L’ÉGLISE EST DEVENUE L’EMPIRE - ÉPISODE 3]] (2023-12-25)

@@ -1,6 +1,6 @@
 ---
 title: "NETANYAHU : HÉRITIER DU FASCISME, MESSIE DE L'EXTRÊME DROITE EN ISRAËL (PARTIE 1)"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/6-2023-12-26
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/2-2023-12-26
 owner: diplo
 preview: >-
   Blast soutient que Netanyahou, nourri par un père admirateur du fascisme, a

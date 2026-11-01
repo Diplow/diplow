@@ -1,6 +1,6 @@
 ---
 title: "INFLATION : MANGEZ LES RICHES, SURTOUT À NOËL !"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23
 owner: diplo
 preview: >-
   Nora Bouazzouni soutient que l'inflation alimentaire vient des marges de

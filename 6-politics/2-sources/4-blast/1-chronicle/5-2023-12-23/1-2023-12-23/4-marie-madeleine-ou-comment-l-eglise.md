@@ -1,6 +1,6 @@
 ---
 title: "MARIE-MADELEINE, OU COMMENT L’ÉGLISE EST DEVENUE L’EMPIRE - ÉPISODE 3"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23
 owner: diplo
 preview: >-
   Blast soutient que l'Église a fait de Marie-Madeleine une prostituée
