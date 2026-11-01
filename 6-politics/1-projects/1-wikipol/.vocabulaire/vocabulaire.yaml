@@ -46,6 +46,11 @@ kinds:
       président-élu: {définition: "Élu à la présidence d'un État mais pas encore entré en fonction, à la date de la Publication.", statut: proposé, introduit_par: boniface/k4Xi-vuVmJY.md}
       dirigeant-sportif: {définition: "Dirige une instance, une fédération ou un comité du sport.", statut: proposé, introduit_par: boniface/2f8gBKazQp0.md}
       ancien-ministre: {définition: "A été membre d'un gouvernement et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/oNE9KIl4LWM.md}
+      ancien-chef-de-gouvernement: {définition: "A dirigé le gouvernement d'un État (Premier ministre) et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: osonscauser/p2YA6-ades8.md}
+      religieux: {définition: "Exerce une fonction religieuse : rabbin, imam, prêtre.", statut: proposé, introduit_par: osonscauser/p2YA6-ades8.md}
+      chef-religieux: {définition: "Fonde ou dirige une religion, une communauté religieuse ou un culte.", statut: proposé, introduit_par: blast/fg9KvtkCDnE.md}
+      apôtre: {définition: "Disciple de Jésus qui propage son message et fonde les premières communautés chrétiennes.", statut: proposé, introduit_par: blast/fg9KvtkCDnE.md}
+      gouverneur: {définition: "Administre une province pour le compte d'un pouvoir central, à la date de la Publication.", statut: proposé, introduit_par: blast/fg9KvtkCDnE.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
