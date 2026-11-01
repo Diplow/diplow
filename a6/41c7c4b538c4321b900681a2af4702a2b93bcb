@@ -1,0 +1,53 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/CLAUDE.md
+  s_3e1f5f2623e7ea::t_4512044b86d9be 2,6-9,11,13,15,17
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31/1-netanyahou-en-roue-libre-sur-tf1lci.md
+  s_3e1f5f2623e7ea::t_56ecb8c7c21f73 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31/2-la-soiree-de-bhl-derape-taxer.md
+  s_3e1f5f2623e7ea::t_befa55daf5766e 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31/3-tpmp-polska-detruit-nadine-morano-sur.md
+  s_3e1f5f2623e7ea::t_564854cf365496 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31/4-dr-zoe-recadre-alice-cordier-et.md
+  s_3e1f5f2623e7ea::t_bb6ced7509d4c1 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/1-2024-05-31/CLAUDE.md
+  s_3e1f5f2623e7ea::t_d7a46db91135a8 3,21-24
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/2-2024-07-06/1-la-breche-front-populaire-vs-barrage.md
+  s_3e1f5f2623e7ea::t_0c100864d0aec2 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/2-2024-07-06/2-imane-khelif-les-transphobes-considerent-cette.md
+  s_3e1f5f2623e7ea::t_e151a5d8007a72 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/2-2024-07-06/3-affaire-mazan-la-sumission-chimique-n.md
+  s_3e1f5f2623e7ea::t_f369ed908e96e8 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/2-2024-07-06/4-10-septembre-les-grandes-gueules-font.md
+  s_3e1f5f2623e7ea::t_61ff6de297727e 1-100
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/2-2024-07-06/CLAUDE.md
+  s_3e1f5f2623e7ea::t_7150cae347f9f0 2-3,6-9,11,13,15-17,21-24
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/3-2024-09-11/1-affaire-mazan-thais-d-escufon-alice.md
+  s_3e1f5f2623e7ea::t_0acc7e33d9dec8 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/3-2024-09-11/2-beyrouth-rasee-bhl-veut-y-apporter.md
+  s_3e1f5f2623e7ea::t_177491060bb6c7 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/3-2024-09-11/3-rima-hassan-met-la-clim-sur.md
+  s_3e1f5f2623e7ea::t_5dd6734b9a0ce0 1-69
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/3-2024-09-11/4-hugo-prevost-depute-lfi-demissionne-apres.md
+  s_3e1f5f2623e7ea::t_7b519b15442d04 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/3-2024-09-11/CLAUDE.md
+  s_3e1f5f2623e7ea::t_3e1971db9371b8 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/CLAUDE.md
+  s_3e1f5f2623e7ea::t_2f03e9b778c006 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_3e1f5f2623e7ea::t_f3af9c9429f3c8 6-10,14,16-18,23-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a641c7c4b538c4321b900681a2af4702a2b93bcb",
+  "prompts": {},
+  "sessions": {
+    "s_3e1f5f2623e7ea": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a88777dab502de659",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
