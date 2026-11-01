@@ -64,6 +64,10 @@ kinds:
       acteur: {définition: "Joue dans des films, y compris pornographiques.", statut: proposé, introduit_par: paduteam/XNIki6_ZNp0.md}
       éditeur: {définition: "Publie des livres et dirige des collections dans une maison d'édition.", statut: proposé, introduit_par: blast/a3ezVXwQlkk.md}
       documentariste: {définition: "Réalise des documentaires pour la télévision ou le cinéma.", statut: proposé, introduit_par: blast/QcyFxkkHY1w.md}
+      psychiatre: {définition: "Médecin qui soigne les troubles psychiques et en élabore des théories.", statut: proposé, introduit_par: blast/rx-pliV3vtc.md}
+      psychanalyste: {définition: "Pratique et théorise la psychanalyse.", statut: proposé, introduit_par: blast/rx-pliV3vtc.md}
+      accusé: {définition: "Est jugé devant un tribunal pénal, à la date de la Publication.", statut: proposé, introduit_par: paduteam/vfEiOQKnZ4M.md}
+      victime: {définition: "A subi une infraction, notamment une violence sexuelle.", statut: proposé, introduit_par: paduteam/vfEiOQKnZ4M.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
