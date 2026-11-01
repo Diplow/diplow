@@ -1,18 +1,20 @@
 ---
-title: "2024-01-25 → 2024-01-28"
+title: "2024-01-25 → 2024-01-29"
 parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25
 owner: diplo
 preview: >-
-  Blast accuse la macronie de mentir tout en prétendant protéger la jeunesse
-  des contrevérités, et les Duhamel-Saint-Cricq de pratiquer un journalisme de
-  cour. Il reçoit Romain Molina sur la corruption de la FIFA et donne la
-  parole à des Gazaouis.
+  Blast dénonce une macronie qui prétend protéger la jeunesse des
+  contrevérités alors que le mensonge y prospère, et un journalisme de cour
+  incarné par la dynastie Duhamel-Saint-Cricq. Elle reçoit Romain Molina sur
+  la FIFA, des Gazaouis et Nicolas Goldberg sur l'électricité.
 ---
-# 2024-01-25 → 2024-01-28
+# 2024-01-25 → 2024-01-29
 
-Le fil principal de ces quatre jours est une charge contre le pouvoir et ses relais. Blast soutient qu'Emmanuel Macron prétend protéger la jeunesse des contrevérités alors que le mensonge prospère d'abord dans la macronie, de la hausse de l'électricité de Bruno Le Maire à la version d'Amélie Oudéa-Castéra sur l'école privée. Il applique la même grille aux médias : la dynastie Duhamel-Saint-Cricq, installée sur les plateaux depuis soixante ans, pratiquerait un journalisme de cour, fait d'entre-soi familial et de proximité avec Macron, de mépris du peuple et de la gauche, et de complaisance envers l'extrême droite.
+Blast soutient que le mensonge prospère d'abord au sommet du pouvoir : Emmanuel Macron prétend protéger la jeunesse des contrevérités, alors que ses ministres, de la hausse de l'électricité de Bruno Le Maire à la version d'Amélie Oudéa-Castéra sur l'école privée, nourrissent eux-mêmes la fake news. Le même pouvoir trouve un relais dans les médias : Blast décrit la dynastie Duhamel-Saint-Cricq, installée sur les plateaux depuis soixante ans, comme un « journalisme de cour », fait d'entre-soi familial, de proximité avec Macron, de mépris du peuple et de la gauche, et de complaisance envers l'extrême droite.
 
-Blast ouvre aussi la parole à d'autres voix. Il reçoit le journaliste Romain Molina, pour qui la FIFA est un système de corruption institutionnalisé que le FIFA Gate n'a jamais démantelé, et pour qui les États du Golfe, le Qatar en tête via le PSG, se servent du football comme outil d'influence et de renseignement. Il donne enfin la parole à des Gazaouis (pêcheur, soignants, enseignants, enfants, journalistes, peintre) qui décrivent les frappes sur les hôpitaux, les déplacements répétés, les enfants privés d'école et leur attachement à la terre.
+Le reste de la Period est consacré à des voix invitées, que Blast reçoit sans parler à leur place. Selon le journaliste Romain Molina, la FIFA est un système de corruption institutionnalisé que le FIFA Gate n'a jamais démantelé, et les États du Golfe, le Qatar en tête via le PSG, se servent du football comme outil d'influence et de renseignement. Blast donne aussi la parole à des Gazaouis (pêcheur, soignants, enseignants, enfants, journalistes, peintre) qui décrivent les frappes sur les hôpitaux, les déplacements répétés, les enfants privés d'école et leur attachement à la terre.
+
+La Period se clôt sur l'électricité : pour Nicolas Goldberg, la hausse d'environ 10 % au 1er février 2024 est un choix purement fiscal, injuste et contraire à l'électrification, et la transition doit être financée autrement que par le consommateur, avec un mix mêlant nucléaire et renouvelables. Ce thème reprend, sous un autre angle, celui de la hausse de l'électricité ouvrant la Period.
 
 ## Contenu
 
@@ -20,3 +22,4 @@ Blast ouvre aussi la parole à d'autres voix. Il reçoit le journaliste Romain M
 2. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25/2-pedophilie-corruption-racket-la-face-cachee|PÉDOPHILIE, CORRUPTION, RACKET : LA FACE CACHÉE DU FOOTBALL MONDIAL]] (2024-01-25)
 3. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25/3-gaza-immersion-et-temoignages-rares-face|GAZA : IMMERSION ET TÉMOIGNAGES RARES FACE AU "RISQUE DE GÉNOCIDE"]] (2024-01-26)
 4. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25/4-duhamel-saint-cricq-une-dynastie-a|🦏 DUHAMEL/SAINT-CRICQ : UNE DYNASTIE À LA BOTTE DU POUVOIR]] (2024-01-28)
+5. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25/5-electricite-sommes-nous-condamnes-a-payer|ÉLECTRICITÉ : SOMMES-NOUS CONDAMNÉS À PAYER PLUS CHER ?]] (2024-01-29)

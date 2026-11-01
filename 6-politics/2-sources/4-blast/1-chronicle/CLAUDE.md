@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit la macronie comme une dérive autoritaire au service des riches et
-  de l'extrême droite, qu'elle banalise jusqu'à la loi immigration. Elle
-  dénonce l'impunité des puissants, la diabolisation de la gauche et des
-  médias complaisants, et défend son journalisme.
+  Blast soutient que Macron sert les riches et les puissants, banalise
+  l'extrême droite jusqu'à la loi immigration et dresse les Français les uns
+  contre les autres. Elle dénonce la diabolisation de la gauche, défend son
+  journalisme d'enquête et reçoit de nombreux invités.
 ---
 # Chronicle
 
-Le fil central de ces trois mois est une accusation contre le pouvoir macroniste. Blast soutient que Macron sert les plus riches et les puissants, que la dette vient des chocs économiques et des baisses d'impôt de la droite, et que la crise du logement creuse les inégalités. Elle soutient aussi que la macronie banalise l'extrême droite : elle feint la fermeté contre le RN tout en lui tendant des perches, s'aligne sur son récit et durcit la politique d'immigration. Cette pente culmine avec la loi immigration, dont Blast juge la crise fabriquée pour déplacer le débat à droite.
+Du 31 octobre 2023 au 1er février 2024, Blast lit la politique française comme une dérive autoritaire. Le pouvoir macroniste feint la fermeté contre le RN tout en lui tendant des perches et en s'alignant sur son récit. La crise de la loi immigration est présentée comme fabriquée pour déplacer le débat à droite. Les médias banalisent le RN, tandis que la gauche est diabolisée autour de l'antisémitisme. Blast reproche aussi à l'État macroniste ses deux poids, deux mesures sur Gaza et l'antisémitisme. À la fin de la période, elle voit l'ultradroite violente se structurer en réseau.
 
-Blast dénonce aussi un traitement à deux vitesses. Elle reproche à l'État deux poids, deux mesures sur Gaza et l'antisémitisme, et voit dans ce dernier un moyen de diaboliser la gauche. L'impunité des responsables politiques devient un thème de plus en plus présent à partir de la fin novembre. Elle range dans le même tableau le mépris de classe, qu'elle lit dans le tollé contre Frenchie Shore, et une COP28 qu'elle dit dictée par les pétroliers. Elle ajoute que la BCE fabrique du chômage au service de la finance.
+Sur le terrain économique et social, elle soutient que Macron mérite son étiquette de président des riches. La dette vient selon elle des chocs économiques et des baisses d'impôt de la droite, la crise du logement creuse les inégalités et la BCE fabrique du chômage au service de la finance. Le tollé contre Frenchie Shore relève, dans sa lecture, du mépris de classe. Elle dénonce une COP28 dictée par les pétroliers.
 
-Blast se tourne enfin vers les médias, qu'elle accuse de banaliser le RN, de dépolitiser l'info ou de pratiquer un journalisme de cour, et dit son propre journalisme libre menacé, qu'elle défend par l'enquête. D'une période à l'autre, elle reçoit de nombreux invités, qui éclairent la montée des extrêmes droites puis, en janvier, l'école, la transition énergétique, la FIFA et Gaza.
+Blast se décrit aussi comme un journalisme libre et menacé. Elle défend l'enquête face à un pouvoir qui malmène la presse et la démocratie, et reproche au pouvoir de dépolitiser l'info. Tout au long de la période, elle reçoit de nombreux invités, dont des soignants, un paysan, des Gazaouis et des experts. Certains éclairent la montée des extrêmes droites.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Blast se tourne enfin vers les médias, qu'elle accuse de banaliser le RN, de d�
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/CLAUDE|2023-11-27 → 2023-12-09]] (18 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/CLAUDE|2023-12-10 → 2023-12-22]] (18 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/CLAUDE|2023-12-23 → 2024-01-07]] (17 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/CLAUDE|2024-01-08 → 2024-01-28]] (21 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/CLAUDE|2024-01-08 → 2024-02-01]] (27 Digests)
