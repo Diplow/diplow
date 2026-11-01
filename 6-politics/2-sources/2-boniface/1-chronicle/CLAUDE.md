@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans d'actualité avec les mêmes grilles : pas d'indignation
-  sélective, la rationalité des acteurs, un Trump promis à la déception et un
-  pari risqué pour l'intérêt américain, un multi-alignement des puissances, et
-  presque rien de changé pour les Palestiniens si Netanyahou part.
+  Boniface applique de 2016 à 2026 les mêmes grilles : il dénonce une
+  indignation occidentale sélective, juge que Trump aggrave les tensions et
+  lit la diplomatie de Macron comme une filiation gaullo-mitterrandiste. En
+  2026, il voit dans l'OCS un multi-alignement.
 ---
 # Chronicle
 
-De 2016 à 2026, Boniface applique à l'actualité des grilles qui ne varient guère. À l'automne 2016, il refuse l'indignation sélective et décrit un monde moins en guerre, mais moins supportable. Il juge le bilan d'Obama meilleur qu'on ne le dit, tient Xi Jinping pour le plus puissant des dirigeants et voit en Trump un président promis à la déception.
+D'un bout à l'autre de la Chronicle, Boniface reconduit les mêmes outils. Il refuse l'indignation sélective, et dès l'automne 2016 il décrit un monde moins en guerre mais moins supportable. Il lit les acteurs par leur rationalité et leur intérêt : pour lui, le pari de Trump est risqué pour l'intérêt américain, la course aux armements produit de l'insécurité, et refuser la confrontation avec les régimes qui provoquent vaut mieux que l'escalade.
 
-Les premiers mois de la présidence Trump confirment cette lecture par la rationalité des acteurs. Boniface y voit un pari risqué pour l'intérêt américain, une course aux armements qui produit de l'insécurité, un refus de la confrontation avec les régimes qui provoquent. Il relève aussi l'absence de la diplomatie dans la campagne présidentielle française.
+Ses jugements sur les dirigeants suivent cette logique. Il tient le bilan d'Obama pour meilleur qu'on ne le dit, Trump pour promis à la déception, Xi Jinping pour le plus puissant. Il note aussi que la diplomatie était absente de la campagne présidentielle française. Plus tard, il soutient que Trump aggrave les tensions, et il lit la diplomatie de Macron comme une filiation gaullo-mitterrandiste.
 
-Après la présidentielle de 2017 et jusqu'à l'automne 2026, la même méthode s'étend à d'autres sujets. Macron devra trancher en politique étrangère. Un départ de Netanyahou ne changerait presque rien pour les Palestiniens. L'OCS relève du multi-alignement. À ces analyses s'ajoutent des chroniques de livres et des invités reçus.
+La Chronicle se clôt en 2026 sur deux lectures du même ordre : pour Boniface, l'OCS signe un multi-alignement, et un départ de Netanyahou ne changerait presque rien.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-01-23]] (19 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/CLAUDE|2017-01-30 → 2017-04-21]] (17 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/CLAUDE|2017-04-24 → 2026-10-30]] (17 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/CLAUDE|2017-04-24 → 2026-10-30]] (23 Digests)

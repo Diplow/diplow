@@ -1,22 +1,26 @@
 ---
-title: "2017-05-09 → 2026-10-14"
+title: "2017-05-09 → 2017-05-23"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/2-2017-05-09
 owner: diplo
 preview: >-
-  Boniface lit les élections de Macron et de Moon Jae-in comme l'occasion
-  d'une diplomatie plus autonome ou plus apaisée. En 2026, il chronique le
-  livre d'Alexander Stubb sur un monde en trois blocs et reçoit Sylvie Bermann
-  sur la parité sino-américaine.
+  Boniface soutient que la diplomatie de Macron s'inscrit dans la filiation
+  gaullo-mitterrandiste, faite de contacts sans soumission, et que
+  l'indignation occidentale est sélective. Il juge que Trump aggrave les
+  tensions dans le Golfe.
 ---
-# 2017-05-09 → 2026-10-14
+# 2017-05-09 → 2017-05-23
 
-Dans les deux Digests de mai 2017, Boniface lit deux élections à travers la marge de manœuvre qu'elles ouvrent. Celle d'Emmanuel Macron rassure l'Europe, et la référence gaullo-mitterrandiste, résumée par la formule « alliés mais non alignés », doit guider sa diplomatie, plus nuancée à l'égard de Trump, de Moscou, de Pékin et sur la Palestine. Celle de Moon Jae-in peut rouvrir à Séoul une politique d'ouverture envers Pyongyang, inspirée de Willy Brandt, avec un recul vis-à-vis de Washington. Boniface n'y voit aucun espoir de réunification, mais celui d'un apaisement.
+Le fil de la Period est l'élection de Macron et la diplomatie qu'elle annonce. Boniface soutient que son arrivée rassure l'Europe et que sa référence gaullo-mitterrandiste, résumée par la formule « alliés mais non alignés », guidera sa politique étrangère. Il la juge plus nuancée envers Trump, Moscou, Pékin et sur la Palestine. Il en tire la même conclusion au moment de la réception de Poutine à Versailles : la France ne peut pas limiter ses relations aux démocraties sans se condamner à l'impuissance, et il défend des contacts dans la clarté, sans soumission.
 
-Les deux Digests d'octobre 2026 ne sont plus des réactions à une élection : Boniface y expose la thèse d'un autre. Il chronique *Le Triangle du pouvoir* d'Alexander Stubb, président finlandais. Pour lui, le monde se divise en trois blocs (Occident, Orient, Sud global), et l'Occident, affaibli par ses échecs, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre. Boniface reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, sans que Pékin ait gagné. La Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Autour de ce fil, Boniface applique sa grille à d'autres scènes. Il soutient que l'indignation occidentale est sélective : elle dépend de la relation avec le pays concerné, non de la gravité de la violation du droit, comme le montrent la Crimée et l'Irak. Il juge que l'élection de Moon Jae-in peut rouvrir en Corée du Sud une politique d'ouverture envers Pyongyang, sans espoir de réunification mais avec celui d'un apaisement. Il estime que le voyage de Trump en Arabie saoudite, guidé par le business, conforte Riyad dans son hostilité à l'Iran et relance la course aux armements.
+
+Boniface consacre enfin une analyse à la candidature de Paris aux JO de 2024. Il la voit bien placée face à Los Angeles, avec un dossier solide, un mouvement sportif et un pouvoir politique alignés, et Trump en handicap pour la candidature américaine. Rien n'est acquis, mais une victoire redonnerait confiance aux Français.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/2-2017-05-09/1-pascal-boniface-emmanuel-macron-une-diplomatie|(Pascal Boniface) Emmanuel Macron : une diplomatie gaullo-mitterrandiste ?]] (2017-05-09)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/2-2017-05-09/2-pascal-boniface-moon-jae-in-un|(Pascal Boniface) Moon Jae-in : un tournant stratégique en péninsule coréenne ?]] (2017-05-10)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/2-2017-05-09/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/2-2017-05-09/4-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/2-2017-05-09/3-pascal-boniface-du-manicheisme-en-geopolitique|(Pascal Boniface) Du manichéisme en géopolitique]] (2017-05-15)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/2-2017-05-09/4-pascal-boniface-paris-2024-a-nous|(Pascal Boniface) Paris 2024 : À nous la victoire ?]] (2017-05-19)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/2-2017-05-09/5-pascal-boniface-trump-aggrave-les-tensions|(Pascal Boniface) Trump aggrave les tensions dans le Golfe]] (2017-05-22)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/2-2017-05-09/6-pascal-boniface-reception-de-poutine-macron|(Pascal Boniface) Réception de Poutine :  Macron s’inscrit dans la ligne gaullo-mitterrandiste]] (2017-05-23)

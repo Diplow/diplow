@@ -129,6 +129,7 @@ kinds:
       rafle: {définition: "Arrestation massive de personnes, visées en raison de leur origine ou de leur appartenance.", statut: proposé, introduit_par: blast/ZlHBgyaDE-s.md}
       cérémonie: {définition: "Remise de prix ou de distinctions lors d'une soirée publique.", statut: proposé, introduit_par: paduteam/uOwfFzd8MZ8.md}
       conférence: {définition: "Réunion de responsables et d'experts qui débattent d'un sujet.", statut: proposé, introduit_par: boniface/gBhXKzKp9mo.md}
+      opération-militaire: {définition: "Action militaire d'envergure menée par une armée, comme un assaut ou un débarquement.", statut: proposé, introduit_par: paduteam/BE6RyV_X6m4.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
