@@ -1,23 +1,25 @@
 ---
-title: "2018-09-19 → 2026-10-14"
+title: "2018-09-19 → 2018-09-26"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19
 owner: diplo
 preview: >-
-  Boniface consacre ces analyses à la montée de la Chine et à la recomposition
-  de l'ordre mondial : il reçoit Pierre Haski et Sylvie Bermann sur la
-  rivalité sino-américaine, et chronique Alexander Stubb, pour qui le Sud
-  global décidera du nouvel ordre.
+  Boniface soutient que la Pologne troque une dépendance subie contre une
+  dépendance choisie, que l'ONU reste indispensable malgré ses blocages, et
+  que la géopolitique est un débat citoyen. Ses invités éclairent la Chine et
+  le Mexique.
 ---
-# 2018-09-19 → 2026-10-14
+# 2018-09-19 → 2018-09-26
 
-Les trois Digests de la Period tournent autour de la place de la Chine face aux États-Unis. Boniface y laisse la parole à ses invités. En 2018, [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19/1-comprendre-le-monde-s2-3-pierre|Pierre Haski]] soutient que la Chine, portée par une revanche sur son histoire et un contrat social fait de progrès et de grandeur, rivalise avec les États-Unis sur la technologie et séduit l'Afrique, sans que l'affrontement soit inévitable.
+Pendant cette semaine, Boniface applique à trois cas la même lecture des rapports entre puissances et de leurs institutions. En réclamant des troupes américaines et un « Fort Trump », la Pologne troque selon lui la dépendance subie envers l'URSS contre une dépendance choisie envers les États-Unis. Elle rompt ainsi la solidarité européenne et nourrit avec la Russie un cercle vicieux. Il défend aussi l'ONU, si souvent raillée pour son impuissance : ses blocages viennent de la division des membres permanents et non de l'institution, et le monde n'irait pas mieux sans elle.
 
-Huit ans plus tard, [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19/3-la-chine-a-t-elle-plie|Sylvie Bermann]], ancienne ambassadrice à Pékin, juge que le sommet Trump-Xi consacre la parité entre les deux puissances sans qu'on puisse dire que Pékin a gagné. Pour elle, la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Il fait enfin de la géopolitique un débat citoyen, pas l'affaire d'un petit nombre d'experts. Pour lui, les Géopolitiques de Nantes le prouvent : un public s'approprie des débats respectueux et contradictoires, dans un monde incertain mais compréhensible.
 
-Boniface chronique aussi [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19/2-j-ai-lu-le-triangle-du|Le Triangle du pouvoir]] d'Alexander Stubb, qui divise le monde en trois blocs : Occident, Orient et Sud global. Selon l'auteur, l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Dans *Comprendre le monde*, deux invités élargissent le regard, chacun avec ses propres thèses. Pierre Haski voit une Chine portée par une revanche sur son histoire et par un contrat social fait de progrès et de grandeur. Elle rivalise avec les États-Unis sur la technologie et séduit l'Afrique, sans que l'affrontement soit inévitable. Pour Christophe Ventura, l'élection de López Obrador est une insurrection démocratique dans un Mexique proche de l'État failli. Il en attend un changement graduel plutôt qu'une révolution, et un pays moins aligné sur Washington.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19/1-comprendre-le-monde-s2-3-pierre|Comprendre le monde S2#3 - Pierre Haski - "La Chine va-t-elle dominer le monde ?"]] (2018-09-19)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19/2-pascal-boniface-pologne-d-une-dependance|(Pascal Boniface) Pologne : d'une dépendance subie à une dépendance choisie]] (2018-09-21)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19/3-pascal-boniface-onu-critiquee-mais-indispensable|(Pascal Boniface) ONU : critiquée mais indispensable]] (2018-09-24)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19/4-pascal-boniface-6e-edition-des-geopolitiques|(Pascal Boniface) - 6e édition des Géopolitiques de Nantes]] (2018-09-26)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19/5-comprendre-le-monde-s2-4-christophe|Comprendre le monde S2#4 - Christophe Ventura - "Le Mexique d'Obrador : réforme ou révolution ?"]] (2018-09-26)

@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface applique les mêmes grilles à l'actualité mondiale :
-  multilatéralisme contre unilatéralisme, rapports de force, rationalité des
-  acteurs. De Trump à la montée de la Chine, il lit une recomposition de
-  l'ordre mondial.
+  Boniface lit la scène internationale, de Trump à la Corée, à l'Iran et au
+  Sud, avec les mêmes grilles : le multilatéralisme contre l'unilatéralisme,
+  le refus d'un monde unipolaire, la défense de l'ONU. Il reçoit aussi de
+  nombreux invités.
 ---
 # Chronicle
 
-Sur les dix ans de la Chronicle, Boniface revient aux mêmes outils d'analyse. Il oppose le multilatéralisme à l'unilatéralisme et tient que le refus de négocier se retourne contre ceux qui le pratiquent. Il suppose aux acteurs une rationalité, et lit l'actualité à travers les rapports de force. Dans [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]], ces grilles servent à lire Trump et la scène internationale. Il y juge Obama meilleur qu'on ne le dit et place Macron dans la ligne gaullo-mitterrandiste.
+Pendant dix ans, Boniface applique à l'actualité internationale un petit nombre de grilles qui reviennent d'une vidéo à l'autre. La première oppose le multilatéralisme à l'unilatéralisme. La deuxième est le refus d'un monde unipolaire, qui conduit à défendre l'ONU. La troisième veut que le refus de négocier se retourne contre ses auteurs. Il juge aussi les acteurs rationnels. Ces outils servent à lire Trump comme les autres dirigeants.
 
-Dans [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]], les mêmes grilles s'appliquent à d'autres dossiers : la trêve coréenne, Israël qui perd la bataille des opinions, la rupture de l'accord iranien. Il y voit une tentative unipolaire de Trump, que l'Europe doit refuser. Le regard s'élargit ensuite à la montée de la Chine et à la recomposition de l'ordre mondial.
+Au fil des années, le terrain d'application se déplace sans que la méthode change. Les premières années sont centrées sur Trump, sur un Obama que Boniface juge meilleur qu'on ne le dit, et sur un Macron qu'il inscrit dans la ligne gaullo-mitterrandiste. La période suivante va de la Corée et de l'Iran jusqu'à la place du Sud et des émergents. La chaîne s'ouvre aussi à de nombreux invités, que Boniface reçoit sans reprendre leurs thèses à son compte.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]] (78 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]] (53 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]] (59 Digests)

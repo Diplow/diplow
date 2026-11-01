@@ -90,6 +90,7 @@ kinds:
       traducteur: {définition: "Traduit des textes d'une langue dans une autre, notamment des livres.", statut: proposé, introduit_par: blast/l26Xt3HOcFM.md}
       entraîneur: {définition: "Dirige et prépare une équipe sportive.", statut: proposé, introduit_par: boniface/9X9jOh-GdcM.md}
       ancien-haut-fonctionnaire: {définition: "A occupé un poste de direction dans l'administration et ne l'occupe plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/cK7ahpqnGRc.md}
+      astronaute: {définition: "Voyage dans l'espace ou appartient à un corps d'astronautes.", statut: proposé, introduit_par: boniface/Ecn08O4RQFs.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -177,6 +178,9 @@ kinds:
       coup-d-état: {définition: "Prise du pouvoir par la force, notamment par l'armée, contre un gouvernement en place.", statut: proposé, introduit_par: blast/K2a3NDKQs9s.md}
       catastrophe-naturelle: {définition: "Phénomène naturel destructeur, comme un cyclone ou un séisme, qui frappe une population.", statut: proposé, introduit_par: paduteam/1OUcDuz-HjY.md}
       campagne: {définition: "Opération de mobilisation ou de sensibilisation du public, menée sur une durée donnée.", statut: proposé, introduit_par: blast/OZ_VdHOsI14.md}
+      session: {définition: "Réunion annuelle ou périodique d'une assemblée ou d'une organisation internationale.", statut: proposé, introduit_par: boniface/y8rHlSIAunw.md}
+      festival: {définition: "Rencontre publique de plusieurs jours, faite de débats ou de conférences.", statut: proposé, introduit_par: boniface/Ecn08O4RQFs.md}
+      famine: {définition: "Pénurie alimentaire extrême qui provoque une mortalité de masse dans une population.", statut: proposé, introduit_par: paduteam/C1MLgXQ7fJA.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -192,6 +196,7 @@ kinds:
       vidéo: {définition: "Une vidéo en ligne.", statut: accepté}
       chanson: {définition: "Une chanson, un morceau.", statut: accepté}
       jeu-vidéo: {définition: "Un jeu vidéo.", statut: accepté}
+      tableau: {définition: "Une peinture, œuvre d'un peintre.", statut: proposé, introduit_par: blast/ZK9AqciwH1A.md}
     qualifiers:
       cité: {définition: "Lue, montrée ou diffusée dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
