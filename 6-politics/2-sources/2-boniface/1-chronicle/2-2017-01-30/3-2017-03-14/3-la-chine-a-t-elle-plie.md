@@ -1,6 +1,6 @@
 ---
 title: "La Chine a-t-elle plié le match ? Avec Sylvie Bermann | Entretiens géopo"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/2-2017-03-06
+parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/3-2017-03-14
 owner: diplo
 preview: >-
   Boniface reçoit Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le
