@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit l'actualité par la rationalité des acteurs plutôt que par
-  l'indignation sélective : un monde moins en guerre mais moins supportable
-  faute de sécurité collective, un Trump pari risqué, une OCS qui signe un
-  multi-alignement.
+  Boniface lit l'actualité mondiale par le réalisme et la rationalité des
+  acteurs : pas d'indignation sélective, le dialogue plutôt que la
+  confrontation, un Trump dont le pari est risqué, un départ de Netanyahou qui
+  changerait peu pour les Palestiniens, l'OCS comme multi-alignement.
 ---
 # Chronicle
 
-Dans la première période, de l'automne 2016 à janvier 2017 ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-01-23]]), Boniface applique sa grille à l'actualité en refusant l'indignation sélective. Pour lui, le monde est moins en guerre mais plus difficile à supporter, faute de sécurité collective. Il juge l'ONU et Obama sous-estimés. Il voit en Trump un président promis à la déception, dont l'élection peut pourtant pousser l'Europe à se défendre seule.
+Sur toute la Chronicle, Boniface applique la même grille à l'actualité internationale : il cherche la rationalité des acteurs plutôt que l'indignation sélective, et il raisonne en réaliste. Il juge un monde moins en guerre mais moins supportable faute de sécurité collective, et il estime que l'ONU et Obama sont sous-estimés. Il préfère le dialogue à la confrontation.
 
-Dans la seconde, qui court de 2017 à 2026 ([[6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/CLAUDE|2017-01-30 → 2026-10-30]]), la méthode reste la même : lire les événements par la rationalité des acteurs. Trump y devient un pari risqué. Un départ de Netanyahou ne changerait presque rien pour les Palestiniens. L'OCS signe un multi-alignement. La chaîne s'ouvre aussi à des invités et à des chroniques de livres, où Boniface distingue ses thèses de celles qu'il reçoit.
+Cette grille s'applique d'abord à l'automne 2016 et à l'arrivée de Trump, promis à la déception mais susceptible de pousser l'Europe à se défendre seule ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-01-23]]). Elle se prolonge ensuite sur toute la période suivante ([[6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/CLAUDE|2017-01-30 → 2026-10-30]]). Boniface y juge risqué le pari de Trump et estime qu'un départ de Netanyahou changerait peu pour les Palestiniens. Il voit dans l'OCS un multi-alignement.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-01-23]] (18 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/CLAUDE|2017-01-30 → 2026-10-30]] (21 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/CLAUDE|2017-01-30 → 2026-10-30]] (23 Digests)
