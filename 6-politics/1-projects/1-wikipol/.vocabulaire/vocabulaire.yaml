@@ -51,6 +51,8 @@ kinds:
       chef-religieux: {définition: "Fonde ou dirige une religion, une communauté religieuse ou un culte.", statut: proposé, introduit_par: blast/fg9KvtkCDnE.md}
       apôtre: {définition: "Disciple de Jésus qui propage son message et fonde les premières communautés chrétiennes.", statut: proposé, introduit_par: blast/fg9KvtkCDnE.md}
       gouverneur: {définition: "Administre une province pour le compte d'un pouvoir central, à la date de la Publication.", statut: proposé, introduit_par: blast/fg9KvtkCDnE.md}
+      historien: {définition: "Étudie et écrit l'histoire.", statut: proposé, introduit_par: osonscauser/BBPBF5Q1Euc.md}
+      résistant: {définition: "Combat l'occupant ou un régime d'oppression dans la clandestinité.", statut: proposé, introduit_par: paduteam/xHa2JBJCZbc.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -80,6 +82,8 @@ kinds:
       coalition: {définition: "Alliance de partis politiques qui agissent ensemble sous un même nom.", statut: proposé, introduit_par: blast/HAuq5hpiV0s.md}
       communauté-en-ligne: {définition: "Groupe d'abonnés réuni autour d'un site ou d'une chaîne, souvent payant.", statut: proposé, introduit_par: paduteam/nxqv571BG-g.md}
       ligue-sportive: {définition: "Organise des compétitions et des événements sportifs professionnels.", statut: proposé, introduit_par: paduteam/HyodKdeKyI4.md}
+      instance-sportive: {définition: "Dirige et régule un sport ou le mouvement olympique, et en attribue les compétitions.", statut: proposé, introduit_par: boniface/AB5haSkt-1o.md}
+      comité-d-organisation: {définition: "Organise une compétition sportive internationale et en fixe les modalités.", statut: proposé, introduit_par: paduteam/TVMgyPabBpE.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -113,6 +117,7 @@ kinds:
       compétition: {définition: "Une compétition sportive.", statut: accepté}
       révolte: {définition: "Soulèvement populaire ou armé contre un pouvoir.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
       déplacement-forcé: {définition: "Fuite ou expulsion d'une population hors de ses terres.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
+      rafle: {définition: "Arrestation massive de personnes, visées en raison de leur origine ou de leur appartenance.", statut: proposé, introduit_par: blast/ZlHBgyaDE-s.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
