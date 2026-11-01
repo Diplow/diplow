@@ -5,7 +5,8 @@ owner: diplo
 preview: >-
   How wikipol's projects get built with nobody watching: one run config per
   Linear project of the Wikipol team, each landing on a project branch I merge
-  into main at the end, and the registers the runs write their decisions to.
+  into main at the end, and the registers a project's decisions go to, whether a
+  run or a ticket worked by hand made them.
 ---
 # autonomous runs
 
@@ -14,7 +15,7 @@ An inner child of wikipol: how its projects get built by [[.skills/4-softeng/1-s
 | File | What it holds |
 |---|---|
 | `sources-from-youtube.yaml` | The run config of the "Sources from YouTube" project, landing on `project/sources-from-youtube`; it builds and tests the pipeline and leaves every operation (Scaleway setup, backfills, launchd) to WIK-12's checklist |
-| `registers/` | What the run records, one folder per project, created by the first entry |
+| `registers/` | What a project's run, or its tickets worked by hand, record: one folder per project, created by the first entry |
 
 ## Launching
 

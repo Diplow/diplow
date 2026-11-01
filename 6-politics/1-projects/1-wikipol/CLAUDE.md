@@ -3,10 +3,10 @@ title: WikiPol
 parent: 6-politics/1-projects/1-wikipol
 owner: diplo
 preview: >-
-  The shared frame that turns a media source (a YouTube channel today) into an
-  Obsidian knowledge graph: Claude skills, Python scripts, templates and
-  conventions, with one vault per source under Sources/. Says how to work on a
-  source and where its skills live.
+  The shared frame that turns a media Source (a YouTube channel today) into
+  Tiles: Claude skills, Python scripts, templates and conventions. Each Source
+  is a node under 6-politics/2-sources; the old per-channel vaults are frozen in
+  Legacy/. Says how to work on a Source and where its skills live.
 ---
 # WikiPol — Instructions méta
 
@@ -14,37 +14,116 @@ preview: >-
 
 WikiPol est l'ossature générique qui permet de construire un graphe de connaissances Obsidian à partir d'une source média (une chaîne YouTube, demain potentiellement un podcast ou un corpus d'articles).
 
-Une **source** est un vault Obsidian autonome rangé dans `Sources/<NomSource>/`. Chaque source :
-- définit son propre contexte éditorial dans `Sources/<NomSource>/CLAUDE.md` (ton, principes, pièges de lecture)
-- définit sa propre taxonomie dans `Sources/<NomSource>/BUILD.md` (domaines / thèmes / enjeux, construits par induction)
-- déclare ses paramètres techniques dans `Sources/<NomSource>/source.yaml` (URL chaîne, slug git, chemins)
+Une **Source** (voir `CONTEXT.md`) est un nœud de `6-politics/2-sources/`, numéroté : `1-paduteam/`, `2-boniface/`. Chaque Source :
+- définit son propre contexte éditorial dans son `CLAUDE.md` (ton, principes, pièges de lecture)
+- déclare ses paramètres techniques dans son `source.yaml` (URL chaîne, slug, modèle, et `legacy.vault`, son vault figé quand elle en a un)
+- range ses Digests par date dans sa Chronicle, `1-chronicle/`
+- peut surcharger des skills génériques dans son `.skills/`
 
-Les skills Claude (`Skills/`), les scripts Python (`Scripts/`) et les conventions universelles (`BUILD.md`) sont partagés entre toutes les sources.
+Les skills Claude (`Skills/`), les scripts Python (`Scripts/`) et les conventions universelles (`BUILD.md`) sont partagés entre toutes les Sources.
 
-## Comment travailler sur une source
+## Les vaults legacy, figés
 
-Lorsque l'utilisateur demande d'ingérer une vidéo, d'analyser un batch, ou de répondre à une question en utilisant une source :
+Avant WIK-1, chaque chaîne était un vault Obsidian dans `Sources/<NomSource>/`. Ces vaults sont figés dans `Legacy/` (`Legacy/Paduteam/`, le vault Graphiked, et `Legacy/Boniface/`) : lus en entrée, jamais écrits, jamais migrés. Leur taxonomie locale (`Legacy/<NomSource>/BUILD.md`), leurs fiches et leur tracker `_CHRONOLOGIQUE.md` y restent.
 
-1. **Identifier la source active**. L'utilisateur nomme la source explicitement ("ingère le batch X de MaChaine") ou la working directory est `Sources/<NomSource>/`. Si ambiguë, demander.
-2. **Charger le contexte source**. Lire `Sources/<NomSource>/CLAUDE.md` — c'est ce fichier qui dicte le ton, les principes éditoriaux, les pièges, la grille analytique. Il complète et surcharge ce fichier-ci.
-3. **Lire la config**. `Sources/<NomSource>/source.yaml` contient les paramètres techniques (URL chaîne, nom affiché, chemins, slug git). Les scripts et skills s'y réfèrent via le helper `Scripts/source_config.py`.
-4. **Appliquer les conventions**. `BUILD.md` (ce repo) pour les invariants universels + `Sources/<NomSource>/BUILD.md` pour la taxonomie locale.
+Les skills d'ingestion (`ingest-*`, `gather-context`, `write-*` hors `write-digest` et `write-period`) et les scripts `run_ingest.py`, `generate_chronological.py` et `batch_transcripts.py` écrivent dans un vault : c'est le pipeline legacy, gardé pour référence. Ne plus le lancer sur un vault figé.
 
-## Transcripts : sur Google Drive, hors git
+## Comment travailler sur une Source
 
-Les transcripts (`Sources/<NomSource>/Sources/Transcripts/*.md`, ~30 Mo) ne sont pas versionnés : ils vivent sur Google Drive, sous `WikiPol/Sources`, avec la même arborescence que `Sources/`. On y accède par le remote rclone `diplow`. Les scripts rangés dans ce dossier (`.py`, `.skill`) restent dans git.
+Lorsque l'utilisateur demande de travailler sur une Source ou de répondre à une question en l'utilisant :
 
-Une copie fraîche (worktree Conductor, nouveau clone, ou dossier d'origine après un pull qui les a retirés) n'a donc pas les transcripts. Depuis la racine de WikiPol :
+1. **Identifier la Source active**. L'utilisateur la nomme explicitement, ou la working directory est son nœud `6-politics/2-sources/<n>-<slug>/`. Si ambiguë, demander.
+2. **Charger le contexte de la Source**. Lire son `CLAUDE.md` : c'est ce fichier qui dicte le ton, les principes éditoriaux, les pièges, la grille analytique. Il complète et surcharge ce fichier-ci.
+3. **Lire la config**. Son `source.yaml` contient les paramètres techniques (URL chaîne, nom affiché, slug, modèle). Les scripts et skills s'y réfèrent via le helper `Scripts/source_config.py`, qui résout aussi les chemins de son vault legacy (`vault_root`).
+4. **Appliquer les conventions**. `BUILD.md` (ce dossier) pour les invariants universels, et `Legacy/<NomSource>/BUILD.md` pour la taxonomie de son vault figé.
+
+## Raws : dans le bucket Scaleway, hors git
+
+Les Raws (voir `CONTEXT.md` : les transcripts tels qu'ils ont été récupérés) vivent dans le bucket Scaleway Object Storage `wikipol-raws` (région `fr-par`, versionné), un objet par Publication : `<slug-de-la-source>/<youtube_id>.md`, ses octets inchangés. Les métadonnées de l'objet gardent ce que la clé perd : le titre d'origine (`title`, encodé en pourcent, car S3 n'admet que l'ASCII dans ses en-têtes) la date de publication quand on la connaît (`published`, au format ISO) et, pour un Raw récupéré par le Fetcher, la durée en secondes (`duration`). Le bucket est leur seul foyer (ADR 0003) : on y ajoute, on n'y remplace ni n'y efface rien.
+
+Le paquet uv de `Scripts/` les lit et les écrit à travers `wikipol.raw_store`. Ses réglages viennent de `~/.config/wikipol/.env`, hors du repo (`WIKIPOL_ENV` désigne un autre fichier), et l'environnement du processus passe devant : `WIKIPOL_S3_BUCKET`, `WIKIPOL_S3_ENDPOINT` (`https://s3.fr-par.scw.cloud`), `SCW_ACCESS_KEY`, `SCW_SECRET_KEY`, et `WIKIPOL_S3_REGION`, `fr-par` par défaut. Depuis `Scripts/` :
 
 ```bash
-# Récupérer les transcripts d'une source (ou de toutes : rclone copy diplow:WikiPol/Sources Sources)
-rclone copy diplow:WikiPol/Sources/<NomSource>/Sources/Transcripts Sources/<NomSource>/Sources/Transcripts
-
-# Pousser les transcripts nouveaux ou modifiés (après batch_transcripts.py --extract, --recent, --enrich-transcripts…)
-rclone copy Sources diplow:WikiPol/Sources --include '/*/Sources/Transcripts/*.md'
+uv sync
+uv run pytest                                 # sur des fakes : ni Scaleway, ni Drive, ni réseau
+uv run wikipol copy-from-drive --dry-run      # ce que la copie depuis Drive ferait, sans rien écrire
+uv run wikipol fetch --source paduteam --dry-run   # les vidéos de la chaîne sans Raw, des plus récentes aux plus anciennes
+uv run wikipol fetch --source paduteam --limit 3   # récupère les Raws des 3 plus récentes qui en manquent
 ```
 
-`rclone copy` n'efface jamais rien à destination ; ne pas utiliser `rclone sync`, qui supprimerait sur Drive ce qui manque en local.
+`wikipol fetch` liste la chaîne de la Source (`youtube.channel_url` de son `source.yaml`), garde les vidéos dont le bucket n'a pas le Raw, et les récupère des plus récentes aux plus anciennes : un frontmatter avec `youtube_id`, puis les sous-titres français par blocs de 30 s (`m:ss`, `h:mm:ss` au-delà d'une heure), comme les Raws venus de Drive. Il attend 8 s entre deux vidéos et s'arrête après 3 échecs de suite ; une vidéo sans sous-titres français sur YouTube n'en est pas un, elle est seulement remise au passage suivant, car YouTube peut les générer des heures après la mise en ligne ; `--limit N` borne les vidéos essayées, échecs compris. `--since AAAA-MM-JJ` ne garde que le passé récent d'une chaîne : la liste de la chaîne ne donne pas les dates, si bien qu'une vidéo publiée avant est récupérée sans être rangée dans le bucket, et trois de suite terminent la commande (une seule peut n'être que mal classée). Le Fetcher par défaut est yt-dlp, lancé depuis le Mac, car YouTube bloque les IP de datacenter ; `--fetcher transcript-api` (ou `WIKIPOL_FETCHER=transcript-api`) passe par l'API de Supadata, qui demande `WIKIPOL_TRANSCRIPT_API_KEY`.
+
+Jusqu'à WIK-2, les transcripts vivaient sur Google Drive, sous `diplow:WikiPol/Sources/<NomSource>/Sources/Transcripts/` (remote rclone `diplow`). `wikipol copy-from-drive` les a copiés dans le bucket le 2026-10-31 : 609 sur 621. Les 12 autres (11 sans `youtube_id` retrouvable, un doublon) sont listés dans la pull request de WIK-2. La commande prend l'identifiant dans le frontmatter du transcript, sinon dans les fiches `Videos/` et l'inventaire du vault figé ; relancée, elle ne copie que ce qui manque, et signale sans le remplacer un Raw du bucket qui diffère de Drive. Drive n'est plus qu'une archive : on n'y pousse plus rien.
+
+## Digests : `wikipol digest`
+
+```bash
+uv run wikipol digest --source paduteam --id=URonNSP0qM0 --out /tmp/URonNSP0qM0.md   # écrit et vérifie un Digest
+uv run wikipol check-digest <fichiers…>                                          # revérifie des Digests contre leur Raw
+```
+
+`wikipol digest` lit le Raw dans le bucket, le `CLAUDE.md` éditorial de la Source et, quand le vault figé en a une, la fiche `Videos/` de la Publication. Il remplit lui-même le frontmatter et le titre du Digest, et fait écrire le Preview et les affirmations par la skill `Skills/write-digest/SKILL.md`, via `claude -p --model <claude.default_model du source.yaml>`, sans outil ni serveur MCP, depuis un dossier vide. Le résultat est vérifié (format, Preview, nombre d'affirmations et d'Extracts, chaque citation retrouvée dans le Raw au bloc lié) ; un brouillon refusé revient une fois au modèle avec la liste des problèmes, un second refus n'écrit rien et laisse le brouillon dans un dossier temporaire. Le format est dans `BUILD.md`, « Le Digest » ; un Digest qui porte des `mentions` ou des `relations` est vérifié aussi contre le vocabulaire de `.vocabulaire/`, que `check-digest` lit à chaque lancement. `--id=` avec un signe égal, car un identifiant YouTube peut commencer par `-`. Écrit hors du dépôt, son `parent` est la Chronicle, jusqu'à ce que `wikipol file` le range.
+
+## La Chronicle : `wikipol file`
+
+```bash
+uv run wikipol file --source paduteam /tmp/URonNSP0qM0.md …   # range des Digests et résume les Periods touchées
+```
+
+`wikipol file` range des Digests, écrits hors de la Chronicle, dans la Period de leur date, coupe les Periods qui débordent, renumérote, et réécrit le `parent` et les wikilinks de ce qui a bougé, dans tout le dépôt sauf `Legacy/`. Puis la skill `Skills/write-period/SKILL.md`, via `claude -p --model <claude.default_model du source.yaml>`, réécrit le Preview et le résumé de chaque Period touchée, des plus profondes à la Chronicle, à partir des titres et des Previews de leurs enfants. Rien n'est écrit avant que tous les résumés soient acceptés ; un résumé refusé deux fois laisse la Chronicle telle qu'elle était. Le fichier d'origine reste où il est. Un Digest sans date de publication n'a pas de place et est refusé. La forme de l'arbre et d'une Period est dans `BUILD.md`, « La Chronicle ».
+
+## L'historique d'une Source : `wikipol backfill`
+
+```bash
+uv run wikipol backfill --source paduteam --dry-run --limit 20   # les Raws qu'il digérerait, des plus anciens aux plus récents
+uv run wikipol backfill --source paduteam --limit 20             # en digère 20 et les range dans la Chronicle
+```
+
+`wikipol backfill` digère les Raws du bucket qui n'ont pas de Digest à jour dans la Chronicle (au `digest_version` d'aujourd'hui et au modèle épinglé dans le `source.yaml`), des plus anciens aux plus récents, avec la skill `write-digest` comme `wikipol digest`, et les range six par six comme `wikipol file` : chaque lot est rangé, ses Periods touchées résumées par `write-period`, et la Chronicle écrite avant que le lot suivant soit digéré, qui peut alors citer les Digests du précédent. Un Digest vérifié attend son rangement dans un dossier hors du dépôt, `~/.cache/wikipol/backfill/<slug>/` (`--staging` en désigne un autre) ; relancée après un arrêt (un plantage, un résumé refusé deux fois, Ctrl-C), la commande revérifie ces Digests contre leur Raw et la Chronicle et les range sans redemander le modèle. Relancée sur un historique fini, elle n'écrit rien.
+
+Elle saute, et liste dans son rapport, un Raw sans date, qui n'a pas de place dans la Chronicle (ni `published` dans ses métadonnées, ni `date` dans sa fiche legacy), et un Raw sans sous-titres utilisables, qui n'a pas assez de mots prononcés pour un Extract. Un Digest refusé deux fois, ou un `claude -p` sans réponse, est un échec ; son dernier brouillon reste dans `rejected/` du dossier d'attente, et trois échecs de suite arrêtent la commande. `--limit N` borne les Raws confiés au modèle, échecs compris ; les Digests repris du dossier d'attente ne comptent pas. Une Period se résume à chaque lot qui la touche : les 20 premiers Digests de PaduTeam ont demandé 11 résumés de Periods, à peu près un appel de `write-period` pour deux Digests, en plus de l'appel (ou des deux) de chaque Digest.
+
+## La recherche : `wikipol index`
+
+```bash
+WIKIPOL_ENV=<fichier> uv run wikipol migrate   # applique le schéma de l'index, une fois, avec une clé qui peut créer des tables
+uv run wikipol index --dry-run                 # ce qu'il indexerait : Publications, chunks, mots, tokens et coût estimés
+uv run wikipol index --source paduteam --limit 5   # indexe 5 Raws de PaduTeam qui manquent à l'index
+uv run wikipol index                           # indexe tout ce qui manque, toutes Sources confondues
+```
+
+L'index vit dans la base Serverless SQL `wikipol`, PostgreSQL avec pgvector (ADR 0003), à l'adresse `WIKIPOL_DATABASE_URL`. Chaque Raw du bucket y est une Publication (`publication` : Source, `youtube_id`, titre, date, durée, clé du Raw, chemin de son Digest dans la Chronicle quand il en a un) et une suite de chunks (`chunk`) d'environ deux minutes, coupés sur ses blocs de 30 s, deux voisins partageant un bloc, chacun avec ses secondes de début et de fin et son embedding. Un Raw sans timestamp est coupé par mots, et ses chunks n'ont pas de secondes ; un Raw sans un mot à indexer est une Publication sans chunks. Les embeddings viennent de `qwen3-embedding-8b`, sur les Generative APIs de Scaleway, en 1024 dimensions, par lots de 16 chunks ; la clé est `WIKIPOL_EMBEDDING_API_KEY`, sinon `SCW_SECRET_KEY`, et `SCW_DEFAULT_PROJECT_ID` facture les appels au projet. Une requête de recherche, de l'autre côté, prend le préfixe `Instruct: …\nQuery: …` du modèle.
+
+Relancée, la commande n'indexe que ce qui manque : une Publication déjà indexée avec le même modèle et le même découpage est sautée, et seul le chemin de son Digest est mis à jour, puisqu'il bouge quand la Chronicle range et coupe. Chaque Publication est écrite avec ses chunks dans une transaction, si bien qu'un arrêt (une API qui refuse, Ctrl-C) n'en laisse aucune à moitié. La date d'une Publication est celle de son Digest : le `published` du Raw, sinon la `date` de sa fiche legacy, sinon inconnue, et une Publication sans date est indexée quand même. Le rapport donne les tokens comptés par l'API et le coût, environ 0,10 € par million de tokens ; `--dry-run` les estime, à 1,42 token par mot.
+
+Le schéma est dans `Scripts/src/wikipol/index/migrations/`, un fichier SQL par migration, appliqué une fois et noté dans `schema_migration`. La clé du pipeline n'écrit que des lignes (`role_readwrite`, la permission `ServerlessSQLDatabaseDataReadWrite`) : `wikipol migrate` se lance avec la chaîne de connexion d'une clé qui a `ServerlessSQLDatabaseReadWrite`, écrite comme `WIKIPOL_DATABASE_URL` dans un fichier d'environnement à part que désigne `WIKIPOL_ENV` (pas sur la ligne de commande, où l'historique du shell garderait son mot de passe), et la migration donne les lignes à `role_readwrite`. `wikipol index` applique lui-même une migration en attente quand sa clé le peut, et sinon s'arrête en le disant.
+
+### Chercher : le serveur MCP `wikipol mcp`
+
+```bash
+uv run wikipol mcp     # un serveur MCP sur stdin et stdout ; le .mcp.json du dépôt le lance depuis la racine
+```
+
+Un agent qui travaille sur un hexframe politique demande ce qu'une Source a dit d'un sujet sur une période avec l'outil `search(query, source?, from?, to?, limit?)`. La requête est embeddée avec l'instruction de `qwen3-embedding-8b`, puis l'index garde les chunks de la Source et de la période demandées, et seulement ensuite les classe par similarité cosinus : une période étroite rend les plus proches de ses propres chunks, au plus `limit` Extracts (8 par défaut, 25 au plus), sans que l'index en ait écarté avant le filtre. `from` et `to` prennent une année, un mois ou un jour (`2025`, `2025-03`, `2025-03-14`) : `from` part du premier jour, `to` finit au dernier. Une Publication sans date n'est trouvée que par une recherche sans période. Chaque Extract rendu donne le passage (le chunk, environ deux minutes de parole), son lien `watch?v=ID&t=Ns` et son moment (`12:30`), le titre et la date de la Publication, sa Source, sa similarité, et le chemin de son Digest. Pour un Raw sans timestamps, le lien n'a pas de `t` et le moment est `null` ; la date est `null` quand elle est inconnue, le Digest tant que la Chronicle n'en a pas.
+
+Le serveur lit ses réglages à chaque recherche, dans `~/.config/wikipol/.env` comme `wikipol index` (`WIKIPOL_DATABASE_URL`, `WIKIPOL_EMBEDDING_API_KEY` sinon `SCW_SECRET_KEY`, `SCW_DEFAULT_PROJECT_ID`), et ouvre une connexion à la base pour chaque recherche, puisque Serverless SQL coupe celles qui dorment. Il démarre donc sans eux, et une recherche qui échoue (un réglage manquant, une clé refusée, une base sans tables) rend son explication à l'agent au lieu d'arrêter le serveur.
+
+## Le run quotidien : `wikipol run`
+
+```bash
+uv run wikipol run --dry-run                 # ce que chaque étape ferait, depuis n'importe quel clone ; n'écrit que son journal
+uv run wikipol run                           # le run : seulement dans le clone du runner
+Scripts/launchd/install-runner.sh --dry-run  # ce que l'installation ferait, sans rien installer
+Scripts/launchd/install-runner.sh            # installe le runner sur ce Mac ; uninstall-runner.sh décharge l'agent, garde le clone
+```
+
+`wikipol run` enchaîne, pour chaque Source, `fetch` (les Raws des nouvelles vidéos dans le bucket) et `backfill` (les Digests des Raws qui n'en ont pas, rangés dans la Chronicle), puis `index` sur toutes les Sources, puis publie : ce que les étapes ont changé est commité sur une branche `wikipol/run-<date>-<heure>`, poussé via `gh auth git-credential`, et une pull request vers `main` (`--base` en désigne une autre) est ouverte avec `gh pr create` et fusionnée par le run, `gh pr merge --squash`. Un run qui n'a rien changé (pas de vidéo nouvelle, rien à rattraper ni à reporter) n'ouvre aucune pull request. Chaque étape est la commande du même nom, idempotente : relancé, le run reprend ce qui manque. `--limit N` borne les vidéos récupérées, les Raws digérés et les Raws indexés par Source.
+
+Trois échecs de suite arrêtent une étape pour une Source, comme dans chaque commande, et le run saute alors cette étape pour les Sources suivantes (YouTube qui refuse le Mac, `claude` qui échoue), sans arrêter les autres : les Digests déjà rangés sont publiés. L'index vient après les Digests, pour qu'une Publication porte le chemin du sien, et son échec (un réglage manquant, une clé refusée, une base sans tables) n'arrête rien ; il s'arrête à la première Source qui échoue. Une étape qui lève une exception est comptée comme un échec, sa trace dans le journal. Quand la publication échoue (un push refusé, GitHub en panne), le run reprend son commit dans l'arbre de travail, ferme ce qu'il a ouvert, et le run suivant porte ces fichiers dans son propre commit.
+
+Chaque run écrit son journal dans `~/Library/Logs/wikipol/run-<date>T<heure>.log` (`--log-dir` en désigne un autre) et affiche son résumé : Raws récupérés, Digests écrits et rangés, Publications indexées, la pull request, les échecs. Le résumé, sans le lien de la pull request qu'il annonce, en est aussi le corps. Le run sort avec 1 quand quelque chose a échoué (l'index sans ses réglages compris), 2 quand un réglage manque pour démarrer (le bucket, le Fetcher).
+
+Le runner est un clone dédié, `~/wikipol-runner`, jamais le dossier Obsidian : `install-runner.sh` le clone, le marque (`git config wikipol.runner true`, sans quoi `wikipol run` refuse d'écrire), y lance `uv sync --frozen`, et charge l'agent launchd `com.diplow.wikipol.runner` (le modèle est `Scripts/launchd/com.diplow.wikipol.runner.plist`) dans `~/Library/LaunchAgents` avec `launchctl bootstrap` ; son `--base` choisit la branche que le clone suit et où les runs atterrissent, `main` par défaut. launchd lance le run chaque jour à 7 h, ou au réveil quand le Mac dormait à cette heure ; éteint, le Mac le manque jusqu'au lendemain. Un seul run à la fois tient le clone. Le runner lit `~/.config/wikipol/.env` comme toutes les commandes, et appelle `claude -p` sur l'abonnement, `gh` et `git` avec les identifiants de la session.
 
 ## Répartition des responsabilités
 
@@ -54,20 +133,23 @@ rclone copy Sources diplow:WikiPol/Sources --include '/*/Sources/Transcripts/*.m
 | WikiPol | `BUILD.md` | Conventions universelles : nommage, wikilinks, frontmatter, git |
 | WikiPol | `CONTEXT.md` | Le glossaire : Source, Publication, Raw, Extract, Digest, Chronicle, Period |
 | WikiPol | `docs/adr/` | Les décisions difficiles à défaire, une par fichier |
+| WikiPol | `.vocabulaire/` | Le vocabulaire vivant des mentions d'un Digest : kinds, labels, qualifiers, relations ; je l'édite à la main |
 | WikiPol | `Skills/` | Skills d'ingestion et d'écriture génériques, agnostiques à la source |
-| WikiPol | `Scripts/` | Scripts Python (ingestion, bootstrap), lisent `source.yaml` |
+| WikiPol | `Scripts/` | Le paquet uv `wikipol` du pipeline (`src/`, `tests/`), l'agent launchd du run quotidien et ses scripts d'installation (`launchd/`), et les scripts Python legacy (ingestion, bootstrap), qui lisent `source.yaml` |
+| WikiPol | `Legacy/` | Les vaults d'avant, figés : taxonomie locale (`BUILD.md`), fiches (`Videos/`, `Individus/`, `Concepts/`…), tracker |
 | Source | `CLAUDE.md` | Contexte éditorial spécifique : qui produit, ton, pièges |
-| Source | `BUILD.md` | Taxonomie locale : domaines, thèmes, enjeux (inductif) |
-| Source | `source.yaml` | Paramètres techniques + `content_types` activés (whitelist stricte) |
-| Source | `Skills/` (optionnel) | Skills propres à la source qui surchargent les skills génériques par même nom |
-| Source | `Videos/`, `Individus/`, `Organisations/`, `Concepts/`, `Enjeux/`, etc. | Contenu du vault (un dossier par type activé) |
+| Source | `source.yaml` | Paramètres techniques, `content_types` activés (whitelist stricte), `legacy.vault` |
+| Source | `1-chronicle/` | La Chronicle : les Digests rangés par date, en Periods |
+| Source | `.skills/` (optionnel) | Skills propres à la source qui surchargent les skills génériques par même nom, regroupées par six |
 
 ## Découverte des skills
 
 Quand une skill est invoquée pendant un travail sur une source, regarder dans cet ordre :
 
-1. **`Sources/<NomSource>/Skills/<skill-name>/SKILL.md`** — skill propre à la source. Si elle existe, **elle l'emporte** sur la version générique (même nom = override).
+1. **`6-politics/2-sources/<n>-<slug>/.skills/*/<skill-name>/SKILL.md`** — skill propre à la source, rangée dans un groupe (`1-ingest/`, `2-write-basic/`…) pour tenir la règle des six. Si elle existe, **elle l'emporte** sur la version générique (même nom = override).
 2. **`Skills/<skill-name>/SKILL.md`** à la racine de WikiPol — skill générique, valable pour toutes les sources.
+
+Les overrides de PaduTeam (`1-paduteam/.skills/`) portent les noms des skills du pipeline legacy et écrivent, comme elles, dans le vault figé : la règle les trouve, mais ni elles ni les génériques du même nom ne se lancent plus. `write-digest` et `write-period` n'ont pas d'override.
 
 Le cas typique de skill source-spécifique : un format de fiche qui s'écarte trop du modèle générique pour être paramétrable (ex : un `write-enjeu` au format « loadout militant » plutôt que narratif). Tant que la signature de la skill (entrées, sortie, prérequis) reste la même, l'override est transparent pour les orchestrateurs (`ingest-video`, `ingest-batch`).
 
@@ -75,7 +157,7 @@ Avant de créer une skill source-spécifique, vérifier que le besoin n'est pas 
 
 ## Activation des types de fiches
 
-Chaque source déclare ses `content_types` activés dans `Sources/<NomSource>/source.yaml` (whitelist stricte). Une skill `write-*` invoquée pour un type désactivé doit s'interrompre et signaler à l'appelant. Avant d'écrire, charger la config via `Scripts/source_config.py` et vérifier `cfg.content_type_enabled("Enjeux")` (ou le type concerné).
+Chaque source déclare ses `content_types` activés dans son `source.yaml` (whitelist stricte). Une skill `write-*` invoquée pour un type désactivé doit s'interrompre et signaler à l'appelant. Avant d'écrire, charger la config via `Scripts/source_config.py` et vérifier `cfg.content_type_enabled("Enjeux")` (ou le type concerné).
 
 Voir `BUILD.md` pour la classification raw/basic/advanced et la spec frontmatter de chaque type.
 
@@ -86,10 +168,10 @@ python Scripts/new_source.py --name "NomSource" --slug "nomsource" \
     --youtube-url "https://www.youtube.com/@Chaine/videos"
 ```
 
-Le script crée la structure, copie les templates, et affiche les prochaines étapes (remplir `CLAUDE.md` éditorial, découvrir les vidéos, lancer l'ingestion).
+Le script crée le nœud de la Source au premier numéro libre de `6-politics/2-sources/` (`source.yaml`, `CLAUDE.md` éditorial à remplir, `1-chronicle/` vide) et refuse une septième Source tant qu'on n'a pas regroupé.
 
 ## Principes d'auto-amélioration
 
-Comme dans chaque source, chaque ingestion est une occasion de raffiner le système. Si un transcript révèle un besoin générique (un type de skill manquant, une convention à étendre), mettre à jour `BUILD.md` ou les skills au niveau WikiPol. Si c'est spécifique à la source, mettre à jour `Sources/<NomSource>/CLAUDE.md` ou `BUILD.md`.
+Comme dans chaque source, chaque ingestion est une occasion de raffiner le système. Si un transcript révèle un besoin générique (un type de skill manquant, une convention à étendre), mettre à jour `BUILD.md` ou les skills au niveau WikiPol. Si c'est spécifique à la source, mettre à jour son `CLAUDE.md`.
 
 Rien n'est figé.

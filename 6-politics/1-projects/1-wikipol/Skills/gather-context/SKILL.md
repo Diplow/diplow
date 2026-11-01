@@ -26,7 +26,7 @@ Ce choix évite de saturer la fenêtre de contexte des `write-*` avec du contenu
 
 ## Contexte éditorial de la source
 
-Le ton et les principes de restitution (fidélité, critique, neutre...) sont définis dans le `CLAUDE.md` de la source active (`Sources/<NomSource>/CLAUDE.md`). Ce fichier dit comment formuler la présentation du sujet : c'est lui qui détermine si on écrit "la source affirme que X" ou "X est factuellement Y".
+Le ton et les principes de restitution (fidélité, critique, neutre...) sont définis dans le `CLAUDE.md` de la source active (`6-politics/2-sources/<n>-<slug>/CLAUDE.md`). Ce fichier dit comment formuler la présentation du sujet : c'est lui qui détermine si on écrit "la source affirme que X" ou "X est factuellement Y".
 
 ---
 

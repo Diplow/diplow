@@ -1,0 +1,42 @@
+source:
+  name: PaduTeam
+  slug: paduteam
+  type: youtube
+  attribution: "la PaduTeam"
+
+youtube:
+  channel_url: https://www.youtube.com/@PaduTeam/videos
+  channel_handle: "@PaduTeam"
+
+# Le vault Obsidian de la source, figé (WIK-1) : lu en entrée, plus jamais écrit.
+# Chemin relatif à ce fichier ; les chemins de `files` se résolvent depuis lui.
+legacy:
+  vault: "../../1-projects/1-wikipol/Legacy/Paduteam"
+files:
+  inventaire: "Sources/Inventaire PaduTeam.md"
+  chronologique: "PADUTEAM_CHRONOLOGIQUE.md"
+
+git:
+  repo: "Diplow/diplow"
+  default_branch: main
+
+claude:
+  # L'identifiant épinglé du modèle qui écrit les Digests de la Source, passé tel quel à
+  # `claude -p --model` et recopié dans le champ `model` de chaque Digest. Jamais un alias
+  # (`sonnet`, `opus`) ni un `-latest` : ils glissent vers un modèle plus récent sans prévenir.
+  default_model: claude-sonnet-5-5
+
+content_types:
+  raw:
+    Transcripts: true
+  basic:
+    Individus: true
+    Organisations: true
+    Concepts: true
+    Videos: true
+    Evenements: true
+  advanced:
+    Enjeux: true
+    Conjonctures: true
+    Possibles: true
+    Methodes: true

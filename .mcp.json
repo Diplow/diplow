@@ -6,6 +6,19 @@
       "headers": {
         "X-Project": "diplow"
       }
+    },
+    "wikipol": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "--directory",
+        "6-politics/1-projects/1-wikipol/Scripts",
+        "run",
+        "--frozen",
+        "--quiet",
+        "wikipol",
+        "mcp"
+      ]
     }
   }
 }

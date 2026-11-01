@@ -6,12 +6,17 @@ Lit le fichier de suivi chronologique d'une source, identifie les batches
 non traités, et invoque `claude` pour chaque batch via la skill ingest-batch.
 Pause automatique de 2h en cas de rate limit.
 
+Pipeline legacy : écrit dans le vault de la source, figé dans wikipol/Legacy/
+depuis WIK-1. Gardé pour référence ; ne plus le lancer sur un vault figé.
+`--source` désigne le nœud de la source (là où vit source.yaml), depuis la
+racine de WikiPol : ../../2-sources/<n>-<slug>.
+
 Usage:
-    python run_ingest.py --source Sources/MaChaine                     # tous les batches ⏳
-    python run_ingest.py --source Sources/MaChaine --dry-run           # affiche sans lancer
-    python run_ingest.py --source Sources/MaChaine --from 5            # commence au batch 05
-    python run_ingest.py --source Sources/MaChaine --batch 7           # un seul batch
-    python run_ingest.py --source Sources/MaChaine --model opus        # surcharge le modèle
+    python run_ingest.py --source ../../2-sources/1-machaine                     # tous les batches ⏳
+    python run_ingest.py --source ../../2-sources/1-machaine --dry-run           # affiche sans lancer
+    python run_ingest.py --source ../../2-sources/1-machaine --from 5            # commence au batch 05
+    python run_ingest.py --source ../../2-sources/1-machaine --batch 7           # un seul batch
+    python run_ingest.py --source ../../2-sources/1-machaine --model opus        # surcharge le modèle
 """
 import sys
 import os
@@ -22,7 +27,7 @@ from datetime import datetime
 
 # Résolution de l'import source_config (même dossier)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from source_config import parse_source_arg, SourceConfig  # noqa: E402
+from source_config import parse_source_arg, require_writable_vault, SourceConfig  # noqa: E402
 
 if sys.platform == 'win32':
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -156,7 +161,7 @@ def run_batch(batch, cfg: SourceConfig, log, dry_run=False, model=None):
     if dry_run:
         log(f"[DRY RUN] Batch {batch['num']:02d} — {batch['title']} [modèle: {active_model}]")
         log(f"[DRY RUN] Prompt : {prompt}")
-        log(f"[DRY RUN] cwd : {cfg.source_root}")
+        log(f"[DRY RUN] cwd : {cfg.vault_root}")
         return True, 'dry_run'
 
     cmd = [CLAUDE_CMD, "--dangerously-skip-permissions", "--model", active_model, "-p", prompt]
@@ -170,7 +175,7 @@ def run_batch(batch, cfg: SourceConfig, log, dry_run=False, model=None):
             encoding='utf-8',
             errors='replace',
             timeout=TIMEOUT_PER_BATCH,
-            cwd=cfg.source_root,
+            cwd=cfg.vault_root,
         )
     except subprocess.TimeoutExpired:
         log(f"TIMEOUT ({TIMEOUT_PER_BATCH}s) — batch {batch['num']:02d}")
@@ -198,7 +203,7 @@ def run_batch(batch, cfg: SourceConfig, log, dry_run=False, model=None):
 # =====================================================================
 
 def run_all(cfg: SourceConfig, dry_run=False, start_from=None, single_batch=None, model=None):
-    log_path = os.path.join(cfg.source_root, "run_ingest.log")
+    log_path = os.path.join(cfg.vault_root, "run_ingest.log")
     log = make_logger(log_path)
 
     batches = parse_batches(cfg.tracking_file)
@@ -212,6 +217,7 @@ def run_all(cfg: SourceConfig, dry_run=False, start_from=None, single_batch=None
     log(f"INGESTION CHRONOLOGIQUE — {cfg.name}")
     log(f"{'='*60}")
     log(f"Source           : {cfg.source_root}")
+    log(f"Vault            : {cfg.vault_root}")
     log(f"Tracking file    : {cfg.tracking_file}")
     log(f"Batches total    : {total}")
     log(f"Déjà traités     : {n_done}")
@@ -302,6 +308,7 @@ def main():
     model        = parse_str_arg(args, '--model', default=None)
 
     cfg = parse_source_arg(args)
+    require_writable_vault(cfg)
 
     run_all(
         cfg,

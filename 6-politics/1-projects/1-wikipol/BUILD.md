@@ -2,7 +2,161 @@
 
 Ce fichier documente **comment** un vault WikiPol est construit : architecture des skills, invariants de nommage et de format, workflow git. Les skills individuelles (dans `Skills/`) décrivent leur workflow spécifique ; ce fichier contient les invariants communs à toutes les sources.
 
-La **taxonomie concrète** (domaines, thèmes, enjeux) n'est pas définie ici : elle est propre à chaque source et vit dans `Sources/<NomSource>/BUILD.md`.
+La **taxonomie concrète** (domaines, thèmes, enjeux) n'est pas définie ici : elle est propre à chaque source et vit dans `Legacy/<NomSource>/BUILD.md`.
+
+Depuis WIK-1, les vaults sont figés dans `Legacy/` et chaque Source est un nœud de `6-politics/2-sources/` (`CLAUDE.md` éditorial, `source.yaml`, `1-chronicle/`, `.skills/`). Les sections « Le Digest » et « La Chronicle » ci-dessous décrivent ce que le pipeline de wikipol écrit dans une Chronicle. Le reste du fichier décrit comment les vaults legacy ont été construits : leurs chemins (`Sources/Transcripts/`, `Videos/`…) restent relatifs au dossier du vault.
+
+---
+
+## Le Digest
+
+Un Digest résume une Publication : sa thèse, ses affirmations, chacune appuyée par des Extracts de son Raw (les mots sont ceux de `CONTEXT.md`). C'est une Leaf de sa Period, un fichier `N-<slug>.md` de la Chronicle de la Source, en français. `wikipol digest` l'écrit avec la skill [[6-politics/1-projects/1-wikipol/Skills/write-digest/SKILL|write-digest]] et le vérifie avant de le garder ; `wikipol check-digest` revérifie un fichier existant contre son Raw. Le format est tenu par `Scripts/src/wikipol/digest/format.py` : ce qui suit et ce module disent la même chose.
+
+### Forme fichier
+
+```markdown
+---
+title: "MBAPPÉ TRAITE MAO DE DICTATEUR ET SE FAIT PURGER DU RÉAL (basé) !!"
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/<la Period>
+owner: diplo
+preview: >-
+  La thèse, en une ou deux phrases, 350 caractères au plus.
+source: paduteam
+url: https://www.youtube.com/watch?v=URonNSP0qM0
+youtube_id: "URonNSP0qM0"
+published: 2026-10-30
+duration: 3447
+raw: paduteam/URonNSP0qM0.md
+ingested: 2026-10-31
+digest_version: 2
+model: claude-sonnet-5-5
+---
+# MBAPPÉ TRAITE MAO DE DICTATEUR ET SE FAIT PURGER DU RÉAL (basé) !!
+
+## 1. Une affirmation de la Source, en une phrase.
+
+Une à trois phrases qui la développent, facultatives, avec au besoin un [[chemin/d-un/autre-digest|lien vers un autre Digest]].
+
+> [1:35](https://www.youtube.com/watch?v=URonNSP0qM0&t=95s) « les mots exacts du Raw »
+
+> [5:12](https://www.youtube.com/watch?v=URonNSP0qM0&t=312s) « une deuxième citation »
+
+## 2. ...
+```
+
+Le frontmatter porte les quatre champs du dépôt (`title`, `parent`, `owner`, `preview`), puis ceux du Digest, tous présents, et peut finir sur ses mentions (« Les mentions », plus bas) :
+
+| Champ | Contient |
+|---|---|
+| `title` | Le titre de la vidéo, celui des métadonnées du Raw ; c'est aussi le titre `#` du corps |
+| `parent` | Le dossier de la Period qui le contient, depuis la racine du dépôt |
+| `preview` | La thèse de la Publication, 350 caractères au plus |
+| `source` | Le slug de la Source |
+| `url` | `https://www.youtube.com/watch?v=<youtube_id>` |
+| `youtube_id` | L'identifiant YouTube, entre guillemets (il peut commencer par `-`) |
+| `published` | La date de publication, ou `null` quand ni le Raw ni la fiche legacy ne la connaissent |
+| `duration` | La durée en secondes, ou `null` : seuls les Raws du Fetcher la connaissent |
+| `raw` | La clé du Raw dans le bucket, `<source>/<youtube_id>.md` |
+| `ingested` | La date d'écriture du Digest |
+| `digest_version` | La version du format et de la skill, un entier ; `2` aujourd'hui, incrémenté quand ce qu'un Digest dit change |
+| `model` | Le modèle qui l'a écrit : l'identifiant épinglé dans le `source.yaml` de la Source |
+
+Le corps : le titre, puis **une à six affirmations** `## <n>. <affirmation>`, numérotées dans l'ordre, rien d'autre sous le titre. Chacune porte **une à trois Extracts**, une ligne chacune, séparées par une ligne vide : `> [<horodatage>](<url>&t=<secondes>s) « <citation> »`. La citation est un passage continu du Raw, cinq mots au moins ; le lien ouvre la vidéo au début du bloc de 30 s où elle commence, une seconde que le Raw porte, avant la fin de la vidéo. Un Raw sans horodatage (deux aujourd'hui, `wsiChBGb6T0` et `xnU_T2a6Nz0`) donne des Extracts sans lien : `> « <citation> »`. Des mots entre « » ailleurs, dans le Preview ou un développement, citent aussi la Source et doivent être dans le Raw. Un Digest en cite un autre de sa Source par wikilink, `[[<chemin du Digest sans .md>|<libellé>]]`, et seulement un Digest qui existe.
+
+### Les mentions
+
+Un Digest peut dire qui et quoi sa Publication mentionne, à la fin de son frontmatter : `mentions`, puis `relations`. Les deux sont facultatifs, et `wikipol check-digest` les vérifie contre le vocabulaire, [[6-politics/1-projects/1-wikipol/.vocabulaire/CLAUDE|.vocabulaire]], que j'édite à la main.
+
+```yaml
+mentions:
+  - {name: Pascal Boniface, kind: personne, labels: [chercheur], qualifiers: [animateur, intervenant]}
+  - {name: Assa Traoré, kind: personne, labels: [militant], qualifiers: [invité, intervenant]}
+  - {name: Adama Traoré, kind: personne, labels: [témoin], qualifiers: [sujet], heard_as: Adam Traore}
+  - {name: Comité Vérité et Justice pour Adama, kind: organisation, labels: [collectif], qualifiers: [mentionné]}
+relations:
+  - {from: Assa Traoré, relation: dirige, to: Comité Vérité et Justice pour Adama}
+```
+
+| Clé | Contient |
+|---|---|
+| `name` | Le nom canonique, bien orthographié |
+| `kind` | personne, organisation, lieu, événement, œuvre ou texte : un des `kinds` du vocabulaire |
+| `labels` | Ce que la mention est dans la Publication, à sa date : des labels de son kind |
+| `qualifiers` | Ce que la mention est pour la Publication : des qualifiers de son kind |
+| `heard_as` | L'orthographe des sous-titres, quand elle diffère du nom (`Adam Traore`) |
+| `unsure` | `true` quand le nom canonique n'est pas sûr ; absent sinon |
+
+Une relation, `{from, relation, to}`, relie deux mentions du même Digest, nommées par leur `name`, d'un kind que la relation admet (`dirige` va d'une personne à une organisation). Le vocabulaire est vivant : un terme `proposé` vaut un terme `accepté`, un terme retiré (`remplacé_par`) est refusé avec son remplaçant. Un nom est cherché dans le Raw, ou à défaut dans le titre de la vidéo, à la casse, aux accents et à la ponctuation près : le `heard_as` quand il y en a un, le `name` sinon. La même mention deux fois, au même nom à la casse, aux accents et à la ponctuation près, est refusée, comme deux fois la même relation.
+
+### Forme app
+
+Dans hexframe, un Digest est un Tile : `title` et `preview` deviennent son titre et son Preview, et son Body s'ouvre sur les champs du Digest en bloc YAML, ses mentions comprises quand il en a, avant les affirmations :
+
+````markdown
+```yaml
+source: paduteam
+url: https://www.youtube.com/watch?v=URonNSP0qM0
+youtube_id: "URonNSP0qM0"
+published: 2026-10-30
+duration: 3447
+raw: paduteam/URonNSP0qM0.md
+ingested: 2026-10-31
+digest_version: 2
+model: claude-sonnet-5-5
+```
+
+## 1. Une affirmation de la Source, en une phrase.
+...
+````
+
+`parent` et `owner` ne passent pas : la place du Tile dans la carte les remplace. La synchronisation du dépôt vers l'app viendra hors de ce projet.
+
+### Le modèle, épinglé
+
+`claude.default_model` du `source.yaml` de chaque Source (et du gabarit `Templates/source.yaml.tmpl`) donne l'identifiant du modèle qui écrit ses Digests, `claude-sonnet-5-5` aujourd'hui. `wikipol digest` le passe tel quel à `claude -p --model` et le recopie dans le champ `model`. Un alias (`sonnet`, `opus`) ou un `-latest` est refusé dès la lecture du `source.yaml` : il glisserait vers un modèle plus récent sans prévenir, et un Digest doit dire ce qui l'a écrit. Changer de modèle, c'est changer cette ligne, et les Digests écrits avant gardent leur `model`.
+
+---
+
+## La Chronicle
+
+La Chronicle d'une Source, `1-chronicle/`, range ses Digests par date en un arbre de Periods qui se divisent par nombre ([[6-politics/1-projects/1-wikipol/docs/adr/0001-chronicle-splits-by-count|ADR 0001]]). `wikipol file` y range des Digests et fait réécrire par la skill [[6-politics/1-projects/1-wikipol/Skills/write-period/SKILL|write-period]] chaque Period touchée. Les règles sont tenues par `Scripts/src/wikipol/chronicle/` : ce qui suit et ce paquet disent la même chose.
+
+### La forme de l'arbre
+
+- **Une Period** est un dossier et son `CLAUDE.md`. Elle tient soit jusqu'à six Digests, soit jusqu'à six Periods plus courtes, jamais les deux. La Chronicle elle-même en est la racine.
+- **Ranger un Digest** descend vers la Period dont les dates l'accueillent : la dernière qui commence au plus tard à sa date, sinon la première. Il y prend sa place par date (puis par `youtube_id` entre deux Digests du même jour).
+- **Une Period qui déborde** (sept enfants) se coupe en deux, de quatre et trois, au milieu ; quand l'autre milieu tombe entre deux dates différentes et celui-là non, c'est l'autre. La seconde moitié devient une Period sœur, juste après ; le parent peut déborder à son tour. La Chronicle n'a pas de sœur : quand elle déborde, ses enfants descendent dans deux nouvelles Periods sous elle. Tous les Digests restent ainsi à la même profondeur, et les dates de deux Periods sœurs ne se chevauchent pas.
+- **Un Digest sans date** (`published: null`) n'a pas de place : `wikipol file` le refuse. Un Digest déjà rangé et rangé de nouveau à la même date remplace l'ancien ; à une autre date, il est refusé.
+
+### Noms, titres, liens
+
+Les enfants sont numérotés de 1 à 6 dans l'ordre des dates. Un Digest est le fichier `N-<slug>.md`, le slug fait des six premiers mots de son titre, sans accents ; une Period est le dossier `N-<sa première date>`, par exemple `2-2026-01-05/`. Le titre d'une Period est sa plage de dates, `2026-01-05 → 2026-01-07` (une seule date quand tous ses Digests sont du même jour) ; la Chronicle garde le sien.
+
+Ranger un Digest peut en déplacer d'autres : une coupe, une renumérotation. Le `parent` de chaque fichier déplacé suit, et chaque wikilink qui nommait un Digest ou une Period déplacée (par son `CLAUDE`) est réécrit : dans la Chronicle, et dans tous les fichiers Markdown du dépôt, hors dossiers cachés, `node_modules/` et les vaults figés de `Legacy/`.
+
+### Le fichier d'une Period
+
+```markdown
+---
+title: "2026-01-05 → 2026-01-07"
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2026-01-05
+owner: diplo
+preview: >-
+  Ce que la Source a soutenu pendant ces dates, 350 caractères au plus.
+---
+# 2026-01-05 → 2026-01-07
+
+Un à trois paragraphes : le résumé de la Period.
+
+## Contenu
+
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2026-01-05/1-titre-de-la-video|TITRE DE LA VIDÉO]] (2026-01-05)
+2. ...
+```
+
+Le pipeline écrit le frontmatter, le titre et la liste `## Contenu` (pour une Period de Periods : `[[<dossier>/CLAUDE|<plage>]] (<n> Digests)`). `write-period` écrit le Preview et le résumé, à partir des titres et des Previews de ses enfants seulement, via `claude -p` sur le modèle épinglé dans le `source.yaml`. Le résumé est refusé s'il est vide, dépasse trois paragraphes, porte un titre ou une citation en bloc, lie autre chose qu'un enfant, ou met entre « » des mots qu'aucun titre ni Preview d'enfant ne contient ; refusé, il revient une fois au modèle, et un second refus n'écrit rien.
+
+Les Periods touchées sont celles dont les enfants ont changé : celles au-dessus du Digest rangé, et celles qu'une coupe a créées. Elles sont résumées de la plus profonde à la Chronicle, pour qu'un parent lise les Previews déjà réécrits de ses enfants. Tout est calculé avant d'écrire : un résumé qui échoue laisse la Chronicle telle qu'elle était. Une Period que le rangement n'a pas touchée garde son résumé.
 
 ---
 
@@ -73,7 +227,7 @@ Trois tiers structurent les fiches du vault. La distinction conditionne **quand*
 
 Données captées hors analyse de la source. Servent de matière première à l'ingestion.
 
-- **Transcripts** — transcripts `.md` des médias source (vidéos YouTube, podcasts, articles transcrits). Stockés sous `Sources/Transcripts/`, hors git : la copie de référence est sur Google Drive (voir `CLAUDE.md` de WikiPol § Transcripts).
+- **Transcripts** — transcripts `.md` des médias source (vidéos YouTube, podcasts, articles transcrits). Stockés sous `Sources/Transcripts/`, hors git. Depuis WIK-2, ce sont les Raws du bucket Scaleway ; Google Drive n'en garde qu'une archive, et les 12 transcripts que la copie n'a pas pu identifier (voir `CLAUDE.md` de WikiPol § Raws).
 
 ### Basic (atomique)
 
@@ -103,7 +257,7 @@ Construits **à partir des fiches basic existantes**, par synthèse multi-vidéo
 
 ### Activation par source
 
-Toutes les sources n'utilisent pas tous les types. Le fichier `Sources/<NomSource>/source.yaml` déclare ses `content_types` activés (whitelist stricte). `Scripts/new_source.py` ne crée que les dossiers correspondants ; les skills `write-*` refusent d'écrire un type désactivé.
+Toutes les sources n'utilisent pas tous les types. Le `source.yaml` de la Source déclare ses `content_types` activés (whitelist stricte) ; les skills `write-*` refusent d'écrire un type désactivé.
 
 ---
 
@@ -113,7 +267,7 @@ Toutes les sources n'utilisent pas tous les types. Le fichier `Sources/<NomSourc
 
 L'attribution par défaut est collective — elle désigne la source (ex : "la chaîne", "les auteurs", nom collectif défini dans `source.yaml:source.attribution`). N'attribuer individuellement que quand c'est explicitement identifiable dans le transcript (segment solo, auto-identification, rôle reconnu).
 
-Le ton et les principes d'attribution spécifiques à une source sont définis dans `Sources/<NomSource>/CLAUDE.md`.
+Le ton et les principes d'attribution spécifiques à une source sont définis dans le `CLAUDE.md` de la Source (`6-politics/2-sources/<n>-<slug>/`).
 
 ### Noms de fichiers
 
@@ -352,7 +506,7 @@ skill_version: write-methode-2026-04-26
 
 ### Champ `content_types` du `source.yaml`
 
-Chaque source déclare ses types actifs dans `Sources/<NomSource>/source.yaml`. C'est une **whitelist stricte** : `Scripts/new_source.py` ne scaffolde que les dossiers correspondants, et les skills `write-*` refusent d'écrire un type désactivé.
+Chaque source déclare ses types actifs dans son `source.yaml` (`6-politics/2-sources/<n>-<slug>/source.yaml`). C'est une **whitelist stricte** : les skills `write-*` refusent d'écrire un type désactivé.
 
 ```yaml
 content_types:
@@ -392,7 +546,7 @@ Inclure uniquement domaine, thèmes et enjeux (pas format ni statut). Ces hashta
 2. **thèmes** — sujets spécifiques récurrents (vocabulaire contrôlé, extensible par la source)
 3. **enjeux** — combats stratégiques récurrents (définis par la source)
 
-Les valeurs concrètes de ces axes sont déclarées dans `Sources/<NomSource>/BUILD.md`. Elles croissent **par induction** au fil des ingestions : ajouter un nouveau thème si un sujet revient dans 2+ vidéos, un nouvel enjeu si un combat revient dans 3+ vidéos avec une position constante.
+Les valeurs concrètes de ces axes sont déclarées dans `Legacy/<NomSource>/BUILD.md`. Elles croissent **par induction** au fil des ingestions : ajouter un nouveau thème si un sujet revient dans 2+ vidéos, un nouvel enjeu si un combat revient dans 3+ vidéos avec une position constante.
 
 ### Sourcing YouTube
 
@@ -422,7 +576,7 @@ Pour les fiches non-vidéo (entités, concepts, enjeux), les footnotes référen
 - Ton analytique, pas encyclopédique
 - Fidélité à l'analyse de la source — restituer, pas neutraliser
 
-Les principes éditoriaux spécifiques (restituer sans challenger, nuancer, contextualiser, etc.) sont définis dans `Sources/<NomSource>/CLAUDE.md` selon la nature de la source.
+Les principes éditoriaux spécifiques (restituer sans challenger, nuancer, contextualiser, etc.) sont définis dans le `CLAUDE.md` de la Source (`6-politics/2-sources/<n>-<slug>/`) selon la nature de la source.
 
 ### Volume
 
@@ -452,7 +606,7 @@ main                                ← état courant du vault ; jamais de push 
 
 ### En fin d'ingestion
 
-1. Stage les fichiers modifiés/créés par nom, tous sous `Sources/<NomSource>/` (pas `git add -A`)
+1. Stage les fichiers modifiés/créés par nom, tous sous le dossier du vault (pas `git add -A`)
 2. Commit avec message structuré :
    ```
    ingest: TITRE ABRÉGÉ DE LA VIDÉO
@@ -470,18 +624,21 @@ main                                ← état courant du vault ; jamais de push 
 
 ---
 
-## Chemins d'un vault source
+## Chemins d'une Source et de son vault legacy
 
 ```
-Sources/<NomSource>/
+6-politics/2-sources/<n>-<slug>/  ← le nœud de la Source
 ├── CLAUDE.md                     ← contexte éditorial de la source
+├── source.yaml                   ← config paramétrique (content_types, git, model, legacy.vault)
+├── 1-chronicle/                  ← les Digests, rangés par date en Periods
+└── .skills/                      ← (optionnel) skills propres à la source qui surchargent
+    └── <groupe>/<skill-name>/SKILL.md  les skills génériques de WikiPol/Skills/
+
+6-politics/1-projects/1-wikipol/Legacy/<NomSource>/  ← le vault, figé
 ├── BUILD.md                      ← taxonomie locale
-├── source.yaml                   ← config paramétrique (content_types, git, model)
-├── Skills/                       ← (optionnel) skills propres à la source qui surchargent
-│   └── <skill-name>/SKILL.md     ←   les skills génériques de WikiPol/Skills/
 ├── Sources/
 │   ├── Inventaire.md             ← table des vidéos (Dataview)
-│   └── Transcripts/              ← transcripts bruts (.md) — type raw, hors git (Google Drive)
+│   └── Transcripts/              ← transcripts bruts (.md) — type raw, hors git (les Raws du bucket)
 ├── Videos/                       ← basic (cas standard)
 ├── Livres/                       ← basic (chronique d'ouvrage, remplace Videos pour ce format)
 ├── Individus/                    ← basic

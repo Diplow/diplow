@@ -1,0 +1,11 @@
+{
+  "content": [
+    {"text": "Bonjour à tous", "offset": 160, "duration": 2310, "lang": "fr"},
+    {"text": "aujourd'hui on parle\ndu budget", "offset": 2480, "duration": 5200, "lang": "fr"},
+    {"text": "le gouvernement recule", "offset": 31200, "duration": 4100, "lang": "fr"},
+    {"text": "encore une fois", "offset": 45020, "duration": 3900, "lang": "fr"},
+    {"text": "à demain", "offset": 3725010, "duration": 9150, "lang": "fr"}
+  ],
+  "lang": "fr",
+  "availableLangs": ["fr", "en"]
+}

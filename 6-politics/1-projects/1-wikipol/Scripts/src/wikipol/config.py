@@ -1,0 +1,225 @@
+"""Where the pipeline's settings come from.
+
+Two places. The pipeline's environment (the bucket, its credentials, the database) lives in
+`~/.config/wikipol/.env`, outside the repo, so every clone and the launchd runner read the same
+file; `WIKIPOL_ENV` points elsewhere. Each Source declares itself in the `source.yaml` of its
+node under `6-politics/2-sources/`.
+"""
+
+from __future__ import annotations
+
+import os
+import re
+from collections.abc import Mapping
+from dataclasses import dataclass, field
+from pathlib import Path
+
+import yaml
+from dotenv import dotenv_values
+
+from wikipol.raw_store import SLUG
+
+DEFAULT_ENV_PATH = Path("~/.config/wikipol/.env")
+DEFAULT_S3_REGION = "fr-par"
+
+# src/wikipol/config.py -> parents: wikipol, src, Scripts, 1-wikipol, 1-projects, 6-politics
+DEFAULT_SOURCES_DIR = Path(__file__).resolve().parents[5] / "2-sources"
+REPO_ROOT = DEFAULT_SOURCES_DIR.parents[1]
+
+# A model id that names one model for good, such as claude-sonnet-5-5. An alias (`sonnet`) or a
+# `-latest` id moves to a newer model without notice, and a Digest must say what wrote it.
+PINNED_MODEL = re.compile(r"claude-[a-z0-9]+(?:-[a-z0-9]+)+")
+
+
+class ConfigError(Exception):
+    """A setting the pipeline needs is missing or malformed. Names the variable, never a value."""
+
+
+@dataclass(frozen=True)
+class Settings:
+    s3_bucket: str
+    s3_endpoint: str
+    s3_region: str
+    # Kept out of repr, so no log or traceback prints them.
+    s3_access_key: str = field(repr=False)
+    s3_secret_key: str = field(repr=False)
+
+
+def read_environment(environ: Mapping[str, str] | None = None) -> tuple[dict[str, str], Path]:
+    """The pipeline's variables, stripped: the env file first, the process environment over it."""
+    environ = os.environ if environ is None else environ
+    env_path = Path(environ.get("WIKIPOL_ENV") or DEFAULT_ENV_PATH).expanduser()
+    values: dict[str, str] = {}
+    if env_path.is_file():
+        values.update({k: v for k, v in dotenv_values(env_path).items() if v is not None})
+    values.update({k: v for k, v in environ.items() if v})
+    return {k: v.strip() for k, v in values.items()}, env_path
+
+
+def load_settings(environ: Mapping[str, str] | None = None) -> Settings:
+    """The bucket and its credentials."""
+    values, env_path = read_environment(environ)
+
+    def required(name: str) -> str:
+        value = values.get(name, "")
+        if not value:
+            raise ConfigError(f"{name} is not set, in {env_path} nor in the environment")
+        return value
+
+    return Settings(
+        s3_bucket=required("WIKIPOL_S3_BUCKET"),
+        s3_endpoint=required("WIKIPOL_S3_ENDPOINT"),
+        s3_region=values.get("WIKIPOL_S3_REGION") or DEFAULT_S3_REGION,
+        s3_access_key=required("SCW_ACCESS_KEY"),
+        s3_secret_key=required("SCW_SECRET_KEY"),
+    )
+
+
+@dataclass(frozen=True)
+class IndexSettings:
+    """The search index's database, and the key of the Generative APIs that embed into it."""
+
+    database_url: str = field(repr=False)
+    embedding_key: str | None = field(default=None, repr=False)
+    project_id: str | None = None
+
+
+def load_index_settings(
+    environ: Mapping[str, str] | None = None, need_embedding: bool = True
+) -> IndexSettings:
+    """`WIKIPOL_DATABASE_URL`, and the Generative APIs key: `WIKIPOL_EMBEDDING_API_KEY` when the
+    pipeline's own key (`SCW_SECRET_KEY`) may not call them, else that one. `SCW_DEFAULT_PROJECT_ID`
+    bills the calls to the project. A dry run embeds nothing and needs no key."""
+    values, env_path = read_environment(environ)
+    database_url = values.get("WIKIPOL_DATABASE_URL", "")
+    if not database_url:
+        raise ConfigError(f"WIKIPOL_DATABASE_URL is not set, in {env_path} nor in the environment")
+    key = values.get("WIKIPOL_EMBEDDING_API_KEY") or values.get("SCW_SECRET_KEY") or None
+    if need_embedding and key is None:
+        raise ConfigError(
+            "neither WIKIPOL_EMBEDDING_API_KEY nor SCW_SECRET_KEY is set, "
+            f"in {env_path} nor in the environment"
+        )
+    return IndexSettings(database_url, key, values.get("SCW_DEFAULT_PROJECT_ID") or None)
+
+
+FETCHERS = ("yt-dlp", "transcript-api")
+
+
+@dataclass(frozen=True)
+class FetcherSettings:
+    """Which Fetcher gets the Raws: yt-dlp, from the Mac's home IP, by default, since YouTube
+    blocks datacenter IPs; the transcript API for a runner that has no home IP."""
+
+    kind: str = "yt-dlp"
+    transcript_api_key: str | None = field(default=None, repr=False)
+
+
+def load_fetcher_settings(
+    environ: Mapping[str, str] | None = None, kind: str | None = None
+) -> FetcherSettings:
+    """`kind`, the command line's `--fetcher`, wins over `WIKIPOL_FETCHER`, which wins over
+    yt-dlp. The transcript API needs `WIKIPOL_TRANSCRIPT_API_KEY`."""
+    values, env_path = read_environment(environ)
+    kind = kind or values.get("WIKIPOL_FETCHER") or "yt-dlp"
+    if kind not in FETCHERS:
+        raise ConfigError(f"WIKIPOL_FETCHER must be one of {', '.join(FETCHERS)}, not {kind!r}")
+    api_key = values.get("WIKIPOL_TRANSCRIPT_API_KEY") or None
+    if kind == "transcript-api" and api_key is None:
+        raise ConfigError(
+            f"WIKIPOL_TRANSCRIPT_API_KEY is not set, in {env_path} nor in the environment"
+        )
+    return FetcherSettings(kind, api_key)
+
+
+@dataclass(frozen=True)
+class Source:
+    """A Source as its `source.yaml` declares it."""
+
+    name: str
+    slug: str
+    node: Path
+    legacy_vault: Path | None
+    legacy_inventory: Path | None
+    channel_url: str | None = None
+    attribution: str | None = None
+    """How a Digest names the Source as a speaker: `la PaduTeam`."""
+    model: str | None = None
+    """`claude.default_model`: the model that writes the Source's Digests, a pinned id."""
+
+    @property
+    def chronicle(self) -> Path:
+        return self.node / "1-chronicle"
+
+
+def is_pinned_model(model: str) -> bool:
+    return bool(PINNED_MODEL.fullmatch(model)) and not model.endswith("-latest")
+
+
+def pinned_model(source: Source) -> str:
+    """The model that writes the Source's Digests; a Source without one writes none."""
+    if source.model is None:
+        raise ConfigError(f"{source.slug}: source.yaml has no claude.default_model")
+    if not is_pinned_model(source.model):
+        raise ConfigError(f"{source.slug}: {source.model!r} is an alias, not a pinned model id")
+    return source.model
+
+
+def load_source(node: Path) -> Source:
+    path = node / "source.yaml"
+    if not path.is_file():
+        raise ConfigError(f"no source.yaml in {node}")
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError as error:
+        raise ConfigError(f"{path} is not valid YAML: {error}") from error
+    source = data.get("source") if isinstance(data, dict) else None
+    if not isinstance(source, dict):
+        raise ConfigError(f"{path} has no `source:` mapping")
+    name, slug = source.get("name"), source.get("slug")
+    if not name or not slug:
+        raise ConfigError(f"{path} lacks source.name or source.slug")
+    if not SLUG.fullmatch(str(slug)):
+        raise ConfigError(f"{path}: source.slug {slug!r} is not lowercase letters, digits and -")
+
+    # An absent or empty block is {}; anything else that isn't a mapping is refused.
+    blocks = ("legacy", "files", "youtube", "claude")
+    legacy, files, youtube, claude = (
+        {} if data.get(name) is None else data[name] for name in blocks
+    )
+    if not all(isinstance(block, dict) for block in (legacy, files, youtube, claude)):
+        raise ConfigError(f"{path}: `legacy:`, `files:`, `youtube:` and `claude:` must be mappings")
+    channel_url = str(youtube.get("channel_url") or "").strip() or None
+    model = str(claude.get("default_model") or "").strip() or None
+    if model is not None and not is_pinned_model(model):
+        raise ConfigError(
+            f"{path}: claude.default_model {model!r} is an alias; pin a model id such as "
+            "claude-sonnet-5-5"
+        )
+    attribution = str(source.get("attribution") or "").strip() or None
+    vault_rel, inventory_rel = legacy.get("vault"), files.get("inventaire")
+    vault = (node / str(vault_rel)).resolve() if vault_rel else None
+    inventory = vault / str(inventory_rel) if vault and inventory_rel else None
+    return Source(
+        name=str(name),
+        slug=str(slug),
+        node=node.resolve(),
+        legacy_vault=vault,
+        legacy_inventory=inventory,
+        channel_url=channel_url,
+        attribution=attribution,
+        model=model,
+    )
+
+
+def load_sources(sources_dir: Path = DEFAULT_SOURCES_DIR) -> list[Source]:
+    """Every Source under `sources_dir`, in the order of their numbered nodes."""
+    if not sources_dir.is_dir():
+        raise ConfigError(f"no Sources folder at {sources_dir}")
+    nodes = sorted(p.parent for p in sources_dir.glob("*/source.yaml"))
+    sources = [load_source(node) for node in nodes]
+    slugs = [s.slug for s in sources]
+    shared = sorted({slug for slug in slugs if slugs.count(slug) > 1})
+    if shared:
+        raise ConfigError(f"two Sources share the slug {', '.join(shared)}")
+    return sources
