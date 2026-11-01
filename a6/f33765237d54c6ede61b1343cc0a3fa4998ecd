@@ -1,0 +1,61 @@
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/CLAUDE.md
+  s_c241d0ab30a9da::t_5f58351868a2c5 2,6-9,11,13,15,17
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01/1-cette-droitarde-tente-de-nous-clasher.md
+  s_c241d0ab30a9da::t_c47346051bf2cf 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01/2-guillaume-kasbarian-le-ministre-qui-deteste.md
+  s_c241d0ab30a9da::t_d355c693134113 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01/3-pinard-et-politique-la-droite-des.md
+  s_c241d0ab30a9da::t_d88ac2bfda75f2 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01/4-la-breche-legalisation-de-toutes-les.md
+  s_c241d0ab30a9da::t_16a2a31d9ecc1c 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01/5-ce-que-signifie-vraiment-l-election.md
+  s_c241d0ab30a9da::t_271ec47bcbc614 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01/CLAUDE.md
+  s_c241d0ab30a9da::t_3354341459355e 3,19-23
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/2-2024-11-14/1-paye-ta-droitarde-4-1-thais.md
+  s_c241d0ab30a9da::t_4a67cfc9ca7e27 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/2-2024-11-14/2-papacito-et-rougeyron-se-la-jouent.md
+  s_c241d0ab30a9da::t_bc06cb189604a0 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/2-2024-11-14/3-paye-ta-droitarde-4-2-thais.md
+  s_c241d0ab30a9da::t_b8f5bc7ac8186e 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/2-2024-11-14/CLAUDE.md
+  s_c241d0ab30a9da::t_9a28718a5e9840 2-3,6-8,10,12,14,18-20
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/3-2024-11-22/1-lobservateurofficiel-me-repond-padu-est-une.md
+  s_c241d0ab30a9da::t_b546829a4d074b 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/3-2024-11-22/2-c0uilles-bleues-mythes-ou-realite-echange.md
+  s_c241d0ab30a9da::t_537e9c4b85346d 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/3-2024-11-22/3-meyer-habib-et-manuel-valls-fous.md
+  s_c241d0ab30a9da::t_370e065609b091 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/3-2024-11-22/4-raz-dit-les-termes-sur-papacito.md
+  s_c241d0ab30a9da::t_f5c2aceecf87f5 1-71
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/3-2024-11-22/CLAUDE.md
+  s_c241d0ab30a9da::t_32f7c8606205e5 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27/1-apologie-du-terr0risme-panot-fait-peter.md
+  s_c241d0ab30a9da::t_88e96ce84b3b00 1-105
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27/2-onlyfan-baiser-avec-100-mecs-en.md
+  s_c241d0ab30a9da::t_5f41d2b8db834e 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27/3-macron-derape-le-probleme-des-urgences.md
+  s_c241d0ab30a9da::t_10cb500db13d5f 1-76
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27/CLAUDE.md
+  s_c241d0ab30a9da::t_255fa3acaa85e7 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/CLAUDE.md
+  s_c241d0ab30a9da::t_60564363a69d0c 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_c241d0ab30a9da::t_c3cad68277b511 6-9,13,15,17,23-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a6f33765237d54c6ede61b1343cc0a3fa4998ecd",
+  "prompts": {},
+  "sessions": {
+    "s_c241d0ab30a9da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-af51b80020383ef45",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
