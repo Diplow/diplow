@@ -1,0 +1,69 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_f038488afb8e5a::t_d6ca0b049aabdc 37
+  s_f038488afb8e5a::t_d427bac70c930d 39,104-105,137-138
+  s_f038488afb8e5a::t_01abf942107f4e 72
+  s_f038488afb8e5a::t_193eeb78258d19 38
+  s_f038488afb8e5a::t_9665232a050c91 42-43
+  s_f038488afb8e5a::t_b53e4d12d99720 40-41
+  s_f038488afb8e5a::t_b9d0ec082f88af 44
+6-politics/2-sources/2-boniface/1-chronicle/2-2016-10-14/3-pascal-boniface-barack-obama-quel-bilan.md
+  s_f038488afb8e5a::t_df13bb405a721c 1-69
+6-politics/2-sources/2-boniface/1-chronicle/2-2016-10-14/4-pascal-boniface-le-monde-selon-donald.md
+  s_f038488afb8e5a::t_6fc9443b06c029 1-71
+6-politics/2-sources/2-boniface/1-chronicle/2-2016-10-14/CLAUDE.md
+  s_f038488afb8e5a::t_2b06fb06b35f41 2,6-9,11,13,15-17,23-24
+6-politics/2-sources/2-boniface/1-chronicle/3-2016-11-23/1-pascal-boniface-le-duel-fillon-juppe.md
+  s_f038488afb8e5a::t_588e1ff1e7b146 1-69
+6-politics/2-sources/2-boniface/1-chronicle/3-2016-11-23/2-pascal-boniface-fidel-castro-dictateur-ou.md
+  s_f038488afb8e5a::t_adeb58a7344b9b 1-70
+6-politics/2-sources/2-boniface/1-chronicle/3-2016-11-23/3-pascal-boniface-bilan-strategique-2016.md
+  s_f038488afb8e5a::t_69a12a8cb85002 1-53
+6-politics/2-sources/2-boniface/1-chronicle/3-2016-11-23/CLAUDE.md
+  s_f038488afb8e5a::t_5b7e0ed04fc6c1 1-21
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-01-03/1-pascal-boniface-le-baroud-d-honneur.md
+  s_f038488afb8e5a::t_313b924e2a2b33 1-69
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-01-03/2-j-ai-lu-le-triangle-du.md
+  s_f038488afb8e5a::t_a9074442bb7f64 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-01-03/3-la-chine-a-t-elle-plie.md
+  s_f038488afb8e5a::t_f827d39164f9f1 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-01-03/CLAUDE.md
+  s_f038488afb8e5a::t_a2dcf3403b37d4 1-21
+6-politics/2-sources/2-boniface/1-chronicle/5-2026-10-15/1-j-ai-lu-comprendre-la-question.md
+  s_f038488afb8e5a::t_556e9b04e23663 3
+6-politics/2-sources/2-boniface/1-chronicle/5-2026-10-15/2-elections-israel-rien-a-signaler-pour.md
+  s_f038488afb8e5a::t_c4c8f80f94736f 3
+6-politics/2-sources/2-boniface/1-chronicle/5-2026-10-15/3-un-maire-francais-agresse-en-palestine.md
+  s_f038488afb8e5a::t_c5bd84f30b042c 3
+6-politics/2-sources/2-boniface/1-chronicle/5-2026-10-15/CLAUDE.md
+  s_f038488afb8e5a::t_6deaedb399212e 3,19-21
+6-politics/2-sources/2-boniface/1-chronicle/6-2026-10-21/1-gaza-dialogue-entre-un-humanitaire-et.md
+  s_f038488afb8e5a::t_4d952be13684dc 3
+6-politics/2-sources/2-boniface/1-chronicle/6-2026-10-21/2-lula-reelu-surprise-politique-choc-geopolitique.md
+  s_f038488afb8e5a::t_abc0f725485581 3
+6-politics/2-sources/2-boniface/1-chronicle/6-2026-10-21/3-le-japon-face-au-defi-trump.md
+  s_f038488afb8e5a::t_098bf1134a0ce2 3
+6-politics/2-sources/2-boniface/1-chronicle/6-2026-10-21/4-l-ocs-une-otan-asiatique-expliquez.md
+  s_f038488afb8e5a::t_f7d07d3e113339 3
+6-politics/2-sources/2-boniface/1-chronicle/6-2026-10-21/5-j-ai-lu-israel-s-lobby.md
+  s_f038488afb8e5a::t_059bc376fe9a87 3
+6-politics/2-sources/2-boniface/1-chronicle/6-2026-10-21/CLAUDE.md
+  s_f038488afb8e5a::t_86b175e53afd81 3,13,19-23
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_f038488afb8e5a::t_6847531ea673e2 6-9,13,15,17,22-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "42eaf97695e14c8b687082bd4395907128bb6ad3",
+  "prompts": {},
+  "sessions": {
+    "s_f038488afb8e5a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5db3dcee-4105-4ef1-abe1-29d7cbbf4139",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
