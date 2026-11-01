@@ -1,6 +1,6 @@
 ---
 title: "🦏 CRÉPOL : RÉCIT D’UNE BATAILLE MÉDIATIQUE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/5-2023-12-10
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/1-2023-12-10
 owner: diplo
 preview: >-
   Blast soutient que l'affaire de Crépol est d'abord une bataille médiatique :

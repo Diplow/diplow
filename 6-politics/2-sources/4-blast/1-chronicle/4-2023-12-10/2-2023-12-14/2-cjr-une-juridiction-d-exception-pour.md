@@ -1,6 +1,6 @@
 ---
 title: "CJR : UNE JURIDICTION D’EXCEPTION POUR LES MINISTRES"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/6-2023-12-14
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/2-2023-12-14
 owner: diplo
 preview: >-
   Blast soutient que la Cour de justice de la République, juridiction

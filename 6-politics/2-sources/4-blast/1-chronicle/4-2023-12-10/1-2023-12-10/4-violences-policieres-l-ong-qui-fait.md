@@ -1,6 +1,6 @@
 ---
 title: "VIOLENCES POLICIÈRES : L’ONG QUI FAIT LE BOULOT DE L’IGPN"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/5-2023-12-10
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/1-2023-12-10
 owner: diplo
 preview: >-
   Blast reçoit Francesco Sebregondi : Index, petite ONG de modélisation 3D et

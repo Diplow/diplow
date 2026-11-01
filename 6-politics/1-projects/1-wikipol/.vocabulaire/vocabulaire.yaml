@@ -76,6 +76,7 @@ kinds:
       sondeur: {définition: "Mesure et analyse l'opinion publique par des sondages.", statut: proposé, introduit_par: blast/4uRY8jKfQH4.md}
       prince-héritier: {définition: "Héritier désigné du trône d'une monarchie, à la date de la Publication.", statut: proposé, introduit_par: boniface/m427VTjvPno.md}
       auteur-d-attentat: {définition: "A commis un attentat meurtrier.", statut: proposé, introduit_par: paduteam/6E070o72u6U.md}
+      lobbyiste: {définition: "Défend auprès des institutions les intérêts de clients ou d'un secteur.", statut: proposé, introduit_par: blast/fEc8opuX6DA.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

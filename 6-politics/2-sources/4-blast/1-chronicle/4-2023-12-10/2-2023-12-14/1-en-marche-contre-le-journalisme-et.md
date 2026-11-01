@@ -1,6 +1,6 @@
 ---
 title: "EN MARCHE CONTRE LE JOURNALISME ET LA DÉMOCRATIE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/6-2023-12-14
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/2-2023-12-14
 owner: diplo
 preview: >-
   Blast soutient que la macronie se drape dans la défense de la presse et de
@@ -55,7 +55,7 @@ La journaliste de Disclose, qui avait révélé les dérives de la coopération 
 
 ## 3. Patrick Cohen, menacé par l'extrême droite, n'a reçu aucun soutien du gouvernement.
 
-Patrick Cohen a été la cible d'insultes et de menaces après avoir rappelé que les circonstances de la mort de l'adolescent de Crépol n'étaient pas encore établies (voir [[6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/5-2023-12-10/1-crepol-recit-d-une-bataille-mediatique|Crépol]]). Séjourné ne l'a évoqué que par ricochet, avec des semaines de retard, et Darmanin ne lui a pas accordé de protection policière.
+Patrick Cohen a été la cible d'insultes et de menaces après avoir rappelé que les circonstances de la mort de l'adolescent de Crépol n'étaient pas encore établies (voir [[6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/1-2023-12-10/1-crepol-recit-d-une-bataille-mediatique|Crépol]]). Séjourné ne l'a évoqué que par ricochet, avec des semaines de retard, et Darmanin ne lui a pas accordé de protection policière.
 
 > [7:15](https://www.youtube.com/watch?v=LfYhIdm5gbc&t=435s) « Rima abdoumalac n'a pas eu le moindre mot de soutien et il a fallu attendre que Jean-Luc Mélenchon apostrophe Rutel crief pour que Stéphane sé journé avec plusieurs semaines de retard se décide enfin »
 

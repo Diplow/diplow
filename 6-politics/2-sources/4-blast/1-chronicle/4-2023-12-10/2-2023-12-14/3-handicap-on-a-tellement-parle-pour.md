@@ -1,6 +1,6 @@
 ---
 title: "HANDICAP :  \"ON A TELLEMENT PARLÉ POUR MOI. IL FALLAIT QUE JE M'AVANCE\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/6-2023-12-14
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/2-2023-12-14
 owner: diplo
 preview: >-
   Blast soutient que le handicap est une affaire politique, pas un destin à
