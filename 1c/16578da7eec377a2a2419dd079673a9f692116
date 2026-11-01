@@ -1,0 +1,35 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/CLAUDE.md
+  s_569dbb4d62f2f3::t_049961144b8909 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12/1-israel-palestine-comment-expliquer-ce-fiasco.md
+  s_569dbb4d62f2f3::t_031b664af849a7 3
+6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12/2-jesus-contre-le-christianisme-episode-2.md
+  s_569dbb4d62f2f3::t_44f09023ef4d83 1-89
+6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12/3-asile-et-immigration-une-loi-pour.md
+  s_569dbb4d62f2f3::t_ee23e9123690f1 1-90
+6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12/4-le-rn-pas-antisemite-vraiment.md
+  s_569dbb4d62f2f3::t_7d60f820b79434 1-90
+6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12/5-bercy-un-monstre-budgetaire-au-service.md
+  s_569dbb4d62f2f3::t_de10352157fee5 1-67
+6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12/6-palestine-69-agressee-la-police-complice.md
+  s_569dbb4d62f2f3::t_2653885f124b3d 1-67
+6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12/CLAUDE.md
+  s_569dbb4d62f2f3::t_9afb5303a1ed0b 1-24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_569dbb4d62f2f3::t_f6a1915eec8179 6-9,13,15,17,24-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1c16578da7eec377a2a2419dd079673a9f692116",
+  "prompts": {},
+  "sessions": {
+    "s_569dbb4d62f2f3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a6e8910-f13d-4cf1-8345-cc32da1c1f94",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
