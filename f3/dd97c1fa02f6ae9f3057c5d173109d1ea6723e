@@ -1,0 +1,61 @@
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2017-10-02/2-podcast-comprendre-le-monde-s1-4.md
+  s_ba8e9b1455165e::t_0147fc5d8ab077 1-73
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2017-10-02/3-podcast-comprendre-le-monde-s1-5.md
+  s_ba8e9b1455165e::t_2118635f0c84f8 1-58
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2017-10-02/4-retrait-de-l-unesco-trump-plus.md
+  s_ba8e9b1455165e::t_8935ed97ddfaa5 1-62
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2017-10-02/5-l-accord-sur-le-nucleaire-iranien.md
+  s_ba8e9b1455165e::t_fb3541bc6db47d 1-76
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2017-10-02/6-podcast-comprendre-le-monde-s1-6.md
+  s_ba8e9b1455165e::t_cf04633d4f9ae1 1-72
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2017-10-02/CLAUDE.md
+  s_ba8e9b1455165e::t_f1318e1d9b4ec1 2,6-9,11,13,15,20-24
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2017-10-24/1-poutine-certitudes-geopolitiques-inquietudes-scientifiques.md
+  s_ba8e9b1455165e::t_a443277a8fde81 1-68
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2017-10-24/2-j-ai-lu-le-triangle-du.md
+  s_ba8e9b1455165e::t_f617a37315d1e9 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2017-10-24/3-la-chine-a-t-elle-plie.md
+  s_ba8e9b1455165e::t_bbfbccb967471d 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2017-10-24/CLAUDE.md
+  s_ba8e9b1455165e::t_cee3b525e25855 1-21
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2026-10-15/1-j-ai-lu-comprendre-la-question.md
+  s_ba8e9b1455165e::t_3f3f51cc345a7c 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2026-10-15/2-elections-israel-rien-a-signaler-pour.md
+  s_ba8e9b1455165e::t_bc56e80c4af869 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2026-10-15/3-un-maire-francais-agresse-en-palestine.md
+  s_ba8e9b1455165e::t_02ef3dcc95c6c1 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2026-10-15/CLAUDE.md
+  s_ba8e9b1455165e::t_2ff51bc688375f 3,19-21
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/5-2026-10-21/1-gaza-dialogue-entre-un-humanitaire-et.md
+  s_ba8e9b1455165e::t_10f25cc93654d1 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/5-2026-10-21/2-lula-reelu-surprise-politique-choc-geopolitique.md
+  s_ba8e9b1455165e::t_0d3a8698789bdd 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/5-2026-10-21/3-le-japon-face-au-defi-trump.md
+  s_ba8e9b1455165e::t_27c160fe71b528 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/5-2026-10-21/4-l-ocs-une-otan-asiatique-expliquez.md
+  s_ba8e9b1455165e::t_45792438c3f3a0 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/5-2026-10-21/5-j-ai-lu-israel-s-lobby.md
+  s_ba8e9b1455165e::t_48f38994149b7a 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/5-2026-10-21/CLAUDE.md
+  s_ba8e9b1455165e::t_616eefb47e78c6 3,13,19-23
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/CLAUDE.md
+  s_ba8e9b1455165e::t_7969e1b328f6f8 6-9,13,15,20-23
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_ba8e9b1455165e::t_28d6de29f2904f 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f3dd97c1fa02f6ae9f3057c5d173109d1ea6723e",
+  "prompts": {},
+  "sessions": {
+    "s_ba8e9b1455165e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a7891c170b975a2de",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
