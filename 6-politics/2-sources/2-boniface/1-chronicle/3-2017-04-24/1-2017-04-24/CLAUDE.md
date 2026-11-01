@@ -1,23 +1,25 @@
 ---
-title: "2017-04-24 → 2026-10-14"
+title: "2017-04-24 → 2017-05-04"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/1-2017-04-24
 owner: diplo
 preview: >-
-  De 2017 à aujourd'hui, Boniface lit les rapports de force : un Macron qui
-  devra trancher en politique étrangère, un Occident affaibli par son deux
-  poids deux mesures selon Stubb, une parité États-Unis–Chine selon Sylvie
-  Bermann.
+  Entre les deux tours de la présidentielle, Boniface juge Macron nettement
+  favori mais condamné à trancher en politique étrangère, et conteste que
+  Marine Le Pen soit gaulliste. Il lit aussi le durcissement russe et
+  l'ouverture du Hamas, et présente son livre Comprendre le monde.
 ---
-# 2017-04-24 → 2026-10-14
+# 2017-04-24 → 2017-05-04
 
-Sur les trois Digests de cette Period, Boniface applique sa grille géopolitique à des moments très éloignés. En avril 2017, il soutient qu'Emmanuel Macron sera nettement élu, Marine Le Pen manquant de réserve de voix, mais que son flou en politique étrangère devra cesser une fois à l'Élysée, sur la Russie comme sur la Palestine.
+Pendant ces dix jours, Boniface passe la présidentielle au crible de la politique étrangère. Il soutient qu'Emmanuel Macron sera nettement élu, Marine Le Pen manquant de réserve de voix, mais que son flou devra cesser une fois à l'Élysée : sur la Russie ou la Palestine, il lui faudra trancher. Il refuse à Marine Le Pen l'héritage gaulliste : de Gaulle et Mitterrand mêlaient alliance et distance envers Washington, défendaient l'Europe et l'ouverture au monde, là où elle prône le repli ([[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/1-2017-04-24/5-pascal-boniface-marine-le-pen-une|Marine Le Pen : une politique étrangère gaulliste, vraiment ?]]).
 
-En octobre 2026, il chronique Le Triangle du pouvoir d'Alexander Stubb, président finlandais. Selon le livre, le monde se divise en trois blocs : l'Occident, l'Orient et le Sud global. L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Hors de France, il lit deux événements comme des signaux dont les acteurs occidentaux ne tirent pas parti. À Moscou, les Russes, déçus par Trump, durcissent le ton et dénoncent l'unilatéralisme américain en taisant leurs propres entorses au droit, dans un cercle vicieux avec l'OTAN que personne ne sait briser. Quand le Hamas se dit prêt à reconnaître Israël dans les frontières de 1967, il y voit un tournant comparable à celui de l'OLP en 1988 et appelle les Occidentaux à saisir l'occasion de négocier, tout en craignant le refus du gouvernement israélien.
 
-Le lendemain, il reçoit Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Elle voit une Chine qui joue la patience sur Taïwan et n'est pas anti-européenne, mais dont l'excédent commercial met l'Europe en difficulté.
+La période s'achève sur la présentation de son livre [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/1-2017-04-24/4-pascal-boniface-comprendre-le-monde|Comprendre le monde]], dont il retient que la globalisation a bouleversé les relations internationales sans détrôner les États, et que la puissance se mesure à son maillon le plus faible.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/1-2017-04-24/1-pascal-boniface-macron-le-pen-quelle|(Pascal Boniface ) Macron/Le Pen : quelle orientation stratégique pour la France ?]] (2017-04-24)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/1-2017-04-24/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/1-2017-04-24/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/1-2017-04-24/2-pascal-boniface-conference-sur-la-securite|(Pascal Boniface) Conférence sur la sécurité internationale de Moscou : les Russes durcissent le ton]] (2017-04-28)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/1-2017-04-24/3-pascal-boniface-le-hamas-pret-a|(Pascal Boniface) Le Hamas prêt à reconnaître Israël : une nouvelle donne ?]] (2017-05-03)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/1-2017-04-24/4-pascal-boniface-comprendre-le-monde|( Pascal Boniface ) Comprendre le monde]] (2017-05-04)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/1-2017-04-24/5-pascal-boniface-marine-le-pen-une|(Pascal Boniface) Marine Le Pen : une politique étrangère gaulliste, vraiment ?]] (2017-05-04)
