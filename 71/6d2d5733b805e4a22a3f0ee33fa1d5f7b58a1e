@@ -1,0 +1,27 @@
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/3-2017-03-14/2-pascal-boniface-elections-en-coree-du.md
+  s_70e2b8820e4c39::t_ad603f432f44c5 1-54
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/3-2017-03-14/3-pascal-boniface-trump-et-kim-jong.md
+  s_70e2b8820e4c39::t_94f5c7c8a900c6 1-69
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/3-2017-03-14/CLAUDE.md
+  s_70e2b8820e4c39::t_42e7b57669c974 6-8,12,14,19-22
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/CLAUDE.md
+  s_70e2b8820e4c39::t_eb6cdf8adb1b06 6-9,13,15,17,23
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_297e4f67a703c2 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "716d2d5733b805e4a22a3f0ee33fa1d5f7b58a1e",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
