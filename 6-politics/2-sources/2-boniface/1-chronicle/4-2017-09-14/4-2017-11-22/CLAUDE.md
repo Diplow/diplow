@@ -1,20 +1,24 @@
 ---
-title: "2017-11-22 → 2026-10-14"
+title: "2017-11-22 → 2017-12-19"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22
 owner: diplo
 preview: >-
-  Sur trois vidéos très espacées, Boniface reçoit Alfredo Valladão sur le
-  Brésil et Sylvie Bermann sur la Chine, et chronique le livre d'Alexander
-  Stubb sur un monde en trois blocs : Occident, Orient, Sud global.
+  Boniface juge catastrophique un transfert de l'ambassade américaine à
+  Jérusalem et voit Trump isoler les États-Unis de l'Europe multilatéraliste.
+  Ses invités traitent du Brésil, des Kurdes, de l'Afrique de Macron et de
+  l'Arabie saoudite de Mohammed Ben Salman.
 ---
-# 2017-11-22 → 2026-10-14
+# 2017-11-22 → 2017-12-19
 
-La Chronicle de Boniface ne compte ici que trois Digests, de 2017 à 2026, et aucun fil continu ne les relie : deux échanges avec des invités et une chronique d'ouvrage. Ce que Boniface y fait tient dans le choix de ses interlocuteurs et de ses lectures, tous tournés vers les rapports de puissance et la recomposition de l'ordre mondial.
+Dans ses deux prises de parole en son nom, Boniface lit la politique de Trump comme un facteur d'isolement et de déstabilisation. Il soutient qu'un transfert de l'ambassade américaine à Jérusalem serait une décision catastrophique : elle enterrerait l'espoir d'un accord de paix, ferait des États-Unis un médiateur partial et offrirait aux radicaux la colère du monde musulman ([[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/3-pascal-boniface-transfert-de-l-ambassade|(Pascal Boniface) Transfert de l'ambassade américaine à Jérusalem : une décision catastrophique]]). Il soutient aussi que Trump n'affaiblit pas seulement l'influence américaine : son unilatéralisme, sans précédent, oppose Washington à l'Europe multilatéraliste ([[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/6-pascal-boniface-trump-elargit-l-atlantique|(Pascal Boniface ) Trump élargit l'Atlantique]]).
 
-En 2017, dans [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/1-podcast-comprendre-le-monde-s1-11|Podcast Comprendre le monde S1#11 - Alfredo Valladão - "Brésil : un géant en panne?"]], c'est Alfredo Valladão qui analyse un Brésil aux élites rentières, clientélistes et corrompues, sans alternative en vue avant 2018. En 2026, Boniface chronique [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] : le livre partage le monde en trois blocs, et c'est au Sud global, que l'Occident doit convaincre par l'exemple, de décider du nouvel ordre. Dans [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]], Sylvie Bermann voit dans le sommet Trump-Xi une parité entre les États-Unis et la Chine, une Chine patiente sur Taïwan et non anti-européenne, mais dont l'excédent commercial met l'Europe en difficulté.
+Le reste de la Period est fait des émissions *Comprendre le monde*, où Boniface reçoit quatre invités, chacun gardant sa thèse. Pour Alfredo Valladão, le Brésil est un modèle d'élites rentières, clientéliste et corrompu qui s'effondre, sans alternative en vue avant 2018. Pour Didier Billion, les Kurdes, répartis sur quatre États et politiquement divisés, n'auront pas d'État unifié à court ou moyen terme, et le référendum de Barzani fut une erreur. Pour Serge Michailof, la Françafrique est finie avec Macron, dont la politique africaine traîne pourtant des bagages. Pour Agnès Levallois, Mohammed Ben Salman réforme vite l'Arabie saoudite en concentrant tous les pouvoirs, mais sa politique régionale, dictée par l'obsession de l'Iran et le feu vert de Trump, est pour l'instant un échec.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/1-podcast-comprendre-le-monde-s1-11|Podcast Comprendre le monde S1#11 - Alfredo Valladão - "Brésil : un géant en panne?"]] (2017-11-22)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/2-podcast-comprendre-le-monde-s1-12|Podcast Comprendre le monde S1#12 - Didier Billion - "Les questions Kurdes"]] (2017-11-28)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/3-pascal-boniface-transfert-de-l-ambassade|(Pascal Boniface) Transfert de l'ambassade américaine à Jérusalem : une décision catastrophique]] (2017-12-05)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/4-podcast-comprendre-le-monde-s1-13|Podcast Comprendre le monde S1#13 - Serge Michailof - "Macron et l'Afrique"]] (2017-12-06)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/5-podcast-comprendre-le-monde-s1-14|Podcast Comprendre le monde S1#14 - Agnès Levallois - "Que veut Mohammed Ben Salman?"]] (2017-12-13)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/6-pascal-boniface-trump-elargit-l-atlantique|(Pascal Boniface ) Trump élargit l'Atlantique]] (2017-12-19)
