@@ -65,7 +65,7 @@ def load_vocabulary(path: Path = VOCABULARY_PATH) -> Vocabulary:
     """The vocabulary file, read and checked. Raises VocabularyError."""
     try:
         data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    except OSError as error:
+    except (OSError, UnicodeDecodeError) as error:
         raise VocabularyError(f"the vocabulary can't be read: {error}") from error
     except yaml.YAMLError as error:
         raise VocabularyError(f"{path} is not valid YAML: {error}") from error
@@ -97,7 +97,11 @@ def load_vocabulary(path: Path = VOCABULARY_PATH) -> Vocabulary:
             raise VocabularyError(f"{where} must be a mapping")
         ends = {key: entry.get(key) for key in ("from", "to")}
         for key, end in ends.items():
-            if not isinstance(end, list) or not end or not all(kind in kinds for kind in end):
+            if (
+                not isinstance(end, list)
+                or not end
+                or not all(isinstance(kind, str) and kind in kinds for kind in end)
+            ):
                 raise VocabularyError(f"{where}.{key} must list kinds of `kinds:`")
         term = {key: value for key, value in entry.items() if key not in ends}
         relations[name] = Relation(_term(term, where), tuple(ends["from"]), tuple(ends["to"]))
@@ -133,7 +137,7 @@ def _term(entry: object, where: str) -> Term:
 
 
 def _definition(value: object, where: str) -> str:
-    if not isinstance(value, str) or not value.strip():
+    if not isinstance(value, str) or not value.strip() or "\n" in value.strip():
         raise VocabularyError(f"{where}: définition must be one line of text")
     return value.strip()
 
@@ -253,7 +257,11 @@ def _check_relation(
         problems.append(
             f"relation {number}: {name!r} is retired, replaced by {known.term.replaced_by!r}"
         )
-    names = {mention.get("name") for mention in mentions if isinstance(mention, dict)}
+    names = {
+        mention["name"]
+        for mention in mentions
+        if isinstance(mention, dict) and isinstance(mention.get("name"), str)
+    }
     for end, allowed in (("from", known.from_kinds), ("to", known.to_kinds)):
         target = relation[end]
         if not isinstance(target, str) or target not in names:

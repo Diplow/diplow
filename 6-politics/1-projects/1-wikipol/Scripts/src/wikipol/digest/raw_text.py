@@ -102,7 +102,9 @@ class RawText:
 
     @cached_property
     def _bare(self) -> str:
-        return f" {' '.join(bare_words(block.text) for block in self.blocks)} "
+        # An empty block holds no word, and must not part its neighbors, as in holds().
+        parts = [bare_words(block.text) for block in self.blocks]
+        return f" {' '.join(part for part in parts if part)} "
 
     def names(self, name: str) -> bool:
         """Whether the Raw says this name anywhere, case, accents and punctuation aside."""

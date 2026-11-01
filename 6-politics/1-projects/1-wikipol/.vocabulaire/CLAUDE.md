@@ -23,6 +23,6 @@ Chaque terme porte une `définition` d'une ligne et un `statut` :
 
 - `accepté` : un terme que j'ai gardé.
 - `proposé` : un terme que le modèle a ajouté faute d'en trouver un qui convienne, avec `introduit_par`, le chemin du Digest qui l'a introduit. Un Digest peut s'en servir, et je l'accepte, le renomme ou le retire plus tard.
-- Un terme retiré garde sa ligne et porte `remplacé_par`, le terme du même groupe qui le remplace. Un Digest qui s'en sert encore est refusé jusqu'à ce que `wikipol relabel` le réécrive.
+- Un terme retiré garde sa ligne et porte `remplacé_par`, le terme du même groupe qui le remplace. Un Digest qui s'en sert encore est refusé jusqu'à ce qu'il soit réécrit sans lui : ce sera le travail de `wikipol relabel`, que WIK-15 ajoute.
 
 Les termes s'écrivent en minuscules, les mots liés par des tirets : `chef-d-état`, `projet-de-loi`.

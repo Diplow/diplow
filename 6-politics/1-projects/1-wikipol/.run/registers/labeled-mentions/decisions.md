@@ -28,12 +28,12 @@ WIK-13. The vocabulary says how wikipol's Digests name things: it is about the n
 
 ### DEC-3 What `check-digest` holds a mention to
 
-WIK-13. Where the ticket left room:
+WIK-13. Where the ticket left room, and one place it departs from it:
 
 - **Optional fields, no version bump.** `mentions` and `relations` may be absent, so the 30 Digests already filed still pass (checked against their Raws on 2026-11-01). WIK-14 bumps `DIGEST_VERSION` when write-digest fills them.
 - **A `proposé` term counts as known**, so WIK-14 can add a term and pass the check in the same pass. A retired term (`remplacé_par`) is refused with its replacement, until `wikipol relabel` (WIK-15) rewrites it.
-- **The name is looked for in the Raw, or else in the title**, case, accents and punctuation aside. The title is the video's, checked against YouTube's metadata, and it often names a guest or an author the captions don't: Boniface's "J'ai lu… « Comprendre la question kurde » de Didier Billion" never says "Didier Billion" in its Raw. Quote matching keeps its own rule ([[6-politics/1-projects/1-wikipol/.run/registers/sources-from-youtube/decisions#DEC-12 What the checker holds a quote to|Sources from YouTube, DEC-12]]): accents count there.
-- **A duplicate** is the same name, case and accents aside; a relation reads the kind of the first.
+- **A departure: the name is looked for in the Raw, or else in the title**, case, accents and punctuation aside. The ticket said the Raw; the ticket's criterion now says the title too. The title is the video's, checked against YouTube's metadata, and it often names a guest or an author the captions don't: Boniface's "J'ai lu… « Comprendre la question kurde » de Didier Billion" never says "Didier Billion" in its Raw. Quote matching keeps its own rule ([[6-politics/1-projects/1-wikipol/.run/registers/sources-from-youtube/decisions#DEC-12 What the checker holds a quote to|Sources from YouTube, DEC-12]]): accents count there.
+- **A duplicate** is the same name, case, accents and punctuation aside; a relation reads the kind of the first.
 - **Relations name their ends by `name`**, exactly as the mention writes it.
 - **`heard_as` and `unsure`**: `unsure` is `true` or absent, as WIK-14 needs it.
 - The vocabulary is read once per `check-digest`; a malformed one stops the command and names the term at fault.

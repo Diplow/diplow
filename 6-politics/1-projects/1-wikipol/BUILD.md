@@ -86,7 +86,7 @@ relations:
 | `heard_as` | L'orthographe des sous-titres, quand elle diffère du nom (`Adam Traore`) |
 | `unsure` | `true` quand le nom canonique n'est pas sûr ; absent sinon |
 
-Une relation, `{from, relation, to}`, relie deux mentions du même Digest, nommées par leur `name`, d'un kind que la relation admet (`dirige` va d'une personne à une organisation). Le vocabulaire est vivant : un terme `proposé` vaut un terme `accepté`, un terme retiré (`remplacé_par`) est refusé avec son remplaçant. Un nom est cherché dans le Raw, ou à défaut dans le titre de la vidéo, à la casse, aux accents et à la ponctuation près : le `heard_as` quand il y en a un, le `name` sinon. La même mention deux fois, au même nom à la casse et aux accents près, est refusée, comme deux fois la même relation.
+Une relation, `{from, relation, to}`, relie deux mentions du même Digest, nommées par leur `name`, d'un kind que la relation admet (`dirige` va d'une personne à une organisation). Le vocabulaire est vivant : un terme `proposé` vaut un terme `accepté`, un terme retiré (`remplacé_par`) est refusé avec son remplaçant. Un nom est cherché dans le Raw, ou à défaut dans le titre de la vidéo, à la casse, aux accents et à la ponctuation près : le `heard_as` quand il y en a un, le `name` sinon. La même mention deux fois, au même nom à la casse, aux accents et à la ponctuation près, est refusée, comme deux fois la même relation.
 
 ### Forme app
 

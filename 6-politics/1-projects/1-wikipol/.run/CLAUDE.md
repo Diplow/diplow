@@ -5,7 +5,8 @@ owner: diplo
 preview: >-
   How wikipol's projects get built with nobody watching: one run config per
   Linear project of the Wikipol team, each landing on a project branch I merge
-  into main at the end, and the registers the runs write their decisions to.
+  into main at the end, and the registers a project's decisions go to, whether a
+  run or a ticket worked by hand made them.
 ---
 # autonomous runs
 

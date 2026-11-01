@@ -155,6 +155,23 @@ def test_a_name_in_the_title_and_not_the_raw_holds(vocabulary):
     ]
 
 
+def test_a_name_across_an_empty_block_is_found(vocabulary):
+    raw = parse_raw("0:00\n\nOn reçoit Assa\n\n0:30\n\n\n1:00\n\nTraoré ce soir.\n")
+
+    assert (
+        check_mentions({"mentions": [{"name": "Assa Traoré", "kind": "personne"}]}, raw, vocabulary)
+        == []
+    )
+
+
+def test_a_malformed_name_does_not_stop_the_relations(vocabulary):
+    relations = [{"from": BONIFACE["name"], "relation": "dirige", "to": COMITE["name"]}]
+
+    assert check(vocabulary, [BONIFACE, COMITE, {"name": ["x"], "kind": "lieu"}], relations) == [
+        "mention 3 needs a name"
+    ]
+
+
 def test_kind_labels_and_qualifiers_come_from_the_vocabulary(vocabulary):
     assert check(vocabulary, [{**BONIFACE, "kind": "concept"}]) == [
         "mention 'Pascal Boniface': kind 'concept' is not one of personne, organisation, œuvre"
@@ -298,6 +315,17 @@ def write(tmp_path, text):
             "relations.dirige.to must list kinds of `kinds:`",
         ),
         ("kinds: [\n", "is not valid YAML"),
+        (
+            "kinds:\n  personne: {définition: x, labels: {}, qualifiers: {}}\n"
+            "relations:\n  dirige: {définition: x, statut: accepté,"
+            " from: [{a: 1}], to: [personne]}\n",
+            "relations.dirige.from must list kinds of `kinds:`",
+        ),
+        (
+            'kinds:\n  personne: {définition: "deux\\nlignes", labels: {}, qualifiers: {}}\n'
+            "relations: {}\n",
+            "kinds.personne: définition must be one line of text",
+        ),
     ],
 )
 def test_a_malformed_vocabulary_is_refused(tmp_path, text, problem):
@@ -308,3 +336,7 @@ def test_a_malformed_vocabulary_is_refused(tmp_path, text, problem):
 def test_a_missing_vocabulary_is_refused(tmp_path):
     with pytest.raises(VocabularyError, match="can't be read"):
         load_vocabulary(tmp_path / "absent.yaml")
+    path = tmp_path / "latin1.yaml"
+    path.write_bytes("kinds: {é: 1}".encode("latin-1"))
+    with pytest.raises(VocabularyError, match="can't be read"):
+        load_vocabulary(path)
