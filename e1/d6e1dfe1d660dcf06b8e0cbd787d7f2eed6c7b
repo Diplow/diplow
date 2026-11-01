@@ -1,0 +1,59 @@
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/2-pascal-boniface-essais-nucleaires-le-bluff.md
+  s_f038488afb8e5a::t_5e81d6af5d23c8 1-55
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/3-pascal-boniface-portrait-d-un-monde.md
+  s_f038488afb8e5a::t_44f66cfaf5eed3 1-65
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/4-pascal-boniface-une-geopolitique-du-sport.md
+  s_f038488afb8e5a::t_8d27dd2402117e 1-61
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/5-pascal-boniface-diplomatie-francaise-les-problemes.md
+  s_f038488afb8e5a::t_2aa71460ae5495 1-66
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE.md
+  s_f038488afb8e5a::t_304ddd10d2822f 2,6-9,11,13,15-17,22-25
+6-politics/2-sources/2-boniface/1-chronicle/2-2016-10-14/1-pascal-boniface-antonio-guterres-a-l.md
+  s_f038488afb8e5a::t_223b5f4ce81401 1-48
+6-politics/2-sources/2-boniface/1-chronicle/2-2016-10-14/2-islamophobie-en-france-le-point-de.md
+  s_f038488afb8e5a::t_3bf28aa8c4c234 1-52
+6-politics/2-sources/2-boniface/1-chronicle/2-2016-10-14/3-j-ai-lu-le-triangle-du.md
+  s_f038488afb8e5a::t_e6832ea336b57d 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2016-10-14/4-la-chine-a-t-elle-plie.md
+  s_f038488afb8e5a::t_377c716a121674 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2016-10-14/CLAUDE.md
+  s_f038488afb8e5a::t_a8b581757e516f 1-22
+6-politics/2-sources/2-boniface/1-chronicle/3-2026-10-15/1-j-ai-lu-comprendre-la-question.md
+  s_f038488afb8e5a::t_aca716a43a4f37 3
+6-politics/2-sources/2-boniface/1-chronicle/3-2026-10-15/2-elections-israel-rien-a-signaler-pour.md
+  s_f038488afb8e5a::t_9f33a2ca938379 3
+6-politics/2-sources/2-boniface/1-chronicle/3-2026-10-15/3-un-maire-francais-agresse-en-palestine.md
+  s_f038488afb8e5a::t_c73561a039597c 3
+6-politics/2-sources/2-boniface/1-chronicle/3-2026-10-15/CLAUDE.md
+  s_f038488afb8e5a::t_3fa5430134c47b 1-21
+6-politics/2-sources/2-boniface/1-chronicle/4-2026-10-21/1-gaza-dialogue-entre-un-humanitaire-et.md
+  s_f038488afb8e5a::t_f971cce2a140ac 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2026-10-21/2-lula-reelu-surprise-politique-choc-geopolitique.md
+  s_f038488afb8e5a::t_2ad61f6791461e 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2026-10-21/3-le-japon-face-au-defi-trump.md
+  s_f038488afb8e5a::t_1cbd9eea82fc2c 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2026-10-21/4-l-ocs-une-otan-asiatique-expliquez.md
+  s_f038488afb8e5a::t_39247236371d6a 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2026-10-21/5-j-ai-lu-israel-s-lobby.md
+  s_f038488afb8e5a::t_c05310c0144d77 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2026-10-21/CLAUDE.md
+  s_f038488afb8e5a::t_735f558190dec8 3,13,19-23
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_f038488afb8e5a::t_022559dec121b6 6-9,13,15-17,21-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e1d6e1dfe1d660dcf06b8e0cbd787d7f2eed6c7b",
+  "prompts": {},
+  "sessions": {
+    "s_f038488afb8e5a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5db3dcee-4105-4ef1-abe1-29d7cbbf4139",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
