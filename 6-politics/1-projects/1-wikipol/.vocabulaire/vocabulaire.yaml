@@ -34,6 +34,14 @@ kinds:
       ingénieur: {définition: "Conçoit, exploite ou évalue des systèmes techniques.", statut: proposé, introduit_par: osonscauser/owU0KJ7RXf0.md}
       cartographe: {définition: "Conçoit et dessine des cartes.", statut: proposé, introduit_par: boniface/KXVSJ0cSg_U.md}
       chef-cuisinier: {définition: "Cuisinier professionnel qui dirige une cuisine ou un restaurant.", statut: proposé, introduit_par: paduteam/vpr0o3duK_4.md}
+      fonctionnaire-international: {définition: "Dirige ou travaille pour une organisation internationale ou l'une de ses agences.", statut: proposé, introduit_par: osonscauser/0rRdwjRkuJU.md}
+      révolutionnaire: {définition: "Mène ou incarne une révolution politique.", statut: proposé, introduit_par: boniface/eqXoEN0OCWc.md}
+      linguiste: {définition: "Étudie les langues et en fixe ou en forge le vocabulaire.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
+      haut-fonctionnaire: {définition: "Occupe un poste de direction dans l'administration ou les établissements publics.", statut: proposé, introduit_par: blast/PfO0d2QPbXU.md}
+      médecin: {définition: "Exerce la médecine : soigne ou opère des patients.", statut: proposé, introduit_par: blast/PfO0d2QPbXU.md}
+      juriste: {définition: "Spécialiste du droit, qui l'étudie ou le pratique.", statut: proposé, introduit_par: osonscauser/cBhHMYnGSJE.md}
+      présentateur: {définition: "Présente des émissions de télévision ou de radio.", statut: proposé, introduit_par: osonscauser/cBhHMYnGSJE.md}
+      ancien-chef-d-état: {définition: "A dirigé un État et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: blast/5N2TINrVJPE.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -61,6 +69,7 @@ kinds:
       institut-de-recherche: {définition: "Organisme qui mène des études et des évaluations, notamment économiques, et en publie les résultats.", statut: proposé, introduit_par: blast/FCVoy7L96sI.md}
       établissement-scolaire: {définition: "École, collège ou lycée, public ou privé.", statut: proposé, introduit_par: osonscauser/emdc6suIeCc.md}
       coalition: {définition: "Alliance de partis politiques qui agissent ensemble sous un même nom.", statut: proposé, introduit_par: blast/HAuq5hpiV0s.md}
+      communauté-en-ligne: {définition: "Groupe d'abonnés réuni autour d'un site ou d'une chaîne, souvent payant.", statut: proposé, introduit_par: paduteam/nxqv571BG-g.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -92,6 +101,8 @@ kinds:
       sommet: {définition: "Une réunion de dirigeants.", statut: accepté}
       meeting: {définition: "Une réunion publique politique.", statut: accepté}
       compétition: {définition: "Une compétition sportive.", statut: accepté}
+      révolte: {définition: "Soulèvement populaire ou armé contre un pouvoir.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
+      déplacement-forcé: {définition: "Fuite ou expulsion d'une population hors de ses terres.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -123,6 +134,8 @@ kinds:
       décision-de-justice: {définition: "Un jugement, un arrêt.", statut: accepté}
       rapport: {définition: "Un rapport officiel, d'une institution ou d'une commission.", statut: accepté}
       programme: {définition: "Le programme d'un parti ou d'un candidat.", statut: accepté}
+      déclaration: {définition: "Prise de position publique et officielle d'un gouvernement ou d'une autorité.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
+      résolution: {définition: "Texte adopté par le vote d'une assemblée ou d'une organisation internationale.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
