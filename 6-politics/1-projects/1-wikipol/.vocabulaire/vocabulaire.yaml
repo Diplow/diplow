@@ -26,6 +26,8 @@ kinds:
       artiste: {définition: "Crée ou interprète des œuvres : musique, cinéma, arts.", statut: accepté}
       sportif: {définition: "Pratique un sport en compétition.", statut: accepté}
       témoin: {définition: "Rapporte ce qu'il a vécu ou vu.", statut: accepté}
+      dirigeant-de-parti: {définition: "Dirige un parti ou en est un cadre dirigeant.", statut: proposé, introduit_par: paduteam/wsiChBGb6T0.md}
+      chef-de-gouvernement: {définition: "Dirige le gouvernement d'un État (Premier ministre), à la date de la Publication.", statut: proposé, introduit_par: paduteam/ADd-wfitfm8.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -49,6 +51,7 @@ kinds:
       armée: {définition: "Les forces armées d'un État.", statut: accepté}
       groupe-armé: {définition: "Un groupe qui combat les armes à la main, hors d'une armée d'État.", statut: accepté}
       think-tank: {définition: "Produit des analyses et des propositions politiques.", statut: accepté}
+      institut-de-sondage: {définition: "Mesure l'opinion par des enquêtes et des sondages.", statut: proposé, introduit_par: paduteam/X0tXWZsjENQ.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

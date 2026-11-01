@@ -92,18 +92,20 @@ def names_said(names: Iterable[KnownName], raw: RawText, title: str) -> list[Kno
 
 def seed_names(vaults: Iterable[Path], kept: Iterable[KnownName] = ()) -> list[KnownName]:
     """The known names of the frozen vaults' person and organisation notes, after the ones
-    `kept`, which win over a note that names the same one by any form.
+    `kept`.
 
     A note's name is its heading, which keeps the accents its file name drops, or else an alias
     that only adds accents to it; its file name and other aliases become aliases, but for those
-    that are the name with other accents."""
+    that are the name with other accents. A note whose name is already a form of a name is left
+    out, so a hand correction survives a new seed. Two notes that only share an alias are two
+    names: `AOC` is Alexandria Ocasio-Cortez and Amélie Oudéa-Castéra."""
     names = list(kept)
     known = {bare_words(form) for name in names for form in name.forms}
     for vault in vaults:
         for folder, kind in LEGACY_FOLDERS.items():
             for path in sorted((vault / folder).glob("*.md")):
-                seeded = _note_name(path, kind)
-                if seeded and not known & {bare_words(form) for form in seeded.forms}:
+                seeded = None if path.name == "CLAUDE.md" else _note_name(path, kind)
+                if seeded and bare_words(seeded.name) not in known:
                     names.append(seeded)
                     known |= {bare_words(form) for form in seeded.forms}
     return names
@@ -148,3 +150,29 @@ def render_names(names: Iterable[KnownName]) -> str:
             lines.append(f"  - {flow_yaml(entry)}")
         lines.append("")
     return "\n".join(lines)
+
+
+def check_known_names(mentions: object, names: Iterable[KnownName]) -> list[str]:
+    """The mentions named by a form the known names list as another name's alias, one line
+    each: the list holds the canonical name, and the captions' spelling goes in `heard_as`. An
+    alias two known names share says nothing."""
+    if not isinstance(mentions, list):
+        return []
+    names = list(names)
+    canonical = {bare_words(known.name) for known in names}
+    by_alias: dict[str, set[str]] = {}
+    for known in names:
+        for alias in known.aliases:
+            by_alias.setdefault(bare_words(alias), set()).add(known.name)
+    problems = []
+    for mention in mentions:
+        name = mention.get("name") if isinstance(mention, dict) else None
+        if not isinstance(name, str) or bare_words(name) in canonical:
+            continue
+        known = by_alias.get(bare_words(name), set())
+        if len(known) == 1:
+            problems.append(
+                f"mention {name!r}: the known names write it {next(iter(known))!r}; "
+                "the captions' spelling goes in heard_as"
+            )
+    return problems

@@ -30,7 +30,13 @@ from wikipol.digest.mentions import (
     read_new_terms,
     with_terms,
 )
-from wikipol.digest.names import NAMES_PATH, KnownName, load_names, names_said
+from wikipol.digest.names import (
+    NAMES_PATH,
+    KnownName,
+    check_known_names,
+    load_names,
+    names_said,
+)
 from wikipol.digest.raw_text import clock, parse_raw
 from wikipol.legacy_index import LegacyNote, find_video_note
 from wikipol.raw_store import Raw, RawStore
@@ -178,6 +184,7 @@ def write_digest(
     linkable = {} if linkable is None else linkable
     skill = skill_path.read_text(encoding="utf-8")
     vocabulary = load_vocabulary(vocabulary_path)
+    names = load_names(names_path)
     prompt = build_prompt(
         source,
         fields,
@@ -186,7 +193,7 @@ def write_digest(
         note.text if note else None,
         linkable,
         vocabulary=vocabulary_path.read_text(encoding="utf-8"),
-        known=names_said(load_names(names_path), raw_text, fields.title),
+        known=names_said(names, raw_text, fields.title),
     )
     asked = prompt
     for attempt in range(1, ATTEMPTS + 1):
@@ -201,6 +208,7 @@ def write_digest(
                 "the draft's frontmatter is not YAML that reads: quote a value holding a colon, "
                 "a comma, a # or brackets"
             )
+        problems += check_known_names(mentions, names)
         problems += check_digest(
             text,
             raw_text,
