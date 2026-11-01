@@ -1,6 +1,6 @@
 ---
 title: "L'ÉTUDE QUI PROUVE QUE MACRON EST LE PRÉSIDENT DES RICHES"
-parent: 6-politics/2-sources/4-blast/1-chronicle
+parent: 6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31
 owner: diplo
 preview: >-
   Blast soutient que Macron mérite son étiquette de président des riches : les

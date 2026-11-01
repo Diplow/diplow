@@ -1,6 +1,6 @@
 ---
 title: "IMPLOSION DE LA NUPES : LE PRÉTEXTE DE LA QUESTION ISRAÉLO-PALESTINIENNE"
-parent: 6-politics/2-sources/4-blast/1-chronicle
+parent: 6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31
 owner: diplo
 preview: >-
   Blast soutient que la guerre entre Israël et le Hamas n'est que le prétexte

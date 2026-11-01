@@ -1,6 +1,6 @@
 ---
 title: "ENFANTS FRANÇAIS TUÉS À GAZA : LA DOULEUR ET LA COLÈRE DE LEUR GRAND-MÈRE"
-parent: 6-politics/2-sources/4-blast/1-chronicle
+parent: 6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31
 owner: diplo
 preview: >-
   Blast donne la parole à une grand-mère de Vitry-sur-Seine dont deux

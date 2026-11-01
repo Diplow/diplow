@@ -1,6 +1,6 @@
 ---
 title: "C. HERNU : LE KGB, LES COLLABOS ET LE TERRORISME D’ÉTAT"
-parent: 6-politics/2-sources/4-blast/1-chronicle
+parent: 6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31
 owner: diplo
 preview: >-
   Blast soutient que Charles Hernu, ministre de la Défense de Mitterrand,
