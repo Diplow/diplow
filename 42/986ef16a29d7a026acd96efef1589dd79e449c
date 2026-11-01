@@ -1,0 +1,47 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_d1eabeb11d31b6 94
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/5-l-inconsistance-politique-d-e-macron.md
+  s_4b3266b9db1e25::t_bf9ed5755e5324 1-87
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/6-immigration-la-france-n-est-un.md
+  s_4b3266b9db1e25::t_f3b98b8ed81a9e 1-83
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/CLAUDE.md
+  s_4b3266b9db1e25::t_536a4c87e4ffce 2,7-9,11,13,15,23-24
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25/1-e-macron-et-ses-ministres-l.md
+  s_4b3266b9db1e25::t_905e913d600e21 1-69
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25/2-pedophilie-corruption-racket-la-face-cachee.md
+  s_4b3266b9db1e25::t_6477f850c02d8a 1-85
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25/3-gaza-immersion-et-temoignages-rares-face.md
+  s_4b3266b9db1e25::t_99d87f9df8782d 1-62
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25/4-duhamel-saint-cricq-une-dynastie-a.md
+  s_4b3266b9db1e25::t_5120e2a97cd44a 1-92
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25/CLAUDE.md
+  s_4b3266b9db1e25::t_ce17ae0aab9821 1-22
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/CLAUDE.md
+  s_4b3266b9db1e25::t_12d0b3d65dfe4f 2,7-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_4b3266b9db1e25::t_4edb3000bdefc7 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "42986ef16a29d7a026acd96efef1589dd79e449c",
+  "prompts": {},
+  "sessions": {
+    "s_4b3266b9db1e25": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a62bae8b73f79f68f",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
