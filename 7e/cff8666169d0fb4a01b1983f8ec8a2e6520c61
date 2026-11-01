@@ -1,0 +1,69 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_382497c6e6ccc8 73-74
+  s_70e2b8820e4c39::t_93a3ea9073d35b 109
+  s_70e2b8820e4c39::t_51633b02b3d8ca 71-72
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/CLAUDE.md
+  s_3e62ec53ff1083::t_a66d9ba73df1d8 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27/1-proces-dupond-moretti-l-heure-du.md
+  s_3e62ec53ff1083::t_86b8e5e7c22810 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27/2-glyphosate-10-ans-d-empoisonnement-en.md
+  s_3e62ec53ff1083::t_845c8e390fe9d7 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27/3-francois-mitterrand-petainiste-et-resistant.md
+  s_3e62ec53ff1083::t_e28c70c6644347 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27/4-milei-trump-bolsonaro-l-inquietante-percee.md
+  s_3e62ec53ff1083::t_3dc17fd39d68fe 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27/5-violences-les-pompiers-pyromanes-du-pouvoir.md
+  s_3e62ec53ff1083::t_0ea14fe6520c44 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27/CLAUDE.md
+  s_3e62ec53ff1083::t_7c90dea850b0b2 3,21-25
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/2-2023-12-01/1-nous-ne-vivons-pas-dans-des.md
+  s_3e62ec53ff1083::t_d1d896d330d38f 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/2-2023-12-01/2-prisonniers-contre-otages-les-vrais-enjeux.md
+  s_3e62ec53ff1083::t_2cf1766070607a 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/2-2023-12-01/3-face-au-mepris-du-pouvoir-la.md
+  s_3e62ec53ff1083::t_105c10092b1230 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/2-2023-12-01/4-frenchie-shore-l-emission-la-plus.md
+  s_3e62ec53ff1083::t_137e83eddbfc02 1-93
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/2-2023-12-01/5-l-imagination-contre-le-pouvoir-de.md
+  s_3e62ec53ff1083::t_131dde846c990d 1-82
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/2-2023-12-01/CLAUDE.md
+  s_3e62ec53ff1083::t_e71515a1d1e8e2 2-3,6-9,11,13,15,19-23
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/3-2023-12-04/1-le-plus-vieux-prisonnier-politique-francais.md
+  s_3e62ec53ff1083::t_462454b3f2b478 1-76
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/3-2023-12-04/2-une-crise-historique-pourquoi-il-devient.md
+  s_3e62ec53ff1083::t_412818fb2e5465 1-89
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/3-2023-12-04/3-grand-sabotage-climatique-revelations-sur-un.md
+  s_3e62ec53ff1083::t_151eb47b0df908 1-96
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/3-2023-12-04/4-batiment-5-un-antidote-au-racisme.md
+  s_3e62ec53ff1083::t_3c35345ace29f0 1-74
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/3-2023-12-04/CLAUDE.md
+  s_3e62ec53ff1083::t_ead8792a065674 1-24
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/CLAUDE.md
+  s_3e62ec53ff1083::t_ce3d2aa7dc2c06 1-21
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_3e62ec53ff1083::t_31da9709f6d487 6-9,13,15,17,22-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7ecff8666169d0fb4a01b1983f8ec8a2e6520c61",
+  "prompts": {},
+  "sessions": {
+    "s_3e62ec53ff1083": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aed0f98e6384a0c72",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
