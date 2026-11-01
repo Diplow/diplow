@@ -1,0 +1,37 @@
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/5-2024-01-08/4-remaniement-tout-changer-pour-que-rien.md
+  s_70e2b8820e4c39::t_0aa712acde6f96 1-97
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/5-2024-01-08/5-gabriel-attal-emmanuel-macron-en-pire.md
+  s_70e2b8820e4c39::t_dd1bf3c968a612 1-77
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/5-2024-01-08/CLAUDE.md
+  s_70e2b8820e4c39::t_dd3f2d2c087389 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/6-2024-01-14/1-france-inter-la-radio-des-bobos.md
+  s_70e2b8820e4c39::t_ee560b55dea7a7 1-96
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/6-2024-01-14/2-dry-january-ecologie-pourquoi-le-pouvoir.md
+  s_70e2b8820e4c39::t_1acd55a879841c 1-89
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/6-2024-01-14/3-de-bamboula-cie-au-diplome-hip.md
+  s_70e2b8820e4c39::t_a0b5666c53c193 1-80
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/6-2024-01-14/4-capitalisme-les-ultra-riches-contre-l.md
+  s_70e2b8820e4c39::t_67753009d88050 1-96
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/6-2024-01-14/CLAUDE.md
+  s_70e2b8820e4c39::t_abffb739122e75 1-24
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/CLAUDE.md
+  s_70e2b8820e4c39::t_84a1e107e7fe91 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_b6577dfe5b2fc6 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ff2b5932fcd6e112ca8f8d9fa78e87de3c0309ef",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
