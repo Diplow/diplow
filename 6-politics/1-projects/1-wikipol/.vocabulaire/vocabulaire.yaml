@@ -44,6 +44,8 @@ kinds:
       ancien-chef-d-état: {définition: "A dirigé un État et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: blast/5N2TINrVJPE.md}
       humanitaire: {définition: "Agit dans l'aide humanitaire ou dirige une organisation qui la porte.", statut: proposé, introduit_par: paduteam/xvFF163UFn4.md}
       président-élu: {définition: "Élu à la présidence d'un État mais pas encore entré en fonction, à la date de la Publication.", statut: proposé, introduit_par: boniface/k4Xi-vuVmJY.md}
+      dirigeant-sportif: {définition: "Dirige une instance, une fédération ou un comité du sport.", statut: proposé, introduit_par: boniface/2f8gBKazQp0.md}
+      ancien-ministre: {définition: "A été membre d'un gouvernement et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/oNE9KIl4LWM.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

@@ -1,6 +1,6 @@
 ---
 title: "LE GRAND REMPLACEMENT - la preuve par les chiffres ?"
-parent: 6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-03-06
+parent: 6-politics/2-sources/3-osonscauser/1-chronicle/3-2024-06-04
 owner: diplo
 preview: >-
   Osons Causer soutient que le grand remplacement est un fantasme : 15 % des
