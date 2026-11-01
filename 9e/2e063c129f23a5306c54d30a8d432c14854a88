@@ -1,0 +1,23 @@
+6-politics/2-sources/3-osonscauser/1-chronicle/5-2024-10-08/4-tout-ce-que-vous-devez-savoir.md
+  s_70e2b8820e4c39::t_b0aab6c6e4e235 1-80
+6-politics/2-sources/3-osonscauser/1-chronicle/5-2024-10-08/CLAUDE.md
+  s_70e2b8820e4c39::t_849e2422e65862 2,6-9,11,13,15-17,24
+6-politics/2-sources/3-osonscauser/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_54f1ec76d1f922 6-8,12,14,16,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9e2e063c129f23a5306c54d30a8d432c14854a88",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
