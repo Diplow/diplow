@@ -87,6 +87,7 @@ kinds:
       ancien-président-de-l-autorité-palestinienne: {définition: "A dirigé l'Autorité palestinienne et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: blast/9IODM4a91Ss.md}
       ancien-élu: {définition: "A détenu un mandat électif et n'en détient plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/uIuBwaYJZEc.md}
       sociologue: {définition: "Étudie les sociétés et les rapports sociaux, et en publie les analyses.", statut: proposé, introduit_par: blast/w09mN2LfUBc.md}
+      traducteur: {définition: "Traduit des textes d'une langue dans une autre, notamment des livres.", statut: proposé, introduit_par: blast/l26Xt3HOcFM.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
