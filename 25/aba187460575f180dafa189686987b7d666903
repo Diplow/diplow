@@ -1,0 +1,74 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_eee3ab1a924534 77
+  s_70e2b8820e4c39::t_5838a0f962ddac 76
+  s_70e2b8820e4c39::t_b1f36a474d4920 75
+  s_70e2b8820e4c39::t_584cd6d786b99a 151
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2017-10-24/2-podcast-comprendre-le-monde-s1-7.md
+  s_ba8e9b1455165e::t_a092ab77bbd2b6 1-99
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2017-10-24/3-podcast-comprendre-le-monde-s1-8.md
+  s_ba8e9b1455165e::t_54605f7e9fb82a 1-80
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2017-10-24/4-pascal-boniface-trump-une-coherence-la.md
+  s_ba8e9b1455165e::t_6daa92e3afeff1 1-65
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2017-10-24/5-podcast-comprendre-le-monde-s1-10.md
+  s_ba8e9b1455165e::t_f7ce740982106f 1-83
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2017-10-24/6-pascal-boniface-mohammed-ben-salman-une.md
+  s_ba8e9b1455165e::t_d6fc02fee52371 1-61
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2017-10-24/CLAUDE.md
+  s_ba8e9b1455165e::t_33c7316959bbb5 2,6-8,10,12,14,19-23
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/1-podcast-comprendre-le-monde-s1-11.md
+  s_ba8e9b1455165e::t_6509675a121e89 1-69
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/2-j-ai-lu-le-triangle-du.md
+  s_ba8e9b1455165e::t_f1b5679b039319 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/3-la-chine-a-t-elle-plie.md
+  s_ba8e9b1455165e::t_64dfc53bb5bbf7 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2017-11-22/CLAUDE.md
+  s_ba8e9b1455165e::t_671a9f25269a0a 1-20
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/5-2026-10-15/1-j-ai-lu-comprendre-la-question.md
+  s_ba8e9b1455165e::t_4d6480c13b84da 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/5-2026-10-15/2-elections-israel-rien-a-signaler-pour.md
+  s_ba8e9b1455165e::t_0703154a1edb81 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/5-2026-10-15/3-un-maire-francais-agresse-en-palestine.md
+  s_ba8e9b1455165e::t_7bb82ea3d9fcfb 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/5-2026-10-15/CLAUDE.md
+  s_ba8e9b1455165e::t_d3fbcc53449294 3,19-21
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/6-2026-10-21/1-gaza-dialogue-entre-un-humanitaire-et.md
+  s_ba8e9b1455165e::t_e5929ebd0fb700 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/6-2026-10-21/2-lula-reelu-surprise-politique-choc-geopolitique.md
+  s_ba8e9b1455165e::t_58603bccdbf9f5 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/6-2026-10-21/3-le-japon-face-au-defi-trump.md
+  s_ba8e9b1455165e::t_2be1639c662a25 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/6-2026-10-21/4-l-ocs-une-otan-asiatique-expliquez.md
+  s_ba8e9b1455165e::t_1274dcfe3f3f55 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/6-2026-10-21/5-j-ai-lu-israel-s-lobby.md
+  s_ba8e9b1455165e::t_284253888d1c79 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/6-2026-10-21/CLAUDE.md
+  s_ba8e9b1455165e::t_2f3e0c6e6d1e4f 3,13,19-23
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/CLAUDE.md
+  s_ba8e9b1455165e::t_0c4b3ac7c771fd 6-8,12,14-16,22-25
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_ba8e9b1455165e::t_ccfd78d74a0ed1 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "25aba187460575f180dafa189686987b7d666903",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_ba8e9b1455165e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a7891c170b975a2de",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
