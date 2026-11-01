@@ -1,0 +1,31 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_569dbb4d62f2f3::t_e7da2d53803c77 63
+  s_569dbb4d62f2f3::t_524bb89cb24366 34
+  s_569dbb4d62f2f3::t_34894834ced2b4 36
+  s_569dbb4d62f2f3::t_28f4893e5ed6dc 35
+  s_569dbb4d62f2f3::t_3d3c08ff3ac314 62
+6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/3-affaire-quatennens-l-erreur-de-melenchon.md
+  s_569dbb4d62f2f3::t_7851b6195325f8 7-9,16-17,19-28,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80-86,88
+6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/4-from-trotskiste-to-rac-ste-il.md
+  s_569dbb4d62f2f3::t_8657275959761d 6-9,16-17,19-41,45,47,53,55,57,61,63-65,69,71,73,75,77,79,81,83,85,87,89,91,93,95-97,99
+6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE.md
+  s_569dbb4d62f2f3::t_b470b91ec3209c 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_569dbb4d62f2f3::t_f8cfe9edec92e9 6-9,13,15,17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e3daa4c91b345b64dc7854a8c2aea47d6c04b4fc",
+  "prompts": {},
+  "sessions": {
+    "s_569dbb4d62f2f3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a6e8910-f13d-4cf1-8345-cc32da1c1f94",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
