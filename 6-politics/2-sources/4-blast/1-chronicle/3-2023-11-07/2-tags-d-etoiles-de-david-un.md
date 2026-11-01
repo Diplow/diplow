@@ -1,6 +1,6 @@
 ---
 title: "TAGS D'ÉTOILES DE DAVID : UN EMBALLEMENT POLITIQUE ET MÉDIATIQUE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-11-04
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-07
 owner: diplo
 preview: >-
   Blast soutient que l'affaire des étoiles de David bleues a été qualifiée
