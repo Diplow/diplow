@@ -3,16 +3,16 @@ title: "2019-09-12 → 2024-01-01"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12
 owner: diplo
 preview: >-
-  La PaduTeam passe tout au crible matérialiste : une vulgarisation du Capital
-  qui n'est qu'une pub, les parcours d'un ingénieur nietzschéen et d'un
-  ex-trotskiste passé à l'extrême droite, la gestion catastrophique de
-  l'affaire Quatennens.
+  La PaduTeam ramène des discours, des parcours et des affaires à leurs bases
+  matérielles et de classe : un vulgarisateur du Capital qui fait de la pub,
+  un ingénieur nietzschéen, la gestion de l'affaire Quatennens, un
+  ex-trotskiste devenu islamophobe.
 ---
 # 2019-09-12 → 2024-01-01
 
-Sur ces quatre vidéos, de 2019 à 2024, la PaduTeam ramène des discours et des trajectoires à leur ancrage matériel. Dans [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/1-cyrus-north-explique-le-marxisme-a|la vidéo sur Cyrus North]], elle soutient que sa présentation du Capital, sponsorisée par un éditeur de manga, n'est qu'une pub : elle confond économie et critique de l'économie politique, capital et argent, et n'explique ni la marchandise ni la valeur. Dans [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/2-d-ado-gauchiste-a-ingenieur-nietzscheen|le récit d'Arthur]], le passage de Mélenchon à Nietzsche n'est pas une conversion réfléchie mais un sociotype classique de jeune ingénieur isolé, politisé par YouTube masculiniste, qui se victimise sans ancrage matériel.
+Sur ces quatre vidéos, la PaduTeam applique la même méthode : elle refuse de prendre un discours ou un parcours pour ce qu'il dit de lui-même et le renvoie à sa position sociale. La vidéo sur le Capital de Cyrus North, sponsorisée par un éditeur de manga, n'est pour elle qu'une pub qui confond économie et critique de l'économie politique, capital et argent, aliénation et abrutissement, sans expliquer la marchandise ni la valeur. Le passage d'Arthur de Mélenchon à Nietzsche relève du même geste : elle y voit non une conversion réfléchie mais un sociotype classique de jeune ingénieur isolé, politisé par YouTube masculiniste, qui se victimise sans ancrage matériel.
 
-Le même geste vaut pour la politique et l'extrême droite. Elle juge catastrophique la gestion de [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/3-affaire-quatennens-l-erreur-de-melenchon|l'affaire Quatennens]], qui efface l'asymétrie du couple. Elle défend une réhabilitation sous condition de transformation et de dépositionnement, et soutiendra Mélenchon en 2027 sans rien lâcher sur les VSS. Enfin, [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/4-from-trotskiste-to-rac-ste-il|le parcours de Luc]], du lambertisme à l'extrême droite, s'explique selon elle par l'islamophobie, nourrie de deux matrices bourgeoises, réactionnaire et laïcarde, qui font de la laïcité un culturalisme.
+Les deux dernières vidéos portent sur les rapports de domination et leurs détournements. La PaduTeam juge catastrophique la gestion de l'affaire Quatennens, par lui comme par Mélenchon : l'asymétrie y est gommée et la domination légitimée, et une réhabilitation exigerait un discours juste et un dépositionnement. Zoé soutiendra pourtant Mélenchon en 2027. Le parcours de Luc, du trotskisme lambertiste à l'extrême droite, lui sert enfin à montrer un racisme islamophobe habillé de laïcité ou de féminisme, hérité de deux matrices bourgeoises, qui détourne la colère sociale de la lutte des classes.
 
 ## Contenu
 
