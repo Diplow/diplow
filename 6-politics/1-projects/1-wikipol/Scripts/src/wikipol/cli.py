@@ -357,8 +357,10 @@ def seed_known_names(args: argparse.Namespace) -> int:
     kept = load_names() if NAMES_PATH.is_file() else []
     vaults = [s.legacy_vault for s in load_sources(args.sources_dir) if s.legacy_vault]
     names = seed_names(vaults, kept=kept)
-    if not args.dry_run:
-        NAMES_PATH.write_text(render_names(names), encoding="utf-8")
+    if not args.dry_run:  # beside itself first: a write cut short leaves the list as it was
+        staged = NAMES_PATH.with_name(f".{NAMES_PATH.name}.new")
+        staged.write_text(render_names(names), encoding="utf-8")
+        staged.replace(NAMES_PATH)
     added = len(names) - len(kept)
     print(f"{NAMES_PATH}: {len(kept)} names kept, {added} added from {len(vaults)} vaults")
     return 0

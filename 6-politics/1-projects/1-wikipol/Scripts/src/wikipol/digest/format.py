@@ -122,9 +122,10 @@ def render(
         f"model: {fields.model}",
     ]
     for name, items in (("mentions", mentions), ("relations", relations)):
-        if isinstance(items, list) and items:
-            frontmatter += [f"{name}:", *(f"  - {flow_yaml(item)}" for item in items)]
-        elif items:  # not a list: kept as written, for the check to say so
+        if isinstance(items, list):
+            if items:
+                frontmatter += [f"{name}:", *(f"  - {flow_yaml(item)}" for item in items)]
+        elif items is not None:  # not a list: kept as written, for the check to say so
             frontmatter.append(f"{name}: {flow_yaml(items)}")
     return "\n".join(["---", *frontmatter, "---", f"# {fields.title}", "", claims.strip(), ""])
 

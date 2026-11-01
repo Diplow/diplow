@@ -343,7 +343,6 @@ personne:
   - {name: Gilles Boulot, aliases: [Gill Boulot]}
   - {name: Gilles Deleuze, aliases: [Deleuze]}
   - {name: Gilles-William Goldnadel, aliases: [Gill William Goldnadel, Goldnadel]}
-  - {name: Gilles-William Goldnadel, aliases: [Goldnadel]}
   - {name: Gisèle Pelicot, aliases: [Giselle Pelicot]}
   - {name: Giulia Sarkozy, aliases: [Julia Sarkozy]}
   - {name: Glupatate, aliases: [Glupatat, Glu]}
@@ -361,7 +360,7 @@ personne:
   - {name: Hélène Geoffroy}
   - {name: Hélène Jaufrois}
   - {name: Hélène Mercier-Arnault, aliases: [Merci Arnaud]}
-  - {name: Helydia, aliases: [Célia, streameuse Helydia]}
+  - {name: Helydia, aliases: [streameuse Helydia]}
   - {name: Henri Guaino, aliases: [Henry Guaino]}
   - {name: Henri Wallon, aliases: [Wallon]}
   - {name: Henry de Lesquen}
@@ -386,7 +385,7 @@ personne:
   - {name: Immanuel Kant, aliases: [Emmanuel Kant]}
   - {name: Infame}
   - {name: Iñigo Errejón, aliases: [Erreron, Errejón]}
-  - {name: Irène Montero, aliases: [Yolanda Díaz]}
+  - {name: Irène Montero}
   - {name: Isaac Herzog, aliases: [Herzog]}
   - {name: Isabelle Alonso, aliases: [Alonso]}
   - {name: Isabelle Cukierman}
@@ -471,7 +470,7 @@ personne:
   - {name: Kimberlé Crenshaw, aliases: [Crenshaw]}
   - {name: Kroc Blanc, aliases: [Cabé, FDNews, fdenews]}
   - {name: Kylian Mbappé, aliases: [Mbappé, Kyan Mbappé]}
-  - {name: L'Observateur Officiel, aliases: [Lobservateur Officiel, '[l''Observateur, @lobservateurOfficiel, l''Observateur Officiel]']}
+  - {name: L'Observateur Officiel, aliases: [Lobservateur Officiel, l'Observateur, '@lobservateurOfficiel']}
   - {name: La Menace, aliases: [Maxime Alexandrov, lamenaceofficial]}
   - {name: La Valette, aliases: [Lavalette]}
   - {name: Lahouaria Addouche, aliases: [Lahouaria]}
@@ -705,9 +704,9 @@ personne:
   - {name: Priscilla Even, aliases: [Priscato, Prisclatno]}
   - {name: Psychodélique}
   - {name: Psyhodelik}
-  - {name: Psykocouac, aliases: ['[Psyko couac, PsykoCouac, @PsykoCouac]']}
+  - {name: Psykocouac, aliases: [Psyko couac]}
   - {name: Quentin Déranque, aliases: [Quentin de Rang]}
-  - {name: Quentin M, aliases: ['[Quentin M (journaliste), @QuentinM]']}
+  - {name: Quentin M, aliases: [Quentin M (journaliste), '@QuentinM']}
   - {name: Rachid Mekhloufi}
   - {name: Rachid Témal}
   - {name: Rachida Dati, aliases: [Dati]}
@@ -770,7 +769,7 @@ personne:
   - {name: Sigmund Freud, aliases: [Freud]}
   - {name: Sihame Assbague}
   - {name: Silvia Federici, aliases: [Federici]}
-  - {name: Slapp, aliases: ['[Slapp_, @Slapp_, Armand Belfroid]']}
+  - {name: Slapp, aliases: [Armand Belfroid]}
   - {name: Sonia Mabrook}
   - {name: Sophia Aram}
   - {name: Sophia Chikirou, aliases: [Chikirou]}
@@ -860,11 +859,11 @@ personne:
   - {name: Yassouk, aliases: [Yasuk, Yassou, yassouk.k]}
   - {name: Yoav Gallant, aliases: [Gallant]}
   - {name: Yohan du Canard Réfractaire, aliases: [Yohan]}
+  - {name: Yolanda Díaz}
   - {name: Yves Calvi}
   - {name: Zoclo}
   - {name: Zoé Dubus}
   - {name: Zohran Mamdani, aliases: [Zohair Mamdani, Mamdani]}
-  - {name: Zohran Mamdani, aliases: [Mamdani]}
   - {name: Zyed Benna, aliases: [Zied Benna, Zied, Zyed]}
 
 organisation:
@@ -955,7 +954,7 @@ organisation:
   - {name: Front de Gauche, aliases: [FdG]}
   - {name: Front de Libération Nationale, aliases: [FLN]}
   - {name: Front démocratique de libération de la Palestine, aliases: [FDLP]}
-  - {name: Front national, aliases: [Front National, FN, Front nat]}
+  - {name: Front national, aliases: [FN, Front nat]}
   - {name: Front Populaire 2027, aliases: [FP2027, Front Pop 2027]}
   - {name: Front populaire de libération de la Palestine, aliases: [FPLP]}
   - {name: Front Uni des Immigrations et des Quartiers Populaires, aliases: [FUIQP, FUP, Front Uni travailleurs immigrés et des quartiers populaires]}
@@ -1069,7 +1068,7 @@ organisation:
   - {name: Parti pour la Liberté}
   - {name: Parti Radical de Gauche, aliases: [PRG]}
   - {name: Parti Républicain américain, aliases: [Republican Party, GOP, Républicains américains]}
-  - {name: Parti socialiste, aliases: [Parti Socialiste, PS]}
+  - {name: Parti socialiste, aliases: [PS]}
   - {name: Parti Socialiste Unifié, aliases: [PSU]}
   - {name: Parti Socialiste Unifié du Venezuela, aliases: [PSUV]}
   - {name: Pasdaran, aliases: [Gardiens de la révolution, Corps des gardiens de la révolution islamique, CGRI, Sepah, سپاه پاسداران انقلاب اسلامی]}
@@ -1081,7 +1080,7 @@ organisation:
   - {name: Pôle de Renaissance Communiste en France, aliases: [PRCF]}
   - {name: Pôle emploi}
   - {name: Politicon}
-  - {name: Positions Revue, aliases: ['[Positions, @Positions_revue]']}
+  - {name: Positions Revue, aliases: [Positions]}
   - {name: Primaire Populaire}
   - {name: Printemps Républicain, aliases: [laïcards]}
   - {name: PTB, aliases: [Parti du Travail de Belgique, PVDA]}
@@ -1091,7 +1090,7 @@ organisation:
   - {name: Radio Canada}
   - {name: Radio J}
   - {name: Radio Nova, aliases: [Nova]}
-  - {name: Rassemblement national, aliases: [Rassemblement National, RN]}
+  - {name: Rassemblement national, aliases: [RN]}
   - {name: Reconquête}
   - {name: RED Jeunes, aliases: [Red June, Red Jun]}
   - {name: Reform UK}

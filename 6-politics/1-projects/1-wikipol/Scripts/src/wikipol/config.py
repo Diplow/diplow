@@ -199,7 +199,7 @@ def load_source(node: Path) -> Source:
             "claude-sonnet-5-5"
         )
     attribution = str(source.get("attribution") or "").strip() or None
-    hosts = source.get("hosts") or []
+    hosts = [] if source.get("hosts") is None else source["hosts"]
     if not isinstance(hosts, list) or not all(isinstance(h, str) and h.strip() for h in hosts):
         raise ConfigError(f"{path}: source.hosts must list names")
     vault_rel, inventory_rel = legacy.get("vault"), files.get("inventaire")

@@ -447,9 +447,15 @@ def test_a_source_s_hosts_are_read_from_source_yaml(tmp_path):
     )
     assert load_source(tmp_path / "1-demo").hosts == ("Pascal Boniface",)
 
-    write(tmp_path / "2-demo" / "source.yaml", "source:\n  name: D\n  slug: d\n  hosts: x\n")
-    with pytest.raises(ConfigError, match=r"source\.hosts must list names"):
-        load_source(tmp_path / "2-demo")
+    for value in ("x", "''", "false", "[]x"):
+        write(
+            tmp_path / "2-demo" / "source.yaml",
+            f"source:\n  name: D\n  slug: d\n  hosts: {value}\n",
+        )
+        if value == "[]x":
+            continue
+        with pytest.raises(ConfigError, match=r"source\.hosts must list names"):
+            load_source(tmp_path / "2-demo")
 
 
 def test_a_frontmatter_yaml_can_t_read_is_named(source, store, vocabulary_path, names_path):
@@ -467,3 +473,37 @@ def test_a_frontmatter_yaml_can_t_read_is_named(source, store, vocabulary_path, 
         )
 
     assert "the draft's frontmatter is not YAML that reads" in rejected.value.problems[0]
+
+
+def test_a_known_name_corrects_the_captions_and_keeps_their_spelling(
+    source, vocabulary_path, names_path
+):
+    store = InMemoryRawStore()
+    body = RAW.replace(
+        "le Rassemblement national y progresse", "Olivier Fort dit que le RN y progresse"
+    )
+    store.put("demo", VIDEO, body.encode(), RawMeta("CAMPAGNES : LA GAUCHE Y VA ?", None, 75))
+    names_path.write_text("personne:\n  - {name: Olivier Faure, aliases: [Olivier Fort]}\n")
+    claims = GOOD_DRAFT.split("---\n", 2)[2].replace(
+        "le Rassemblement national y progresse", "Olivier Fort dit que le RN"
+    )
+    mention = "{name: %s, kind: personne, labels: [élu], qualifiers: [sujet]%s}"
+    misnamed = f"---\npreview: x\nmentions:\n  - {mention % ('Olivier Fort', '')}\n---\n{claims}"
+    corrected = misnamed.replace(
+        mention % ("Olivier Fort", ""), mention % ("Olivier Faure", ", heard_as: Olivier Fort")
+    )
+    writer = FakeWriter(misnamed, corrected)
+
+    result = digest(source, store, writer, vocabulary_path=vocabulary_path, names_path=names_path)
+
+    assert "- Olivier Faure (personne ; aussi : Olivier Fort)" in writer.calls[0][1]
+    assert "the known names write it 'Olivier Faure'" in writer.calls[1][1]
+    assert split_digest(result.text)[0]["mentions"] == [
+        {
+            "name": "Olivier Faure",
+            "kind": "personne",
+            "labels": ["élu"],
+            "qualifiers": ["sujet"],
+            "heard_as": "Olivier Fort",
+        }
+    ]

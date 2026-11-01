@@ -291,3 +291,12 @@ def test_a_quote_cut_by_a_line_break_is_still_checked():
     assert check_digest(digest(cut), RAW) == [
         "« boycott total » is quoted outside an Extract and is not in the Raw"
     ]
+
+
+def test_mentions_that_are_not_a_list_are_kept_for_the_check_to_refuse():
+    from wikipol.digest.mentions import load_vocabulary
+
+    for value in ({}, False, "Pascal Boniface"):
+        text = render(FIELDS, PREVIEW, CLAIMS, mentions=value)
+        assert "mentions must be a list" in check_digest(text, RAW, vocabulary=load_vocabulary())
+    assert "mentions" not in render(FIELDS, PREVIEW, CLAIMS, mentions=[])

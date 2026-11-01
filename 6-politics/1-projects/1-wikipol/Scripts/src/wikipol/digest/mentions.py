@@ -250,8 +250,9 @@ def _check_mention(
         problems.append("unsure is true, or left out")
     spoken = heard_as if isinstance(heard_as, str) and heard_as.strip() else mention["name"]
     # The title is the video's, from YouTube's metadata: it names a guest the Raw may not. A
-    # host leads every Publication of the Source, and may never say their own name.
-    if host:
+    # host leads every Publication of the Source, and may never say their own name; a spelling
+    # the captions are said to give is still looked for.
+    if host and "heard_as" not in mention:
         return problems
     if not raw.names(spoken) and f" {bare_words(spoken)} " not in f" {bare_words(title)} ":
         hint = "" if "heard_as" in mention else "; heard_as gives the captions' spelling"

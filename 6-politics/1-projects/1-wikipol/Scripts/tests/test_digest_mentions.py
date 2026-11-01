@@ -354,6 +354,10 @@ def test_a_host_needs_not_be_heard(vocabulary):
         "mention 'Jean Hôte': 'Jean Hôte' is in neither the Raw nor the title; "
         "heard_as gives the captions' spelling"
     ]
+    misheard = {**host, "heard_as": "Jean Ote"}  # a spelling the captions are said to give
+    assert check_mentions({"mentions": [misheard]}, RAW, vocabulary, hosts=["Jean Hôte"]) == [
+        "mention 'Jean Hôte': 'Jean Ote' is in neither the Raw nor the title"
+    ]
 
 
 def test_new_terms_are_read_and_the_known_ones_left_out(vocabulary):

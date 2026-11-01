@@ -33,6 +33,10 @@ def vault(tmp_path):
     )
     write(vault / "Individus" / "Le Media.md", "---\naliases: Media\n---\n# Le Média TV\n")
     write(
+        vault / "Individus" / "Slapp.md",
+        '---\naliases: "[Slapp_, Armand Belfroid]"\n---\n# Slapp\n',
+    )
+    write(
         vault / "Organisations" / "Confederation Paysanne.md",
         "---\naliases: [Confédération Paysanne, La Conf]\n---\nPas de titre.\n",
     )
@@ -43,6 +47,7 @@ def test_a_note_gives_its_heading_or_an_accented_alias_and_the_other_forms(vault
     assert seed_names([vault]) == [
         KnownName("Adam Traore", "personne", ("Adama Traoré",)),
         KnownName("Le Média TV", "personne", ("Le Media", "Media")),
+        KnownName("Slapp", "personne", ("Armand Belfroid",)),
         KnownName("Sylvie Trémouille", "personne", ("Tremouille",)),
         KnownName("Confédération Paysanne", "organisation", ("La Conf",)),
     ]
@@ -55,7 +60,7 @@ def test_a_name_kept_wins_over_a_note_named_by_one_of_its_forms(vault):
 
     assert names[0] == kept[0]
     assert [n.name for n in names].count("Adam Traore") == 0
-    assert len(names) == 4
+    assert len(names) == 5
 
 
 def test_notes_that_share_an_alias_are_two_names_and_an_index_note_none(vault):

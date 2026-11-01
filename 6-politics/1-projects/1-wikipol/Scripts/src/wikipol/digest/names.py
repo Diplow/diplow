@@ -116,6 +116,15 @@ def _note_name(path: Path, kind: str) -> KnownName | None:
     heading = next((line[2:].strip() for line in body.splitlines() if line.startswith("# ")), "")
     aliases = frontmatter.get("aliases") or []
     aliases = [str(a).strip() for a in (aliases if isinstance(aliases, list) else [aliases])]
+    # A few notes write their aliases as one string, `"[a, b]"`: a list YAML never saw.
+    aliases = [
+        part.strip()
+        for alias in aliases
+        for part in (
+            alias[1:-1].split(",") if alias.startswith("[") and alias.endswith("]") else [alias]
+        )
+        if part.strip()
+    ]
     name = heading or path.stem
     accented = [a for a in aliases if bare_words(a) == bare_words(name) and _accents(a)]
     if not _accents(name) and accented:
