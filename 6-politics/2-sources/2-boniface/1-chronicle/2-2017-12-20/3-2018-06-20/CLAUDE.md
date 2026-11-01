@@ -1,25 +1,24 @@
 ---
-title: "2018-06-20 → 2026-10-30"
+title: "2018-06-20 → 2018-10-24"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20
 owner: diplo
 preview: >-
-  Boniface défend l'ONU et le multilatéralisme, suit la place du Sud et des
-  puissances émergentes dans l'ordre mondial (Brésil, OCS) et juge la France
-  réduite à des protestations face aux colons. Ses invités éclairent la Chine,
-  les Kurdes, le Japon.
+  Boniface lit la victoire des Bleus comme un gain de prestige par le soft
+  power, soutient que l'ONU reste indispensable et qu'en dénonçant le traité
+  FNI, Trump rejette l'Arms control et le multilatéralisme. Il juge
+  l'assassinat de Khashoggi être une faute stratégique.
 ---
-# 2018-06-20 → 2026-10-30
+# 2018-06-20 → 2018-10-24
 
-Les Digests se concentrent sur deux moments, 2018 et la fin d'octobre 2026, et un même fil les traverse : Boniface lit les relations internationales à travers la place des puissances intermédiaires, émergentes ou du Sud. En 2018, il soutient que la Pologne troque une dépendance subie contre une dépendance choisie et que l'ONU reste indispensable malgré ses blocages. Il craint que le Brésil de Bolsonaro ne devienne un suiveur de Trump et ne perde son rôle multilatéral. En 2026, il soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement.
+Boniface applique à l'actualité de l'été et de l'automne 2018 une même attention au prestige et aux règles communes. La victoire des Bleus est pour lui une joie collective qui rassemble les Français et leur vaut un surcroît de prestige par le soft power du football. Il soutient ensuite que la Pologne troque une dépendance subie contre une dépendance choisie, que l'ONU reste indispensable malgré ses blocages et que la géopolitique est un débat citoyen.
 
-Il lit aussi les événements comme des ressorts collectifs ou de politique intérieure. La victoire des Bleus est pour lui une joie qui rassemble les Français et leur vaut un surcroît de prestige par le soft power du football. La géopolitique, dit-il, est un débat citoyen. Sur le Proche-Orient, il soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens et que la France se contente de protestations face à l'impunité des colons. Il juge passionnant un livre sur le lobby pro-israélien.
+À partir d'octobre, sa lecture se durcit autour de ce que font les États-Unis de Trump et ceux qui les suivent. Le Brésil de Bolsonaro risque de suivre Trump et de perdre son prestige, et l'assassinat de Khashoggi est une faute stratégique de Mohammed Ben Salman. En dénonçant le traité FNI après l'ABM, Trump rejette l'Arms control et le multilatéralisme, et Boniface appelle à un front commun au-delà des seuls pays occidentaux.
 
-Une large part de la Period est faite d'entretiens, et les thèses restent à ceux qui les portent. Ses invités traitent de l'IA, des réfugiés, de diplomatie, d'Hollywood, de la Chine et du Mexique. Badie, Stubb et Sylvie Bermann parlent du Sud, de l'Occident et de la Chine. Didier Billion défend que l'avenir des Kurdes passe par l'autonomie. D'autres invités éclairent Gaza, Lula et le Japon.
+Les invités éclairent d'autres terrains : l'IA, les réfugiés, la diplomatie, Hollywood, la Chine et le Mexique. Bertrand Badie voit le Sud au centre du système international, Jean de Gliniasty parle de la Russie et Éric Vernier des paradis fiscaux.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/1-2018-06-20/CLAUDE|2018-06-20 → 2018-09-12]] (6 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/2-2018-09-19/CLAUDE|2018-09-19 → 2018-09-26]] (5 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/3-2018-10-09/CLAUDE|2018-10-09 → 2026-10-14]] (4 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/4-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/5-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/3-2018-10-09/CLAUDE|2018-10-09 → 2018-10-12]] (3 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/4-2018-10-17/CLAUDE|2018-10-17 → 2018-10-24]] (4 Digests)

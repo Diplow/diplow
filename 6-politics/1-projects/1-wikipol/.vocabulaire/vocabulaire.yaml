@@ -181,6 +181,7 @@ kinds:
       session: {définition: "Réunion annuelle ou périodique d'une assemblée ou d'une organisation internationale.", statut: proposé, introduit_par: boniface/y8rHlSIAunw.md}
       festival: {définition: "Rencontre publique de plusieurs jours, faite de débats ou de conférences.", statut: proposé, introduit_par: boniface/Ecn08O4RQFs.md}
       famine: {définition: "Pénurie alimentaire extrême qui provoque une mortalité de masse dans une population.", statut: proposé, introduit_par: paduteam/C1MLgXQ7fJA.md}
+      crise: {définition: "Tension politique ou militaire majeure entre États, sans guerre ouverte.", statut: proposé, introduit_par: boniface/TpKoDXZ7mQY.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
