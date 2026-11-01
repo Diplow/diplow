@@ -1,0 +1,59 @@
+6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/CLAUDE.md
+  s_133ae6e7e1755e::t_1f4ce4e751dedd 2,6-9,11,13,15,17
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/1-paye-ton-droitard-5-2-killian.md
+  s_133ae6e7e1755e::t_b3c1a0037aaced 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/2-arthur-animateur-tele-ou-predateur-qui.md
+  s_133ae6e7e1755e::t_996f85946a90c4 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/3-mayotte-macron-engueule-encore-les-survivants.md
+  s_133ae6e7e1755e::t_1540971a75212c 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/4-verdict-mazan-tous-concernes-tous-responsables.md
+  s_133ae6e7e1755e::t_fa1c8db14da6c6 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/5-5-livres-pour-faire-vriller-ton.md
+  s_133ae6e7e1755e::t_0902cfe1646d30 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/CLAUDE.md
+  s_133ae6e7e1755e::t_02d6390daa0900 3,21-25
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/2-2024-12-21/1-70-victimes-dans-un-attentat-d.md
+  s_133ae6e7e1755e::t_d00ff7d2c4c035 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/2-2024-12-21/2-arthur-nous-censure-dr-zoe-yt.md
+  s_133ae6e7e1755e::t_9de5f4e211140b 3,32
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/2-2024-12-21/3-alex-hitchens-humilie-cette-actrice-p0rn0.md
+  s_133ae6e7e1755e::t_280f897eedfd62 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/2-2024-12-21/4-on-decouvre-les-projets-desastreux-de.md
+  s_133ae6e7e1755e::t_ce686b69b87555 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/2-2024-12-21/CLAUDE.md
+  s_133ae6e7e1755e::t_16c5291f6aae3a 3,6-9,13,15,19-22
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/3-2024-12-29/1-fou-de-rage-cet-abonne-donne.md
+  s_133ae6e7e1755e::t_cc66a9fc494c9d 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/3-2024-12-29/2-tonton-raciste-cousine-woke-on-marxsplain.md
+  s_133ae6e7e1755e::t_1b37c6426f6dd7 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/3-2024-12-29/3-pascal-praud-met-leon-deffontaines-en.md
+  s_133ae6e7e1755e::t_afe327aaf410a8 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/3-2024-12-29/4-etienne-chouard-catastrophique-face-a-yohan.md
+  s_133ae6e7e1755e::t_3d9e08f192ef94 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/3-2024-12-29/5-la-clique-a-soral-me-clashe.md
+  s_133ae6e7e1755e::t_d56cbd75d313e8 1-72
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/3-2024-12-29/6-ce-marxiste-a-tres-peur-du.md
+  s_133ae6e7e1755e::t_7f2f10e438641a 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/3-2024-12-29/CLAUDE.md
+  s_133ae6e7e1755e::t_3bee252c270a8a 1-25
+6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/CLAUDE.md
+  s_133ae6e7e1755e::t_fcee85422794b8 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_133ae6e7e1755e::t_3b4d45675213ca 6-9,13,15,17,25-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "875b90f26aea6007be8199489990daac9056c95b",
+  "prompts": {},
+  "sessions": {
+    "s_133ae6e7e1755e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-af66c4d818f74de4c",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
