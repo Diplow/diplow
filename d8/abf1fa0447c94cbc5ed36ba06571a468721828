@@ -1,0 +1,33 @@
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-pascal-boniface-crimes-de-guerre-a.md
+  s_569dbb4d62f2f3::t_44f6d879606ce2 1-49
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/2-j-ai-lu-le-triangle-du.md
+  s_569dbb4d62f2f3::t_8f8a780fc543cb 3
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/3-la-chine-a-t-elle-plie.md
+  s_569dbb4d62f2f3::t_348ea54d10ee39 3
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/4-j-ai-lu-comprendre-la-question.md
+  s_569dbb4d62f2f3::t_b2ae639eabba83 3
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/5-elections-israel-rien-a-signaler-pour.md
+  s_569dbb4d62f2f3::t_b4f4e3beef2f58 3
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/6-un-maire-francais-agresse-en-palestine.md
+  s_569dbb4d62f2f3::t_ac7896edc42ba4 3
+6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE.md
+  s_569dbb4d62f2f3::t_4ef78b5e3b32da 2-3,6-9,11,13,15,19-24
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_569dbb4d62f2f3::t_f0fe45d5e3e786 6-9,13,15,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d8abf1fa0447c94cbc5ed36ba06571a468721828",
+  "prompts": {},
+  "sessions": {
+    "s_569dbb4d62f2f3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a6e8910-f13d-4cf1-8345-cc32da1c1f94",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
