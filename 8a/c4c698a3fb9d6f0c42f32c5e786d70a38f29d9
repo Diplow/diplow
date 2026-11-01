@@ -1,0 +1,37 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/3-2023-12-04/CLAUDE.md
+  s_6a99057fcca825::t_f80ddc6b109653 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/4-2023-12-07/1-macronie-le-foutage-de-gueule-permanent.md
+  s_6a99057fcca825::t_7dc96e27859960 1-82
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/4-2023-12-07/2-inceste-pedocriminalite-la-realite-la-plus.md
+  s_6a99057fcca825::t_7d146e9a9c4084 1-103
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/4-2023-12-07/3-censure-la-justice-suisse-attaque-blast.md
+  s_6a99057fcca825::t_252cc3489d4e83 1-58
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/4-2023-12-07/4-gaza-si-vous-pensez-que-les.md
+  s_6a99057fcca825::t_802439f092b1b6 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/4-2023-12-07/5-crepol-recit-d-une-bataille-mediatique.md
+  s_6a99057fcca825::t_8f2ca4165af885 1-88
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/4-2023-12-07/6-mm-macron-le-maire-etc-sont.md
+  s_6a99057fcca825::t_6fa249fd39e619 1-94
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/4-2023-12-07/CLAUDE.md
+  s_6a99057fcca825::t_9fd4bb90882836 1-26
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/CLAUDE.md
+  s_6a99057fcca825::t_481b9ba2b42e78 2,6-9,11,13,15-17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_6a99057fcca825::t_27e6d95ad3c92b 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8ac4c698a3fb9d6f0c42f32c5e786d70a38f29d9",
+  "prompts": {},
+  "sessions": {
+    "s_6a99057fcca825": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aee7fcd3b29887814",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
