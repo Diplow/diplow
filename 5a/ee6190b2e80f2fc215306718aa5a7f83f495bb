@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-04/CLAUDE.md
+  s_d584a81bcf23d2::t_59f5a88f3329d5 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-07/1-dette-publique-la-realite-derriere-les.md
+  s_d584a81bcf23d2::t_8ec5bf3cbc7775 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-07/2-tags-d-etoiles-de-david-un.md
+  s_d584a81bcf23d2::t_4023750175dcc7 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-07/3-israel-palestine-le-double-standard-des.md
+  s_d584a81bcf23d2::t_12f0649a6a5c59 1-73
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-07/CLAUDE.md
+  s_d584a81bcf23d2::t_a521c770469448 1-21
+6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/1-israel-palestine-l-onu-face-a.md
+  s_d584a81bcf23d2::t_b0d973687b0709 1-91
+6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/2-2-poids-2-mesures-ou-l.md
+  s_d584a81bcf23d2::t_4c99e1ef870a29 1-85
+6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/3-blast-est-face-au-plus-grand.md
+  s_d584a81bcf23d2::t_4532224048abfa 1-72
+6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/4-le-rapport-qui-accable-dupond-moretti.md
+  s_d584a81bcf23d2::t_e54789d5326130 1-84
+6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/5-israel-palestine-comment-expliquer-ce-fiasco.md
+  s_d584a81bcf23d2::t_e66a084f6ae005 1-94
+6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/CLAUDE.md
+  s_d584a81bcf23d2::t_2e8bf27dc590f4 1-25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_d584a81bcf23d2::t_c5ec8f52cde9e0 6-9,13,15-17,22-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5aee6190b2e80f2fc215306718aa5a7f83f495bb",
+  "prompts": {},
+  "sessions": {
+    "s_d584a81bcf23d2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-acff6cbfb287ff488",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
