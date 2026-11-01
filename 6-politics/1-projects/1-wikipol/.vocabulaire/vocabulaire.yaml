@@ -53,6 +53,8 @@ kinds:
       gouverneur: {définition: "Administre une province pour le compte d'un pouvoir central, à la date de la Publication.", statut: proposé, introduit_par: blast/fg9KvtkCDnE.md}
       historien: {définition: "Étudie et écrit l'histoire.", statut: proposé, introduit_par: osonscauser/BBPBF5Q1Euc.md}
       résistant: {définition: "Combat l'occupant ou un régime d'oppression dans la clandestinité.", statut: proposé, introduit_par: paduteam/xHa2JBJCZbc.md}
+      fondateur-de-parti: {définition: "A fondé un parti politique.", statut: proposé, introduit_par: blast/wcToU9D958Q.md}
+      économiste: {définition: "Étudie l'économie et en élabore des théories ou des mesures.", statut: proposé, introduit_par: osonscauser/nPJR_P9_T14.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
