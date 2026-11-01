@@ -3,49 +3,53 @@ title: "PSYHODELIK ET MARGUERITE STERN  CHAMPIONS DES FAKES NEWS TRANSPHOBES !!"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-03-07
 owner: diplo
 preview: >-
-  La PaduTeam démonte une fake news transphobe relayée par Marguerite Stern
-  puis par Psyhodelik : des costumes de carnaval espagnol caricaturant des
-  partis politiques, présentés à tort comme des enfants déguisés par la gauche
-  LGBT. Elle y voit un ciblage des trans, aux effets concrets sur leurs vies.
+  La PaduTeam démonte une fake news transphobe : la vidéo relayée par
+  Marguerite Stern puis par Psyhodelik montre des costumes de carnaval qui
+  caricaturent des partis espagnols, pas des enfants sexualisés par la gauche
+  LGBT. Relayée sans vérification, elle sert à cibler les trans.
 source: paduteam
 url: https://www.youtube.com/watch?v=tjCRdy1UAls
 youtube_id: "tjCRdy1UAls"
 published: 2024-03-07
 duration: null
 raw: paduteam/tjCRdy1UAls.md
-ingested: 2026-10-31
-digest_version: 1
+ingested: 2026-11-01
+digest_version: 3
 model: claude-sonnet-5-5
+mentions:
+  - {name: Marguerite Stern, kind: personne, labels: [militant], qualifiers: [sujet, cité]}
+  - {name: Psyhodelik, kind: personne, labels: [vidéaste], qualifiers: [sujet, cité], heard_as: psychodélique}
+  - {name: Espagne, kind: lieu, labels: [pays], qualifiers: [mentionné]}
 ---
 # PSYHODELIK ET MARGUERITE STERN  CHAMPIONS DES FAKES NEWS TRANSPHOBES !!
 
-## 1. La vidéo virale n'est pas la mise en scène LGBT dénoncée : ce sont des costumes de carnaval faits par une troupe, dans une ville de droite, pour caricaturer quatre partis espagnols.
+## 1. La vidéo d'enfants soi-disant déguisés en poupées sexuelles LGBT est un fake : ce sont des costumes de troupe qui caricaturent des partis espagnols.
 
-La note de vérification qui accompagne la vidéo le dit elle-même : l'accusation visant la communauté LGBT est une affiliation fallacieuse.
+La vidéo de trente secondes vient d'un carnaval en Espagne, d'une troupe d'une ville à mairie de droite. Une note de contexte la qualifie d'affiliation fallacieuse dès sa diffusion.
 
-> [0:31](https://www.youtube.com/watch?v=tjCRdy1UAls&t=31s) « il y a une note affitation fallacieuse il s'agit des costumes d'Alcantara atelier pour la troupe au zadia caricaturant quatre partis politiques espagnoles »
+> [0:31](https://www.youtube.com/watch?v=tjCRdy1UAls&t=31s) « sauf qu'en fait tout ça ça a été fait par une mairie de droite justement pour caricaturer »
 
-> [1:02](https://www.youtube.com/watch?v=tjCRdy1UAls&t=62s) « donc en fait ça a été fait par une troupe dans un ville avec une mairie de droite »
+> [0:31](https://www.youtube.com/watch?v=tjCRdy1UAls&t=31s) « il s'agit des costumes d'Alcantara atelier pour la troupe au zadia caricaturant quatre partis politiques espagnoles »
 
-## 2. Marguerite Stern, puis Psyhodelik, relaient la vidéo sans rien vérifier, parce que la fake news fait cliquer et que vérifier n'est pas leur intérêt.
+## 2. Psyhodelik relaie la fake news sans rien vérifier, parce qu'elle fait cliquer.
 
-La PaduTeam souligne que Stern avait déjà publié plusieurs fausses informations. Pour elle, quelqu'un qui vérifierait ne serait pas d'extrême droite.
+La source, Marguerite Stern, a déjà publié plusieurs fake news, mais Psyhodelik reprend sa vidéo telle quelle, avec un titre qui réactive le récit de la sexualisation des enfants par la gauche.
 
-> [4:14](https://www.youtube.com/watch?v=tjCRdy1UAls&t=254s) « lui il y va directement il se dit ah ouais ben je une vidéo de 30 secondes publiée par margar qui a déjà publié plusieurs fake »
+> [4:14](https://www.youtube.com/watch?v=tjCRdy1UAls&t=254s) « mais comment ça se fait qu'il ne vérifie rien »
 
-> [4:45](https://www.youtube.com/watch?v=tjCRdy1UAls&t=285s) « s'il vérifie il serait pas d'extrême droite il s'en fout bah oui il s'en fout ça fait plus cliquer de dire la gauche met en scène des gamines en por jartel »
+> [4:45](https://www.youtube.com/watch?v=tjCRdy1UAls&t=285s) « s'il vérifie il serait pas d'extrême droite il s'en fout bah oui il s'en fout ça fait plus cliquer de dire la gauche met en scène des gamines »
 
-## 3. La fake news sert à désigner les trans comme le vrai problème, alors qu'ils n'y sont pour rien.
+## 3. Cette fake news sert à désigner les trans comme le vrai problème, alors qu'ils n'y sont pour rien.
 
-Psyhodelik dit que le vrai problème n'est ni l'homosexualité ni les lesbiennes, mais les trans, et il reprend cette vidéo pour alimenter ce récit. Or elle n'a pas été faite par des personnes trans.
+Psyhodelik dit lui-même que le vrai problème n'est ni l'homosexualité ni les lesbiennes, mais les trans. La fake news nourrit ce récit, alors que le montage n'a pas été fait par des trans.
 
-> [1:33](https://www.youtube.com/watch?v=tjCRdy1UAls&t=93s) « donc voilà pour lui le vrai problème c'est les trans et c'est pour ça que là il nous reprend du coup cette fake news »
+> [1:33](https://www.youtube.com/watch?v=tjCRdy1UAls&t=93s) « c'est là que tu vois que le vrai problème c'est pas l'homosexualité ni les Guer le vrai problème c'est les trans »
 
-> [3:09](https://www.youtube.com/watch?v=tjCRdy1UAls&t=189s) « ça a pas été fait par des trans donc je pas pourquoi faudrait dire voilà la communauté trans c'est le problème »
+> [3:09](https://www.youtube.com/watch?v=tjCRdy1UAls&t=189s) « toi ça sert ton narratif pour dire que le problème c'est les trans alors que ça n'a pas été fait par des trans »
 
-## 4. Le vrai problème, ce sont les transphobes qui diffusent des fake news : leur discours de haine peut briser des vies.
+## 4. Les fake news transphobes ont des conséquences matérielles : le vrai problème, ce sont ceux qui les fabriquent et les utilisent.
 
-La PaduTeam insiste sur les conséquences matérielles pour des personnes déjà très exposées, par exemple celles qui auraient pu être acceptées par leur famille.
+Le discours de haine bâti sur ces fausses informations peut empêcher des personnes trans d'être acceptées par leur famille et les pousser à cacher leur identité.
 
 > [5:16](https://www.youtube.com/watch?v=tjCRdy1UAls&t=316s) « le vrai problème c'est les gens qui qui balancent des fake news et les utilisent pour faire passer là-dessus un discours qui est un discours de haine »
 

@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle
 owner: diplo
 preview: >-
-  La PaduTeam ramène discours et affaires à leurs bases matérielles et de
-  classe, puis fait de Gaza son fil : double standard médiatique, vraie cancel
-  culture contre les voix pro-Palestine, accusation d'antisémitisme comme
-  retournement de la critique d'Israël.
+  La PaduTeam ramène discours et affaires à leurs bases de classe, puis, de
+  février à avril 2024, fait de Gaza son fil : double standard médiatique,
+  cancel culture visant les voix pro-Palestine, accusation d'antisémitisme vue
+  comme un retournement de toute critique d'Israël.
 ---
 # Chronicle
 
-Des premières vidéos jusqu'à fin 2023, la PaduTeam ramène des discours, des parcours et des affaires à leurs bases matérielles et de classe. Elle le fait avec un vulgarisateur du Capital qui fait de la pub, un ingénieur nietzschéen, la gestion de l'affaire Quatennens et un ex-trotskiste devenu islamophobe. La Chronicle est ensuite très dense à partir de février 2024 : presque toutes les vidéos résumées s'inscrivent dans trois mois de 2024.
+Sur l'essentiel de la Chronicle, jusqu'à fin 2023, la PaduTeam ramène des discours, des parcours et des affaires à leurs bases matérielles et de classe. Elle le fait pour un vulgarisateur du Capital qui fait de la pub, pour un ingénieur nietzschéen, pour la gestion de l'affaire Quatennens et pour un ex-trotskiste devenu islamophobe.
 
-Dans cette dernière séquence, Gaza devient le fil conducteur. La PaduTeam dénonce un double standard médiatique : la vraie cancel culture frappe les voix pro-Palestine, comme Baky ou Jonathan Glazer, pendant que des propos d'extermination restent impunis et que CNews traite le massacre à sa manière. Elle défend Rima Hassan contre Le Crayon, soutient que le mot génocide s'impose à Gaza et appelle à soutenir les influenceurs qui se positionnent. Elle voit dans l'accusation d'antisémitisme un retournement de toute critique d'Israël, et deux poids, deux mesures face à Gaza.
+À partir de février 2024, Gaza devient le fil de la Chronicle. La PaduTeam dénonce un double standard médiatique : la vraie cancel culture frappe les voix pro-Palestine, pendant que des propos d'extermination restent impunis. Elle défend Rima Hassan contre Le Crayon et appelle à soutenir les influenceurs qui se positionnent. Elle parle désormais de génocide et regrette son effacement médiatique. Elle suit les cas de Baki, privé de micro par le PFL, de CNews pris en défaut par Aymeric Caron et de Jonathan Glazer, visé pour avoir condamné toutes les victimes. En avril, elle voit dans l'accusation d'antisémitisme un retournement de toute critique d'Israël, et deux poids, deux mesures face à Gaza.
 
-Un second axe traverse la période : les violences faites aux femmes et la lecture de classe des figures du web. Elle dénonce le féminisme à géométrie variable d'Aurore Bergé, salue le témoignage de Lio sur les violences sexuelles dans le show-business et voit dans la virilité affichée de figures masculines du web une posture. Elle lit aussi l'offre de Thaïs d'Escufon comme un tunnel de vente, et démonte une fake news transphobe.
+L'autre axe est la dénonciation de l'impunité masculine du show-business et des violences faites aux femmes chez des figures masculines du web. Elle y voit un féminisme à géométrie variable et, dans la virilité affichée, une posture. Elle démonte aussi une fake news transphobe, et lit dans l'offre de Thaïs d'Escufon un tunnel de vente.
 
 ## Contenu
 
