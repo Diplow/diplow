@@ -79,6 +79,11 @@ kinds:
       lobbyiste: {définition: "Défend auprès des institutions les intérêts de clients ou d'un secteur.", statut: proposé, introduit_par: blast/fEc8opuX6DA.md}
       chef-de-groupe-armé: {définition: "Dirige un groupe armé ou sa branche militaire.", statut: proposé, introduit_par: paduteam/U26977L2L24.md}
       dirigeant-associatif: {définition: "Préside ou dirige une association ou une fédération d'associations.", statut: proposé, introduit_par: boniface/U0CB4brRb3g.md}
+      président-de-l-autorité-palestinienne: {définition: "Dirige l'Autorité palestinienne, à la date de la Publication.", statut: proposé, introduit_par: boniface/gTivTxVw9EE.md}
+      disciple: {définition: "Suit un maître et reçoit son enseignement, notamment l'un des compagnons de Jésus.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
+      magicien: {définition: "Pratique la magie et fait des prodiges devant un public.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
+      théologien: {définition: "Élabore et défend une doctrine religieuse.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
+      empereur: {définition: "Dirige un empire, notamment l'Empire romain.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -157,6 +162,7 @@ kinds:
       opération-militaire: {définition: "Action militaire d'envergure menée par une armée, comme un assaut ou un débarquement.", statut: proposé, introduit_par: paduteam/BE6RyV_X6m4.md}
       défilé: {définition: "Parade publique, notamment militaire, organisée lors d'une fête nationale.", statut: proposé, introduit_par: boniface/mZfWVPlac4Y.md}
       congrès: {définition: "Assemblée des délégués d'un parti, qui en fixe la direction et en désigne les dirigeants.", statut: proposé, introduit_par: boniface/OEVYfzPYeCI.md}
+      persécution: {définition: "Vague de violences dirigées contre un groupe en raison de sa religion ou de ses croyances.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

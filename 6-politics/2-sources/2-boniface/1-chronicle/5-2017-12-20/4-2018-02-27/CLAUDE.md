@@ -1,21 +1,25 @@
 ---
-title: "2018-02-27 → 2026-10-14"
+title: "2018-02-27 → 2018-03-28"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/4-2018-02-27
 owner: diplo
 preview: >-
-  Boniface soutient la candidature du Maroc à la Coupe du monde 2026,
-  chronique le livre d'Alexander Stubb sur un monde en trois blocs où le Sud
-  global décidera, et reçoit Sylvie Bermann sur la parité entre États-Unis et
-  Chine.
+  Boniface juge le sommet Trump–Kim Jong-un bon pour la paix, sans excès
+  d'optimisme, et défend la candidature du Maroc à la Coupe du monde 2026.
+  Dans Comprendre le monde, il reçoit Filiu, Vidal, Brauman et Shahid, qui
+  parlent des régimes arabes, de l'antisionisme, de la guerre juste et de la
+  Palestine.
 ---
-# 2018-02-27 → 2026-10-14
+# 2018-02-27 → 2018-03-28
 
-En 2018, Boniface soutient que le Maroc mérite d'organiser la Coupe du monde 2026. Il oppose une candidature de proximité, pacifique et à taille humaine au gigantisme de l'offre nord-américaine, à l'effet repoussoir de Trump et à un projet américain de privatisation du football.
+Dans ses propres analyses, Boniface soutient que le Maroc mérite d'organiser la Coupe du monde 2026. Il y voit une candidature de proximité, pacifique et à taille humaine, face au gigantisme de l'offre nord-américaine, à l'effet repoussoir de Trump et à un projet américain de privatisation du football. Sur la scène asiatique, il juge le sommet Trump–Kim Jong-un bon pour la paix, puisque l'option militaire s'éloigne et que chacun y trouve son compte. Il refuse pourtant l'excès d'optimisme : la dénucléarisation reste lointaine, et la Chine comme le Japon ont de quoi s'inquiéter ([[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/4-2018-02-27/4-donald-trump-kim-jong-un-vers|Donald Trump / Kim Jong-un : vers un sommet historique ?]]).
 
-Les deux Digests de 2026 portent sur l'ordre mondial. Boniface chronique Le Triangle du pouvoir d'Alexander Stubb, qui divise le monde en trois blocs (Occident, Orient, Sud global). Selon le livre, l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre. Boniface reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Elle estime que la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais que son excédent commercial met l'Europe en difficulté.
+Le reste de la Period est fait d'entretiens de Comprendre le monde, où Boniface reçoit ses invités et leur laisse leurs thèses. Trois d'entre eux touchent au monde arabe et au Proche-Orient. Pour Jean-Pierre Filiu, les régimes arabes sont des mamelouks modernes, des cliques militaires qui ont confisqué les indépendances, et seule la Tunisie laisse une lueur d'espoir. Pour Dominique Vidal, l'antisionisme est une opinion politique et non un racisme, et le confondre avec l'antisémitisme sert à détourner la critique d'une politique israélienne qui se radicalise. Pour Leïla Shahid, le processus de paix est mort et les Palestiniens vivent une deuxième Nakba. Rony Brauman, lui, estime que les critères de la guerre juste méritent d'être pris au sérieux, mais que la Somalie, le Kosovo et la Libye montrent qu'on les contourne.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/4-2018-02-27/1-le-maroc-merite-d-organiser-la|Le Maroc mérite d'organiser la Coupe du monde 2026]] (2018-02-27)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/4-2018-02-27/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/4-2018-02-27/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/4-2018-02-27/2-comprendre-le-monde-s1-23-jean|Comprendre le monde S1#23 - Jean-Pierre Filiu - "Généraux, gangsters et jihadistes"]] (2018-02-28)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/4-2018-02-27/3-comprendre-le-monde-s1-24-dominique|Comprendre le monde S1#24 - Dominique Vidal - "Antisionisme = antisémitisme ?"]] (2018-03-07)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/4-2018-02-27/4-donald-trump-kim-jong-un-vers|Donald Trump / Kim Jong-un : vers un sommet historique ?]] (2018-03-09)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/4-2018-02-27/5-comprendre-le-monde-s1-26-rony|Comprendre le monde S1#26 - Rony Brauman - "Y a-t-il des guerres justes ?"]] (2018-03-21)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/4-2018-02-27/6-comprendre-le-monde-s1-27-leila|Comprendre le monde S1#27 - Leïla Shahid - "Palestine : y a-t-il encore un espoir de paix ?"]] (2018-03-28)
