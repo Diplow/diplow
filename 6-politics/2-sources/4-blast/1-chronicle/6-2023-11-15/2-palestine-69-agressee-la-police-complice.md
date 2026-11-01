@@ -1,6 +1,6 @@
 ---
 title: "PALESTINE 69 AGRESSÉE : LA POLICE \"COMPLICE\" DES IDENTITAIRES ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2023-11-15
 owner: diplo
 preview: >-
   Blast recueille les témoignages de Palestine 69 : le 11 novembre, une

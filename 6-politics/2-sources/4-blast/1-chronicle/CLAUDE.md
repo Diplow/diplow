@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast soutient que Macron, les médias et les institutions font le jeu de
-  l'extrême droite : la guerre Israël-Hamas sert de prétexte à l'implosion de
-  la NUPES au profit du RN, et l'État applique deux poids, deux mesures sur
-  Gaza et l'antisémitisme.
+  Blast soutient que Macron gouverne pour les riches, que le pouvoir et les
+  médias diabolisent la gauche et banalisent le RN, et que la dette sert de
+  prétexte à Bercy. Elle donne la parole à Gaza, enquête sur les violences
+  policières et alerte sur sa propre survie.
 ---
 # Chronicle
 
-Du 31 octobre au 16 novembre 2023, Blast tient un fil politique : le pouvoir et les institutions préparent le terrain de l'extrême droite. Elle soutient que Macron mérite son étiquette de « président des riches » et que la guerre Israël-Hamas n'est que le prétexte de l'implosion de la NUPES, au profit du RN ([[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-11-03]]). Elle reproche ensuite à l'État macroniste ses « deux poids, deux mesures » sur Gaza et l'antisémitisme ([[6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/CLAUDE|2023-11-09 → 2023-11-11]]). La Period s'achève sur le même constat, élargi aux médias, à la loi immigration calquée sur le RN et à la normalisation du RN ([[6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12/CLAUDE|2023-11-12 → 2023-11-16]]).
+Pendant ces dix-huit jours, Blast tient un même fil : le pouvoir macroniste sert les riches, et la guerre Israël-Hamas devient le prétexte ou le levier d'un jeu politique qui profite au RN. Elle y voit l'implosion de la NUPES, une loi asile et immigration qui reprend le programme du RN, et la présence du RN à la marche contre l'antisémitisme, qui sert sa normalisation. Elle reproche à l'État ses deux poids, deux mesures sur Gaza et l'antisémitisme. Selon elle, le pouvoir et les médias diabolisent la gauche, banalisent l'extrême droite et ménagent les identitaires, au nom d'intérêts électoraux.
 
-Israël-Palestine revient d'un bout à l'autre. Blast donne la parole à une grand-mère de Gaza et à Charles Enderlin, dénonce le traitement médiatique des étoiles de David et d'Israël-Palestine, puis juge la couverture française alignée sur l'armée israélienne. Elle recueille aussi les témoignages d'habitants de la Plaine Saint-Denis sur les violences policières des nuits d'émeutes ([[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-04/CLAUDE|2023-11-04 → 2023-11-06]]).
+Blast dénonce aussi la couverture médiatique française du conflit israélo-palestinien et le traitement des étoiles de David. Elle donne la parole à une grand-mère de Gaza et à Charles Enderlin. Sur l'économie, elle soutient que la dette publique, énorme mais sans danger pour la solvabilité de la France, vient des chocs économiques et des baisses d'impôt de la droite. Bercy, selon elle, fait passer pour une nécessité un choix politique de priorités. Elle reçoit Baptiste Mylondo pour son revenu inconditionnel et oppose la parole de Jésus au christianisme.
 
-Le reste relève de l'enquête et de l'économie. Blast reçoit Baptiste Mylondo pour son revenu inconditionnel, enquête sur Jean-Yves Grall, patron de l'ARS Auvergne-Rhône-Alpes, et juge Dupond-Moretti accablé par un rapport. Sur la dette, elle soutient que la dette publique française, énorme mais sans danger pour sa solvabilité, vient des chocs économiques et des baisses d'impôt de la droite ([[6-politics/2-sources/4-blast/1-chronicle/3-2023-11-07/CLAUDE|2023-11-07 → 2023-11-08]]). Elle dit aussi affronter son plus grand défi : sans abonnés ni dons, son journalisme libre est menacé.
+Blast mène aussi des enquêtes et recueille des témoignages : ceux d'habitants de la Plaine Saint-Denis sur les violences policières des nuits d'émeutes, une enquête sur Jean-Yves Grall, patron de l'ARS Auvergne-Rhône-Alpes, et un rapport qui accable Dupond-Moretti. À la mi-période, elle se dit face à son plus grand défi : sans abonnés ni dons, son journalisme libre est menacé.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ Le reste relève de l'enquête et de l'économie. Blast reçoit Baptiste Mylondo
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-04/CLAUDE|2023-11-04 → 2023-11-06]] (3 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2023-11-07/CLAUDE|2023-11-07 → 2023-11-08]] (3 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/CLAUDE|2023-11-09 → 2023-11-11]] (4 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12/CLAUDE|2023-11-12 → 2023-11-16]] (6 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12/CLAUDE|2023-11-12 → 2023-11-14]] (4 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/6-2023-11-15/CLAUDE|2023-11-15 → 2023-11-17]] (4 Digests)
