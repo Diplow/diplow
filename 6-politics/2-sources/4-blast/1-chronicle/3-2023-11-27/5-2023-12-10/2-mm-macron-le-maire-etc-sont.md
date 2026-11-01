@@ -1,6 +1,6 @@
 ---
 title: "\"MM. MACRON, LE MAIRE, ETC SONT MÉDIOCRES, INTELLECTUELLEMENT ET MORALEMENT\" #LFP1"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/4-2023-12-07
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/5-2023-12-10
 owner: diplo
 preview: >-
   Blast et Johann Chapoutot soutiennent que le pouvoir macroniste, médiocre et
