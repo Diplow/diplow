@@ -1,6 +1,6 @@
 ---
 title: "Cette DROITARDE tente de nous CLASHER  ÇA TOURNE MAL !! (x @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/4-2024-10-19
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01
 owner: diplo
 preview: >-
   La PaduTeam et Dr Zoé répondent à Herga : les violences sexuelles forment un
