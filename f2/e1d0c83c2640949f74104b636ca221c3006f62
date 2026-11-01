@@ -1,0 +1,75 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_82c3768201a9c6 65
+6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/3-2017-05-31/3-pascal-boniface-paris-2024-ode-a.md
+  s_2302bc4f5a5611::t_1c34756ab64f67 1-54
+6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/3-2017-05-31/4-pascal-boniface-qatar-ban-le-pyromane.md
+  s_2302bc4f5a5611::t_f07b8c2b9b0424 1-65
+6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/3-2017-05-31/CLAUDE.md
+  s_2302bc4f5a5611::t_f5a4cbfc54e077 2,6-9,11,13,15-17,23-24
+6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/4-2017-06-27/1-pascal-boniface-defense-europeenne-un-concept.md
+  s_2302bc4f5a5611::t_8dfb0448376b78 1-75
+6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/4-2017-06-27/2-fallait-il-inviter-trump-le-14.md
+  s_2302bc4f5a5611::t_c38c0838c058e7 1-56
+6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/4-2017-06-27/3-pascal-boniface-coree-du-nord-une.md
+  s_2302bc4f5a5611::t_688a15c65c54a0 1-65
+6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/4-2017-06-27/CLAUDE.md
+  s_2302bc4f5a5611::t_7e5b852bb288f1 1-21
+6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/CLAUDE.md
+  s_2302bc4f5a5611::t_49ef16dadede12 2,6-9,11,13,15-17,23-24
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/1-2017-09-14/1-podcast-comprendre-le-monde-s1-1.md
+  s_2302bc4f5a5611::t_05a55388794533 1-77
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/1-2017-09-14/2-j-ai-lu-le-triangle-du.md
+  s_2302bc4f5a5611::t_a2fcdb23c00d4d 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/1-2017-09-14/3-la-chine-a-t-elle-plie.md
+  s_2302bc4f5a5611::t_c06acf15dd662a 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/1-2017-09-14/CLAUDE.md
+  s_2302bc4f5a5611::t_73783bf2add5d2 1-21
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2026-10-15/1-j-ai-lu-comprendre-la-question.md
+  s_2302bc4f5a5611::t_74fede7572c743 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2026-10-15/2-elections-israel-rien-a-signaler-pour.md
+  s_2302bc4f5a5611::t_028ee659a74458 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2026-10-15/3-un-maire-francais-agresse-en-palestine.md
+  s_2302bc4f5a5611::t_9a50f11b42c02f 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2026-10-15/CLAUDE.md
+  s_2302bc4f5a5611::t_a54e3968eb268f 3,19-21
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2026-10-21/1-gaza-dialogue-entre-un-humanitaire-et.md
+  s_2302bc4f5a5611::t_6c99062b53cd8d 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2026-10-21/2-lula-reelu-surprise-politique-choc-geopolitique.md
+  s_2302bc4f5a5611::t_6cc6110e461b7b 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2026-10-21/3-le-japon-face-au-defi-trump.md
+  s_2302bc4f5a5611::t_6fe08b81c31d05 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2026-10-21/4-l-ocs-une-otan-asiatique-expliquez.md
+  s_2302bc4f5a5611::t_060658464df7bf 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2026-10-21/5-j-ai-lu-israel-s-lobby.md
+  s_2302bc4f5a5611::t_77f72bcf7d84db 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2026-10-21/CLAUDE.md
+  s_2302bc4f5a5611::t_dd29a2748dafc5 3,13,19-23
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/CLAUDE.md
+  s_2302bc4f5a5611::t_aa43cc50a9827d 1-21
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_2302bc4f5a5611::t_ffcb7a34ff19f7 6-9,13,15,17,23-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f2e1d0c83c2640949f74104b636ca221c3006f62",
+  "prompts": {},
+  "sessions": {
+    "s_2302bc4f5a5611": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-afc309b370c42f28f",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
