@@ -1,0 +1,53 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_0fd4ede2b1203e 169
+  s_70e2b8820e4c39::t_10c449182105ab 63-64
+  s_70e2b8820e4c39::t_0350ac67219b59 135
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/3-2025-10-29/CLAUDE.md
+  s_2a959c5090c016::t_fb4208d494e220 2,6-9,11,13,15
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/4-2026-03-15/1-le-vrai-probleme-avec-l-abstention.md
+  s_2a959c5090c016::t_cc4b3c262602b3 3
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/4-2026-03-15/2-pourquoi-le-front-republicain-est-un.md
+  s_2a959c5090c016::t_01f8df4807f4cb 1-99
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/4-2026-03-15/3-2026-la-voiture-electrique-moins-chere.md
+  s_2a959c5090c016::t_9016be63c9ef78 1-68
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/4-2026-03-15/4-essence-on-a-calcule-le-vrai.md
+  s_2a959c5090c016::t_7e75137afcda61 1-69
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/4-2026-03-15/CLAUDE.md
+  s_2a959c5090c016::t_2f6e21e5bed844 1-22
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/5-2026-07-01/1-pourquoi-la-gauche-se-trompe-sur.md
+  s_2a959c5090c016::t_3214dcf0eaea58 1-90
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/5-2026-07-01/2-ils-veulent-donner-un-permis-de.md
+  s_2a959c5090c016::t_7750c4ed4fef13 1-84
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/5-2026-07-01/3-pour-le-climat-pas-besoin-de.md
+  s_2a959c5090c016::t_20ea66f89dbccd 1-75
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/5-2026-07-01/CLAUDE.md
+  s_2a959c5090c016::t_a763f39a7dc251 1-21
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/CLAUDE.md
+  s_2a959c5090c016::t_e3b1ec4675c35f 2,6-9,11,13,15,17,23-25
+6-politics/2-sources/3-osonscauser/1-chronicle/CLAUDE.md
+  s_2a959c5090c016::t_a857b7426abbed 7-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "764aa7616276b5c06c66f2e04ed73c502a828df1",
+  "prompts": {},
+  "sessions": {
+    "s_2a959c5090c016": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a2e5bda2dca47ea28",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
