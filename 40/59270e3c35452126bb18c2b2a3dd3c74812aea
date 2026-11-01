@@ -1,0 +1,33 @@
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27/4-louis-san-catastrophique-sur-le-feminisme.md
+  s_c241d0ab30a9da::t_aec80535f3afd9 1-78
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27/CLAUDE.md
+  s_c241d0ab30a9da::t_b51ad79d73ef97 6-9,13,15,22
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/1-cuisine-et-politique-nos-avis-problematiques.md
+  s_c241d0ab30a9da::t_03bad4456f1b47 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/2-glupatate-quitte-la-brav-m-x.md
+  s_c241d0ab30a9da::t_25f76ea76c0011 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/3-mila-refuse-les-avances-de-kroc.md
+  s_c241d0ab30a9da::t_48906729c3897d 1-60
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/CLAUDE.md
+  s_c241d0ab30a9da::t_b6985ee9dfc1a2 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/CLAUDE.md
+  s_c241d0ab30a9da::t_27573710d56984 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_c241d0ab30a9da::t_194285af7b32cc 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4059270e3c35452126bb18c2b2a3dd3c74812aea",
+  "prompts": {},
+  "sessions": {
+    "s_c241d0ab30a9da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-af51b80020383ef45",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
