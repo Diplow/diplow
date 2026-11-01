@@ -1,0 +1,57 @@
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/2-2017-03-06/2-pascal-boniface-kim-jong-un-des.md
+  s_569dbb4d62f2f3::t_803ab0bfef0150 1-54
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/2-2017-03-06/3-pascal-boniface-jeux-olympiques-2024-paris.md
+  s_569dbb4d62f2f3::t_b7a55e80dccca3 1-59
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/2-2017-03-06/4-pascal-boniface-le-cercle-vicieux-de.md
+  s_569dbb4d62f2f3::t_dc1f40aa79f51e 1-58
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/2-2017-03-06/CLAUDE.md
+  s_569dbb4d62f2f3::t_222c9b1899aa45 2,6-10,12,14,16-18,23-25
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/3-2017-03-14/1-pascal-boniface-turquie-comment-l-europe.md
+  s_569dbb4d62f2f3::t_c3f99de93acdbe 1-57
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/3-2017-03-14/2-j-ai-lu-le-triangle-du.md
+  s_569dbb4d62f2f3::t_c09f30b3e60562 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/3-2017-03-14/3-la-chine-a-t-elle-plie.md
+  s_569dbb4d62f2f3::t_0c3568dd6d6094 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/3-2017-03-14/CLAUDE.md
+  s_569dbb4d62f2f3::t_ab7afb1705ea43 1-21
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/4-2026-10-15/1-j-ai-lu-comprendre-la-question.md
+  s_569dbb4d62f2f3::t_d41efde3eb291f 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/4-2026-10-15/2-elections-israel-rien-a-signaler-pour.md
+  s_569dbb4d62f2f3::t_ddb0be3f97bbbd 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/4-2026-10-15/3-un-maire-francais-agresse-en-palestine.md
+  s_569dbb4d62f2f3::t_7c53192935227f 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/4-2026-10-15/CLAUDE.md
+  s_569dbb4d62f2f3::t_7442f1152ff9f1 3,19-21
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/5-2026-10-21/1-gaza-dialogue-entre-un-humanitaire-et.md
+  s_569dbb4d62f2f3::t_9fe4aebf563bfc 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/5-2026-10-21/2-lula-reelu-surprise-politique-choc-geopolitique.md
+  s_569dbb4d62f2f3::t_89fdc3ed9ec3f5 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/5-2026-10-21/3-le-japon-face-au-defi-trump.md
+  s_569dbb4d62f2f3::t_541cdeb10e3b6c 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/5-2026-10-21/4-l-ocs-une-otan-asiatique-expliquez.md
+  s_569dbb4d62f2f3::t_3710d77b8067c5 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/5-2026-10-21/5-j-ai-lu-israel-s-lobby.md
+  s_569dbb4d62f2f3::t_0ee7f64c273ec0 3
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/5-2026-10-21/CLAUDE.md
+  s_569dbb4d62f2f3::t_2b4140d2db8961 3,13,19-23
+6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/CLAUDE.md
+  s_569dbb4d62f2f3::t_2f9758ae97989b 6-9,13,15,17,22-25
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_569dbb4d62f2f3::t_2660c4a13247bd 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b000d7628630ea4354030c7ec3cc8436785c92ee",
+  "prompts": {},
+  "sessions": {
+    "s_569dbb4d62f2f3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a6e8910-f13d-4cf1-8345-cc32da1c1f94",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
