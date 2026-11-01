@@ -1,0 +1,45 @@
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/4-2024-10-19/CLAUDE.md
+  s_c241d0ab30a9da::t_b06ce3d4fb9f38 2,6-9,11,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01/1-cette-droitarde-tente-de-nous-clasher.md
+  s_c241d0ab30a9da::t_2cb16d53346523 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01/2-guillaume-kasbarian-le-ministre-qui-deteste.md
+  s_c241d0ab30a9da::t_9abe95f5863794 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01/3-pinard-et-politique-la-droite-des.md
+  s_c241d0ab30a9da::t_b82dfed2498b99 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01/4-la-breche-legalisation-de-toutes-les.md
+  s_c241d0ab30a9da::t_eef2e597a36280 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01/5-ce-que-signifie-vraiment-l-election.md
+  s_c241d0ab30a9da::t_0d84def8c9613e 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01/CLAUDE.md
+  s_c241d0ab30a9da::t_386469fe15c9cc 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/6-2024-11-14/1-paye-ta-droitarde-4-1-thais.md
+  s_c241d0ab30a9da::t_c190559dc9b339 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/6-2024-11-14/2-papacito-et-rougeyron-se-la-jouent.md
+  s_c241d0ab30a9da::t_0918c81ce9bdf2 1-71
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/6-2024-11-14/3-paye-ta-droitarde-4-2-thais.md
+  s_c241d0ab30a9da::t_f332c06708520f 1-83
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/6-2024-11-14/4-lobservateurofficiel-me-repond-padu-est-une.md
+  s_c241d0ab30a9da::t_403a32bee9a52c 1-78
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/6-2024-11-14/CLAUDE.md
+  s_c241d0ab30a9da::t_48076129d28da5 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/CLAUDE.md
+  s_c241d0ab30a9da::t_9bedcc30d91767 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_c241d0ab30a9da::t_879a9d6969c8b0 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ffcbf5263bd9206c3cdb512f165308a51289c974",
+  "prompts": {},
+  "sessions": {
+    "s_c241d0ab30a9da": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-af51b80020383ef45",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
