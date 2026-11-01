@@ -1,0 +1,25 @@
+6-politics/2-sources/4-blast/1-chronicle/2-c-hernu-le-kgb-les-collabos.md
+  s_f038488afb8e5a::t_95681b5a43d5a3 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-implosion-de-la-nupes-le-pretexte.md
+  s_f038488afb8e5a::t_5cbcacfd6a2bc3 1-91
+6-politics/2-sources/4-blast/1-chronicle/4-enfants-francais-tues-a-gaza-la.md
+  s_f038488afb8e5a::t_7240ce91a3a8ae 1-54
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_f038488afb8e5a::t_d00cb38077da7f 6-8,12,14,19-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f9b5720fd0c078b47a65c033f0fadf645e90a37b",
+  "prompts": {},
+  "sessions": {
+    "s_f038488afb8e5a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5db3dcee-4105-4ef1-abe1-29d7cbbf4139",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
