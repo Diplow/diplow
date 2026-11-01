@@ -1,0 +1,21 @@
+6-politics/1-projects/CLAUDE.md
+  s_bffceea45dbe3a::t_f3e7e68ef26797 8-10,19
+6-politics/1-projects/2-claude-sessions/CLAUDE.md
+  s_bffceea45dbe3a::t_ed43a9fb733b7e 1-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b88b62370ea5e961b0d214b2ff4c2e0512e9c8e8",
+  "prompts": {},
+  "sessions": {
+    "s_bffceea45dbe3a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5274278-dc5f-473a-95c3-8a1fb9ea4df9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
