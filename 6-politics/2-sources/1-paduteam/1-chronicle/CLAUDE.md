@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle
 owner: diplo
 preview: >-
-  La PaduTeam ramène discours, affaires et actualité à leurs bases de classe,
-  dénonce un deux poids deux mesures sur Gaza et Israël, veut une gauche de
-  rupture enracinée dans les classes populaires et répète que seule
-  l'organisation permet de battre la droite.
+  De 2019 à fin 2024, la PaduTeam ramène discours et affaires à leurs bases de
+  classe, dénonce un deux poids deux mesures sur Israël et Gaza, fait des
+  violences sexuelles un fait systémique et défend une gauche de rupture,
+  structurée et ancrée dans les classes populaires.
 ---
 # Chronicle
 
-De 2019 à décembre 2024, la PaduTeam lit le monde par la classe : discours, parcours, affaires et actualité sont ramenés à leurs bases matérielles. Les discours de droite deviennent des discours de classe, les influenceurs droitards sont démontés, et la domination de classe se retrouve mêlée au genre. Les violences sexistes et sexuelles sont traitées comme un fait social massif et Mazan comme un fait politique. Fin 2024, les assurances privées apparaissent comme la vraie violence et la censure de Barnier sur la Sécu est jugée justifiée.
+Sur toute la Chronicle, la PaduTeam applique la même grille : elle ramène les discours, les parcours et les affaires à leurs bases matérielles et de classe. Les discours de droite deviennent des discours de classe. La défaite de Harris vient de l'absence de programme de gauche. La Sécu subit une privatisation rampante. Elle voit dans l'organisation collective le seul moyen de dépasser une droite qui ne sait pas s'organiser ([[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/CLAUDE|2024-11-01 → 2024-11-26]]).
 
-À partir de 2024, la Palestine occupe une place croissante. La PaduTeam dénonce un deux poids deux mesures médiatique sur Israël et Gaza, parle de génocide, juge le bombardement de Rafah intentionnel et lit une répression croissante du soutien à la Palestine (voir [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/CLAUDE|2024-03-28 → 2024-05-30]]). Elle démonte aussi les discours qui blanchissent Israël dans les médias et défend Rima Hassan comme Imane Khelif.
+À partir de début 2024, Israël et Gaza prennent une place centrale. La PaduTeam dénonce un double standard médiatique, défend Rima Hassan et parle de génocide. Elle lit une répression croissante du soutien à la Palestine et juge le bombardement de Rafah intentionnel. Elle démonte ensuite les discours qui blanchissent Israël dans les médias ([[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/CLAUDE|2024-05-31 → 2024-10-25]]).
 
-Côté stratégie, elle veut une gauche de rupture réenracinée dans les classes populaires. Elle lit la défaite de Harris comme l'absence de programme de gauche et défend la légalisation des drogues sous contrôle public. Elle répète que la droite ne sait pas s'organiser et que seule l'organisation permet de la dépasser.
+Elle traite aussi les violences sexuelles comme un fait social massif, puis systémique. Elle reçoit Dr Zoé sur les médecins, lit Mazan comme un fait politique, défend Imane Khelif, s'attaque aux figures de la droite en ligne et note que la droite récupère les drames. Le fil politique est une gauche de rupture, réenracinée dans les classes populaires et structurée collectivement.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Côté stratégie, elle veut une gauche de rupture réenracinée dans les classe
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/CLAUDE|2024-03-28 → 2024-05-30]] (17 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/CLAUDE|2024-05-31 → 2024-10-25]] (15 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/CLAUDE|2024-11-01 → 2024-11-26]] (12 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/CLAUDE|2024-11-27 → 2024-12-19]] (19 Digests)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/CLAUDE|2024-11-27 → 2024-12-27]] (25 Digests)

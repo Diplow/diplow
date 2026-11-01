@@ -88,6 +88,8 @@ kinds:
       ancien-élu: {définition: "A détenu un mandat électif et n'en détient plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/uIuBwaYJZEc.md}
       sociologue: {définition: "Étudie les sociétés et les rapports sociaux, et en publie les analyses.", statut: proposé, introduit_par: blast/w09mN2LfUBc.md}
       traducteur: {définition: "Traduit des textes d'une langue dans une autre, notamment des livres.", statut: proposé, introduit_par: blast/l26Xt3HOcFM.md}
+      entraîneur: {définition: "Dirige et prépare une équipe sportive.", statut: proposé, introduit_par: boniface/9X9jOh-GdcM.md}
+      ancien-haut-fonctionnaire: {définition: "A occupé un poste de direction dans l'administration et ne l'occupe plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/cK7ahpqnGRc.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -128,6 +130,10 @@ kinds:
       mission-de-paix: {définition: "Mission de l'ONU déployée dans un pays pour y maintenir la paix.", statut: proposé, introduit_par: blast/Ulg-VuZg6i8.md}
       organisation-religieuse: {définition: "Église ou communauté religieuse constituée, avec ses structures et ses fidèles.", statut: proposé, introduit_par: blast/Ulg-VuZg6i8.md}
       force-armée-du-régime: {définition: "Corps militaire distinct de l'armée régulière, chargé de défendre un régime et son idéologie.", statut: proposé, introduit_par: boniface/U6lYvoNv594.md}
+      club-sportif: {définition: "Club qui engage des équipes sportives en compétition, notamment professionnelles.", statut: proposé, introduit_par: blast/hTs4-SwOYGE.md}
+      maison-d-édition: {définition: "Publie des livres et dirige des collections.", statut: proposé, introduit_par: paduteam/NBOUwkc60fc.md}
+      plateforme-vidéo: {définition: "Héberge et diffuse des vidéos mises en ligne par ses utilisateurs.", statut: proposé, introduit_par: paduteam/KI1sQj8QvUo.md}
+      équipe-nationale: {définition: "Équipe qui représente un pays dans les compétitions sportives internationales.", statut: proposé, introduit_par: boniface/9X9jOh-GdcM.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -170,6 +176,7 @@ kinds:
       persécution: {définition: "Vague de violences dirigées contre un groupe en raison de sa religion ou de ses croyances.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
       coup-d-état: {définition: "Prise du pouvoir par la force, notamment par l'armée, contre un gouvernement en place.", statut: proposé, introduit_par: blast/K2a3NDKQs9s.md}
       catastrophe-naturelle: {définition: "Phénomène naturel destructeur, comme un cyclone ou un séisme, qui frappe une population.", statut: proposé, introduit_par: paduteam/1OUcDuz-HjY.md}
+      campagne: {définition: "Opération de mobilisation ou de sensibilisation du public, menée sur une durée donnée.", statut: proposé, introduit_par: blast/OZ_VdHOsI14.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
