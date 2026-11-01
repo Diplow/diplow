@@ -78,6 +78,7 @@ kinds:
       auteur-d-attentat: {définition: "A commis un attentat meurtrier.", statut: proposé, introduit_par: paduteam/6E070o72u6U.md}
       lobbyiste: {définition: "Défend auprès des institutions les intérêts de clients ou d'un secteur.", statut: proposé, introduit_par: blast/fEc8opuX6DA.md}
       chef-de-groupe-armé: {définition: "Dirige un groupe armé ou sa branche militaire.", statut: proposé, introduit_par: paduteam/U26977L2L24.md}
+      dirigeant-associatif: {définition: "Préside ou dirige une association ou une fédération d'associations.", statut: proposé, introduit_par: boniface/U0CB4brRb3g.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
