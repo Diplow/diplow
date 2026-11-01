@@ -1,0 +1,67 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_415610290abe46 79
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/CLAUDE.md
+  s_6a99057fcca825::t_b2d94392cf2676 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/1-2023-12-10/1-crepol-recit-d-une-bataille-mediatique.md
+  s_6a99057fcca825::t_54ac012a11de78 3
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/1-2023-12-10/2-mm-macron-le-maire-etc-sont.md
+  s_6a99057fcca825::t_d0ddf74d55d015 3
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/1-2023-12-10/3-bygmalion-sarkozy-1er-beneficiaire-mais-a.md
+  s_6a99057fcca825::t_f222431b88110d 3
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/1-2023-12-10/4-violences-policieres-l-ong-qui-fait.md
+  s_6a99057fcca825::t_91e962849abbcd 3
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/1-2023-12-10/5-qui-peut-encore-arreter-macron.md
+  s_6a99057fcca825::t_c920a9d3ac4861 3
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/1-2023-12-10/CLAUDE.md
+  s_6a99057fcca825::t_2b05e3ea6d7aea 3,13,15,21-25
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/2-2023-12-14/1-en-marche-contre-le-journalisme-et.md
+  s_6a99057fcca825::t_f74e138ee1cb0e 3,58
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/2-2023-12-14/2-cjr-une-juridiction-d-exception-pour.md
+  s_6a99057fcca825::t_ae5601a1b272ee 3
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/2-2023-12-14/3-handicap-on-a-tellement-parle-pour.md
+  s_6a99057fcca825::t_8e8c25f647bf8b 3
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/2-2023-12-14/4-climat-vivons-nous-dans-un-monde.md
+  s_6a99057fcca825::t_0f8c50d2321a2d 1-85
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/2-2023-12-14/5-vincent-l-histoire-d-un-mec.md
+  s_6a99057fcca825::t_7b716004fd64e1 1-51
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/2-2023-12-14/CLAUDE.md
+  s_6a99057fcca825::t_28ea65d5eb8d1b 2-3,6-9,11,13,15,19-23
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/3-2023-12-17/1-face-aux-menaces-et-a-la.md
+  s_6a99057fcca825::t_353ced34502590 1-84
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/3-2023-12-17/2-cop28-un-accord-historique-dicte-par.md
+  s_6a99057fcca825::t_a835af968f0a2c 1-107
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/3-2023-12-17/3-republique-democratique-du-congo-une-election.md
+  s_6a99057fcca825::t_c965f83d737f50 1-86
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/3-2023-12-17/4-sms-gate-un-lanceur-d-alerte.md
+  s_6a99057fcca825::t_8e73b05f987d21 1-83
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/3-2023-12-17/CLAUDE.md
+  s_6a99057fcca825::t_b036c88b193b48 1-21
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/CLAUDE.md
+  s_6a99057fcca825::t_7e9962935e009e 1-23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_6a99057fcca825::t_86af076889c200 6-9,13,15,17,23-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6e0da4e0a91eec3697ced9436f812a94e43d01a2",
+  "prompts": {},
+  "sessions": {
+    "s_6a99057fcca825": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aee7fcd3b29887814",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
