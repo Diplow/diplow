@@ -62,6 +62,7 @@ kinds:
       commissaire-européen: {définition: "Membre de la Commission européenne, à la date de la Publication.", statut: proposé, introduit_par: blast/RAbqVRNbepU.md}
       influenceur: {définition: "Crée du contenu sur les réseaux sociaux et y rassemble un public.", statut: proposé, introduit_par: paduteam/XNIki6_ZNp0.md}
       acteur: {définition: "Joue dans des films, y compris pornographiques.", statut: proposé, introduit_par: paduteam/XNIki6_ZNp0.md}
+      éditeur: {définition: "Publie des livres et dirige des collections dans une maison d'édition.", statut: proposé, introduit_par: blast/a3ezVXwQlkk.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

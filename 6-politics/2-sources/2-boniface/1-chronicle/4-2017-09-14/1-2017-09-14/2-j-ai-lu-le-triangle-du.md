@@ -1,6 +1,6 @@
 ---
 title: "J'ai lu... « Le triangle du pouvoir » de Alexander Stubb"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/3-2017-05-31
+parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/1-2017-09-14
 owner: diplo
 preview: >-
   Boniface chronique Le Triangle du pouvoir d'Alexander Stubb, président

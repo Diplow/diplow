@@ -3,21 +3,22 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface applique de 2016 à 2026 les mêmes grilles : il dénonce une
-  indignation occidentale sélective, juge que Trump aggrave les tensions et
-  lit la diplomatie de Macron comme une filiation gaullo-mitterrandiste. En
-  2026, il voit dans l'OCS un multi-alignement.
+  Boniface lit l'actualité par la rationalité des acteurs et sans indignation
+  sélective : Trump, promis à la déception, isole les États-Unis et ouvre une
+  fenêtre à l'autonomie stratégique européenne ; Macron prolonge la ligne
+  gaullo-mitterrandiste ; l'OCS relève du multi-alignement.
 ---
 # Chronicle
 
-D'un bout à l'autre de la Chronicle, Boniface reconduit les mêmes outils. Il refuse l'indignation sélective, et dès l'automne 2016 il décrit un monde moins en guerre mais moins supportable. Il lit les acteurs par leur rationalité et leur intérêt : pour lui, le pari de Trump est risqué pour l'intérêt américain, la course aux armements produit de l'insécurité, et refuser la confrontation avec les régimes qui provoquent vaut mieux que l'escalade.
+Les trois premières Periods, d'octobre 2016 à septembre 2017, forment le cœur de la Chronicle. Boniface y applique les mêmes grilles : pas d'indignation sélective, un monde moins en guerre mais moins supportable, des acteurs dont il évalue la rationalité. Il tient le bilan d'Obama pour meilleur qu'on ne le dit et Xi Jinping pour le plus puissant. Trump est pour lui promis à la déception.
 
-Ses jugements sur les dirigeants suivent cette logique. Il tient le bilan d'Obama pour meilleur qu'on ne le dit, Trump pour promis à la déception, Xi Jinping pour le plus puissant. Il note aussi que la diplomatie était absente de la campagne présidentielle française. Plus tard, il soutient que Trump aggrave les tensions, et il lit la diplomatie de Macron comme une filiation gaullo-mitterrandiste.
+Les premiers mois de la présidence Trump sont à ses yeux un pari risqué pour l'intérêt américain. La course aux armements produit de l'insécurité, et refuser la confrontation avec les régimes qui provoquent lui paraît la bonne ligne. Il relève aussi l'absence de la diplomatie dans la campagne présidentielle française. De la présidentielle à l'été 2017, il lit l'actualité à travers deux figures. Macron prolonge la ligne gaullo-mitterrandiste, et Trump isole les États-Unis, ce qui ouvre une fenêtre à l'autonomie stratégique européenne.
 
-La Chronicle se clôt en 2026 sur deux lectures du même ordre : pour Boniface, l'OCS signe un multi-alignement, et un départ de Netanyahou ne changerait presque rien.
+La dernière Period court de septembre 2017 à octobre 2026, mais elle ne compte que onze Digests. Boniface y soutient que l'OCS n'est pas une OTAN asiatique mais un multi-alignement, et qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens. Il y reçoit des invités sur l'ONU, la Chine, les Kurdes, Gaza, Lula et le Japon, et y chronique des livres. Leurs thèses restent à leurs auteurs : Boniface les reçoit ou les retient, sans les soutenir à leur place.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-01-23]] (19 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/CLAUDE|2017-01-30 → 2017-04-21]] (17 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/CLAUDE|2017-04-24 → 2026-10-30]] (23 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/CLAUDE|2017-04-24 → 2017-09-06]] (18 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/CLAUDE|2017-09-14 → 2026-10-30]] (11 Digests)
