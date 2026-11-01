@@ -1,6 +1,6 @@
 ---
 title: "La CLIQUE À SORAL me CLASHE  PUDUSTREAM EST UN GAUCHISTE MOU"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/3-2024-12-29
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/4-2025-01-01
 owner: diplo
 preview: >-
   La PaduTeam soutient que le clash d'Égalité et Réconciliation est un trophée

@@ -1,6 +1,6 @@
 ---
 title: "Ce MARXISTE a très PEUR du GRAND REMPLACEMENT !! (FRANCIS COUSIN) (avec Chris de Positions Revue)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/3-2024-12-29
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/4-2025-01-01
 owner: diplo
 preview: >-
   La PaduTeam et Chris soutiennent que Francis Cousin n'est pas un marxiste
