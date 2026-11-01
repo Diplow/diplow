@@ -1,0 +1,47 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_db45c9c82babec 62
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/3-2023-11-19/CLAUDE.md
+  s_3e62ec53ff1083::t_6e7ff43dc8e372 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/4-2023-11-22/1-crise-de-l-eau-expulsions-24h.md
+  s_3e62ec53ff1083::t_3caa9349aa0a2d 1-50
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/4-2023-11-22/2-darmanin-braun-pivet-mentir-en-toute.md
+  s_3e62ec53ff1083::t_adfa1ba5fbb4f6 1-79
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/4-2023-11-22/3-acces-interdit-a-gaza-la-culture.md
+  s_3e62ec53ff1083::t_72041daa0d1c2c 1-82
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/4-2023-11-22/4-fourest-enthoven-barbier-franc-tireur-le.md
+  s_3e62ec53ff1083::t_95bfd6cc45a44a 1-90
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/4-2023-11-22/5-proces-dupond-moretti-l-heure-du.md
+  s_3e62ec53ff1083::t_a82af6ea58c588 1-73
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/4-2023-11-22/6-glyphosate-10-ans-d-empoisonnement-en.md
+  s_3e62ec53ff1083::t_9667b9fbbac4ab 1-78
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/4-2023-11-22/CLAUDE.md
+  s_3e62ec53ff1083::t_0fabdb722bad20 1-24
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/CLAUDE.md
+  s_3e62ec53ff1083::t_596a73253f4130 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_3e62ec53ff1083::t_c1e85fcdcaf4f3 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7c519f4783f20843e92bfaa805404d1bfa5464aa",
+  "prompts": {},
+  "sessions": {
+    "s_3e62ec53ff1083": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aed0f98e6384a0c72",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
