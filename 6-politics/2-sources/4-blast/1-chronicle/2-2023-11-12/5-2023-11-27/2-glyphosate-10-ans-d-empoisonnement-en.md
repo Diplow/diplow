@@ -1,6 +1,6 @@
 ---
 title: "GLYPHOSATE : 10 ANS D'EMPOISONNEMENT EN PLUS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/4-2023-11-22
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27
 owner: diplo
 preview: >-
   Blast donne la parole à Philippe Pierre, de Secret toxique : alors que le

@@ -63,6 +63,7 @@ kinds:
       influenceur: {définition: "Crée du contenu sur les réseaux sociaux et y rassemble un public.", statut: proposé, introduit_par: paduteam/XNIki6_ZNp0.md}
       acteur: {définition: "Joue dans des films, y compris pornographiques.", statut: proposé, introduit_par: paduteam/XNIki6_ZNp0.md}
       éditeur: {définition: "Publie des livres et dirige des collections dans une maison d'édition.", statut: proposé, introduit_par: blast/a3ezVXwQlkk.md}
+      documentariste: {définition: "Réalise des documentaires pour la télévision ou le cinéma.", statut: proposé, introduit_par: blast/QcyFxkkHY1w.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -96,6 +97,7 @@ kinds:
       comité-d-organisation: {définition: "Organise une compétition sportive internationale et en fixe les modalités.", statut: proposé, introduit_par: paduteam/TVMgyPabBpE.md}
       établissement-d-enseignement-supérieur: {définition: "Université, grande école ou institut qui dispense un enseignement supérieur.", statut: proposé, introduit_par: paduteam/iOd5lu0wO3c.md}
       ordre-professionnel: {définition: "Organisme qui réunit les membres d'une profession réglementée et en contrôle la déontologie.", statut: proposé, introduit_par: paduteam/xrGePx2JwbM.md}
+      mouvement-de-résistance: {définition: "Organisation ou coordination qui combat l'occupant ou un régime d'oppression.", statut: proposé, introduit_par: paduteam/4-j1k5auwOU.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
