@@ -1,6 +1,6 @@
 ---
 title: "CRISE POLITIQUE, LOI IMMIGRATION : LA FABRIQUE DU MONSTRE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/4-2023-12-20
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23
 owner: diplo
 preview: >-
   Blast soutient que la crise politique brandie après le rejet de la loi

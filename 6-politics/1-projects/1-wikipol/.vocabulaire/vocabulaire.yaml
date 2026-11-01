@@ -84,6 +84,7 @@ kinds:
       magicien: {définition: "Pratique la magie et fait des prodiges devant un public.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
       théologien: {définition: "Élabore et défend une doctrine religieuse.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
       empereur: {définition: "Dirige un empire, notamment l'Empire romain.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
+      ancien-président-de-l-autorité-palestinienne: {définition: "A dirigé l'Autorité palestinienne et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: blast/9IODM4a91Ss.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
