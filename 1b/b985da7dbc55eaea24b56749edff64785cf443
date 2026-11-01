@@ -1,0 +1,53 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_66a90373f74b99 87
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/4-2023-12-20/CLAUDE.md
+  s_619f166389185f::t_aa753fd5d20a91 2,6-8,10,12,14
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23/1-crise-politique-loi-immigration-la-fabrique.md
+  s_619f166389185f::t_370e36edaf349b 3
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23/2-comment-se-rearmer-face-au-danger.md
+  s_619f166389185f::t_34d8964d2cc382 3
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23/3-inflation-mangez-les-riches-surtout-a.md
+  s_619f166389185f::t_94a59d01a2cac5 1-89
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23/4-marie-madeleine-ou-comment-l-eglise.md
+  s_619f166389185f::t_dcabc2ce9b6b61 1-95
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/5-2023-12-23/CLAUDE.md
+  s_619f166389185f::t_f15188bd00e16e 1-22
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/6-2023-12-26/1-extremes-droites-au-pouvoir-en-europe.md
+  s_619f166389185f::t_b8ff6b5c464188 1-94
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/6-2023-12-26/2-pourquoi-la-meritocratie-n-existe-pas.md
+  s_619f166389185f::t_ad477fbaf861da 1-96
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/6-2023-12-26/3-netanyahu-heritier-du-fascisme-messie-de.md
+  s_619f166389185f::t_27eca2bf7b8fd5 1-92
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/6-2023-12-26/4-2023-l-annee-ou-macron-a.md
+  s_619f166389185f::t_0e5a81523f96e9 1-72
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/6-2023-12-26/CLAUDE.md
+  s_619f166389185f::t_b7cfaaaa6d61c2 1-22
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/CLAUDE.md
+  s_619f166389185f::t_189843c0c92e29 2,6-8,10,12,14,16,23-25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_619f166389185f::t_b88abd655b9ac6 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1bb985da7dbc55eaea24b56749edff64785cf443",
+  "prompts": {},
+  "sessions": {
+    "s_619f166389185f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a553c7203a608039e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
