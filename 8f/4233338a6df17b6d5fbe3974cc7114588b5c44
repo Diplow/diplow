@@ -1,0 +1,47 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_fba45b4297df55 224
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25/5-electricite-sommes-nous-condamnes-a-payer.md
+  s_9a114f777b76d2::t_7822c5409afca2 1-87
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/4-2024-01-25/CLAUDE.md
+  s_9a114f777b76d2::t_e7363475b7d10f 2,6-9,11,13,15-17,25
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/5-2024-01-30/1-maltraitance-desespoir-et-cadences-infernales-les.md
+  s_9a114f777b76d2::t_d16889c6e175ee 1-71
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/5-2024-01-30/2-agriculteurs-il-faut-tordre-le-bras.md
+  s_9a114f777b76d2::t_d95d654c4dfa93 1-78
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/5-2024-01-30/3-entre-soi-comment-les-riches-font.md
+  s_9a114f777b76d2::t_d81facf9b98bda 1-105
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/5-2024-01-30/4-b-megret-le-felon-qui-voulait.md
+  s_9a114f777b76d2::t_4f6751e4d4d664 1-98
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/5-2024-01-30/5-darmanin-macron-les-bons-agriculteurs-et.md
+  s_9a114f777b76d2::t_9cd9ccb2c510c2 1-59
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/5-2024-01-30/CLAUDE.md
+  s_9a114f777b76d2::t_baa9a8844b6df6 1-25
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/CLAUDE.md
+  s_9a114f777b76d2::t_9035dc48b1aa9a 2,7-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_9a114f777b76d2::t_a1025db60c95b7 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8f4233338a6df17b6d5fbe3974cc7114588b5c44",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_9a114f777b76d2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a91d9a935029a2759",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
