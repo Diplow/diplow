@@ -1,0 +1,43 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/4-2023-12-07/CLAUDE.md
+  s_fe6034ce5bae76::t_df0bc27dd05fe9 2,6-8,10,12,14,16
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/5-2023-12-10/1-crepol-recit-d-une-bataille-mediatique.md
+  s_fe6034ce5bae76::t_f90293d6b40486 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/5-2023-12-10/2-mm-macron-le-maire-etc-sont.md
+  s_fe6034ce5bae76::t_ba5a55dc034bcb 3
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/5-2023-12-10/3-bygmalion-sarkozy-1er-beneficiaire-mais-a.md
+  s_fe6034ce5bae76::t_5305d49dee6f5d 1-72
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/5-2023-12-10/4-violences-policieres-l-ong-qui-fait.md
+  s_fe6034ce5bae76::t_30361a460aadc3 1-87
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/5-2023-12-10/5-qui-peut-encore-arreter-macron.md
+  s_fe6034ce5bae76::t_20b0cd08824b6d 1-85
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/5-2023-12-10/CLAUDE.md
+  s_fe6034ce5bae76::t_a580d1c61eaedf 1-25
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/6-2023-12-14/1-en-marche-contre-le-journalisme-et.md
+  s_fe6034ce5bae76::t_565fc9c7e861fa 1-76
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/6-2023-12-14/2-cjr-une-juridiction-d-exception-pour.md
+  s_fe6034ce5bae76::t_908590784caf4f 1-74
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/6-2023-12-14/3-handicap-on-a-tellement-parle-pour.md
+  s_fe6034ce5bae76::t_a25dc17d0d9ae7 1-87
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/6-2023-12-14/CLAUDE.md
+  s_fe6034ce5bae76::t_0920c91b538b46 1-20
+6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/CLAUDE.md
+  s_fe6034ce5bae76::t_e18699bb58b4d8 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_fe6034ce5bae76::t_d69d3347241200 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "597ba3f19170f62fc17ce060b60e7ed8adac6086",
+  "prompts": {},
+  "sessions": {
+    "s_fe6034ce5bae76": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a209d4bb85f2734fb",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
