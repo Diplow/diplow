@@ -1,6 +1,6 @@
 ---
 title: "Sûreté nucléaire : comment on évite le pire ?"
-parent: 6-politics/2-sources/3-osonscauser/1-chronicle
+parent: 6-politics/2-sources/3-osonscauser/1-chronicle/1-2023-12-17
 owner: diplo
 preview: >-
   Osons Causer soutient que la sûreté des centrales françaises repose sur la

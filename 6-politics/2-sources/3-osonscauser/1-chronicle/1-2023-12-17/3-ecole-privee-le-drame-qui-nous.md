@@ -1,6 +1,6 @@
 ---
 title: "École privée : le drame qui nous menace"
-parent: 6-politics/2-sources/3-osonscauser/1-chronicle
+parent: 6-politics/2-sources/3-osonscauser/1-chronicle/1-2023-12-17
 owner: diplo
 preview: >-
   Osons Causer soutient que l'affaire Oudéa-Castéra révèle une école privée de
