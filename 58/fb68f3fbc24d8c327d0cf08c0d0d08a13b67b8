@@ -1,0 +1,57 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/CLAUDE.md
+  s_616ebae33f923f::t_e18ba693974559 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23/1-crise-politique-loi-immigration-la-fabrique.md
+  s_616ebae33f923f::t_24493bab000a9e 3
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23/2-comment-se-rearmer-face-au-danger.md
+  s_616ebae33f923f::t_47d1ce96ce13ad 3
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23/3-inflation-mangez-les-riches-surtout-a.md
+  s_616ebae33f923f::t_4d02260f56e8a8 3
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23/4-marie-madeleine-ou-comment-l-eglise.md
+  s_616ebae33f923f::t_db6720ce770f7f 3
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/1-2023-12-23/CLAUDE.md
+  s_616ebae33f923f::t_2e223600f97dd3 3,19-22
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/2-2023-12-26/1-extremes-droites-au-pouvoir-en-europe.md
+  s_616ebae33f923f::t_282c6ab70c2348 3
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/2-2023-12-26/2-pourquoi-la-meritocratie-n-existe-pas.md
+  s_616ebae33f923f::t_3b70061bce7223 3
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/2-2023-12-26/3-netanyahu-heritier-du-fascisme-messie-de.md
+  s_616ebae33f923f::t_833dad8d256762 3
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/2-2023-12-26/4-2023-l-annee-ou-macron-a.md
+  s_616ebae33f923f::t_88222076ad39e4 3
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/2-2023-12-26/CLAUDE.md
+  s_616ebae33f923f::t_eaa67ef6d04a86 3,6-9,13,15,19-22
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/3-2023-12-29/1-chili-50-ans-apres-retour-sur.md
+  s_616ebae33f923f::t_21ff13412fb9ce 1-82
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/3-2023-12-29/2-israel-netanyahu-est-desavoue-pour-la.md
+  s_616ebae33f923f::t_115ab057e8723c 1-75
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/3-2023-12-29/3-et-si-le-pire-revenait-le.md
+  s_616ebae33f923f::t_65f5a353497776 1-99
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/3-2023-12-29/4-luxleaks-retour-sur-un-scandale-international.md
+  s_616ebae33f923f::t_aa4333fe1bdb16 1-84
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/3-2023-12-29/5-bce-faire-monter-le-chomage-c.md
+  s_616ebae33f923f::t_c683dd30020e70 1-78
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/3-2023-12-29/6-extremes-droites-au-pouvoir-tour-d.md
+  s_616ebae33f923f::t_6548e239450ae1 1-74
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/3-2023-12-29/CLAUDE.md
+  s_616ebae33f923f::t_93d015df76cc1e 1-24
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/CLAUDE.md
+  s_616ebae33f923f::t_82ab0917a48a9d 1-23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_616ebae33f923f::t_5ec21b5a758422 6-9,13,15,17,24-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "58fb68f3fbc24d8c327d0cf08c0d0d08a13b67b8",
+  "prompts": {},
+  "sessions": {
+    "s_616ebae33f923f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a6b2bd317762f2adf",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
