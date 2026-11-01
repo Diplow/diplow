@@ -26,7 +26,14 @@ It is a maintained context about my life, kept so it can be put to work: the poi
 
 ## How it is organized
 
-The repo is a hexframe: a node with at most 6 meta folders, 6 child folders and 6 files, the same shape at every level.
+The repo is a hexframe: every folder is a node of the same shape, read in hexframe's words.
+
+- **Tile**: the node's `CLAUDE.md`, what the node is and a link per child.
+- **Branches**: at most 6 child folders, `1-name/` … `6-name/`, the node's facets.
+- **Leaves**: at most 6 files, content that belongs to the node itself.
+- **Context**: at most 6 dot folders, what the node knows about itself rather than its content: its tooling (`.claude/`, `.skills/`), its run registers (`.run/`), its vocabulary. A dot *file* (`.gitignore`) is neither a Leaf nor Context.
+
+The words are defined once in [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|the shape]]; [[STACK]] lays out the root's own slots.
 
 ## Six domains
 
