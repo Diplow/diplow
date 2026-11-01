@@ -1,0 +1,25 @@
+6-politics/2-sources/3-osonscauser/1-chronicle/2-surete-nucleaire-comment-on-evite-le.md
+  s_f038488afb8e5a::t_c0c83717f174fb 1-86
+6-politics/2-sources/3-osonscauser/1-chronicle/3-ecole-privee-le-drame-qui-nous.md
+  s_f038488afb8e5a::t_836ed607dc17f3 1-81
+6-politics/2-sources/3-osonscauser/1-chronicle/4-les-milliardaires-un-nouveau-probleme-historique.md
+  s_f038488afb8e5a::t_c9931b021994aa 1-76
+6-politics/2-sources/3-osonscauser/1-chronicle/CLAUDE.md
+  s_f038488afb8e5a::t_0e62fa37580474 6-9,13,15-17,22-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c7a12b2c89143a031499b52080ebcfeea6b6e98e",
+  "prompts": {},
+  "sessions": {
+    "s_f038488afb8e5a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5db3dcee-4105-4ef1-abe1-29d7cbbf4139",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
