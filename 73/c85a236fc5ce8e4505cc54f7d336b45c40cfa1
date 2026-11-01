@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/4-2024-10-19/5-guillaume-kasbarian-le-ministre-qui-deteste.md
+  s_70e2b8820e4c39::t_b69b3f8b467bdc 1-78
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_b69b3f8b467bdc 6-9,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/4-2024-10-19/CLAUDE.md
+  s_70e2b8820e4c39::t_b69b3f8b467bdc 1-26
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_c1292f871a332c 113
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/3-2024-09-11/CLAUDE.md
+  s_70e2b8820e4c39::t_b69b3f8b467bdc 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/4-2024-10-19/2-paye-ton-droitard-2-lobservateurofficiel-le.md
+  s_70e2b8820e4c39::t_b69b3f8b467bdc 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/4-2024-10-19/6-pinard-et-politique-la-droite-des.md
+  s_70e2b8820e4c39::t_b69b3f8b467bdc 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/CLAUDE.md
+  s_70e2b8820e4c39::t_b69b3f8b467bdc 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/4-2024-10-19/1-kroc-blanc-fdenews-100-000e-d.md
+  s_70e2b8820e4c39::t_b69b3f8b467bdc 1-73
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/4-2024-10-19/4-cette-droitarde-tente-de-nous-clasher.md
+  s_70e2b8820e4c39::t_b69b3f8b467bdc 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/4-2024-10-19/3-ce-pnj-de-droite-quitte-la.md
+  s_70e2b8820e4c39::t_b69b3f8b467bdc 1-69
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "73c85a236fc5ce8e4505cc54f7d336b45c40cfa1",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
