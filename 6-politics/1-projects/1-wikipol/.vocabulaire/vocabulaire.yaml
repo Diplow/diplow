@@ -1,0 +1,149 @@
+# Le vocabulaire des mentions d'un Digest : CLAUDE.md, à côté, dit comment il se lit et s'édite.
+#
+# Un terme : `définition` (une ligne), `statut` (`accepté` ou `proposé`) ; un terme proposé
+# porte `introduit_par`, le Digest qui l'a introduit ; un terme retiré porte `remplacé_par`,
+# le terme qui le remplace, du même groupe.
+
+kinds:
+  personne:
+    définition: "Une personne, nommée."
+    labels:
+      chercheur: {définition: "Étudie un domaine et en publie les résultats.", statut: accepté}
+      journaliste: {définition: "Enquête ou informe pour un média.", statut: accepté}
+      vidéaste: {définition: "Publie des vidéos sous son nom, hors d'un média établi.", statut: accepté}
+      militant: {définition: "Agit pour une cause, hors d'un mandat électif.", statut: accepté}
+      syndicaliste: {définition: "Agit au nom d'un syndicat.", statut: accepté}
+      élu: {définition: "Détient un mandat électif, à la date de la Publication.", statut: accepté}
+      candidat: {définition: "Se présente à une élection, à la date de la Publication.", statut: accepté}
+      ministre: {définition: "Membre d'un gouvernement, à la date de la Publication.", statut: accepté}
+      chef-d-état: {définition: "Chef d'un État, à la date de la Publication.", statut: accepté}
+      diplomate: {définition: "Représente un État ou une organisation internationale.", statut: accepté}
+      militaire: {définition: "Sert dans une armée.", statut: accepté}
+      magistrat: {définition: "Juge ou procureur.", statut: accepté}
+      avocat: {définition: "Défend ou conseille devant la justice.", statut: accepté}
+      chef-d-entreprise: {définition: "Dirige ou possède une entreprise.", statut: accepté}
+      écrivain: {définition: "Écrit des livres.", statut: accepté}
+      artiste: {définition: "Crée ou interprète des œuvres : musique, cinéma, arts.", statut: accepté}
+      sportif: {définition: "Pratique un sport en compétition.", statut: accepté}
+      témoin: {définition: "Rapporte ce qu'il a vécu ou vu.", statut: accepté}
+    qualifiers:
+      animateur: {définition: "Mène la Publication.", statut: accepté}
+      invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
+      intervenant: {définition: "Sa voix est dans le Raw.", statut: accepté}
+      cité: {définition: "Ses mots sont lus ou diffusés, sans qu'il intervienne.", statut: accepté}
+      sujet: {définition: "La Publication parle de lui.", statut: accepté}
+      mentionné: {définition: "Nommé en passant.", statut: accepté}
+
+  organisation:
+    définition: "Un groupe constitué qui agit sous un nom."
+    labels:
+      parti: {définition: "Un parti politique.", statut: accepté}
+      syndicat: {définition: "Défend les intérêts d'une profession ou de salariés.", statut: accepté}
+      association: {définition: "Une association, une ONG.", statut: accepté}
+      collectif: {définition: "Un mouvement sans statut juridique.", statut: accepté}
+      média: {définition: "Publie de l'information : journal, chaîne, site.", statut: accepté}
+      entreprise: {définition: "Produit ou vend pour un profit.", statut: accepté}
+      gouvernement: {définition: "Le gouvernement d'un État.", statut: accepté}
+      institution: {définition: "Un organe public : assemblée, cour, agence, administration.", statut: accepté}
+      organisation-internationale: {définition: "Réunit des États : ONU, UE, OTAN.", statut: accepté}
+      armée: {définition: "Les forces armées d'un État.", statut: accepté}
+      groupe-armé: {définition: "Un groupe qui combat les armes à la main, hors d'une armée d'État.", statut: accepté}
+      think-tank: {définition: "Produit des analyses et des propositions politiques.", statut: accepté}
+    qualifiers:
+      cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
+      sujet: {définition: "La Publication parle d'elle.", statut: accepté}
+      mentionné: {définition: "Nommée en passant.", statut: accepté}
+
+  lieu:
+    définition: "Un endroit, nommé."
+    labels:
+      pays: {définition: "Un pays.", statut: accepté}
+      région: {définition: "Une région, une province, un État fédéré.", statut: accepté}
+      ville: {définition: "Une ville, une commune.", statut: accepté}
+      quartier: {définition: "Une partie d'une ville.", statut: accepté}
+      territoire: {définition: "Une zone au statut disputé ou particulier.", statut: accepté}
+      site: {définition: "Un lieu précis : une usine, une place, un bâtiment.", statut: accepté}
+    qualifiers:
+      sujet: {définition: "La Publication parle de lui.", statut: accepté}
+      mentionné: {définition: "Nommé en passant.", statut: accepté}
+
+  événement:
+    définition: "Ce qui a eu lieu, ou aura lieu, à une date."
+    labels:
+      élection: {définition: "Un scrutin, et la campagne qui y mène.", statut: accepté}
+      manifestation: {définition: "Un rassemblement ou un défilé de protestation.", statut: accepté}
+      grève: {définition: "Un arrêt de travail collectif.", statut: accepté}
+      guerre: {définition: "Un conflit armé.", statut: accepté}
+      attaque: {définition: "Une action violente ponctuelle contre des personnes ou des biens.", statut: accepté}
+      procès: {définition: "Une affaire jugée devant un tribunal.", statut: accepté}
+      affaire: {définition: "Une affaire politique ou judiciaire qui porte un nom.", statut: accepté}
+      sommet: {définition: "Une réunion de dirigeants.", statut: accepté}
+      meeting: {définition: "Une réunion publique politique.", statut: accepté}
+      compétition: {définition: "Une compétition sportive.", statut: accepté}
+    qualifiers:
+      sujet: {définition: "La Publication parle de lui.", statut: accepté}
+      mentionné: {définition: "Nommé en passant.", statut: accepté}
+
+  œuvre:
+    définition: "Ce qu'on crée pour être lu, vu ou écouté."
+    labels:
+      livre: {définition: "Un livre.", statut: accepté}
+      article: {définition: "Un article de presse ou de revue.", statut: accepté}
+      film: {définition: "Un film, un documentaire.", statut: accepté}
+      série: {définition: "Une série.", statut: accepté}
+      émission: {définition: "Une émission de radio ou de télévision, un podcast.", statut: accepté}
+      vidéo: {définition: "Une vidéo en ligne.", statut: accepté}
+      chanson: {définition: "Une chanson, un morceau.", statut: accepté}
+      jeu-vidéo: {définition: "Un jeu vidéo.", statut: accepté}
+    qualifiers:
+      cité: {définition: "Lue, montrée ou diffusée dans la Publication.", statut: accepté}
+      sujet: {définition: "La Publication parle d'elle.", statut: accepté}
+      mentionné: {définition: "Nommée en passant.", statut: accepté}
+
+  texte:
+    définition: "Un texte qui engage une institution : il dispose, décide ou rend compte."
+    labels:
+      constitution: {définition: "La loi fondamentale d'un État.", statut: accepté}
+      loi: {définition: "Une loi votée.", statut: accepté}
+      projet-de-loi: {définition: "Une loi en discussion, pas encore votée.", statut: accepté}
+      décret: {définition: "Un acte réglementaire du gouvernement.", statut: accepté}
+      traité: {définition: "Un accord entre États.", statut: accepté}
+      décision-de-justice: {définition: "Un jugement, un arrêt.", statut: accepté}
+      rapport: {définition: "Un rapport officiel, d'une institution ou d'une commission.", statut: accepté}
+      programme: {définition: "Le programme d'un parti ou d'un candidat.", statut: accepté}
+    qualifiers:
+      cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
+      sujet: {définition: "La Publication parle de lui.", statut: accepté}
+      mentionné: {définition: "Nommé en passant.", statut: accepté}
+
+relations:
+  auteur:
+    définition: "A écrit, réalisé ou produit."
+    from: [personne, organisation]
+    to: [œuvre, texte]
+    statut: accepté
+  organise:
+    définition: "Organise l'événement."
+    from: [personne, organisation]
+    to: [événement]
+    statut: accepté
+  participe:
+    définition: "Prend part à l'événement."
+    from: [personne, organisation]
+    to: [événement]
+    statut: accepté
+  membre:
+    définition: "Fait partie de l'organisation."
+    from: [personne, organisation]
+    to: [organisation]
+    statut: accepté
+  dirige:
+    définition: "Est à la tête de l'organisation."
+    from: [personne]
+    to: [organisation]
+    statut: accepté
+  situé:
+    définition: "A lieu ou a son siège dans ce lieu."
+    from: [événement, organisation]
+    to: [lieu]
+    statut: accepté

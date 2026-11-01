@@ -14,7 +14,7 @@ An inner child of wikipol: how its projects get built by [[.skills/4-softeng/1-s
 | File | What it holds |
 |---|---|
 | `sources-from-youtube.yaml` | The run config of the "Sources from YouTube" project, landing on `project/sources-from-youtube`; it builds and tests the pipeline and leaves every operation (Scaleway setup, backfills, launchd) to WIK-12's checklist |
-| `registers/` | What the run records, one folder per project, created by the first entry |
+| `registers/` | What a project's run, or its tickets worked by hand, record: one folder per project, created by the first entry |
 
 ## Launching
 

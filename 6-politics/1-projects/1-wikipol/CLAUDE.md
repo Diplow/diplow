@@ -62,7 +62,7 @@ uv run wikipol digest --source paduteam --id=URonNSP0qM0 --out /tmp/URonNSP0qM0.
 uv run wikipol check-digest <fichiers…>                                          # revérifie des Digests contre leur Raw
 ```
 
-`wikipol digest` lit le Raw dans le bucket, le `CLAUDE.md` éditorial de la Source et, quand le vault figé en a une, la fiche `Videos/` de la Publication. Il remplit lui-même le frontmatter et le titre du Digest, et fait écrire le Preview et les affirmations par la skill `Skills/write-digest/SKILL.md`, via `claude -p --model <claude.default_model du source.yaml>`, sans outil ni serveur MCP, depuis un dossier vide. Le résultat est vérifié (format, Preview, nombre d'affirmations et d'Extracts, chaque citation retrouvée dans le Raw au bloc lié) ; un brouillon refusé revient une fois au modèle avec la liste des problèmes, un second refus n'écrit rien et laisse le brouillon dans un dossier temporaire. Le format est dans `BUILD.md`, « Le Digest ». `--id=` avec un signe égal, car un identifiant YouTube peut commencer par `-`. Écrit hors du dépôt, son `parent` est la Chronicle, jusqu'à ce que `wikipol file` le range.
+`wikipol digest` lit le Raw dans le bucket, le `CLAUDE.md` éditorial de la Source et, quand le vault figé en a une, la fiche `Videos/` de la Publication. Il remplit lui-même le frontmatter et le titre du Digest, et fait écrire le Preview et les affirmations par la skill `Skills/write-digest/SKILL.md`, via `claude -p --model <claude.default_model du source.yaml>`, sans outil ni serveur MCP, depuis un dossier vide. Le résultat est vérifié (format, Preview, nombre d'affirmations et d'Extracts, chaque citation retrouvée dans le Raw au bloc lié) ; un brouillon refusé revient une fois au modèle avec la liste des problèmes, un second refus n'écrit rien et laisse le brouillon dans un dossier temporaire. Le format est dans `BUILD.md`, « Le Digest » ; un Digest qui porte des `mentions` ou des `relations` est vérifié aussi contre le vocabulaire de `.vocabulaire/`, que `check-digest` lit à chaque lancement. `--id=` avec un signe égal, car un identifiant YouTube peut commencer par `-`. Écrit hors du dépôt, son `parent` est la Chronicle, jusqu'à ce que `wikipol file` le range.
 
 ## La Chronicle : `wikipol file`
 
@@ -133,6 +133,7 @@ Le runner est un clone dédié, `~/wikipol-runner`, jamais le dossier Obsidian :
 | WikiPol | `BUILD.md` | Conventions universelles : nommage, wikilinks, frontmatter, git |
 | WikiPol | `CONTEXT.md` | Le glossaire : Source, Publication, Raw, Extract, Digest, Chronicle, Period |
 | WikiPol | `docs/adr/` | Les décisions difficiles à défaire, une par fichier |
+| WikiPol | `.vocabulaire/` | Le vocabulaire vivant des mentions d'un Digest : kinds, labels, qualifiers, relations ; je l'édite à la main |
 | WikiPol | `Skills/` | Skills d'ingestion et d'écriture génériques, agnostiques à la source |
 | WikiPol | `Scripts/` | Le paquet uv `wikipol` du pipeline (`src/`, `tests/`), l'agent launchd du run quotidien et ses scripts d'installation (`launchd/`), et les scripts Python legacy (ingestion, bootstrap), qui lisent `source.yaml` |
 | WikiPol | `Legacy/` | Les vaults d'avant, figés : taxonomie locale (`BUILD.md`), fiches (`Videos/`, `Individus/`, `Concepts/`…), tracker |
