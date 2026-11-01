@@ -1,0 +1,61 @@
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/1-2017-09-14/2-les-nations-unies-imparfaites-mais-indispensables.md
+  s_af44fe2c0a3141::t_baba6b7fbfee61 1-51
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/1-2017-09-14/3-donald-trump-docteur-folamour.md
+  s_af44fe2c0a3141::t_06b589c10bacee 1-59
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/1-2017-09-14/4-podcast-comprendre-le-monde-s1-2.md
+  s_af44fe2c0a3141::t_9649cd3f6bb1cf 1-86
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/1-2017-09-14/5-les-risques-de-la-proliferation-etatique.md
+  s_af44fe2c0a3141::t_878fca4ced6243 1-62
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/1-2017-09-14/6-podcast-comprendre-le-monde-s1-3.md
+  s_af44fe2c0a3141::t_4abcb86f604121 1-94
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/1-2017-09-14/CLAUDE.md
+  s_af44fe2c0a3141::t_d8a2c52ac07a10 2,6-9,11,13,15-17,22-26
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2017-10-02/1-pascal-boniface-espagne-catalogne-rajoy-et.md
+  s_af44fe2c0a3141::t_7d596470c921af 1-61
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2017-10-02/2-j-ai-lu-le-triangle-du.md
+  s_af44fe2c0a3141::t_b0a63d62ffce53 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2017-10-02/3-la-chine-a-t-elle-plie.md
+  s_af44fe2c0a3141::t_07427edde68ef2 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/2-2017-10-02/CLAUDE.md
+  s_af44fe2c0a3141::t_7c8a76cb59b4b6 1-21
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2026-10-15/1-j-ai-lu-comprendre-la-question.md
+  s_af44fe2c0a3141::t_439917f5591906 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2026-10-15/2-elections-israel-rien-a-signaler-pour.md
+  s_af44fe2c0a3141::t_8c22223ba83aab 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2026-10-15/3-un-maire-francais-agresse-en-palestine.md
+  s_af44fe2c0a3141::t_afeb09eaed177d 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/3-2026-10-15/CLAUDE.md
+  s_af44fe2c0a3141::t_32125d3fc8cf9f 3,19-21
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2026-10-21/1-gaza-dialogue-entre-un-humanitaire-et.md
+  s_af44fe2c0a3141::t_01ad9c4f0abe2e 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2026-10-21/2-lula-reelu-surprise-politique-choc-geopolitique.md
+  s_af44fe2c0a3141::t_869323514a9a10 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2026-10-21/3-le-japon-face-au-defi-trump.md
+  s_af44fe2c0a3141::t_81623a9af73c7a 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2026-10-21/4-l-ocs-une-otan-asiatique-expliquez.md
+  s_af44fe2c0a3141::t_b6b18dfd20cd31 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2026-10-21/5-j-ai-lu-israel-s-lobby.md
+  s_af44fe2c0a3141::t_9b109d8ca48fcf 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/4-2026-10-21/CLAUDE.md
+  s_af44fe2c0a3141::t_d53c3a9445eb57 3,13,19-23
+6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/CLAUDE.md
+  s_af44fe2c0a3141::t_a33d31fdc99eea 6-9,13,15-17,21-24
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_af44fe2c0a3141::t_48cc5b2cd2a715 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "53f3e623898bd49849cd3773a4ff7dc15a556592",
+  "prompts": {},
+  "sessions": {
+    "s_af44fe2c0a3141": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a784011073e180d98",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
