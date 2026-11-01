@@ -75,6 +75,7 @@ kinds:
       ancien-diplomate: {définition: "A représenté un État ou une organisation et ne le fait plus, à la date de la Publication.", statut: proposé, introduit_par: blast/YQayX26U_oU.md}
       sondeur: {définition: "Mesure et analyse l'opinion publique par des sondages.", statut: proposé, introduit_par: blast/4uRY8jKfQH4.md}
       prince-héritier: {définition: "Héritier désigné du trône d'une monarchie, à la date de la Publication.", statut: proposé, introduit_par: boniface/m427VTjvPno.md}
+      auteur-d-attentat: {définition: "A commis un attentat meurtrier.", statut: proposé, introduit_par: paduteam/6E070o72u6U.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -112,6 +113,8 @@ kinds:
       lobby: {définition: "Organisation qui défend auprès des pouvoirs publics les intérêts d'un secteur ou d'un groupe d'entreprises.", statut: proposé, introduit_par: blast/h6ziZ4JPWEM.md}
       société-savante: {définition: "Réunit les spécialistes d'une discipline médicale ou scientifique et en émet des recommandations.", statut: proposé, introduit_par: paduteam/t6_vxVJrA1E.md}
       réseau-criminel: {définition: "Organisation criminelle structurée qui contrôle un trafic, comme celui de l'héroïne.", statut: proposé, introduit_par: paduteam/UwDPHbgQm4s.md}
+      mission-de-paix: {définition: "Mission de l'ONU déployée dans un pays pour y maintenir la paix.", statut: proposé, introduit_par: blast/Ulg-VuZg6i8.md}
+      organisation-religieuse: {définition: "Église ou communauté religieuse constituée, avec ses structures et ses fidèles.", statut: proposé, introduit_par: blast/Ulg-VuZg6i8.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

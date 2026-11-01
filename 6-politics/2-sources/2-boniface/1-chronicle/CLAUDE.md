@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface applique les mêmes grilles à l'actualité mondiale : pas
-  d'indignation sélective, rationalité des acteurs, défense du
-  multilatéralisme et de la négociation. Trump isole les États-Unis et ouvre
-  une fenêtre à l'autonomie stratégique européenne.
+  Boniface lit l'actualité mondiale avec les mêmes grilles, de Trump à
+  l'Afghanistan : la rationalité des acteurs, le multilatéralisme contre
+  l'unilatéralisme, une puissance militaire qui ne remplace pas un projet
+  stratégique, un monde qui se multi-aligne.
 ---
 # Chronicle
 
-Dès l'automne 2016, Boniface lit l'actualité avec des grilles qui ne changent pas. Il refuse l'indignation sélective et décrit un monde moins en guerre mais moins supportable. Il tient le bilan d'Obama pour meilleur qu'on ne le dit, Trump pour promis à la déception et Xi Jinping pour le plus puissant. Les premiers mois de Trump sont pour lui un pari risqué pour l'intérêt américain. La course aux armements produit de l'insécurité, et refuser la confrontation avec les régimes qui provoquent vaut mieux que la chercher.
+Sur les 95 Digests de la Chronicle, Boniface applique les mêmes outils à des événements qui changent. Il juge les acteurs à leur rationalité et à leur intérêt : à l'automne 2016, il tient le bilan d'Obama pour meilleur qu'on ne le dit, Trump pour promis à la déception et Xi Jinping pour le plus puissant. Quand Trump arrive au pouvoir, il y voit un pari risqué pour l'intérêt américain et une course aux armements qui produit de l'insécurité. Il relève aussi que la diplomatie est absente de la campagne présidentielle française.
 
-Le fil de 2017 est l'opposition entre unilatéralisme et multilatéralisme. Trump isole les États-Unis et ouvre une fenêtre à l'autonomie stratégique européenne. La diplomatie de Macron prolonge la ligne gaullo-mitterrandiste. Boniface soutient que l'ONU est imparfaite mais indispensable et que le refus de négocier se retourne contre ceux qui le pratiquent. Il note aussi l'absence de diplomatie dans la campagne présidentielle française.
+Au fil de 2017, deux figures organisent sa lecture. Macron prolonge la ligne gaullo-mitterrandiste, et Trump isole les États-Unis, ce qui ouvre une fenêtre à l'autonomie stratégique européenne. Il défend alors le multilatéralisme face à l'unilatéralisme américain : l'ONU est imparfaite mais indispensable, et le refus de négocier se retourne contre ceux qui le pratiquent.
 
-Ses invités élargissent ensuite le champ à la France, à la Chine, au chiisme et à l'Arabie saoudite. La dernière période mêle invités et lecture d'un livre. Boniface y soutient qu'un départ de Netanyahou changerait peu pour les Palestiniens et que l'OCS signale un multi-alignement, non une OTAN asiatique.
+La dernière période, qui court jusqu'en 2026, garde cette grille. Boniface soutient que la puissance militaire ne remplace pas un projet stratégique, comme le montre l'Afghanistan. Selon lui, un départ de Netanyahou ne changerait presque rien pour les Palestiniens, et l'OCS signale un multi-alignement. La Chronicle s'ouvre aussi, au fil des Digests, à des invités et à des chroniques de livres, dont les thèses restent à ceux qui les portent.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Ses invités élargissent ensuite le champ à la France, à la Chine, au chiisme
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-01-30/CLAUDE|2017-01-30 → 2017-04-21]] (17 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/CLAUDE|2017-04-24 → 2017-09-06]] (18 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/CLAUDE|2017-09-14 → 2017-12-19]] (24 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]] (11 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]] (17 Digests)
