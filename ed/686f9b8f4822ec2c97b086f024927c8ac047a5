@@ -1,0 +1,52 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_d681a5a2404bbf 135
+  s_70e2b8820e4c39::t_ae7bcbaaf2ba6d 92
+  s_70e2b8820e4c39::t_b4596c803a0986 179
+  s_70e2b8820e4c39::t_663d06f3848aba 133
+  s_70e2b8820e4c39::t_50e949962e78b5 91,136
+  s_70e2b8820e4c39::t_b2f6b68588423a 134
+6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15/4-verdict-mazan-tous-concernes-tous-responsables.md
+  s_133ae6e7e1755e::t_f15f4befe9e63e 1-81
+6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15/5-5-livres-pour-faire-vriller-ton.md
+  s_133ae6e7e1755e::t_03e47d9a374e3d 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15/CLAUDE.md
+  s_133ae6e7e1755e::t_5bdf423499f9f5 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/6-2024-12-21/1-70-victimes-dans-un-attentat-d.md
+  s_133ae6e7e1755e::t_be1256faf94e86 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/6-2024-12-21/2-arthur-nous-censure-dr-zoe-yt.md
+  s_133ae6e7e1755e::t_890ad60f3f91a4 1-72
+6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/6-2024-12-21/3-alex-hitchens-humilie-cette-actrice-p0rn0.md
+  s_133ae6e7e1755e::t_cc6bccca5c8f48 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/6-2024-12-21/4-on-decouvre-les-projets-desastreux-de.md
+  s_133ae6e7e1755e::t_623d2c25498861 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/6-2024-12-21/CLAUDE.md
+  s_133ae6e7e1755e::t_2f3e5222aace39 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/CLAUDE.md
+  s_133ae6e7e1755e::t_f52455e3493b8c 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_133ae6e7e1755e::t_c3b0ba10c0c9b3 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ed686f9b8f4822ec2c97b086f024927c8ac047a5",
+  "prompts": {},
+  "sessions": {
+    "s_133ae6e7e1755e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-af66c4d818f74de4c",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
