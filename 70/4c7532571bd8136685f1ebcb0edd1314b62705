@@ -1,0 +1,42 @@
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/digest/names.py
+  s_52bfad30c83731::t_005606b94a0632 119-127
+6-politics/1-projects/1-wikipol/Scripts/tests/test_digest_format.py
+  s_52bfad30c83731::t_e89a01e7fd029d 294-302
+6-politics/1-projects/1-wikipol/.vocabulaire/noms.yaml
+  s_52bfad30c83731::t_b8820c2bc585a2 363,388,473,707,709,772,862,957,1071,1083,1093
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/digest/format.py
+  s_52bfad30c83731::t_c0719abe44694f 125-128
+6-politics/1-projects/1-wikipol/.run/registers/labeled-mentions/decisions.md
+  s_52bfad30c83731::t_a8478e956196fa 68-69
+6-politics/1-projects/1-wikipol/Scripts/tests/test_digest_write.py
+  s_52bfad30c83731::t_e89a01e7fd029d 450-458,476-478,480,482-509
+  s_52bfad30c83731::t_76a049a0d285d3 479,481
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/digest/mentions.py
+  s_52bfad30c83731::t_c0719abe44694f 253-255
+6-politics/1-projects/1-wikipol/Scripts/tests/test_digest_names.py
+  s_52bfad30c83731::t_977d151460e0e7 50
+  s_52bfad30c83731::t_005606b94a0632 63
+  s_52bfad30c83731::t_e89a01e7fd029d 35-38
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/config.py
+  s_52bfad30c83731::t_c0719abe44694f 202
+6-politics/1-projects/1-wikipol/Scripts/tests/test_digest_mentions.py
+  s_52bfad30c83731::t_e89a01e7fd029d 357-360
+6-politics/1-projects/1-wikipol/Scripts/src/wikipol/cli.py
+  s_52bfad30c83731::t_c0719abe44694f 360-363
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "704c7532571bd8136685f1ebcb0edd1314b62705",
+  "prompts": {},
+  "sessions": {
+    "s_52bfad30c83731": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a9cf8df8-1faf-4121-a008-5e5a2fc72528",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
