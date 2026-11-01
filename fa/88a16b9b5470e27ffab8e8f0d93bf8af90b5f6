@@ -1,0 +1,59 @@
+6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/CLAUDE.md
+  s_9a114f777b76d2::t_efa8339d6d5ff7 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/1-2024-01-08/1-menace-fasciste-un-cap-a-ete.md
+  s_9a114f777b76d2::t_e152a1eb213889 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/1-2024-01-08/2-de-friedman-a-macron-le-choix.md
+  s_9a114f777b76d2::t_7d2f47b9514246 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/1-2024-01-08/3-justice-une-defaillance-francaise-au-service.md
+  s_9a114f777b76d2::t_f729bab816feff 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/1-2024-01-08/4-remaniement-tout-changer-pour-que-rien.md
+  s_9a114f777b76d2::t_77214fc9223012 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/1-2024-01-08/5-gabriel-attal-emmanuel-macron-en-pire.md
+  s_9a114f777b76d2::t_dc46d7a542a465 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/1-2024-01-08/CLAUDE.md
+  s_9a114f777b76d2::t_f09b2c94a3847b 3,15,17,21-25
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/2-2024-01-14/1-france-inter-la-radio-des-bobos.md
+  s_9a114f777b76d2::t_a45d00f72915d9 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/2-2024-01-14/2-dry-january-ecologie-pourquoi-le-pouvoir.md
+  s_9a114f777b76d2::t_eac0aca4576a97 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/2-2024-01-14/3-de-bamboula-cie-au-diplome-hip.md
+  s_9a114f777b76d2::t_6d419bc7f09939 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/2-2024-01-14/4-capitalisme-les-ultra-riches-contre-l.md
+  s_9a114f777b76d2::t_4c72f6f65d278a 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/2-2024-01-14/5-remaniement-a-l-extreme-droite-toute.md
+  s_9a114f777b76d2::t_ae8638cdaade6f 1-68
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/2-2024-01-14/6-france-2024-l-attalisme-maladie-infantile.md
+  s_9a114f777b76d2::t_6bbce84084b1d3 1-85
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/2-2024-01-14/CLAUDE.md
+  s_9a114f777b76d2::t_17c5d0d65ea833 2-3,6-9,11,13,15,17,21-26
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/1-information-depolitisee-sourires-forces-que-nous.md
+  s_9a114f777b76d2::t_e3716a27494690 1-82
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/2-solaris-le-chef-d-oeuvre-de.md
+  s_9a114f777b76d2::t_64620d2fa86c17 1-80
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/3-etre-lucide-face-aux-defis-climatiques.md
+  s_9a114f777b76d2::t_91b415011429ca 1-86
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/4-depuis-macron-le-grand-gagnant-c.md
+  s_9a114f777b76d2::t_af92fe388119d5 1-73
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/CLAUDE.md
+  s_9a114f777b76d2::t_0ddce5c3a46860 1-22
+6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/CLAUDE.md
+  s_9a114f777b76d2::t_e28946b2ace17d 1-23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_9a114f777b76d2::t_ce63640d4154d4 6-9,13,15,17,25-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fa88a16b9b5470e27ffab8e8f0d93bf8af90b5f6",
+  "prompts": {},
+  "sessions": {
+    "s_9a114f777b76d2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a91d9a935029a2759",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
