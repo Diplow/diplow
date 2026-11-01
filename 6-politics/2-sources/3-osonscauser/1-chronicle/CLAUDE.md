@@ -1,13 +1,18 @@
 ---
-title: Chronicle
+title: "Chronicle"
 parent: 6-politics/2-sources/3-osonscauser/1-chronicle
 owner: diplo
 preview: >-
-  Les Digests de Osons Causer rangés par date, en arbre de Periods qui se
-  divisent par nombre. Vide : le pipeline de wikipol y écrira le premier Digest.
+  Osons Causer soutient que la France a sacrifié ses profs : moins bien payés
+  que chez ses voisins, appauvris depuis 25 ans, plus chargés de travail et de
+  classes, de plus en plus précaires.
 ---
 # Chronicle
 
-La Chronicle de [[6-politics/2-sources/3-osonscauser/CLAUDE|Osons Causer]] : un Digest par Publication, rangé par date. Une Period, un dossier et son `CLAUDE.md`, tient soit jusqu'à six sous-Periods, soit jusqu'à six Digests, jamais les deux, et se divise quand elle déborde ([[6-politics/1-projects/1-wikipol/docs/adr/0001-chronicle-splits-by-count|ADR 0001]]). Son Preview et son Body résument ce que Osons Causer a dit sur la période.
+Pour l'instant, la Chronicle d'Osons Causer tient en un seul Digest, daté du 17 décembre 2023, et consacré à la condition des enseignants en France. Osons Causer y défend l'idée que le pays a sacrifié ses profs : ils sont moins bien payés que chez ses voisins européens, et leur situation s'est dégradée depuis 25 ans.
 
-Vide pour l'instant. Les mots sont ceux du [[6-politics/1-projects/1-wikipol/CONTEXT|glossaire de wikipol]].
+À la rémunération s'ajoutent, dans cette lecture, une charge de travail et des effectifs de classe plus lourds, ainsi qu'une précarité croissante du métier. Osons Causer en conclut que le cliché du prof privilégié ne tient pas, et c'est ce qui donne son fil à la Chronicle : [[6-politics/2-sources/3-osonscauser/1-chronicle/1-la-france-est-elle-le-pire|La France est-elle le pire pays d'Europe pour les profs ?]]
+
+## Contenu
+
+1. [[6-politics/2-sources/3-osonscauser/1-chronicle/1-la-france-est-elle-le-pire|La France est-elle le pire pays d'Europe pour les profs ?]] (2023-12-17)
