@@ -1,24 +1,24 @@
 ---
-title: "2023-10-31 → 2023-11-11"
+title: "2023-10-31 → 2023-12-22"
 parent: 6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31
 owner: diplo
 preview: >-
-  Blast soutient que Macron mérite son étiquette de président des riches, que
-  la dette vient des chocs économiques et des baisses d'impôt de la droite, et
-  reproche à l'État macroniste ses deux poids, deux mesures sur Gaza et
-  l'antisémitisme. Elle dit son journalisme libre menacé.
+  Blast lit l'automne 2023 comme une dérive : une macronie des riches, deux
+  poids deux mesures sur Gaza et l'antisémitisme, un RN banalisé, puis une loi
+  immigration alignée sur l'extrême droite. Elle défend l'enquête et dit sa
+  liberté menacée.
 ---
-# 2023-10-31 → 2023-11-11
+# 2023-10-31 → 2023-12-22
 
-Pendant ces douze jours, Blast s'en prend au pouvoir macroniste. Elle soutient que Macron mérite son étiquette de président des riches et que la guerre Israël-Hamas sert de prétexte à l'implosion de la NUPES, au profit du RN. Elle reproche ensuite à l'État ses deux poids, deux mesures sur Gaza et l'antisémitisme, et dénonce le traitement médiatique des étoiles de David et d'Israël-Palestine. Sur Gaza, elle donne aussi la parole à une grand-mère et à Charles Enderlin.
+Blast ouvre la période en soutenant que Macron mérite son étiquette de président des riches, que la dette vient des chocs économiques et des baisses d'impôt de la droite, et que l'État macroniste applique deux poids, deux mesures sur Gaza et l'antisémitisme. Elle dit son journalisme libre menacé, un thème qui revient jusqu'à la fin de la période avec sa défense de l'enquête et les pressions sur la presse.
 
-Sur le terrain social et économique, Blast recueille les témoignages d'habitants de la Plaine Saint-Denis sur les violences policières des nuits d'émeutes et reçoit Baptiste Mylondo pour son revenu inconditionnel. Elle enquête sur Jean-Yves Grall, patron de l'ARS Auvergne-Rhône-Alpes, et juge Dupond-Moretti accablé par un rapport. Pour elle, la dette publique, énorme mais sans danger pour la solvabilité de la France, vient des chocs économiques et des baisses d'impôt de la droite ([[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/3-2023-11-07/CLAUDE|2023-11-07 → 2023-11-08]]).
+Le fil central est celui d'une banalisation de l'extrême droite. Blast dénonce des médias et un gouvernement qui normalisent le RN, diabolisent la gauche autour de l'antisémitisme et durcissent la politique d'immigration. Elle soutient ensuite que la macronie feint la fermeté contre le RN tout en lui tendant des perches, et que Macron attise la violence. L'impunité des responsables politiques s'ajoute à ce tableau.
 
-La Period se termine sur une alerte de Blast sur elle-même : face à son plus grand défi, sans abonnés ni dons, son journalisme libre est menacé.
+Sur le plan social, elle montre une crise du logement qui creuse les inégalités et lit le tollé contre Frenchie Shore comme du mépris de classe. Elle reçoit de nombreux invités au cours de ces semaines. Les dernières semaines sont lues comme une dérive autoritaire : l'extrême droite impose son récit, la macronie s'aligne sur elle jusqu'à la loi immigration, et la COP28 est dénoncée comme dictée par les pétroliers.
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/1-2023-10-31/CLAUDE|2023-10-31 → 2023-11-03]] (5 Digests)
-2. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/2-2023-11-04/CLAUDE|2023-11-04 → 2023-11-06]] (3 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/3-2023-11-07/CLAUDE|2023-11-07 → 2023-11-08]] (3 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/4-2023-11-09/CLAUDE|2023-11-09 → 2023-11-11]] (4 Digests)
+1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/1-2023-10-31/CLAUDE|2023-10-31 → 2023-11-11]] (15 Digests)
+2. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/2-2023-11-12/CLAUDE|2023-11-12 → 2023-11-26]] (18 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/3-2023-11-27/CLAUDE|2023-11-27 → 2023-12-09]] (18 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/4-2023-12-10/CLAUDE|2023-12-10 → 2023-12-22]] (18 Digests)
