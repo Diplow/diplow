@@ -1,0 +1,1143 @@
+# Les noms connus des mentions d'un Digest, par kind : le nom canonique (`name`) et les autres
+# façons dont on l'a écrit ou entendu (`aliases`). `wikipol digest` donne au modèle ceux que la
+# Publication dit. Tiré des fiches Individus/ et Organisations/ des vaults figés, puis corrigé et
+# complété à la main ; CLAUDE.md, à côté, dit comment.
+
+personne:
+  - {name: Aboubakar Cissé, aliases: [Aboubakar]}
+  - {name: Adama Traoré, aliases: [Adam Traore]}
+  - {name: Adnan Albourch, aliases: [Dr Albourch, Adnan Al-Bursh]}
+  - {name: Adrien Matou}
+  - {name: Adrien Quatennens, aliases: [Quatennens]}
+  - {name: Agnès Buzin, aliases: [Buzin]}
+  - {name: Agnès Pannier-Runacher, aliases: [Pannier-Runacher]}
+  - {name: Ahmed al-Charaa, aliases: [Ahmed al-Shara, Abu Mohammad al-Jolani, Al-Sharaa, chef de HTS, dirigeant syrien, Hamed El Shara]}
+  - {name: Aimé Césaire, aliases: [Césaire]}
+  - {name: Alain Aunac, aliases: [Aunac]}
+  - {name: Alain Badiou, aliases: [Badiou]}
+  - {name: Alain Bihr}
+  - {name: Alain Duhamel, aliases: [Duhamel]}
+  - {name: Alain Finkielkraut, aliases: [Finkielkraut, Finkle Crow, Finky]}
+  - {name: Alain Jakubowicz, aliases: [Jakubowicz, Jacubovic]}
+  - {name: Alain Jamet}
+  - {name: Alain Madelin, aliases: [Madelin]}
+  - {name: Alain Soral, aliases: [Soral]}
+  - {name: Alex Hitchens, aliases: [Alexis Chens, Alexis Hitchens]}
+  - {name: Alex Luau, aliases: [Alex Louau, Louau]}
+  - {name: Alexandra Kollontaï, aliases: [Kollontaï]}
+  - {name: Alexandre Ferron, aliases: [Ferron]}
+  - {name: Alexandre Jafari, aliases: [Alexandre Chafari, Jafari]}
+  - {name: Alexandria Ocasio-Cortez, aliases: [AOC, Ocasio-Cortez]}
+  - {name: Alexia Michelin, aliases: [Dr Michelin, Docteur Alexia Michelin, Dr Alexia Michelin]}
+  - {name: Alexis Corbière}
+  - {name: Alexis Kohler, aliases: [Kohler]}
+  - {name: Alexis Tsipras, aliases: [Tsipras]}
+  - {name: Ali Diouara}
+  - {name: Ali Khamenei, aliases: [علی خامنه‌ای, Rameneï, Ramene, Rameney, Ayatollah Khamenei]}
+  - {name: Alice Coffin, aliases: [Alis Cofin]}
+  - {name: Alice Cordier}
+  - {name: Alma Dufour, aliases: [Dufour, Alma]}
+  - {name: Alvin Hellerstein}
+  - {name: Aly Diouara, aliases: [Ali Douar]}
+  - {name: Amal Bentounsi, aliases: [Bentounsi]}
+  - {name: Ambroise Croizat, aliases: [Croizat]}
+  - {name: Amélie de Montchalin, aliases: [ADM]}
+  - {name: Amélie Oudéa-Castéra, aliases: [AOC]}
+  - {name: Amilcar Cabral}
+  - {name: Anasse Kazib, aliases: [Anas Kazib]}
+  - {name: André Comte-Sponville, aliases: [Compte-Sponville, Conte-Sponville, Componville, Sponville]}
+  - {name: André Glucksmann, aliases: [André Gluksmann]}
+  - {name: André Grimaldi, aliases: [Professeur Grimaldi]}
+  - {name: André Ventura, aliases: [Ventura]}
+  - {name: Andrew Cuomo, aliases: [Cuomo]}
+  - {name: Andy Kerbrat}
+  - {name: Angela Davis, aliases: [Davis]}
+  - {name: Anna Asuline}
+  - {name: Anne Hidalgo, aliases: [Hidalgo]}
+  - {name: Anne Sinclair}
+  - {name: Antoine Daniel}
+  - {name: Antoine Diers}
+  - {name: Antoine Goya}
+  - {name: Antoine Léaument}
+  - {name: Antoine Oberdorff}
+  - {name: Antonio Gramsci, aliases: [Gramsci, Gramchi]}
+  - {name: Ariel Sharon, aliases: [Sharon]}
+  - {name: Arnaud Dandicolle}
+  - {name: Arnaud Lagardère, aliases: [Nono]}
+  - {name: Arno Klarsfeld, aliases: [Arnaud Klarsfeld]}
+  - {name: Arthur, aliases: [Jacques Essebag, Arthur animateur]}
+  - {name: Ary Abittan, aliases: [Harry Abittan]}
+  - {name: Assa Traoré}
+  - {name: Astrid Panosyan-Bouvet, aliases: [Astrid Panosyan, Panosyan, Panosyan-Bouvet]}
+  - {name: Audrey Rivoal, aliases: [Audri Rivoal, Audri Voal]}
+  - {name: Auguste Bebel, aliases: [August Bebel, Bebel]}
+  - {name: Augustin Robespierre, aliases: [Bon-Joseph Robespierre]}
+  - {name: Aurélie Trouvée, aliases: [Trouvée, Aurélie Trouvé]}
+  - {name: Aurélien Rousseau}
+  - {name: Aurore Bergé}
+  - {name: Aurore Laluc}
+  - {name: Aymeric Lompret, aliases: [Emeric Lompret, Emmeric Lompray]}
+  - {name: Bachar al-Assad, aliases: [Assad, Bashar al-Assad]}
+  - {name: Bad Mulch, aliases: [Mulch, Bad Mulge]}
+  - {name: Badmulch, aliases: [Badmul]}
+  - {name: Baki, aliases: [Baki Dzhakhanguirov]}
+  - {name: Bally Bagayoko, aliases: [Bali Bagayoko, Bagayoko]}
+  - {name: Baptiste Marché}
+  - {name: Baptiste Moireau, aliases: [Baptiste Pas Net, tpasnet]}
+  - {name: Barbara Le Fevre, aliases: [Barbara Lefèvre, Lefèvre]}
+  - {name: Barbara Stiegler, aliases: [Stiegler]}
+  - {name: Baruch Spinoza, aliases: [Spinoza]}
+  - {name: Benjamin Duhamel, aliases: [Benjamin Duamel, Duhamel le jeune]}
+  - {name: Benjamin Lucas}
+  - {name: Benjamin Morel}
+  - {name: Benjamin Netanyahu, aliases: [Bibi, Netanyahou, netanahou]}
+  - {name: Benjamin Schenderf, aliases: [Schenderf]}
+  - {name: Benoît Coquard, aliases: [Benoît Cocard, Benoît Cocar, Coquard]}
+  - {name: Benoît Hamon, aliases: [Hamon]}
+  - {name: Benoît Jiménez, aliases: [Jiménez]}
+  - {name: Benoît Lepinat, aliases: [Lepinat]}
+  - {name: Benoît Paillant}
+  - {name: Benoît Payan, aliases: [Payan]}
+  - {name: Béodo}
+  - {name: Bérangère du Bus, aliases: [Bérangère]}
+  - {name: Bernard Arnault, aliases: [Bernard Arnaud, PDG LVMH]}
+  - {name: Bernard Cazeneuve}
+  - {name: Bernard Friot, aliases: [Friot]}
+  - {name: Bernard Golse, aliases: [Golse, Bernard Gols]}
+  - {name: Bernard-Henri Lévy, aliases: [BHL]}
+  - {name: Bernard Kouchner, aliases: [Kouchner]}
+  - {name: Bernard Lahire, aliases: [Lahire]}
+  - {name: Bernie Sanders, aliases: [Sanders]}
+  - {name: Bertrand Cantat, aliases: [Cantat, Bertrand Cantats, Bertrand Kanta, Bertrand Quentin]}
+  - {name: Bezalel Smotrich, aliases: [Smotrich]}
+  - {name: Bienfait Pour Tous}
+  - {name: Björk, aliases: [Björk Guðmundsdóttir]}
+  - {name: Blaise Compaoré}
+  - {name: Bobby Seale, aliases: [Bobby Seal, Seale]}
+  - {name: Boris Johnson, aliases: [Johnson, Boris]}
+  - {name: Boris Vallaud, aliases: [Boris Vallot]}
+  - {name: Boris Vallot, aliases: [Vallot]}
+  - {name: Bouna Traoré}
+  - {name: Brian Thompson, aliases: [Brian Thomson]}
+  - {name: Brice Hortefeux, aliases: [Hortefeux]}
+  - {name: Brigitte Bardot, aliases: [BB]}
+  - {name: Brigitte Macron, aliases: [Brigitte Trogneux]}
+  - {name: Britney Spears, aliases: [Britney]}
+  - {name: Bruno Amable}
+  - {name: Bruno Gollnisch, aliases: [Bruno Goldnich, Gollnisch]}
+  - {name: Bruno Le Maire, aliases: [Le Maire]}
+  - {name: Bruno Mégret, aliases: [Mégret]}
+  - {name: Bruno Retailleau}
+  - {name: Călin Georgescu, aliases: [Georgescu]}
+  - {name: Camille Kouchner}
+  - {name: Canard réfractaire, aliases: [le Canard réfractaire]}
+  - {name: Carla Vyx}
+  - {name: Carlos Ghosn, aliases: [Ghosn, Carlos Gone]}
+  - {name: Carlos Tavares, aliases: [Tavares]}
+  - {name: Carole Delga, aliases: [Delga]}
+  - {name: Carole Pateman, aliases: [Carol Patman, Carol Pateman]}
+  - {name: Caroline Darian}
+  - {name: Caroline Fourest, aliases: [Fourest, Caroline forest]}
+  - {name: Cassandra}
+  - {name: Cassandre}
+  - {name: Cathédrale Osseuse}
+  - {name: Catherine Clément, aliases: [Clément]}
+  - {name: Catherine Trautmann, aliases: [Trautmann]}
+  - {name: Caty Miller, aliases: [Katie Miller, Katherine Miller]}
+  - {name: Cauet, aliases: [Sébastien Cauet]}
+  - {name: Cécile Cukierman}
+  - {name: Cécile de Ménibus}
+  - {name: Cécile Duflot}
+  - {name: Cédric Doumbè}
+  - {name: Cédric Robinson}
+  - {name: Cédric Villani}
+  - {name: Celia}
+  - {name: Céline Pina}
+  - {name: Cem Yoldas, aliases: [Chem Yoldash]}
+  - {name: Chantal Mouffe}
+  - {name: Charles Consigny, aliases: [Consigny, Consigni]}
+  - {name: Charles de Gaulle, aliases: [de Gaulle, de Goll]}
+  - {name: Charles Gave}
+  - {name: Charles Maurras}
+  - {name: Charles Mills}
+  - {name: Charline Vanhoenacker}
+  - {name: Charlotte Arnoux}
+  - {name: Charlotte Bellaïch, aliases: [Charlotte Belaïch]}
+  - {name: Charlotte Boulin}
+  - {name: Chloé Ridel}
+  - {name: Chris}
+  - {name: Christa Bango}
+  - {name: Christa Vango}
+  - {name: Christian Ingrao, aliases: [Ingrao]}
+  - {name: Christine Kelly}
+  - {name: Christophe Barbier}
+  - {name: Christophe Daran, aliases: [Daranj, Daran]}
+  - {name: Christophe Guilluy, aliases: [Guilluy]}
+  - {name: Christopher Lasch, aliases: [Lasch, Lash]}
+  - {name: Cilia Flores, aliases: [Silvia Flores, Silvia Florest]}
+  - {name: Clara Zetkin, aliases: [Zetkin]}
+  - {name: Claude Duvieux}
+  - {name: Claude Guéant, aliases: [Claude Guean, Guéant]}
+  - {name: Claudia Jones}
+  - {name: Claudia Sheinbaum, aliases: [Sheinbaum, Claudia Shenbaum, Shinbaum]}
+  - {name: Clémence Guété, aliases: [Guété]}
+  - {name: Clémence Guetté, aliases: [Clémence Geté, Guetté]}
+  - {name: Clément Marx}
+  - {name: Clément Petro}
+  - {name: Clément Viktorovitch, aliases: [Viktorovitch]}
+  - {name: Clementine Autain}
+  - {name: Clint Eastwood, aliases: [Eastwood]}
+  - {name: CLR James}
+  - {name: Cly Marx, aliases: [Cli Marx, CliMarx]}
+  - {name: Cori Bush, aliases: [Bush, Cori]}
+  - {name: Croblanc}
+  - {name: Cyrel Châtelin}
+  - {name: Cyrielle Châtelain}
+  - {name: Cyril Diabaté}
+  - {name: Cyril Hanouna, aliases: [Hanouna]}
+  - {name: Cyrus North, aliases: [Cyrus Nors, Sirus North]}
+  - {name: Daï-Mon, aliases: [Diamond]}
+  - {name: Damien Rieu, aliases: [Damien Rieux]}
+  - {name: Damocles, aliases: [Damoclass]}
+  - {name: Daniel Bensaïd, aliases: [Bensaïd]}
+  - {name: Daniel Buffier}
+  - {name: Daniel Cohn-Bendit, aliases: [Cohn-Bendit, Dany Cohn-Bendit, Dany le Rouge]}
+  - {name: Daniel Křetínský, aliases: [Daniel Kretinski, Kretinski]}
+  - {name: Daniel Mermet}
+  - {name: Daniel Obono}
+  - {name: Daniel Simonet, aliases: [Simonet]}
+  - {name: Daniel Woirin}
+  - {name: Danieras, aliases: [Dani et Raz, Dani & Raz]}
+  - {name: Dany Caligula, aliases: [Danis, Danic Caligula, Dany]}
+  - {name: Dany Raz, aliases: [Raz, Dani Raz]}
+  - {name: Darius Rochebin, aliases: [Darius Rochbin, Darius Rochbain]}
+  - {name: David Cormand}
+  - {name: David Graeber, aliases: [Graeber]}
+  - {name: David Guiraud}
+  - {name: David Guirot}
+  - {name: David Harvey, aliases: [David Harvet]}
+  - {name: David Lisnard, aliases: [Lisnard]}
+  - {name: David Rachline, aliases: [Rachline]}
+  - {name: Delcy Rodriguez}
+  - {name: Delphine Ernotte}
+  - {name: Denis Colombini}
+  - {name: Denis Gravouille, aliases: [Gravouille]}
+  - {name: Denis Oliven, aliases: [Denis Olivennes]}
+  - {name: DFla, aliases: [Dofla, DF la]}
+  - {name: Didier Billion, aliases: [Didier Billon]}
+  - {name: Didier Eribon}
+  - {name: Dieudonné, aliases: [Dieudo]}
+  - {name: Dimitrov, aliases: [Georgi Dimitrov]}
+  - {name: Djordje Kuzmanovic, aliases: [Kuzmanovic, Nicolas Kuzmanovic]}
+  - {name: Domenico Losurdo, aliases: [Losurdo, l'Osourdo]}
+  - {name: Dominique de Villepin, aliases: [Villepin]}
+  - {name: Dominique Pélicot, aliases: [Pelicot]}
+  - {name: Dominique Strauss-Kahn, aliases: [DSK]}
+  - {name: Dominique Voynet}
+  - {name: Donald Trump}
+  - {name: Douglas Murray}
+  - {name: Dr Zoé, aliases: [Zoé]}
+  - {name: Écharpe, aliases: [Écharpe streameuse]}
+  - {name: Edgar Morin, aliases: [Morin]}
+  - {name: Edmund Husserl, aliases: [Husserl]}
+  - {name: Edouard Louis}
+  - {name: Édouard Philippe}
+  - {name: Eduard Bernstein, aliases: [Bernstein]}
+  - {name: Edwy Plenel, aliases: [Plenel]}
+  - {name: Eka Zguladze, aliases: [Eka Zgouadze, Eka Zgouad]}
+  - {name: Élisa Rojas}
+  - {name: Élisabeth Borne}
+  - {name: Elisabeth Roudinesco, aliases: [Roudinesco]}
+  - {name: Elon Musk, aliases: [Musk]}
+  - {name: Elsa Deck Marceau, aliases: [Elsa de Marceau]}
+  - {name: Émeric Caron, aliases: [Aymeric Caron]}
+  - {name: Emmanuel Grégoire}
+  - {name: Emmanuel Macron, aliases: [Macron]}
+  - {name: Emmanuel Todd, aliases: [Tod, Emmanuel Tod]}
+  - {name: EP Thomson, aliases: [Edward Palmer Thompson, E.P. Thompson]}
+  - {name: Éric Besson}
+  - {name: Éric Ciotti, aliases: [Ciotti]}
+  - {name: Éric Coquel}
+  - {name: Éric Coquerel, aliases: [Coquerel]}
+  - {name: Eric Dupont-Moretti, aliases: [Dupont-Moretti, EDM]}
+  - {name: Éric Larchevêque, aliases: [l'Archevêque]}
+  - {name: Éric Naulleau, aliases: [Naulleau]}
+  - {name: Éric Piolle, aliases: [Piolle]}
+  - {name: Eric Tegner}
+  - {name: Eric Williams}
+  - {name: Éric Zemmour, aliases: [Zemmour, Zemour]}
+  - {name: Erik Olin Wright, aliases: [Erik O. Wright]}
+  - {name: Ernesto Laclau}
+  - {name: Étienne Chouard, aliases: [Chouard]}
+  - {name: Éva Joly}
+  - {name: Ève Cheftel, aliases: [Cheftel]}
+  - {name: Fabien Gay}
+  - {name: Fabien Roussel}
+  - {name: Fabienne Montmaçon Michel, aliases: [Montmaçon Michel]}
+  - {name: Fabrice Arfi}
+  - {name: Fabrice Julien, aliases: [Le Coach en Séduction]}
+  - {name: Fanny Renard}
+  - {name: Félicien Faury, aliases: [Félicien Fory, Fory]}
+  - {name: Ferdinand Buisson}
+  - {name: Ferhat Abbas, aliases: [Abbas, Feratabas]}
+  - {name: Fidel Castro, aliases: [Castro]}
+  - {name: Floé}
+  - {name: Flora Gbali, aliases: [Gbali]}
+  - {name: Florence Bergeaud-Blackler, aliases: [Bergeaud-Blackler]}
+  - {name: Florence Portelli}
+  - {name: Florentin Lissier}
+  - {name: Florian Philippot, aliases: [Philippot]}
+  - {name: France Jamet}
+  - {name: Francesca Albanese}
+  - {name: Francis Cousin}
+  - {name: Francis Lelon}
+  - {name: Franck Alisio}
+  - {name: Franck Keller}
+  - {name: François Asselineau, aliases: [Asselineau]}
+  - {name: François Asselino, aliases: [Asselineau]}
+  - {name: François Bayrou}
+  - {name: François Bégaudeau, aliases: [Begodo, Bégaudeau]}
+  - {name: François Brillançon}
+  - {name: François Durvi}
+  - {name: François Fillon, aliases: [Fillon]}
+  - {name: François Hollande}
+  - {name: François Mitterrand}
+  - {name: François Piquemal, aliases: [François Picmal]}
+  - {name: François Ruffin, aliases: [Ruffin]}
+  - {name: François-Xavier Bellamy}
+  - {name: Françoise Degois, aliases: [Françoise Degouis]}
+  - {name: Frank B. Wilderson III, aliases: [Wilderson, Frank Wilderson]}
+  - {name: Frantz Fanon}
+  - {name: Frédéric Beigbeder, aliases: [Beigbeder]}
+  - {name: Frédéric Châtillon}
+  - {name: Frédéric Delavier, aliases: [Fred de la Viier]}
+  - {name: Frédéric Jameson, aliases: [Fredric Jameson]}
+  - {name: Frédéric Lordon, aliases: [Lordon, l'Ordon, Fred Lordon]}
+  - {name: Frédéric Oudéa, aliases: [Oudéa]}
+  - {name: Friedrich Engels, aliases: [Engels]}
+  - {name: Friedrich Merz}
+  - {name: Friedrich Nietzsche, aliases: [Nietzsche]}
+  - {name: Fritz Sternberg, aliases: [Sternberg]}
+  - {name: Fugu, aliases: [streamer Fugu]}
+  - {name: Gabriel Attal, aliases: [Gaby, Macron de Wish, Gabriel Atal]}
+  - {name: Gabriel Matzneff}
+  - {name: Gabriel Rockhill, aliases: [Rockhill]}
+  - {name: Gabriel Zucman, aliases: [Zucman, Gabriel Zükman]}
+  - {name: Gaspard Koenig, aliases: [Gaspard König, Caspar Cing]}
+  - {name: Gavin Newsom, aliases: [Newsom]}
+  - {name: Geert Wilders, aliases: [Wilders]}
+  - {name: Geoffroy de Lagasnerie, aliases: [Lagasnerie, la Gasnerie, la ganerie, la gannerie]}
+  - {name: Georg Lukács, aliases: [Lukacs]}
+  - {name: George W Bush, aliases: [Bush, W]}
+  - {name: Georges Gastaud}
+  - {name: Georges Ibrahim Abdallah, aliases: [George Ibrahim Abdallah, George Abdallah]}
+  - {name: Georges Labica}
+  - {name: Georges Marchais, aliases: [Marchais]}
+  - {name: Georges Politzer, aliases: [Politzer]}
+  - {name: Georgia Meloni, aliases: [Giorgia Meloni, Meloni]}
+  - {name: Gérald Darmanin, aliases: [Darmanin]}
+  - {name: Gérard Depardieu}
+  - {name: Gérard Filoche, aliases: [Filoche, la béfiloche, l'abbé Filoche]}
+  - {name: Gérard Larcher, aliases: [Larcher]}
+  - {name: Gérard Miller}
+  - {name: Gilles Boulot, aliases: [Gill Boulot]}
+  - {name: Gilles Deleuze, aliases: [Deleuze]}
+  - {name: Gilles-William Goldnadel, aliases: [Gill William Goldnadel, Goldnadel]}
+  - {name: Gisèle Pelicot, aliases: [Giselle Pelicot]}
+  - {name: Giulia Sarkozy, aliases: [Julia Sarkozy]}
+  - {name: Glupatate, aliases: [Glupatat, Glu]}
+  - {name: Grégoire Chamayou}
+  - {name: Greta Thunberg, aliases: [Thunberg, Greta]}
+  - {name: Guillaume Faye, aliases: [Faye]}
+  - {name: Guillaume Kasbarian, aliases: [Kasbarian, Guillaume Casbarian]}
+  - {name: Guillaume Lacroix, aliases: [Lacroix, président PRG]}
+  - {name: Guillaume Meurice}
+  - {name: Gustavo Petro, aliases: [Petro]}
+  - {name: Guy Mollet, aliases: [Mollet]}
+  - {name: György Lukács, aliases: [Lukacs]}
+  - {name: Hassan Nasrallah, aliases: [Nasrallah, حسن نصرالله]}
+  - {name: Hélène de Vinck, aliases: [Helene de Vinc]}
+  - {name: Hélène Geoffroy}
+  - {name: Hélène Jaufrois}
+  - {name: Hélène Mercier-Arnault, aliases: [Merci Arnaud]}
+  - {name: Helydia, aliases: [streameuse Helydia]}
+  - {name: Henri Guaino, aliases: [Henry Guaino]}
+  - {name: Henri Wallon, aliases: [Wallon]}
+  - {name: Henry de Lesquen}
+  - {name: Herbert Marcuse, aliases: [Marcuse, Marcus]}
+  - {name: Hercilia Soudé}
+  - {name: Herga}
+  - {name: Hervé Le Bras, aliases: [Le Bras, Lebras]}
+  - {name: Hillary Clinton, aliases: [Clinton, Hilary Clinton]}
+  - {name: Houria Bouteldja, aliases: [Bouteldja, Oria Bouteldja, Ouria Bouteldja]}
+  - {name: Huey Newton, aliases: [Newton, Wton]}
+  - {name: Hugo Bernalicis}
+  - {name: Hugo Carvajal}
+  - {name: Hugo Chavez, aliases: [Chávez]}
+  - {name: Hugo Clément}
+  - {name: Hugo Mazouz, aliases: [Hugo Mazouse, Hugo]}
+  - {name: Hugo Prévost, aliases: [Hugo Prévau]}
+  - {name: Idir Boumertit, aliases: [Boumertit]}
+  - {name: Ignace Meyerson, aliases: [Meyerson]}
+  - {name: Ilhan Omar, aliases: [Omar, Ilhan]}
+  - {name: Ilya Prigogine}
+  - {name: Imane Khelif, aliases: [Iman Khelif]}
+  - {name: Immanuel Kant, aliases: [Emmanuel Kant]}
+  - {name: Infame}
+  - {name: Iñigo Errejón, aliases: [Erreron, Errejón]}
+  - {name: Irène Montero}
+  - {name: Isaac Herzog, aliases: [Herzog]}
+  - {name: Isabelle Alonso, aliases: [Alonso]}
+  - {name: Isabelle Cukierman}
+  - {name: Isabelle Lasserre, aliases: [Isabelle Laer]}
+  - {name: Itamar Ben-Gvir, aliases: [Ben-Gvir]}
+  - {name: Ivan Benedetti, aliases: [Benedetti]}
+  - {name: Ivan Pavlov, aliases: [Pavlov]}
+  - {name: Jacques Bidet}
+  - {name: Jacques Chaban-Delmas}
+  - {name: Jacques Chirac, aliases: [Chirac]}
+  - {name: Jacques Doriot, aliases: [Doriot]}
+  - {name: Jacques Lacan, aliases: [Lacan]}
+  - {name: Jacques Rueff}
+  - {name: Jared Sexton, aliases: [Sexton]}
+  - {name: Javier Milei, aliases: [Milei]}
+  - {name: JD Vance, aliases: [Vance, James David Vance]}
+  - {name: JDG (Joueur du Grenier), aliases: [JDG, Joueur du Grenier, Fred, Frédéric Molas]}
+  - {name: Jean-Christophe Cambadélis, aliases: [Cambadélis]}
+  - {name: Jean-Claude Gayssot}
+  - {name: Jean-Claude Lefort, aliases: [Lefort]}
+  - {name: Jean-Claude Michéa, aliases: [Michéa]}
+  - {name: Jean-François Copé, aliases: [Copé]}
+  - {name: Jean-François Corty, aliases: [Corty]}
+  - {name: Jean-Jacques Rousseau}
+  - {name: Jean Jaurès, aliases: [Jaurès, Jores]}
+  - {name: Jean Lassalle}
+  - {name: Jean-Luc Mélenchon, aliases: [Mélenchon, JLM, Jean-Luc]}
+  - {name: Jean-Luc Moudenc, aliases: [Jean-Luc Moudan]}
+  - {name: Jean-Marc Jancovici, aliases: [Jancovici, Jankovici, jankovichiste]}
+  - {name: Jean-Marc Morandini, aliases: [Morandini]}
+  - {name: Jean-Marc Sylvestre}
+  - {name: Jean-Marie Le Pen, aliases: [JMLP]}
+  - {name: Jean Massiet}
+  - {name: Jean Messia}
+  - {name: Jean-Paul Amond, aliases: [Jean-Paul Amont]}
+  - {name: Jean-Paul Escuro, aliases: [Escuro]}
+  - {name: Jean-Philippe Tanguy, aliases: [Tanguy, JP Tanguy]}
+  - {name: Jean Piaget, aliases: [Piaget]}
+  - {name: Jean Pormanove, aliases: [JP, Jean Portmanov]}
+  - {name: Jean Quatremer}
+  - {name: Jean Robin}
+  - {name: Jean Tibéry, aliases: [Tibéry]}
+  - {name: Jeanne Barseghian, aliases: [Barseghian]}
+  - {name: Jérémy Assous}
+  - {name: Jérémy Bacchi, aliases: [Bacchi]}
+  - {name: Jeremy Corbyn, aliases: [Corbyn]}
+  - {name: Jérémy Jordanov, aliases: [Jordanov]}
+  - {name: Jérôme Gagé}
+  - {name: Jérôme Guedj}
+  - {name: Jérôme Marty}
+  - {name: Jill Stein, aliases: [Stein]}
+  - {name: Joe Biden, aliases: [Biden]}
+  - {name: Johann Chapoutot, aliases: [Chapoutot, Joan Chaputo]}
+  - {name: Johanna Rolland, aliases: [Johanna Roland, Rolland]}
+  - {name: John Carlos}
+  - {name: John F Kennedy, aliases: [John Fitzgerald Kennedy, JFK, Kennedy]}
+  - {name: John Steinbeck, aliases: [Steinbeck]}
+  - {name: Jonathan Gelop}
+  - {name: Jonathan Glazer}
+  - {name: Jordan Bardella, aliases: [Bardella]}
+  - {name: Jordan Florentin}
+  - {name: Jordan Peterson}
+  - {name: Jovann de l'Ourme, aliases: [Le JARL]}
+  - {name: Juan Guaido, aliases: [Guaidó]}
+  - {name: Jules Ferry}
+  - {name: Julia Cagé, aliases: [Cagé, Kagé, Kaget, Kager]}
+  - {name: Julia Castanier}
+  - {name: Julia de Funès, aliases: [Julia de Funess, Julia de Funesse]}
+  - {name: Julian Assange, aliases: [Assange]}
+  - {name: Julie Gayet, aliases: [Julie Gaillet]}
+  - {name: Julien Dray}
+  - {name: Julien Odoul, aliases: [Odoul]}
+  - {name: Julien Rochedy, aliases: [Rochedy, Juju]}
+  - {name: Julien Sanchez}
+  - {name: Kamala Harris, aliases: [Harris]}
+  - {name: Kanye West, aliases: [Kanye, Ye]}
+  - {name: Karim Benzema, aliases: [Benzema]}
+  - {name: Karim Bouamrane, aliases: [Bouamrane]}
+  - {name: Karl Kautsky, aliases: [Kautsky]}
+  - {name: Karl Marx, aliases: [Marx]}
+  - {name: Killian Senseï}
+  - {name: Kimberlé Crenshaw, aliases: [Crenshaw]}
+  - {name: Kroc Blanc, aliases: [Cabé, FDNews, fdenews]}
+  - {name: Kylian Mbappé, aliases: [Mbappé, Kyan Mbappé]}
+  - {name: L'Observateur Officiel, aliases: [Lobservateur Officiel, l'Observateur, '@lobservateurOfficiel']}
+  - {name: La Menace, aliases: [Maxime Alexandrov, lamenaceofficial]}
+  - {name: La Valette, aliases: [Lavalette]}
+  - {name: Lahouaria Addouche, aliases: [Lahouaria]}
+  - {name: Laurence Ferrari}
+  - {name: Laurence Rossignol}
+  - {name: Laurence Ruffin}
+  - {name: Laurent Alexandre, aliases: [Dr Laurent Alexandre, Laurent Alexandre chirurgien]}
+  - {name: Laurent Baumel, aliases: [Baumel]}
+  - {name: Laurent Berger, aliases: [Berger]}
+  - {name: Laurent Bouvet, aliases: [Bouvet]}
+  - {name: Laurent Fabius, aliases: [Fabius]}
+  - {name: Laurent Mauduit}
+  - {name: Laurent Nuñez, aliases: [Nuñez, Nunes]}
+  - {name: Laurent Ruquier}
+  - {name: Laurent Voquat}
+  - {name: Laurent Wauquiez, aliases: [Wauquiez]}
+  - {name: Le brac}
+  - {name: Le Fouallier, aliases: [Stéphan le fou allier]}
+  - {name: Le Guiz, aliases: [LeGuiz]}
+  - {name: Léa Salamé}
+  - {name: Leïla Chaibi, aliases: [Laila Shebi]}
+  - {name: Léna Situations}
+  - {name: Lénine, aliases: [Vladimir Lenine, Vladimir Ilitch Lénine, Ulyanov]}
+  - {name: Léo Grassé, aliases: [Dirty Biology]}
+  - {name: Léon Deffontaines}
+  - {name: Léon Degrelle}
+  - {name: Léon des Fontaines}
+  - {name: Léon Landini, aliases: [Landini]}
+  - {name: Léon Trotski, aliases: [Trotsky, Léon Trotsky]}
+  - {name: Leonarda Dibrani, aliases: [Leonarda]}
+  - {name: Léonore Moncond'huy, aliases: [Moncond'huy, Leonore Monconduy]}
+  - {name: Léopold Sédar Senghor, aliases: [Senghor, Léopold Senghor, Saint-or]}
+  - {name: Leopoldina Fortunati, aliases: [Fortunati]}
+  - {name: Lev Vygotski, aliases: [Vygotski, Vigotski]}
+  - {name: Liliane Bettencourt, aliases: [Bettencourt]}
+  - {name: Lily Phillips, aliases: [Lily Philips]}
+  - {name: Linguisticae, aliases: [Monté, vulgarisateur linguistique]}
+  - {name: Linh Lan Dao, aliases: [LinhLan Dao]}
+  - {name: Lio, aliases: [chanteuse Lio]}
+  - {name: Lionel Jospin}
+  - {name: Loïc Chaigneau, aliases: [Loïc Chenu]}
+  - {name: Lou Girard}
+  - {name: Louis Aliot, aliases: [Aliot]}
+  - {name: Louis Althusser, aliases: [Althusser, Altusser]}
+  - {name: Louis Boyard}
+  - {name: Louis San, aliases: [LouisSan, Louisan]}
+  - {name: Louis Sarkozy, aliases: [le Nabo]}
+  - {name: Louise Billant, aliases: [Louise Billan]}
+  - {name: Luc Ferry}
+  - {name: Lucie Castets, aliases: [Castets]}
+  - {name: Lucien Goldmann}
+  - {name: Lucien Sève}
+  - {name: Lucile Pepin, aliases: [Lucile Payvin, Lucille Payvin]}
+  - {name: Lucy Castets}
+  - {name: Ludivine Bantigny, aliases: [Bantigny]}
+  - {name: Lula, aliases: [Lula da Silva, Luis Inácio Lula da Silva]}
+  - {name: Lumi, aliases: [Lumi l'Humanité]}
+  - {name: Lumière l'Après, aliases: [Lumir Lapray, Lumière, Lumière la Presse, Lumir]}
+  - {name: Lyas Loufok, aliases: [Lias Loufok]}
+  - {name: Lyes Louffok}
+  - {name: Ma Nombrile, aliases: [Manon]}
+  - {name: Maboula Soumahoro, aliases: [Maboula]}
+  - {name: Magali Berdah, aliases: [Magalie Berdah, Magalie Berda]}
+  - {name: Magne, aliases: [M, le miniaturiste, le graphiste]}
+  - {name: Magnus Hirschfeld}
+  - {name: Mahdi Amel, aliases: [Mahdi Amil]}
+  - {name: Mahmoud Abbas, aliases: [Abbas, Abou Mazen, Abu Mazen]}
+  - {name: Manon Aubry}
+  - {name: Manuel Bompard, aliases: [Bompard]}
+  - {name: Manuel Servet-Mersal, aliases: [Servet Mersal, Servera Marsal]}
+  - {name: Manuel Valls, aliases: [Valls]}
+  - {name: Mao Zedong, aliases: [Mao, Mao Tsé-Toung, Mao Tse-Tung]}
+  - {name: Marc, aliases: [Marc (Terre des hommes libres)]}
+  - {name: Marc-Antoine Jamet, aliases: [Jamet]}
+  - {name: Marc Belissa, aliases: [Marc Bellissa, Belissa]}
+  - {name: Marc Fesneau, aliases: [Fesneau]}
+  - {name: Marc Lazar}
+  - {name: Marc-Olivier Fogiel}
+  - {name: Marcel Gauchet, aliases: [Gauchet]}
+  - {name: Marco Rubio, aliases: [Narco Rubio, Marco Antonio Rubio]}
+  - {name: Margaret Thatcher}
+  - {name: Marguerite Stern}
+  - {name: Maria Carolina de Bourbon des Deux-Siciles, aliases: [Maria Carolina de Bourbon de Sicile, Maria Carolina Bourbon des Deux-Siciles, la Princesse]}
+  - {name: Maria Corina Machado}
+  - {name: Marianne Maximi}
+  - {name: Mariarosa Dalla Costa, aliases: [Dalla Costa]}
+  - {name: Marie Coquille Chambel, aliases: [Marie Coky, Marie Coqui, Marikoki, Marie Coquille]}
+  - {name: Marie-Lise Léon, aliases: [Marylise Léon]}
+  - {name: Marie Mesmer}
+  - {name: Marie Toussaint}
+  - {name: Marie Toussin}
+  - {name: Marie Trintignant}
+  - {name: Marielle de Sarnez, aliases: [de Sarnez, Sarnez]}
+  - {name: Marina Simonin, aliases: [Marina Nagar, Marina Simonin-Nagar]}
+  - {name: Marine Le Pen}
+  - {name: Marine Tondelier}
+  - {name: Marion Maréchal}
+  - {name: Marion Séclin}
+  - {name: Marsha P. Johnson}
+  - {name: Martin Bouygues}
+  - {name: Martine Vassal, aliases: [Vassal]}
+  - {name: Marwan Barghouti, aliases: [Barghouti]}
+  - {name: Masoud Pézeshkian, aliases: [Pezeshkian, مسعود پزشکیان]}
+  - {name: Mathieu Burgalassi}
+  - {name: Mathieu Hanotin}
+  - {name: Mathieu Kassovitz}
+  - {name: Mathieu Pigasse}
+  - {name: Mathilde Panot}
+  - {name: Matteo Salvini, aliases: [Salvini]}
+  - {name: Maud Brégeon, aliases: [Brégeon]}
+  - {name: Maurice Papon}
+  - {name: Maxime Sbaihi, aliases: [Maxime Sbai]}
+  - {name: Médine, aliases: [Médine Zaouiche]}
+  - {name: Mélanie Klein, aliases: [Klein]}
+  - {name: Merwan Benlazar}
+  - {name: Messali Hadj, aliases: [Messali, Messaliad]}
+  - {name: Mette Frederiksen, aliases: [Mette Fredericksen]}
+  - {name: Meyer Habib, aliases: [Habib]}
+  - {name: Michaël Zemmour}
+  - {name: Michel Barnier}
+  - {name: Michel Boujenah}
+  - {name: Michel Clouscard, aliases: [Clouscard, Cluscard, Michel Clouscar]}
+  - {name: Michel-Édouard Leclerc, aliases: [MEL]}
+  - {name: Michel Feher, aliases: [Michel Fer]}
+  - {name: Michel Foucault, aliases: [Foucault, Fouco]}
+  - {name: Michel Maffesoli, aliases: [Maffesoli]}
+  - {name: Michel Onfray, aliases: [Michel Yun, Onfray, Michel Onfrey, on Frey]}
+  - {name: Michel Picard}
+  - {name: Michel Rocard}
+  - {name: Mikheil Saakachvili, aliases: [Saakachvili, Chakajeville]}
+  - {name: Mila}
+  - {name: Missak Manouchian, aliases: [Manouchian]}
+  - {name: Mohamed Cassi}
+  - {name: Mohammed Ali, aliases: [Muhammad Ali, Cassius Clay]}
+  - {name: Mohammed Ben Salman, aliases: [MBS, Ben Salman, محمد بن سلمان]}
+  - {name: Mohammed Mossadegh, aliases: [Mohammad Mossadegh, Mossadeg, Mossadek, محمد مصدق]}
+  - {name: Mojtaba Khamenei, aliases: [Modjaba Ramenei, مجتبی خامنه‌ای]}
+  - {name: Morgan Merteuil}
+  - {name: Morgane Merteuil}
+  - {name: Mos Majorum, aliases: [Boss Major Room, Moss Majorum]}
+  - {name: Mouammar Kadhafi, aliases: [Muammar Kadhafi, Kadhafi, Kaddafi, Gaddafi]}
+  - {name: Muhittin Altun, aliases: [Muhittin, Main]}
+  - {name: Myriam Soumaré}
+  - {name: Nadine Morano}
+  - {name: Naël Merzouk, aliases: [Naël]}
+  - {name: Najat Vallaud-Belkacem}
+  - {name: Napoléon Bonaparte, aliases: [Napoléon]}
+  - {name: Naruto}
+  - {name: Natacha Polonie}
+  - {name: Natacha Polony, aliases: [Polony, Natacha Poloni]}
+  - {name: Nathalie Arthaud}
+  - {name: Nathalie Oziol, aliases: [Oziol]}
+  - {name: Nathalie Saint-Cricq, aliases: [Nathalie Saintcric, Saint-Cricq]}
+  - {name: Nayib Bukélé}
+  - {name: Neigma Traviglini}
+  - {name: Nguyễn Ái Quốc, aliases: [Ho Chi Minh]}
+  - {name: Nicolas Bedos}
+  - {name: Nicolas Bouzou, aliases: [Bouzou]}
+  - {name: Nicolas Da Silva}
+  - {name: Nicolas Démorand, aliases: [Demorand, Nicolas de Morand]}
+  - {name: Nicolas Dupont-Aignan, aliases: [Dupont-Aignan, du Pontignan]}
+  - {name: Nicolas Framont}
+  - {name: Nicolas Hulot}
+  - {name: Nicolas Maduro, aliases: [Maduro]}
+  - {name: Nicolas Mayer-Rossignol, aliases: [Nicolas Meer Rossignol]}
+  - {name: Nicolas Offenstadt}
+  - {name: Nicolas Patin, aliases: [Patin]}
+  - {name: Nicolas Sarkozy, aliases: [Sarkozy]}
+  - {name: Nicolas W}
+  - {name: Nigel Farage, aliases: [Farage]}
+  - {name: Nikolaï Boukharine, aliases: [Boukharine, Boukharin, Bukharin]}
+  - {name: Norman Ajari}
+  - {name: Od Geno, aliases: [Odde Geno]}
+  - {name: Olivier Besancenot, aliases: [Besancenot, Bezano, Besno]}
+  - {name: Olivier Bianqui, aliases: [Bianqui]}
+  - {name: Olivier Duhamel}
+  - {name: Olivier Faure, aliases: [Olivier Fort]}
+  - {name: Olivier Fort}
+  - {name: Olivier Matheu, aliases: [Matheu]}
+  - {name: Olivier Pérou}
+  - {name: Oscar Lafontaine, aliases: [Oskar Lafontaine]}
+  - {name: OseilleTV, aliases: [Oseille TV, Guillermo, Guilermo]}
+  - {name: Otto Strasser, aliases: [Strasser, Autostrascher]}
+  - {name: Oussam Abou Safiya, aliases: [Dr Abou Safiya, Hussam Abu Safiya]}
+  - {name: Pablo Iglesias, aliases: [Pablo Iglesias Turrión]}
+  - {name: Padrino Lopez}
+  - {name: Padu}
+  - {name: Papacito}
+  - {name: Pape de Logou, aliases: [de Logou, Logou]}
+  - {name: Pascal André, aliases: [Dr Pascal André]}
+  - {name: Pascal Boniface, aliases: [Boniface]}
+  - {name: Pascal Canfin}
+  - {name: Pascal Praud}
+  - {name: Patrice Duhamel}
+  - {name: Patrice Lumumba, aliases: [Lumumba, Lumumbumba]}
+  - {name: Patrick Bessac, aliases: [Bessac]}
+  - {name: Patrick Buisson}
+  - {name: Patrick Cohen}
+  - {name: Patrick Kanner}
+  - {name: Patrick Martin}
+  - {name: Paul Elek}
+  - {name: Paul Vanier}
+  - {name: Pedro Sánchez}
+  - {name: Pedro Sancho}
+  - {name: Philippe Aghion}
+  - {name: Philippe Bilger}
+  - {name: Philippe Brun}
+  - {name: Philippe Coté}
+  - {name: Philippe de Villier, aliases: [de Villier, Philippe de Villiers, Villier]}
+  - {name: Philippe Martinez, aliases: [Martinez]}
+  - {name: Philippe Njar}
+  - {name: Philippe Poutou, aliases: [Poutou]}
+  - {name: Pierre-Alain Cotino}
+  - {name: Pierre Bourdieu, aliases: [Bourdieu]}
+  - {name: Pierre Bournazel}
+  - {name: Pierre de Brague, aliases: [de Brague]}
+  - {name: Pierre de Coubertin}
+  - {name: Pierre-Édouard Stérin, aliases: [Stérin]}
+  - {name: Pierre Emmanuel Barre}
+  - {name: Pierre-Joseph Proudhon, aliases: [Proudhon, proudonien, Proudon]}
+  - {name: Pierre Jouvet}
+  - {name: Pierre Laurent}
+  - {name: Pierre Moscovici, aliases: [Pierre Moskovic]}
+  - {name: Pierre-René Laavier, aliases: [Laavier]}
+  - {name: Pierre Sautarel}
+  - {name: Pierre Vidal-Naquet, aliases: [Vidal-Naquet]}
+  - {name: Plantu, aliases: [Jean Plantu]}
+  - {name: Platon}
+  - {name: Polska}
+  - {name: PPDA, aliases: [Patrick Poivre d'Arvor]}
+  - {name: Priscilla Even, aliases: [Priscato, Prisclatno]}
+  - {name: Psychodélique}
+  - {name: Psyhodelik}
+  - {name: Psykocouac, aliases: [Psyko couac]}
+  - {name: Quentin Déranque, aliases: [Quentin de Rang]}
+  - {name: Quentin M, aliases: [Quentin M (journaliste), '@QuentinM']}
+  - {name: Rachid Mekhloufi}
+  - {name: Rachid Témal}
+  - {name: Rachida Dati, aliases: [Dati]}
+  - {name: Raoul Hedebouw}
+  - {name: Raoul Peck}
+  - {name: Raphaël Arnaud}
+  - {name: Raphaël Enthoven, aliases: [Enthoven]}
+  - {name: Raphaël Glucksmann, aliases: [Glucksmann, Raphaël G.]}
+  - {name: Raquel Garrido}
+  - {name: Rashida Tlaib, aliases: [Tlaib, Rashida]}
+  - {name: Ratko Mladić, aliases: [Mladic, Ratkomadic]}
+  - {name: Recep Tayyip Erdoğan, aliases: [Erdogan]}
+  - {name: Renaud Camus, aliases: [Renaud Camu]}
+  - {name: René Cassin}
+  - {name: Ribo, aliases: [Ribo dans la sauce]}
+  - {name: Rima Hassan}
+  - {name: Robert Ménard}
+  - {name: Robespierre, aliases: [Maximilien Robespierre]}
+  - {name: Rodolphe Saadé}
+  - {name: Roger Garaudy, aliases: [Garaudy]}
+  - {name: Romaric Godin}
+  - {name: Ronald Reagan}
+  - {name: Ronny Brauman, aliases: [Rony Brauman]}
+  - {name: Roque Dalton}
+  - {name: Rosa Luxemburg, aliases: [Rosa Luxembourg, Luxemburg]}
+  - {name: Roswitha Scholz, aliases: [Scholz, Ros Vital Schol]}
+  - {name: Rougeyron, aliases: [Pierre-Yves Rougeyron]}
+  - {name: Rouhollah Khomeini, aliases: [Khomeini, Khomeiny, آیت‌الله خمینی, Ayatollah Khomeini]}
+  - {name: Rudolf Bahro, aliases: [Bahro, Rudolph Bahro]}
+  - {name: Sabrina Ali Benali}
+  - {name: Sacha Tabibian, aliases: [Tabibian]}
+  - {name: Saddam Hussein, aliases: [Saddam Husayn, صدام حسين]}
+  - {name: Saïd Bouamama, aliases: [Boamama]}
+  - {name: Salim Lamrani}
+  - {name: Salomé Saqué}
+  - {name: Salvador Allende, aliases: [Allende, Aliend]}
+  - {name: Samir Amin, aliases: [Samir Amine]}
+  - {name: Samir Galem}
+  - {name: Samuel Ferrara}
+  - {name: Samuel Grzybowski}
+  - {name: Samuel Paty}
+  - {name: Sándor Ferenczi, aliases: [Ferenczi]}
+  - {name: Sandra Lucbert, aliases: [Lucbert]}
+  - {name: Sandrine Rousseau}
+  - {name: Sandrine Runel}
+  - {name: Santiago Abascal, aliases: [Abascal]}
+  - {name: Sara Farris, aliases: [Sarah Farris, Sarah Faris]}
+  - {name: Sarah Knafo}
+  - {name: Sarah Legrain, aliases: [Sarah Lin, Sarah Leograph]}
+  - {name: Sarah Saldmann, aliases: [Sarah Salman]}
+  - {name: Sardoche, aliases: [Sardoch]}
+  - {name: Sasha Veber}
+  - {name: Sébastien Chenu}
+  - {name: Sébastien De Logu, aliases: [De Logu]}
+  - {name: Sébastien Le Cornu, aliases: [Le Cornu, Sébastien Lecnu, Lecnu]}
+  - {name: Ségolène Royal, aliases: [Royal]}
+  - {name: Serge Alimi}
+  - {name: Serge Mallet}
+  - {name: Shah d'Iran, aliases: [Reza Shah Pahlavi, Mohammad Reza Pahlavi, le Shah, Chah d'Iran]}
+  - {name: Sigmund Freud, aliases: [Freud]}
+  - {name: Sihame Assbague}
+  - {name: Silvia Federici, aliases: [Federici]}
+  - {name: Slapp, aliases: [Armand Belfroid]}
+  - {name: Sonia Mabrook}
+  - {name: Sophia Aram}
+  - {name: Sophia Chikirou, aliases: [Chikirou]}
+  - {name: Sophie Binet}
+  - {name: Sophie Bower}
+  - {name: Sophie Marceau}
+  - {name: Sophie Orange}
+  - {name: Squeezie, aliases: [Lucas Hauchard]}
+  - {name: Staline, aliases: [Stalin, Joseph Staline, Joseph Stalin, Iossif Djougachvili]}
+  - {name: Stathis Kouvelakis, aliases: [Stathis, Kouvelakis]}
+  - {name: Stefano Palombarini, aliases: [Palombarini, Stéphano Palombarini, Stéphane Palombarini]}
+  - {name: Stéphane Courtois}
+  - {name: Stéphane Édouard}
+  - {name: Stéphane Le Rudulier, aliases: [Le Rudulier]}
+  - {name: Stéphane Peu}
+  - {name: Stephen Miller, aliases: [Stéphane Miller, Steve Miller]}
+  - {name: Sydney Sweeney, aliases: [Sweeney]}
+  - {name: Sylvain Maillard}
+  - {name: Sylvain Mercadier}
+  - {name: Sylvie Bermann, aliases: [Sylvie Berman]}
+  - {name: Sylvie Gaté}
+  - {name: Sylvie Trémouille}
+  - {name: Tatiana Ventôse}
+  - {name: Terracid, aliases: [Rebeu des terres]}
+  - {name: Thaïs d'Escufon, aliases: [Thaïs Descufon]}
+  - {name: Théo Favre-Rochex, aliases: [Favre-Rochex]}
+  - {name: Theodore Kaczynski, aliases: [Kaczynski, Unabomber, Ted Kaczynski, Yuna Bomber, Yonabomber]}
+  - {name: Thierry Breton}
+  - {name: Thierry Deronne}
+  - {name: Thierry Mariani}
+  - {name: Thomas Franck, aliases: [Thomas Frank]}
+  - {name: Thomas Legrand}
+  - {name: Thomas Piketty, aliases: [Piketty, Piketti, Piquetti]}
+  - {name: Thomas Portes}
+  - {name: Thomas Posado}
+  - {name: Thomas Sankara}
+  - {name: Thomas Sotto}
+  - {name: Thomas Sowell, aliases: [Sowell]}
+  - {name: Tibo InShape, aliases: [TiboInShape, Thibo Inshape]}
+  - {name: Tim Walz, aliases: [Tim Waltz, Walz]}
+  - {name: Tito Josip Broz, aliases: [Tito, Josip Broz Tito]}
+  - {name: Tommy Smith}
+  - {name: Tony Blair, aliases: [Blair]}
+  - {name: Tran Duc Thao, aliases: [Trần Đức Thảo, Tranduc Thao]}
+  - {name: Troublant Acide}
+  - {name: Umberto Eco}
+  - {name: Ursula von der Leyen, aliases: [von der Leyen, UvdL]}
+  - {name: Usul, aliases: [Usule]}
+  - {name: Valek, aliases: [PUCIX, Valek Studio]}
+  - {name: Valérie Hayer}
+  - {name: Valérie Pécresse, aliases: [Pécresse]}
+  - {name: Valéry Giscard d'Estaing}
+  - {name: Vanessa Springora}
+  - {name: Victor Chabert}
+  - {name: Victor Ferry}
+  - {name: Vie de Carabin, aliases: [VieDeCarabin]}
+  - {name: Viktor Orbán, aliases: [Orban]}
+  - {name: Vincent Bolloré, aliases: [Bolloré]}
+  - {name: Vincent Lapierre}
+  - {name: Violaine Girard}
+  - {name: Virginie Despentes, aliases: [Despentes]}
+  - {name: Virginie Joron}
+  - {name: Virginie Vota}
+  - {name: Vladimir Jabotinski, aliases: [Jabotinsky, Vladimir Jabotinsky, Zeev Jabotinsky]}
+  - {name: Vladimir Padrino López}
+  - {name: Vladimir Poutine, aliases: [Poutine, Putin]}
+  - {name: Volodymyr Zelensky, aliases: [Zelenski, Zelensky]}
+  - {name: W.E.B. Du Bois}
+  - {name: Walid Mouali}
+  - {name: Werner Heisenberg}
+  - {name: Werner Sombart, aliases: [Sombart]}
+  - {name: Wilfried Granier, aliases: [fondateur SuperProf, fondateur Super Prof]}
+  - {name: William Aucant}
+  - {name: William Reich}
+  - {name: Wissam Xelka, aliases: [Wisam, Wissam, Wiisam]}
+  - {name: Xavier Bertrand}
+  - {name: Xavier Niel}
+  - {name: Xi Jinping, aliases: [Jing Ping, Xi, Shishinping, Shishing Ping]}
+  - {name: Yaël Braun-Pivet, aliases: [Bron Pivé]}
+  - {name: Yanis Varoufakis, aliases: [Varoufakis]}
+  - {name: Yann Brossat}
+  - {name: Yann Moix}
+  - {name: Yannick Jadot, aliases: [Jadot]}
+  - {name: Yannick Noder, aliases: [Yannick Noer, Yannick Nder]}
+  - {name: Yasser Arafat, aliases: [Arafat, Abu Ammar]}
+  - {name: Yassine Bennetou}
+  - {name: Yassouk, aliases: [Yasuk, Yassou, yassouk.k]}
+  - {name: Yoav Gallant, aliases: [Gallant]}
+  - {name: Yohan du Canard Réfractaire, aliases: [Yohan]}
+  - {name: Yolanda Díaz}
+  - {name: Yves Calvi}
+  - {name: Zoclo}
+  - {name: Zoé Dubus}
+  - {name: Zohran Mamdani, aliases: [Zohair Mamdani, Mamdani]}
+  - {name: Zyed Benna, aliases: [Zied Benna, Zied, Zyed]}
+
+organisation:
+  - {name: '1083', aliases: [Mille Quatre-Vingt-Trois]}
+  - {name: Action Distribution, aliases: [Action, Action (discounter), Action magasin]}
+  - {name: Action Française}
+  - {name: ALBA, aliases: [Alliance bolivarienne pour les Amériques]}
+  - {name: Allégria}
+  - {name: Alliance FR, aliases: [AllianceFR]}
+  - {name: Alternativa}
+  - {name: Alternative für Deutschland, aliases: [AFD]}
+  - {name: Amazon, aliases: [Amazon France, Amazon Logistique]}
+  - {name: Amnesty International}
+  - {name: Anavim}
+  - {name: Antitech Résistance, aliases: [ATR]}
+  - {name: AODA, aliases: [Union des comités des travailleurs de la santé de Gaza]}
+  - {name: Armée Nationale Syrienne, aliases: [ANS, Syrian National Army]}
+  - {name: Assemblée nationale, aliases: [AN]}
+  - {name: Association des maires de France, aliases: [AMF]}
+  - {name: Assurance Maladie, aliases: [CNAM, Caisse Nationale d'Assurance Maladie]}
+  - {name: ASUD, aliases: [AutoSupport des usagers de drogue]}
+  - {name: Atlas Network, aliases: [réseau Atlas]}
+  - {name: Audace Lyon}
+  - {name: Autorité Palestinienne, aliases: [AP, Palestinian Authority]}
+  - {name: B'Tselem}
+  - {name: Backseat}
+  - {name: BDS, aliases: [Boycott Divestment Sanctions, Boycott Désinvestissement Sanctions]}
+  - {name: BFM TV, aliases: [BFMTV, BFM]}
+  - {name: Black Panthers, aliases: [Black Panther Party]}
+  - {name: Blast, aliases: [Blast France]}
+  - {name: Brand New Congress, aliases: [BNC]}
+  - {name: BRAV-M, aliases: [Brigade de Répression de l'Action Violente Motocycliste]}
+  - {name: Breaking the Silence}
+  - {name: C'est Nicolas qui paye, aliases: [Nicolas qui paye, C'est Nicolas qui paye collectif]}
+  - {name: Canal Réfractaire, aliases: [le Canal réfractaire]}
+  - {name: Centre National d'Enseignement à Distance (CNED), aliases: [Centre National d'Enseignement a Distance, CNED]}
+  - {name: CFDT, aliases: [Confédération Française Démocratique du Travail]}
+  - {name: CGT}
+  - {name: Charlie Hebdo, aliases: [Charlie, l'esprit Charlie]}
+  - {name: CIA}
+  - {name: Club 1988}
+  - {name: Cluster 17, aliases: [Cluster17]}
+  - {name: CNews, aliases: [C8, canal Bolloré]}
+  - {name: Collectif MEP, aliases: [MEP, Mise en Place, collectif Mise en Place]}
+  - {name: Collectif Némésis, aliases: [Némésis]}
+  - {name: Commission des affaires étrangères}
+  - {name: Confédération des PME, aliases: [CPME, syndicat des patrons de TPE-PME]}
+  - {name: Confédération Paysanne, aliases: [Conf paysanne, La Conf]}
+  - {name: Congrégation Notre-Dame de Bétharram, aliases: [Notre-Dame de Bétharram, Bétharram, pensionnat Bétharram]}
+  - {name: Conseil de l'Ordre des Médecins, aliases: [Conseil de l'Ordre, CNOM, Ordre des médecins]}
+  - {name: Contre-Attaque, aliases: [Contreattaque]}
+  - {name: Contretemps, aliases: [contre-temps]}
+  - {name: Coordination Rurale}
+  - {name: Cour Pénale Internationale, aliases: [CPI, ICC, International Criminal Court]}
+  - {name: Cour Suprême des États-Unis, aliases: [Cour suprême, Supreme Court]}
+  - {name: Cuba, aliases: [République de Cuba, Cuba socialiste]}
+  - {name: Daech, aliases: [Daesh, État islamique]}
+  - {name: Debout, aliases: [Debout le peuple]}
+  - {name: Debout la France, aliases: [DLF]}
+  - {name: Democratic Socialists of America, aliases: [DSA, Socialistes démocrates d'Amérique]}
+  - {name: Éditions Sociales, aliases: [Les Éditions Sociales]}
+  - {name: Égalité et Réconciliation, aliases: [ER, Égalité & Réconciliation]}
+  - {name: Église catholique, aliases: [Église catholique romaine, clergé catholique]}
+  - {name: Empire Mulliez, aliases: [Mulliez, famille Mulliez, Auchan, Décathlon]}
+  - {name: En Marche, aliases: [La République En Marche, LREM, Renaissance]}
+  - {name: Ensemble, aliases: [Ensemble pour la République, coalition macroniste]}
+  - {name: Europe 1, aliases: [Europe1]}
+  - {name: Europe Écologie Les Verts}
+  - {name: Extinction Rébellion, aliases: [XR]}
+  - {name: Fakir}
+  - {name: FARC, aliases: [Forces armées révolutionnaires de Colombie, Farcs]}
+  - {name: FD News, aliases: [FDNews, fdenews]}
+  - {name: FdeSouche, aliases: [F de Souche, fdesouche.com]}
+  - {name: Flottille pour la liberté, aliases: [Freedom Flotilla]}
+  - {name: FMI}
+  - {name: FNSEA, aliases: [Fédération Nationale des Syndicats d'Exploitants Agricoles]}
+  - {name: Fondation Médecins de France, aliases: [FMF]}
+  - {name: Force Ouvrière, aliases: [FO]}
+  - {name: Forces Démocratiques Syriennes, aliases: [FDS, Syrian Democratic Forces, SDF, Kurdes syriens]}
+  - {name: Forum Économique de Davos, aliases: [Forum Économique Mondial, WEF, World Economic Forum, Davos]}
+  - {name: Fracas, aliases: [Fracas media, fracasse]}
+  - {name: Franc-Tireur, aliases: [FrancTireur, Fran tireur]}
+  - {name: France 24, aliases: [France24]}
+  - {name: France Inter, aliases: [France Interre]}
+  - {name: France Télévisions, aliases: [France Television, France TV]}
+  - {name: France Travail}
+  - {name: Fratelli d Italia, aliases: [FDI]}
+  - {name: Front de Gauche, aliases: [FdG]}
+  - {name: Front de Libération Nationale, aliases: [FLN]}
+  - {name: Front démocratique de libération de la Palestine, aliases: [FDLP]}
+  - {name: Front national, aliases: [FN, Front nat]}
+  - {name: Front Populaire 2027, aliases: [FP2027, Front Pop 2027]}
+  - {name: Front populaire de libération de la Palestine, aliases: [FPLP]}
+  - {name: Front Uni des Immigrations et des Quartiers Populaires, aliases: [FUIQP, FUP, Front Uni travailleurs immigrés et des quartiers populaires]}
+  - {name: Frontex, aliases: [Agence européenne de garde-frontières et de garde-côtes]}
+  - {name: Frontière}
+  - {name: Frustration Magazine, aliases: [Frustration, Frustration Mag]}
+  - {name: Garde nationale des Etats-Unis, aliases: [Garde nationale, National Guard]}
+  - {name: Génération Identitaire, aliases: [GI, Identitaires]}
+  - {name: Génération.s, aliases: [parti de Hamon]}
+  - {name: Géopolitique Profonde, aliases: [GP]}
+  - {name: GIP Tandem, aliases: [Tandem, groupement d'intérêt public Tandem]}
+  - {name: Gouvernement régional du Kurdistan, aliases: [GRK]}
+  - {name: Hamas, aliases: [Mouvement de la Résistance Islamique]}
+  - {name: Haute Autorité de Santé, aliases: [HAS]}
+  - {name: Hayat Tahrir al-Sham, aliases: [HTS, Hayat Tahrir al-Cham]}
+  - {name: Hezbollah, aliases: [Esbola]}
+  - {name: Historical Materialism, aliases: [Historical Materialism Conference, HM]}
+  - {name: Horizon}
+  - {name: Hors-Série}
+  - {name: HowToBitcoin, aliases: [How to Bitcoin]}
+  - {name: Humane Evolution}
+  - {name: I24, aliases: [I24 News, I24news]}
+  - {name: ICE, aliases: [U.S. Immigration and Customs Enforcement, police de l'immigration américaine]}
+  - {name: IFOP, aliases: [l'IFOP]}
+  - {name: Institut de Formation Politique, aliases: [IFP]}
+  - {name: Institut de relations internationales et stratégiques, aliases: [IRIS]}
+  - {name: Institut Elabe, aliases: [Elabe, Institut Élab]}
+  - {name: Institut La Boétie, aliases: [La Boétie, La Boessie]}
+  - {name: Institut Montaigne, aliases: [Institut Montagne]}
+  - {name: Institut Rousseau}
+  - {name: Investigation}
+  - {name: Jardin d'Acclimatation}
+  - {name: Kick, aliases: [Kick.com]}
+  - {name: L'Après}
+  - {name: L'Humanité, aliases: [Humanité]}
+  - {name: L'Opinion}
+  - {name: La Brèche}
+  - {name: La Cocarde étudiante, aliases: [Cocarde, cocard d'étudiant]}
+  - {name: La Dernière, aliases: [La Dernière (émission)]}
+  - {name: La Dispute, aliases: [Editions La Dispute]}
+  - {name: La Fabrique, aliases: [Éditions La Fabrique, La Fabrique éditions]}
+  - {name: La France Humaniste, aliases: [France Humaniste]}
+  - {name: La France insoumise, aliases: [France Insoumise, LFI, les Insoumis]}
+  - {name: La Jeune Garde, aliases: [Jeune Garde]}
+  - {name: Lazard, aliases: [banque Lazard, Lazard Frères]}
+  - {name: LCI, aliases: [La Chaîne Info]}
+  - {name: Le Canard Enchaîné, aliases: [Canard Enchaîné, Le Canard]}
+  - {name: Le Canon Français, aliases: [Canon Français]}
+  - {name: Le Crayon, aliases: [Le Crayon média]}
+  - {name: Le Figaro, aliases: [Figaro]}
+  - {name: Le Média TV, aliases: [Le Média]}
+  - {name: Le meilleur des mondes}
+  - {name: Le Monde, aliases: [journal Le Monde]}
+  - {name: Le Point}
+  - {name: Les Grandes Gueules, aliases: [Les GG, LGG, Grandes Gueules]}
+  - {name: Les Inrockuptibles, aliases: [Les Inrocks, Inrockuptibles]}
+  - {name: Les Républicains}
+  - {name: LICRA, aliases: [Ligue internationale contre le racisme et l'antisémitisme]}
+  - {name: Lidl, aliases: [Lidl France]}
+  - {name: Ligue}
+  - {name: Ligue de Défense Juive, aliases: [LDJ]}
+  - {name: Ligue des États arabes, aliases: [Ligue arabe]}
+  - {name: Likoud}
+  - {name: Lutte Ouvrière, aliases: [LO]}
+  - {name: LVMH, aliases: [Louis Vuitton Moët Hennessy]}
+  - {name: Maison Blanche, aliases: [White House]}
+  - {name: Marche des Solidarités}
+  - {name: Marianne, aliases: [magazine Marianne, hebdomadaire Marianne, Marianne (journal)]}
+  - {name: Médecins du Monde, aliases: [MdM, Doctors of the World]}
+  - {name: Médecins Sans Frontières, aliases: [MSF, Doctors Without Borders]}
+  - {name: MEDEF, aliases: [Mouvement des Entreprises de France, le MEDEF]}
+  - {name: Médiapart}
+  - {name: Medicuba Europe}
+  - {name: MJCF, aliases: [Mouvement des jeunes communistes de France]}
+  - {name: MoDem, aliases: [Mouvement Démocratique, Mouvement Démocrate]}
+  - {name: Mouvement des non-alignés, aliases: [Non-alignés, Mouvement de non-alignement]}
+  - {name: Mouvement National Algérien, aliases: [MNA]}
+  - {name: Mouvement pour la France, aliases: [MPF]}
+  - {name: NASDAQ}
+  - {name: NFP, aliases: [Nouveau Front Populaire]}
+  - {name: Nous Vivrons}
+  - {name: NousToutes, aliases: [Nous Toutes]}
+  - {name: Nouvelle Énergie}
+  - {name: NPA, aliases: [Nouveau Parti Anticapitaliste, NPA révolutionnaire, NPAC]}
+  - {name: NUPES, aliases: [Nouvelle Union Populaire Écologique et Sociale]}
+  - {name: Odoxa, aliases: [Aodoxa, au Doxa]}
+  - {name: Oeuvre Française, aliases: [L'Œuvre française]}
+  - {name: OLP, aliases: [PLO, Organisation de Libération de la Palestine, Palestine Liberation Organization]}
+  - {name: On ne veut plus}
+  - {name: ONU, aliases: [Organisation des Nations Unies, UN, Nations unies]}
+  - {name: Organisation mondiale du commerce}
+  - {name: Organisation Socialiste des Travailleurs, aliases: [OST]}
+  - {name: Organisation Solidarité Trans, aliases: [OST]}
+  - {name: OTAN, aliases: [NATO, Alliance atlantique]}
+  - {name: Oxfam France, aliases: [Oxfam, Oxfamme]}
+  - {name: PaduTeam}
+  - {name: Palmed}
+  - {name: Paris Match}
+  - {name: Parole d'Honneur, aliases: [PDH]}
+  - {name: Parti Communiste Américain, aliases: [PC américain, CPUSA, Communist Party USA]}
+  - {name: Parti Communiste Chinois, aliases: [PCC]}
+  - {name: Parti Communiste Français, aliases: [PCF]}
+  - {name: Parti communiste Tudeh, aliases: [Parti Tudeh, Tudeh, Hezb-e Tudeh, حزب توده ایران]}
+  - {name: Parti de l'union démocratique, aliases: [PYD]}
+  - {name: Parti Démocrate, aliases: [Democratic Party, Démocrates américains]}
+  - {name: Parti des Indigènes de la République, aliases: [PIR]}
+  - {name: Parti des Travailleurs, aliases: [PT, POI, POID, Organisation Communiste Internationaliste, OCI]}
+  - {name: Parti des travailleurs du Kurdistan, aliases: [PKK]}
+  - {name: Parti Miléiste Français, aliases: [Les Miléistes, Compte Twitter Miléiste]}
+  - {name: Parti ouvrier indépendant, aliases: [POI]}
+  - {name: Parti pour la Liberté}
+  - {name: Parti Radical de Gauche, aliases: [PRG]}
+  - {name: Parti Républicain américain, aliases: [Republican Party, GOP, Républicains américains]}
+  - {name: Parti socialiste, aliases: [PS]}
+  - {name: Parti Socialiste Unifié, aliases: [PSU]}
+  - {name: Parti Socialiste Unifié du Venezuela, aliases: [PSUV]}
+  - {name: Pasdaran, aliases: [Gardiens de la révolution, Corps des gardiens de la révolution islamique, CGRI, Sepah, سپاه پاسداران انقلاب اسلامی]}
+  - {name: Patriotes pour l'Europe}
+  - {name: Peau Noir Ligne Rouge, aliases: [PNLR]}
+  - {name: PFL — Professional Fighters League, aliases: [PFL, Professional Fighters League]}
+  - {name: Place Publique}
+  - {name: Podemos}
+  - {name: Pôle de Renaissance Communiste en France, aliases: [PRCF]}
+  - {name: Pôle emploi}
+  - {name: Politicon}
+  - {name: Positions Revue, aliases: [Positions]}
+  - {name: Primaire Populaire}
+  - {name: Printemps Républicain, aliases: [laïcards]}
+  - {name: PTB, aliases: [Parti du Travail de Belgique, PVDA]}
+  - {name: Québec Solidaire, aliases: [QS]}
+  - {name: Quotidien}
+  - {name: Rabbis for Human Rights}
+  - {name: Radio Canada}
+  - {name: Radio J}
+  - {name: Radio Nova, aliases: [Nova]}
+  - {name: Rassemblement national, aliases: [RN]}
+  - {name: Reconquête}
+  - {name: RED Jeunes, aliases: [Red June, Red Jun]}
+  - {name: Reform UK}
+  - {name: République fédérative socialiste de Yougoslavie, aliases: [RFSY, Yougoslavie, Yougoslavie de Tito]}
+  - {name: République Souveraine}
+  - {name: Réseau Salariat}
+  - {name: Résistance et Solidarité}
+  - {name: Révolution Écologique pour le Vivant, aliases: [La Rêve, Rêve, REV]}
+  - {name: Révolution Permanente}
+  - {name: RMC, aliases: [Radio Monte-Carlo]}
+  - {name: Sanofi}
+  - {name: Sécurité Sociale, aliases: [Sécu, Assurance Maladie publique, SS]}
+  - {name: Smartbox}
+  - {name: SNJ — Syndicat National des Journalistes, aliases: [SNJ, Syndicat National des Journalistes]}
+  - {name: Solidaires, aliases: [SUD, SUD Rail, Sudrail]}
+  - {name: Solidaires Etudiants, aliases: [Solidaires Étudiant·e·s, solidaire étudiant]}
+  - {name: SOS Méditerranée, aliases: [SOS Mediteranee]}
+  - {name: SOS Racisme}
+  - {name: Strasbourg c est nous, aliases: [liste Yoldas Strasbourg]}
+  - {name: Street Press}
+  - {name: Sud Radio}
+  - {name: SuperProf, aliases: [Super Prof, SuperP]}
+  - {name: Syndicat de la Médecine Générale, aliases: [SMG]}
+  - {name: T18, aliases: [canal 18]}
+  - {name: TF1}
+  - {name: TPMP, aliases: [Touche Pas à Mon Poste]}
+  - {name: Tsahal, aliases: [IDF, Israel Defense Forces, armée israélienne]}
+  - {name: TV Liberté}
+  - {name: UDCGT, aliases: [UD CGT, Union Départementale CGT]}
+  - {name: UDMA, aliases: [Union Démocratique du Manifeste Algérien, Feratabas]}
+  - {name: UDR, aliases: [Union des Droites pour la République]}
+  - {name: UEC, aliases: [Union des étudiants communistes]}
+  - {name: UJFP, aliases: [Union Juive Française pour la Paix]}
+  - {name: UNI}
+  - {name: Union Etudiante, aliases: [UE]}
+  - {name: Union Européenne, aliases: [UE, European Union]}
+  - {name: Union Française pour la Médecine Libérale, aliases: [UFML]}
+  - {name: Union Pirate}
+  - {name: Union Populaire Républicaine, aliases: [UPR]}
+  - {name: Union pour la Reconstruction Communiste, aliases: [URC]}
+  - {name: UnitedHealthcare, aliases: [United Healthcare, United Health]}
+  - {name: Urgence Palestine}
+  - {name: USB Syndicato, aliases: [USB]}
+  - {name: Valeurs Actuelles, aliases: [VA]}
+  - {name: Venezuela Infos}
+  - {name: Victoire Populaire}
+  - {name: Viva Salout, aliases: [Viva Salud]}
+  - {name: Vlaams Belang}
+  - {name: Women's Voices, aliases: [Womens Voices]}
+  - {name: ZawaProd, aliases: [Zawashow, Zawa Show, Dany et Raz, Zawa, la Zawa, Zawa Production]}

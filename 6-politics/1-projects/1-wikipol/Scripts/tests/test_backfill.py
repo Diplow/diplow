@@ -339,3 +339,35 @@ def test_a_staged_digest_with_another_parent_is_written_again(source, store, rep
 
     assert report.resumed == []
     assert writer.digests == [FROM_NOTE]
+
+
+class MentioningWriter(FakeWriter):
+    """Mentions the Source's host, unheard, as a humoriste, a label it proposes."""
+
+    def __call__(self, skill: str, prompt: str, model: str) -> str:
+        draft = super().__call__(skill, prompt, model)
+        if "# Le Raw" not in prompt:
+            return draft
+        mentions = (
+            "mentions:\n  - {name: Jean Hôte, kind: personne, labels: [humoriste]}\n"
+            "new_terms:\n  - {label: humoriste, kind: personne, definition: Fait rire.}\n"
+        )
+        return draft.replace("\n---\n## 1.", f"\n{mentions}---\n## 1.", 1)
+
+
+def test_a_staged_digest_with_mentions_is_taken_back(source, store, repo, tmp_path):
+    from dataclasses import replace
+
+    from wikipol.digest.mentions import VOCABULARY_PATH, load_vocabulary
+
+    vocabulary = write(tmp_path / "vocabulaire.yaml", VOCABULARY_PATH.read_text())
+    hosted = replace(source, hosts=("Jean Hôte",))
+    writer = MentioningWriter(summary_ok=False)
+    run(hosted, store, writer, repo, tmp_path, limit=1, vocabulary_path=vocabulary)
+
+    report = run(hosted, store, FakeWriter(), repo, tmp_path, limit=1, vocabulary_path=vocabulary)
+
+    assert report.resumed == [FROM_NOTE]
+    assert digests_in(repo)[FROM_NOTE]["mentions"][0]["name"] == "Jean Hôte"
+    term = load_vocabulary(vocabulary).kinds["personne"].labels["humoriste"]
+    assert term.introduced_by == f"demo/{FROM_NOTE}.md"

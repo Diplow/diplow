@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import re
 import textwrap
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date
 
@@ -26,7 +27,7 @@ from wikipol.digest.mentions import Vocabulary, check_mentions
 from wikipol.digest.raw_text import RawText, clock_seconds, words
 from wikipol.raw_store import YOUTUBE_ID, raw_key
 
-DIGEST_VERSION = 2
+DIGEST_VERSION = 3
 """Bumped when the format or the write-digest skill changes what a Digest says."""
 
 OWNER = "diplo"
@@ -96,8 +97,15 @@ def folded_preview(preview: str) -> list[str]:
     return ["preview: >-", *(f"  {line}" for line in lines)]
 
 
-def render(fields: DigestFields, preview: str, claims: str) -> str:
-    """The Digest file: the frontmatter, the title as a heading, then the claims as written."""
+def render(
+    fields: DigestFields,
+    preview: str,
+    claims: str,
+    mentions: object = None,
+    relations: object = None,
+) -> str:
+    """The Digest file: the frontmatter, its mentions and relations as written when there are
+    any, one per line, then the title as a heading and the claims as written."""
     frontmatter = [
         f"title: {json.dumps(fields.title, ensure_ascii=False)}",
         f"parent: {fields.parent}",
@@ -113,7 +121,23 @@ def render(fields: DigestFields, preview: str, claims: str) -> str:
         f"digest_version: {DIGEST_VERSION}",
         f"model: {fields.model}",
     ]
+    for name, items in (("mentions", mentions), ("relations", relations)):
+        if isinstance(items, list):
+            if items:
+                frontmatter += [f"{name}:", *(f"  - {flow_yaml(item)}" for item in items)]
+        elif items is not None:  # not a list: kept as written, for the check to say so
+            frontmatter.append(f"{name}: {flow_yaml(items)}")
     return "\n".join(["---", *frontmatter, "---", f"# {fields.title}", "", claims.strip(), ""])
+
+
+def flow_yaml(value: object) -> str:
+    """A value on one line of YAML: `{name: Pascal Boniface, kind: personne}`."""
+    if isinstance(value, (dict, list)):
+        text = yaml.safe_dump(
+            value, default_flow_style=True, allow_unicode=True, sort_keys=False, width=1 << 16
+        )
+        return text.strip()
+    return json.dumps(value, ensure_ascii=False, default=str)
 
 
 def split_digest(text: str) -> tuple[dict | None, str]:
@@ -137,18 +161,20 @@ def check_digest(
     expected: DigestFields | None = None,
     linkable: set[str] = frozenset(),
     vocabulary: Vocabulary | None = None,
+    hosts: Iterable[str] = (),
 ) -> list[str]:
     """What is wrong with a Digest, one line each; nothing when it holds.
 
     `raw` is its Publication's Raw, `expected` what the pipeline knows of its fields,
-    `linkable` the Digests it may cite, as repo paths without `.md`, and `vocabulary` the words
-    its mentions and relations may use.
+    `linkable` the Digests it may cite, as repo paths without `.md`, `vocabulary` the words
+    its mentions and relations may use, and `hosts` the Source's, whose names its mentions may
+    give without the Raw saying them.
     """
     frontmatter, body = split_digest(text)
     if frontmatter is None:
         return ["no readable YAML frontmatter"]
     problems = _check_fields(frontmatter, expected)
-    problems += check_mentions(frontmatter, raw, vocabulary)
+    problems += check_mentions(frontmatter, raw, vocabulary, hosts)
     youtube_id = str(frontmatter.get("youtube_id") or "")
     duration = frontmatter.get("duration")
     duration = duration if isinstance(duration, int) and not isinstance(duration, bool) else None

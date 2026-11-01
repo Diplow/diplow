@@ -10,9 +10,13 @@ import yaml
 from wikipol.digest.format import DigestFields, check_digest, render
 from wikipol.digest.mentions import (
     VOCABULARY_PATH,
+    NewTerm,
     VocabularyError,
+    add_terms,
     check_mentions,
     load_vocabulary,
+    read_new_terms,
+    with_terms,
 )
 from wikipol.digest.raw_text import parse_raw
 
@@ -340,3 +344,115 @@ def test_a_missing_vocabulary_is_refused(tmp_path):
     path.write_bytes("kinds: {é: 1}".encode("latin-1"))
     with pytest.raises(VocabularyError, match="can't be read"):
         load_vocabulary(path)
+
+
+def test_a_host_needs_not_be_heard(vocabulary):
+    host = {"name": "Jean Hôte", "kind": "personne", "qualifiers": ["animateur"]}
+
+    assert check_mentions({"mentions": [host]}, RAW, vocabulary, hosts=["Jean Hote"]) == []
+    assert check_mentions({"mentions": [host]}, RAW, vocabulary) == [
+        "mention 'Jean Hôte': 'Jean Hôte' is in neither the Raw nor the title; "
+        "heard_as gives the captions' spelling"
+    ]
+    misheard = {**host, "heard_as": "Jean Ote"}  # a spelling the captions are said to give
+    assert check_mentions({"mentions": [misheard]}, RAW, vocabulary, hosts=["Jean Hôte"]) == [
+        "mention 'Jean Hôte': 'Jean Ote' is in neither the Raw nor the title"
+    ]
+
+
+def test_new_terms_are_read_and_the_known_ones_left_out(vocabulary):
+    terms, problems = read_new_terms(
+        [
+            {"label": "humoriste", "kind": "personne", "definition": "Fait rire."},
+            {"qualifier": "sujet", "kind": "personne", "definition": "Déjà là."},
+            {"label": "humoriste", "kind": "personne", "definition": "Deux fois."},
+            {
+                "relation": "soutient",
+                "from": ["personne"],
+                "to": ["organisation"],
+                "definition": "Prend son parti.",
+            },
+        ],
+        vocabulary,
+    )
+
+    assert problems == []
+    assert terms == [
+        NewTerm("labels", "humoriste", "Fait rire.", "personne"),
+        NewTerm(
+            "relations", "soutient", "Prend son parti.", None, ("personne",), ("organisation",)
+        ),
+    ]
+    extended = with_terms(vocabulary, terms, "boniface/aaaaaaaaaaa")
+    assert extended.kinds["personne"].labels["humoriste"].status == "proposé"
+    assert extended.relations["soutient"].term.introduced_by == "boniface/aaaaaaaaaaa"
+    assert "humoriste" not in vocabulary.kinds["personne"].labels
+
+
+def test_malformed_new_terms_are_named(vocabulary):
+    _, problems = read_new_terms(
+        [
+            "humoriste",
+            {"label": "Humoriste", "kind": "personne", "definition": "x"},
+            {"label": "drôle", "kind": "concept", "definition": "x"},
+            {"label": "drôle", "kind": "personne"},
+            {"label": "victime", "kind": "personne", "definition": "x"},
+            {"relation": "aime", "from": ["personne"], "to": ["idée"], "definition": "x"},
+            {"label": "x", "kind": "personne", "definition": "deux\nlignes"},
+        ],
+        vocabulary,
+    )
+
+    assert problems == [
+        "new term 1 names one label, qualifier or relation",
+        "new term 2: 'Humoriste' is not lowercase words joined by -",
+        "new term 3: kind 'concept' is not one of the vocabulary",
+        "new term 4 holds definition, kind, label, and only them",
+        "new term 5: 'victime' is retired, replaced by 'témoin'",
+        "new term 6: from and to list kinds of the vocabulary",
+        "new term 7: 'x' needs a definition of one line",
+    ]
+    assert read_new_terms({"label": "x"}, vocabulary) == ([], ["new_terms must be a list"])
+
+
+def test_added_terms_join_their_group_and_leave_the_rest_as_it_was(tmp_path):
+    path = write(tmp_path, VOCABULARY)
+    terms = [
+        NewTerm("labels", "humoriste", "Fait rire, « sur scène ».", "personne"),
+        NewTerm("qualifiers", "cité", "Lue à voix haute.", "œuvre"),
+        NewTerm(
+            "relations", "soutient", "Prend son parti.", None, ("personne",), ("organisation",)
+        ),
+    ]
+
+    add_terms(terms, "boniface/aaaaaaaaaaa", path=path)
+
+    text = path.read_text(encoding="utf-8")
+    assert text.startswith(VOCABULARY.split("      militante")[0])
+    assert (
+        "      victime: {définition: A subi., statut: accepté, remplacé_par: témoin}\n"
+        '      humoriste: {définition: "Fait rire, « sur scène ».", statut: proposé, '
+        "introduit_par: boniface/aaaaaaaaaaa}\n    qualifiers:\n"
+    ) in text
+    assert '    qualifiers:\n      cité: {définition: "Lue à voix haute."' in text
+    vocabulary = load_vocabulary(path)
+    assert vocabulary.kinds["personne"].labels["humoriste"].definition == (
+        "Fait rire, « sur scène »."
+    )
+    assert vocabulary.kinds["œuvre"].qualifiers["cité"].status == "proposé"
+    assert vocabulary.relations["soutient"].to_kinds == ("organisation",)
+    assert vocabulary.relations["fonde"].term.replaced_by == "dirige"
+
+
+def test_a_term_that_would_break_the_vocabulary_is_not_written(tmp_path):
+    path = write(tmp_path, VOCABULARY)
+
+    with pytest.raises(VocabularyError, match="would break the vocabulary"):
+        add_terms([NewTerm("labels", "yes", "Un booléen pour YAML.", "personne")], "a/b", path=path)
+    assert path.read_text(encoding="utf-8") == VOCABULARY
+    assert not (tmp_path / ".vocabulaire.yaml.new").exists()
+    # A draft can't propose it: YAML would read it as a boolean.
+    _, problems = read_new_terms(
+        [{"label": "yes", "kind": "personne", "definition": "x"}], load_vocabulary(path)
+    )
+    assert problems == ["new term 1: 'yes' reads as True in YAML"]

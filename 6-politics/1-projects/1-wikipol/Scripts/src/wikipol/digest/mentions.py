@@ -5,12 +5,19 @@ A mention names who or what a Publication talks about: its `kind` (personne, org
 Publication, and `heard_as`, the captions' spelling, when it differs from the canonical `name`.
 A relation links two mentions of the same Digest. The words come from `vocabulaire.yaml`, in
 wikipol's `.vocabulaire/`, which Ulysse edits by hand; BUILD.md shows a Digest's mentions.
+
+When no word fits, write-digest proposes one, with a definition (`new_terms` in its draft): the
+Digest is checked against the vocabulary with it, and once accepted, `add_terms` writes it into
+the file as `proposé`, for Ulysse to accept, rename or retire.
 """
 
 from __future__ import annotations
 
+import json
+import os
 import re
-from dataclasses import dataclass
+from collections.abc import Iterable
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import yaml
@@ -25,6 +32,8 @@ STATUSES = ("accepté", "proposé")
 TERM = re.compile(r"[^\W\d_]+(?:-[^\W\d_]+)*")
 MENTION_KEYS = ("name", "kind", "labels", "qualifiers", "heard_as", "unsure")
 RELATION_KEYS = ("from", "relation", "to")
+GROUPS = {"label": "labels", "qualifier": "qualifiers", "relation": "relations"}
+"""A new term's key in a draft, to the vocabulary's group it joins."""
 
 
 class VocabularyError(ConfigError):
@@ -158,9 +167,11 @@ def _check_replacements(terms: dict[str, Term], where: str) -> None:
             )
 
 
-def check_mentions(data: dict, raw: RawText, vocabulary: Vocabulary | None) -> list[str]:
+def check_mentions(
+    data: dict, raw: RawText, vocabulary: Vocabulary | None, hosts: Iterable[str] = ()
+) -> list[str]:
     """What is wrong with a Digest frontmatter's `mentions` and `relations`, one line each;
-    nothing when it has neither."""
+    nothing when it has neither. `hosts` are the Source's, who may go unnamed in the Raw."""
     if "mentions" not in data and "relations" not in data:
         return []
     if vocabulary is None:
@@ -175,6 +186,7 @@ def check_mentions(data: dict, raw: RawText, vocabulary: Vocabulary | None) -> l
         relations = []
 
     title = str(data.get("title") or "")
+    hosted = {bare_words(host) for host in hosts}
     kinds: dict[str, str] = {}  # a mention's name, to its kind when it has a known one
     seen: set[str] = set()
     for number, mention in enumerate(mentions, start=1):
@@ -186,7 +198,8 @@ def check_mentions(data: dict, raw: RawText, vocabulary: Vocabulary | None) -> l
             problems.append(f"mention {number} needs a name")
             continue
         problems += [
-            f"mention {name!r}: {p}" for p in _check_mention(mention, raw, title, vocabulary)
+            f"mention {name!r}: {p}"
+            for p in _check_mention(mention, raw, title, vocabulary, bare_words(name) in hosted)
         ]
         if bare_words(name) in seen:
             problems.append(f"mention {name!r} is listed twice")
@@ -205,7 +218,9 @@ def check_mentions(data: dict, raw: RawText, vocabulary: Vocabulary | None) -> l
     return problems
 
 
-def _check_mention(mention: dict, raw: RawText, title: str, vocabulary: Vocabulary) -> list[str]:
+def _check_mention(
+    mention: dict, raw: RawText, title: str, vocabulary: Vocabulary, host: bool
+) -> list[str]:
     problems = []
     unknown = [str(key) for key in mention if key not in MENTION_KEYS]
     if unknown:
@@ -234,7 +249,11 @@ def _check_mention(mention: dict, raw: RawText, title: str, vocabulary: Vocabula
     if "unsure" in mention and mention["unsure"] is not True:
         problems.append("unsure is true, or left out")
     spoken = heard_as if isinstance(heard_as, str) and heard_as.strip() else mention["name"]
-    # The title is the video's, from YouTube's metadata: it names a guest the Raw may not.
+    # The title is the video's, from YouTube's metadata: it names a guest the Raw may not. A
+    # host leads every Publication of the Source, and may never say their own name; a spelling
+    # the captions are said to give is still looked for.
+    if host and "heard_as" not in mention:
+        return problems
     if not raw.names(spoken) and f" {bare_words(spoken)} " not in f" {bare_words(title)} ":
         hint = "" if "heard_as" in mention else "; heard_as gives the captions' spelling"
         problems.append(f"{spoken!r} is in neither the Raw nor the title{hint}")
@@ -281,3 +300,157 @@ def _check_term(group: dict[str, Term], term: object, what: str) -> str | None:
     if known.replaced_by is not None:
         return f"{term!r} is retired, replaced by {known.replaced_by!r}"
     return None
+
+
+@dataclass(frozen=True)
+class NewTerm:
+    """A term a draft proposes, which the vocabulary lacks."""
+
+    group: str
+    """`labels`, `qualifiers` or `relations`."""
+    name: str
+    definition: str
+    kind: str | None = None
+    """The kind a label or a qualifier belongs to."""
+    from_kinds: tuple[str, ...] = ()
+    to_kinds: tuple[str, ...] = ()
+
+
+def read_new_terms(data: object, vocabulary: Vocabulary) -> tuple[list[NewTerm], list[str]]:
+    """The terms a draft's `new_terms` propose, those the vocabulary already has left out, and
+    what is wrong with the others, one line each."""
+    if data is None:
+        return [], []
+    if not isinstance(data, list):
+        return [], ["new_terms must be a list"]
+    terms: list[NewTerm] = []
+    problems: list[str] = []
+    for number, entry in enumerate(data, start=1):
+        where = f"new term {number}"
+        named = [key for key in GROUPS if isinstance(entry, dict) and key in entry]
+        if len(named) != 1:
+            problems.append(f"{where} names one label, qualifier or relation")
+            continue
+        key = named[0]
+        name, definition = entry[key], entry.get("definition")
+        allowed = {key, "definition", *(("from", "to") if key == "relation" else ("kind",))}
+        if set(entry) != allowed:
+            problems.append(f"{where} holds {', '.join(sorted(allowed))}, and only them")
+            continue
+        if not isinstance(name, str) or not TERM.fullmatch(name) or name != name.lower():
+            problems.append(f"{where}: {name!r} is not lowercase words joined by -")
+            continue
+        if yaml.safe_load(name) != name:  # `yes`, `no`, `on`: YAML's booleans
+            problems.append(f"{where}: {name!r} reads as {yaml.safe_load(name)!r} in YAML")
+            continue
+        if not isinstance(definition, str) or not definition.strip() or "\n" in definition.strip():
+            problems.append(f"{where}: {name!r} needs a definition of one line")
+            continue
+        if key == "relation":
+            ends = [entry["from"], entry["to"]]
+            if not all(
+                isinstance(end, list) and end and all(kind in vocabulary.kinds for kind in end)
+                for end in ends
+            ):
+                problems.append(f"{where}: from and to list kinds of the vocabulary")
+                continue
+            known = vocabulary.relations[name].term if name in vocabulary.relations else None
+            term = NewTerm(
+                "relations", name, definition.strip(), None, tuple(ends[0]), tuple(ends[1])
+            )
+        else:
+            kind = vocabulary.kinds.get(entry["kind"]) if isinstance(entry["kind"], str) else None
+            if kind is None:
+                problems.append(f"{where}: kind {entry['kind']!r} is not one of the vocabulary")
+                continue
+            group = kind.labels if key == "label" else kind.qualifiers
+            known = group.get(name)
+            term = NewTerm(GROUPS[key], name, definition.strip(), entry["kind"])
+        if known is not None and known.replaced_by is not None:
+            problems.append(f"{where}: {name!r} is retired, replaced by {known.replaced_by!r}")
+        elif known is None and all(
+            (t.group, t.kind, t.name) != (term.group, term.kind, name) for t in terms
+        ):
+            terms.append(term)
+    return terms, problems
+
+
+def with_terms(vocabulary: Vocabulary, terms: list[NewTerm], introduced_by: str) -> Vocabulary:
+    """The vocabulary with the terms added, `proposé`."""
+    kinds, relations = dict(vocabulary.kinds), dict(vocabulary.relations)
+    for term in terms:
+        proposed = Term(term.definition, "proposé", introduced_by)
+        if term.group == "relations":
+            relations[term.name] = Relation(proposed, term.from_kinds, term.to_kinds)
+        else:
+            kind = kinds[term.kind]
+            group = {**getattr(kind, term.group), term.name: proposed}
+            kinds[term.kind] = replace(kind, **{term.group: group})
+    return Vocabulary(kinds, relations)
+
+
+def add_terms(terms: list[NewTerm], introduced_by: str, path: Path = VOCABULARY_PATH) -> None:
+    """Writes the terms into the vocabulary file, `proposé`, each at the end of its group, and
+    leaves every other line as it was. Raises VocabularyError, the file unchanged, when the
+    file has no place for one or wouldn't read back."""
+    if not terms:
+        return
+    text = path.read_text(encoding="utf-8")
+    lines = text.split("\n")
+    for term in terms:
+        definition = json.dumps(term.definition, ensure_ascii=False)
+        if term.group == "relations":
+            at = _block_line(lines, "relations", 0, 0, len(lines))
+            entry = [
+                f"  {term.name}:",
+                f"    définition: {definition}",
+                f"    from: [{', '.join(term.from_kinds)}]",
+                f"    to: [{', '.join(term.to_kinds)}]",
+                "    statut: proposé",
+                f"    introduit_par: {introduced_by}",
+            ]
+            indent = 0
+        else:
+            kinds = _block_line(lines, "kinds", 0, 0, len(lines))
+            kind = _block_line(lines, term.kind, 2, kinds + 1, _block_end(lines, kinds, 0))
+            at = _block_line(lines, term.group, 4, kind + 1, _block_end(lines, kind, 2))
+            entry = [
+                f"      {term.name}: {{définition: {definition}, statut: proposé, "
+                f"introduit_par: {introduced_by}}}"
+            ]
+            indent = 4
+        end = _block_end(lines, at, indent)
+        lines[end:end] = entry
+    written = "\n".join(lines)
+    staged = path.with_name(f".{path.name}.new")
+    staged.write_text(written, encoding="utf-8")
+    try:
+        load_vocabulary(staged)
+    except VocabularyError as error:
+        staged.unlink()
+        raise VocabularyError(f"the proposed terms would break the vocabulary: {error}") from error
+    os.replace(staged, path)
+
+
+def _block_line(lines: list[str], key: str, indent: int, start: int, end: int) -> int:
+    """The line opening `key:` at this indent; an empty `key: {}` is opened for terms."""
+    for number in range(start, end):
+        line = lines[number].rstrip()
+        if line == f"{' ' * indent}{key}:":
+            return number
+        if line == f"{' ' * indent}{key}: {{}}":
+            lines[number] = f"{' ' * indent}{key}:"
+            return number
+    raise VocabularyError(f"the vocabulary has no `{key}:` to add a term to")
+
+
+def _block_end(lines: list[str], start: int, indent: int) -> int:
+    """The line after the last one of the block opened at `start`, blank lines left out."""
+    end = start + 1
+    while end < len(lines) and (
+        not lines[end].strip() or len(lines[end]) - len(lines[end].lstrip()) > indent
+    ):
+        end += 1
+    while end > start + 1 and not lines[end - 1].strip():
+        end -= 1
+    return end

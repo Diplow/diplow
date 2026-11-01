@@ -1,7 +1,8 @@
 """`claude -p`, as the pipeline's skills run it: one skill, one prompt, one pinned model.
 
 `write-digest` and `write-period` share it. Each returns a draft in one shape, a frontmatter
-holding the `preview` and then a Body, which `split_draft` takes apart; the caller checks it.
+holding the `preview` (and, for a Digest, its mentions) and then a Body, which `read_draft` takes
+apart; the caller checks it.
 """
 
 from __future__ import annotations
@@ -84,18 +85,24 @@ class ClaudeCli:
         return str(answer["result"])
 
 
-def split_draft(draft: str) -> tuple[str, str]:
-    """The Preview and the Body of a draft; a code fence or a title heading around them goes."""
+def read_draft(draft: str) -> tuple[dict, str]:
+    """The frontmatter and the Body of a draft; a code fence or a title heading around them
+    goes."""
     text = draft.strip()
     if text.startswith("```"):
         text = text.split("\n", 1)[1] if "\n" in text else ""
         text = text.rsplit("```", 1)[0].strip()
     frontmatter, body = split_digest(text + "\n")
-    preview = str((frontmatter or {}).get("preview") or "")
     body = body.strip()
     if body.startswith("# "):
         body = body.split("\n", 1)[1] if "\n" in body else ""
-    return " ".join(preview.split()), body.strip()
+    return frontmatter or {}, body.strip()
+
+
+def split_draft(draft: str) -> tuple[str, str]:
+    """The Preview and the Body of a draft."""
+    frontmatter, body = read_draft(draft)
+    return " ".join(str(frontmatter.get("preview") or "").split()), body
 
 
 def retry_prompt(prompt: str, draft: str, problems: list[str]) -> str:

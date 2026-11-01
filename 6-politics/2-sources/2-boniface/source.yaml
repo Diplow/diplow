@@ -6,6 +6,9 @@ source:
   slug: "boniface"                # préfixe branches git, nom court
   type: "youtube"                        # unique type supporté pour l'instant
   attribution: "Pascal Boniface"  # phrase utilisée dans les fiches (ex: "la PaduTeam")
+  # Qui mène chaque Publication, même quand le Raw ne dit pas son nom : sa mention passe la
+  # vérification sans être entendue (decisions.md de Labeled Mentions, DEC-6).
+  hosts: ["Pascal Boniface"]
 
 youtube:
   channel_url: "https://www.youtube.com/@pascalboniface241/videos"

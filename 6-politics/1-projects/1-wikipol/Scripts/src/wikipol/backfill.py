@@ -34,6 +34,7 @@ from wikipol.chronicle.period import PeriodRejected, write_period
 from wikipol.claude import Writer, WriterFailed
 from wikipol.config import REPO_ROOT, Source, pinned_model
 from wikipol.digest.format import DIGEST_VERSION, MIN_QUOTE_WORDS, check_digest, split_digest
+from wikipol.digest.mentions import VOCABULARY_PATH, load_vocabulary
 from wikipol.digest.raw_text import RawText, parse_raw, words
 from wikipol.digest.write import DigestRejected, digest_fields, linkable_digests, write_digest
 from wikipol.legacy_index import LegacyNote, video_notes
@@ -182,6 +183,7 @@ def take_staged(
     model: str,
     parent: str,
     linkable: dict[str, str],
+    vocabulary_path: Path = VOCABULARY_PATH,
 ) -> str | None:
     """The Digest a stopped run left in staging, when it still passes the check against its Raw
     and the Chronicle as it is now; anything else is dropped, to be written again."""
@@ -200,7 +202,14 @@ def take_staged(
             ingested=frontmatter.get("ingested"),
             model=model,
         )
-        problems = check_digest(text, candidate.raw_text, expected, set(linkable))
+        problems = check_digest(
+            text,
+            candidate.raw_text,
+            expected,
+            set(linkable),
+            load_vocabulary(vocabulary_path),
+            source.hosts,
+        )
     if problems:
         path.unlink()
         return None
@@ -218,6 +227,7 @@ def backfill(
     repo_root: Path = REPO_ROOT,
     batch: int = FILING_BATCH,
     log: Callable[[str], None] = lambda _: None,
+    vocabulary_path: Path = VOCABULARY_PATH,
 ) -> BackfillReport:
     """Digests and files what the Source lacks; raises ConfigError for a Source without a pinned
     model. Everything else that goes wrong is in the report."""
@@ -308,7 +318,7 @@ def backfill(
         own = filed_before[youtube_id][0] if youtube_id in filed_before else None
         links = {target: title for target, title in linkable.items() if target != own}
         staged = staging / f"{youtube_id}.md"
-        text = take_staged(staged, source, candidate, model, parent, links)
+        text = take_staged(staged, source, candidate, model, parent, links, vocabulary_path)
         if text is not None:
             report.resumed.append(youtube_id)
             log(f"  {youtube_id}: taken back from staging")
@@ -325,6 +335,7 @@ def backfill(
                     parent=parent,
                     today=today,
                     linkable=links,
+                    vocabulary_path=vocabulary_path,
                 )
             except DigestRejected as error:
                 refuse(youtube_id, "; ".join([str(error), *error.problems]), error.draft)

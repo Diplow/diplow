@@ -144,6 +144,8 @@ class Source:
     channel_url: str | None = None
     attribution: str | None = None
     """How a Digest names the Source as a speaker: `la PaduTeam`."""
+    hosts: tuple[str, ...] = ()
+    """Who leads every Publication of the Source, whose name the Raw may never say."""
     model: str | None = None
     """`claude.default_model`: the model that writes the Source's Digests, a pinned id."""
 
@@ -197,6 +199,9 @@ def load_source(node: Path) -> Source:
             "claude-sonnet-5-5"
         )
     attribution = str(source.get("attribution") or "").strip() or None
+    hosts = [] if source.get("hosts") is None else source["hosts"]
+    if not isinstance(hosts, list) or not all(isinstance(h, str) and h.strip() for h in hosts):
+        raise ConfigError(f"{path}: source.hosts must list names")
     vault_rel, inventory_rel = legacy.get("vault"), files.get("inventaire")
     vault = (node / str(vault_rel)).resolve() if vault_rel else None
     inventory = vault / str(inventory_rel) if vault and inventory_rel else None
@@ -208,6 +213,7 @@ def load_source(node: Path) -> Source:
         legacy_inventory=inventory,
         channel_url=channel_url,
         attribution=attribution,
+        hosts=tuple(host.strip() for host in hosts),
         model=model,
     )
 
