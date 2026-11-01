@@ -91,6 +91,7 @@ kinds:
       entraîneur: {définition: "Dirige et prépare une équipe sportive.", statut: proposé, introduit_par: boniface/9X9jOh-GdcM.md}
       ancien-haut-fonctionnaire: {définition: "A occupé un poste de direction dans l'administration et ne l'occupe plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/cK7ahpqnGRc.md}
       astronaute: {définition: "Voyage dans l'espace ou appartient à un corps d'astronautes.", statut: proposé, introduit_par: boniface/Ecn08O4RQFs.md}
+      dirigeant-de-média: {définition: "Dirige un groupe, une chaîne ou une société de médias.", statut: proposé, introduit_par: blast/whkfczDMyVs.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

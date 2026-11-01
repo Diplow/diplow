@@ -1,18 +1,18 @@
 ---
-title: "2024-01-21 → 2024-01-22"
+title: "2024-01-21 → 2024-01-24"
 parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21
 owner: diplo
 preview: >-
   Blast soutient que les matinales télé dépolitisent l'info pour vendre du
-  temps de cerveau aux annonceurs, et lit Solaris comme un film sur notre
-  nostalgie. Elle reçoit Jean-Baptiste Fressoz sur le climat et la secrétaire
-  générale du SNES-FSU sur l'école.
+  temps de cerveau et lit Solaris comme un film sur notre nostalgie. Elle
+  reçoit des invités qui critiquent la transition énergétique, l'école sous
+  Macron, sa dérive autoritaire et la politique d'accueil.
 ---
-# 2024-01-21 → 2024-01-22
+# 2024-01-21 → 2024-01-24
 
-Pendant ces deux jours, Blast soutient que les matinales télé, de TF1 à France 2, sont des magazines de bonne humeur et de consommation. Elles dépolitisent l'info pour vendre du temps de cerveau aux annonceurs, et ce modèle gagne le service public. Côté culture, elle lit Solaris, le film de Tarkovski, comme une œuvre qui lutte contre le genre de la science-fiction et parle de notre nostalgie plus que du futur. Selon Blast, nous ne désirons pas vraiment l'avenir, et l'absence de résolution du film laisse chaque spectateur faire son propre film.
+Blast soutient que les matinales télé, de TF1 à France 2, sont des magazines de bonne humeur et de consommation. Elles dépolitisent l'info pour vendre du temps de cerveau aux annonceurs, et ce modèle gagne le service public. Elle propose aussi une lecture de Solaris : le film de Tarkovski nous parle de notre nostalgie plus que du futur, et son absence de résolution laisse chaque spectateur faire son propre film.
 
-Le 22 janvier, Blast donne la parole à deux invités, à qui les thèses restent. Pour Jean-Baptiste Fressoz, la transition énergétique est une fable historique : les énergies s'additionnent sans jamais se remplacer. Il juge cette idée utile aux pétroliers et au solutionnisme technologique, et il estime qu'elle retarde une politique climatique fondée sur la sobriété. Blast reçoit aussi la secrétaire générale du SNES-FSU après l'affaire Oudéa-Castéra. Selon elle, la ministre assume une vision de classe de l'école, et depuis 2017 le grand gagnant est le secteur privé, ni les profs ni les élèves.
+Le reste de la Period donne la parole à des invités, dont chacun garde sa thèse. Jean-Baptiste Fressoz tient la transition énergétique pour une fable historique, qui sert les pétroliers et le solutionnisme technologique et retarde une politique de sobriété. La secrétaire générale du SNES-FSU, après l'affaire Oudéa-Castéra, voit dans la ministre une vision de classe de l'école et dans le secteur privé le grand gagnant depuis 2017. Jean-François Bayart relie l'inconsistance politique de Macron à une dérive autoritaire qui met la République en danger, avec l'extrême droite en embuscade. Didier Fassin et Anne-Claire Defossez jugent enfin que la France n'est ni attractive ni accueillante, que l'appel d'air est un mythe et que militariser la frontière de Briançon tue sans arrêter l'exil.
 
 ## Contenu
 
@@ -20,3 +20,5 @@ Le 22 janvier, Blast donne la parole à deux invités, à qui les thèses resten
 2. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/2-solaris-le-chef-d-oeuvre-de|SOLARIS : LE CHEF-D'OEUVRE DE LA SCIENCE-FICTION (QUI N'EXISTE PAS)]] (2024-01-21)
 3. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/3-etre-lucide-face-aux-defis-climatiques|ÊTRE LUCIDE FACE AUX DÉFIS CLIMATIQUES]] (2024-01-22)
 4. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/4-depuis-macron-le-grand-gagnant-c|« DEPUIS MACRON, LE GRAND GAGNANT, C’EST NI LES PROFS, NI LES ÉLÈVES : C’EST LE PRIVÉ » (P1) #LFP2]] (2024-01-22)
+5. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/5-l-inconsistance-politique-d-e-macron|« L’INCONSISTANCE POLITIQUE D’E. MACRON MET LA RÉPUBLIQUE EN DANGER » (PARTIE 2) #LFP2]] (2024-01-23)
+6. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/3-2024-01-21/6-immigration-la-france-n-est-un|IMMIGRATION : "LA FRANCE N'EST UN PAYS NI ATTRACTIF, NI ACCUEILLANT"]] (2024-01-24)
