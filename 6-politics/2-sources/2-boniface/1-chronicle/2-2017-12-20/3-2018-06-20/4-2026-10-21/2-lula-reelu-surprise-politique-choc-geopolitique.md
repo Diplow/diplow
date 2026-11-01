@@ -1,6 +1,6 @@
 ---
 title: "Lula réélu : surprise politique, choc géopolitique | Les mardis de l'IRIS"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/3-2026-10-21
+parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/4-2026-10-21
 owner: diplo
 preview: >-
   Dans cet entretien, Boniface interroge Christophe Ventura, pour qui la
