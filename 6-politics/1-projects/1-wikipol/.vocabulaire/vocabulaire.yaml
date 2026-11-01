@@ -93,6 +93,7 @@ kinds:
       astronaute: {définition: "Voyage dans l'espace ou appartient à un corps d'astronautes.", statut: proposé, introduit_par: boniface/Ecn08O4RQFs.md}
       dirigeant-de-média: {définition: "Dirige un groupe, une chaîne ou une société de médias.", statut: proposé, introduit_par: blast/whkfczDMyVs.md}
       policier: {définition: "Agent de la police nationale, gardien de la paix, brigadier ou major.", statut: proposé, introduit_par: blast/pvUNJ3ehYco.md}
+      sexologue: {définition: "Spécialiste de la sexualité humaine, qui conseille et publie sur le sujet.", statut: proposé, introduit_par: blast/Fp1gFaFFE_E.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
