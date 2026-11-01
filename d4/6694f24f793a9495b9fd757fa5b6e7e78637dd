@@ -1,0 +1,31 @@
+6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12/CLAUDE.md
+  s_70e2b8820e4c39::t_933724a1499a28 2,6-9,11,13,15-17
+6-politics/2-sources/4-blast/1-chronicle/6-2023-11-15/1-bercy-un-monstre-budgetaire-au-service.md
+  s_70e2b8820e4c39::t_1da0788a86456c 3
+6-politics/2-sources/4-blast/1-chronicle/6-2023-11-15/2-palestine-69-agressee-la-police-complice.md
+  s_70e2b8820e4c39::t_4973c922f7034b 3
+6-politics/2-sources/4-blast/1-chronicle/6-2023-11-15/3-antisemitisme-le-jeu-tres-dangereux-du.md
+  s_70e2b8820e4c39::t_a23209b5a6387a 1-76
+6-politics/2-sources/4-blast/1-chronicle/6-2023-11-15/4-israel-palestine-un-conflit-qui-fracture.md
+  s_70e2b8820e4c39::t_a27c0462f7fc2b 1-92
+6-politics/2-sources/4-blast/1-chronicle/6-2023-11-15/CLAUDE.md
+  s_70e2b8820e4c39::t_e7636f3a39786d 1-24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_11fd30a55986ee 6-9,13,15,17,25-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d46694f24f793a9495b9fd757fa5b6e7e78637dd",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
