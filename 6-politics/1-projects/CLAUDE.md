@@ -5,8 +5,9 @@ owner: diplo
 preview: >-
   What I build in politics, one project per numbered child. For now, wikipol:
   the pipeline that turns political YouTube channels into the Sources under
-  6-politics/2-sources, built by Claude skills and Python scripts. Its old
-  per-channel vaults are frozen in its Legacy/ folder.
+  6-politics/2-sources, built by Claude skills and Python scripts, its old
+  per-channel vaults frozen in its Legacy/ folder. And the Claude sessions,
+  the political discussions worth keeping, filed by date.
 ---
 # Projects
 
@@ -15,6 +16,7 @@ What I build in politics. Each project is a numbered child and owns its own stac
 | # | Project | What it is |
 |---|---|---|
 | 1 | [[6-politics/1-projects/1-wikipol/CLAUDE\|wikipol]] | The pipeline that fills [[6-politics/2-sources/CLAUDE\|the Sources]] from political media; its old vaults frozen in `Legacy/`; written in French |
+| 2 | [[6-politics/1-projects/2-claude-sessions/CLAUDE\|Claude sessions]] | My political discussions with Claude worth keeping, one private file per session, filed by date |
 
 ## wikipol
 
