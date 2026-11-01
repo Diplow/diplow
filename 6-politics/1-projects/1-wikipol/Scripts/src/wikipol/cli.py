@@ -28,6 +28,7 @@ from wikipol.config import (
     load_sources,
 )
 from wikipol.digest.format import check_digest, split_digest
+from wikipol.digest.mentions import Vocabulary, load_vocabulary
 from wikipol.digest.raw_text import parse_raw
 from wikipol.digest.write import DigestRejected, digest_fields, linkable_digests, write_digest
 from wikipol.drive_copy import DEFAULT_DRIVE_ROOT, copy_source, format_report
@@ -297,9 +298,10 @@ def write_one_digest(args: argparse.Namespace) -> int:
 
 def check_digests(args: argparse.Namespace) -> int:
     store = S3RawStore.from_settings(load_settings())
+    vocabulary = load_vocabulary()
     failed = 0
     for path in args.digests:
-        problems = check_one_digest(path, store, args.sources_dir)
+        problems = check_one_digest(path, store, args.sources_dir, vocabulary)
         print(f"{path}: {'ok' if not problems else f'{len(problems)} problems'}")
         for problem in problems:
             print(f"  - {problem}")
@@ -307,7 +309,9 @@ def check_digests(args: argparse.Namespace) -> int:
     return 1 if failed else 0
 
 
-def check_one_digest(path: Path, store: RawStore, sources_dir: Path) -> list[str]:
+def check_one_digest(
+    path: Path, store: RawStore, sources_dir: Path, vocabulary: Vocabulary | None = None
+) -> list[str]:
     """What is wrong with one Digest file, read against its Raw; a file the check can't even
     place (no Source, no Raw) says so in its problems, and the next file is still checked."""
     try:
@@ -335,7 +339,7 @@ def check_one_digest(path: Path, store: RawStore, sources_dir: Path) -> list[str
         model=frontmatter.get("model"),
     )
     linkable = set(linkable_digests(source)) - {repo_path(path.with_suffix(""))}
-    return check_digest(text, raw_text, expected, linkable)
+    return check_digest(text, raw_text, expected, linkable, vocabulary)
 
 
 def repo_of(sources_dir: Path) -> Path:
