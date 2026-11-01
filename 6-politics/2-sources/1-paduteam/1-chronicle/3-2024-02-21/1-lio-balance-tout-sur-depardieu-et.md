@@ -3,64 +3,89 @@ title: "LIO BALANCE TOUT SUR DEPARDIEU et les VSS dans le SHOW-BUSINESS !!"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-02-21
 owner: diplo
 preview: >-
-  La PaduTeam salue Lio, qui décrit de l'intérieur un show-business où les
-  listes de prédateurs circulent, où l'on s'en prend aux victimes les plus
-  fragiles et où l'entre-soi protège Depardieu, comme il a protégé Cantat
-  après la mort de Marie Trintignant.
+  La PaduTeam salue Lio, qui décrit de l'intérieur un show-business où
+  circulent des listes de prédateurs, où l'on s'attaque aux femmes sans
+  pouvoir, et où le milieu protège Depardieu comme il a protégé Cantat : même
+  silence, même impunité masculine.
 source: paduteam
 url: https://www.youtube.com/watch?v=Thah39dBUhg
 youtube_id: "Thah39dBUhg"
 published: 2024-02-21
 duration: null
 raw: paduteam/Thah39dBUhg.md
-ingested: 2026-10-31
-digest_version: 1
+ingested: 2026-11-01
+digest_version: 3
 model: claude-sonnet-5-5
+mentions:
+  - {name: Lio, kind: personne, labels: [artiste, témoin], qualifiers: [cité, sujet]}
+  - {name: Gérard Depardieu, kind: personne, labels: [artiste], qualifiers: [sujet], heard_as: Gérard pardieu}
+  - {name: Affaire Depardieu, kind: événement, labels: [affaire], qualifiers: [sujet], heard_as: affaire de par Dieu}
+  - {name: Sophie Marceau, kind: personne, labels: [artiste], qualifiers: [sujet, cité]}
+  - {name: Nadine Trintignant, kind: personne, labels: [artiste], qualifiers: [sujet], heard_as: Nadine trintigan}
+  - {name: Marie Trintignant, kind: personne, labels: [artiste], qualifiers: [sujet], heard_as: Marie trintigan}
+  - {name: Bertrand Cantat, kind: personne, labels: [artiste], qualifiers: [sujet], heard_as: Bertrand Kanta}
+  - {name: Charlotte Arnould, kind: personne, labels: [témoin], qualifiers: [mentionné], heard_as: Charlotte Arnou}
+  - {name: Maurice Pialat, kind: personne, labels: [artiste], qualifiers: [mentionné], heard_as: Maurice piala}
+  - {name: Police, kind: œuvre, labels: [film], qualifiers: [sujet], heard_as: police}
+  - {name: Éric Zemmour, kind: personne, labels: [dirigeant-de-parti], qualifiers: [mentionné], heard_as: Zémour}
+  - {name: Psychodélique, kind: personne, labels: [vidéaste], qualifiers: [mentionné]}
+  - {name: Le Figaro, kind: organisation, labels: [média], qualifiers: [mentionné]}
+  - {name: Paris Match, kind: organisation, labels: [média], qualifiers: [cité]}
+  - {name: TF1, kind: organisation, labels: [média], qualifiers: [cité]}
+  - {name: Télévision Suisse, kind: organisation, labels: [média], qualifiers: [mentionné]}
+relations:
+  - {from: Maurice Pialat, relation: auteur, to: Police}
 ---
 # LIO BALANCE TOUT SUR DEPARDIEU et les VSS dans le SHOW-BUSINESS !!
 
-## 1. Dans le cinéma, tout le monde connaît les prédateurs et personne ne parle : l'affaire Depardieu est le symptôme d'un système.
+## 1. Lio confirme de l'intérieur que des listes de prédateurs circulent dans le métier : tout le monde sait, personne ne parle.
 
-Pour la PaduTeam, le témoignage de Lio confirme de l'intérieur que des listes d'hommes circulent dans le métier, y compris de ceux qui continuent à faire carrière.
+La PaduTeam y voit une dinguerie : le milieu connaît ses agresseurs, certains continuent leur carrière, et l'affaire Depardieu n'est que le symptôme d'un système.
 
-> [8:50](https://www.youtube.com/watch?v=Thah39dBUhg&t=530s) « tu as des listes des mecs on sait voilà c'est comme ça bon ils agressent il agressent pas lui il agresse un peu c'est tellement une dinguerie quoi »
+> [8:20](https://www.youtube.com/watch?v=Thah39dBUhg&t=500s) « il y a des listes qui circulent dans le métier donc tout le monde connaît les prédateurs sexuel qui sont dans le métier »
 
-> [17:47](https://www.youtube.com/watch?v=Thah39dBUhg&t=1067s) « c'est ça mais tout le monde sait et personne ne dit »
+> [17:47](https://www.youtube.com/watch?v=Thah39dBUhg&t=1067s) « tout le monde sait et personne ne dit rien »
 
-## 2. Les prédateurs s'en prennent à celles qui ont le moins de pouvoir : maquilleuses, habilleuses, figurantes, jamais les têtes d'affiche.
+## 2. Les prédateurs choisissent les femmes les plus fragiles et les moins protégées : maquilleuses, habilleuses, figurantes, jamais Sophie Marceau.
 
-La PaduTeam souligne que ces femmes, souvent jeunes et choisies pour leur physique, n'ont pas les moyens de se défendre face à un homme installé.
+Lio raconte que sa sœur a été prévenue des gestes de Depardieu avec un « c'est Gérard » qui banalise tout.
 
 > [9:55](https://www.youtube.com/watch?v=Thah39dBUhg&t=595s) « les prédateurs choisissent la blessée du du troupeau »
 
+> [10:26](https://www.youtube.com/watch?v=Thah39dBUhg&t=626s) « il touche les seins il met les mains dans les culottes enfin c'est il met les mains dans les culottes mais enfin c'est Gérard quoi »
+
 > [11:58](https://www.youtube.com/watch?v=Thah39dBUhg&t=718s) « maquilleuses habilleus figurante petite actrice jamais Sophie Marceau »
 
-## 3. L'entre-soi du métier protège les agresseurs et normalise leurs gestes.
+## 3. Sophie Marceau avait dénoncé l'attitude de Depardieu dès 1985, sans être entendue.
 
-Lio rapporte qu'on a prévenu sa sœur, avant un tournage, des mains de Depardieu, en ajoutant que c'était Gérard et que ça avait toujours été comme ça. Lio y voit une défense collective du métier.
+La PaduTeam commente un extrait de promotion de TF1 sur le tournage de Police, où la jeune actrice se fait agresser par les questions.
 
-> [7:48](https://www.youtube.com/watch?v=Thah39dBUhg&t=468s) « c'était déjà une volonté de défense d'un métier parce qu'il y a un entre soi »
+> [11:58](https://www.youtube.com/watch?v=Thah39dBUhg&t=718s) « j'ai dit publiquement à l'époque que je ne supportais pas son attitude grossière et très déplacé »
 
-> [10:26](https://www.youtube.com/watch?v=Thah39dBUhg&t=626s) « tu sais il touche les seins il met les mains dans les culottes enfin c'est il met les mains dans les culottes mais enfin c'est Gérard quoi »
+> [15:44](https://www.youtube.com/watch?v=Thah39dBUhg&t=944s) « elle a parlé elle a pas été entendue »
 
-## 4. La tribune de soutien à Depardieu n'avait pas lieu d'être, et ce n'est pas une affaire de cancel culture.
+## 4. Lio juge la tribune de soutien à Depardieu regrettable, et rappelle que la présomption d'innocence n'empêche pas d'entendre la voix des femmes.
 
-La PaduTeam relève que Lio regrette surtout les rétractations motivées par l'extrême droite de l'auteur, plutôt que par le fond de la tribune. Elle rappelle qu'il y a de très nombreux témoignages contre Depardieu.
+Elle reproche aux signataires de s'être rétractés parce que l'auteur de la tribune est d'extrême droite, plutôt que pour le contenu.
 
-> [2:04](https://www.youtube.com/watch?v=Thah39dBUhg&t=124s) « dit ce que je trouve regrettable c'est que les gens se soit rétracté parce que ce mec était d'extrême droite »
+> [1:33](https://www.youtube.com/watch?v=Thah39dBUhg&t=93s) « tribune est un un homme d'extrême droite »
 
-> [3:37](https://www.youtube.com/watch?v=Thah39dBUhg&t=217s) « alors qu'on parle d'un mec qui est accusé par je ne sais combien de meufs il y a énormément de témoignages »
+> [2:04](https://www.youtube.com/watch?v=Thah39dBUhg&t=124s) « moi je trouve que la tribune est regrettable »
 
-## 5. La présomption d'innocence ne doit pas servir à étouffer la parole des femmes, d'autant que la justice aboutit rarement.
+> [5:12](https://www.youtube.com/watch?v=Thah39dBUhg&t=312s) « la présomption d'innocence existe et insistera toujours c'est à la justice de rendre son son verdict mais ce qui est rendu public est rendu public la voix des femmes qui se sont fait entendre doivent être entendu »
 
-> [5:12](https://www.youtube.com/watch?v=Thah39dBUhg&t=312s) « la présomption d'innocence existe et insistera toujours c'est à la justice de rendre son son verdict mais ce qui est rendu public est rendu public »
+## 5. Lio relie l'affaire Depardieu au meurtre de Marie Trintignant : un homme remonte sur scène et on l'applaudit, au lieu de se ranger du côté de la victime.
 
-> [5:43](https://www.youtube.com/watch?v=Thah39dBUhg&t=343s) « quand un mec commence à être vraiment pointé du doigt dénoncé par énormément de meufs avec des témoignages et tout »
-
-## 6. Le sort fait à Cantat après la mort de Marie Trintignant relève de la même impunité masculine.
-
-La PaduTeam reprend Lio : Cantat est remonté sur scène, applaudi, soutenu par des journalistes, alors que la première chose à faire est de se placer du côté de la victime.
-
-> [18:51](https://www.youtube.com/watch?v=Thah39dBUhg&t=1131s) « et après le gars remonte sur scène et et il se fait applaudir et tout le monde s'en fiche quoi »
+> [4:41](https://www.youtube.com/watch?v=Thah39dBUhg&t=281s) « j'ai été très choqué quand Bernard quand Bertran Kanta remoné sur scène euh soutenu par la Une des un rooc »
 
 > [19:22](https://www.youtube.com/watch?v=Thah39dBUhg&t=1162s) « la première chose qu'il a à faire dans ce genre d'affaire c'est de se mettre du du côté de la victime »
+
+> [19:52](https://www.youtube.com/watch?v=Thah39dBUhg&t=1192s) « Hubert fxen qui dit ronge tes barreaux mon ami nous t'attendons dehors »
+
+## 6. Lio se dit ancienne femme battue et ancienne misogyne intégrée ; la PaduTeam y voit une critique du système de domination, pas une morale.
+
+Pour la PaduTeam, peu importe que Lio soit bourgeoise : sur ce sujet, elle assume sa propre évolution et ne fait pas la leçon.
+
+> [6:15](https://www.youtube.com/watch?v=Thah39dBUhg&t=375s) « j'ai fait le parcours du combattant d'une femme battue »
+
+> [7:48](https://www.youtube.com/watch?v=Thah39dBUhg&t=468s) « elle a une critique en plus qui est pas débile qui est pas une critique moralisatrice elle a une critique d'un système de domination qui cache et qui euh légitime des violences faites aux femmes »

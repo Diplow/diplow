@@ -3,68 +3,80 @@ title: "Rima Hassan TAILLE Le Crayon et EXPOSE leurs méthodes MALVEILLANTES !!"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-02-21
 owner: diplo
 preview: >-
-  La PaduTeam soutient que Rima Hassan a été diabolisée en pro-Hamas à partir
-  de cinq secondes tronquées d'une interview d'1h30 par le format vrai/faux du
-  Crayon, et que l'accusation d'apologie du terrorisme est politique : son
-  vrai discours n'a rien d'extrémiste.
+  La PaduTeam soutient que Le Crayon a réduit l'interview de Rima Hassan à un
+  vrai/faux de cinq secondes pour buzzer, et que la diabolisation qui a suivi
+  ne repose sur rien de ce qu'elle dit publiquement.
 source: paduteam
 url: https://www.youtube.com/watch?v=qmDyGrnfTio
 youtube_id: "qmDyGrnfTio"
 published: 2024-03-01
 duration: null
 raw: paduteam/qmDyGrnfTio.md
-ingested: 2026-10-31
-digest_version: 1
+ingested: 2026-11-01
+digest_version: 3
 model: claude-sonnet-5-5
+mentions:
+  - {name: Rima Hassan, kind: personne, labels: [militant, candidat], qualifiers: [sujet, cité]}
+  - {name: Le Crayon, kind: organisation, labels: [média], qualifiers: [sujet]}
+  - {name: Antonin Marin, kind: personne, labels: [journaliste], qualifiers: [sujet, cité], heard_as: Antonin marin}
+  - {name: Psyhodelik, kind: personne, labels: [vidéaste], qualifiers: [mentionné], heard_as: psychodéliqu, unsure: true}
+  - {name: Jean-Luc Mélenchon, kind: personne, labels: [élu], qualifiers: [cité], heard_as: Jean-Luc Mélanchon}
+  - {name: Jean-Marc Morandini, kind: personne, labels: [présentateur], qualifiers: [mentionné], heard_as: Morandini}
+  - {name: Sonia Mabrouk, kind: personne, labels: [journaliste], qualifiers: [mentionné], heard_as: Sonia mauru, unsure: true}
+  - {name: Meyer Habib, kind: personne, labels: [élu], qualifiers: [mentionné], heard_as: meilleur Habib}
+  - {name: Hamas, kind: organisation, labels: [groupe-armé], qualifiers: [sujet]}
+  - {name: La France insoumise, kind: organisation, labels: [parti], qualifiers: [sujet], heard_as: France insoumise}
+  - {name: Marche du 9 octobre, kind: événement, labels: [manifestation], qualifiers: [mentionné], heard_as: marche du 9 octobre}
+  - {name: Élections européennes de 2024, kind: événement, labels: [élection], qualifiers: [sujet], heard_as: élections européennes}
+relations:
+  - {from: Rima Hassan, relation: participe, to: Marche du 9 octobre}
 ---
 # Rima Hassan TAILLE Le Crayon et EXPOSE leurs méthodes MALVEILLANTES !!
 
-## 1. Le format vrai/faux du Crayon force une réponse binaire qui sort forcément de son contexte.
+## 1. Le format vrai/faux du Crayon force une réponse binaire qui ne peut que sortir hors contexte et faire dire à Rima Hassan qu'elle soutient le Hamas.
 
-La question sur « l'action du Hamas » peut désigner la distribution d'eau comme le 7 octobre. Le vrai/faux écrase cette distinction et transforme la réponse en adhésion à tout ce que fait le Hamas.
+La question sur « l'action du Hamas » est floue, et sur la légitimité de la résistance armée en contexte colonial, la réponse est nuancée. Le format efface cette nuance : un vrai devient un soutien à tout ce que fait le Hamas.
 
-> [1:35](https://www.youtube.com/watch?v=qmDyGrnfTio&t=95s) « tu es obligé de dire vrai ou faux donc on dit est-ce que l'action du Hamas est légitime et alors là bon que veut dire l'action du Hamas on ne sait pas »
+> [1:35](https://www.youtube.com/watch?v=qmDyGrnfTio&t=95s) « est-ce que l'action du Hamas est légitime et alors là bon que veut dire l'action du Hamas on ne sait pas est-ce que est que c'est quand il distribue de l'eau à Gaza ou est-ce que c'est le 7 octobre »
 
-> [2:06](https://www.youtube.com/watch?v=qmDyGrnfTio&t=126s) « sauf que le vrai faux réduit euh la question et la réponse en mode elle a dit elle a dit vrai donc elle est d'accord avec tout ce que fait le Hamas et c'est une pro Hamas quoi »
+> [2:06](https://www.youtube.com/watch?v=qmDyGrnfTio&t=126s) « sauf que le vrai faux réduit euh la question et la réponse en mode elle a dit elle a dit vrai donc elle est d'accord avec tout ce que fait le Hamas »
 
-## 2. Le Crayon a laissé tourner cinq secondes d'une interview d'1h30 et refuse d'en rendre les rushes.
+## 2. Rima Hassan dénonce cinq secondes tirées d'une longue interview et le refus du Crayon de lui rendre ses rushes.
 
-Rima Hassan réclame les rushes depuis des semaines et a envoyé une mise en demeure. La PaduTeam juge la réponse du Crayon insuffisante : son explication, un signalement de l'extrait pour apologie du terrorisme, ne justifie pas de refuser l'intégralité.
+Elle demande les rushes pour pouvoir démentir les attaques, et envoie une mise en demeure par son avocat.
 
-> [2:36](https://www.youtube.com/watch?v=qmDyGrnfTio&t=156s) « vous avez visionné 5 secondes de mon interview pour le crayon média depuis plusieurs semaines je demande à la direction de ce média »
+> [2:36](https://www.youtube.com/watch?v=qmDyGrnfTio&t=156s) « vous avez visionné 5 secondes de mon interview pour le crayon média depuis plusieurs semaines »
 
-> [3:08](https://www.youtube.com/watch?v=qmDyGrnfTio&t=188s) « bah oui c'estd que si on te pose des questions pendant 1 heure et de et puis en fait à la fin il y a juste un extrait de 5 secondes qui tourne c'est un peu euh un peu abusé quoi »
+> [3:08](https://www.youtube.com/watch?v=qmDyGrnfTio&t=188s) « mon avocat est saisi de l'affaire et nous envoyons aujourd'hui une mise en demeure à la direction du diméia »
 
-## 3. Le Crayon pratique les mêmes méthodes que Psychodélique : le format est fait pour buzzer, et l'invitation à revenir ne règle rien.
+## 3. La PaduTeam reprend le constat de Rima Hassan : Le Crayon a les mêmes méthodes que Psyhodelik, des extraits tronqués pour buzzer puis une invitation à venir s'expliquer.
 
-Inviter à revenir s'expliquer, c'est faire des vues sur une personne qu'on a soi-même mise dans la difficulté. Publier l'entretien en entier ne changerait rien, car le problème est le vrai/faux lui-même.
+Publier l'entretien en entier ne changerait rien, selon la PaduTeam : le problème est le vrai/faux lui-même.
 
-> [6:18](https://www.youtube.com/watch?v=qmDyGrnfTio&t=378s) « reviens sur la chaîne tu refais des vues en fait sur une personne que tu as toi-même mis dans la merde »
+> [5:47](https://www.youtube.com/watch?v=qmDyGrnfTio&t=347s) « puis proposer à la personne dans la sauce par leur faute de revenir sur leur chaîne et discuter pour refaire des vues »
 
-> [6:18](https://www.youtube.com/watch?v=qmDyGrnfTio&t=378s) « ce format vraifut est fait pour pour provoquer ce genre de ce genre de de problème en réalité le format il sera en intégralité ce serait la même chose le problème c'est ce vrai faux en fait »
+> [6:18](https://www.youtube.com/watch?v=qmDyGrnfTio&t=378s) « tu fais des vrais faux qui sont faits pour buzzer et pour battre buzzer »
 
-## 4. Dans un cadre colonial la résistance armée est légitime, et l'accusation d'apologie du terrorisme est une arme politique.
+> [6:18](https://www.youtube.com/watch?v=qmDyGrnfTio&t=378s) « ce format vraifut est fait pour pour provoquer ce genre de ce genre de de problème »
 
-La PaduTeam maintient sa position constante, avec la limite que la mort de civils rend la légitimité bien plus difficile à soutenir. Pour elle, le peuple dominé passe par la résistance armée faute de voies politiques et pacifiques. Quand on traite de soutien aux terroristes celle qui le dit, pendant qu'une armée commet un génocide à Gaza, l'accusation devient politique.
+## 4. L'accusation d'apologie du terrorisme contre Rima Hassan est une accusation politique, portée à la télé et sur Twitter par Meyer Habib, Morandini ou Sonia Mabrouk.
 
-> [2:06](https://www.youtube.com/watch?v=qmDyGrnfTio&t=126s) « on sait que dans des cadres coloniales la résistance même armée est légitime donc on pourrait dire que l'action du Hamas sur ce pan là est légitime »
+Dire que la résistance armée palestinienne est légitime en contexte colonial n'est pas de l'apologie du terrorisme. Réduire Rima Hassan à pro-Hamas la diabolise, et la PaduTeam y voit une manière de disqualifier la cause palestinienne.
 
-> [9:55](https://www.youtube.com/watch?v=qmDyGrnfTio&t=595s) « on a une armée qui est en train de faire un génocide à Gaza il y a pas de il y a pas d'apologie du terrorisme »
+> [9:55](https://www.youtube.com/watch?v=qmDyGrnfTio&t=595s) « il y a pas d'apologie du terrorisme par contre si tu dis oui ben en fait la résistance armée palestinienne elle est légitime parce qu'on est dans un contexte colonial »
 
 > [10:26](https://www.youtube.com/watch?v=qmDyGrnfTio&t=626s) « c'est là où voit que l'accusation d' poologie du terrorisme elle est hyper elle est hyper politique en fait »
 
-## 5. Le vrai discours de Rima Hassan ne justifie en rien qu'on la traite d'extrémiste ou de terroriste.
+## 5. Le vrai discours de Rima Hassan, celui de la Nakba et du plan de partage décidé sans les Palestiniens, n'a rien de celui d'une extrémiste.
 
-Son interview sur la Nakba, le plan de partage décidé sans les Palestiniens et le régime d'apartheid, comme son discours à la marche du 9 octobre aux côtés de Mélenchon, n'a rien d'extrémiste. Les relais médiatiques et les tweets qui la diabolisent la caricaturent.
+La PaduTeam met aussi le discours de Mélenchon à la marche du 9 octobre et la première prise de parole de Rima Hassan en face des accusations.
 
 > [14:36](https://www.youtube.com/watch?v=qmDyGrnfTio&t=876s) « le plan de partage de la Palestine il a été fait sans les Palestiniens »
 
-> [21:55](https://www.youtube.com/watch?v=qmDyGrnfTio&t=1315s) « mais à quel moment tu penses que cette meuf est une espèce d'extrémiste antisémite terroriste je sais pas quoi »
+> [21:55](https://www.youtube.com/watch?v=qmDyGrnfTio&t=1315s) « mais à quel moment tu penses que cette meuf est une espèce d'extrémiste antisémite terroriste »
 
-## 6. Sa 7e place sur la liste LFI aux européennes est une bonne nouvelle, et la PaduTeam appelle à voter pour elle.
+## 6. Rima Hassan en septième position sur la liste de la France insoumise aux européennes est une bonne nouvelle, et la PaduTeam appelle à voter pour elle.
 
-La PaduTeam y voit une LFI qui assume son positionnement sur la Palestine, et elle espère que cette liste arrivera devant celles du PS et d'EELV. Elle appelle à s'inscrire sur les listes électorales et à voter.
-
-> [0:00](https://www.youtube.com/watch?v=qmDyGrnfTio&t=0s) « alors si vous avez pas suivi Rima Hassan a été positionné en 7e place sur la liste aux européennees de la France insoumise »
+> [0:00](https://www.youtube.com/watch?v=qmDyGrnfTio&t=0s) « Rima Hassan a été positionné en 7e place sur la liste aux européennees de la France insoumise »
 
 > [22:27](https://www.youtube.com/watch?v=qmDyGrnfTio&t=1347s) « vous allez voter pour Rima Hassan vous allez voter pour la liste euh France insoumise »
