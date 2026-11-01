@@ -1,0 +1,27 @@
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/5-2026-07-01/4-l-histoire-de-la-resistance-palestinienne.md
+  s_2a959c5090c016::t_dfe8edc8d26dc1 1-85
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/5-2026-07-01/5-manifs-en-france-pourquoi-ca-degenere.md
+  s_2a959c5090c016::t_e50eaf819d4e40 1-85
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/5-2026-07-01/CLAUDE.md
+  s_2a959c5090c016::t_1d1a696d86d164 2,6-9,11,13,15-17,24-25
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/CLAUDE.md
+  s_2a959c5090c016::t_2013a89c1aa99c 2,6-9,11,13,15,17,25
+6-politics/2-sources/3-osonscauser/1-chronicle/CLAUDE.md
+  s_2a959c5090c016::t_6e1b92df5b9f84 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "85a10ce5eeed9edb530083a0daf9090bc388e5c4",
+  "prompts": {},
+  "sessions": {
+    "s_2a959c5090c016": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a2e5bda2dca47ea28",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
