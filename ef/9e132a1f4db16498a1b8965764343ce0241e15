@@ -1,0 +1,29 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_569dbb4d62f2f3::t_933f77c68510ee 31
+  s_569dbb4d62f2f3::t_08836667769b42 32-33
+  s_569dbb4d62f2f3::t_5360676a3487a5 58
+6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/1-cyrus-north-explique-le-marxisme-a.md
+  s_569dbb4d62f2f3::t_ce707196d1b15f 6-9,16-17,19-33,37,39,41,43,45-47,49,51,53,55,57-59,61,63,65,67,69,71,73,75,77,79,81,83,85
+6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/2-d-ado-gauchiste-a-ingenieur-nietzscheen.md
+  s_569dbb4d62f2f3::t_ed1f44687d4356 7-9,16-17,19-32,36,38,40,42,44,46,48,50,52,58,60-68,74,76,78,80
+6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE.md
+  s_569dbb4d62f2f3::t_02a28c95a03f9f 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_569dbb4d62f2f3::t_057936fbd99c6d 6-9,13,15,17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ef9e132a1f4db16498a1b8965764343ce0241e15",
+  "prompts": {},
+  "sessions": {
+    "s_569dbb4d62f2f3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a6e8910-f13d-4cf1-8345-cc32da1c1f94",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
