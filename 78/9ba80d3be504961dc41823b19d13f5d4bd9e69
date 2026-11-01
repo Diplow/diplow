@@ -1,0 +1,21 @@
+6-politics/2-sources/3-osonscauser/1-chronicle/1-la-france-est-elle-le-pire.md
+  s_569dbb4d62f2f3::t_62f9d03346d4fb 1-69
+6-politics/2-sources/3-osonscauser/1-chronicle/CLAUDE.md
+  s_569dbb4d62f2f3::t_68e1d15982ef57 2,6-8,12,14-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "789ba80d3be504961dc41823b19d13f5d4bd9e69",
+  "prompts": {},
+  "sessions": {
+    "s_569dbb4d62f2f3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a6e8910-f13d-4cf1-8345-cc32da1c1f94",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
