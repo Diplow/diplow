@@ -1,6 +1,6 @@
 ---
 title: "BCE : FAIRE MONTER LE CHÔMAGE, C’EST SON PROJEEEET"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/3-2023-12-29
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/4-2024-01-02
 owner: diplo
 preview: >-
   Blast soutient que la BCE de Christine Lagarde crée volontairement du

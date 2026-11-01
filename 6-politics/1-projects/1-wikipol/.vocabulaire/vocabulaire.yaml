@@ -206,6 +206,7 @@ kinds:
       paquet-législatif: {définition: "Ensemble de textes législatifs adoptés ensemble pour atteindre un même objectif.", statut: proposé, introduit_par: osonscauser/e4ep4Ky23hI.md}
       accord: {définition: "Accord conclu entre parties, États ou non, qui fixe un processus politique.", statut: proposé, introduit_par: boniface/GJeVOIsPrtU.md}
       code: {définition: "Recueil de lois qui organise une matière du droit, comme le Code civil.", statut: proposé, introduit_par: blast/HFuCQg-owpw.md}
+      règlement: {définition: "Acte de l'Union européenne, directement applicable dans tous les États membres.", statut: proposé, introduit_par: boniface/0vlim-vqHn0.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
