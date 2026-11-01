@@ -1,6 +1,6 @@
 ---
 title: "VIOLENCES : LES POMPIERS PYROMANES DU POUVOIR"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27
 owner: diplo
 preview: >-
   Blast soutient que le gouvernement Macron, qui se dit inquiet de la violence

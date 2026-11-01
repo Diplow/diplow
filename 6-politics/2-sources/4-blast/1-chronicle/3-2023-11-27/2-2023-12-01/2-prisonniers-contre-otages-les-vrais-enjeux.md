@@ -1,6 +1,6 @@
 ---
 title: "« PRISONNIERS » CONTRE « OTAGES » : LES VRAIS ENJEUX DE LA PAIX À GAZA"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/6-2023-12-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/2-2023-12-01
 owner: diplo
 preview: >-
   Pour la chercheuse Stéphanie Latte Abdallah, l'échange d'otages israéliens

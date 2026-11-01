@@ -1,6 +1,6 @@
 ---
 title: "2023-11-27 → 2023-11-30"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27
 owner: diplo
 preview: >-
   Blast donne la parole à l'avocat des magistrats visés par Dupond-Moretti et
@@ -18,8 +18,8 @@ La période se termine sur le pouvoir en France : le gouvernement Macron se dit 
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/1-proces-dupond-moretti-l-heure-du|PROCÈS DUPOND-MORETTI : L’HEURE DU VERDICT]] (2023-11-27)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/2-glyphosate-10-ans-d-empoisonnement-en|GLYPHOSATE : 10 ANS D'EMPOISONNEMENT EN PLUS]] (2023-11-28)
-3. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/3-francois-mitterrand-petainiste-et-resistant|FRANÇOIS MITTERRAND : PÉTAINISTE ET RÉSISTANT]] (2023-11-29)
-4. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/4-milei-trump-bolsonaro-l-inquietante-percee|MILEI, TRUMP, BOLSONARO : L’INQUIÉTANTE PERCÉE DE L’EXTRÊME DROITE DANS LE MONDE]] (2023-11-29)
-5. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/5-violences-les-pompiers-pyromanes-du-pouvoir|VIOLENCES : LES POMPIERS PYROMANES DU POUVOIR]] (2023-11-30)
+1. [[6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27/1-proces-dupond-moretti-l-heure-du|PROCÈS DUPOND-MORETTI : L’HEURE DU VERDICT]] (2023-11-27)
+2. [[6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27/2-glyphosate-10-ans-d-empoisonnement-en|GLYPHOSATE : 10 ANS D'EMPOISONNEMENT EN PLUS]] (2023-11-28)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27/3-francois-mitterrand-petainiste-et-resistant|FRANÇOIS MITTERRAND : PÉTAINISTE ET RÉSISTANT]] (2023-11-29)
+4. [[6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27/4-milei-trump-bolsonaro-l-inquietante-percee|MILEI, TRUMP, BOLSONARO : L’INQUIÉTANTE PERCÉE DE L’EXTRÊME DROITE DANS LE MONDE]] (2023-11-29)
+5. [[6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27/5-violences-les-pompiers-pyromanes-du-pouvoir|VIOLENCES : LES POMPIERS PYROMANES DU POUVOIR]] (2023-11-30)

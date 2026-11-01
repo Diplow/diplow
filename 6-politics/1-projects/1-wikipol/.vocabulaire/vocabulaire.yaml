@@ -68,6 +68,10 @@ kinds:
       psychanalyste: {définition: "Pratique et théorise la psychanalyse.", statut: proposé, introduit_par: blast/rx-pliV3vtc.md}
       accusé: {définition: "Est jugé devant un tribunal pénal, à la date de la Publication.", statut: proposé, introduit_par: paduteam/vfEiOQKnZ4M.md}
       victime: {définition: "A subi une infraction, notamment une violence sexuelle.", statut: proposé, introduit_par: paduteam/vfEiOQKnZ4M.md}
+      chauffeur-vtc: {définition: "Conduit des clients avec sa propre voiture via une plateforme de transport.", statut: proposé, introduit_par: paduteam/OWvRp0vK2Sg.md}
+      expert-comptable: {définition: "Professionnel du chiffre qui tient et certifie la comptabilité d'entreprises.", statut: proposé, introduit_par: paduteam/OWvRp0vK2Sg.md}
+      réalisateur: {définition: "Réalise des films de fiction ou des documentaires.", statut: proposé, introduit_par: blast/tH60p9vvmXQ.md}
+      scénariste: {définition: "Écrit des scénarios de films.", statut: proposé, introduit_par: blast/tH60p9vvmXQ.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -102,6 +106,7 @@ kinds:
       établissement-d-enseignement-supérieur: {définition: "Université, grande école ou institut qui dispense un enseignement supérieur.", statut: proposé, introduit_par: paduteam/iOd5lu0wO3c.md}
       ordre-professionnel: {définition: "Organisme qui réunit les membres d'une profession réglementée et en contrôle la déontologie.", statut: proposé, introduit_par: paduteam/xrGePx2JwbM.md}
       mouvement-de-résistance: {définition: "Organisation ou coordination qui combat l'occupant ou un régime d'oppression.", statut: proposé, introduit_par: paduteam/4-j1k5auwOU.md}
+      lobby: {définition: "Organisation qui défend auprès des pouvoirs publics les intérêts d'un secteur ou d'un groupe d'entreprises.", statut: proposé, introduit_par: blast/h6ziZ4JPWEM.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

@@ -3,20 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast soutient que Macron mérite son étiquette de président des riches, que
-  la gauche est diabolisée et le RN banalisé autour de l'antisémitisme, et que
-  la loi asile et immigration reprend le programme du RN. Elle fait de
-  l'impunité des pouvoirs un fil de la période.
+  Blast soutient que Macron est un président des riches, dénonce la
+  banalisation du RN, la diabolisation de la gauche autour de l'antisémitisme
+  et le durcissement migratoire, puis l'impunité des responsables et le
+  désengagement de l'État sur le logement et le climat.
 ---
 # Chronicle
 
-Dans les premiers jours, Blast s'attache à la politique du pouvoir en place : Macron mérite selon elle son étiquette de « président des riches », et la dette vient des chocs économiques et des baisses d'impôt de la droite. Elle reproche à l'État macroniste ses deux poids, deux mesures sur Gaza et l'antisémitisme, et dit son journalisme libre menacé ([[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-11-11]]).
+Sur l'ensemble de la Chronicle, Blast déroule une critique du pouvoir macroniste. Elle soutient que Macron mérite son étiquette de président des riches, que la dette vient des chocs économiques et des baisses d'impôt de la droite, et que l'État applique deux poids, deux mesures sur Gaza et l'antisémitisme. Elle dit aussi que son propre journalisme libre est menacé.
 
-La suite prolonge ce reproche et l'élargit. Blast dénonce la diabolisation de la gauche et la banalisation du RN autour de l'antisémitisme, ainsi qu'une loi asile et immigration qui reprend le programme du RN. Elle critique aussi la couverture médiatique du conflit israélo-palestinien ([[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/CLAUDE|2023-11-12 → 2023-12-02]]).
+Le fil se déplace ensuite vers les médias et le gouvernement. Blast leur reproche de banaliser le RN, de diaboliser la gauche autour de l'antisémitisme et de durcir la politique d'immigration. La fin de cette deuxième période fait de l'impunité des responsables politiques son fil conducteur.
 
-D'un bout à l'autre, le fil est celui d'un pouvoir qui, aux yeux de Blast, protège les puissants et déplace les lignes à droite. L'impunité des pouvoirs devient un thème à part entière de la seconde moitié.
+La dernière période élargit le propos. Blast soutient que Mitterrand fut vichyste et résistant, que l'extrême droite mondiale aggrave les maux qu'elle dénonce et que Macron attise la violence. Elle relie le mal-logement et la crise climatique à un même désengagement de l'État. Plusieurs invités prennent aussi la parole, et leurs thèses restent les leurs.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-11-11]] (15 Digests)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/CLAUDE|2023-11-12 → 2023-12-02]] (26 Digests)
+2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/CLAUDE|2023-11-12 → 2023-11-26]] (18 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/CLAUDE|2023-11-27 → 2023-12-06]] (14 Digests)

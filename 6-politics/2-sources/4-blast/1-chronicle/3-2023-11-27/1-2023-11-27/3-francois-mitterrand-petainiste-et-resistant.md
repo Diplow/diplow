@@ -1,6 +1,6 @@
 ---
 title: "FRANÇOIS MITTERRAND : PÉTAINISTE ET RÉSISTANT"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/1-2023-11-27
 owner: diplo
 preview: >-
   Blast soutient que Mitterrand fut à la fois vichyste et résistant :

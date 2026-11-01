@@ -1,6 +1,6 @@
 ---
 title: "« NOUS NE VIVONS PAS DANS DES DÉMOCRATIES MAIS DANS DES ÉTATS AUTORITAIRES »"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/6-2023-12-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/2-2023-12-01
 owner: diplo
 preview: >-
   Jacques Rancière soutient que nous vivons non dans des démocraties mais dans

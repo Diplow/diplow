@@ -1,20 +1,20 @@
 ---
-title: "2023-11-12 → 2023-12-02"
+title: "2023-11-12 → 2023-11-26"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12
 owner: diplo
 preview: >-
-  Blast dénonce la diabolisation de la gauche et la banalisation du RN autour
-  de l'antisémitisme, une loi asile et immigration qui reprend le programme du
-  RN, et la couverture médiatique du conflit israélo-palestinien. Elle fait
-  aussi de l'impunité des pouvoirs un fil de la période.
+  Blast dénonce des médias et un gouvernement qui banalisent le RN,
+  diabolisent la gauche autour de l'antisémitisme et durcissent la politique
+  d'immigration. Elle fait ensuite de l'impunité des responsables politiques
+  le fil de la fin de période.
 ---
-# 2023-11-12 → 2023-12-02
+# 2023-11-12 → 2023-11-26
 
-Le conflit israélo-palestinien et l'antisémitisme occupent le début de la Period. Blast critique la couverture médiatique française du conflit. Elle soutient que le gouvernement et les médias diabolisent la gauche et banalisent le RN, dont la présence à la marche contre l'antisémitisme sert la normalisation. Elle soutient aussi que le conflit fracture le monde. Elle donne la parole à Palestine 69 et à des habitants de Gaza.
+Blast soutient que la couverture médiatique du conflit israélo-palestinien et le débat sur l'antisémitisme servent à diaboliser la gauche et à banaliser le RN. Selon elle, la présence du RN à la marche contre l'antisémitisme sert sa normalisation, et la loi asile et immigration reprend son programme (voir [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/1-2023-11-12/CLAUDE|2023-11-12 → 2023-11-14]]). Elle juge aussi que le conflit fracture le monde et donne la parole à Palestine 69 et à des habitants de Gaza.
 
-Sur l'immigration, Blast juge que la loi asile et immigration reprend le programme du RN. Elle voit dans l'émission de France 2 sur le sujet un relais de l'agenda du gouvernement et juge le RSA conditionné à une activité régressif pour les pauvres. Des lanceurs d'alerte et des chercheurs, à qui elle donne la parole, réfutent les idées reçues sur l'immigration.
+Le même fil court sur l'immigration et les politiques sociales. Blast juge l'émission de France 2 sur l'immigration au service de l'agenda du gouvernement, et le RSA conditionné à une activité régressif pour les pauvres. Elle donne la parole à des lanceurs d'alerte et à des chercheurs qui réfutent les idées reçues sur l'immigration.
 
-Le fil de la fin de Period est l'impunité : mensonges de Braun-Pivet et de Darmanin, droits bafoués dans les expulsions à Mayotte, justice pour Gaza avec Johann Soufi. Blast reçoit aussi l'avocat des magistrats visés par Dupond-Moretti et Secret toxique sur le glyphosate. Elle soutient que Mitterrand fut vichyste et résistant, que l'extrême droite mondiale aggrave les maux qu'elle dénonce et que Macron attise la violence. Elle reçoit enfin Jacques Rancière, pour qui nous vivons dans des États autoritaires, et Stéphanie Latte Abdallah, qui parle de l'échange d'otages et de prisonniers.
+La fin de la période se resserre autour de l'impunité : mensonges de Braun-Pivet et de Darmanin, droits bafoués dans les expulsions à Mayotte, et justice pour Gaza avec Johann Soufi. Blast y ajoute un Franc-Tireur qu'elle juge macroniste et d'extrême centre.
 
 ## Contenu
 
@@ -22,5 +22,3 @@ Le fil de la fin de Period est l'impunité : mensonges de Braun-Pivet et de Darm
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/2-2023-11-15/CLAUDE|2023-11-15 → 2023-11-18]] (6 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/3-2023-11-19/CLAUDE|2023-11-19 → 2023-11-21]] (4 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/4-2023-11-22/CLAUDE|2023-11-22 → 2023-11-26]] (4 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/CLAUDE|2023-11-27 → 2023-11-30]] (5 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/6-2023-12-01/CLAUDE|2023-12-01 → 2023-12-02]] (3 Digests)
