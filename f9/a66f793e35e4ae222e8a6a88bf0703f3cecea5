@@ -1,0 +1,43 @@
+6-politics/2-sources/3-osonscauser/1-chronicle/1-2023-12-17/1-la-france-est-elle-le-pire.md
+  s_f0746dc02a4906::t_77d4bf8c4aafb4 3
+6-politics/2-sources/3-osonscauser/1-chronicle/1-2023-12-17/2-surete-nucleaire-comment-on-evite-le.md
+  s_f0746dc02a4906::t_0d1016f26ec3ff 3
+6-politics/2-sources/3-osonscauser/1-chronicle/1-2023-12-17/3-ecole-privee-le-drame-qui-nous.md
+  s_f0746dc02a4906::t_1db3485313a462 3
+6-politics/2-sources/3-osonscauser/1-chronicle/1-2023-12-17/4-les-milliardaires-un-nouveau-probleme-historique.md
+  s_f0746dc02a4906::t_0013ca321ce9cf 3
+6-politics/2-sources/3-osonscauser/1-chronicle/1-2023-12-17/CLAUDE.md
+  s_f0746dc02a4906::t_7fd59e5e571f36 1-24
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-03-06/1-pourquoi-netanyahu-veut-detruire-l-unrwa.md
+  s_f0746dc02a4906::t_1e063ead390af9 1-85
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-03-06/2-austerite-en-europe-face-aux-etats.md
+  s_f0746dc02a4906::t_c045e53d1b5d9e 1-79
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-03-06/3-l-origine-du-conflit-de-l.md
+  s_f0746dc02a4906::t_b0da4291a5271b 1-109
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-03-06/4-qui-est-vraiment-rima-hassan.md
+  s_f0746dc02a4906::t_805863497a87f8 1-90
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-03-06/5-le-grand-remplacement-la-preuve-par.md
+  s_f0746dc02a4906::t_e0d0c168ba3c44 1-83
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-03-06/6-legislatives-tout-ce-qu-il-faut.md
+  s_f0746dc02a4906::t_24d9e5f3303e38 1-108
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-03-06/CLAUDE.md
+  s_f0746dc02a4906::t_d6431a75416727 1-25
+6-politics/2-sources/3-osonscauser/1-chronicle/CLAUDE.md
+  s_f0746dc02a4906::t_5d712337980fdc 6-9,13,15,19-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f9a66f793e35e4ae222e8a6a88bf0703f3cecea5",
+  "prompts": {},
+  "sessions": {
+    "s_f0746dc02a4906": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-af2db91179241cb12",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
