@@ -3,66 +3,85 @@ title: "CYRUS NORTH EXPLIQUE le MARXISME à CHRIS de @Positions_revue !!"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12
 owner: diplo
 preview: >-
-  La PaduTeam soutient, par la voix de Chris, que la vulgarisation sponsorisée
-  de Cyrus North trahit Marx : le Capital est une critique de l'économie, le
-  capital un rapport de propriété et non de l'argent, l'aliénation une
-  séparation de classe et non un abrutissement.
+  La PaduTeam soutient que la vidéo de Cyrus North sur le Capital, sponsorisée
+  par un éditeur de manga, n'est qu'une pub : elle confond économie et
+  critique de l'économie politique, capital et argent, aliénation et
+  abrutissement, et n'explique ni la marchandise ni la valeur.
 source: paduteam
 url: https://www.youtube.com/watch?v=7d1lLvnd2cE
 youtube_id: "7d1lLvnd2cE"
 published: 2019-09-12
 duration: null
 raw: paduteam/7d1lLvnd2cE.md
-ingested: 2026-10-31
-digest_version: 1
+ingested: 2026-11-01
+digest_version: 3
 model: claude-sonnet-5-5
+mentions:
+  - {name: Padu, kind: personne, labels: [vidéaste], qualifiers: [animateur, intervenant]}
+  - {name: Chris, kind: personne, labels: [militant], qualifiers: [invité, intervenant]}
+  - {name: Cyrus North, kind: personne, labels: [vidéaste], qualifiers: [sujet, cité]}
+  - {name: Karl Marx, kind: personne, labels: [philosophe], qualifiers: [sujet], heard_as: Carl Marx}
+  - {name: Thomas Piketty, kind: personne, labels: [chercheur], qualifiers: [mentionné], heard_as: piketti}
+  - {name: Francis Cousin, kind: personne, labels: [écrivain], qualifiers: [mentionné]}
+  - {name: Positions Revue, kind: organisation, labels: [média], qualifiers: [mentionné], heard_as: position revue}
+  - {name: Politicon, kind: organisation, labels: [média], qualifiers: [mentionné]}
+  - {name: Kurokawa, kind: organisation, labels: [entreprise], qualifiers: [sujet]}
+  - {name: Le Capital, kind: œuvre, labels: [livre], qualifiers: [sujet]}
+  - {name: 'Le coup de fil #30', kind: œuvre, labels: [vidéo], qualifiers: [sujet, cité], heard_as: 'le coup de fil # 30'}
+relations:
+  - {from: Karl Marx, relation: auteur, to: Le Capital}
+  - {from: Cyrus North, relation: auteur, to: 'Le coup de fil #30'}
 ---
 # CYRUS NORTH EXPLIQUE le MARXISME à CHRIS de @Positions_revue !!
 
-## 1. L'aliénation n'est pas l'abrutissement : c'est la séparation du travailleur de son travail et de son produit.
+## 1. Le Capital n'est pas un livre d'économie : c'est une critique de l'économie politique, et croire à l'économie comme science relève déjà du fétichisme de la marchandise.
 
-Chris reproche à Cyrus North de faire de l'aliénation une affaire de technique et de complexité. Pour lui, l'ouvrier comprend très bien ce qu'il fabrique. Ce qui lui manque, c'est tout pouvoir sur la conception et les moyens, qui reviennent aux ingénieurs et aux cadres.
+Découper Marx en livres économiques, philosophiques et politiques n'a pas de sens : le sous-titre du Capital est Critique de l'économie politique.
 
-> [31:16](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=1876s) « l'aliénation c'est un concept au début de la pensé de marque c'est vraiment la séparation du travailleur et de son et de son travail »
+> [15:58](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=958s) « des livres philosophiques politique c'est n'importe quoi »
 
-> [33:21](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=2001s) « bah ta gueule Jean-Luc euh parce que ça il y a des des ingénieurs et des des cadres qui ont décidé que si on mettait une vise en plus ok ça tiendrait mieux dans le temps mais ça coûterait trop cher »
+> [16:28](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=988s) « croire dans la science économie c'est déjà un effet du fétichisme de la marchandise »
+
+## 2. Le capital n'est pas de l'argent mais un rapport de propriété, et confondre les deux est un réflexe piketiste.
+
+On peut accumuler de l'argent sans être capitaliste, et être capitaliste avec peu d'argent mais une part de propriété.
+
+> [23:25](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=1405s) « le capital ce n'est pas de l'argent c'est pas de l'accumulation de l'argent »
+
+> [23:56](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=1436s) « un capitaliste c'est un rapport de propriété le capital c'est pas de l'argent »
+
+> [24:59](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=1499s) « c'est accumuler de la propriété de moyens de production »
+
+## 3. L'aliénation n'est pas l'abrutissement : appuyer sur un bouton ne rend pas aliéné, et un travail abrutissant peut ne pas l'être.
+
+Les ouvriers des usines modernes comprennent parfaitement ce qu'ils fabriquent. Cette confusion mène à une critique petite-bourgeoise, décroissante, de la technique.
 
 > [37:32](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=2252s) « comme si l'aliénation c'était l'abrutissement tu vois ils confondent l'abrutissement et l'aliénation »
 
-## 2. Le capital n'est pas de l'argent mais un rapport social de propriété.
+> [38:03](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=2283s) « tu peux très bien abrutir des gens à faire des tâches idiotes sans être dans un rapport capitaliste »
 
-La PaduTeam range cette confusion parmi les réflexes piketistes. Quelqu'un peut accumuler de l'argent sans être capitaliste, et un petit porteur de parts l'est dès qu'il détient un droit de propriété qui donne accès à la plus-value. Accumuler du capital, c'est accumuler de la propriété de moyens de production.
+## 4. L'aliénation, c'est savoir ce qu'on produit sans avoir aucun pouvoir dessus : l'ouvrier à qui on dit de se taire, le soignant empêché de bien soigner.
 
-> [23:56](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=1436s) « le capital c'est pas de l'argent on peut vous pouvez très bien avoir 500 € de part sociale d'une entreprise qui vous donne droit de propriété sur cette entreprise »
+L'exemple vient du soin : le médecin qui pourrait mieux soigner est rattrapé par les contraintes de valorisation imposées par un tiers.
 
-> [24:59](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=1499s) « c'est accumuler du capital c'est accumuler de la propriété de moyens de production c'est pas accumuler euh accumuler de l'argent »
+> [33:21](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=2001s) « et là il y a un gars qui te dit bah ta gueule Jean-Luc »
 
-## 3. Le Capital n'est pas un livre d'économie : c'est une critique de l'économie politique.
+> [47:58](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=2878s) « tu voudrais le soigner le mieux possible mais tu es aliéné par le fait que tu as des directives »
 
-Présenter l'œuvre comme un livre d'économie, c'est ignorer son sous-titre. Marx s'attaque à l'économie comme fausse science, et diviser ses textes en livres économiques, philosophiques ou politiques n'a pas de sens.
+> [50:05](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=3005s) « tu es aliéné parce que tu te dis tiens j'aurais pu faire un truc nif pour le gars il aurait pu vivre 30 ans »
 
-> [15:58](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=958s) « des livres philosophiques politique c'est n'importe quoi ils sont tous philo éch politique »
+## 5. La production ne suit pas ses propres lois : elle suit celles du rapport capitaliste, et le fétichisme consiste à croire le contraire.
 
-> [16:28](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=988s) « Marx justement veut montrer que l'économie et cette science cette cette croyance dans de dans des lois extérieures à l'humanité de choses économiques n'est qu'un n'est que l'expression du fétichisme de la marchandise »
+Comme le fétiche des sociétés archaïques, la marchandise passe pour porter des lois qui viennent en réalité de nous.
 
-## 4. La production échappe au contrôle des producteurs, mais elle ne suit pas ses propres lois : elle suit celles du rapport capitaliste.
+> [50:35](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=3035s) « elle ne suit pas ses propres lois elle suit les lois de du rapport capitaliste »
 
-Le fétichisme de la marchandise consiste précisément à croire que ces lois sont extérieures et autonomes, alors qu'elles viennent de nous. Chris corrige ici la définition de Cyrus North.
+> [52:08](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=3128s) « non pourquoi le fétiche parce que vous faites ça »
 
-> [50:35](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=3035s) « elle ne suit pas ses propres lois elle suit les lois de du rapport capitaliste c'est-à-dire des lois un rapport social spécifique »
+## 6. La vidéo de Cyrus North n'est pas de la vulgarisation mais une pub, qui n'explique même pas ce qu'est une marchandise ni la valeur.
 
-> [51:05](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=3065s) « qu'elle est autonome oui que c'est ses propres lois c'est ça c'est les lois du marché et ces lois on y est soumis comme si c'était extérieur alors que ça vient de nous »
+Sponsorisée par Kurokawa pour un manga sur le Capital, elle égrène des concepts marxistes sans les définir.
 
-## 5. Le capital a d'abord transformé le travail humain en travail de machine, avant de remplacer l'homme par la machine.
-
-Normes, standardisation et contrôles rendent le travail abstrait comparable et calculable, quelles que soient les différences entre les personnes. C'est ce qui rend ensuite logique de fabriquer des machines pour le faire.
-
-> [41:10](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=2470s) « il a fallu que le capital transforme le travail humain en travail de machine c'est-à-dire c'est par les tâches tac les normes les standardises euh les les les contrôles »
-
-## 6. La vidéo de Cyrus North est une publicité, qui n'explique même pas la marchandise ni la valeur.
-
-Chris juge le format du coup de fil séduisant mais creux : il aligne des concepts marxistes sans les définir. Le partenariat avec la maison d'édition du manga achève de faire de la vidéo un produit de marketing plus qu'une introduction à Marx.
-
-> [54:15](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=3255s) « la vidéo c'est c'est vraiment de la pub en fait »
+> [54:15](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=3255s) « non la vidéo c'est c'est vraiment de la pub en fait »
 
 > [54:45](https://www.youtube.com/watch?v=7d1lLvnd2cE&t=3285s) « il a même pas expliqué ce qui était une marchandise ce qui était la valeur »

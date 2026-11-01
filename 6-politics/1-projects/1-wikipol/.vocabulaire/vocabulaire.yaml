@@ -28,6 +28,9 @@ kinds:
       témoin: {définition: "Rapporte ce qu'il a vécu ou vu.", statut: accepté}
       dirigeant-de-parti: {définition: "Dirige un parti ou en est un cadre dirigeant.", statut: proposé, introduit_par: paduteam/wsiChBGb6T0.md}
       chef-de-gouvernement: {définition: "Dirige le gouvernement d'un État (Premier ministre), à la date de la Publication.", statut: proposé, introduit_par: paduteam/ADd-wfitfm8.md}
+      philosophe: {définition: "Pense et écrit sur des questions de philosophie.", statut: proposé, introduit_par: paduteam/7d1lLvnd2cE.md}
+      philosophe: {définition: "Élabore et publie une pensée philosophique.", statut: proposé, introduit_par: paduteam/1fj9qJ21apI.md}
+      enseignant: {définition: "Enseigne dans un établissement scolaire.", statut: proposé, introduit_par: paduteam/1fj9qJ21apI.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -52,6 +55,7 @@ kinds:
       groupe-armé: {définition: "Un groupe qui combat les armes à la main, hors d'une armée d'État.", statut: accepté}
       think-tank: {définition: "Produit des analyses et des propositions politiques.", statut: accepté}
       institut-de-sondage: {définition: "Mesure l'opinion par des enquêtes et des sondages.", statut: proposé, introduit_par: paduteam/X0tXWZsjENQ.md}
+      institut-de-recherche: {définition: "Organisme qui mène des études et des évaluations, notamment économiques, et en publie les résultats.", statut: proposé, introduit_par: blast/FCVoy7L96sI.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

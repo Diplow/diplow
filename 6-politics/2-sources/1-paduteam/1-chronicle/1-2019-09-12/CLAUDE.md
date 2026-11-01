@@ -3,16 +3,16 @@ title: "2019-09-12 → 2024-01-01"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12
 owner: diplo
 preview: >-
-  Sur quatre vidéos, de 2019 à 2024, la PaduTeam défend un Marx fidèle contre
-  la vulgarisation et lit les parcours individuels, de l'ingénieur nietzschéen
-  à l'ex-trotskiste passé à l'extrême droite, comme des effets de classe et de
-  matrices bourgeoises.
+  La PaduTeam passe tout au crible matérialiste : une vulgarisation du Capital
+  qui n'est qu'une pub, les parcours d'un ingénieur nietzschéen et d'un
+  ex-trotskiste passé à l'extrême droite, la gestion catastrophique de
+  l'affaire Quatennens.
 ---
 # 2019-09-12 → 2024-01-01
 
-Sur ces cinq années, la PaduTeam applique une même grille matérialiste à des objets très différents. Elle commence par défendre Marx contre une vulgarisation sponsorisée qui le trahit : le Capital est une critique de l'économie, le capital un rapport de propriété et non d'argent, l'aliénation une séparation de classe et non un abrutissement ([[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/1-cyrus-north-explique-le-marxisme-a|CYRUS NORTH EXPLIQUE le MARXISME à CHRIS de @Positions_revue !!]]). La même grille sert ensuite à lire des trajectoires individuelles. Le passage de Mélenchon à Nietzsche est le sociotype classique de l'ingénieur isolé, politisé par le YouTube masculiniste, qui habille sa victimisation de références philosophiques. Le glissement du lambertisme à l'extrême droite est l'effet de l'islamophobie, nourrie par deux matrices bourgeoises, réactionnaire et laïcarde, qui transforment la laïcité en culturalisme.
+Sur ces quatre vidéos, de 2019 à 2024, la PaduTeam ramène des discours et des trajectoires à leur ancrage matériel. Dans [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/1-cyrus-north-explique-le-marxisme-a|la vidéo sur Cyrus North]], elle soutient que sa présentation du Capital, sponsorisée par un éditeur de manga, n'est qu'une pub : elle confond économie et critique de l'économie politique, capital et argent, et n'explique ni la marchandise ni la valeur. Dans [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/2-d-ado-gauchiste-a-ingenieur-nietzscheen|le récit d'Arthur]], le passage de Mélenchon à Nietzsche n'est pas une conversion réfléchie mais un sociotype classique de jeune ingénieur isolé, politisé par YouTube masculiniste, qui se victimise sans ancrage matériel.
 
-Entre les deux, la Source s'occupe de la gauche elle-même. Elle juge catastrophique la gestion de l'affaire Quatennens, par lui puis par Mélenchon, qui efface l'asymétrie du couple. Elle défend une réhabilitation sous condition de transformation et de dépositionnement, et annonce qu'elle soutiendra Mélenchon en 2027 sans rien lâcher sur les VSS.
+Le même geste vaut pour la politique et l'extrême droite. Elle juge catastrophique la gestion de [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/3-affaire-quatennens-l-erreur-de-melenchon|l'affaire Quatennens]], qui efface l'asymétrie du couple. Elle défend une réhabilitation sous condition de transformation et de dépositionnement, et soutiendra Mélenchon en 2027 sans rien lâcher sur les VSS. Enfin, [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/4-from-trotskiste-to-rac-ste-il|le parcours de Luc]], du lambertisme à l'extrême droite, s'explique selon elle par l'islamophobie, nourrie de deux matrices bourgeoises, réactionnaire et laïcarde, qui font de la laïcité un culturalisme.
 
 ## Contenu
 
