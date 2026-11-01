@@ -1,6 +1,6 @@
 ---
 title: "2024-11-01 → 2024-11-10"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01
 owner: diplo
 preview: >-
   Avec Dr Zoé, la PaduTeam démonte ce qu'elle lit comme des discours de classe
@@ -16,8 +16,8 @@ Le reste de la Period élargit le propos. En recevant l'historienne Zoé Dubus �
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01/1-cette-droitarde-tente-de-nous-clasher|Cette DROITARDE tente de nous CLASHER  ÇA TOURNE MAL !! (x @Dr_Zoé_YT)]] (2024-11-01)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01/2-guillaume-kasbarian-le-ministre-qui-deteste|GUILLAUME KASBARIAN le MINISTRE qui DÉTESTE les FONCTIONNAIRES   (avec @Dr_Zoé_YT)]] (2024-11-01)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01/3-pinard-et-politique-la-droite-des|PINARD et POLITIQUE  la DROITE DES LOBBYS vs la GAUCHE DU TERROIR (X @Dr_Zoé_YT) !!]] (2024-11-01)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01/4-la-breche-legalisation-de-toutes-les|LA BRÈCHE - LÉGALISATION de TOUTES les DR0GUES + AFFAIRE ANDY KERBRATFI (x ZOË DUBUS @Dr_Zoé_YT)]] (2024-11-03)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01/5-ce-que-signifie-vraiment-l-election|Ce que SIGNIFIE VRAIMENT l'ÉLECTION de TRUMP !! (avec @Positions_revue )]] (2024-11-10)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01/1-cette-droitarde-tente-de-nous-clasher|Cette DROITARDE tente de nous CLASHER  ÇA TOURNE MAL !! (x @Dr_Zoé_YT)]] (2024-11-01)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01/2-guillaume-kasbarian-le-ministre-qui-deteste|GUILLAUME KASBARIAN le MINISTRE qui DÉTESTE les FONCTIONNAIRES   (avec @Dr_Zoé_YT)]] (2024-11-01)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01/3-pinard-et-politique-la-droite-des|PINARD et POLITIQUE  la DROITE DES LOBBYS vs la GAUCHE DU TERROIR (X @Dr_Zoé_YT) !!]] (2024-11-01)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01/4-la-breche-legalisation-de-toutes-les|LA BRÈCHE - LÉGALISATION de TOUTES les DR0GUES + AFFAIRE ANDY KERBRATFI (x ZOË DUBUS @Dr_Zoé_YT)]] (2024-11-03)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01/5-ce-que-signifie-vraiment-l-election|Ce que SIGNIFIE VRAIMENT l'ÉLECTION de TRUMP !! (avec @Positions_revue )]] (2024-11-10)

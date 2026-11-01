@@ -1,6 +1,6 @@
 ---
 title: "Ce que SIGNIFIE VRAIMENT l'ÉLECTION de TRUMP !! (avec @Positions_revue )"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01
 owner: diplo
 preview: >-
   La PaduTeam soutient que Kamala Harris, Jospin de 2002 à l'américaine, a

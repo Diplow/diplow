@@ -1,6 +1,6 @@
 ---
 title: "LA BRÈCHE - LÉGALISATION de TOUTES les DR0GUES + AFFAIRE ANDY KERBRATFI (x ZOË DUBUS @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01
 owner: diplo
 preview: >-
   La PaduTeam reçoit l'historienne Zoé Dubus : à partir de l'affaire Kerbrat,

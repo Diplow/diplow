@@ -1,6 +1,6 @@
 ---
 title: "GUILLAUME KASBARIAN le MINISTRE qui DÉTESTE les FONCTIONNAIRES   (avec @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/5-2024-11-01
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/1-2024-11-01
 owner: diplo
 preview: >-
   La PaduTeam soutient que la hausse des jours de carence voulue par Kasbarian

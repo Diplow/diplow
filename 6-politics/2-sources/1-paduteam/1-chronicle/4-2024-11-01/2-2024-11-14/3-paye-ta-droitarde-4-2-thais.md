@@ -1,6 +1,6 @@
 ---
 title: "PAYE TA DROITARDE #4.2 THAÏS D'ESCUFON COACH les INCELS POUR faire des BÉBÉS BLANCS (x @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/6-2024-11-14
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/2-2024-11-14
 owner: diplo
 preview: >-
   La PaduTeam soutient que l'antiféminisme de Thaïs d'Escufon est d'abord un

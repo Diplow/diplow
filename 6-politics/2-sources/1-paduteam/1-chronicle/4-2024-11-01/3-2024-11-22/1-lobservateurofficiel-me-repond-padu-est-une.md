@@ -1,6 +1,6 @@
 ---
 title: "@lobservateurOfficiel  ME RÉPOND  PADU EST UNE PETITE SALLLL000PE !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/6-2024-11-14
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/3-2024-11-22
 owner: diplo
 preview: >-
   La PaduTeam soutient que L'Observateur Officiel, incapable de répondre aux

@@ -1,6 +1,6 @@
 ---
 title: "PAYE TA DROITARDE #4.1  THAÏS D'ESCUFON, L'IDENTITAIRE qui DÉTESTE les BÉBÉS NOIRS (x @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/6-2024-11-14
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/2-2024-11-14
 owner: diplo
 preview: >-
   La PaduTeam soutient que Thaïs d'Escufon n'a pas changé de projet : de
