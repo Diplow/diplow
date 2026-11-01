@@ -1,0 +1,21 @@
+6-politics/2-sources/4-blast/1-chronicle/1-l-etude-qui-prouve-que-macron.md
+  s_569dbb4d62f2f3::t_3690036ba05ac0 1-79
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_569dbb4d62f2f3::t_13186e92258d65 2,6-9,13,15-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ed2c4e5d5b82add67c37212591c82f4187e8aa77",
+  "prompts": {},
+  "sessions": {
+    "s_569dbb4d62f2f3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a6e8910-f13d-4cf1-8345-cc32da1c1f94",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
