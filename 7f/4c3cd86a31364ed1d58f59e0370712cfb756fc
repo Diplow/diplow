@@ -1,0 +1,35 @@
+6-politics/2-sources/3-osonscauser/1-chronicle/5-2024-10-08/5-pourquoi-le-rn-est-toujours-un.md
+  s_70e2b8820e4c39::t_a6097d7d29d8ed 1-109
+6-politics/2-sources/3-osonscauser/1-chronicle/5-2024-10-08/6-obesite-l-epidemie-du-21eme-siecle.md
+  s_70e2b8820e4c39::t_dd95e86ab2652b 1-71
+6-politics/2-sources/3-osonscauser/1-chronicle/5-2024-10-08/CLAUDE.md
+  s_70e2b8820e4c39::t_a33547af1ba445 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/3-osonscauser/1-chronicle/6-2025-02-06/1-le-plan-de-trump-voler-gaza.md
+  s_70e2b8820e4c39::t_00afce259c2019 1-77
+6-politics/2-sources/3-osonscauser/1-chronicle/6-2025-02-06/2-comment-elon-musk-s-est-radicalise.md
+  s_70e2b8820e4c39::t_e6ce5d0a207854 1-93
+6-politics/2-sources/3-osonscauser/1-chronicle/6-2025-02-06/3-comment-israel-colonise-la-cisjordanie-1967.md
+  s_70e2b8820e4c39::t_f50135e442d25d 1-98
+6-politics/2-sources/3-osonscauser/1-chronicle/6-2025-02-06/4-nucleaire-une-energie-inadaptee-au-changement.md
+  s_70e2b8820e4c39::t_b7b6d9729af3a4 1-78
+6-politics/2-sources/3-osonscauser/1-chronicle/6-2025-02-06/CLAUDE.md
+  s_70e2b8820e4c39::t_34fab69fd9bed9 1-24
+6-politics/2-sources/3-osonscauser/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_4c3ae7bb8ca1b0 6-9,13,15,17,25-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7f4c3cd86a31364ed1d58f59e0370712cfb756fc",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
