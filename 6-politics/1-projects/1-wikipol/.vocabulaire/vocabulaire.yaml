@@ -72,6 +72,9 @@ kinds:
       expert-comptable: {définition: "Professionnel du chiffre qui tient et certifie la comptabilité d'entreprises.", statut: proposé, introduit_par: paduteam/OWvRp0vK2Sg.md}
       réalisateur: {définition: "Réalise des films de fiction ou des documentaires.", statut: proposé, introduit_par: blast/tH60p9vvmXQ.md}
       scénariste: {définition: "Écrit des scénarios de films.", statut: proposé, introduit_par: blast/tH60p9vvmXQ.md}
+      ancien-diplomate: {définition: "A représenté un État ou une organisation et ne le fait plus, à la date de la Publication.", statut: proposé, introduit_par: blast/YQayX26U_oU.md}
+      sondeur: {définition: "Mesure et analyse l'opinion publique par des sondages.", statut: proposé, introduit_par: blast/4uRY8jKfQH4.md}
+      prince-héritier: {définition: "Héritier désigné du trône d'une monarchie, à la date de la Publication.", statut: proposé, introduit_par: boniface/m427VTjvPno.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -145,6 +148,7 @@ kinds:
       conférence: {définition: "Réunion de responsables et d'experts qui débattent d'un sujet.", statut: proposé, introduit_par: boniface/gBhXKzKp9mo.md}
       opération-militaire: {définition: "Action militaire d'envergure menée par une armée, comme un assaut ou un débarquement.", statut: proposé, introduit_par: paduteam/BE6RyV_X6m4.md}
       défilé: {définition: "Parade publique, notamment militaire, organisée lors d'une fête nationale.", statut: proposé, introduit_par: boniface/mZfWVPlac4Y.md}
+      congrès: {définition: "Assemblée des délégués d'un parti, qui en fixe la direction et en désigne les dirigeants.", statut: proposé, introduit_par: boniface/OEVYfzPYeCI.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
