@@ -3,22 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle
 owner: diplo
 preview: >-
-  La PaduTeam ramène discours, parcours et affaires à leurs bases matérielles
-  et de classe, puis fait de Gaza son front en 2024 : deux poids deux mesures,
-  répression du soutien à la Palestine, génocide. Elle fait des VSS un fait
-  social massif et réclame une gauche de rupture ancrée dans les classes
-  populaires.
+  De 2019 à novembre 2024, la PaduTeam ramène discours, parcours et affaires à
+  leurs bases matérielles et de classe, dénonce le deux poids deux mesures
+  médiatique sur Gaza et appelle à une gauche de rupture réenracinée dans les
+  classes populaires.
 ---
 # Chronicle
 
-La Chronicle s'ouvre sur une lecture matérialiste : la PaduTeam ramène d'abord discours, parcours et affaires à leurs bases matérielles et de classe. Début 2024, Israël et Gaza prennent le premier plan et ne le quittent plus. Elle dénonce un double standard médiatique autour de Gaza et de la cancel culture, défend Rima Hassan et parle de génocide ([[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2024-03-26]]).
+Le fil qui court sur toute la Chronicle est une lecture matérialiste : la PaduTeam ramène discours, parcours et affaires à leurs bases matérielles et de classe. Cette grille sert d'abord à décrypter l'actualité politique ([[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2024-03-26]]), puis, dans les derniers mois, à lire les figures de droite par leur classe et leur intérêt ([[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/CLAUDE|2024-05-31 → 2024-11-01]]).
 
-Au printemps 2024, le propos se durcit. La PaduTeam décrit un deux poids deux mesures sur Israël, lit une répression croissante du soutien à la Palestine et juge le bombardement de Rafah intentionnel. Elle reçoit aussi Dr Zoé sur les médecins et fait des violences sexuelles et sexistes un fait social massif ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/CLAUDE|2024-03-28 → 2024-05-30]]).
+À partir de début 2024, Gaza occupe une place centrale. La PaduTeam dénonce un double standard médiatique, parle de génocide et défend Rima Hassan. Elle juge intentionnel le bombardement de Rafah et lit une répression croissante du soutien à la Palestine ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/CLAUDE|2024-03-28 → 2024-05-30]]). Elle poursuit ensuite en démontant les discours pro-israéliens des médias.
 
-De juin à octobre 2024, elle démonte les discours qui blanchissent Israël dans les médias, défend Imane Khelif et voit dans Mazan un fait politique. Elle réclame une gauche de rupture ancrée dans les classes populaires et juge structurel le problème des violences sexuelles à LFI ([[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/CLAUDE|2024-05-31 → 2024-10-16]]).
+D'autres faits de société sont traités comme des faits politiques. Les VSS deviennent pour elle un fait social massif, et la parole de Dr Zoé sur les médecins est reçue sur ce terrain. Elle défend Imane Khelif et fait de Mazan un fait politique. La conclusion, à la fin de la période, est un appel à une gauche de rupture réenracinée dans les classes populaires.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2024-03-26]] (16 Digests)
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/CLAUDE|2024-03-28 → 2024-05-30]] (17 Digests)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/CLAUDE|2024-05-31 → 2024-10-16]] (12 Digests)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2024-05-31/CLAUDE|2024-05-31 → 2024-11-01]] (18 Digests)
