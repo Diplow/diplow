@@ -1,6 +1,6 @@
 ---
 title: "APOLOGIE du TERR0RISME  PANOT FAIT PÉTER le PLATEAU de BFMTV en direct !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/1-2024-11-27
 owner: diplo
 preview: >-
   La PaduTeam soutient que la proposition de Bernalicis, qui remet l'apologie

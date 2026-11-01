@@ -1,6 +1,6 @@
 ---
 title: "MACRON DÉRAPE  Le PROBLÈME des URGENCES, c'est que c'est rempli de MAMADOU !! (X @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/1-2024-11-27
 owner: diplo
 preview: >-
   La PaduTeam soutient que les urgences saturent à cause de politiques

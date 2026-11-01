@@ -1,6 +1,6 @@
 ---
 title: "Un INCONNU ASSASSINE le PDG de la + GROSSE ASSURANCE SANTÉ des USA (X @Dr_Zoé_YT) !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/6-2024-12-05
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/3-2024-12-05
 owner: diplo
 preview: >-
   La PaduTeam condamne le meurtre du PDG d'UnitedHealthcare mais soutient que

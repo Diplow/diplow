@@ -1,6 +1,6 @@
 ---
 title: "MILA REFUSE LES AVANCES DE KROC BLANC  IL PORTE PLAINTE !! (@fdenews)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/2-2024-12-01
 owner: diplo
 preview: >-
   La PaduTeam soutient que Kroc Blanc brandit une plainte contre Mila quinze

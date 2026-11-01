@@ -1,6 +1,6 @@
 ---
 title: "ONLYFAN  BAISER avec 100 MECS en 1 JOUR est-il VRAIMENT MARXISTE  (X @Dr_Zoé_YT Positions Revue)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/1-2024-11-27
 owner: diplo
 preview: >-
   Le consentement n'explique pas la violence : comme l'ouvrier signe son

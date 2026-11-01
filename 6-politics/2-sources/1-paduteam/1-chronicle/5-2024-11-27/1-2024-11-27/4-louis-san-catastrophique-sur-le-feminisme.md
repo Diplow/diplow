@@ -1,6 +1,6 @@
 ---
 title: "LOUIS SAN CATASTROPHIQUE sur le FÉMINISME au JAPON ! (avec @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/1-2024-11-27
 owner: diplo
 preview: >-
   La PaduTeam soutient, avec Dr Zoé, que la vidéo de Louis San sur les hommes

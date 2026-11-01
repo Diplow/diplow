@@ -1,6 +1,6 @@
 ---
 title: "DE WOKE À FACHO, @Slapp_ RACONTE SA REDPILL LA + CRINGE !!  (avec @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/6-2024-12-05
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/4-2024-12-09
 owner: diplo
 preview: >-
   La PaduTeam soutient que le parcours de Slapp, de woke à droitard, est celui

@@ -169,6 +169,7 @@ kinds:
       congrès: {définition: "Assemblée des délégués d'un parti, qui en fixe la direction et en désigne les dirigeants.", statut: proposé, introduit_par: boniface/OEVYfzPYeCI.md}
       persécution: {définition: "Vague de violences dirigées contre un groupe en raison de sa religion ou de ses croyances.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
       coup-d-état: {définition: "Prise du pouvoir par la force, notamment par l'armée, contre un gouvernement en place.", statut: proposé, introduit_par: blast/K2a3NDKQs9s.md}
+      catastrophe-naturelle: {définition: "Phénomène naturel destructeur, comme un cyclone ou un séisme, qui frappe une population.", statut: proposé, introduit_par: paduteam/1OUcDuz-HjY.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -204,6 +205,7 @@ kinds:
       résolution: {définition: "Texte adopté par le vote d'une assemblée ou d'une organisation internationale.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
       paquet-législatif: {définition: "Ensemble de textes législatifs adoptés ensemble pour atteindre un même objectif.", statut: proposé, introduit_par: osonscauser/e4ep4Ky23hI.md}
       accord: {définition: "Accord conclu entre parties, États ou non, qui fixe un processus politique.", statut: proposé, introduit_par: boniface/GJeVOIsPrtU.md}
+      code: {définition: "Recueil de lois qui organise une matière du droit, comme le Code civil.", statut: proposé, introduit_par: blast/HFuCQg-owpw.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}

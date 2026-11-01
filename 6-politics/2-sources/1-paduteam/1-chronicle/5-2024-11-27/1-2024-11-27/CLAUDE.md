@@ -1,6 +1,6 @@
 ---
 title: "2024-11-27 → 2024-12-01"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/1-2024-11-27
 owner: diplo
 preview: >-
   La PaduTeam lit chaque sujet par les structures : une loi PS de 2014 que le
@@ -16,7 +16,7 @@ Le fil se prolonge sur le terrain féministe, avec Dr Zoé. Le consentement n'ex
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27/1-apologie-du-terr0risme-panot-fait-peter|APOLOGIE du TERR0RISME  PANOT FAIT PÉTER le PLATEAU de BFMTV en direct !!]] (2024-11-27)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27/2-onlyfan-baiser-avec-100-mecs-en|ONLYFAN  BAISER avec 100 MECS en 1 JOUR est-il VRAIMENT MARXISTE  (X @Dr_Zoé_YT Positions Revue)]] (2024-12-01)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27/3-macron-derape-le-probleme-des-urgences|MACRON DÉRAPE  Le PROBLÈME des URGENCES, c'est que c'est rempli de MAMADOU !! (X @Dr_Zoé_YT)]] (2024-12-01)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/4-2024-11-27/4-louis-san-catastrophique-sur-le-feminisme|LOUIS SAN CATASTROPHIQUE sur le FÉMINISME au JAPON ! (avec @Dr_Zoé_YT)]] (2024-12-01)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/1-2024-11-27/1-apologie-du-terr0risme-panot-fait-peter|APOLOGIE du TERR0RISME  PANOT FAIT PÉTER le PLATEAU de BFMTV en direct !!]] (2024-11-27)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/1-2024-11-27/2-onlyfan-baiser-avec-100-mecs-en|ONLYFAN  BAISER avec 100 MECS en 1 JOUR est-il VRAIMENT MARXISTE  (X @Dr_Zoé_YT Positions Revue)]] (2024-12-01)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/1-2024-11-27/3-macron-derape-le-probleme-des-urgences|MACRON DÉRAPE  Le PROBLÈME des URGENCES, c'est que c'est rempli de MAMADOU !! (X @Dr_Zoé_YT)]] (2024-12-01)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/1-2024-11-27/4-louis-san-catastrophique-sur-le-feminisme|LOUIS SAN CATASTROPHIQUE sur le FÉMINISME au JAPON ! (avec @Dr_Zoé_YT)]] (2024-12-01)

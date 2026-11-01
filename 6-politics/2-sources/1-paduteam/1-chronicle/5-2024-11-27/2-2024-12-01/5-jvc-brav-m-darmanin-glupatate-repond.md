@@ -1,6 +1,6 @@
 ---
 title: "JVC, BRAV-M, DARMANIN, @Glupatate RÉPOND À MES ACCUSATIONS !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/2-2024-12-01
 owner: diplo
 preview: >-
   Entretien de Padu avec Glupatate, qui raconte sa politisation et son arrivée

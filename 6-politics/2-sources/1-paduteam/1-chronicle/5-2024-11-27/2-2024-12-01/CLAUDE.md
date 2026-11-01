@@ -1,6 +1,6 @@
 ---
 title: "2024-12-01 → 2024-12-04"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/2-2024-12-01
 owner: diplo
 preview: >-
   La PaduTeam traite le quotidien comme un terrain de classe : alimentation,
@@ -17,8 +17,8 @@ Ce fil mène à une défense de la structuration. Toute organisation à gauche e
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/1-cuisine-et-politique-nos-avis-problematiques|CUISINE et POLITIQUE  nos AVIS PROBLÉMATIQUES !! (avec @Dr_Zoé_YT)]] (2024-12-01)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/2-glupatate-quitte-la-brav-m-x|GLUPATATE QUITTE LA BRAV-M ! (X @Dr_Zoé_YT)]] (2024-12-01)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/3-mila-refuse-les-avances-de-kroc|MILA REFUSE LES AVANCES DE KROC BLANC  IL PORTE PLAINTE !! (@fdenews)]] (2024-12-02)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/4-motion-de-censure-causes-et-consequences|MOTION DE CENSURE  CAUSES ET CONSÉQUENCES !! (X @Dr_Zoé_YT)]] (2024-12-03)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/5-jvc-brav-m-darmanin-glupatate-repond|JVC, BRAV-M, DARMANIN, @Glupatate RÉPOND À MES ACCUSATIONS !!]] (2024-12-04)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/2-2024-12-01/1-cuisine-et-politique-nos-avis-problematiques|CUISINE et POLITIQUE  nos AVIS PROBLÉMATIQUES !! (avec @Dr_Zoé_YT)]] (2024-12-01)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/2-2024-12-01/2-glupatate-quitte-la-brav-m-x|GLUPATATE QUITTE LA BRAV-M ! (X @Dr_Zoé_YT)]] (2024-12-01)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/2-2024-12-01/3-mila-refuse-les-avances-de-kroc|MILA REFUSE LES AVANCES DE KROC BLANC  IL PORTE PLAINTE !! (@fdenews)]] (2024-12-02)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/2-2024-12-01/4-motion-de-censure-causes-et-consequences|MOTION DE CENSURE  CAUSES ET CONSÉQUENCES !! (X @Dr_Zoé_YT)]] (2024-12-03)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/2-2024-12-01/5-jvc-brav-m-darmanin-glupatate-repond|JVC, BRAV-M, DARMANIN, @Glupatate RÉPOND À MES ACCUSATIONS !!]] (2024-12-04)

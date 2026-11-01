@@ -1,6 +1,6 @@
 ---
 title: "RENONCE à sa NATIONALITÉ FRANÇAISE pour les IMPÔTS !! (@OseilleTV)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/6-2024-12-05
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/3-2024-12-05
 owner: diplo
 preview: >-
   La PaduTeam soutient qu'OseilleTV, youtubeur de l'expatriation fiscale,
