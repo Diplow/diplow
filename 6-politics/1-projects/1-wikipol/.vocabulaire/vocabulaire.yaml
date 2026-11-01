@@ -59,6 +59,7 @@ kinds:
       lanceur-d-alerte: {définition: "Révèle ou signale, dans l'intérêt général, des faits illégaux ou dangereux dont il a connaissance.", statut: proposé, introduit_par: blast/JQ-n9rdqUe0.md}
       défenseur-des-droits: {définition: "Dirige l'autorité indépendante chargée de défendre les droits des citoyens face à l'administration.", statut: proposé, introduit_par: blast/ZQ8hNH3OOrE.md}
       étudiant: {définition: "Suit des études, notamment supérieures, à la date de la Publication.", statut: proposé, introduit_par: paduteam/xrGePx2JwbM.md}
+      commissaire-européen: {définition: "Membre de la Commission européenne, à la date de la Publication.", statut: proposé, introduit_par: blast/RAbqVRNbepU.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
