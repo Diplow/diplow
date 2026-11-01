@@ -3,22 +3,22 @@ title: "2017-12-20 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20
 owner: diplo
 preview: >-
-  Boniface lit l'actualité mondiale à travers la critique de l'unilatéralisme
-  de Trump, qui démantèle l'arms control, et défend l'ONU et le
-  multi-alignement. Il voit Israël perdre la bataille des opinions et traite
-  le football comme un objet géopolitique.
+  Boniface lit l'ordre mondial à travers Trump, qu'il juge unilatéral et
+  hostile à l'Arms control, et défend un multilatéralisme en crise, une ONU
+  indispensable et une France indépendante. Le soft power, le football et
+  l'OCS lui servent de grilles de lecture des puissances.
 ---
 # 2017-12-20 → 2026-10-30
 
-Le fil qui traverse la Chronique est la critique de l'unilatéralisme américain. Boniface soutient que Trump, après Bush, a démantelé l'arms control. En dénonçant le traité FNI, Trump rejette à ses yeux l'Arms control et le multilatéralisme. La rupture de l'accord nucléaire iranien est pour lui une tentative d'imposer un monde unipolaire, que l'Europe doit refuser. Face à cela, il tient l'ONU pour indispensable et lit l'OCS non comme une OTAN asiatique mais comme un signe de multi-alignement.
+Le fil principal de la Period est la lecture que Boniface fait de l'ère Trump. Il y voit une tentative d'imposer un monde unipolaire, que l'Europe doit refuser : la rupture de l'accord nucléaire iranien et la dénonciation du traité FNI en sont pour lui les signes, Trump rejetant l'Arms control et le multilatéralisme. Face à cela, il soutient que l'ONU reste indispensable, que le multilatéralisme est en crise mais à défendre, et que la France doit tenir une ligne indépendante. Il lit aussi la montée de l'OCS comme la marque d'un multi-alignement.
 
-Sur les crises, il applique des grilles de lecture stratégiques. En Corée, la participation nord-coréenne aux JO ouvre une trêve, et le sommet Trump–Kim est bon pour la paix sans excès d'optimisme. Il juge la guerre d'Afghanistan perdue et l'assassinat de Khashoggi être une faute stratégique. Il voit Israël perdre la bataille des opinions publiques à Gaza, et estime qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens.
+Il applique ces grilles à une série de cas. Sur la Corée, il lit la participation nord-coréenne aux JO comme l'ouverture d'une trêve et juge le sommet Trump–Kim bon pour la paix, sans excès d'optimisme. Il estime la guerre d'Afghanistan perdue, Israël en train de perdre la bataille des opinions publiques à Gaza, et l'assassinat de Khashoggi être une faute stratégique. Sur Israël-Palestine, il juge qu'un départ de Netanyahou ne changerait presque rien. Il fait aussi du football un objet géopolitique : la victoire des Bleus est pour lui un gain de prestige par le soft power.
 
-Le football et le soft power forment un second registre : la victoire des Bleus est pour lui un gain de prestige, et le football un objet géopolitique. Boniface reçoit aussi de nombreux invités, qui traitent notamment des Rohingya, de la Chine et de la dissuasion, et chronique des livres.
+Tout au long de la Period, la chaîne accueille de nombreux invités, dont les propos portent sur les Rohingya, la Chine ou la dissuasion.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/1-2017-12-20/CLAUDE|2017-12-20 → 2018-03-28]] (18 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/2-2018-04-04/CLAUDE|2018-04-04 → 2018-06-13]] (18 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/CLAUDE|2018-06-20 → 2018-10-24]] (18 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/CLAUDE|2018-10-25 → 2026-10-30]] (11 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/CLAUDE|2018-10-25 → 2026-10-30]] (17 Digests)
