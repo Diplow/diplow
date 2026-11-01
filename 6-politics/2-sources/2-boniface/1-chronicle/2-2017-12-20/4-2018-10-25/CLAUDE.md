@@ -1,25 +1,24 @@
 ---
-title: "2018-10-25 → 2026-10-30"
+title: "2018-10-25 → 2019-01-09"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25
 owner: diplo
 preview: >-
-  Boniface lit l'actualité par ses grilles : Trump et le démantèlement de
-  l'arms control, un multilatéralisme en crise mais indispensable, l'autonomie
-  stratégique de la France et de l'Europe, puis un Occident miné par son deux
-  poids deux mesures face au Sud global.
+  Boniface lit la fin 2018 à travers Trump : arms control démantelé,
+  multilatéralisme en crise mais indispensable, soutien à MBS comme calcul
+  d'intérêts. Il appelle la France et l'Europe à l'autonomie stratégique et
+  voit dans les gilets jaunes un affaiblissement de Macron à l'international.
 ---
-# 2018-10-25 → 2026-10-30
+# 2018-10-25 → 2019-01-09
 
-Fin 2018, Boniface lit l'actualité à travers Trump : démantèlement de l'arms control, Brésil de Bolsonaro aligné sur Washington, midterms en demi-échec. Il soutient que Trump défend MBS par intérêt, que Kertch est un conflit gelé et qu'un Brexit sans accord frapperait le seul Royaume-Uni. Face à ce contexte, il défend un multilatéralisme en crise mais indispensable et appelle la France et l'Europe à l'autonomie stratégique. Il reçoit Christophe Ventura sur Bolsonaro, Olivier Da Lage sur l'affaire Khashoggi et Jean-Pierre Chevènement, qui lit chez Trump une somme de deals contre la Chine.
+Pendant ces mois, Boniface lit l'actualité internationale à travers Trump et son unilatéralisme. Il y voit le démantèlement de l'arms control, un Brésil de Bolsonaro aligné sur Washington et des midterms en demi-échec. Il interprète le soutien de Trump à MBS après l'assassinat de Khashoggi comme un calcul d'intérêts. Il défend un multilatéralisme en crise mais indispensable face à cette politique, et fait de 2018 l'année de l'unilatéralisme de Trump.
 
-La Chronicle reprend en octobre 2026 avec les mêmes grilles. Boniface chronique un livre sur l'Occident, miné par son deux poids deux mesures face au Sud global. Il soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens et que la France se contente de protestations face à l'impunité des colons. Pour lui, l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement. Il juge passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins.
+Face à lui, Boniface appelle la France et l'Europe à l'autonomie stratégique, tout en constatant une Europe divisée. Il juge le conflit de Kertch gelé, les Football leaks sans scandale et le Brexit sans accord périlleux pour le seul Royaume-Uni. Il voit dans les gilets jaunes un mouvement qui affaiblit Macron à l'international.
 
-Ses invités élargissent l'horizon : Didier Billion, pour qui l'avenir des Kurdes passe par l'autonomie, puis des invités sur Gaza, Lula et le Japon.
+Ses invités portent leurs propres lectures : Christophe Ventura sur Bolsonaro, Olivier Da Lage sur l'affaire Khashoggi, Jean-Pierre Chevènement sur les deals de Trump contre la Chine, puis Christian Cambon et Yannick Jadot en fin de période. Boniface y présente aussi son livre La géopolitique illustrée.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/1-2018-10-25/CLAUDE|2018-10-25 → 2018-11-09]] (5 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/2-2018-11-12/CLAUDE|2018-11-12 → 2018-11-21]] (4 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/3-2018-11-26/CLAUDE|2018-11-26 → 2026-10-14]] (6 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/4-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/5-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/3-2018-11-26/CLAUDE|2018-11-26 → 2018-12-11]] (4 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/4-2018-12-12/CLAUDE|2018-12-12 → 2019-01-09]] (5 Digests)
