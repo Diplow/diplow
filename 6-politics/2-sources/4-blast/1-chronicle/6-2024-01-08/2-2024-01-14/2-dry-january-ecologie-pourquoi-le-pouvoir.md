@@ -1,6 +1,6 @@
 ---
 title: "DRY JANUARY, ÉCOLOGIE : POURQUOI LE POUVOIR A-T-IL SI PEUR DE LA SOBRIÉTÉ ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/6-2024-01-14
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/2-2024-01-14
 owner: diplo
 preview: >-
   Blast soutient que le pouvoir se dérobe devant le Dry January et la lutte

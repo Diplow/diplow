@@ -1,20 +1,18 @@
 ---
-title: "2023-12-23 → 2024-01-17"
+title: "2023-12-23 → 2024-01-07"
 parent: 6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23
 owner: diplo
 preview: >-
-  Blast soutient que Macron banalise l'extrême droite et gouverne pour les
-  puissants, que la crise de la loi immigration est fabriquée et que les
-  élites verrouillent le pouvoir. Il reçoit historienne, sociologue, LDH et
-  lanceur d'alerte sur les libertés, l'extrême droite et l'évasion fiscale.
+  Blast soutient que Macron a banalisé l'extrême droite, que la crise de la
+  loi immigration est fabriquée pour déplacer le débat à droite et que la BCE
+  fabrique du chômage au service de la finance ; elle reçoit des invités qui
+  éclairent la montée des extrêmes droites.
 ---
-# 2023-12-23 → 2024-01-17
+# 2023-12-23 → 2024-01-07
 
-Le fil de ces vingt-six jours est la dénonciation d'un pouvoir macroniste qui déplace le débat vers la droite. Blast soutient que la crise née du rejet de la loi immigration est fabriquée et que Macron a banalisé l'extrême droite au point de rendre plausible son arrivée au pouvoir. Il lui reproche aussi des vœux mensongers et un remaniement qui sert les puissants. Il dénonce de même une BCE qui fabrique du chômage au service de la finance. À l'international, il soutient que Netanyahou a bâti son pouvoir sur le refus d'un État palestinien, et que la méritocratie n'existe pas.
+Sur ces deux semaines, Blast revient sur une thèse : le pouvoir macroniste a rendu plausible l'arrivée de l'extrême droite au pouvoir. Selon Blast, la crise née du rejet de la loi immigration est fabriquée pour déplacer le débat vers la droite, et les vœux de Macron reposent sur des mensonges. L'extrême droite au pouvoir en Europe est traitée comme une menace qui s'étend. Blast dénonce aussi un ordre économique et institutionnel : la méritocratie n'existe pas, la BCE fabrique du chômage au service de la finance, et l'Église est devenue un instrument du pouvoir impérial.
 
-Les invités portent une large part de l'analyse. Blast reçoit une historienne qui revient sur l'expérience Allende brisée par Pinochet, une sociologue, le traducteur d'Hitler, qui éclaire la progression de l'extrême droite par les mots, et un lanceur d'alerte sur l'évasion fiscale du Luxembourg. La LDH lui décrit un recul de la liberté d'expression, Bourdieu éclaire le rôle de la télévision, et des journalistes européens expliquent la montée des extrêmes droites. Sur le terrain, Blast constate que l'ultradroite violente se structure en réseau national coordonné que les dissolutions n'arrêtent pas.
-
-La Period se termine sur le thème des élites qui captent le pouvoir et le verrouillent, dans [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/6-2024-01-14/CLAUDE|2024-01-14 → 2024-01-17]] : France Inter dirigée par des proches de Macron, lobbies du vin face à la sobriété, ultra-riches qui ne redistribuent rien, et un contrôle institutionnel hérité du rapport colonial.
+Blast soutient également que Netanyahou a bâti son pouvoir sur le refus d'un État palestinien. Le reste de la Period passe par des invités, dont Blast restitue les analyses sans les prendre à son compte. Une historienne revient sur l'expérience Allende brisée par Pinochet. Des journalistes européens expliquent la montée des extrêmes droites. D'autres invités décrivent un Netanyahou désavoué par les Israéliens, une extrême droite qui progresse par les mots et l'évasion fiscale du Luxembourg. La LDH décrit un recul de la liberté d'expression, et Bourdieu éclaire le rôle de la télévision.
 
 ## Contenu
 
@@ -22,5 +20,3 @@ La Period se termine sur le thème des élites qui captent le pouvoir et le verr
 2. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/2-2023-12-26/CLAUDE|2023-12-26 → 2023-12-28]] (4 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/3-2023-12-29/CLAUDE|2023-12-29 → 2024-01-01]] (4 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/4-2024-01-02/CLAUDE|2024-01-02 → 2024-01-07]] (5 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/5-2024-01-08/CLAUDE|2024-01-08 → 2024-01-13]] (5 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/6-2024-01-14/CLAUDE|2024-01-14 → 2024-01-17]] (4 Digests)

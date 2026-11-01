@@ -1,6 +1,6 @@
 ---
 title: "GABRIEL ATTAL : EMMANUEL MACRON, EN PIRE ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/5-2024-01-08
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-01-08/1-2024-01-08
 owner: diplo
 preview: >-
   Blast soutient que Gabriel Attal, porté par un emballement médiatique calqué
