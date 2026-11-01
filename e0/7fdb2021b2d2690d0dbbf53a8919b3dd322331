@@ -1,0 +1,52 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_c649e26f976627 69-70
+  s_70e2b8820e4c39::t_d58d35e4a78d04 67-68
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/4-2024-05-28/CLAUDE.md
+  s_af44fe2c0a3141::t_357b573631bd9e 2,6-9,11,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31/1-netanyahou-en-roue-libre-sur-tf1lci.md
+  s_af44fe2c0a3141::t_4a52ce96a8ccaa 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31/2-la-soiree-de-bhl-derape-taxer.md
+  s_af44fe2c0a3141::t_2727b2a3b80a19 1-75
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31/3-tpmp-polska-detruit-nadine-morano-sur.md
+  s_af44fe2c0a3141::t_7ef28c9c221ea3 1-78
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31/4-dr-zoe-recadre-alice-cordier-et.md
+  s_af44fe2c0a3141::t_12532dc001680a 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/5-2024-05-31/CLAUDE.md
+  s_af44fe2c0a3141::t_2af198560500b1 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/6-2024-07-06/1-la-breche-front-populaire-vs-barrage.md
+  s_af44fe2c0a3141::t_85f92072810918 1-106
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/6-2024-07-06/2-imane-khelif-les-transphobes-considerent-cette.md
+  s_af44fe2c0a3141::t_586de530574696 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/6-2024-07-06/3-affaire-mazan-la-sumission-chimique-n.md
+  s_af44fe2c0a3141::t_f73a9804434dc3 1-77
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/6-2024-07-06/CLAUDE.md
+  s_af44fe2c0a3141::t_61fec8e221fff1 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-03-28/CLAUDE.md
+  s_af44fe2c0a3141::t_5e19f9997b9dca 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_af44fe2c0a3141::t_aa9ae1f2aaa05e 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e07fdb2021b2d2690d0dbbf53a8919b3dd322331",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_af44fe2c0a3141": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a784011073e180d98",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
