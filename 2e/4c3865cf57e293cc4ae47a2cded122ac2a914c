@@ -1,0 +1,43 @@
+6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/5-netanyahou-a-favorise-le-hamas-pour.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-93
+6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/1-l-etude-qui-prouve-que-macron.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-79
+6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/2-c-hernu-le-kgb-les-collabos.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-90
+6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-23
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-04/1-la-plaine-saint-denis-la-nuit.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-59
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-04/3-dr-grall-enquete-sur-le-vrai.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-78
+6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/3-implosion-de-la-nupes-le-pretexte.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-91
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 6-9,13,15,19-20
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-04/4-dette-publique-la-realite-derriere-les.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-79
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-04/5-tags-d-etoiles-de-david-un.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-80
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-04/2-salaire-a-vie-revenu-de-base.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-78
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-04/CLAUDE.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-23
+6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/4-enfants-francais-tues-a-gaza-la.md
+  s_f038488afb8e5a::t_18bd0884a4b6df 1-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2e4c3865cf57e293cc4ae47a2cded122ac2a914c",
+  "prompts": {},
+  "sessions": {
+    "s_f038488afb8e5a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5db3dcee-4105-4ef1-abe1-29d7cbbf4139",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
