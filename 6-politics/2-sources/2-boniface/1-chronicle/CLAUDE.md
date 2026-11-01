@@ -3,18 +3,16 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans d'actualité mondiale avec les mêmes grilles : la
-  rationalité des acteurs, le multilatéralisme contre l'unilatéralisme, le
-  refus de l'indignation sélective. Trump, Macron, la Corée, Netanyahou et
-  l'OCS y passent tour à tour.
+  Boniface lit l'actualité avec les mêmes grilles : un Trump unilatéraliste
+  qui isole les États-Unis, un multilatéralisme imparfait mais indispensable,
+  la négociation plutôt que le refus de discuter, l'autonomie stratégique
+  européenne, puis Israël et le multi-alignement.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Boniface applique à l'actualité quelques grilles stables plutôt qu'il ne commente des événements. Il refuse l'indignation sélective et juge les acteurs à la rationalité de leurs choix. Il tient le bilan d'Obama pour meilleur qu'on ne le dit, Trump pour promis à la déception et Xi Jinping pour le plus puissant. Les premiers mois de Trump, selon lui, sont un pari risqué pour l'intérêt américain, qui nourrit une course aux armements productrice d'insécurité.
+De 2016 à 2018, Boniface lit l'actualité à travers Trump. Il tient le bilan d'Obama pour meilleur qu'on ne le dit et Trump pour promis à la déception. Il juge son pari risqué pour l'intérêt américain, sa course aux armements productrice d'insécurité, et il voit les États-Unis s'isoler, ce qui ouvre une fenêtre à l'autonomie stratégique européenne. Face à cet unilatéralisme, il défend le multilatéralisme : l'ONU est imparfaite mais indispensable, et le refus de négocier se retourne contre ceux qui le pratiquent. La Corée en donne l'application : la participation nord-coréenne aux JO ouvre une trêve, et le sommet Trump–Kim est bon pour la paix, sans excès d'optimisme.
 
-Boniface oppose ensuite le multilatéralisme à l'unilatéralisme. L'ONU est imparfaite mais indispensable, et le refus de négocier se retourne contre ceux qui le pratiquent. Il juge que l'isolement des États-Unis sous Trump ouvre une fenêtre à l'autonomie stratégique européenne. Il voit dans la diplomatie de Macron le prolongement de la ligne gaullo-mitterrandiste. La Corée lui sert de cas d'école : la participation nord-coréenne aux JO ouvre une trêve, et le sommet Trump–Kim est bon pour la paix sans excès d'optimisme. Il juge par ailleurs la guerre d'Afghanistan perdue.
-
-Dans les années plus récentes, la même lecture s'étend au Moyen-Orient et à l'Asie. Boniface soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens. Il voit dans l'OCS un multi-alignement, non une OTAN asiatique. Il reçoit de nombreux invités, qui élargissent le propos à la France, la Chine, le chiisme ou l'Arabie saoudite, et il chronique des livres sur les Rohingya, les Kurdes, Gaza, Lula ou le Japon, qu'il lit et apprécie sans en faire ses propres thèses.
+Sa lecture reste celle d'un analyste qui refuse l'indignation sélective et note un monde moins en guerre mais moins supportable. Il suit Macron dans la ligne gaullo-mitterrandiste, juge la guerre d'Afghanistan perdue et voit en Xi Jinping le plus puissant des dirigeants. La suite de la Chronicle applique les mêmes grilles au Proche-Orient : un Israël protégé diplomatiquement mais qui perd l'opinion, un départ de Netanyahou qui ne changerait presque rien pour les Palestiniens, l'OCS comme signe d'un multi-alignement. Tout au long, ses invités élargissent le propos, de la France à la Chine, du chiisme à l'Arabie saoudite, et il chronique des livres.
 
 ## Contenu
 
@@ -23,4 +21,4 @@ Dans les années plus récentes, la même lecture s'étend au Moyen-Orient et à
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2017-04-24/CLAUDE|2017-04-24 → 2017-09-06]] (18 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2017-09-14/CLAUDE|2017-09-14 → 2017-12-19]] (24 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2017-12-20/CLAUDE|2017-12-20 → 2018-03-28]] (18 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2018-04-04/CLAUDE|2018-04-04 → 2026-10-30]] (11 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2018-04-04/CLAUDE|2018-04-04 → 2026-10-30]] (17 Digests)

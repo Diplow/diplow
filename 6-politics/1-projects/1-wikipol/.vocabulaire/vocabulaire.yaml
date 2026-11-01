@@ -85,6 +85,8 @@ kinds:
       théologien: {définition: "Élabore et défend une doctrine religieuse.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
       empereur: {définition: "Dirige un empire, notamment l'Empire romain.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
       ancien-président-de-l-autorité-palestinienne: {définition: "A dirigé l'Autorité palestinienne et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: blast/9IODM4a91Ss.md}
+      ancien-élu: {définition: "A détenu un mandat électif et n'en détient plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/uIuBwaYJZEc.md}
+      sociologue: {définition: "Étudie les sociétés et les rapports sociaux, et en publie les analyses.", statut: proposé, introduit_par: blast/w09mN2LfUBc.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -124,6 +126,7 @@ kinds:
       réseau-criminel: {définition: "Organisation criminelle structurée qui contrôle un trafic, comme celui de l'héroïne.", statut: proposé, introduit_par: paduteam/UwDPHbgQm4s.md}
       mission-de-paix: {définition: "Mission de l'ONU déployée dans un pays pour y maintenir la paix.", statut: proposé, introduit_par: blast/Ulg-VuZg6i8.md}
       organisation-religieuse: {définition: "Église ou communauté religieuse constituée, avec ses structures et ses fidèles.", statut: proposé, introduit_par: blast/Ulg-VuZg6i8.md}
+      force-armée-du-régime: {définition: "Corps militaire distinct de l'armée régulière, chargé de défendre un régime et son idéologie.", statut: proposé, introduit_par: boniface/U6lYvoNv594.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -164,6 +167,7 @@ kinds:
       défilé: {définition: "Parade publique, notamment militaire, organisée lors d'une fête nationale.", statut: proposé, introduit_par: boniface/mZfWVPlac4Y.md}
       congrès: {définition: "Assemblée des délégués d'un parti, qui en fixe la direction et en désigne les dirigeants.", statut: proposé, introduit_par: boniface/OEVYfzPYeCI.md}
       persécution: {définition: "Vague de violences dirigées contre un groupe en raison de sa religion ou de ses croyances.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
+      coup-d-état: {définition: "Prise du pouvoir par la force, notamment par l'armée, contre un gouvernement en place.", statut: proposé, introduit_par: blast/K2a3NDKQs9s.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

@@ -1,21 +1,22 @@
 ---
-title: "2018-04-04 → 2026-10-14"
+title: "2018-04-04 → 2018-04-23"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/6-2018-04-04/1-2018-04-04
 owner: diplo
 preview: >-
-  Dans ces trois contenus, Boniface laisse la parole à ses sources : Alice
-  Baillat sur les Rohingya, le livre d'Alexander Stubb sur un monde en trois
-  blocs où le Sud global décidera du nouvel ordre, et Sylvie Bermann sur la
-  parité entre les États-Unis et la Chine.
+  Boniface soutient qu'Israël, protégé diplomatiquement, perd la bataille des
+  opinions publiques à Gaza, et que l'entente Macron-Trump ne cède rien sur le
+  fond. Il reçoit Alice Baillat sur les Rohingya et François-Bernard Huyghe
+  sur les fake news.
 ---
-# 2018-04-04 → 2026-10-14
+# 2018-04-04 → 2018-04-23
 
-Cette Period tient en trois contenus où Boniface reçoit ou lit plus qu'il ne plaide. Le premier est un entretien de 2018 avec Alice Baillat, chercheuse à l'IRIS. Pour elle, la persécution des Rohingya vient d'un héritage colonial et de la perte de leur nationalité en 1982. La crise s'enlise : camps surpeuplés, silence d'Aung San Suu Kyi, veto chinois.
+Sur l'actualité, Boniface applique une même grille à deux cas. À propos de la marche du retour à Gaza, il soutient qu'Israël, protégé diplomatiquement, ne risque rien du bilan mais perd la bataille des opinions publiques, tandis que la société civile palestinienne conteste le Hamas et l'Autorité palestinienne. À propos de la relation entre Emmanuel Macron et Donald Trump, il y voit une stratégie psychologique et un réalisme gaullo-mitterrandiste qui ne cède rien sur le fond. Pour lui, la vraie différence entre les deux hommes est le multilatéralisme contre l'unilatéralisme.
 
-Les deux autres datent d'octobre 2026 et regardent l'ordre mondial. Boniface chronique *Le Triangle du pouvoir*, du président finlandais Alexander Stubb : le monde se divise en trois blocs, l'Occident, l'Orient et le Sud global. L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre. Boniface reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, sans qu'on puisse dire que Pékin a gagné. La Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Deux émissions de *Comprendre le monde* complètent la période, et leurs thèses restent à ceux qui les portent. Pour Alice Baillat, chercheuse à l'IRIS, la persécution des Rohingya vient d'un héritage colonial et de la perte de leur nationalité en 1982, et la crise s'enlise entre camps surpeuplés, silence d'Aung San Suu Kyi et veto chinois. François-Bernard Huyghe, interrogé par Boniface, soutient que les fake news sont un phénomène ancien dont seule l'ampleur change avec les réseaux sociaux, que l'influence russe sur Trump est surestimée, et qu'elles sont le symptôme d'une rupture de confiance envers les élites.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/6-2018-04-04/1-2018-04-04/1-comprendre-le-monde-s1-28-alice|Comprendre le monde S1#28 - Alice Baillat - "Le drame des Rohingyas"]] (2018-04-04)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/6-2018-04-04/1-2018-04-04/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/6-2018-04-04/1-2018-04-04/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/6-2018-04-04/1-2018-04-04/2-marche-du-retour-a-gaza|"Marche du retour" à Gaza]] (2018-04-05)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/6-2018-04-04/1-2018-04-04/3-comprendre-le-monde-s1-30-francois|Comprendre le monde S1#30 - François-Bernard Huyghe - "Fake news : une réalité nouvelle"]] (2018-04-18)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/6-2018-04-04/1-2018-04-04/4-pascal-boniface-trump-macron-copains-copains|(Pascal Boniface) Trump / Macron : copains copains ?]] (2018-04-23)
