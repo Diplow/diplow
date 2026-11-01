@@ -1,0 +1,54 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_80d2fe99ddcf8a 100
+  s_70e2b8820e4c39::t_83ef45a4c34ced 66
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/4-2023-11-22/CLAUDE.md
+  s_8b9dba803a74eb::t_807d2e652e7f62 2,6-9,11,13,15-17
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/1-proces-dupond-moretti-l-heure-du.md
+  s_8b9dba803a74eb::t_861584636c03ce 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/2-glyphosate-10-ans-d-empoisonnement-en.md
+  s_8b9dba803a74eb::t_ec180b9da8378c 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/3-francois-mitterrand-petainiste-et-resistant.md
+  s_8b9dba803a74eb::t_2b738e83cddf88 1-95
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/4-milei-trump-bolsonaro-l-inquietante-percee.md
+  s_8b9dba803a74eb::t_b7ed8a9796afd8 1-87
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/5-violences-les-pompiers-pyromanes-du-pouvoir.md
+  s_8b9dba803a74eb::t_1b2ea328d3016f 1-72
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/5-2023-11-27/CLAUDE.md
+  s_8b9dba803a74eb::t_25f1fef31ae99e 1-25
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/6-2023-12-01/1-nous-ne-vivons-pas-dans-des.md
+  s_8b9dba803a74eb::t_95069fe33d5c64 1-97
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/6-2023-12-01/2-prisonniers-contre-otages-les-vrais-enjeux.md
+  s_8b9dba803a74eb::t_d2781d53969412 1-96
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/6-2023-12-01/3-face-au-mepris-du-pouvoir-la.md
+  s_8b9dba803a74eb::t_29104dd336c099 1-82
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/6-2023-12-01/CLAUDE.md
+  s_8b9dba803a74eb::t_3abcf935994e60 1-23
+6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/CLAUDE.md
+  s_8b9dba803a74eb::t_e89e313697f34b 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_8b9dba803a74eb::t_4f40404ad1b401 7-9,13,15-17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6301c7d867b5443f410f351920bb488e09982924",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_8b9dba803a74eb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-abefd5c4db2eabe6e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
