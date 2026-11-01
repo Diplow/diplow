@@ -42,6 +42,8 @@ kinds:
       juriste: {définition: "Spécialiste du droit, qui l'étudie ou le pratique.", statut: proposé, introduit_par: osonscauser/cBhHMYnGSJE.md}
       présentateur: {définition: "Présente des émissions de télévision ou de radio.", statut: proposé, introduit_par: osonscauser/cBhHMYnGSJE.md}
       ancien-chef-d-état: {définition: "A dirigé un État et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: blast/5N2TINrVJPE.md}
+      humanitaire: {définition: "Agit dans l'aide humanitaire ou dirige une organisation qui la porte.", statut: proposé, introduit_par: paduteam/xvFF163UFn4.md}
+      président-élu: {définition: "Élu à la présidence d'un État mais pas encore entré en fonction, à la date de la Publication.", statut: proposé, introduit_par: boniface/k4Xi-vuVmJY.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -70,6 +72,7 @@ kinds:
       établissement-scolaire: {définition: "École, collège ou lycée, public ou privé.", statut: proposé, introduit_par: osonscauser/emdc6suIeCc.md}
       coalition: {définition: "Alliance de partis politiques qui agissent ensemble sous un même nom.", statut: proposé, introduit_par: blast/HAuq5hpiV0s.md}
       communauté-en-ligne: {définition: "Groupe d'abonnés réuni autour d'un site ou d'une chaîne, souvent payant.", statut: proposé, introduit_par: paduteam/nxqv571BG-g.md}
+      ligue-sportive: {définition: "Organise des compétitions et des événements sportifs professionnels.", statut: proposé, introduit_par: paduteam/HyodKdeKyI4.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
