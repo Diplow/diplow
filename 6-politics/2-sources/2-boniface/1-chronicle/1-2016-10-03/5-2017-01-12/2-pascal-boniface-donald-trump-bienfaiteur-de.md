@@ -1,6 +1,6 @@
 ---
 title: "[Pascal Boniface] DONALD TRUMP : bienfaiteur de l'Europe malgré lui ?"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/4-2017-01-03
+parent: 6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/5-2017-01-12
 owner: diplo
 preview: >-
   Boniface soutient que les déclarations de Trump sur l'OTAN, obsolète faute

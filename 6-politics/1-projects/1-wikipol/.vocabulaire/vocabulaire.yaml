@@ -55,6 +55,8 @@ kinds:
       résistant: {définition: "Combat l'occupant ou un régime d'oppression dans la clandestinité.", statut: proposé, introduit_par: paduteam/xHa2JBJCZbc.md}
       fondateur-de-parti: {définition: "A fondé un parti politique.", statut: proposé, introduit_par: blast/wcToU9D958Q.md}
       économiste: {définition: "Étudie l'économie et en élabore des théories ou des mesures.", statut: proposé, introduit_par: osonscauser/nPJR_P9_T14.md}
+      humoriste: {définition: "Fait profession de l'humour : spectacles, sketchs, chroniques.", statut: proposé, introduit_par: paduteam/uOwfFzd8MZ8.md}
+      lanceur-d-alerte: {définition: "Révèle ou signale, dans l'intérêt général, des faits illégaux ou dangereux dont il a connaissance.", statut: proposé, introduit_par: blast/JQ-n9rdqUe0.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -86,6 +88,7 @@ kinds:
       ligue-sportive: {définition: "Organise des compétitions et des événements sportifs professionnels.", statut: proposé, introduit_par: paduteam/HyodKdeKyI4.md}
       instance-sportive: {définition: "Dirige et régule un sport ou le mouvement olympique, et en attribue les compétitions.", statut: proposé, introduit_par: boniface/AB5haSkt-1o.md}
       comité-d-organisation: {définition: "Organise une compétition sportive internationale et en fixe les modalités.", statut: proposé, introduit_par: paduteam/TVMgyPabBpE.md}
+      établissement-d-enseignement-supérieur: {définition: "Université, grande école ou institut qui dispense un enseignement supérieur.", statut: proposé, introduit_par: paduteam/iOd5lu0wO3c.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -120,6 +123,7 @@ kinds:
       révolte: {définition: "Soulèvement populaire ou armé contre un pouvoir.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
       déplacement-forcé: {définition: "Fuite ou expulsion d'une population hors de ses terres.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
       rafle: {définition: "Arrestation massive de personnes, visées en raison de leur origine ou de leur appartenance.", statut: proposé, introduit_par: blast/ZlHBgyaDE-s.md}
+      cérémonie: {définition: "Remise de prix ou de distinctions lors d'une soirée publique.", statut: proposé, introduit_par: paduteam/uOwfFzd8MZ8.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
