@@ -60,6 +60,8 @@ kinds:
       défenseur-des-droits: {définition: "Dirige l'autorité indépendante chargée de défendre les droits des citoyens face à l'administration.", statut: proposé, introduit_par: blast/ZQ8hNH3OOrE.md}
       étudiant: {définition: "Suit des études, notamment supérieures, à la date de la Publication.", statut: proposé, introduit_par: paduteam/xrGePx2JwbM.md}
       commissaire-européen: {définition: "Membre de la Commission européenne, à la date de la Publication.", statut: proposé, introduit_par: blast/RAbqVRNbepU.md}
+      influenceur: {définition: "Crée du contenu sur les réseaux sociaux et y rassemble un public.", statut: proposé, introduit_par: paduteam/XNIki6_ZNp0.md}
+      acteur: {définition: "Joue dans des films, y compris pornographiques.", statut: proposé, introduit_par: paduteam/XNIki6_ZNp0.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -130,6 +132,7 @@ kinds:
       cérémonie: {définition: "Remise de prix ou de distinctions lors d'une soirée publique.", statut: proposé, introduit_par: paduteam/uOwfFzd8MZ8.md}
       conférence: {définition: "Réunion de responsables et d'experts qui débattent d'un sujet.", statut: proposé, introduit_par: boniface/gBhXKzKp9mo.md}
       opération-militaire: {définition: "Action militaire d'envergure menée par une armée, comme un assaut ou un débarquement.", statut: proposé, introduit_par: paduteam/BE6RyV_X6m4.md}
+      défilé: {définition: "Parade publique, notamment militaire, organisée lors d'une fête nationale.", statut: proposé, introduit_par: boniface/mZfWVPlac4Y.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -163,6 +166,7 @@ kinds:
       programme: {définition: "Le programme d'un parti ou d'un candidat.", statut: accepté}
       déclaration: {définition: "Prise de position publique et officielle d'un gouvernement ou d'une autorité.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
       résolution: {définition: "Texte adopté par le vote d'une assemblée ou d'une organisation internationale.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
+      paquet-législatif: {définition: "Ensemble de textes législatifs adoptés ensemble pour atteindre un même objectif.", statut: proposé, introduit_par: osonscauser/e4ep4Ky23hI.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}

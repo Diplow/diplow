@@ -4,17 +4,17 @@ parent: 6-politics/2-sources/3-osonscauser/1-chronicle
 owner: diplo
 preview: >-
   Osons Causer défend la gauche contre le RN et l'austérité, appelle à voter
-  Nouveau Front populaire après la dissolution, puis oppose les faits aux
-  idées reçues sur le RN, la transition énergétique, Gaza, la délinquance et
-  les inégalités.
+  Nouveau Front populaire après la dissolution, puis tient le RN pour un parti
+  d'extrême droite, dénonce la politique d'Israël à Gaza, défend les
+  renouvelables et remet des chiffres sur les débats publics.
 ---
 # Chronicle
 
-Jusqu'à l'été 2024, Osons Causer mène un combat de gauche contre le RN et l'austérité. Elle parle de l'école et de la fiscalité des milliardaires, et porte la cause palestinienne. Après la dissolution, son propos devient électoral : elle appelle à voter Nouveau Front populaire et soutient Lucie Castets pour Matignon (voir [[6-politics/2-sources/3-osonscauser/1-chronicle/1-2023-12-17/CLAUDE|2023-12-17 → 2024-07-23]]).
+De décembre 2023 à l'été 2024, Osons Causer défend la gauche contre le RN et l'austérité. Elle s'attache à l'école et à la fiscalité des milliardaires, et porte la cause palestinienne. Après la dissolution, elle appelle à voter Nouveau Front populaire et soutient Lucie Castets pour Matignon ([[6-politics/2-sources/3-osonscauser/1-chronicle/1-2023-12-17/CLAUDE|2023-12-17 → 2024-07-23]]).
 
-À partir d'octobre 2024, la Source change de registre : elle oppose les faits aux idées reçues. Elle maintient que le RN reste d'extrême droite. Elle défend une transition où le solaire, l'éolien et le nucléaire ont chacun leur place. Elle dénonce la politique d'Israël à Gaza. Elle propose enfin une autre lecture de la délinquance et des inégalités (voir [[6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/CLAUDE|2024-10-08 → 2026-03-15]]).
+À partir d'octobre 2024, le fil politique reste le même : Osons Causer tient le RN pour un parti d'extrême droite et dénonce la politique d'Israël à Gaza. Elle y ajoute la défense des renouvelables et d'un nucléaire adapté au climat. Elle remet aussi des chiffres sur les débats publics, de la délinquance aux inégalités, de l'abstention à la voiture électrique ([[6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/CLAUDE|2024-10-08 → 2026-07-29]]).
 
 ## Contenu
 
 1. [[6-politics/2-sources/3-osonscauser/1-chronicle/1-2023-12-17/CLAUDE|2023-12-17 → 2024-07-23]] (19 Digests)
-2. [[6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/CLAUDE|2024-10-08 → 2026-03-15]] (16 Digests)
+2. [[6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/CLAUDE|2024-10-08 → 2026-07-29]] (22 Digests)

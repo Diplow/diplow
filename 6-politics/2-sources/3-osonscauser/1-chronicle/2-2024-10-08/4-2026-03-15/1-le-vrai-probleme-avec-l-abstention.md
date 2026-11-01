@@ -1,6 +1,6 @@
 ---
 title: "Le vrai problème avec l'abstention"
-parent: 6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/3-2025-10-29
+parent: 6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-10-08/4-2026-03-15
 owner: diplo
 preview: >-
   Osons Causer soutient que l'abstention est très inégale : les jeunes, les
