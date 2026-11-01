@@ -57,6 +57,7 @@ kinds:
       économiste: {définition: "Étudie l'économie et en élabore des théories ou des mesures.", statut: proposé, introduit_par: osonscauser/nPJR_P9_T14.md}
       humoriste: {définition: "Fait profession de l'humour : spectacles, sketchs, chroniques.", statut: proposé, introduit_par: paduteam/uOwfFzd8MZ8.md}
       lanceur-d-alerte: {définition: "Révèle ou signale, dans l'intérêt général, des faits illégaux ou dangereux dont il a connaissance.", statut: proposé, introduit_par: blast/JQ-n9rdqUe0.md}
+      défenseur-des-droits: {définition: "Dirige l'autorité indépendante chargée de défendre les droits des citoyens face à l'administration.", statut: proposé, introduit_par: blast/ZQ8hNH3OOrE.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -124,6 +125,7 @@ kinds:
       déplacement-forcé: {définition: "Fuite ou expulsion d'une population hors de ses terres.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
       rafle: {définition: "Arrestation massive de personnes, visées en raison de leur origine ou de leur appartenance.", statut: proposé, introduit_par: blast/ZlHBgyaDE-s.md}
       cérémonie: {définition: "Remise de prix ou de distinctions lors d'une soirée publique.", statut: proposé, introduit_par: paduteam/uOwfFzd8MZ8.md}
+      conférence: {définition: "Réunion de responsables et d'experts qui débattent d'un sujet.", statut: proposé, introduit_par: boniface/gBhXKzKp9mo.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
