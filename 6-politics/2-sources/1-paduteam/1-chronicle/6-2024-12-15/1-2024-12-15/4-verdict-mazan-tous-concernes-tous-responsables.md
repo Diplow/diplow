@@ -1,6 +1,6 @@
 ---
 title: "VERDICT MAZAN  TOUS CONCERNÉS, TOUS RESPONSABLES !! (avec @Dr_Zoé_YT )"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15
 owner: diplo
 preview: >-
   Zoé soutient que le verdict Mazan ne clôt rien : les violeurs sont des

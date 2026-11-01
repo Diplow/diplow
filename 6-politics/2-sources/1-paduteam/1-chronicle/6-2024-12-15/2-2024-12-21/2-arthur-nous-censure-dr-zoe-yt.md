@@ -1,6 +1,6 @@
 ---
 title: "ARTHUR NOUS CENSURE, @Dr_Zoé_YT  EST FOLLE DE RAGE !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/6-2024-12-21
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/2-2024-12-21
 owner: diplo
 preview: >-
   La PaduTeam soutient qu'Arthur, dominant par sa fortune comme par son
@@ -29,7 +29,7 @@ mentions:
 
 ## 1. Arthur a fait censurer la vidéo de la PaduTeam sur son émission par des réclamations de droit d'auteur.
 
-La vidéo d'analyse, faite avec Dr Zoé, est amputée de ses extraits sur YouTube. La version complète reste disponible sur Odysee, où il n'y a pas eu de réclamation. C'est la suite de [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15/2-arthur-animateur-tele-ou-predateur-qui|Arthur, animateur télé ou prédateur]].
+La vidéo d'analyse, faite avec Dr Zoé, est amputée de ses extraits sur YouTube. La version complète reste disponible sur Odysee, où il n'y a pas eu de réclamation. C'est la suite de [[6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/2-arthur-animateur-tele-ou-predateur-qui|Arthur, animateur télé ou prédateur]].
 
 > [0:00](https://www.youtube.com/watch?v=KI1sQj8QvUo&t=0s) « Arthur l'animateur télé Arthur nous a censuré très très étonnant »
 

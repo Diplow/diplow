@@ -1,20 +1,20 @@
 ---
-title: "2024-11-27 → 2024-12-27"
+title: "2024-11-27 → 2024-12-11"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27
 owner: diplo
 preview: >-
-  La PaduTeam lit la fin 2024 par les structures de classe et de genre :
-  privatisation rampante de la Sécu, violences sexuelles systémiques, droite
-  qui récupère les drames. Elle défend la structuration collective de la
-  gauche.
+  La PaduTeam lit l'actualité par les structures et la classe : elle juge la
+  censure de Barnier sur la Sécu justifiée, voit dans le meurtre du PDG
+  d'UnitedHealthcare la violence des assurances privées, démonte les droitards
+  et refuse de plier devant la menace judiciaire.
 ---
-# 2024-11-27 → 2024-12-27
+# 2024-11-27 → 2024-12-11
 
-Pendant ce mois, la PaduTeam ramène chaque sujet à des rapports de classe et de domination. Elle traite le quotidien (alimentation, travail salarié) comme un terrain de classe. Elle juge justifiée la censure du 49.3 de Barnier sur la Sécu, car transférer des remboursements aux complémentaires privées est une privatisation rampante ([[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/2-2024-12-01/CLAUDE|2024-12-01 → 2024-12-04]]). Le meurtre du PDG d'UnitedHealthcare lui sert à montrer la vraie violence des assurances privées. Elle défend la structuration collective à gauche, et dénonce une loi PS de 2014 que le PS, la droite et Roussel retournent contre LFI.
+Pendant ces deux semaines, la PaduTeam rattache chaque sujet à des rapports de classe et de domination. Elle montre une loi PS de 2014 retournée contre LFI par le PS, la droite et Roussel. Elle voit dans le racisme de Macron un écran sur les politiques néolibérales qui frappent les urgences, et un capitalisme patriarcal derrière le consentement et les souffrances des hommes. L'alimentation, le travail salarié et la domination masculine à l'extrême droite deviennent des terrains de classe, et elle défend la structuration collective à gauche.
 
-Elle s'en prend aussi aux figures de la droite en ligne : l'exilé fiscal patriote en paroles, le coach sigma, puis Slapp, Kroc Blanc et Stéphane Édouard. Elle refuse de céder à la menace judiciaire et soutient qu'on ne muselle pas la critique par la justice. Dans les dernières semaines, elle lit Magdebourg comme un attentat d'extrême droite récupéré par ceux qui en partagent le logiciel. Elle accuse des startuppers de vouloir une école au service du capital.
+La santé revient comme fil politique. La PaduTeam juge la censure du 49.3 de Barnier sur la Sécu justifiée, car transférer des remboursements aux complémentaires privées est une privatisation rampante. Elle voit dans le meurtre du PDG d'UnitedHealthcare la vraie violence des assurances privées.
 
-Un second fil traverse la Period : les violences sexuelles et la domination masculine lues comme structurelles. Elle les voit derrière le consentement et les souffrances des hommes, dans l'antiféminisme de Killian Senseï et dans le verdict Mazan. Le racisme de Macron, colon à Mayotte, masque à ses yeux les politiques néolibérales. Elle reçoit Cem Yoldaş sur la chute d'Assad, sans campisme ni joie naïve devant les islamistes, et recommande cinq lectures de formation politique.
+Elle s'en prend aussi à des figures de la droite en ligne : l'exilé fiscal patriote en paroles, le coach sigma qui soumet les hommes à l'ordre bourgeois, puis les influenceurs Slapp, Kroc Blanc et Stéphane Édouard. Elle refuse de céder à la menace judiciaire, car on ne muselle pas la critique par la justice. La période se clôt sur la chute d'Assad, qu'elle aborde avec Cem Yoldaş, sans campisme ni joie naïve devant les islamistes.
 
 ## Contenu
 
@@ -22,5 +22,3 @@ Un second fil traverse la Period : les violences sexuelles et la domination masc
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/2-2024-12-01/CLAUDE|2024-12-01 → 2024-12-04]] (5 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/3-2024-12-05/CLAUDE|2024-12-05 → 2024-12-06]] (3 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/4-2024-12-09/CLAUDE|2024-12-09 → 2024-12-11]] (4 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15/CLAUDE|2024-12-15 → 2024-12-20]] (5 Digests)
-6. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/6-2024-12-21/CLAUDE|2024-12-21 → 2024-12-27]] (4 Digests)

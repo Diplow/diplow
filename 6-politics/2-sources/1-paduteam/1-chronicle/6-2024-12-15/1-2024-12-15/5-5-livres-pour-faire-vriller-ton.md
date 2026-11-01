@@ -1,6 +1,6 @@
 ---
 title: "5 LIVRES POUR FAIRE VRILLER TON TONTON RACISTE À NOËL (X @Dr_Zoé_YT et Positions Revue)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15
 owner: diplo
 preview: >-
   La PaduTeam recommande cinq lectures de formation politique, de la plus

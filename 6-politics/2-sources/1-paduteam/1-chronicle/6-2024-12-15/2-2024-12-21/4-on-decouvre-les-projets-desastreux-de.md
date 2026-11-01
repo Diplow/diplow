@@ -1,6 +1,6 @@
 ---
 title: "On DÉCOUVRE les PROJETS DÉSASTREUX de ces STARTUPPERS pour NOS ENFANTS !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/6-2024-12-21
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/2-2024-12-21
 owner: diplo
 preview: >-
   La PaduTeam soutient que ces startuppers invités à parler d'éducation,

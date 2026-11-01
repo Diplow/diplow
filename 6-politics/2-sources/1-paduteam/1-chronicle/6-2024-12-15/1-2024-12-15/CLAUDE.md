@@ -1,6 +1,6 @@
 ---
 title: "2024-12-15 → 2024-12-20"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15
 owner: diplo
 preview: >-
   La PaduTeam lit les violences sexuelles et la domination de classe comme
@@ -18,8 +18,8 @@ La semaine se clôt sur de la formation politique, dans l'esprit de la chaîne :
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15/1-paye-ton-droitard-5-2-killian|PAYE TON DROITARD #5.2  KILLIAN SENSEÏ LUTTE CONTRE LE MATRIARCAT PÉD0$ATANISTE (X @Dr_Zoé_YT)]] (2024-12-15)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15/2-arthur-animateur-tele-ou-predateur-qui|ARTHUR  ANIMATEUR TÉLÉ ou PRÉDATEUR qui TRIP0TE et HUMILE les PAUVRES  (avec @Dr_Zoé_YT)]] (2024-12-17)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15/3-mayotte-macron-engueule-encore-les-survivants|MAYOTTE  MACRON ENGUEULE encore les SURVIVANTS au cyclone CHIDO !! (avec @Dr_Zoé_YT)]] (2024-12-19)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15/4-verdict-mazan-tous-concernes-tous-responsables|VERDICT MAZAN  TOUS CONCERNÉS, TOUS RESPONSABLES !! (avec @Dr_Zoé_YT )]] (2024-12-19)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2024-11-27/5-2024-12-15/5-5-livres-pour-faire-vriller-ton|5 LIVRES POUR FAIRE VRILLER TON TONTON RACISTE À NOËL (X @Dr_Zoé_YT et Positions Revue)]] (2024-12-20)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/1-paye-ton-droitard-5-2-killian|PAYE TON DROITARD #5.2  KILLIAN SENSEÏ LUTTE CONTRE LE MATRIARCAT PÉD0$ATANISTE (X @Dr_Zoé_YT)]] (2024-12-15)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/2-arthur-animateur-tele-ou-predateur-qui|ARTHUR  ANIMATEUR TÉLÉ ou PRÉDATEUR qui TRIP0TE et HUMILE les PAUVRES  (avec @Dr_Zoé_YT)]] (2024-12-17)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/3-mayotte-macron-engueule-encore-les-survivants|MAYOTTE  MACRON ENGUEULE encore les SURVIVANTS au cyclone CHIDO !! (avec @Dr_Zoé_YT)]] (2024-12-19)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/4-verdict-mazan-tous-concernes-tous-responsables|VERDICT MAZAN  TOUS CONCERNÉS, TOUS RESPONSABLES !! (avec @Dr_Zoé_YT )]] (2024-12-19)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2024-12-15/1-2024-12-15/5-5-livres-pour-faire-vriller-ton|5 LIVRES POUR FAIRE VRILLER TON TONTON RACISTE À NOËL (X @Dr_Zoé_YT et Positions Revue)]] (2024-12-20)
