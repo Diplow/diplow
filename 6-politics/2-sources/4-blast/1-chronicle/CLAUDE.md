@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit la macronie comme un pouvoir au service des riches, qui banalise
-  le RN, diabolise la gauche, durcit l'immigration jusqu'à la loi immigration
-  et malmène presse et démocratie. Elle y ajoute les inégalités, la COP28 et
-  la BCE.
+  Blast soutient que Macron gouverne pour les riches et les puissants, que la
+  macronie banalise l'extrême droite et s'aligne sur elle jusqu'à la loi
+  immigration, diabolise la gauche et malmène presse et démocratie. Elle
+  défend son journalisme d'enquête.
 ---
 # Chronicle
 
-Le fil principal de la période est une critique du pouvoir macroniste. Blast soutient que Macron mérite son étiquette de président des riches, que la dette vient des chocs économiques et des baisses d'impôt de la droite, et que l'État applique deux poids, deux mesures sur Gaza et l'antisémitisme. Elle dit son propre journalisme libre menacé, puis lit la fin de la période comme une dérive autoritaire où la macronie malmène presse et démocratie, et où l'impunité des responsables politiques revient comme un fil.
+D'un bout à l'autre de la Chronicle, Blast décrit un pouvoir qui gouverne pour les puissants. Macron mérite son étiquette de président des riches, la dette vient des chocs économiques et des baisses d'impôt de la droite, la crise du logement creuse les inégalités et les élites verrouillent le pouvoir. L'impunité des responsables politiques devient un fil de plus en plus net, et le tollé contre Frenchie Shore relève à ses yeux du mépris de classe. La COP28, enfin, est dictée par les pétroliers.
 
-Le second fil est la banalisation de l'extrême droite. Blast dénonce des médias et un gouvernement qui normalisent le RN et diabolisent la gauche autour de l'antisémitisme. Selon elle, la macronie feint la fermeté contre le RN en lui tendant des perches, s'aligne sur son récit et durcit la politique d'immigration jusqu'à la loi immigration. Elle voit dans la crise de cette loi une crise fabriquée pour déplacer le débat vers la droite, et dans Macron celui qui a banalisé l'extrême droite.
+L'autre fil est l'extrême droite. Blast dénonce des médias et un gouvernement qui banalisent le RN, quand la macronie feint la fermeté en lui tendant des perches. Elle lit la période comme une dérive autoritaire où l'extrême droite impose son récit et où la macronie s'aligne sur elle, jusqu'à la loi immigration (voir [[6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/CLAUDE|2023-12-10 → 2023-12-22]]), dont la crise est selon elle fabriquée. Dans le même mouvement, le pouvoir diabolise la gauche autour de l'antisémitisme, applique deux poids, deux mesures sur Gaza, attise la violence et malmène presse et démocratie.
 
-Blast élargit aussi son propos aux inégalités et aux choix économiques. Elle soutient que la crise du logement creuse les inégalités et que le tollé contre Frenchie Shore relève du mépris de classe. Elle défend l'enquête, dénonce une COP28 dictée par les pétroliers et une BCE qui fabrique du chômage, ce qu'elle lit comme un choix politique. Elle reçoit de nombreux invités au fil de ces semaines.
+Face à cela, Blast défend son journalisme d'enquête et le dit menacé. Elle reçoit de nombreux invités, dont une historienne, une sociologue, la LDH et un lanceur d'alerte, pour parler des libertés, de l'extrême droite et de l'évasion fiscale. Leurs thèses leur restent : Blast les reçoit et leur donne la parole.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Blast élargit aussi son propos aux inégalités et aux choix économiques. Elle
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-11-12/CLAUDE|2023-11-12 → 2023-11-26]] (18 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2023-11-27/CLAUDE|2023-11-27 → 2023-12-09]] (18 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2023-12-10/CLAUDE|2023-12-10 → 2023-12-22]] (18 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/CLAUDE|2023-12-23 → 2024-01-10]] (20 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/5-2023-12-23/CLAUDE|2023-12-23 → 2024-01-17]] (26 Digests)
