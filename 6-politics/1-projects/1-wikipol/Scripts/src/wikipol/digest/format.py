@@ -1,7 +1,8 @@
 """The Digest file: how the pipeline writes one, and what it checks before keeping it.
 
 A Digest is a Markdown file, in French. Its frontmatter holds the repo's four fields (`title`,
-`parent`, `owner`, `preview`) and the Digest's own (`DIGEST_FIELDS`). Its Body is the video's
+`parent`, `owner`, `preview`), the Digest's own (`DIGEST_FIELDS`), and may hold its mentions and
+their relations (`MENTION_FIELDS`, checked in `mentions.py`). Its Body is the video's
 title as a heading, then up to six claims, `## <n>. <claim>`, each backed by one to three
 Extracts, one per line:
 
@@ -21,6 +22,7 @@ from datetime import date
 import yaml
 
 from wikipol.config import is_pinned_model
+from wikipol.digest.mentions import Vocabulary, check_mentions
 from wikipol.digest.raw_text import RawText, clock_seconds, words
 from wikipol.raw_store import YOUTUBE_ID, raw_key
 
@@ -45,6 +47,8 @@ DIGEST_FIELDS = (
     "digest_version",
     "model",
 )
+MENTION_FIELDS = ("mentions", "relations")
+"""Optional: who and what the Publication mentions, checked against the vocabulary."""
 
 CLAIM = re.compile(r"^## (\d+)\. (\S.*)$")
 TIMED_EXTRACT = re.compile(
@@ -132,16 +136,19 @@ def check_digest(
     raw: RawText,
     expected: DigestFields | None = None,
     linkable: set[str] = frozenset(),
+    vocabulary: Vocabulary | None = None,
 ) -> list[str]:
     """What is wrong with a Digest, one line each; nothing when it holds.
 
-    `raw` is its Publication's Raw, `expected` what the pipeline knows of its fields, and
-    `linkable` the Digests it may cite, as repo paths without `.md`.
+    `raw` is its Publication's Raw, `expected` what the pipeline knows of its fields,
+    `linkable` the Digests it may cite, as repo paths without `.md`, and `vocabulary` the words
+    its mentions and relations may use.
     """
     frontmatter, body = split_digest(text)
     if frontmatter is None:
         return ["no readable YAML frontmatter"]
     problems = _check_fields(frontmatter, expected)
+    problems += check_mentions(frontmatter, raw, vocabulary)
     youtube_id = str(frontmatter.get("youtube_id") or "")
     duration = frontmatter.get("duration")
     duration = duration if isinstance(duration, int) and not isinstance(duration, bool) else None
@@ -163,7 +170,7 @@ def check_digest(
 def _check_fields(data: dict, expected: DigestFields | None) -> list[str]:
     problems = []
     missing = [name for name in (*REPO_FIELDS, *DIGEST_FIELDS) if name not in data]
-    extra = [name for name in data if name not in (*REPO_FIELDS, *DIGEST_FIELDS)]
+    extra = [name for name in data if name not in (*REPO_FIELDS, *DIGEST_FIELDS, *MENTION_FIELDS)]
     if missing:
         problems.append(f"frontmatter lacks {', '.join(missing)}")
     if extra:

@@ -15,6 +15,7 @@ from __future__ import annotations
 import re
 import unicodedata
 from dataclasses import dataclass
+from functools import cached_property
 
 from wikipol.legacy_index import split_frontmatter
 
@@ -45,6 +46,13 @@ def words(text: str) -> str:
     """The text's words, lowercased and space-separated: what a quote is matched on."""
     text = unicodedata.normalize("NFKC", text).casefold()
     return " ".join(NOT_A_WORD.sub(" ", text).split())
+
+
+def bare_words(text: str) -> str:
+    """The text's words, accents dropped too: what a mention's name is matched on, since
+    captions spell names loosely (Traore for Traoré)."""
+    decomposed = unicodedata.normalize("NFKD", words(text))
+    return "".join(char for char in decomposed if not unicodedata.combining(char))
 
 
 @dataclass(frozen=True)
@@ -91,6 +99,15 @@ class RawText:
                 return True
             found = haystack.find(needle, found + 1)
         return False
+
+    @cached_property
+    def _bare(self) -> str:
+        return f" {' '.join(bare_words(block.text) for block in self.blocks)} "
+
+    def names(self, name: str) -> bool:
+        """Whether the Raw says this name anywhere, case, accents and punctuation aside."""
+        needle = bare_words(name)
+        return bool(needle) and f" {needle} " in self._bare
 
 
 def parse_raw(body: str) -> RawText:
