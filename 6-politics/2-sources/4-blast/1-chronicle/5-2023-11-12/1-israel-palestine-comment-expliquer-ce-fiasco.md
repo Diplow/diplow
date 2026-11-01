@@ -1,6 +1,6 @@
 ---
 title: "🦏 ISRAËL-PALESTINE : COMMENT EXPLIQUER CE FIASCO JOURNALISTIQUE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2023-11-12
 owner: diplo
 preview: >-
   Blast soutient que les médias français ont repris les éléments de langage de

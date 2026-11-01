@@ -1,20 +1,20 @@
 ---
-title: "2023-11-09 → 2023-11-12"
+title: "2023-11-09 → 2023-11-11"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09
 owner: diplo
 preview: >-
-  Blast dénonce le deux poids, deux mesures du pouvoir et des médias français
-  sur Israël-Palestine, accuse Dupond-Moretti d'avoir fait enquêter sur des
-  magistrats, et alerte sur sa survie financière. Elle reçoit aussi l'UNRWA
-  sur Gaza.
+  Blast reproche à l'État macroniste ses deux poids, deux mesures sur Gaza et
+  l'antisémitisme, juge Dupond-Moretti accablé par un rapport, et se dit face
+  à son plus grand défi : sans abonnés ni dons, son journalisme libre est
+  menacé.
 ---
-# 2023-11-09 → 2023-11-12
+# 2023-11-09 → 2023-11-11
 
-Le fil de la Period est Israël-Palestine, vu sous l'angle du traitement politique et médiatique. Blast reçoit Tamara Alrifai (UNRWA), pour qui l'aide entrée à Gaza n'est qu'une goutte face aux besoins, le sort des réfugiés palestiniens reste sans solution politique depuis la Nakba, et les violations du droit humanitaire interrogent le rôle de l'ONU. Blast soutient ensuite que l'État macroniste pratique deux poids, deux mesures : crimes de guerre russes dénoncés mais pas israéliens, antisémitisme condamné mais pas la stigmatisation des musulmans et des Arabes. Elle soutient aussi que les médias français ont repris les éléments de langage de l'armée israélienne et fait du 7 octobre la seule date qui compte, tandis que les Palestiniens restent invisibles, faute d'images et par un racisme diffus dans les rédactions.
+Blast lit l'actualité du 9 au 11 novembre à travers une même dénonciation : celle d'un pouvoir qui n'applique pas ses principes à tous. Elle soutient que l'État macroniste pratique deux poids, deux mesures : les crimes de guerre russes sont dénoncés, pas les israéliens, et l'antisémitisme est condamné sans que la stigmatisation des musulmans et des Arabes le soit, comme s'ils étaient des victimes négligeables ([[6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/2-2-poids-2-mesures-ou-l|2 POIDS, 2 MESURES OU L’INDIGNITÉ DU MONDE POLITICO-MÉDIATIQUE]]). Sur Gaza, elle reçoit Tamara Alrifai (UNRWA), pour qui l'aide entrée n'est qu'une goutte face aux besoins et le sort des réfugiés palestiniens reste sans solution politique depuis la Nakba.
 
-Sur le terrain judiciaire, Blast soutient que le garde des Sceaux Dupond-Moretti, ancien avocat des personnes visées, a supervisé ou ordonné des enquêtes contre des magistrats avec lesquels il avait eu maille à partir. Elle ajoute qu'il est jugé pour cela devant une Cour de justice de la République très contestable.
+Blast soutient aussi que le garde des Sceaux Éric Dupont-Moretti, ancien avocat des personnes visées, a supervisé ou ordonné des enquêtes contre des magistrats avec lesquels il avait eu maille à partir. Il est jugé pour cela devant une Cour de justice de la République très contestable ([[6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/4-le-rapport-qui-accable-dupond-moretti|LE RAPPORT QUI ACCABLE DUPOND-MORETTI]]).
 
-Blast parle enfin d'elle-même : elle dit affronter le plus gros défi de son histoire. Son audience grandit, avec 900 000 abonnés YouTube, mais ses soutiens payants se raréfient et ses enquêtes lui valent des procès coûteux. Elle appelle à s'abonner ou à donner pour sauver un journalisme indépendant en accès libre.
+Au milieu de ces dates, Blast parle d'elle-même : elle dit affronter le plus gros défi de son histoire. Son audience grandit (900 000 abonnés YouTube), mais ses soutiens payants se raréfient et ses enquêtes lui valent des procès coûteux. Elle appelle à s'abonner ou à donner pour sauver un journalisme indépendant en accès libre.
 
 ## Contenu
 
@@ -22,4 +22,3 @@ Blast parle enfin d'elle-même : elle dit affronter le plus gros défi de son hi
 2. [[6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/2-2-poids-2-mesures-ou-l|2 POIDS, 2 MESURES OU L’INDIGNITÉ DU MONDE POLITICO-MÉDIATIQUE]] (2023-11-09)
 3. [[6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/3-blast-est-face-au-plus-grand|« BLAST EST FACE AU PLUS GRAND DÉFI DE SON HISTOIRE »]] (2023-11-10)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/4-le-rapport-qui-accable-dupond-moretti|LE RAPPORT QUI ACCABLE DUPOND-MORETTI]] (2023-11-11)
-5. [[6-politics/2-sources/4-blast/1-chronicle/4-2023-11-09/5-israel-palestine-comment-expliquer-ce-fiasco|🦏 ISRAËL-PALESTINE : COMMENT EXPLIQUER CE FIASCO JOURNALISTIQUE]] (2023-11-12)
