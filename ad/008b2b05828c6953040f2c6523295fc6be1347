@@ -1,0 +1,31 @@
+6-politics/1-projects/1-wikipol/BUILD.md
+  s_3184f511a74578::t_e87be5d56e9964 31,47,61,66-90,93,104
+6-politics/1-projects/1-wikipol/.run/CLAUDE.md
+  s_3184f511a74578::t_5ced2dce05652d 17
+6-politics/1-projects/1-wikipol/CLAUDE.md
+  s_3184f511a74578::t_26c433317fc19d 65,136
+6-politics/1-projects/1-wikipol/.run/registers/labeled-mentions/decisions.md
+  s_3184f511a74578::t_0aecf19510ad5d 1-34,36-47
+  s_3184f511a74578::t_7b84aa703709c1 35
+6-politics/1-projects/1-wikipol/.vocabulaire/CLAUDE.md
+  s_3184f511a74578::t_741e29cde02255 1-28
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_3184f511a74578::t_6710306e90356a 1-8,10-37,39-57,59-70,72-87,89-103,105-120,122-125,127-130,132-135,137-140,142-145,147-149
+  s_3184f511a74578::t_47e60c8551bda1 9,38,58,71,88,104,121,126,131,136,141,146
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ad008b2b05828c6953040f2c6523295fc6be1347",
+  "prompts": {},
+  "sessions": {
+    "s_3184f511a74578": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2acc1ecc-d46e-4fd6-940a-dc77d66f7c18",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
