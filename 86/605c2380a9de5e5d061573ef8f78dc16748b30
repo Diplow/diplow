@@ -1,0 +1,47 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_7eb913ec6ceb93 90
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/4-motion-de-censure-causes-et-consequences.md
+  s_133ae6e7e1755e::t_3c9b9a47145612 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/5-jvc-brav-m-darmanin-glupatate-repond.md
+  s_133ae6e7e1755e::t_2a50538b37c5e9 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/5-2024-12-01/CLAUDE.md
+  s_133ae6e7e1755e::t_46839a1befcc9a 2,6-10,12,14,16,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/6-2024-12-05/1-renonce-a-sa-nationalite-francaise-pour.md
+  s_133ae6e7e1755e::t_33a2955f0e1ed6 1-74
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/6-2024-12-05/2-paye-ton-droitard-5-1-killian.md
+  s_133ae6e7e1755e::t_9662c2a3c85c82 1-83
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/6-2024-12-05/3-un-inconnu-assassine-le-pdg-de.md
+  s_133ae6e7e1755e::t_35f2278f479a93 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/6-2024-12-05/4-de-woke-a-facho-slapp-raconte.md
+  s_133ae6e7e1755e::t_2b7f67bddb7c46 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/6-2024-12-05/CLAUDE.md
+  s_133ae6e7e1755e::t_a8854969b8ad5f 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/4-2024-11-01/CLAUDE.md
+  s_133ae6e7e1755e::t_6d9aa859f90242 2,6-9,11,13,15,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_133ae6e7e1755e::t_242390b79701ad 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "86605c2380a9de5e5d061573ef8f78dc16748b30",
+  "prompts": {},
+  "sessions": {
+    "s_133ae6e7e1755e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-af66c4d818f74de4c",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
