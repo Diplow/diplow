@@ -1,23 +1,24 @@
 ---
-title: "2025-12-01 → 2026-02-15"
+title: "2025-12-01 → 2026-02-21"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01
 owner: diplo
 preview: >-
-  La PaduTeam soutient que la gauche de rupture doit l'emporter sur celle
-  d'accommodement : elle défend LFI et Mélenchon, mène la campagne Plus jamais
-  PS, et lit l'international comme un impérialisme américain assumé.
+  La PaduTeam lit l'hiver comme une recomposition avant 2027 : elle combat le
+  PS avec la campagne Plus jamais PS, défend LFI et Mélenchon, pousse la FI à
+  radicaliser son programme et lit l'international par l'impérialisme
+  américain.
 ---
-# 2025-12-01 → 2026-02-15
+# 2025-12-01 → 2026-02-21
 
-De décembre à mi-février, la PaduTeam lit la gauche en termes de classes et de stratégie. PCF, PS et Écologistes lui semblent s'accommoder du social-libéralisme et du macronisme, et la gauche de rupture doit l'emporter sur celle d'accommodement. Elle défend LFI et Mélenchon contre les médias et contre le PS, qu'elle combat avec la campagne Plus jamais PS. Elle range Rochedy et les agriculteurs dans le camp réactionnaire.
+Sur ces trois mois, la PaduTeam range la gauche en deux camps : celle de rupture, qui doit l'emporter, et celle d'accommodement. Elle y met le PCF, le PS et les Écologistes, qu'elle voit s'accommoder du social-libéralisme et du macronisme. Le PS est sa cible constante : elle le dit en train de se reconstituer et de trahir, et elle le combat avec la campagne Plus jamais PS, de Guedj à la recomposition autour de Vallaud. Les écologistes sont, selon elle, purgés en gage au PS.
 
-À l'international, elle lit l'enlèvement de Maduro et la revendication du Groenland comme un impérialisme américain assumé. Elle en tire une proposition : commercer avec la Chine et sortir du dollar.
+À l'inverse, elle défend LFI et Mélenchon contre les médias et le PS, démonte les récits médiatiques sur la gauche et pousse la FI à radicaliser son programme. Elle lui demande aussi de garder la tête froide après la mort de Quentin Déranque. Vue de décembre à février, la période est pour elle une recomposition avant 2027, où Macron prépare la guerre. Elle range Rochedy et les agriculteurs dans le camp réactionnaire.
 
-Le ton se précise au fil de la Period. En janvier, elle décrit une recomposition avant 2027 : le PS se reconstitue et trahit, Macron prépare la guerre, et les écologistes sont purgés en gage au PS. En février, elle démonte les récits médiatiques sur la gauche (Duhamel, Chaigneau, Todd, Marianne) comme des choix de camp déguisés en neutralité. Elle reproche à Tondelier de refuser de choisir et soutient que les classes populaires voteraient Mélenchon.
+À l'international, elle lit l'enlèvement de Maduro et la revendication du Groenland comme un impérialisme américain assumé. Sa réponse est de commercer avec la Chine et de sortir du dollar.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/1-2025-12-01/CLAUDE|2025-12-01 → 2025-12-22]] (17 Digests)
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/2-2025-12-23/CLAUDE|2025-12-23 → 2026-01-08]] (16 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/CLAUDE|2026-01-10 → 2026-02-01]] (15 Digests)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/CLAUDE|2026-02-06 → 2026-02-15]] (11 Digests)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/CLAUDE|2026-02-06 → 2026-02-21]] (17 Digests)
