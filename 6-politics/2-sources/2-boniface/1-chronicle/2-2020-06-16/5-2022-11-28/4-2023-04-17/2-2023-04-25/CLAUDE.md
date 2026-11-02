@@ -1,23 +1,23 @@
 ---
-title: "2023-04-25 → 2026-10-14"
+title: "2023-04-25 → 2023-05-09"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/2-2023-04-25
 owner: diplo
 preview: >-
-  Boniface voit dans la Crimée le nœud de la guerre en Ukraine et dans le Sud
-  global l'arbitre du nouvel ordre, que l'Occident, affaibli par son deux
-  poids deux mesures, doit convaincre par l'exemple. Il chronique Stubb et
-  reçoit Sylvie Bermann sur la Chine.
+  Boniface lit la guerre en Ukraine par la Crimée et le drone du Kremlin,
+  décrit un partenariat russo-chinois asymétrique, et voit en Erdogan un
+  président qui peut perdre sans que la Turquie cesse d'être autonome.
 ---
-# 2023-04-25 → 2026-10-14
+# 2023-04-25 → 2023-05-09
 
-Boniface lit la guerre en Ukraine à partir de la Crimée : Kiev et Moscou y tiennent des positions irréconciliables, et seule l'ampleur de la contre-offensive ukrainienne dira si une négociation redevient possible. Il place le Sud global à côté des belligérants, comme un acteur qui veut une paix immédiate. C'est le fil qui revient d'une vidéo à l'autre : le monde ne se joue plus entre Occidentaux.
+Boniface soutient que la Crimée est le nœud de la guerre : Kiev et Moscou ont des positions irréconciliables, le Sud global veut une paix immédiate, et seule l'ampleur de la contre-offensive ukrainienne dira si une négociation redevient possible. Il lit l'« amitié sans limite » entre Moscou et Pékin comme un partenariat de convergence contre l'ordre occidental, non comme une alliance : très asymétrique en faveur de la Chine, qui soutient la Russie sans lui livrer d'armes. Devant le drone du Kremlin, il juge peu probable que l'Ukraine ait visé Poutine, pèse l'hypothèse d'une opposition interne et celle d'un faux drapeau russe, qui serait aussi un aveu de faiblesse, et prévoit une intensification de la guerre quelle que soit l'origine du tir.
 
-Il le prolonge en chroniquant Le Triangle du pouvoir d'Alexander Stubb. Selon le livre, le monde se divise en trois blocs : l'Occident, l'Orient et le Sud global. Boniface retient que l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur un Sud qui décidera du nouvel ordre.
-
-La Chine est abordée par un entretien avec Sylvie Bermann, ancienne ambassadrice à Pékin, dont les thèses restent les siennes. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Elle estime que la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais que son excédent commercial met l'Europe en difficulté.
+Boniface consacre aussi deux vidéos aux élections turques : Erdogan, usé par la dérive autoritaire, la gestion du séisme et la crise économique, peut perdre le pouvoir pour la première fois, mais une victoire de l'opposition ne changerait pas l'ADN géopolitique d'une Turquie qui restera autonome. Son invité Didier Billion y voit lui aussi une alternance qui changerait le ton plus que le fond de la politique étrangère turque. Dans un entretien avec Boniface, Agnès Levallois soutient pour sa part que le gouvernement Netanyahou, une Autorité palestinienne délégitimée et l'inaction de la communauté internationale ferment toute issue politique en Israël-Palestine.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/2-2023-04-25/1-la-crimee-condition-de-la-victoire|La Crimée, condition de la victoire ?]] (2023-04-25)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/2-2023-04-25/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/2-2023-04-25/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/2-2023-04-25/2-israel-palestine-le-cout-de-l|Israël-Palestine : le coût de l’impuissance volontaire. Avec Agnès Levallois - Entretiens géopo]] (2023-04-26)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/2-2023-04-25/3-la-relation-entre-la-russie-et|La relation entre la Russie et la Chine - Expliquez-moi...]] (2023-04-27)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/2-2023-04-25/4-erdogan-clap-de-fin-avec-didier|Erdogan : clap de fin ? Avec Didier Billion - Entretiens géopo]] (2023-05-03)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/2-2023-04-25/5-le-mystere-du-drone-du-kremlin|Le mystère du drone du Kremlin]] (2023-05-04)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/2-2023-04-25/6-elections-en-turquie-erdogan-stop-ou|Élections en Turquie : Erdogan, stop ou encore ?]] (2023-05-09)
