@@ -1,0 +1,71 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_6d1cee4b8de52c 205
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/CLAUDE.md
+  s_acaf6d88d9ecff::t_880ab9709802b3 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/1-le-diable-est-un-drole-de.md
+  s_acaf6d88d9ecff::t_9e5b7209b0b4ce 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/2-grand-patronat-et-extreme-droite-les.md
+  s_acaf6d88d9ecff::t_f3edc3a9d890f0 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/3-sortir-de-l-amour-romantique-comme.md
+  s_acaf6d88d9ecff::t_4751c49f55c0a9 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/4-comment-le-gouvernement-netanyahu-veut-faire.md
+  s_acaf6d88d9ecff::t_b78d78e4a14626 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/5-marseille-la-grande-fracture-des-deux.md
+  s_acaf6d88d9ecff::t_2fe940942e4999 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/6-collaboration-avec-l-extreme-droite-comment.md
+  s_acaf6d88d9ecff::t_bd2f16f36ccb11 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/CLAUDE.md
+  s_acaf6d88d9ecff::t_76c97ef42ade8f 3,21-26
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/2-2024-08-28/1-paradoxes-des-recits-de-transfuges-de.md
+  s_acaf6d88d9ecff::t_690985eb35adaf 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/2-2024-08-28/2-emmanuel-macron-est-il-en-train.md
+  s_acaf6d88d9ecff::t_77c7be0a418a5a 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/2-2024-08-28/3-macron-la-note-interne-qui-legitime.md
+  s_acaf6d88d9ecff::t_7630aeb900f483 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/2-2024-08-28/4-violences-policieres-la-fabrique-de-l.md
+  s_acaf6d88d9ecff::t_694ba24ce89401 1-76
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/2-2024-08-28/5-finance-la-machine-a-detruire.md
+  s_acaf6d88d9ecff::t_ee328e07e58ba8 1-96
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/2-2024-08-28/6-de-pinochet-a-macron-50-nuances.md
+  s_acaf6d88d9ecff::t_fa1283e658c076 1-88
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/2-2024-08-28/CLAUDE.md
+  s_acaf6d88d9ecff::t_4f2fd16e920af5 2-3,6-9,11,13,15,19-24
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/3-2024-09-06/1-gerald-darmanin-en-croisade-contre-le.md
+  s_acaf6d88d9ecff::t_3c2c46875c3038 1-63
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/3-2024-09-06/2-m-barnier-victoire-pour-l-extreme.md
+  s_acaf6d88d9ecff::t_1d5548f370f53c 1-80
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/3-2024-09-06/3-cooperatives-les-alternatives-au-capitalisme-existent.md
+  s_acaf6d88d9ecff::t_5e336bdcda6ebe 1-83
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/3-2024-09-06/CLAUDE.md
+  s_acaf6d88d9ecff::t_c939b249a1892e 1-21
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/CLAUDE.md
+  s_acaf6d88d9ecff::t_b0ce3e2a3c9d25 1-22
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/CLAUDE.md
+  s_acaf6d88d9ecff::t_3c352b3c5fb66e 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_acaf6d88d9ecff::t_487733076996d2 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f3c5243ab70e4d4e88c2ee6732965246d9b510cf",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_acaf6d88d9ecff": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-adc666cca62973d67",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
