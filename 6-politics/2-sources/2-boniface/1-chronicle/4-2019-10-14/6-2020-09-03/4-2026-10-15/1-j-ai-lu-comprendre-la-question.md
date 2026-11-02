@@ -1,6 +1,6 @@
 ---
 title: "J'ai lu... « Comprendre la question kurde » de Didier Billion"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/3-2026-10-15
+parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/4-2026-10-15
 owner: diplo
 preview: >-
   Boniface reçoit Didier Billion, auteur de *Comprendre la question kurde*

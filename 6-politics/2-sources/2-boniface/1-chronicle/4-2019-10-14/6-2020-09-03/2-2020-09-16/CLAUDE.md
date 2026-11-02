@@ -1,23 +1,26 @@
 ---
-title: "2020-09-16 → 2026-10-14"
+title: "2020-09-16 → 2020-09-24"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16
 owner: diplo
 preview: >-
-  Boniface reçoit Pierre Haski, qui plaide pour la complexité, et Sylvie
-  Bermann, qui lit le sommet Trump-Xi comme une parité entre Washington et
-  Pékin, et chronique le livre d'Alexander Stubb sur trois blocs : Occident,
-  Orient, Sud global.
+  Boniface lit la prolifération nucléaire comme un ordre déséquilibré qui
+  protège le privilège des puissances nucléaires, juge qu'un Biden changerait
+  le ton sans bouleverser Russie et Chine, et défend l'ouverture du débat sur
+  le Rwanda de Kagame.
 ---
-# 2020-09-16 → 2026-10-14
+# 2020-09-16 → 2020-09-24
 
-Sur ces trois Digests, Boniface donne la parole à des regards qui se répondent plus qu'ils ne s'additionnent, autour d'un monde que l'on ne peut plus lire en bons et en méchants. En 2020, Pierre Haski soutient qu'éclairer un large public exige de rentrer dans la complexité, sans renoncer à un avis argumenté. Boniface lui laisse cette thèse : il reçoit un invité.
+Boniface applique sa grille à deux sujets. La non-prolifération répond selon lui à un vrai souci de stabilité, mais elle protège aussi le privilège des puissances nucléaires. Il juge le TNP déséquilibré, et l'Inde, le Pakistan, Israël, la Corée du Nord, l'Irak et l'Iran en ont chacun révélé les failles ([[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16/2-la-proliferation-nucleaire-expliquez-moi|La prolifération nucléaire]]). Sur les États-Unis, une élection de Biden changerait le ton et rouvrirait les dossiers de l'Iran et du climat, mais pas la Russie ni la Chine, car les diplomaties sont des tankers. Les Européens doivent en profiter pour bâtir un rapport de force, alliés mais non alignés ([[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16/4-biden-pourrait-il-revolutionner-la-diplomatie|Biden]]).
 
-Les deux autres Digests, six ans plus tard, tournent autour de la même question : qui pèse dans le nouvel ordre ? Boniface chronique Le Triangle du pouvoir d'Alexander Stubb, qui divise le monde en trois blocs, Occident, Orient et Sud global. Boniface retient de ce livre que l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Deux chroniques de lecture complètent la période. Boniface salue l'Atlas de l'Afrique de l'AFD, complet et accessible, qui répond aux clichés par des chiffres sans cacher les défis de l'emploi et des inégalités. Il juge que le livre de Judi Rever sur Kagame n'est pas négationniste. Il y voit un régime à la fois réussite économique et dictature, et estime qu'il est temps d'ouvrir le débat, car l'interdire n'est jamais la bonne solution ([[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16/6-j-ai-lu-rwanda-l-eloge|Rwanda l'éloge du sang]]).
 
-Avec Sylvie Bermann, l'angle est plus concret. Pour l'ancienne ambassadrice à Pékin, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, sans qu'on puisse dire que Pékin a gagné. Elle voit une Chine qui joue la patience sur Taïwan, qui n'est pas anti-européenne, mais dont l'excédent commercial met l'Europe en difficulté.
+Deux invités de *Comprendre le monde* portent leurs propres thèses. Pour Pierre Haski, éclairer un large public exige de rentrer dans la complexité plutôt que de découper le monde en bons et en méchants, sans renoncer à un avis argumenté. Pour Akram Belkaïd, le Covid-19 n'a imposé au Hirak algérien qu'une pause conjoncturelle, dont le régime profite pour réprimer et pour faire passer une constitution sans débat. Il reste optimiste sur le long terme.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16/1-comprendre-le-monde-s4-3-pierre|Comprendre le monde S4#3 - Pierre Haski - "Master class géopolitique"]] (2020-09-16)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16/2-la-proliferation-nucleaire-expliquez-moi|La prolifération nucléaire - Expliquez-moi...]] (2020-09-17)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16/3-j-ai-lu-l-atlas-de|J'ai lu... "L'Atlas de l'Afrique" de l'AFD]] (2020-09-18)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16/4-biden-pourrait-il-revolutionner-la-diplomatie|Biden pourrait-il révolutionner la diplomatie américaine ?]] (2020-09-21)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16/5-comprendre-le-monde-s4-4-akram|Comprendre le monde S4#4 - Akram Belkaïd - "Algérie : le Covid-19 a-t-il tué le Hirak ?"]] (2020-09-23)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/2-2020-09-16/6-j-ai-lu-rwanda-l-eloge|J'ai lu... Rwanda l'éloge du sang]] (2020-09-24)
