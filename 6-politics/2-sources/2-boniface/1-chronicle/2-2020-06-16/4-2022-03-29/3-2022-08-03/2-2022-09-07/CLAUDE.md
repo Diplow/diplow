@@ -1,23 +1,25 @@
 ---
-title: "2022-09-07 → 2026-10-14"
+title: "2022-09-07 → 2022-09-19"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/3-2022-08-03/2-2022-09-07
 owner: diplo
 preview: >-
-  Sur ces dates, Boniface reçoit Gérard Chaliand et Sylvie Bermann et
-  chronique le livre d'Alexander Stubb : Ukraine, Chine, rapport de forces
-  entre l'Occident et le Sud global. Les thèses restent à ceux qui les
-  portent.
+  Boniface lit la guerre en Ukraine par les appuis de la Russie : Poutine
+  n'est pas isolé, grâce à l'Inde et à la Chine, mais ces mêmes appuis
+  l'empêcheraient d'aller au nucléaire. Il reçoit Gérard Chaliand et Marc
+  Endeweld, qui défendent leurs propres thèses.
 ---
-# 2022-09-07 → 2026-10-14
+# 2022-09-07 → 2022-09-19
 
-Les trois Digests de cette Period sont deux entretiens et une chronique de livre, et les thèses y sont celles de ses interlocuteurs. En 2022, Boniface reçoit Gérard Chaliand, pour qui la guerre en Ukraine aurait pu être évitée sans l'élargissement de l'OTAN. Selon Chaliand, elle finira par un compromis territorial plutôt que par une victoire, et le vrai adversaire de l'Occident est la Chine.
+Boniface soutient que Poutine, au forum de Vladivostok, a voulu montrer qu'il n'est pas isolé, mais que son appui réel tient à la neutralité de l'Inde et au soutien implicite de la Chine. Les Occidentaux, seuls face à la Russie, ne doivent donc pas forcer les autres pays à choisir. La même grille sert sur le nucléaire : Poutine, brutal mais pas irrationnel, n'irait pas jusqu'à l'arme atomique, car franchir le tabou lui ferait perdre l'appui de la Chine et de l'Inde.
 
-En 2026, Boniface chronique *Le Triangle du pouvoir*, où le président finlandais Alexander Stubb divise le monde en trois blocs : Occident, Orient et Sud global. Pour Stubb, l'Occident est affaibli par ses échecs et son deux poids deux mesures. Il doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre. Boniface reçoit ensuite l'ancienne ambassadrice à Pékin Sylvie Bermann. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans que Pékin ait gagné. La Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Deux émissions de *Comprendre le monde* prolongent ce fil par la voix d'invités. Pour Gérard Chaliand, la guerre aurait pu être évitée sans l'élargissement de l'OTAN, elle finira par un compromis territorial et le vrai adversaire de l'Occident est la Chine. Pour Marc Endeweld, le gaz est un enjeu caché de la guerre, où Washington, Moscou et Total jouent leurs intérêts, et l'Europe, faute d'anticipation, s'est mise dans les mains des Russes.
 
-D'un Digest à l'autre, l'écart de quatre ans est grand, mais la Chine et la place de l'Occident face aux autres puissances reviennent d'un bout à l'autre de la Period.
+Boniface présente aussi son livre sur l'histoire de la Coupe du monde, un football mondialisé qui concentre des débats de société.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/3-2022-08-03/2-2022-09-07/1-comprendre-le-monde-s6-1-gerard|Comprendre le monde S6#1 – Gérard Chaliand – "Une interprétation géopolitique du monde"]] (2022-09-07)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/3-2022-08-03/2-2022-09-07/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/3-2022-08-03/2-2022-09-07/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/3-2022-08-03/2-2022-09-07/2-forum-de-vladivostok-poutine-veut-montrer|Forum de Vladivostok : Poutine veut montrer qu'il n'est pas seul]] (2022-09-08)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/3-2022-08-03/2-2022-09-07/3-parution-3-minutes-pour-comprendre-l|(PARUTION) 3 minutes pour comprendre... L'histoire de la Coupe du monde de football]] (2022-09-12)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/3-2022-08-03/2-2022-09-07/4-comprendre-le-monde-s6-2-marc|Comprendre le monde S6#2 – Marc Endeweld – "Géopolitique du gaz : la face cachée de la guerre"]] (2022-09-14)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/3-2022-08-03/2-2022-09-07/5-poutine-une-menace-nucleaire-credible|Poutine : une menace nucléaire crédible ?]] (2022-09-19)

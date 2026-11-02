@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Pascal Boniface applique pendant dix ans les mêmes grilles à l'actualité :
-  multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
-  rivalité sino-américaine. Il presse l'Europe d'être autonome tout en restant
-  alliée des États-Unis, et tient la question palestinienne pour centrale.
+  Pendant dix ans, Boniface applique les mêmes grilles à l'actualité :
+  multilatéralisme contre unilatéralisme américain, deux-poids-deux-mesures
+  occidental. Il presse l'Europe de gagner son autonomie stratégique, puis lit
+  un monde multipolaire où le Sud global pèse.
 ---
 # Chronicle
 
-De 2016 à 2026, Pascal Boniface lit l'actualité internationale à travers un petit nombre de grilles stables. Le multilatéralisme s'oppose pour lui à l'unilatéralisme, et le deux-poids-deux-mesures occidental structure son regard sur les crises. Trump, puis le Covid-19, qu'il tient pour un révélateur, lui servent de cas d'application, avant que l'Ukraine n'en vienne à révéler à ses yeux les limites occidentales.
+De 2016 à 2026, Boniface lit l'actualité internationale à travers un petit nombre de grilles qu'il remobilise sans cesse. Le multilatéralisme s'oppose à l'unilatéralisme américain, d'abord sous Trump, et le deux-poids-deux-mesures occidental structure son regard. Il demande à l'Europe d'acquérir son autonomie stratégique. Le Covid-19 lui sert de révélateur des rapports de force du moment.
 
-D'une période à l'autre, la continuité prime sur la rupture. Boniface presse l'Europe d'acquérir son autonomie stratégique, sans la couper de l'alliance avec les États-Unis. À partir de 2020, la rivalité sino-américaine prend plus de place dans son analyse. La question palestinienne reste centrale dans sa lecture du monde.
+À partir de 2020, les mêmes outils servent à lire la rivalité sino-américaine et l'échec des interventions extérieures. Puis vient l'Ukraine, qui l'amène à décrire un monde multipolaire où le Sud global pèse. Sur la Palestine, il reproche à la France de s'en tenir à des protestations. La continuité des grilles d'une période à l'autre fait la cohérence de sa lecture.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (299 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (305 Digests)

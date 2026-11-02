@@ -158,6 +158,7 @@ kinds:
       ancien-commissaire-européen: {définition: "A été membre de la Commission européenne et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Ax11S6NfGvc.md}
       ancien-militaire: {définition: "A servi dans une armée et n'y sert plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/pMSgohsnkJM.md}
       assistant-parlementaire: {définition: "Collabore avec un parlementaire dans son travail politique.", statut: proposé, introduit_par: paduteam/2lojw09EHRw.md}
+      commerçant: {définition: "Tient un commerce, comme un café ou une boutique.", statut: proposé, introduit_par: blast/AnnvY4AxufE.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
