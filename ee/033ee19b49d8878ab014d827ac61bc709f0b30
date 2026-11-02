@@ -1,0 +1,53 @@
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/CLAUDE.md
+  s_d682eb1160164f::t_23e73a27ecf279 2,6-9,11,13,15,17
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/1-2025-08-01/1-the-right-winger-the-most-panic.md
+  s_d682eb1160164f::t_06fbc99583184d 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/1-2025-08-01/2-poutou-d-ouvrier-revolutionnaire-a-libraire.md
+  s_d682eb1160164f::t_1b95b96996f9f0 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/1-2025-08-01/3-bernard-arnault-le-pire-esclavagiste.md
+  s_d682eb1160164f::t_285f474d110ea2 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/1-2025-08-01/4-la-paduteam-hom0phobes-envers-lagasnerie-echaarpe.md
+  s_d682eb1160164f::t_4df00941fd55fd 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/1-2025-08-01/CLAUDE.md
+  s_d682eb1160164f::t_b40ba0aa6fd7ac 2-3,6-9,11,13,15,19-22
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/2-2025-08-07/1-lordon-melenchon-peut-gagner-en-2027.md
+  s_d682eb1160164f::t_7898d8046bb89a 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/2-2025-08-07/2-la-masterclass-de-melenchon-sur-le.md
+  s_d682eb1160164f::t_ffcf178f3e6419 1-102
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/2-2025-08-07/3-ce-milliardaire-veut-des-bebes-blancs.md
+  s_d682eb1160164f::t_eb73753bf93e04 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/2-2025-08-07/4-ce-droitard-adore-les-genes-de.md
+  s_d682eb1160164f::t_b61fbb4e1b04d9 1-99
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/2-2025-08-07/CLAUDE.md
+  s_d682eb1160164f::t_3031bca9b656f0 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/3-2025-08-13/1-parti-socialiste-leur-plan-anti-melenchon.md
+  s_d682eb1160164f::t_ac76c85f6c66d2 1-108
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/3-2025-08-13/2-ces-2-bourgeoises-nous-motivent-pour.md
+  s_d682eb1160164f::t_7b21dfd2e2f710 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/3-2025-08-13/3-julien-dray-nie-la-famine-a.md
+  s_d682eb1160164f::t_2c57c435467b43 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/3-2025-08-13/CLAUDE.md
+  s_d682eb1160164f::t_55634ee44a8a76 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/CLAUDE.md
+  s_d682eb1160164f::t_2618ec70ca178c 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/CLAUDE.md
+  s_d682eb1160164f::t_6ccac7cdd7d77d 2,6-8,10,12,14,16,22-23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_d682eb1160164f::t_9348ae8f2c4a49 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ee033ee19b49d8878ab014d827ac61bc709f0b30",
+  "prompts": {},
+  "sessions": {
+    "s_d682eb1160164f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a99c8c41f28287284",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
