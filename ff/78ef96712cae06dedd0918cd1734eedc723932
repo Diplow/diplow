@@ -1,0 +1,39 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/4-2024-03-30/CLAUDE.md
+  s_751c9a14c50576::t_193d4843ee36e1 6-8,12,14,16
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02/1-testosterror-ou-comment-etre-un-homme.md
+  s_751c9a14c50576::t_ff80aa5605c075 1-85
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02/2-pierre-messmer-heros-en-france-bourreau.md
+  s_751c9a14c50576::t_877648ff625f05 1-96
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02/3-comment-e-macron-va-encore-voler.md
+  s_751c9a14c50576::t_022bac252609f5 1-78
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02/4-vol-de-donnees-de-43-millions.md
+  s_751c9a14c50576::t_f6290131bf2973 1-65
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02/5-poutine-du-contrat-social-a-la.md
+  s_751c9a14c50576::t_4ceb79c1bacd1d 1-75
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02/6-bfmtv-rachetee-par-le-milliardaire-prefere.md
+  s_751c9a14c50576::t_0c3446bd18c60a 1-101
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02/CLAUDE.md
+  s_751c9a14c50576::t_c6c2bf84d55166 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/CLAUDE.md
+  s_751c9a14c50576::t_c11339da10207e 2,6-8,10,12,14,16,24
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE.md
+  s_751c9a14c50576::t_a89c1e32c1be4a 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_751c9a14c50576::t_8b5112cccc9204 6-8,12,14,16,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ff78ef96712cae06dedd0918cd1734eedc723932",
+  "prompts": {},
+  "sessions": {
+    "s_751c9a14c50576": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aa90e1b2f272ce4ba",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
