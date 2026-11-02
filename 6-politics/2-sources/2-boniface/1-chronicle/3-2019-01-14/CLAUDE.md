@@ -3,19 +3,18 @@ title: "2019-01-14 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14
 owner: diplo
 preview: >-
-  De 2019 à 2026, Boniface lit l'actualité par quelques grilles :
-  l'unilatéralisme américain, un deux poids deux mesures occidental, une
-  Europe dépendante de Washington qui doit définir ses intérêts, et le Sud
-  global. Il défend la diplomatie et le multilatéralisme, et nuance ses
-  lectures.
+  Boniface lit l'actualité mondiale par quelques grilles stables : un deux
+  poids deux mesures occidental, des Européens trop alignés sur Washington, un
+  multilatéralisme à défendre, des rapports de force entre États. Il reçoit
+  aussi des invités.
 ---
 # 2019-01-14 → 2026-10-30
 
-Dès 2019, Boniface lit le Venezuela, la Corée du Nord, les sanctions ou la guerre commerciale à travers l'unilatéralisme américain. Il craint que Trump rétablisse une hégémonie par la menace et les rapports de force. Il en tire un même reproche aux Européens : trop dépendants de Washington, ils doivent définir leurs intérêts, viser l'autonomie stratégique et tenir tête, notamment sur le commerce, où une Europe unie en a les moyens. Il juge aussi que l'OTAN est mal adaptée au terrorisme.
+Sur toute la Period, Boniface applique les mêmes grilles à des événements très divers. Il voit dans l'unilatéralisme américain, fait de sanctions et de menaces sous Trump, la tentative de rétablir une hégémonie. Il dénonce un deux poids deux mesures occidental. Il presse les Européens de définir leurs intérêts et de gagner en autonomie stratégique plutôt que de s'aligner sur Washington. Il soutient qu'unie sur le commerce, l'Europe peut tenir tête à Trump. Face à la logique des blocs, il défend la diplomatie et un multilatéralisme qui, malgré sa crise, fonctionne, et plus tard un multi-alignement.
 
-Le deux poids deux mesures occidental revient d'un bout à l'autre de la Période, avec le silence des capitales sur les Ouïghours comme exemple, et l'idée que les Occidentaux n'appliquent pas à tous les mêmes principes. Boniface oppose à ces rapports de force la diplomatie et un multilatéralisme en crise. Il salue le refus de la guerre d'Irak par Chirac, soutient la rue algérienne contre un cinquième mandat de Bouteflika et traite le sport comme un enjeu politique. Dans les dernières années, il décrit le multi-alignement du Sud global et juge qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens.
+Ces grilles s'appliquent à des dossiers qui se succèdent. En 2019, il traite le Venezuela, en nuançant : la contestation de Maduro est d'abord nationale. Il traite aussi la Corée du Nord, la rue algérienne contre un cinquième mandat de Bouteflika, une guerre Chine/États-Unis qu'il juge loin d'être écrite, et l'offensive turque comme suite du retrait américain. Il évoque une OTAN mal adaptée au terrorisme et le silence des capitales sur les Ouïghours. Il salue Chirac pour son refus de la guerre d'Irak et traite le sport comme un enjeu politique.
 
-Ses lectures restent nuancées : la contestation de Maduro est d'abord nationale, et la guerre entre la Chine et les États-Unis est loin d'être écrite. Il reçoit aussi des invités, dont certains discutent son Requiem pour le monde occidental.
+La Chronicle est très dense sur 2019, qui rassemble la grande majorité des Digests. Les années suivantes tiennent dans la dernière Period, qui s'étend jusqu'en 2026. Boniface y reçoit des invités, qui discutent son Requiem pour le monde occidental ou parlent du coronavirus, des Kurdes et de Gaza. Leurs propos restent les leurs.
 
 ## Contenu
 
@@ -24,4 +23,4 @@ Ses lectures restent nuancées : la contestation de Maduro est d'abord nationale
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/CLAUDE|2019-04-08 → 2019-07-03]] (23 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/4-2019-07-05/CLAUDE|2019-07-05 → 2019-10-10]] (19 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/CLAUDE|2019-10-14 → 2019-12-10]] (22 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/CLAUDE|2019-12-11 → 2026-10-30]] (19 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/CLAUDE|2019-12-11 → 2026-10-30]] (25 Digests)

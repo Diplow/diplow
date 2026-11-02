@@ -3,19 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Pascal Boniface lit dix ans d'actualité par quelques grilles constantes :
-  multilatéralisme contre unilatéralisme américain, deux poids deux mesures
-  occidental, Europe qui doit définir ses intérêts et gagner en autonomie, Sud
-  global. Il défend la diplomatie, en nuançant.
+  Boniface lit dix ans d'actualité mondiale par quelques grilles stables : le
+  multilatéralisme contre l'unilatéralisme, un deux poids deux mesures
+  occidental, des Européens trop alignés sur Washington, l'autonomie
+  stratégique à conquérir, des rapports de force entre États.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Pascal Boniface revient aux mêmes grilles de lecture. La première oppose le multilatéralisme à l'unilatéralisme. Dès l'arrivée de Trump, il lit la scène internationale à travers elle. Il juge le refus de négocier contre-productif pour ceux qui le pratiquent, et il tient les acteurs pour rationnels. Il voit en 2018 un contrôle des armements démantelé et un multilatéralisme en crise mais indispensable. Dans la suite de la période, cette grille devient une critique de l'unilatéralisme américain, à laquelle s'ajoute celle d'un deux poids deux mesures occidental.
+De 2016 à 2019, Boniface lit la scène internationale à travers Trump. Il y applique le multilatéralisme contre l'unilatéralisme, le refus de négocier qui se retourne contre ses auteurs et la rationalité des acteurs. Il voit l'arms control démantelé, un multilatéralisme en crise mais indispensable, et une unipolarité que l'Europe doit refuser. Il juge Obama meilleur qu'on ne le dit et place Macron dans la ligne gaullo-mitterrandiste, tout en voyant les gilets jaunes l'affaiblir à l'international.
 
-Boniface en tire un message à l'adresse de la France et de l'Europe. Elles doivent refuser l'unipolarité, viser l'autonomie stratégique et définir leurs propres intérêts, plutôt que rester dépendantes de Washington. Il lit aussi la montée du Sud global comme un changement durable de l'ordre mondial. Côté français, il situe Macron dans la ligne gaullo-mitterrandiste et voit les gilets jaunes l'affaiblir à l'international. Il juge Obama meilleur qu'on ne le dit. Tout au long, il défend la diplomatie et le multilatéralisme, et ses lectures restent nuancées.
+Les mêmes outils reviennent ensuite sur toute la période, jusqu'en 2026. Boniface dénonce un deux poids deux mesures occidental et des Européens trop alignés sur Washington. Il appelle la France et l'Europe à l'autonomie stratégique, et il défend un multilatéralisme qu'il juge à préserver. Il ramène les crises à des rapports de force entre États plutôt qu'à des récits d'événements.
+
+La Chronicle montre ainsi une grille de lecture qui reste très stable d'une actualité à l'autre : ce qui change, c'est l'événement auquel il l'applique. Dans la dernière période, Boniface reçoit aussi des invités.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]] (78 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2019-01-09]] (72 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2026-10-30]] (125 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2026-10-30]] (131 Digests)

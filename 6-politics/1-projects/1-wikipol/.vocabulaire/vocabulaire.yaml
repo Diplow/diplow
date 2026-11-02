@@ -121,6 +121,7 @@ kinds:
       pilote: {définition: "Pilote un aéronef, notamment pour une compagnie aérienne.", statut: proposé, introduit_par: blast/N_GWbPTMLqA.md}
       dignitaire-nazi: {définition: "Dirigeant du parti ou de l'État nazi, notamment ministre du Reich.", statut: proposé, introduit_par: paduteam/oKhLNMPUApY.md}
       démographe: {définition: "Étudie les populations et leur évolution.", statut: proposé, introduit_par: boniface/Tl5hZKRztyw.md}
+      chroniqueur: {définition: "Tient une chronique régulière dans un média, à la télévision, à la radio ou dans la presse.", statut: proposé, introduit_par: paduteam/L4b3g_GHEqk.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
