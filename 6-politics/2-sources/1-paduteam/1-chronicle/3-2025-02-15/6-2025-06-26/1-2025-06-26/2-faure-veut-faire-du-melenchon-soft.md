@@ -1,6 +1,6 @@
 ---
 title: "FAURE VEUT FAIRE DU MÉLENCHON SOFT !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/5-2025-06-04/5-2025-06-26
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/1-2025-06-26
 owner: diplo
 preview: >-
   La PaduTeam soutient que Faure, réélu à la tête du PS, ne cherche pas

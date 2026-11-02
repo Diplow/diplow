@@ -1,6 +1,6 @@
 ---
 title: "HOLLANDE NARGUE LES SANS DENTS AVEC SA VIE INSTAGRAM"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/5-2025-06-04/5-2025-06-26
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/1-2025-06-26
 owner: diplo
 preview: >-
   La PaduTeam détourne un reportage Paris Match sur Hollande et Julie Gayet à
