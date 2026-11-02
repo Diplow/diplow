@@ -188,6 +188,7 @@ kinds:
       site: {définition: "Un lieu précis : une usine, une place, un bâtiment.", statut: accepté}
       infrastructure: {définition: "Ouvrage ou projet d'aménagement du territoire, comme une autoroute.", statut: proposé, introduit_par: blast/E1Yn7k4mlBQ.md}
       département: {définition: "Collectivité territoriale française de niveau départemental, y compris d'outre-mer.", statut: proposé, introduit_par: blast/Bq3_whwwKTg.md}
+      colonie: {définition: "Implantation civile israélienne en Cisjordanie, illégale au regard du droit international.", statut: proposé, introduit_par: blast/XjqGY3qsQaE.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -224,6 +225,7 @@ kinds:
       génocide: {définition: "Extermination systématique d'un groupe national, ethnique ou religieux.", statut: proposé, introduit_par: blast/9sBrrpX8Ywg.md}
       débat: {définition: "Échange organisé entre plusieurs intervenants autour d'un sujet, en direct ou enregistré.", statut: proposé, introduit_par: paduteam/Im2oLpge17Y.md}
       massacre: {définition: "Tuerie de masse commise contre une population civile ou des manifestants.", statut: proposé, introduit_par: boniface/WVMzhXjYC5c.md}
+      foire: {définition: "Salon commercial où des exposants présentent leurs offres au public.", statut: proposé, introduit_par: blast/XjqGY3qsQaE.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
