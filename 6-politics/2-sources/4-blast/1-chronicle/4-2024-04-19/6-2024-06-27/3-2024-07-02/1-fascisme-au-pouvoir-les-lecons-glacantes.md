@@ -1,6 +1,6 @@
 ---
 title: "FASCISME AU POUVOIR : LES LEÇONS (GLAÇANTES) DU CAS ITALIEN"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/6-2024-06-30
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/6-2024-06-27/3-2024-07-02
 owner: diplo
 preview: >-
   Blast soutient que Georgia Meloni applique en Italie un programme d'extrême

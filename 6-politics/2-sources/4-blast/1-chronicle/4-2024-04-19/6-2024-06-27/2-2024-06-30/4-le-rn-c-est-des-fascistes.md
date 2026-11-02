@@ -1,6 +1,6 @@
 ---
 title: "\"LE RN, C’EST DES FASCISTES EN COSTARD\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/6-2024-06-30
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/6-2024-06-27/2-2024-06-30
 owner: diplo
 preview: >-
   Pour les deux invités de Blast, une historienne et un sociologue, le RN est

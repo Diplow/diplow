@@ -1,6 +1,6 @@
 ---
 title: "LGBTQIA+ : UNE FIERTÉ ENCORE TRÈS MENACÉE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/6-2024-06-27/1-2024-06-27
 owner: diplo
 preview: >-
   Blast soutient que la fierté LGBTQIA+ est née de la révolte de Stonewall
