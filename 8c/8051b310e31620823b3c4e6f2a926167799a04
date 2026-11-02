@@ -1,0 +1,43 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/4-2024-05-19/CLAUDE.md
+  s_6838625815887f::t_188689876db513 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/5-2024-05-22/1-gaza-le-mot-genocide-n-est.md
+  s_6838625815887f::t_c67bc13a4cdd5f 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/5-2024-05-22/2-nouvelle-caledonie-les-kanaks-ne-lacheront.md
+  s_6838625815887f::t_bbcfdf8a631cfe 1-79
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/5-2024-05-22/3-kanaky-nouvelle-caledonie-le-macronisme-est.md
+  s_6838625815887f::t_6dd364ed96824c 1-92
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/5-2024-05-22/4-vers-la-fin-du-droit-au.md
+  s_6838625815887f::t_b83dd512b9ecbc 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/5-2024-05-22/CLAUDE.md
+  s_6838625815887f::t_3617dfc1aabc49 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/6-2024-05-26/1-la-revolte-des-kanaks-et-les.md
+  s_6838625815887f::t_02d950602c1dff 1-83
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/6-2024-05-26/2-la-vie-de-muriel-j-allais.md
+  s_6838625815887f::t_7ded5747889e52 1-65
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/6-2024-05-26/3-normale-sup-l-elite-du-pays.md
+  s_6838625815887f::t_20bb716bfd3089 1-68
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/6-2024-05-26/CLAUDE.md
+  s_6838625815887f::t_56877e1d70b31e 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/CLAUDE.md
+  s_6838625815887f::t_540132d2cc45b9 2,6-9,11,13,15-17,24-26
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE.md
+  s_6838625815887f::t_36464caa116025 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_6838625815887f::t_8006a3fce6ceeb 6-9,13,15-17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8c8051b310e31620823b3c4e6f2a926167799a04",
+  "prompts": {},
+  "sessions": {
+    "s_6838625815887f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a5c7895d9306bbd73",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
