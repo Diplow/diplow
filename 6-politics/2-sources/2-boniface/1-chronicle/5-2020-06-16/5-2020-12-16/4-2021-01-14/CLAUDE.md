@@ -1,21 +1,22 @@
 ---
-title: "2021-01-14 → 2026-10-14"
+title: "2021-01-14 → 2021-01-25"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/5-2020-12-16/4-2021-01-14
 owner: diplo
 preview: >-
-  Boniface soutient que les révoltes arabes de 2011 ont donné autant de cas
-  nationaux que de pays, sans effet domino. Il chronique le livre d'Alexander
-  Stubb sur un monde en trois blocs, puis reçoit Sylvie Bermann, pour qui le
-  sommet Trump-Xi consacre la parité sino-américaine.
+  Boniface lit les dix ans des révoltes arabes comme autant de cas nationaux
+  distincts, sans effet domino, et voit en Navalny l'opposant qui incarne
+  l'opposition à un Poutine que la corruption fragilise. Il reçoit Sophie
+  Bessis sur la Tunisie et raconte les trente ans de l'IRIS.
 ---
-# 2021-01-14 → 2026-10-14
+# 2021-01-14 → 2021-01-25
 
-Boniface soutient, dans [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/5-2020-12-16/4-2021-01-14/1-revoltes-arabes-10-ans-apres|Révoltes arabes, 10 ans après]], que les révoltes de 2011 n'ont pas produit d'effet domino mais autant de cas nationaux distincts. La Tunisie reste l'exception démocratique. Ailleurs, la répression et les interventions étrangères ont mené au chaos, sans éteindre l'aspiration démocratique.
+Boniface revient sur les révoltes arabes de 2011 et refuse d'y voir un effet domino : il y lit autant de cas nationaux distincts. La Tunisie reste l'exception démocratique, tandis que la répression et les interventions étrangères ont mené ailleurs au chaos, sans éteindre l'aspiration démocratique. Il prolonge ce bilan en recevant Sophie Bessis. Pour elle, la Tunisie vit dix ans après un désenchantement en grande partie justifié, entre revendications sociales oubliées, économie en voie de désindustrialisation et Ennahdha intégrée au jeu mais clientéliste. Elle juge pourtant le pays au milieu du gué.
 
-Les deux autres Digests, datés de 2026, sont consacrés à des voix qu'il reçoit ou qu'il lit. Il chronique *Le Triangle du pouvoir* d'Alexander Stubb, qui divise le monde en trois blocs (Occident, Orient, Sud global) et voit dans le Sud celui qui décidera du nouvel ordre. Il s'entretient ensuite avec Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans que Pékin ait gagné. Elle juge aussi que la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais que son excédent commercial met l'Europe en difficulté.
+Boniface applique aussi sa lecture à la Russie. En rentrant pour y être arrêté, Navalny a gagné politiquement : il incarne désormais l'opposition à Poutine, que la corruption fragilise plus que l'autoritarisme. Trop faible pour le renverser, il restera sa mauvaise conscience. Enfin, Boniface raconte les trente ans de l'IRIS, passée d'une petite bande d'amis sans moyens à une institution, et défend sa pédagogie pour le grand public, le débat contradictoire et la liberté de parole de ses chercheurs face aux pressions.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/5-2020-12-16/4-2021-01-14/1-revoltes-arabes-10-ans-apres|Révoltes arabes, 10 ans après]] (2021-01-14)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/5-2020-12-16/4-2021-01-14/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/5-2020-12-16/4-2021-01-14/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/5-2020-12-16/4-2021-01-14/2-comprendre-le-monde-s4-19-sophie|Comprendre le monde S4#19 – Sophie Bessis – "10 ans après, où en est la Tunisie ?"]] (2021-01-20)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/5-2020-12-16/4-2021-01-14/3-30-ans-de-l-iris-une|30 ans de l'IRIS : une anomalie sympathique]] (2021-01-21)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/5-2020-12-16/4-2021-01-14/4-alexei-navalny-emprisonne-mais-pas-baillonne|Alexeï Navalny : emprisonné mais pas bâillonné]] (2021-01-25)
