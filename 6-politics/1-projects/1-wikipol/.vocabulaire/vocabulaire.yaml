@@ -199,6 +199,8 @@ kinds:
       organisation-de-jeunesse: {définition: "Organisation de jeunes rattachée à un parti ou à un courant politique, ou indépendante d'eux.", statut: proposé, introduit_par: paduteam/kmJDHYGIm9c.md}
       mécanisme-d-achats-groupés: {définition: "Dispositif international qui regroupe les commandes de plusieurs pays pour acheter des produits de santé en commun.", statut: proposé, introduit_par: boniface/yjQYl9LEl0g.md}
       organisation-patronale: {définition: "Représente et défend les intérêts des employeurs et des chefs d'entreprise.", statut: proposé, introduit_par: paduteam/YcsA0DOXtQw.md}
+      fondation: {définition: "Organisme privé qui finance des projets d'intérêt général.", statut: proposé, introduit_par: boniface/MPf_VEFQRc0.md}
+      intersyndicale: {définition: "Front commun de plusieurs confédérations syndicales qui appellent ensemble à l'action.", statut: proposé, introduit_par: paduteam/F0x4OhYVpTk.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
