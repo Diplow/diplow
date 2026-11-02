@@ -1,0 +1,49 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_144b3f4ff4ec81 199,238
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/5-2025-06-04/CLAUDE.md
+  s_a748ff42963f45::t_a5759cdf19b75e 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/6-2025-06-08/1-flottille-de-la-liberte-meyer-habib.md
+  s_a748ff42963f45::t_7d7577230678d8 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/6-2025-06-08/2-roussel-trouve-retailleau-trop-mou.md
+  s_a748ff42963f45::t_f24f8fca70dbd6 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/6-2025-06-08/3-marine-tondelier-catastrophique-sur-france-inter.md
+  s_a748ff42963f45::t_6911f328833a1e 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/6-2025-06-08/4-natacha-polony-veut-plus-de-violence.md
+  s_a748ff42963f45::t_8fc497fb545dd6 1-71
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/6-2025-06-08/5-revoltes-a-los-angeles-vers-une.md
+  s_a748ff42963f45::t_71a16958c2aa43 1-83
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/6-2025-06-08/6-les-derniers-jours-de-l-iran.md
+  s_a748ff42963f45::t_13220268712a7f 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/6-2025-06-08/CLAUDE.md
+  s_a748ff42963f45::t_a112517f5ada9b 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/CLAUDE.md
+  s_a748ff42963f45::t_3124466919a0f6 2,6-9,11,13,15,17,26
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/CLAUDE.md
+  s_a748ff42963f45::t_e28afaa81f87e4 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_a748ff42963f45::t_1a41609a8f8089 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0d3e8fc175b609a6b2abb586c69fa332f55b2a5d",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_a748ff42963f45": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a33604e3b8e2479e3",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
