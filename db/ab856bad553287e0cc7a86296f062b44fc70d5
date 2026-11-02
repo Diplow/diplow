@@ -1,0 +1,55 @@
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/3-2024-07-08/CLAUDE.md
+  s_832cbf64b72e1b::t_c03ad68d292a28 2,6-10,12,14,16,18
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/1-2024-07-25/1-e-macron-un-vol-democratique-d.md
+  s_832cbf64b72e1b::t_94448c83be4c09 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/1-2024-07-25/2-rendre-le-pouvoir-aux-citoyens-pour.md
+  s_832cbf64b72e1b::t_b4f7f25f72656f 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/1-2024-07-25/3-jo-2024-une-aberration-sociale-ecologique.md
+  s_832cbf64b72e1b::t_80a3fe476c5319 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/1-2024-07-25/4-qatar-un-ancien-directeur-de-bein.md
+  s_832cbf64b72e1b::t_c2c76388364b13 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/1-2024-07-25/CLAUDE.md
+  s_832cbf64b72e1b::t_659fc14c57a3b0 2-3,6-9,11,13,15,19-22
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/2-2024-07-29/1-royaume-uni-pourquoi-la-gauche-n.md
+  s_832cbf64b72e1b::t_7d3611c21676d0 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/2-2024-07-29/2-l-amitie-un-outil-revolutionnaire-largement.md
+  s_832cbf64b72e1b::t_6c72ffe9a7099d 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/2-2024-07-29/3-n-sarkozy-le-president-qui-a.md
+  s_832cbf64b72e1b::t_ffb06c62ad0a75 1-91
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/2-2024-07-29/CLAUDE.md
+  s_832cbf64b72e1b::t_ef0744287ff955 1-21
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/3-2024-08-01/1-macron-prochaine-etape-dissoudre-le-peuple.md
+  s_832cbf64b72e1b::t_f86fdaae9897d6 1-84
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/3-2024-08-01/2-israel-liban-iran-la-guerre-generalisee.md
+  s_832cbf64b72e1b::t_2094c754021a28 1-93
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/3-2024-08-01/3-celui-qui-controle-les-medias-controle.md
+  s_832cbf64b72e1b::t_81283435455a2e 1-63
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/3-2024-08-01/4-risques-climatiques-le-rapport-qui-montre.md
+  s_832cbf64b72e1b::t_d5652e3bdefacd 1-92
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/3-2024-08-01/5-antiterrorisme-une-arme-juridique-utilisee-pour.md
+  s_832cbf64b72e1b::t_4a1f874c9f0968 1-70
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/3-2024-08-01/CLAUDE.md
+  s_832cbf64b72e1b::t_519c2cd7a55356 1-22
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/CLAUDE.md
+  s_832cbf64b72e1b::t_e6bbdaa519ed20 1-21
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/CLAUDE.md
+  s_832cbf64b72e1b::t_ee5e1ec84c41b7 2,6-9,11,13,15,21-22
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_832cbf64b72e1b::t_e91183fd228222 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dbab856bad553287e0cc7a86296f062b44fc70d5",
+  "prompts": {},
+  "sessions": {
+    "s_832cbf64b72e1b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a334a12a51508312e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
