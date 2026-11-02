@@ -1,0 +1,39 @@
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/4-des-etats-unis-a-la-france.md
+  s_ffc43dc7436333::t_e67423fb9f1a3b 1-102
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/5-les-grandes-gueules-une-certaine-idee.md
+  s_ffc43dc7436333::t_16a1b6311a4233 1-81
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/CLAUDE.md
+  s_ffc43dc7436333::t_085e8a291213ea 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/6-2024-10-28/1-comment-resister-a-la-culpabilisation-avec.md
+  s_ffc43dc7436333::t_2c516b3c831d94 1-95
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/6-2024-10-28/2-quand-la-compassion-devient-une-arme.md
+  s_ffc43dc7436333::t_d92ad089f5773e 1-106
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/6-2024-10-28/3-voyage-a-gaza-au-c-ur.md
+  s_ffc43dc7436333::t_e1584f17255a5e 1-85
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/6-2024-10-28/4-france-usa-hongrie-illiberalisme-danger-pour.md
+  s_ffc43dc7436333::t_9736ba2785b44c 1-96
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/6-2024-10-28/CLAUDE.md
+  s_ffc43dc7436333::t_67f78522fd9999 1-22
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/CLAUDE.md
+  s_ffc43dc7436333::t_9fb5e2082dfd00 2,7-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE.md
+  s_ffc43dc7436333::t_2f806c60544abb 2,8,10,12,14,16,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_ffc43dc7436333::t_5d0a2fd1713aa3 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dbb6a7d812dc1f2f69a3eba87d040ab5c15534d7",
+  "prompts": {},
+  "sessions": {
+    "s_ffc43dc7436333": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ae8a6ef7041b2aa05",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
