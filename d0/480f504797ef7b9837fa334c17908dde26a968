@@ -1,0 +1,50 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_525a6536903df1 276
+  s_70e2b8820e4c39::t_83c335ae0a56e2 178,233
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/5-2025-05-07/5-affaire-dany-comment-la-zawaprod-a.md
+  s_df0c5a64086f1f::t_69c4de2ccca2ac 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/5-2025-05-07/CLAUDE.md
+  s_df0c5a64086f1f::t_72c8b8bbd085a0 2,6-9,11,13,15,17,25
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/6-2025-05-16/1-faut-il-envoyer-les-streamers-au.md
+  s_df0c5a64086f1f::t_ebe068a23fa3d1 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/6-2025-05-16/2-louis-sarkozy-le-gros-debile-du.md
+  s_df0c5a64086f1f::t_2eb1a7afeb6a8b 1-99
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/6-2025-05-16/3-euthanasie-macron-veut-il-rentabiliser-ta.md
+  s_df0c5a64086f1f::t_b9a1e54384abba 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/6-2025-05-16/4-retailleau-met-fin-au-wauquisme-pasduhring.md
+  s_df0c5a64086f1f::t_34aefcdfcbc661 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/6-2025-05-16/5-lena-situations-et-jean-francois-cope.md
+  s_df0c5a64086f1f::t_94b7119755e64b 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/6-2025-05-16/CLAUDE.md
+  s_df0c5a64086f1f::t_7c43b7f664e292 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/CLAUDE.md
+  s_df0c5a64086f1f::t_e1b76237d3e06c 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/CLAUDE.md
+  s_df0c5a64086f1f::t_f6271c7d1ff52c 2,6-9,11,13,15-17,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_df0c5a64086f1f::t_203c4b5c31286c 7-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d0480f504797ef7b9837fa334c17908dde26a968",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_df0c5a64086f1f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a48a90b881329ecc2",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
