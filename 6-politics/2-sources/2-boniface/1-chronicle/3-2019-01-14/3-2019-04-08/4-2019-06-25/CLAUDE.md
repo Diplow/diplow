@@ -1,24 +1,26 @@
 ---
-title: "2019-06-25 → 2026-10-14"
+title: "2019-06-25 → 2019-07-03"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/4-2019-06-25
 owner: diplo
 preview: >-
-  Boniface soutient qu'on peut critiquer Erdogan sans être l'ennemi de la
-  Turquie. Il chronique le livre d'Alexander Stubb sur les trois blocs du
-  monde et reçoit Carole Gomez sur le football féminin, puis Sylvie Bermann
-  sur la Chine.
+  Boniface défend la diplomatie contre les insultes et les rapports de force :
+  critiquer Erdogan est légitime, le G20 reste utile, le sommet Trump-Kim et
+  le plan Kushner sont voués à l'échec, et l'hostilité entre Washington et
+  Téhéran n'est pas une fatalité.
 ---
-# 2019-06-25 → 2026-10-14
+# 2019-06-25 → 2019-07-03
 
-Les quatre Digests de cette Period, étalés de juin 2019 à octobre 2026, ne forment pas un fil continu. Le seul où Pascal Boniface parle en son nom propre est son plaidoyer pour la liberté de critiquer Erdogan. Selon lui, on peut le faire sans être l'ennemi de la Turquie. Depuis le coup d'état manqué de 2016, la répression a pris un tour excessif et autoritaire, ce qui éloigne la Turquie de l'Europe. Il demande que le débat reste libre, sans insultes.
+Sur ces neuf jours, Boniface revient à une même ligne : la concertation et la diplomatie valent mieux que l'affrontement ou l'invective. Il défend un G20 imparfait mais utile, parce que la concertation des dirigeants empêche certains problèmes de s'aggraver. Il soutient aussi qu'on peut critiquer Erdogan sans être l'ennemi de la Turquie, la répression étant devenue excessive et éloignant le pays de l'Europe, à condition que le débat reste libre et sans insultes.
 
-Les trois autres Digests donnent la parole à des tiers, et leurs thèses leur restent. Boniface reçoit Carole Gomez, pour qui le football féminin n'a rien de neuf : il a été massif après 1914-1918, puis freiné par des interdits sans base médicale. Aujourd'hui il se mondialise, mais son modèle économique reste à inventer. Il reçoit aussi Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, sans que Pékin ait gagné, et l'excédent commercial chinois met l'Europe en difficulté.
+Sur les dossiers où les apparences l'emportent sur le réel, son diagnostic est sévère. Le sommet Trump-Kim est pour lui un coup médiatique sans résultat probable, puisque Kim ne renoncera pas à l'arme nucléaire. Le plan Kushner est voué à l'échec : conçu avec Israël sans les Palestiniens, imposé du vainqueur au vaincu et rejeté par les opinions arabes, il ne peut remplacer une solution politique par une paix économique. Pour les relations entre les États-Unis et l'Iran, il remonte la chaîne des contentieux historiques, du coup d'État de 1953 à la dénonciation de l'accord nucléaire par Trump, mais refuse d'y voir une fatalité.
 
-Entre les deux, Boniface chronique *Le Triangle du pouvoir*, le livre d'Alexander Stubb, président finlandais. Pour Stubb, le monde se divise en trois blocs : l'Occident, l'Orient et le Sud global. Il estime que l'Occident, affaibli par ses échecs, doit montrer l'exemple s'il veut peser sur un Sud qui décidera du nouvel ordre.
+Le football féminin tient une place à part, avec Carole Gomez, invitée de Boniface. Selon elle, il n'a rien de neuf : il a été massif après 1914-1918, puis freiné par des interdits sans base médicale. Il se mondialise aujourd'hui, mais son modèle économique reste à inventer, et la FIFA y voit aussi un marché à conquérir.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/4-2019-06-25/1-est-il-permis-de-critiquer-erdogan|Est-il permis de critiquer Erdogan ?]] (2019-06-25)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/4-2019-06-25/2-comprendre-le-monde-s2-40-carole|Comprendre le monde S2#40 - Carole Gomez - "Quand le football s'accorde au féminin"]] (2019-06-26)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/4-2019-06-25/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/4-2019-06-25/4-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/4-2019-06-25/3-g20-quels-enjeux-strategiques|G20 : Quels enjeux stratégiques ?]] (2019-06-27)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/4-2019-06-25/4-trump-kim-un-show-diplomatico-mediatique|Trump - Kim, un show diplomatico-médiatique]] (2019-07-01)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/4-2019-06-25/5-plan-kushner-le-flop-du-deal|Plan Kushner : le flop du « deal du siècle » - Je réponds à vos questions]] (2019-07-01)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/4-2019-06-25/6-etats-unis-iran-pourquoi-tant-de|États-Unis - Iran : pourquoi tant de haine ?]] (2019-07-03)
