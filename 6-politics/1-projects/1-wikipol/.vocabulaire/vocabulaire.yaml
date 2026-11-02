@@ -119,6 +119,8 @@ kinds:
       ancien-dirigeant-sportif: {définition: "A dirigé une instance, une fédération ou un comité du sport et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/kk3SmKSCNXM.md}
       politologue: {définition: "Étudie la vie politique et en publie des analyses.", statut: proposé, introduit_par: blast/rPaHsMZ7pts.md}
       pilote: {définition: "Pilote un aéronef, notamment pour une compagnie aérienne.", statut: proposé, introduit_par: blast/N_GWbPTMLqA.md}
+      dignitaire-nazi: {définition: "Dirigeant du parti ou de l'État nazi, notamment ministre du Reich.", statut: proposé, introduit_par: paduteam/oKhLNMPUApY.md}
+      démographe: {définition: "Étudie les populations et leur évolution.", statut: proposé, introduit_par: boniface/Tl5hZKRztyw.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
