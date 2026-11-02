@@ -202,6 +202,7 @@ kinds:
       organisation-patronale: {définition: "Représente et défend les intérêts des employeurs et des chefs d'entreprise.", statut: proposé, introduit_par: paduteam/YcsA0DOXtQw.md}
       fondation: {définition: "Organisme privé qui finance des projets d'intérêt général.", statut: proposé, introduit_par: boniface/MPf_VEFQRc0.md}
       intersyndicale: {définition: "Front commun de plusieurs confédérations syndicales qui appellent ensemble à l'action.", statut: proposé, introduit_par: paduteam/F0x4OhYVpTk.md}
+      coopérative: {définition: "Entreprise détenue et contrôlée démocratiquement par ses membres, à lucrativité limitée.", statut: proposé, introduit_par: blast/FA3IpqdI7k0.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

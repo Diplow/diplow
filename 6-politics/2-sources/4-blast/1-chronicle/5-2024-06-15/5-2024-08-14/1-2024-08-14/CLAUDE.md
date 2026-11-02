@@ -1,6 +1,6 @@
 ---
 title: "2024-08-14 → 2024-08-26"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14
 owner: diplo
 preview: >-
   Blast reçoit des chercheurs sur l'alliance du grand patronat avec l'extrême
@@ -18,9 +18,9 @@ Le reste de la Period quitte l'actualité politique. Aline Laurent-Mayillard pla
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14/1-le-diable-est-un-drole-de|LE DIABLE EST UN DRÔLE DE LASCAR]] (2024-08-14)
-2. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14/2-grand-patronat-et-extreme-droite-les|GRAND PATRONAT ET EXTRÊME DROITE : LES NOUVEAUX COLLABOS]] (2024-08-18)
-3. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14/3-sortir-de-l-amour-romantique-comme|SORTIR DE L’AMOUR ROMANTIQUE COMME SEUL MODÈLE DE SOCIÉTÉ]] (2024-08-20)
-4. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14/4-comment-le-gouvernement-netanyahu-veut-faire|COMMENT LE GOUVERNEMENT NETANYAHU VEUT FAIRE DISPARAÎTRE LA CISJORDANIE]] (2024-08-22)
-5. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14/5-marseille-la-grande-fracture-des-deux|MARSEILLE : LA GRANDE FRACTURE DES "DEUX GAUCHES"]] (2024-08-24)
-6. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14/6-collaboration-avec-l-extreme-droite-comment|COLLABORATION AVEC L’EXTRÊME DROITE : COMMENT LA RUSSIE DÉSTABILISE LA FRANCE]] (2024-08-26)
+1. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/1-le-diable-est-un-drole-de|LE DIABLE EST UN DRÔLE DE LASCAR]] (2024-08-14)
+2. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/2-grand-patronat-et-extreme-droite-les|GRAND PATRONAT ET EXTRÊME DROITE : LES NOUVEAUX COLLABOS]] (2024-08-18)
+3. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/3-sortir-de-l-amour-romantique-comme|SORTIR DE L’AMOUR ROMANTIQUE COMME SEUL MODÈLE DE SOCIÉTÉ]] (2024-08-20)
+4. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/4-comment-le-gouvernement-netanyahu-veut-faire|COMMENT LE GOUVERNEMENT NETANYAHU VEUT FAIRE DISPARAÎTRE LA CISJORDANIE]] (2024-08-22)
+5. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/5-marseille-la-grande-fracture-des-deux|MARSEILLE : LA GRANDE FRACTURE DES "DEUX GAUCHES"]] (2024-08-24)
+6. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14/6-collaboration-avec-l-extreme-droite-comment|COLLABORATION AVEC L’EXTRÊME DROITE : COMMENT LA RUSSIE DÉSTABILISE LA FRANCE]] (2024-08-26)

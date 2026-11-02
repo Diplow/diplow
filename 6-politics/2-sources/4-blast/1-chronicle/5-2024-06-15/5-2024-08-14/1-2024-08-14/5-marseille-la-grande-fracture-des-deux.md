@@ -1,6 +1,6 @@
 ---
 title: "MARSEILLE : LA GRANDE FRACTURE DES \"DEUX GAUCHES\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14
 owner: diplo
 preview: >-
   Blast diffuse Adieu Bourbon, documentaire de 2017 sur la bataille de

@@ -1,6 +1,6 @@
 ---
 title: "PARADOXES DES RÉCITS DE TRANSFUGES DE CLASSE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/6-2024-08-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/2-2024-08-28
 owner: diplo
 preview: >-
   Laélia Véron soutient que les récits de transfuge de classe, devenus une

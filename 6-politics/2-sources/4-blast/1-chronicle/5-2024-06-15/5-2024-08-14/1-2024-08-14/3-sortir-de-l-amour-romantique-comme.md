@@ -1,6 +1,6 @@
 ---
 title: "SORTIR DE L’AMOUR ROMANTIQUE COMME SEUL MODÈLE DE SOCIÉTÉ"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/1-2024-08-14
 owner: diplo
 preview: >-
   Aline Laurent-Mayillard soutient que l'amour romantique, norme culturelle

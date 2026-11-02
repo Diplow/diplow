@@ -1,24 +1,25 @@
 ---
-title: "2024-06-15 → 2024-09-01"
+title: "2024-06-15 → 2024-09-07"
 parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15
 owner: diplo
 preview: >-
-  Blast soutient que la dissolution a ouvert la voie du pouvoir à l'extrême
-  droite, que Macron et les grands médias ont déroulé le tapis au RN et que le
-  Nouveau Front populaire est le seul rempart. Elle dénonce ensuite le refus
-  de Macron de laisser la gauche gouverner.
+  Blast soutient que la dissolution et la stratégie de Macron ont ouvert la
+  voie à l'extrême droite, puis que Macron nie le vote des urnes en écartant
+  Lucie Castets et en nommant Michel Barnier. Le Nouveau Front populaire est
+  présenté comme l'alternative sérieuse.
 ---
-# 2024-06-15 → 2024-09-01
+# 2024-06-15 → 2024-09-07
 
-Blast lit l'été 2024 à partir de la dissolution : Macron a ouvert la voie du pouvoir à l'extrême droite, et les grands médias ont préparé l'arrivée du RN. Pour elle, une victoire du RN serait une bascule et non une alternance. Le Nouveau Front populaire est présenté comme la seule alternative sérieuse, et Blast donne la parole à ceux qui appellent à voter contre l'extrême droite.
+Pendant cette Period, Blast suit les législatives et leurs suites. Avant le scrutin, elle soutient que la dissolution a ouvert la voie du pouvoir à l'extrême droite, que les médias dominants préparent l'arrivée du RN et que le Nouveau Front populaire est la seule alternative sérieuse. Entre les deux tours, elle affirme que Macron a déroulé le tapis au RN et qu'une victoire du RN serait une bascule, non une alternance. Elle donne alors la parole à ceux qui appellent à voter contre l'extrême droite.
 
-Après les législatives, Blast lit le scrutin comme le produit de la stratégie de Macron et d'une extrême droite servie par les médias. Elle demande à la gauche de gouverner par majorités de projet, accuse les médias de milliardaires de fabriquer la soumission et dénonce les violences policières et racistes.
+Après le vote, le propos se déplace vers la gauche et vers Macron. Blast demande à la gauche de gouverner par majorités de projet. Elle accuse ensuite Macron de nier le vote des Français, d'écarter Lucie Castets et de garder la main en retardant la nomination d'un Premier ministre. Avec la nomination de Michel Barnier, elle soutient qu'il nie le résultat des urnes et prépare l'extrême droite pour 2027.
 
-À la fin de la Period, Blast soutient que Macron, battu aux législatives, confisque la voix des Français en écartant Lucie Castets. Elle alerte sur l'empire de Bolloré et reçoit chercheurs et associations sur Gaza, la Cisjordanie, le climat et l'ingérence étrangère.
+Un second fil court sur toute la Period : la critique des médias de milliardaires, accusés de fabriquer la soumission, avec une alerte sur l'empire Bolloré. Blast dénonce aussi les violences policières et racistes et l'ingérence azerbaïdjanaise en Outre-mer, et juge la victoire travailliste trompeuse. Elle reçoit de nombreux invités, dont des chercheurs sur le grand patronat, la Cisjordanie et l'ingérence russe.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/1-2024-06-15/CLAUDE|2024-06-15 → 2024-06-26]] (16 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/2-2024-06-27/CLAUDE|2024-06-27 → 2024-07-06]] (18 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/3-2024-07-08/CLAUDE|2024-07-08 → 2024-07-24]] (16 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/CLAUDE|2024-07-25 → 2024-09-01]] (24 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/CLAUDE|2024-07-25 → 2024-08-12]] (15 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/CLAUDE|2024-08-14 → 2024-09-07]] (15 Digests)
