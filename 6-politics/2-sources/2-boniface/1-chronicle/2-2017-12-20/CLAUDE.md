@@ -3,18 +3,18 @@ title: "2017-12-20 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20
 owner: diplo
 preview: >-
-  Pascal Boniface lit l'actualité par une même grille : Trump défait l'Arms
-  control et le multilatéralisme, l'Europe doit s'affranchir de Washington, la
-  menace russe est une fiction. Il juge Trump et Kim Jong-un rationnels et
-  voit Israël perdre la bataille des opinions.
+  Boniface lit 2017-2026 à travers l'unilatéralisme de Trump, qu'il oppose à
+  un multilatéralisme indispensable et à l'autonomie stratégique de l'Europe.
+  Il suit aussi la Corée, la Chine et le Proche-Orient, voit dans le football
+  un soft power et reçoit de nombreux invités.
 ---
 # 2017-12-20 → 2026-10-30
 
-Du premier au dernier Digest, Pascal Boniface applique à l'actualité la même grille. Pour lui, Trump veut imposer un monde unipolaire : la rupture de l'accord nucléaire iranien puis la dénonciation du traité FNI relèvent d'un rejet de l'Arms control et du multilatéralisme. Il juge ce multilatéralisme en crise mais indispensable, et l'ONU toujours nécessaire. Il en conclut que la France et l'Europe doivent viser l'autonomie stratégique, et il reproche ensuite à l'Europe de s'aligner sur Washington. Il tient la menace russe pour une fiction.
+Le fil le plus constant chez Boniface est sa lecture de l'ordre mondial à travers Trump. Il voit dans la dénonciation du traité FNI le rejet de l'Arms control et du multilatéralisme, et dans la rupture de l'accord nucléaire iranien une tentative d'imposer un monde unipolaire que l'Europe doit refuser. Le multilatéralisme est en crise mais reste indispensable, l'ONU aussi. Il en tire un appel répété à l'autonomie stratégique de la France et de l'Europe, dont il constate la dépendance. Il nuance toutefois : au Venezuela, la contestation de Maduro est d'abord nationale.
 
-Cette lecture passe par des cas concrets. En Corée, il voit dans la participation nord-coréenne aux JO l'ouverture d'une trêve, et dans le sommet Trump–Kim une bonne nouvelle pour la paix, sans excès d'optimisme. Il tient Trump et Kim Jong-un pour rationnels. Il juge la guerre d'Afghanistan perdue. Au Moyen-Orient, il voit Israël perdre la bataille des opinions publiques à Gaza, l'assassinat de Khashoggi être une faute stratégique, et le soutien à MBS relever d'un calcul d'intérêts. En 2026, il estime que Netanyahou ne changerait presque rien et lit l'OCS comme un multi-alignement.
+Sur l'Asie et le Proche-Orient, il applique des grilles de réalisme et d'intérêts. Il lit l'hiver 2017-2018 par la Corée, où la trêve des JO et le sommet Trump–Kim sont bons pour la paix sans justifier un optimisme excessif. Il juge la guerre d'Afghanistan perdue. Il tient la guerre entre la Chine et les États-Unis pour loin d'être écrite, la dissuasion nucléaire l'excluant, et voit dans l'OCS le signe d'un multi-alignement. Il soutient que le soutien à MBS relève d'un calcul d'intérêts, que l'assassinat de Khashoggi est une faute stratégique, qu'Israël perd la bataille des opinions publiques à Gaza et qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens.
 
-Il traite aussi de ce qui fait le prestige des États. Il lit la victoire des Bleus comme un gain de soft power, et fait du football un objet géopolitique. Il voit dans les gilets jaunes un affaiblissement de Macron à l'international. Ses invités, nombreux, abordent entre autres les Rohingya, la Chine et la dissuasion.
+Il traite aussi le football comme un objet géopolitique : la victoire des Bleus est pour lui un gain de prestige par le soft power. Il lit les gilets jaunes comme un affaiblissement de Macron à l'international. Tout au long de la période, il reçoit des invités qui traitent des Rohingya, de la Chine ou de la dissuasion, et qui discutent son Requiem pour le monde occidental ; leurs thèses restent les leurs.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ Il traite aussi de ce qui fait le prestige des États. Il lit la victoire des Bl
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/2-2018-04-04/CLAUDE|2018-04-04 → 2018-06-13]] (18 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/CLAUDE|2018-06-20 → 2018-10-24]] (18 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/CLAUDE|2018-10-25 → 2019-01-09]] (18 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/CLAUDE|2019-01-14 → 2026-10-30]] (29 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/CLAUDE|2019-01-14 → 2019-02-15]] (23 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/6-2019-02-20/CLAUDE|2019-02-20 → 2026-10-30]] (12 Digests)

@@ -1,6 +1,6 @@
 ---
 title: "[Requiem pour le monde occidental] - Le point de vue de J-D Giuliani"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/4-2019-02-08
+parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/5-2019-02-12
 owner: diplo
 preview: >-
   Selon Giuliani, qui commente le livre de Boniface, l'Amérique se replie sur
