@@ -1,0 +1,47 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/3-2025-02-25/CLAUDE.md
+  s_ca5c416291e594::t_bd66796834f811 2,6-8,10,12,14,16
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/4-2025-02-28/1-cesar-2025-un-revelateur-du-sexisme.md
+  s_ca5c416291e594::t_fce4fa0ef7289b 3
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/4-2025-02-28/2-la-serbie-se-souleve-dans-l.md
+  s_ca5c416291e594::t_43715985252366 3
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/4-2025-02-28/3-comprendre-comment-le-fascisme-gagne-les.md
+  s_ca5c416291e594::t_22b38f29dc2694 3
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/4-2025-02-28/CLAUDE.md
+  s_ca5c416291e594::t_0dc8fd2ae629a7 1-21
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/5-2025-03-02/1-macron-bayrou-le-pen-etc-corrompus.md
+  s_ca5c416291e594::t_fe1ac86e408d58 1-76
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/5-2025-03-02/2-medias-mainstream-servir-les-patrons-invisibiliser.md
+  s_ca5c416291e594::t_775e5caf1bc4e4 1-104
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/5-2025-03-02/3-la-france-est-elle-structurellement-raciste.md
+  s_ca5c416291e594::t_831a51de4bf03f 1-86
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/5-2025-03-02/4-capitalisme-l-apocalypse-qui-vient.md
+  s_ca5c416291e594::t_f515ad7fbac649 1-99
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/5-2025-03-02/5-grands-patrons-mais-pourquoi-tant-de.md
+  s_ca5c416291e594::t_5dbda884e4b46d 1-74
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/5-2025-03-02/CLAUDE.md
+  s_ca5c416291e594::t_7cdc7411b5416b 1-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/CLAUDE.md
+  s_ca5c416291e594::t_8769df692902e7 2,6-9,11,13,15,17,23-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE.md
+  s_ca5c416291e594::t_b0afc42cbd721c 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_ca5c416291e594::t_3381a1cbce1a27 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_ca5c416291e594::t_346bd273c836fd 6-9,13,15-17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "27c7ad8120f035bafa8bd8e49bd762e62e003b76",
+  "prompts": {},
+  "sessions": {
+    "s_ca5c416291e594": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a984746222654b42f",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
