@@ -128,6 +128,7 @@ kinds:
       poète: {définition: "Écrit de la poésie et la publie.", statut: proposé, introduit_par: blast/FlQyQXxBQDU.md}
       chef-politique-de-groupe-armé: {définition: "Dirige la branche politique d'un groupe armé.", statut: proposé, introduit_par: blast/7tYGSp4jvDM.md}
       anthropologue: {définition: "Étudie les sociétés humaines, leurs pratiques et leurs institutions.", statut: proposé, introduit_par: paduteam/oJJjXM92mjs.md}
+      première-dame: {définition: "Épouse du chef de l'État, à la date de la Publication.", statut: proposé, introduit_par: paduteam/JvzArhdDXIk.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -184,6 +185,7 @@ kinds:
       mouvement-islamiste: {définition: "Mouvement politique et religieux se réclamant de l'islam, comme les Frères musulmans.", statut: proposé, introduit_par: paduteam/fE3d7YfY5Sw.md}
       mouvement-de-libération: {définition: "Organisation qui mène la lutte politique et armée d'un peuple pour son indépendance nationale.", statut: proposé, introduit_par: blast/przNv45s2u0.md}
       organisme-de-formation: {définition: "Forme des militants, des journalistes ou des cadres à l'engagement politique et médiatique.", statut: proposé, introduit_par: blast/C48PbGgqyDo.md}
+      organisation-de-jeunesse: {définition: "Organisation de jeunes rattachée à un parti ou à un courant politique, ou indépendante d'eux.", statut: proposé, introduit_par: paduteam/kmJDHYGIm9c.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

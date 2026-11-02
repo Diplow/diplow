@@ -3,17 +3,19 @@ title: "2019-10-14 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14
 owner: diplo
 preview: >-
-  Boniface lit l'actualité par les rapports de force entre États et par ses
-  grilles : deux poids deux mesures occidental, multilatéralisme, autonomie
-  stratégique européenne face à Washington et Pékin, soft power du sport.
+  Boniface lit l'actualité par les rapports de force entre puissances : un
+  Occident qui ne domine plus, un multilatéralisme nécessaire, des États-Unis
+  et une Chine face à face, une Europe qui doit gagner son autonomie
+  stratégique, et une France qui se contente de protestations sur la
+  Palestine.
 ---
 # 2019-10-14 → 2026-10-30
 
-Dès l'automne 2019, Boniface applique à l'actualité une même lecture par les rapports de force entre États. L'offensive turque suit le retrait américain, l'Europe à 27 se mesure à la Chine, l'OTAN s'adapte mal au terrorisme, et les capitales se taisent sur les Ouïghours. L'hiver 2019-2020 met en avant ses grilles : un deux poids deux mesures occidental après l'assassinat de Soleimani, des Européens alignés sur Washington, un plan Trump-Kushner qui enterre les deux États.
+Depuis l'automne 2019, Boniface applique la même grille aux événements : ce sont les rapports de force entre États qui expliquent l'actualité. L'offensive turque suit le retrait américain, l'Europe à 27 se mesure à la Chine, l'OTAN s'adapte mal au terrorisme. Il relève un deux poids deux mesures occidental, par exemple après l'assassinat de Soleimani, et des Européens alignés sur Washington. Il note aussi le silence des capitales sur les Ouïghours.
 
-Le coronavirus devient ensuite son principal terrain d'analyse. Il y voit un test du multilatéralisme et un révélateur des rapports de force. L'Europe est éprouvée faute de solidarité, Trump affaiblit les États-Unis et sert la Chine, qui gagne du terrain grâce aux défaillances américaines sans les dépasser. Boniface plaide pour une rivalité sino-américaine traitée lucidement, pour l'autonomie stratégique européenne, et pour un débat sur les libertés, l'impôt et la solidarité hors de l'urgence.
+Le Covid-19 devient en 2020 son révélateur principal. Il y voit une Europe éprouvée faute de solidarité, un Trump qui affaiblit les États-Unis et sert la Chine, et une Chine qui gagne du terrain grâce aux défaillances américaines sans pour autant dépasser les États-Unis. Il juge que la rivalité sino-américaine doit être traitée avec lucidité. Face à cela, il en appelle au multilatéralisme et à l'autonomie stratégique européenne. Il demande aussi de débattre des libertés, de l'impôt et de la solidarité hors de l'urgence.
 
-Sur la durée la plus longue, la grille se stabilise. L'Europe n'a pas à choisir entre Washington et Pékin, le sport est un soft power, l'OCS relève du multi-alignement. Un départ de Netanyahou ne changerait presque rien pour les Palestiniens.
+Sur la longue durée qui suit, le fil reste le même. Boniface décrit un Occident qui ne domine plus, des États-Unis et une Chine face à face, et un multi-alignement qui s'installe. Le multilatéralisme lui paraît nécessaire pour y répondre. Sur Israël et la Palestine, il juge que la France se contente de protestations, après avoir lu dès 2020 dans le plan Trump-Kushner un enterrement des deux États.
 
 ## Contenu
 
@@ -21,4 +23,4 @@ Sur la durée la plus longue, la grille se stabilise. L'Europe n'a pas à choisi
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/2-2019-12-11/CLAUDE|2019-12-11 → 2020-02-06]] (20 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/CLAUDE|2020-02-07 → 2020-04-03]] (24 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/CLAUDE|2020-04-06 → 2020-06-11]] (24 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (17 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (23 Digests)
