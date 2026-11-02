@@ -3,21 +3,21 @@ title: "2020-06-16 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16
 owner: diplo
 preview: >-
-  De 2020 à 2026, Boniface lit un monde qui ne suit plus l'Occident :
-  multilatéralisme contre unilatéralisme américain, rivalité des puissances,
-  Europe trop alignée. Il plaide partout la négociation, sans rien excuser à
-  Poutine.
+  De 2020 à 2026, Boniface lit l'actualité par la fin du monopole occidental
+  de la puissance : multilatéralisme contre unilatéralisme, rivalité
+  sino-américaine, Europe autonome mais alliée, négociation en Ukraine sans
+  rien excuser à Poutine, échec des interventions extérieures.
 ---
 # 2020-06-16 → 2026-10-30
 
-Sur toute la Chronicle, Pascal Boniface applique les mêmes grilles de lecture à l'actualité. Il défend le multilatéralisme face à l'unilatéralisme américain et demande une Europe qui ne s'aligne ni sur Washington ni sur Pékin. Sa fermeté ne va pas jusqu'à la rupture, et il refuse de sacrifier l'état de droit à la lutte antiterroriste.
+D'un bout à l'autre de la Period, Boniface applique les mêmes grilles à l'actualité. Il défend le multilatéralisme contre l'unilatéralisme américain et décrit un monde où l'Occident perd le monopole de la puissance. L'Europe, dans cette lecture, ne doit s'aligner ni sur Washington ni sur Pékin : il la veut autonome, mais alliée des États-Unis.
 
-En 2021, cette lecture s'organise autour de la rivalité sino-américaine, que l'arrivée de Biden ne change guère. Boniface demande à la France d'assumer son passé en Libye et au Rwanda. Il tient la question palestinienne pour centrale. Il plaide pour une Europe autonome, mais alliée des États-Unis.
+Les premiers mois, de juin à décembre 2020, il plaide la fermeté sans rupture et refuse de sacrifier l'état de droit à la lutte antiterroriste. En 2021, la rivalité sino-américaine devient sa clef de lecture, et il constate que Biden la change guère. Il demande aussi à la France d'assumer son passé en Libye et au Rwanda, et tient la question palestinienne pour centrale.
 
-À partir de l'été 2021 et jusqu'en 2026, de Kaboul à l'Ukraine, Boniface voit un monde qui ne suit plus l'Occident. Il y relève l'échec des interventions extérieures, la rivalité des puissances et une Europe trop alignée. Il plaide partout la négociation, sans rien excuser à Poutine.
+Sur les cinq années suivantes, il juge les interventions extérieures vouées à l'échec. Pour l'Ukraine, il plaide pour la négociation sans rien excuser à Poutine. En Asie, il observe du multi-alignement plutôt que des blocs.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/1-2020-06-16/CLAUDE|2020-06-16 → 2020-12-14]] (78 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/2-2020-12-16/CLAUDE|2020-12-16 → 2021-06-28]] (78 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/CLAUDE|2021-06-30 → 2026-10-30]] (101 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/CLAUDE|2021-06-30 → 2026-10-30]] (107 Digests)
