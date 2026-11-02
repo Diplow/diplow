@@ -102,6 +102,7 @@ kinds:
       roi: {définition: "Dirige un royaume par héritage ou par conquête, à la date de la Publication.", statut: proposé, introduit_par: blast/J99oFBtEsAE.md}
       maire-du-palais: {définition: "Plus haut dignitaire d'un royaume franc après le roi, dont il finit par prendre le pouvoir.", statut: proposé, introduit_par: blast/J99oFBtEsAE.md}
       dirigeant-de-think-tank: {définition: "Préside ou dirige un think tank ou une fondation de réflexion.", statut: proposé, introduit_par: boniface/D7fNMG-163A.md}
+      psychologue: {définition: "Étudie le psychisme et le comportement humains et en élabore des théories.", statut: proposé, introduit_par: paduteam/HGz-uG-9Hzw.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

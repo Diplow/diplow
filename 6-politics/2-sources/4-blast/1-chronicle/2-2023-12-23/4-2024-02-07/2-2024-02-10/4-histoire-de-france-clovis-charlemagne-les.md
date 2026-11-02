@@ -1,6 +1,6 @@
 ---
 title: "HISTOIRE DE FRANCE : CLOVIS, CHARLEMAGNE, LES ROIS DE L'ARNAQUE - ÉPISODE 4"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/6-2024-02-10
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/2-2024-02-10
 owner: diplo
 preview: >-
   Blast soutient que les Francs, une bande de pillards installée par Rome et

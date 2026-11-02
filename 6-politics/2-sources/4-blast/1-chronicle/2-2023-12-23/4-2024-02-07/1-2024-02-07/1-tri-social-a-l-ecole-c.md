@@ -1,6 +1,6 @@
 ---
 title: "TRI SOCIAL À L'ÉCOLE : \"C'EST LE GOUVERNEMENT QUI FAIT DU SÉPARATISME\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/5-2024-02-07
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/1-2024-02-07
 owner: diplo
 preview: >-
   Zoé Buzbach, enseignante et syndicaliste CGT, soutient que le choc des

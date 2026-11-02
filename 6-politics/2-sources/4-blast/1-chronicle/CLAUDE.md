@@ -3,20 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit ces mois comme une dérive du pouvoir macroniste : il sert les
-  riches et les puissants, banalise l'extrême droite et aligne sa loi
-  immigration sur elle. La colère agricole révèle pour elle une dette au
-  profit de l'agro-industrie. Elle défend l'enquête.
+  Blast lit l'automne 2023 et l'hiver 2024 comme une dérive : un macronisme au
+  service des puissants, une extrême droite banalisée jusque dans la loi
+  immigration, deux poids deux mesures sur Gaza, une colère agricole
+  confisquée par la FNSEA. Elle défend l'enquête.
 ---
 # Chronicle
 
-Pendant ces quatorze semaines, Blast déroule une même thèse : le pouvoir macroniste gouverne pour les riches et a banalisé l'extrême droite. À l'automne, elle décrit une macronie des riches et un RN rendu fréquentable. Elle dénonce aussi deux poids deux mesures sur Gaza et l'antisémitisme. La loi immigration vient ensuite confirmer cet alignement sur l'extrême droite ([[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]]).
+Sur les 137 Digests de la Chronicle, Blast soutient que le macronisme sert les riches et les puissants, et que cette politique banalise l'extrême droite. Le RN y apparaît comme un parti normalisé, et la loi immigration comme un alignement sur ses thèses. Elle dénonce aussi un deux poids deux mesures sur Gaza et sur l'antisémitisme, et défend l'enquête, dont elle dit la liberté menacée.
 
-Au tournant de l'année, Blast juge la crise de la loi immigration fabriquée et maintient que le pouvoir sert les puissants. Elle lit ensuite la colère agricole comme un système de dette qui profite à l'agro-industrie. Elle soutient enfin que le droit permet de parler de génocide à Gaza ([[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-11]]).
-
-Blast défend tout du long l'enquête comme son métier et dit sa liberté menacée.
+La [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|première Period]] (31 octobre au 22 décembre 2023) est celle de cette dérive politique et de la défense du journalisme d'enquête. La [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|seconde]] (23 décembre 2023 au 16 février 2024) reprend la critique du macronisme et de l'extrême droite. Elle y ajoute une lecture de la colère agricole comme un système de dette que la FNSEA confisque, et le jugement que le droit international permet de parler de génocide à Gaza.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]] (69 Digests)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-11]] (62 Digests)
+2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-16]] (68 Digests)
