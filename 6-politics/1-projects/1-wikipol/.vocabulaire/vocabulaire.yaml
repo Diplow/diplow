@@ -164,6 +164,7 @@ kinds:
       cabinet-d-avocats: {définition: "Cabinet qui conseille et défend des entreprises, notamment par des enquêtes internes.", statut: proposé, introduit_par: blast/ow61t9N6KEE.md}
       troupe-humoristique: {définition: "Groupe d'humoristes qui écrivent et jouent ensemble.", statut: proposé, introduit_par: blast/tUXPDn1iCHA.md}
       forum-intergouvernemental: {définition: "Réunit régulièrement les dirigeants de plusieurs États pour se concerter, sans traité fondateur ni structure permanente.", statut: proposé, introduit_par: boniface/tQTH7PXX-sI.md}
+      établissement-de-santé: {définition: "Hôpital ou clinique qui accueille et soigne des patients.", statut: proposé, introduit_par: paduteam/43_Rj76Mv0Y.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
