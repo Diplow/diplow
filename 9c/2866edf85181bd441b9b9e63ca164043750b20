@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/3-2025-09-08/4-au-c-ur-du-10-septembre.md
+  s_70e2b8820e4c39::t_60cd8c3daf4127 1-78
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/3-2025-09-08/5-ces-bourgeois-sont-en-sueur-devant.md
+  s_70e2b8820e4c39::t_6f0dc006dde04f 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/3-2025-09-08/CLAUDE.md
+  s_70e2b8820e4c39::t_52ab4281f32991 2,6-8,10,12,14,16,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/4-2025-09-12/1-la-police-de-retailleau-maltraite-une.md
+  s_70e2b8820e4c39::t_84ce30cfbd058a 1-81
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/4-2025-09-12/2-le-18-septembre-tous-en-greve.md
+  s_70e2b8820e4c39::t_5daff93b871d40 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/4-2025-09-12/3-18-septembre-on-est-la.md
+  s_70e2b8820e4c39::t_90c4c4555fe945 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/4-2025-09-12/4-taxe-zucman-2-c-est-deja.md
+  s_70e2b8820e4c39::t_1e51f14e774b95 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/4-2025-09-12/CLAUDE.md
+  s_70e2b8820e4c39::t_3bbed6b2a2efb7 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/CLAUDE.md
+  s_70e2b8820e4c39::t_106a6eee65b841 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/CLAUDE.md
+  s_70e2b8820e4c39::t_236ef5aa2cec08 2,6-9,11,13,15,17,25
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_a9178e90bc8b48 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9c2866edf85181bd441b9b9e63ca164043750b20",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
