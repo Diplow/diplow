@@ -1,0 +1,50 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_d085c75e842392 98-99
+  s_70e2b8820e4c39::t_820a0276a93622 100
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/3-2024-02-03/4-la-ferme-des-bertrand-un-contre.md
+  s_e74c862a1dd458::t_14b6cb11acebc9 1-92
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/3-2024-02-03/CLAUDE.md
+  s_e74c862a1dd458::t_792038681e22c9 6-9,13,15,22
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/4-2024-02-05/1-yemen-comment-les-houthis-pesent-sur.md
+  s_e74c862a1dd458::t_72df847e937f41 1-89
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/4-2024-02-05/2-je-vous-nourris-et-moi-je.md
+  s_e74c862a1dd458::t_e2de8cf2914bc0 1-96
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/4-2024-02-05/3-agriculteurs-les-solutions-sont-la-mais.md
+  s_e74c862a1dd458::t_51297541688aca 1-85
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/4-2024-02-05/4-tri-social-a-l-ecole-c.md
+  s_e74c862a1dd458::t_ab00afeb3298e6 1-78
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/4-2024-02-05/5-terrorisme-genocide-crime-de-guerre-ce.md
+  s_e74c862a1dd458::t_c789a3267f655f 1-88
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/4-2024-02-05/CLAUDE.md
+  s_e74c862a1dd458::t_df9003c5230950 1-25
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/CLAUDE.md
+  s_e74c862a1dd458::t_3428cf4fcac24d 2,6-9,11,13,15,21-22
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE.md
+  s_e74c862a1dd458::t_89b8073413294a 2,6-9,11,13,15-17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_e74c862a1dd458::t_89831fc1ebc094 6-9,13,15-17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "26392e5db3a821c9b1cecd105867ac349583a3b3",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_e74c862a1dd458": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a448d523aa705b993",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
