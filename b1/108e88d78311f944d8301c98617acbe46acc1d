@@ -1,0 +1,47 @@
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/4-2025-07-08/CLAUDE.md
+  s_c0972483285b5f::t_2d194d66a7d95c 2,6-9,11,13,15-17
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/5-2025-07-13/1-purges-pour-islamo-gauchisme-ca-bouge.md
+  s_c0972483285b5f::t_c29b237dcad762 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/5-2025-07-13/2-garrido-vire-ce-streamer-du-congres.md
+  s_c0972483285b5f::t_a02112392d4c0b 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/5-2025-07-13/3-glucksmann-ne-choisit-pas-entre-melenchon.md
+  s_c0972483285b5f::t_4ad1718da3c232 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/5-2025-07-13/4-annonces-de-bayrou-il-veut-mettre.md
+  s_c0972483285b5f::t_b7fda48ec77001 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/5-2025-07-13/5-bompard-ou-faure-quelle-strategie-contre.md
+  s_c0972483285b5f::t_aebf707957c430 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/5-2025-07-13/CLAUDE.md
+  s_c0972483285b5f::t_894e31382e3674 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/6-2025-07-18/1-georges-ibrahim-abdallah-enfin-libre-entretien.md
+  s_c0972483285b5f::t_fc48881cacd8e8 1-100
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/6-2025-07-18/2-l-union-bancale-des-traitres-et.md
+  s_c0972483285b5f::t_6cce91d29c6f11 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/6-2025-07-18/3-roussel-est-il-le-frank-dubosc.md
+  s_c0972483285b5f::t_fb46e11630a17b 1-77
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/6-2025-07-18/4-lagasnerie-rebelle-genial-ou-adolescent-bourgeois.md
+  s_c0972483285b5f::t_1279a03fe45ac6 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/6-2025-07-18/CLAUDE.md
+  s_c0972483285b5f::t_fb17fa54eb1285 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/CLAUDE.md
+  s_c0972483285b5f::t_1dd0580eb8403e 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/CLAUDE.md
+  s_c0972483285b5f::t_094c5a6bd2dd43 2,6-9,11,13,15,17,26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_c0972483285b5f::t_0b005dd21fa75d 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b1108e88d78311f944d8301c98617acbe46acc1d",
+  "prompts": {},
+  "sessions": {
+    "s_c0972483285b5f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad9ccfce646dda139",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
