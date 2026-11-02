@@ -1,6 +1,6 @@
 ---
 title: "LINGUISTICAE en CONCURRENCE avec les ENFANTS GAZAOUIS !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/5-2025-06-04
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/5-2025-06-04/1-2025-06-04
 owner: diplo
 preview: >-
   La PaduTeam soutient que Linguisticae, qui se dit en concurrence avec les

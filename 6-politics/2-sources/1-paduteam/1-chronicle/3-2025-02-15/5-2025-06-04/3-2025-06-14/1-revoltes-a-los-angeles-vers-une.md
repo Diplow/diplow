@@ -1,6 +1,6 @@
 ---
 title: "RÉVOLTES à LOS ANGELES  VERS une RÉPUBLIQUE SOVIÉTIQUE de CALIFORNIE"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/6-2025-06-08
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/5-2025-06-04/3-2025-06-14
 owner: diplo
 preview: >-
   La PaduTeam soutient qu'un empire ne peut pas devenir fasciste : en envoyant

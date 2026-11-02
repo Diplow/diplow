@@ -124,6 +124,8 @@ kinds:
       chroniqueur: {définition: "Tient une chronique régulière dans un média, à la télévision, à la radio ou dans la presse.", statut: proposé, introduit_par: paduteam/L4b3g_GHEqk.md}
       espion: {définition: "Mène des opérations de renseignement sous fausse identité, pour un service ou une société privée.", statut: proposé, introduit_par: blast/FUwkLwlpohA.md}
       conférencier: {définition: "Donne des conférences publiques sur un sujet.", statut: proposé, introduit_par: boniface/QVFIXch9zL8.md}
+      duc: {définition: "Grand seigneur qui dirige un duché, à la date de la Publication.", statut: proposé, introduit_par: blast/FlQyQXxBQDU.md}
+      poète: {définition: "Écrit de la poésie et la publie.", statut: proposé, introduit_par: blast/FlQyQXxBQDU.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -237,6 +239,7 @@ kinds:
       foire: {définition: "Salon commercial où des exposants présentent leurs offres au public.", statut: proposé, introduit_par: blast/XjqGY3qsQaE.md}
       festival-de-cinéma: {définition: "Festival où des films sont projetés et récompensés.", statut: proposé, introduit_par: paduteam/fE3d7YfY5Sw.md}
       pandémie: {définition: "Épidémie qui s'étend à l'ensemble du monde.", statut: proposé, introduit_par: boniface/o43DHoCZys4.md}
+      bataille: {définition: "Affrontement armé décisif entre deux armées, en un lieu et un jour précis.", statut: proposé, introduit_par: blast/FlQyQXxBQDU.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

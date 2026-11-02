@@ -1,6 +1,6 @@
 ---
 title: "Les DERNIERS JOURS de l'IRAN des MOLLAH  (analyse MARXISTE)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/6-2025-06-08
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/5-2025-06-04/3-2025-06-14
 owner: diplo
 preview: >-
   La PaduTeam soutient que le régime des mollahs est un régime
