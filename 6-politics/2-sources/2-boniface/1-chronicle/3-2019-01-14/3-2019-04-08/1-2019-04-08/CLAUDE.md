@@ -1,23 +1,25 @@
 ---
-title: "2019-04-08 → 2026-10-14"
+title: "2019-04-08 → 2019-04-25"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/1-2019-04-08
 owner: diplo
 preview: >-
-  Boniface soutient que le pouvoir mondial se redistribue : entre États,
-  milliardaires du spatial et Chine. Il chronique le livre d'Alexander Stubb
-  sur un monde en trois blocs et reçoit Sylvie Bermann, pour qui Washington et
-  Pékin sont désormais à parité.
+  Boniface lit un pouvoir qui se redistribue (Trump bridé par l'État profond,
+  milliardaires du spatial, Chine qui divise l'Europe), voit dans la victoire
+  de Nétanyahou l'enterrement du processus de paix, et défend une
+  mondialisation à réguler par un multilatéralisme en crise.
 ---
-# 2019-04-08 → 2026-10-14
+# 2019-04-08 → 2019-04-25
 
-Sur ces trois Digests, qui vont de 2019 à 2026, Boniface revient à une même idée : le pouvoir ne se concentre plus là où on l'attend. En 2019, il soutient que l'État profond bride Trump, que des milliardaires du spatial rivalisent avec les États et que la Chine avance en divisant l'Europe, sans que sa population exige la démocratie. Il ajoute que tous les dirigeants ukrainiens ont échoué.
+Boniface soutient d'abord que le pouvoir ne se concentre plus là où on l'attend. L'État profond bride Trump, des milliardaires du spatial rivalisent avec les États, tous les dirigeants ukrainiens ont échoué, et la Chine avance en divisant l'Europe sans que sa population exige la démocratie. Sur Israël, il lit la victoire de Netanyahou, portée par un soutien international sans précédent et par sa promesse d'annexion, comme la fin du processus de paix. Pour lui, une paix imposée, sans perspective politique pour les Palestiniens, prépare des violences.
 
-Les deux Digests suivants donnent la parole à d'autres voix, qu'il restitue sans les faire siennes. Boniface chronique *Le Triangle du pouvoir* d'Alexander Stubb, président finlandais. Pour Stubb, le monde se divise en trois blocs (Occident, Orient, Sud global), et l'Occident, affaibli par ses échecs, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Dans la série Comprendre le monde, il pose ensuite un cadre plus large. La mondialisation n'est pas nouvelle, mais sa phase actuelle contracte le temps et l'espace : elle enrichit tout en creusant les inégalités. Il faut donc la réguler par des règles communes, c'est-à-dire par un multilatéralisme aujourd'hui en crise. Il ajoute que la scène internationale ne se réduit plus aux États, puisque organisations internationales, multinationales, ONG, acteurs illégaux, médias et opinions publiques pèsent aussi, même si l'État reste l'acteur principal.
 
-Il reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Elle estime que la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais que son excédent commercial met l'Europe en difficulté.
+Au milieu de la Period, Boniface reçoit Temir Porras, ancien proche de Chavez, pour qui la crise vénézuélienne ne se règle que par un dialogue national. Pour lui, les sanctions américaines et le soutien occidental à Guaidó l'aggravent sans faire tomber Maduro.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/1-2019-04-08/1-les-entretiens-geopolitiques-d-iris-sup|(Les entretiens géopolitiques d'IRIS Sup' #6) Défense spatiale, présidentielles en Ukraine, Chine]] (2019-04-08)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/1-2019-04-08/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/1-2019-04-08/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/1-2019-04-08/2-netanyahou-triomphe-strategique|Nétanyahou : triomphe stratégique ?]] (2019-04-10)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/1-2019-04-08/3-comprendre-le-monde-s2-31-temir|Comprendre le monde S2#31 - Temir Porras - "Venezuela : l'impossible médiation ?"]] (2019-04-17)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/1-2019-04-08/4-comprendre-le-monde-la-mondialisation|(Comprendre le monde) La mondialisation]] (2019-04-19)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/3-2019-04-08/1-2019-04-08/5-comprendre-le-monde-les-acteurs-des|(Comprendre le monde) Les acteurs des relations internationales]] (2019-04-25)
