@@ -1,6 +1,6 @@
 ---
 title: "TONDELIER VA À DES DÎNERS DE BOURGEOIS D EXTRÈME DROITE ! (c est pire que vous croyez...)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/5-2026-02-06
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/1-2026-02-06
 owner: diplo
 preview: >-
   La PaduTeam soutient que la présence de Marine Tondelier au Dîner des

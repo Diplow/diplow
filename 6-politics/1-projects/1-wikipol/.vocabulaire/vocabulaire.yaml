@@ -156,6 +156,7 @@ kinds:
       représentant-du-personnel: {définition: "Élu du comité social et économique d'une entreprise, qui représente les salariés.", statut: proposé, introduit_par: blast/p_FSKLRQs-U.md}
       vice-président-élu: {définition: "Élu à la vice-présidence d'un État mais pas encore entré en fonction, à la date de la Publication.", statut: proposé, introduit_par: blast/RexzwVwsZBI.md}
       ancien-commissaire-européen: {définition: "A été membre de la Commission européenne et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Ax11S6NfGvc.md}
+      ancien-militaire: {définition: "A servi dans une armée et n'y sert plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/pMSgohsnkJM.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

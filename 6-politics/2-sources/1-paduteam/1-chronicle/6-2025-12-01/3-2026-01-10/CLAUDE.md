@@ -1,20 +1,18 @@
 ---
-title: "2026-01-10 → 2026-02-07"
+title: "2026-01-10 → 2026-02-01"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10
 owner: diplo
 preview: >-
-  Sur ces quatre semaines, la PaduTeam lit l'actualité par les rapports de
-  force matériels et l'impérialisme : un PS qui se reconstitue et trahit,
-  Macron en PDG ou en guerre, Venezuela et Iran sous propagande, Mélenchon
-  gagnant la bataille des deux gauches.
+  La PaduTeam lit ces trois semaines comme une recomposition avant 2027 : le
+  PS se reconstitue et trahit, Macron prépare la guerre, les écologistes sont
+  purgés en gage au PS. Elle lit l'international par l'impérialisme et propose
+  de commercer avec la Chine et de sortir du dollar.
 ---
-# 2026-01-10 → 2026-02-07
+# 2026-01-10 → 2026-02-01
 
-Le fil principal de la Period est la recomposition de la gauche et du pouvoir avant 2027, que la PaduTeam lit par les rapports de force matériels plutôt que par les discours. Le PS se reconstitue et trahit, Kanner exécute Faure pour Hollande, et la purge chez les écologistes est un gage donné au PS. Macron, lui, prépare la guerre, et son passage à Davos n'est qu'un pitch de PDG. Retailleau recycle le sarkozysme. Ruffin fait de la charité là où il faudrait changer la propriété. Antitech Résistance, de son côté, mène à l'eugénisme.
+Du 10 au 21 janvier, la PaduTeam lit la séquence comme une recomposition avant 2027 : le PS se reconstitue et trahit, Macron prépare la guerre, Retailleau recycle le sarkozysme, et Antitech Résistance mène à l'eugénisme ([[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/1-2026-01-10/CLAUDE|2026-01-10 → 2026-01-21]]). Elle passe ensuite chaque scène politique au crible des rapports de force matériels : le discours de Macron à Davos est un pitch de PDG, Kanner exécute Faure pour Hollande, Ruffin fait de la charité là où il faudrait changer la propriété. La purge chez les écologistes est lue de la même façon, comme un gage donné au PS.
 
-Au milieu de la Period, la lecture bascule vers l'impérialisme. Sur le Venezuela, les fact-checkers servent la propagande de guerre. Les anti-impérialistes subissent un chantage au mot dictateur à propos de Maduro. Les manifestations iraniennes naissent du blocus avant d'être récupérées. Bardella s'aplatit devant Trump. À cela s'ajoute une proposition, commercer avec la Chine et sortir du dollar. Le programme sécuritaire de Knafo, lui, masque les violences sexuelles réelles.
-
-La fin de la Period revient à la gauche française. Les portraits de Duhamel dépolitisent en masquant les rapports de force. Mélenchon gagnera par la bataille des deux gauches, Tondelier va faire exploser son parti, et Chaigneau trahit Clouscard.
+Le regard se tourne ensuite vers l'impérialisme. Les fact-checkers servent la propagande de guerre sur le Venezuela, et les manifestations iraniennes, nées du blocus, ont été récupérées ([[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/3-2026-01-30/CLAUDE|2026-01-30]]). La PaduTeam dénonce aussi un Bardella aplati devant Trump, un chantage au mot dictateur contre les anti-impérialistes sur Maduro, et un programme sécuritaire de Knafo qui masque les violences sexuelles réelles. En réponse, elle propose de commercer avec la Chine et de sortir du dollar.
 
 ## Contenu
 
@@ -22,4 +20,3 @@ La fin de la Period revient à la gauche française. Les portraits de Duhamel d�
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/2-2026-01-22/CLAUDE|2026-01-22 → 2026-01-26]] (3 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/3-2026-01-30/CLAUDE|2026-01-30]] (4 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/4-2026-01-30/CLAUDE|2026-01-30 → 2026-02-01]] (3 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/5-2026-02-06/CLAUDE|2026-02-06 → 2026-02-07]] (5 Digests)
