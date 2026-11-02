@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/4-2025-05-28/4-wissam-me-traite-de-marxiste-stalinien.md
+  s_a748ff42963f45::t_059ddfe7b1962a 1-96
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/4-2025-05-28/5-cette-bourgeoise-sioniste-agre-e-rima.md
+  s_a748ff42963f45::t_cb489c4ee92a88 1-78
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/4-2025-05-28/6-le-pen-declare-la-guerre-a.md
+  s_a748ff42963f45::t_eef807f06ce550 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/4-2025-05-28/CLAUDE.md
+  s_a748ff42963f45::t_e6e4a9a10f431d 2,6-9,11,13,15-17,24-26
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/5-2025-06-04/1-les-incels-ont-enfin-leur-saint.md
+  s_a748ff42963f45::t_be008a4a34bec6 1-75
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/5-2025-06-04/2-linguisticae-en-concurrence-avec-les-enfants.md
+  s_a748ff42963f45::t_49976574008f71 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/5-2025-06-04/3-chris-derape-sur-linguisticae-t-as.md
+  s_a748ff42963f45::t_7d026a42c2afc0 1-77
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/5-2025-06-04/CLAUDE.md
+  s_a748ff42963f45::t_095cd27d39dd84 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/CLAUDE.md
+  s_a748ff42963f45::t_6b329555114984 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/CLAUDE.md
+  s_a748ff42963f45::t_94961e723a30f3 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_a748ff42963f45::t_f10f6ea5252d6c 7-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d3ec35e5dcb88a632295204f04a2192b3d5620e3",
+  "prompts": {},
+  "sessions": {
+    "s_a748ff42963f45": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a33604e3b8e2479e3",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
