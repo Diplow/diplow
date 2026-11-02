@@ -3,22 +3,24 @@ title: "2021-05-18 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18
 owner: diplo
 preview: >-
-  Boniface tient que la question palestinienne reste sans issue tant que les
-  droits des Palestiniens ne sont pas reconnus, que la France se contente de
-  protestations, et que l'OCS signale un multi-alignement plutôt qu'un bloc.
-  Il reçoit des invités et chronique des livres.
+  Boniface lit l'actualité par le multilatéralisme, une Europe autonome mais
+  alliée des États-Unis, et les droits des Palestiniens sans lesquels il ne
+  voit aucune issue diplomatique. Il reçoit aussi beaucoup d'invités. Les
+  Digests se concentrent en mai-juin 2021, puis en octobre 2026.
 ---
 # 2021-05-18 → 2026-10-30
 
-Le fil le plus constant de la Period est la question israélo-palestinienne. En 2021, Boniface juge qu'aucune issue diplomatique n'est en vue entre Israël et le Hamas tant que les droits des Palestiniens ne sont pas reconnus. En octobre 2026, il soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens et que la France se contente de protestations face à l'impunité des colons. La grille reste la même, appliquée à des moments différents.
+Le fil le plus constant est la lecture de l'ordre mondial. En 2021, Boniface voit dans l'accord du G7 sur un impôt mondial minimum un changement de paradigme et un progrès du multilatéralisme. Il plaide pour une Europe autonome mais alliée des États-Unis, qui se garde d'être enrôlée contre la Chine au sein de l'OTAN. En octobre 2026, il soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement. Il lit aussi dans l'Euro un retour à la normale après le Covid, et de la géopolitique.
 
-Il lit aussi l'ordre mondial à travers les alignements. Il soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement. De son côté, la chronique du livre d'Alexander Stubb présente un monde en trois blocs, thèse de l'auteur que Boniface restitue. Dans son roman Le Bateau ivre, il juge que le mensonge coûte peu à une carrière en France.
+Le Proche-Orient revient à cinq ans d'écart. En 2021, Boniface juge qu'aucune issue diplomatique n'est en vue entre Israël et le Hamas tant que les droits des Palestiniens ne sont pas reconnus. En 2026, il soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens et que la France se contente de protestations face à l'impunité des colons. Il juge passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins.
 
-La chaîne fait une large place aux invités, dont Boniface reste distinct. Il reçoit Bronchtein, Wieviorka et Rufin, puis François Cailleteau et Sylvie Bermann. Didier Billion défend l'idée que l'avenir des Kurdes passe par l'autonomie. D'autres invités traitent de Gaza, de Lula et du Japon. Boniface juge passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins.
+Une bonne part de la Period revient à ses invités, qui gardent leurs thèses : Bronchtein, Wieviorka et Rufin en 2021, puis Esther Benbassa sur la laïcité et les fractures françaises, Sylvie Bermann sur la parité entre les États-Unis et la Chine, ou Didier Billion, pour qui l'avenir des Kurdes passe par l'autonomie. Il lit Alexander Stubb sur trois blocs mondiaux, présente son roman et imagine un Zidane entraîneur du PSG. Les Digests se regroupent en mai-juin 2021 puis en octobre 2026, avec un seul groupe entre les deux.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/1-2021-05-18/CLAUDE|2021-05-18 → 2021-05-28]] (5 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/2-2021-06-02/CLAUDE|2021-06-02 → 2026-10-14]] (4 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/3-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/4-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/2-2021-06-02/CLAUDE|2021-06-02 → 2021-06-09]] (4 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/3-2021-06-10/CLAUDE|2021-06-10 → 2021-06-11]] (3 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/4-2021-06-16/CLAUDE|2021-06-16 → 2026-10-14]] (3 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/5-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/6-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
