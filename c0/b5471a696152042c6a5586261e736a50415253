@@ -1,0 +1,73 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_5a7f2db2f8199e 186
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/2-comprendre-le-monde-s3-30-emmanuel.md
+  s_096904be677384::t_dfde39d0d5fb07 1-83
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/3-l-europe-doit-elle-choisir-entre.md
+  s_096904be677384::t_1c35a56a275641 1-55
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/4-clap-de-fin-pour-trump.md
+  s_096904be677384::t_822121a0504584 1-67
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/5-netanyahou-va-t-il-risquer-l.md
+  s_096904be677384::t_863581d52f513f 1-61
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/CLAUDE.md
+  s_096904be677384::t_17b1a10be62be8 2,6-9,11,13,15,17,22-25
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/2-2020-06-29/1-arabie-saoudite-qatar-om-psg-geopolitique.md
+  s_096904be677384::t_293f2724475c66 1-67
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/2-2020-06-29/2-comment-reagir-face-au-durcissement-de.md
+  s_096904be677384::t_729efa0156e94a 1-56
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/2-2020-06-29/3-j-ai-lu-le-triangle-du.md
+  s_096904be677384::t_8f807defbc9dbd 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/2-2020-06-29/4-la-chine-a-t-elle-plie.md
+  s_096904be677384::t_5fc1710c82b6c8 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/2-2020-06-29/CLAUDE.md
+  s_096904be677384::t_2cf58341bd97ba 1-24
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/3-2026-10-15/1-j-ai-lu-comprendre-la-question.md
+  s_096904be677384::t_72aa23a97e8e21 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/3-2026-10-15/2-elections-israel-rien-a-signaler-pour.md
+  s_096904be677384::t_3e44fd9625abc8 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/3-2026-10-15/3-un-maire-francais-agresse-en-palestine.md
+  s_096904be677384::t_b8ca2178ba0877 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/3-2026-10-15/CLAUDE.md
+  s_096904be677384::t_7ca34cb0b56ee9 3,19-21
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/4-2026-10-21/1-gaza-dialogue-entre-un-humanitaire-et.md
+  s_096904be677384::t_a37af8bc739efd 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/4-2026-10-21/2-lula-reelu-surprise-politique-choc-geopolitique.md
+  s_096904be677384::t_2fbaf7304eb01a 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/4-2026-10-21/3-le-japon-face-au-defi-trump.md
+  s_096904be677384::t_bca721eb04366c 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/4-2026-10-21/4-l-ocs-une-otan-asiatique-expliquez.md
+  s_096904be677384::t_09501617377442 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/4-2026-10-21/5-j-ai-lu-israel-s-lobby.md
+  s_096904be677384::t_cd40d21cf55a62 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/4-2026-10-21/CLAUDE.md
+  s_096904be677384::t_d515f9396cccb6 3,13,19-23
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/CLAUDE.md
+  s_096904be677384::t_24239498cd41fe 6-8,12,14-16,20-23
+6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE.md
+  s_096904be677384::t_7019e9a564b1ce 6-8,12,14,16,24
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_096904be677384::t_5b98d6296f7e3c 6-8,12,14,16,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c0b5471a696152042c6a5586261e736a50415253",
+  "prompts": {},
+  "sessions": {
+    "s_096904be677384": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a8b53845b15bac5fc",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
