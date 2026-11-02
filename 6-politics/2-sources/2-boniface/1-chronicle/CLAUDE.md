@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface applique les mêmes grilles à dix ans d'actualité : multilatéralisme
-  contre unilatéralisme, deux-poids-deux-mesures occidental, diplomatie plutôt
-  que refus de négocier, et une Europe autonome mais alliée des États-Unis. Il
-  lit Trump, le Covid-19, la Chine et la Palestine.
+  Boniface lit l'actualité d'une décennie par les mêmes grilles :
+  multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
+  autonomie stratégique de l'Europe, rivalité sino-américaine et question
+  palestinienne comme centrale.
 ---
 # Chronicle
 
-D'octobre 2016 à 2026, Boniface lit l'actualité avec un petit nombre de grilles qui reviennent d'une période à l'autre. Le multilatéralisme, en crise mais indispensable, s'oppose à l'unilatéralisme américain. Le deux-poids-deux-mesures occidental et le refus de négocier, qui se retourne contre ses auteurs, sont les deux autres fils constants. Il défend la diplomatie, la fermeté sans rupture et la rationalité des acteurs. Il refuse aussi de sacrifier l'état de droit à la lutte antiterroriste.
+De 2016 à 2019, Boniface lit la scène internationale à travers Trump. Il applique les mêmes grilles d'un cas à l'autre : le multilatéralisme contre l'unilatéralisme, le refus de négocier qui se retourne contre ses auteurs, la rationalité des acteurs, le deux-poids-deux-mesures occidental. Il juge Obama meilleur qu'on ne le dit et Macron dans la ligne gaullo-mitterrandiste, mais voit les gilets jaunes l'affaiblir à l'international. Il presse la France et l'Europe de définir leurs intérêts, de refuser l'unipolarité, de tenir tête à Washington et de gagner en autonomie stratégique. Il défend la diplomatie et un multilatéralisme en crise mais indispensable.
 
-Les premières années tournent autour de Trump. Boniface voit dans l'arms control démantelé, l'unipolarité et la dépendance des Européens autant de raisons d'en appeler à l'autonomie stratégique de la France et de l'Europe. Il presse les Européens de définir leurs intérêts et de tenir tête à Washington. Il juge Obama meilleur qu'on ne le dit, place Macron dans la ligne gaullo-mitterrandiste et voit les gilets jaunes l'affaiblir à l'international. Le Covid-19 est pour lui un révélateur : Trump affaiblit les États-Unis et sert la Chine, et l'Europe pâtit de son manque de solidarité.
+En 2020, il fait du Covid-19 un révélateur. Trump affaiblit les États-Unis et sert la Chine, et l'Europe pâtit de son manque de solidarité. Il en appelle au multilatéralisme et à une Europe alignée ni sur Washington ni sur Pékin. Il plaide pour la fermeté sans rupture et refuse de sacrifier l'état de droit au nom de la lutte antiterroriste.
 
-À mesure que la Chronicle avance, la rivalité sino-américaine prend la première place. L'Europe qu'il appelle de ses vœux n'est alignée ni sur Washington ni sur Pékin : autonome, mais alliée des États-Unis. Il tient les droits des Palestiniens pour la condition de toute issue diplomatique et demande à la France d'assumer son passé.
+Depuis la fin de 2020, ses grilles se déplacent sans changer de nature. Il lit le monde par la rivalité sino-américaine et le déclin de l'Occident, et tient la question palestinienne pour centrale. Il voit un multilatéralisme qui progresse et demande à la France d'assumer son passé. L'Europe qu'il veut autonome reste pour lui alliée des États-Unis.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Les premières années tournent autour de Trump. Boniface voit dans l'arms contr
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2019-10-10]] (84 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2020-06-11]] (90 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/CLAUDE|2020-06-16 → 2020-12-14]] (78 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/CLAUDE|2020-12-16 → 2026-10-30]] (83 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/CLAUDE|2020-12-16 → 2026-10-30]] (89 Digests)

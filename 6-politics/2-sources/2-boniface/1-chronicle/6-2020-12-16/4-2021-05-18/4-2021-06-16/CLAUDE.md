@@ -1,23 +1,26 @@
 ---
-title: "2021-06-16 → 2026-10-14"
+title: "2021-06-16 → 2021-06-28"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/4-2021-06-16
 owner: diplo
 preview: >-
-  Sur ces dates, Boniface donne surtout la parole à d'autres : Esther Benbassa
-  sur la laïcité et les fractures françaises, Alexander Stubb dans un livre
-  sur trois blocs mondiaux, Sylvie Bermann sur la parité entre les États-Unis
-  et la Chine.
+  Boniface lit le sport comme un terrain politique : footballeurs légitimes à
+  prendre position, UEFA piégée par un effet boomerang contre Orbán, nation
+  branding au Tour de France. Il voit en Biden un piège pour Macron, et reçoit
+  Esther Benbassa et Thierry Coville.
 ---
-# 2021-06-16 → 2026-10-14
+# 2021-06-16 → 2021-06-28
 
-Pendant cette Period, Boniface reçoit et lit plus qu'il ne tranche seul : les trois Digests donnent la thèse à un invité ou à un auteur. En 2021, il accueille Esther Benbassa dans son émission CLM. Pour elle, islamo-gauchiste est une insulte sans contenu, la loi sur le séparatisme a détricoté la laïcité de 1905, et le conflit israélo-palestinien a fracturé juifs et musulmans de France, sans issue en vue.
+Pendant ces deux semaines, Boniface traite surtout le sport comme un terrain politique. Il soutient que les footballeurs sont légitimes à prendre position sur les sujets de société et le feront de plus en plus, car leur carrière ne dépend ni des réseaux, ni des médias, ni du pouvoir politique. Selon lui, refuser de les entendre relève d'un mépris social. Il juge que l'UEFA, en refusant d'illuminer le stade de Munich aux couleurs arc-en-ciel, a obtenu un effet boomerang contre Orbán, et qu'elle a du retard sur l'homophobie alors qu'elle agit depuis longtemps contre le racisme. Au Tour de France, il voit revenir des équipes aux couleurs de pays (Kazakhstan, Bahreïn, Émirats, Israël) qui font du nation branding à bon compte, mais s'exposent aux protestations.
 
-Les deux autres Digests, en octobre 2026, portent sur l'ordre mondial. Boniface chronique Le Triangle du pouvoir d'Alexander Stubb : le monde s'y divise en trois blocs, Occident, Orient et Sud global. Dans ce livre, l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur un Sud qui décidera du nouvel ordre.
+Sur la scène internationale, Boniface applique sa grille du multilatéralisme à l'élection de Biden. Bonne nouvelle pour le multilatéralisme, elle devient un piège pour Macron : privé de son rôle d'anti-Trump, celui-ci peine à résister à l'agenda américain face à la Chine, et se fait doubler sur sa gauche en politique intérieure.
 
-Le lendemain, il reçoit Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. La Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Deux invités de *Comprendre le monde* portent leurs propres thèses. Pour Esther Benbassa, islamo-gauchiste est une insulte sans contenu, la loi sur le séparatisme a détricoté la laïcité de 1905 et le conflit israélo-palestinien a fracturé juifs et musulmans de France. Pour Thierry Coville, l'élection présidentielle iranienne a été verrouillée par les durs autour du guide, les sanctions de Trump ont ruiné l'économie sans faire plier le régime, et seule une négociation qui prend en compte les impératifs stratégiques de l'Iran peut aboutir.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/4-2021-06-16/1-clm-s4-40-esther-benbassa-debats|CLM S4#40 - Esther Benbassa - "Débats intellectuels, débats politiques : peut-on raison garder ?"]] (2021-06-16)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/4-2021-06-16/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/4-2021-06-16/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/4-2021-06-16/2-peut-on-etre-footballeur-sans-prendre|Peut-on être footballeur sans prendre position ?]] (2021-06-16)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/4-2021-06-16/3-l-uefa-et-l-homophobie|L'UEFA et l'homophobie]] (2021-06-23)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/4-2021-06-16/4-clm-s4-41-thierry-coville-ou|CLM S4#41 - Thierry Coville - "Où va l'Iran ?"]] (2021-06-23)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/4-2021-06-16/5-geopolitique-du-tour-de-france|Géopolitique du Tour de France]] (2021-06-25)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/4-2021-06-16/6-biden-un-piege-pour-macron|Biden : un piège pour Macron ?]] (2021-06-28)
