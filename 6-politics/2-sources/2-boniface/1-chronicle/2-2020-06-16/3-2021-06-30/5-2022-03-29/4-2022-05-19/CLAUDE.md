@@ -1,22 +1,25 @@
 ---
-title: "2022-05-19 → 2026-10-14"
+title: "2022-05-19 → 2022-05-25"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/4-2022-05-19
 owner: diplo
 preview: >-
-  Boniface lit la guerre d'Ukraine par les intérêts occidentaux plutôt que par
-  les valeurs et réclame la raison face à l'émotion. En 2026, il chronique
-  Stubb sur un Occident affaibli face au Sud global, puis reçoit Sylvie
-  Bermann sur la Chine.
+  Boniface lit la mobilisation pour l'Ukraine par l'intérêt et la proximité
+  plutôt que par les valeurs, et refuse que l'émotion décide d'une adhésion à
+  l'UE. Il juge Zelensky vainqueur de la guerre de la communication, et reçoit
+  Jean de Gliniasty puis Gallagher Fenwick.
 ---
-# 2022-05-19 → 2026-10-14
+# 2022-05-19 → 2022-05-25
 
-En mai 2022, Boniface applique à la guerre en Ukraine une grille de lecture constante : la mobilisation occidentale tient d'abord aux intérêts et à la proximité, non aux valeurs, et il demande de l'admettre plutôt que de s'enfermer dans le récit du bien absolu contre le mal absolu. Il en tire une prudence politique : l'émotion ne doit pas décider d'une adhésion rapide de l'Ukraine à l'UE. Il met en avant la corruption, le tropisme américain de Zelensky et ses critiques répétées des Européens, et conclut qu'il faut défendre d'abord l'intérêt européen.
+Boniface soutient que la mobilisation occidentale pour l'Ukraine tient d'abord à nos intérêts et à la proximité, non à nos valeurs. Il demande de l'admettre et de ne pas se laisser piéger par le récit du bien absolu contre le mal absolu. Le même souci de lucidité le conduit à refuser que l'émotion décide d'une adhésion rapide de l'Ukraine à l'UE : la corruption, le tropisme américain de Zelensky et ses critiques répétées des Européens commandent de défendre d'abord l'intérêt européen.
 
-Les deux Digests suivants datent d'octobre 2026 et déplacent le regard vers la recomposition de l'ordre mondial. Boniface chronique Le Triangle du pouvoir d'Alexander Stubb, qui divise le monde en trois blocs (Occident, Orient, Sud global). Selon ce livre, l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur un Sud qui décidera du nouvel ordre. Boniface reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné, et la Chine joue la patience sur Taïwan. Elle estime aussi que la Chine n'est pas anti-européenne, mais que son excédent commercial met l'Europe en difficulté.
+Boniface soutient aussi que Zelensky a très largement gagné la guerre de la communication face à Poutine, parce qu'il adapte son discours à chaque public, parlement par parlement, quand Poutine ne passe pas au-delà des frontières russes.
+
+La fin de la période laisse la parole à deux invités. Reçu par Boniface, Jean de Gliniasty, auteur de *La Russie, un nouvel échiquier*, voit dans la guerre le prolongement d'un cycle d'expansion et de repli de l'histoire russe, qui brise l'essor économique du pays et dont Poutine ne sortirait pas politiquement vivant en cas de défaite. Pour Gallagher Fenwick, biographe de Zelensky, l'ancien comique apprend à jouer les rapports de force avec les Occidentaux mais reste marqué par ses liens avec l'oligarque Kolomoïski et sa dépendance aux États-Unis, et son défi est désormais de gagner la paix.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/4-2022-05-19/1-guerre-en-ukraine-defend-on-nos|Guerre en Ukraine : défend-on nos valeurs ou nos intérêts ?]] (2022-05-19)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/4-2022-05-19/2-guerre-en-ukraine-l-emotion-ne|Guerre en Ukraine : l'émotion ne doit pas faire perdre la raison]] (2022-05-20)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/4-2022-05-19/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/4-2022-05-19/4-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/4-2022-05-19/3-volodymyr-zelensky-une-communication-en-frappes|Volodymyr Zelensky : une communication en frappes chirurgicales]] (2022-05-23)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/4-2022-05-19/4-j-ai-lu-la-russie-un|J'ai lu... "La Russie, un nouvel échiquier" par Jean de Gliniasty]] (2022-05-24)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/4-2022-05-19/5-comprendre-le-monde-s5-36-gallagher|Comprendre le monde S5#36 – Gallagher Fenwick – "Qui est Volodymyr Zelensky ?"]] (2022-05-25)
