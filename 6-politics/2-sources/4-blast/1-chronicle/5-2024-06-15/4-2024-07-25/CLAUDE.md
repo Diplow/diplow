@@ -1,21 +1,23 @@
 ---
-title: "2024-07-25 → 2024-08-06"
+title: "2024-07-25 → 2024-08-20"
 parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25
 owner: diplo
 preview: >-
-  Blast soutient que Macron confisque la voix du peuple après les
-  législatives, que Sarkozy a banalisé l'extrême droite et que l'empire de
-  Bolloré menace la démocratie ; il reçoit aussi des invités sur la société
-  civile, le Qatar, le climat et l'antiterrorisme.
+  Blast dénonce le déni de démocratie de Macron après les législatives et
+  l'éviction de Lucie Castets, alerte sur l'empire Bolloré et l'ingérence
+  azerbaïdjanaise, et reçoit des invités sur la société civile, Gaza, le
+  climat et l'amour.
 ---
-# 2024-07-25 → 2024-08-06
+# 2024-07-25 → 2024-08-20
 
-Le fil de la Period est une dénonciation de la confiscation démocratique. Blast soutient que Macron nie le résultat des législatives, puis qu'il confisque la voix du peuple ([[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/1-2024-07-25/CLAUDE|2024-07-25 → 2024-07-28]], [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/3-2024-08-01/CLAUDE|2024-08-01 → 2024-08-06]]). Il soutient aussi que Sarkozy a banalisé l'extrême droite jusqu'à ruiner la droite républicaine, que la victoire travailliste au Royaume-Uni est trompeuse et que l'empire médiatique de Bolloré menace la démocratie.
+Le fil principal de la Period est la critique d'Emmanuel Macron. Blast dénonce un déni de démocratie après les législatives, puis l'accuse de confisquer la voix des Français en écartant Lucie Castets. La même grille court sur d'autres terrains : la victoire travailliste au Royaume-Uni serait trompeuse, Sarkozy aurait banalisé l'extrême droite jusqu'à ruiner la droite républicaine, et la saison se ferme sur une alerte contre l'empire médiatique de Bolloré. Blast soutient aussi que l'Azerbaïdjan s'ingère dans l'Outre-mer français, surtout par rétorsion contre le soutien de Paris à l'Arménie.
 
-Autour de ce constat, Blast reçoit des invités qui l'élargissent chacun à leur manière. Roger Sue, Jade Lingart et Ali Salem abordent la société civile à remettre au centre, les JO contestés et une détention sans procès au Qatar. Alice Raybaud défend l'amitié comme lien politique sous-estimé. Ziad Majed est invité sur la guerre régionale, Oxfam sur le climat et Florient sur l'antiterrorisme.
+Autour de ce fil, Blast reçoit des invités qui portent leurs propres thèses. Roger Sue, Jade Lingart et Ali Salem élargissent le constat à la société civile, aux JO et à une détention sans procès au Qatar. Ziad Majed et l'UNICEF parlent du Proche-Orient et des enfants de Gaza, Oxfam France de l'impréparation climatique, et un condamné du 8 décembre prend la parole. En fin de Period, Théo Bourgeron traite du soutien des grands patrons à l'extrême droite, tandis qu'Alice Raybaud défend l'amitié comme lien politique et qu'Aline Laurent-Mayillard critique l'amour romantique comme modèle unique de société. El Diablo présente sa BD Carcajou.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/1-2024-07-25/CLAUDE|2024-07-25 → 2024-07-28]] (4 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/2-2024-07-29/CLAUDE|2024-07-29 → 2024-07-31]] (3 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/3-2024-08-01/CLAUDE|2024-08-01 → 2024-08-06]] (5 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/3-2024-08-01/CLAUDE|2024-08-01 → 2024-08-04]] (4 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/4-2024-08-06/CLAUDE|2024-08-06 → 2024-08-12]] (4 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14/CLAUDE|2024-08-14 → 2024-08-20]] (3 Digests)

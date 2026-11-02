@@ -1,6 +1,6 @@
 ---
 title: "ANTITERRORISME : UNE ARME JURIDIQUE UTILISÉE POUR FAIRE TAIRE LES CONTESTATIONS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/3-2024-08-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/4-2024-08-06
 owner: diplo
 preview: >-
   Blast donne la parole à Florient, ancien combattant du Rojava condamné dans
