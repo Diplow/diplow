@@ -3,18 +3,18 @@ title: "2020-06-16 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16
 owner: diplo
 preview: >-
-  Pascal Boniface lit l'actualité de 2020 à 2026 par quelques grilles stables
-  : le multilatéralisme contre l'unilatéralisme américain, un Occident en
-  déclin face à la Chine, une Europe qui ne choisit pas son camp, puis le
-  multi-alignement.
+  Boniface applique les mêmes grilles à l'actualité : multilatéralisme contre
+  unilatéralisme, Occident qui ne domine plus, Europe autonome entre
+  Washington et Pékin, rivalité sino-américaine. Il refuse les faux concepts
+  et juge que les blocages pèsent plus que les changements de dirigeants.
 ---
 # 2020-06-16 → 2026-10-30
 
-D'un bout à l'autre de la Period, Pascal Boniface applique les mêmes grilles de lecture à des événements très différents. Il défend le multilatéralisme contre l'unilatéralisme américain, juge que l'Occident ne domine plus et doit être cohérent, et préfère le dialogue exigeant aux sanctions. Il veut une Europe qui ne s'aligne ni sur Washington ni sur Pékin. La rivalité sino-américaine revient comme fil conducteur : elle tient à la montée en puissance de la Chine, et Biden changerait le ton sans bouleverser le fond. Le Covid y apparaît comme un accélérateur du déclin occidental.
+Du milieu de 2020 à début 2021, Boniface lit les crises par quelques grilles stables. Il oppose le multilatéralisme à l'unilatéralisme américain. Il voit un Occident qui ne domine plus et qui doit être cohérent. Il préfère le dialogue exigeant aux sanctions, et refuse que l'Europe choisisse entre Washington et Pékin. À l'automne 2020, ces grilles s'appliquent à la fermeté sans rupture face à Erdogan, à un ordre nucléaire déséquilibré et à un Biden qui changerait le ton sans bouleverser les relations avec la Russie et la Chine.
 
-Les premiers mois, de l'été 2020 à l'hiver 2021, suivent l'actualité de près : fermeté sans rupture face à Erdogan, ordre nucléaire déséquilibré, élection américaine lue comme une défaite de la démocratie américaine, impasse israélo-palestinienne, révoltes arabes vues comme autant de cas nationaux distincts. Après l'assassinat de Samuel Paty, Boniface veut combattre le terrorisme sans sacrifier l'état de droit et récuse islamo-gauchisme et islamo-fascisme comme faux concepts ([[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/CLAUDE|2020-10-20 → 2020-11-16]]). Il reçoit aussi plusieurs invités, dont les thèses restent les leurs.
+Les mois suivants prolongent ce fil. Après l'assassinat de Samuel Paty, Boniface veut combattre le terrorisme sans sacrifier l'état de droit, et récuse islamo-gauchisme et islamo-fascisme comme faux concepts. Il lit l'élection américaine comme une défaite de la démocratie américaine. La rivalité sino-américaine, qui tient à la montée en puissance de la Chine, revient ensuite : pour lui, Biden ne la change guère. Il voit dans le Covid un accélérateur du déclin de l'Occident, dans les révoltes arabes autant de cas nationaux distincts, et dans l'actualité de la fin 2020 des rapports de force et des blocages, de l'OTAN et l'isolement de la France au Tigré et à l'impasse israélo-palestinienne. Il reçoit aussi plusieurs invités, dont Ventura, Duflot, Naves, Ernoult, Le Cam et Matelly.
 
-La dernière Period, la plus étendue dans le temps, déplace l'attention vers de nouveaux objets ([[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/6-2021-01-27/CLAUDE|2021-01-27 → 2026-10-30]]). Boniface soutient que l'IA bouleverse les métiers et les rapports de pouvoir, qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens, et que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement.
+La dernière Period, la plus longue en dates mais la plus courte en Digests, garde la même méthode. Boniface reproche au débat français d'ignorer les vrais enjeux et lit le Sahara occidental comme une rivalité entre Rabat et Alger. Il juge qu'un départ de Netanyahou changerait presque rien pour les Palestiniens, et voit dans l'OCS un multi-alignement, non une OTAN asiatique.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ La dernière Period, la plus étendue dans le temps, déplace l'attention vers d
 3. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/CLAUDE|2020-10-20 → 2020-11-16]] (18 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/4-2020-11-17/CLAUDE|2020-11-17 → 2020-12-14]] (20 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/5-2020-12-16/CLAUDE|2020-12-16 → 2021-01-25]] (16 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/6-2021-01-27/CLAUDE|2021-01-27 → 2026-10-30]] (13 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/6-2021-01-27/CLAUDE|2021-01-27 → 2026-10-30]] (19 Digests)
