@@ -296,6 +296,7 @@ kinds:
       convention-citoyenne: {définition: "Assemblée de citoyens tirés au sort qui délibèrent sur un sujet et formulent des propositions.", statut: proposé, introduit_par: blast/9Cor6NP5qH4.md}
       dîner: {définition: "Repas mondain, souvent annuel, qui réunit des personnalités d'un milieu autour d'une table.", statut: proposé, introduit_par: paduteam/mCek51AyK50.md}
       opération-policière: {définition: "Opération de police d'envergure menée par l'État, comme une campagne de démolitions et d'expulsions.", statut: proposé, introduit_par: blast/LYkjqB8XUe8.md}
+      coup-de-force: {définition: "Tentative d'imposer ou de conserver le pouvoir par des moyens d'exception, comme une loi martiale.", statut: proposé, introduit_par: blast/1RD7TpXlcgA.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -343,6 +344,7 @@ kinds:
       charte: {définition: "Texte fondateur qui fixe les principes d'une organisation ou d'un mouvement.", statut: proposé, introduit_par: paduteam/HZfk8m0cvtU.md}
       plan-de-paix: {définition: "Proposition de règlement d'un conflit, avancée par une puissance ou un médiateur, sans accord des parties.", statut: proposé, introduit_par: boniface/qHChXvTuJAI.md}
       plan-d-action: {définition: "Plan public qui fixe des objectifs et des mesures sur un sujet, sans être une loi.", statut: proposé, introduit_par: blast/MgSxfC58dfM.md}
+      engagement-solennel: {définition: "Engagement public pris ensemble par des partis ou des élus, qui fixe un objectif commun.", statut: proposé, introduit_par: blast/MRXfHqwt3jg.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
