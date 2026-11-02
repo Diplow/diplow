@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/3-2025-08-13/4-la-verite-sur-la-mort-de.md
+  s_70e2b8820e4c39::t_70cfd2aa735de0 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/3-2025-08-13/5-padu-gache-l-hommage-a-trotski.md
+  s_70e2b8820e4c39::t_9a0fcb3c7ec29f 1-80
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/3-2025-08-13/CLAUDE.md
+  s_70e2b8820e4c39::t_85b648dea9d764 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/4-2025-08-24/1-charles-consigny-veut-d-esclaves-pour.md
+  s_70e2b8820e4c39::t_41b36615bad985 1-78
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/4-2025-08-24/2-melenchon-appelle-a-la-greve-generale.md
+  s_70e2b8820e4c39::t_f5c5cda1e281bf 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/4-2025-08-24/3-salome-saque-n-est-plus-de.md
+  s_70e2b8820e4c39::t_cd5c057bf887b4 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/4-2025-08-24/4-lfi-ils-font-pleurer-les-journalistes.md
+  s_70e2b8820e4c39::t_39c06f90354bb0 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/4-2025-08-24/CLAUDE.md
+  s_70e2b8820e4c39::t_af0a75e407aa62 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/CLAUDE.md
+  s_70e2b8820e4c39::t_072c4d3eee22ef 2,6-9,11,13,15-17,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/CLAUDE.md
+  s_70e2b8820e4c39::t_42f1219d6378a6 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_aa2b1309a4b456 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "20fe79a74bd91d4798301bf10d341847681da939",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
