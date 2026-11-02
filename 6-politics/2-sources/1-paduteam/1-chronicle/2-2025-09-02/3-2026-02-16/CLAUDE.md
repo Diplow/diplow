@@ -1,20 +1,20 @@
 ---
-title: "2026-02-16 → 2026-04-28"
+title: "2026-02-16 → 2026-05-07"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16
 owner: diplo
 preview: >-
-  La PaduTeam appelle la gauche à rompre avec le PS et à radicaliser son
-  programme, lit les municipales comme un succès de LFI, la guerre d'Iran
-  comme un recul américain, et voit s'ouvrir une fenêtre pour la gauche
-  radicale en vue de 2027.
+  La PaduTeam pousse la gauche à rompre avec le PS et à se radicaliser pour
+  2027. Elle lit les municipales comme un succès de LFI, la guerre d'Iran
+  comme un recul américain, et le virage du PS comme une tactique : seule une
+  gauche de rupture organisée en profite.
 ---
-# 2026-02-16 → 2026-04-28
+# 2026-02-16 → 2026-05-07
 
-Le fil qui traverse ces dix semaines est la rupture avec le PS. Après la mort de Quentin Déranque, que la PaduTeam lit comme un prétexte pour enfermer la FI dans l'extrême gauche, elle appelle celle-ci à radicaliser son programme. Elle n'admet pas d'unité sans programme et joue le plus jamais PS dès le premier tour. Les municipales 2026 confirment cette lecture : succès de LFI, échec des écologistes alliés au PS. Elle annonce un PS qui revient en absorbant le centre, puis le décrit comme seulement tactique.
+Du milieu de février à début mai, la PaduTeam ramène presque tout à une même ligne : la gauche doit rompre avec le PS et radicaliser son programme. Elle voit dans la mort de Quentin Déranque un prétexte pour enfermer la FI dans l'extrême gauche. Les municipales sont pour elle un succès de LFI et un échec des écologistes alliés au PS (voir [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/2-2026-03-15/CLAUDE|2026-03-15 → 2026-03-30]]). Elle annonce un PS qui revient en absorbant le centre. Pas d'unité sans programme, et le plus jamais PS se joue dès le premier tour.
 
-Fin mars, elle lit l'actualité par les bases sociales et les blocs de classe : 2027 comme duel de classe, PS néokeynésien, Hollande comme recours du bloc bourgeois, Sécu à défendre, et défense du 100 % Sécu. Elle dénonce des milliardaires qui imposent leur ligne par les médias. Dans le vote Mélenchon, elle voit une lame de fond générationnelle. Elle observe aussi, après les municipales, la formation d'un pôle de gauche anti-Mélenchon qui vise 2027.
+Elle lit ensuite l'actualité par les bases sociales et les blocs de classe : 2027 sera un duel de classe, le PS est néokeynésien, et Hollande est le recours du bloc bourgeois. Les milliardaires imposent leur ligne par les médias. La PaduTeam défend le 100 % Sécu et Cuba, voit dans le vote Mélenchon une lame de fond générationnelle et, après les municipales, un pôle de gauche anti-Mélenchon qui se forme pour 2027.
 
-Sur le plan international, la guerre contre l'Iran apparaît d'abord comme une manœuvre pour sauver le pétrodollar, puis comme un recul américain. En avril, la PaduTeam juge la primaire morte et passe la gauche comme ses adversaires au crible de la classe. Elle voit s'ouvrir une fenêtre à la gauche radicale, devant un RN fissuré.
+Sur le plan international, la guerre contre l'Iran est d'abord présentée comme une manœuvre pour sauver le pétrodollar. Elle devient, en fin de période, un recul américain. Dans la même veine, la PaduTeam juge la primaire morte et voit l'extrême droite en reflux. Le virage du PS est pour elle tactique : seule une gauche de rupture organisée en profite.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Sur le plan international, la guerre contre l'Iran apparaît d'abord comme une m
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/2-2026-03-15/CLAUDE|2026-03-15 → 2026-03-30]] (16 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/CLAUDE|2026-03-30 → 2026-03-31]] (16 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/CLAUDE|2026-03-31 → 2026-04-12]] (16 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/CLAUDE|2026-04-13 → 2026-04-28]] (11 Digests)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/CLAUDE|2026-04-13 → 2026-05-07]] (17 Digests)

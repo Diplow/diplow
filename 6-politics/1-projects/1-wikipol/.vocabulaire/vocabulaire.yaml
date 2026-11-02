@@ -241,6 +241,7 @@ kinds:
       groupe-musical: {définition: "Groupe de musiciens qui compose et se produit ensemble.", statut: proposé, introduit_par: blast/0qT5qNEF76Y.md}
       milice: {définition: "Groupe paramilitaire privé qui s'arme et s'entraîne en vue d'affrontements, hors de toute armée d'État.", statut: proposé, introduit_par: blast/rr3ED9-O228.md}
       groupe-parlementaire: {définition: "Groupe politique constitué au sein d'un parlement, comme au Parlement européen.", statut: proposé, introduit_par: paduteam/V-HmXl_Jrz4.md}
+      fonds-public: {définition: "Dispositif de financement public qui distribue des subventions à des projets ou à des associations.", statut: proposé, introduit_par: boniface/f_R0_C1GahM.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
