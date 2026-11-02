@@ -1,0 +1,41 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_1bc981d09f6ee8 167
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/4-2024-03-13/5-antisemitisme-a-sciences-po-macron-et.md
+  s_70e2b8820e4c39::t_4afbf6dbf7f342 1-78
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/4-2024-03-13/CLAUDE.md
+  s_70e2b8820e4c39::t_4167db761852db 6-10,14,16-18,26
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/5-2024-03-16/1-du-gilet-jaune-au-parapluie-les.md
+  s_70e2b8820e4c39::t_06908929c6a7e5 1-92
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/5-2024-03-16/2-sondages-d-opinion-l-overdose.md
+  s_70e2b8820e4c39::t_88fbc1ec4790ce 1-98
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/5-2024-03-16/3-bollore-hanouna-dans-les-coulisses-de.md
+  s_70e2b8820e4c39::t_791ea590875bdd 1-102
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/5-2024-03-16/4-guerre-ukraine-russie-la-transnistrie-poudriere.md
+  s_70e2b8820e4c39::t_dbc7d5e7d6d333 1-81
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/5-2024-03-16/5-le-journalisme-neutre-n-existe-pas.md
+  s_70e2b8820e4c39::t_58ccef30b953c5 1-94
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/5-2024-03-16/CLAUDE.md
+  s_70e2b8820e4c39::t_0b67677590bc32 1-25
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/CLAUDE.md
+  s_70e2b8820e4c39::t_0c258d3957c97d 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE.md
+  s_70e2b8820e4c39::t_04752e12dd323d 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_0e9e078a3ce234 6-9,13,15-17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5f3e68d1e88ec49084a9ee67438cd86d8d03c947",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
