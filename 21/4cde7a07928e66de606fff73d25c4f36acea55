@@ -1,0 +1,51 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_0ed1b23d5122c9 165
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/5-2025-02-01/4-nous-sommes-tous-contamines-pfas-l.md
+  s_0fedfbcc24a87f::t_c1caa040181ca1 1-99
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/5-2025-02-01/5-desirer-la-violence-ce-ux-que.md
+  s_0fedfbcc24a87f::t_e598b0deefdf4f 1-109
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/5-2025-02-01/CLAUDE.md
+  s_0fedfbcc24a87f::t_b58c8e45addcaf 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/6-2025-02-05/1-pourquoi-le-patronat-n-aime-pas.md
+  s_0fedfbcc24a87f::t_2e1fac747d7668 1-91
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/6-2025-02-05/2-le-ps-trahit-les-fachos-et.md
+  s_0fedfbcc24a87f::t_4c4ee69530d3a3 1-62
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/6-2025-02-05/3-pourquoi-trump-veut-s-emparer-du.md
+  s_0fedfbcc24a87f::t_786f94234f0b9c 1-83
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/6-2025-02-05/4-transformer-gaza-en-riviera-legitimer-un.md
+  s_0fedfbcc24a87f::t_956f7f76f677c6 1-71
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/6-2025-02-05/CLAUDE.md
+  s_0fedfbcc24a87f::t_649a67ee9df10e 1-24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/CLAUDE.md
+  s_0fedfbcc24a87f::t_96acc5e48e902a 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE.md
+  s_0fedfbcc24a87f::t_fc34ecb1012eed 2,6-8,10,12,14,16,22
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_0fedfbcc24a87f::t_7bc58680865b78 2,6-8,10,12,14,21
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_0fedfbcc24a87f::t_013c1a04cad082 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "214cde7a07928e66de606fff73d25c4f36acea55",
+  "prompts": {},
+  "sessions": {
+    "s_0fedfbcc24a87f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-afd938be69d8eb02d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
