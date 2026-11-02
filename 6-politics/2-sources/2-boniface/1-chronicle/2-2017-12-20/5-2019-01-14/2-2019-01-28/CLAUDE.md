@@ -1,21 +1,22 @@
 ---
-title: "2019-01-28 → 2026-10-14"
+title: "2019-01-28 → 2019-01-31"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/2-2019-01-28
 owner: diplo
 preview: >-
   Boniface lit le Venezuela comme une ligne de front entre Occidentaux et
-  non-Occidentaux, sans réduire la crise à l'ingérence américaine. Il
-  chronique aussi le livre d'Alexander Stubb sur les trois blocs du monde et
-  reçoit Sylvie Bermann sur la Chine.
+  non-Occidentaux, mais juge la contestation de Maduro d'abord nationale, et
+  soutient que Trump n'est pas irrationnel. Deux invités commentent aussi son
+  Requiem pour le monde occidental.
 ---
-# 2019-01-28 → 2026-10-14
+# 2019-01-28 → 2019-01-31
 
-Le fil de la Period, qui ne compte que trois Digests très espacés, est la lecture des rapports de force entre Occident et non-Occident. En 2019, Boniface fait du Venezuela la ligne de front entre ces deux camps. Il y ajoute une réserve : la contestation de Maduro est d'abord nationale, et l'ingérence américaine l'exploite sans l'expliquer à elle seule.
+Boniface applique sa grille à deux sujets d'actualité. Sur le Venezuela, il soutient que le pays est devenu la ligne de front entre Occidentaux et non-Occidentaux. Il nuance aussitôt : la contestation de Maduro est d'abord nationale, et l'ingérence américaine l'exploite sans l'expliquer à elle seule. Sur Trump, il défend l'idée qu'il n'est pas irrationnel. Il a sa rationalité, qui n'est pas la nôtre, ses décisions visant à plaire à ses électeurs et à faire fonctionner le complexe militaro-industriel. Ce serait donc une erreur de le prendre à la légère.
 
-Les deux Digests de 2026 prolongent cette question de l'ordre mondial, mais Boniface y passe la parole à d'autres. Il chronique Le Triangle du pouvoir d'Alexander Stubb, qui divise le monde en trois blocs (Occident, Orient, Sud global), et en retient que l'Occident doit montrer l'exemple s'il veut peser sur le Sud. Il reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans que Pékin ait gagné, la Chine joue la patience sur Taïwan, et son excédent commercial met l'Europe en difficulté.
+La Period donne aussi la parole à deux lectures de *Requiem pour le monde occidental*, le livre de Boniface, qui restent celles de leurs auteurs. Jean de Gliniasty y voit la première synthèse des événements qui rendent caduques les structures héritées de la Guerre froide, un livre de référence pour qui admet que le monde occidental tel qu'on l'a connu n'existe plus. Louis Gautier juge le panorama brillant, mais reproche au livre un déséquilibre à l'égard de la Russie et un lien trop étroit avec Trump. Pour lui, l'Occident ne meurt pas, car ses valeurs le tiennent uni.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/2-2019-01-28/1-venezuela-je-reponds-a-vos-questions|Venezuela : je réponds à vos questions]] (2019-01-28)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/2-2019-01-28/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/2-2019-01-28/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/2-2019-01-28/2-requiem-pour-le-monde-occidental-le|(Requiem pour le monde occidental) - Le point de vue de Jean de Gliniasty]] (2019-01-28)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/2-2019-01-28/3-50-idees-recues-sur-l-etat|(50 idées reçues sur l'état du monde) - L'idée reçue du jour : "Trump est irrationnel"]] (2019-01-30)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/2-2019-01-28/4-requiem-pour-le-monde-occidental-le|(Requiem pour le monde occidental) - Le point de vue de Louis Gautier]] (2019-01-31)

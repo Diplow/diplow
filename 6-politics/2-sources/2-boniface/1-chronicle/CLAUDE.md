@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit la scène mondiale, de Trump à l'Europe, par quelques grilles
-  constantes : le multilatéralisme contre l'unilatéralisme, l'autonomie
-  stratégique d'une Europe qui refuse un monde unipolaire, le soft power et le
-  multi-alignement qui redistribuent les rapports de force.
+  Boniface lit dix ans de relations internationales, de 2016 à 2026, avec les
+  mêmes grilles : Trump, le multilatéralisme contre l'unilatéralisme,
+  l'autonomie stratégique de l'Europe, et un monde que Washington voudrait
+  unipolaire.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Boniface applique les mêmes grilles à l'actualité. Le multilatéralisme s'oppose à l'unilatéralisme, et Trump en est la figure centrale : dans la première période, Boniface le lit avec ces outils, puis il soutient que Trump rejette l'Arms control comme le multilatéralisme. Il retient aussi que le refus de négocier se retourne contre ses auteurs, et il pose la rationalité des acteurs comme point de départ de l'analyse.
+Dès les premiers Digests ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]]), Boniface lit Trump et la scène internationale avec les mêmes outils : le multilatéralisme contre l'unilatéralisme, le refus de négocier qui se retourne contre ses auteurs, la rationalité des acteurs. Il juge Obama meilleur qu'on ne le dit et situe Macron dans la ligne gaullo-mitterrandiste.
 
-Les jugements sur les dirigeants relèvent de la même cohérence. Boniface estime Obama meilleur qu'on ne le dit et place Macron dans la ligne gaullo-mitterrandiste ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]]). Dans la période suivante ([[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]]), l'accent se déplace vers l'Europe : elle doit refuser un monde unipolaire et gagner son autonomie stratégique. Le soft power et le multi-alignement y redistribuent les rapports de force.
+Ces grilles tiennent sur toute la durée de la Chronicle ([[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]]). Trump, le multilatéralisme et l'autonomie stratégique de l'Europe organisent sa lecture des relations internationales jusqu'en 2026. La Corée, l'Iran, l'Arabie saoudite ou le Venezuela sont pour lui des cas d'une même grille : celle d'un monde que Washington voudrait unipolaire.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]] (78 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]] (89 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]] (95 Digests)
