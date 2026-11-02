@@ -1,6 +1,6 @@
 ---
 title: "The RIGHT-WINGER the MOST PANIC about SECURITY!!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/5-2025-08-01
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/1-2025-08-01
 owner: diplo
 preview: >-
   La PaduTeam soutient que la psychose sécuritaire de Damocles, TikTokeur qui

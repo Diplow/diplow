@@ -1,6 +1,6 @@
 ---
 title: "LORDON  MÉLENCHON peut GAGNER en 2027"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/5-2025-08-01
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/2-2025-08-07
 owner: diplo
 preview: >-
   La PaduTeam soutient que Lordon, en jugeant que 2027 ne se présente pas si
