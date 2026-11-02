@@ -1,0 +1,53 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_a28a63de1e2927 107
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/3-2024-02-12/CLAUDE.md
+  s_e74c862a1dd458::t_851c84729d6246 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/4-2024-02-16/1-haut-karabagh-l-armenie-va-t.md
+  s_e74c862a1dd458::t_bf1ddd2abe6073 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/4-2024-02-16/2-navalny-rappelle-la-necessite-de-se.md
+  s_e74c862a1dd458::t_0e217c5fb27a68 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/4-2024-02-16/3-pourquoi-il-faut-en-finir-avec.md
+  s_e74c862a1dd458::t_f938bbfc5ad89f 1-89
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/4-2024-02-16/4-c-dettinger-le-prix-a-payer.md
+  s_e74c862a1dd458::t_a02434cbe9383f 1-79
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/4-2024-02-16/CLAUDE.md
+  s_e74c862a1dd458::t_824284d444a29c 1-22
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19/1-on-est-en-train-d-enfouir.md
+  s_e74c862a1dd458::t_f87faeb6969ce5 1-88
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19/2-bukele-au-salvador-le-dictateur-le.md
+  s_e74c862a1dd458::t_d6a5794ac02679 1-97
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19/3-pantheonisation-comment-macron-a-refuse-d.md
+  s_e74c862a1dd458::t_8aaec66da3aa97 1-71
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19/CLAUDE.md
+  s_e74c862a1dd458::t_f5381c6dc3657b 1-23
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/CLAUDE.md
+  s_e74c862a1dd458::t_99d1b042fdf3ff 2,6-9,11,13,15,17,23-25
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE.md
+  s_e74c862a1dd458::t_91259d067d1995 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_e74c862a1dd458::t_b63a8863c92b8f 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5dfe99a7691a3b063ab1c56f209982ac08d9624a",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_e74c862a1dd458": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a448d523aa705b993",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
