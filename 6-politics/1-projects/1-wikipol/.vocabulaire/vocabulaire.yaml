@@ -290,6 +290,7 @@ kinds:
       crise-financière: {définition: "Effondrement de banques ou de marchés qui menace le système financier et appelle des sauvetages.", statut: proposé, introduit_par: blast/SHpGen_J318.md}
       convention-citoyenne: {définition: "Assemblée de citoyens tirés au sort qui délibèrent sur un sujet et formulent des propositions.", statut: proposé, introduit_par: blast/9Cor6NP5qH4.md}
       dîner: {définition: "Repas mondain, souvent annuel, qui réunit des personnalités d'un milieu autour d'une table.", statut: proposé, introduit_par: paduteam/mCek51AyK50.md}
+      opération-policière: {définition: "Opération de police d'envergure menée par l'État, comme une campagne de démolitions et d'expulsions.", statut: proposé, introduit_par: blast/LYkjqB8XUe8.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

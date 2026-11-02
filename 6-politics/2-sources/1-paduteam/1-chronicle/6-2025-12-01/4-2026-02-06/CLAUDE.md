@@ -1,24 +1,26 @@
 ---
-title: "2026-02-06 → 2026-02-21"
+title: "2026-02-06 → 2026-03-01"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06
 owner: diplo
 preview: >-
   La PaduTeam démonte les récits médiatiques sur la gauche, mène le combat
-  contre le PS, de Guedj à la recomposition autour de Vallaud, et pousse la FI
-  à radicaliser son programme et à garder la tête froide après la mort de
-  Quentin Déranque.
+  Plus jamais PS contre Tondelier, Guedj et Vallaud, et lit la mort de Quentin
+  Déranque comme un prétexte pour enfermer la FI dans l'extrême gauche. Elle
+  l'appelle à radicaliser son programme.
 ---
-# 2026-02-06 → 2026-02-21
+# 2026-02-06 → 2026-03-01
 
-La PaduTeam passe ces deux semaines à passer au crible ceux qui racontent la gauche. Elle reproche à Duhamel de dépolitiser en personnalisant, à Mediapart d'oublier ce qui fera gagner Mélenchon en 2027, et elle s'en prend aussi aux discours de Chaigneau et de Todd. Tondelier, qui refuse de choisir un camp, mènerait selon elle son parti à l'explosion. Elle dénonce le verrouillage de la primaire des noisettes et plaide pour en finir avec l'hégémonie du PS à gauche, avec un féminisme plus communiste (voir [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/2-2026-02-07/CLAUDE|2026-02-07 → 2026-02-13]]).
+Du 6 février au 1er mars, la PaduTeam passe au crible ceux qui racontent la gauche. Duhamel dépolitise en personnalisant, Chaigneau et Todd sont démontés, Mediapart oublie ce qui fera gagner Mélenchon en 2027. Marianne et Clément Viktorovitch font campagne contre la gauche radicale sous couvert de neutralité. L'article de Plenel contre Mélenchon est pour elle une opération de fabrication du consentement.
 
-Ce fil devient le combat « Plus jamais PS » dans [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/3-2026-02-14/CLAUDE|2026-02-14 → 2026-02-15]]. La candidature Guedj y est lue comme une manœuvre de l'appareil Hollande, à laquelle la PaduTeam oppose un programme de rupture. Elle accuse Marianne et Clément Viktorovitch de faire campagne contre la gauche radicale sous couvert de neutralité.
+Le combat Plus jamais PS traverse toute la période. Elle veut en finir avec l'hégémonie du PS à gauche. Tondelier, en refusant de choisir un camp, va faire exploser son parti, et elle verrouille la primaire des noisettes. La candidature Guedj est une manœuvre de l'appareil Hollande, et le PS de Vallaud appelle lui aussi une rupture. La PaduTeam demande donc à la FI un programme de rupture et défend un féminisme plus communiste.
 
-La dernière semaine est dominée par la mort de Quentin Déranque. La PaduTeam y voit une opération de Némésis que Macron, Glucksmann et Garrido retournent contre la FI. Elle demande à la FI de garder la tête froide et de radicaliser son programme, alors que le PS se recompose autour de Vallaud.
+À droite, elle décrit une impasse : Retailleau rejoue le Sarkozy de 2007, Knafo incarne une élite qui fait semblant de savoir, et Némésis instrumentalise la mort de Quentin Déranque. Elle l'accuse aussi d'avoir préparé des guets-apens avec des néofascistes d'Audace Lyon. Elle y lit un prétexte de Macron, Glucksmann, Garrido et Hollande pour enfermer la FI dans l'extrême gauche, et conseille à celle-ci de garder la tête froide. Elle voit dans le discours de Rubio à Munich un colonialisme assumé et récuse la psychanalyse de Trump comme impasse politique.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/1-2026-02-06/CLAUDE|2026-02-06]] (3 Digests)
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/2-2026-02-07/CLAUDE|2026-02-07 → 2026-02-13]] (4 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/3-2026-02-14/CLAUDE|2026-02-14 → 2026-02-15]] (4 Digests)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/4-2026-02-16/CLAUDE|2026-02-16 → 2026-02-21]] (6 Digests)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/4-2026-02-16/CLAUDE|2026-02-16 → 2026-02-19]] (4 Digests)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/5-2026-02-19/CLAUDE|2026-02-19 → 2026-02-23]] (4 Digests)
+6. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/6-2026-02-25/CLAUDE|2026-02-25 → 2026-03-01]] (3 Digests)
