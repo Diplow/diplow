@@ -1,0 +1,51 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_ff81340b2e08b7 266
+  s_70e2b8820e4c39::t_eb5aac9afbc933 121
+  s_70e2b8820e4c39::t_b6446f9303edca 120
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/3-2024-03-25/4-le-massacre-social-qui-vient.md
+  s_3f54c3e8624304::t_ba6e09a7dd06a6 1-67
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/3-2024-03-25/5-comment-survivre-a-la-fin-du.md
+  s_3f54c3e8624304::t_8718283cde3288 1-104
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/3-2024-03-25/CLAUDE.md
+  s_3f54c3e8624304::t_ba6c31e46db233 2,6-9,11,13,15-17,24-25
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/4-2024-03-30/1-drahileaks-10-ans-de-manipulations-revelees.md
+  s_3f54c3e8624304::t_ec76d39b80639a 1-78
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/4-2024-03-30/2-israel-palestine-un-naufrage-mediatique-sans.md
+  s_3f54c3e8624304::t_13385792b69872 1-100
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/4-2024-03-30/3-france-info-pour-qui-roulent-les.md
+  s_3f54c3e8624304::t_cf4a2428330222 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/4-2024-03-30/4-indonesie-cette-lutte-pour-l-independance.md
+  s_3f54c3e8624304::t_1f9dae8aaa19b2 1-87
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/4-2024-03-30/CLAUDE.md
+  s_3f54c3e8624304::t_11402570d258f6 1-24
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/CLAUDE.md
+  s_3f54c3e8624304::t_eb69033dc678ae 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE.md
+  s_3f54c3e8624304::t_b0689c170448bc 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_3f54c3e8624304::t_13664fdab3fdbc 6-9,13,15-17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9d1f1a7dd263c6e3253b94b41b8319915e10b724",
+  "prompts": {},
+  "sessions": {
+    "s_3f54c3e8624304": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a6d8a1a57a94e3ecb",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
