@@ -1,18 +1,17 @@
 ---
-title: "2025-12-01 → 2025-12-22"
+title: "2025-12-01 → 2025-12-31"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01
 owner: diplo
 preview: >-
-  La PaduTeam reproche à la gauche ses renoncements : un PCF devenu SFIO qui
-  suit le PS, un PS qui calcule pour 2027 et se range derrière les
-  macronistes, des écolos tournés vers leur primaire. Elle veut que la gauche
-  de rupture batte celle d'accommodement.
+  La PaduTeam lit décembre en termes de classes : le PCF, le PS et les écolos
+  s'alignent sur le social-libéralisme ou jouent 2027, la gauche de rupture
+  doit les battre, et l'équation LFI = RN sert à sauver le macronisme.
 ---
-# 2025-12-01 → 2025-12-22
+# 2025-12-01 → 2025-12-31
 
-Pendant ces trois semaines de décembre, la PaduTeam lit l'actualité en termes de classes et en tire un réquisitoire contre les renoncements de la gauche. Le PCF de Roussel, devenu SFIO, suit le PS et reprend la valeur travail de Sarkozy. Le PS, après avoir laissé passer le budget de la Sécu par calcul pour 2027, se range derrière les macronistes pendant que Hollande reprend la main sur la gauche social-libérale. Les écolos servent leur primaire plutôt que les classes populaires. La PaduTeam en conclut que la gauche de rupture doit battre celle d'accommodement, et que le PCF social-démocrate refuse l'expropriation.
+Le fil du mois est une guerre à l'intérieur de la gauche. La PaduTeam soutient que le PCF de Roussel, devenu SFIO, suit le PS et reprend la valeur travail de Sarkozy. Elle voit Hollande reprendre la main sur la gauche social-libérale et le PS se ranger derrière les macronistes. Le budget de la Sécu est passé, selon elle, parce que le PS et les écolos l'ont laissé passer par calcul pour 2027 ([[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/3-2025-12-10/CLAUDE|2025-12-10 → 2025-12-16]]). Les Écologistes servent leur primaire plutôt que les classes populaires, et Usul glisse vers l'impérialisme libéral. La gauche de rupture doit donc battre celle d'accommodement.
 
-Elle oppose à ces renoncements l'abondance, que la monnaie ne sait plus penser, et elle la dresse contre l'anthropologie libérale. Elle suit aussi l'évolution d'Usul, qui glisse selon elle vers l'impérialisme libéral. Elle répond à Naulleau en assumant l'histoire du mouvement ouvrier. Du côté adverse, elle présente Bardella comme un produit fabriqué et sans substance, et Mélenchon comme le vainqueur de sa commission.
+Le mois s'ouvre sur une lecture de classe de l'actualité : la domestique de Dubaï subalternisée par l'accumulation de capital, la monnaie dépassée par l'abondance, Mélenchon vainqueur de sa commission, Bardella produit fabriqué et sans substance. Il se referme sur le démontage des idéologies adverses, du programme de Rochedy aux écolos d'extrême droite d'Antitech Résistance. Elle voit chez Naulleau un bingo réactionnaire contre LFI et dans les paysans une petite bourgeoisie du bloc réactionnaire. L'équation LFI = RN est pour elle une manœuvre pour sauver le macronisme, et elle reproche au PCF son opportunisme.
 
 ## Contenu
 
@@ -20,3 +19,4 @@ Elle oppose à ces renoncements l'abondance, que la monnaie ne sait plus penser,
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/2-2025-12-01/CLAUDE|2025-12-01 → 2025-12-05]] (4 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/3-2025-12-10/CLAUDE|2025-12-10 → 2025-12-16]] (5 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/4-2025-12-17/CLAUDE|2025-12-17 → 2025-12-22]] (4 Digests)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/5-2025-12-23/CLAUDE|2025-12-23 → 2025-12-31]] (6 Digests)

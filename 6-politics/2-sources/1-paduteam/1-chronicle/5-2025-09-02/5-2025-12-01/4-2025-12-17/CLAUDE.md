@@ -3,16 +3,16 @@ title: "2025-12-17 → 2025-12-22"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/4-2025-12-17
 owner: diplo
 preview: >-
-  La PaduTeam reproche à la gauche ses renoncements: un PCF social-démocrate
-  qui refuse l'expropriation, des Écologistes qui servent leur primaire plutôt
-  que les classes populaires. Elle oppose l'abondance à l'anthropologie
-  libérale et répond à Naulleau en assumant l'histoire du mouvement ouvrier.
+  La PaduTeam attaque ce qu'elle juge mou ou libéral à gauche : un PCF
+  social-démocrate, des Écologistes qui servent leur primaire plutôt que les
+  classes populaires, un ingénieur à l'anthropologie libérale. Elle voit chez
+  Naulleau un bingo réactionnaire contre LFI.
 ---
 # 2025-12-17 → 2025-12-22
 
-La PaduTeam passe la semaine à pointer les renoncements de la gauche. Elle soutient que la porte-parole du PCF, en refusant l'expropriation et en préférant les SCOP à la nationalisation, tient une ligne social-démocrate, voire de droite, indigne d'un parti qui se dit communiste. Elle lit de même l'abstention des Écologistes sur le budget de la Sécurité sociale: un calcul au service de la primaire de Tondelier et Faure, pas des classes populaires. Sandrine Rousseau, selon elle, devra choisir entre la trahison et la rupture. Elle y ajoute la tarification à l'acte, déjà ruineuse à l'hôpital et qui gagne maintenant les ÉPAD.
+Pendant cette Period, la PaduTeam règle ses comptes avec la gauche qu'elle juge insuffisante. Elle reproche au PCF, qui refuse l'expropriation et préfère les SCOP à la nationalisation, une ligne social-démocrate, voire de droite, indigne d'un parti qui se dit communiste. Elle dit la même chose des Écologistes : leur abstention sur le budget de la Sécurité sociale sert la primaire de Tondelier et Faure, pas les classes populaires, et Sandrine Rousseau devra choisir entre trahison et rupture. Elle y ajoute la tarification à l'acte, déjà ruineuse à l'hôpital et qui gagne maintenant les ÉPAD.
 
-Contre les adversaires du dehors, elle défend une ligne positive. À Badmulch, qui craint que personne ne travaille sans carotte monétaire, elle répond que c'est une anthropologie libérale et de classe: avec l'abondance, la monnaie devient inutile et le travail nécessaire se répartit collectivement. Éric Naulleau, présenté comme un homme de gauche, est pour elle d'extrême droite, et son réquisitoire contre LFI n'est qu'un bingo réactionnaire. Elle y répond en assumant l'histoire du mouvement ouvrier plutôt qu'en s'en défendant.
+Le même geste vaut pour le travail et pour la droite. Face à Badmulch, elle tient que craindre que personne ne travaille sans carotte monétaire relève d'une anthropologie libérale et de classe : avec l'abondance, la monnaie devient inutile et le travail nécessaire se répartit collectivement. Contre Éric Naulleau, qu'elle range à l'extrême droite malgré son étiquette de gauche, elle réduit son réquisitoire contre LFI à un bingo réactionnaire. Elle y répond en assumant l'histoire du mouvement ouvrier.
 
 ## Contenu
 
