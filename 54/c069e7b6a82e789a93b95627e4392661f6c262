@@ -1,0 +1,39 @@
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/3-2024-09-20/5-gouvernement-barnier-le-coup-d-etat.md
+  s_180a5f58a1de2b::t_dddc6f40b6482d 1-92
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/3-2024-09-20/6-le-capitalisme-est-deja-mort.md
+  s_180a5f58a1de2b::t_6303a586e810f0 1-94
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/3-2024-09-20/CLAUDE.md
+  s_180a5f58a1de2b::t_5a22ea7d01b9f8 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/4-2024-09-25/1-la-5e-republique-constitutionnalise-la-dictature.md
+  s_180a5f58a1de2b::t_a858e8c10d93f6 1-74
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/4-2024-09-25/2-b-retailleau-l-extreme-droite-au.md
+  s_180a5f58a1de2b::t_12982249ad41fa 1-91
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/4-2024-09-25/3-trump-le-projet-qui-veut-renverser.md
+  s_180a5f58a1de2b::t_9f89c8e6a0e138 1-90
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/4-2024-09-25/4-de-gaza-au-liban-l-incomprehensible.md
+  s_180a5f58a1de2b::t_4490233df2bce5 1-83
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/4-2024-09-25/CLAUDE.md
+  s_180a5f58a1de2b::t_e5464fb7e0d5d3 1-24
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/CLAUDE.md
+  s_180a5f58a1de2b::t_919f457f2f0ac8 2,7-9,11,13,15,21-22
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/CLAUDE.md
+  s_180a5f58a1de2b::t_a0f914b0025ca4 2,6-8,10,12,14,16,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_180a5f58a1de2b::t_2cf1c1e31f3975 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "54c069e7b6a82e789a93b95627e4392661f6c262",
+  "prompts": {},
+  "sessions": {
+    "s_180a5f58a1de2b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aef0a3b53861fca02",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
