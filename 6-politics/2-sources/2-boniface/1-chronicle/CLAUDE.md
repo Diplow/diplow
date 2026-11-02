@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Sur dix ans, Boniface lit l'actualité par le multilatéralisme contre
-  l'unilatéralisme, le deux-poids-deux-mesures occidental et l'échec des
-  interventions extérieures. Il plaide pour une Europe autonome mais alliée
-  des États-Unis, et juge morte la solution à deux États.
+  Sur dix ans, Boniface applique les mêmes grilles au monde : multilatéralisme
+  contre unilatéralisme, deux poids deux mesures occidental qui affaiblit
+  l'Occident, rivalité sino-américaine, échec des interventions extérieures,
+  Sud appelé à décider du nouvel ordre.
 ---
 # Chronicle
 
-D'octobre 2016 à fin 2026, Boniface applique aux événements du monde un petit nombre de grilles stables. Le multilatéralisme s'oppose pour lui à l'unilatéralisme, et il dénonce un deux-poids-deux-mesures occidental. Ces outils servent d'abord à lire Trump et la scène internationale, puis le Covid-19, qu'il présente comme un révélateur. Ils reviennent d'une vidéo à l'autre : pour lui, la répétition des grilles fait la cohérence de son analyse.
+Pendant toute la Chronicle, Boniface revient aux mêmes grilles de lecture. Il oppose le multilatéralisme à l'unilatéralisme et dénonce le deux poids deux mesures occidental. Il pousse l'Europe à acquérir son autonomie stratégique. Ces outils servent à éclairer des événements très différents, ce qui fait la cohérence de sa lecture.
 
-La Chronicle montre aussi un déplacement des objets. Jusqu'à juin 2020, Boniface presse l'Europe d'acquérir son autonomie stratégique. Depuis, il lit l'actualité par la rivalité sino-américaine et par l'échec des interventions extérieures. Il plaide toujours pour une Europe autonome, mais alliée des États-Unis. Sur le conflit israélo-palestinien, il juge morte la solution à deux États.
+De 2016 à juin 2020 ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]]), il les applique à Trump et à la scène internationale, et lit le Covid-19 comme un révélateur. Depuis juin 2020 ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]]), ces grilles s'enrichissent de la rivalité sino-américaine et de l'échec des interventions extérieures. Le deux poids deux mesures occidental affaiblit alors l'Occident face à un Sud appelé à décider du nouvel ordre.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (215 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (221 Digests)

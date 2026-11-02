@@ -3,21 +3,19 @@ title: "2020-06-16 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16
 owner: diplo
 preview: >-
-  Boniface lit l'actualité internationale par le multilatéralisme, la rivalité
-  sino-américaine et l'échec des interventions extérieures, plaide pour une
-  Europe autonome mais alliée des États-Unis et juge morte la solution à deux
-  États.
+  Boniface lit six ans de monde par le multilatéralisme contre
+  l'unilatéralisme, la rivalité sino-américaine, l'échec des interventions
+  extérieures et le deux poids deux mesures occidental, qui affaiblit
+  l'Occident face à un Sud appelé à décider du nouvel ordre.
 ---
 # 2020-06-16 → 2026-10-30
 
-Sur toute la Chronicle, Boniface applique les mêmes grilles de lecture à l'actualité. Il oppose le multilatéralisme à l'unilatéralisme américain, veut une Europe qui ne s'aligne ni sur Washington ni sur Pékin, et refuse que la lutte antiterroriste sacrifie l'état de droit. Dès [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/1-2020-06-16/CLAUDE|2020-06-16 → 2020-12-14]], il défend la fermeté sans rupture. La constance de ces outils d'une vidéo à l'autre fait la cohérence de son propos.
+Dès 2020, Boniface applique les mêmes grilles à l'actualité : le multilatéralisme contre l'unilatéralisme américain, une Europe qui ne s'aligne ni sur Washington ni sur Pékin, la fermeté sans rupture, le refus de sacrifier l'état de droit à la lutte antiterroriste. Début 2021, il lit le monde par la rivalité sino-américaine, que l'arrivée de Biden ne change guère. Il demande à la France d'assumer son passé en Libye et au Rwanda, tient la question palestinienne pour centrale et plaide pour une Europe autonome mais alliée des États-Unis.
 
-Entre fin 2020 et mi-2021, la rivalité sino-américaine devient son fil principal : pour lui, Biden ne la change guère. Il demande à la France d'assumer son passé en Libye et au Rwanda, tient la question palestinienne pour centrale et plaide pour une Europe autonome tout en restant alliée des États-Unis ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/2-2020-12-16/CLAUDE|2020-12-16 → 2021-06-28]]).
-
-Dans la dernière période, qui est la plus longue, il lit les crises internationales comme l'échec des interventions extérieures et de l'alignement sur Washington. Il juge morte la solution à deux États et décrit un monde de rivalités de puissances et de multi-alignement. La chaîne s'ouvre alors davantage : Boniface y reçoit des invités et chronique des livres.
+Sur les cinq années suivantes, ces fils se durcissent en constats. Boniface insiste sur l'échec des interventions extérieures et sur la mort de la solution à deux États, et il continue de penser les relations internationales comme une rivalité des puissances. Le deux poids deux mesures occidental revient comme la grille qui relie ces sujets : il affaiblit l'Occident face à un Sud appelé à décider du nouvel ordre.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/1-2020-06-16/CLAUDE|2020-06-16 → 2020-12-14]] (78 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/2-2020-12-16/CLAUDE|2020-12-16 → 2021-06-28]] (78 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/CLAUDE|2021-06-30 → 2026-10-30]] (59 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/CLAUDE|2021-06-30 → 2026-10-30]] (65 Digests)
