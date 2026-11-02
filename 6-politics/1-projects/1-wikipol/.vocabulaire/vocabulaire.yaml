@@ -129,6 +129,8 @@ kinds:
       chef-politique-de-groupe-armé: {définition: "Dirige la branche politique d'un groupe armé.", statut: proposé, introduit_par: blast/7tYGSp4jvDM.md}
       anthropologue: {définition: "Étudie les sociétés humaines, leurs pratiques et leurs institutions.", statut: proposé, introduit_par: paduteam/oJJjXM92mjs.md}
       première-dame: {définition: "Épouse du chef de l'État, à la date de la Publication.", statut: proposé, introduit_par: paduteam/JvzArhdDXIk.md}
+      collaborateur-de-l-élysée: {définition: "Travaille auprès du président de la République, au palais de l'Élysée.", statut: proposé, introduit_par: blast/LSlUPiGbl7o.md}
+      impératrice: {définition: "Épouse d'un empereur, notamment romain.", statut: proposé, introduit_par: blast/QonpAL18ydE.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
