@@ -1,0 +1,53 @@
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/CLAUDE.md
+  s_2bd7f88b4bef24::t_74438118185cb0 2,7-8,10,12,14,16
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/1-2025-11-10/1-melenchon-vs-le-pen-2027-les.md
+  s_2bd7f88b4bef24::t_559c0b49f2ca9d 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/1-2025-11-10/2-l-arme-du-ps-pour-battre.md
+  s_2bd7f88b4bef24::t_7c662e891d6c3b 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/1-2025-11-10/3-atomisation-du-bras-droit-de-benoit.md
+  s_2bd7f88b4bef24::t_34f1e9c5715576 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/1-2025-11-10/4-17-700-mois-mais-pris-a.md
+  s_2bd7f88b4bef24::t_e3683873998f87 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/1-2025-11-10/CLAUDE.md
+  s_2bd7f88b4bef24::t_be0b4538e6b251 2-3,6-9,11,13,15,19-22
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/2-2025-11-14/1-tondelier-femme-sandwich-pour-le-capitalisme.md
+  s_2bd7f88b4bef24::t_8c3734d10e70df 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/2-2025-11-14/2-sondages-de-propagande-sur-france-info.md
+  s_2bd7f88b4bef24::t_5e67090531455b 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/2-2025-11-14/3-jdg-joueur-du-grenier-anti-capitaliste.md
+  s_2bd7f88b4bef24::t_607b48093e61da 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/2-2025-11-14/4-saucisson-beret-sardou-les-fetes-de.md
+  s_2bd7f88b4bef24::t_60a7417392fbda 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/2-2025-11-14/CLAUDE.md
+  s_2bd7f88b4bef24::t_bb69df8ed4e8b1 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/3-2025-11-19/1-primaire-de-la-gauche-noisette-le.md
+  s_2bd7f88b4bef24::t_55dd1f94a3b89b 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/3-2025-11-19/2-il-met-l-extreme-droite-en.md
+  s_2bd7f88b4bef24::t_a536f7526b9267 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/3-2025-11-19/3-elle-a-choque-lci-une-militante.md
+  s_2bd7f88b4bef24::t_80e8e6c0b943c3 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/3-2025-11-19/CLAUDE.md
+  s_2bd7f88b4bef24::t_cb4751242ea6b7 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/CLAUDE.md
+  s_2bd7f88b4bef24::t_6931a8bce2f399 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE.md
+  s_2bd7f88b4bef24::t_7b06d69db0c5c6 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_2bd7f88b4bef24::t_da120c2d54c96b 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b7ce46ecfa29a53dd2788b087b5f653f71070033",
+  "prompts": {},
+  "sessions": {
+    "s_2bd7f88b4bef24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a69518118e83d2c7b",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
