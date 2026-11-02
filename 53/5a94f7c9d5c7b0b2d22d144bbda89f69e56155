@@ -1,0 +1,57 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_f506a67124cd38 157
+  s_70e2b8820e4c39::t_35b6d1a12a9874 223
+  s_70e2b8820e4c39::t_0f377b9d9f0b78 156
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/4-2026-01-06/CLAUDE.md
+  s_665861f0ad68e0::t_c4da9aa03a5f2a 2,6-9,11,13,15,17
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/5-2026-01-10/1-anti-feministe-transph0be-et-eugeniste-le.md
+  s_665861f0ad68e0::t_b0d023c544211c 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/5-2026-01-10/2-municipales-philippe-martinez-soutient-le-ps.md
+  s_665861f0ad68e0::t_7fba1334279da8 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/5-2026-01-10/3-macron-et-glucksmann-veulent-la-guerre.md
+  s_665861f0ad68e0::t_f7666e9fd732a8 1-101
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/5-2026-01-10/4-le-ps-scandaleux-ils-acceptent-le.md
+  s_665861f0ad68e0::t_e6828dbf517a5b 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/5-2026-01-10/5-retailleau-la-pire-campagne-de-communication.md
+  s_665861f0ad68e0::t_062591bb6a657e 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/5-2026-01-10/CLAUDE.md
+  s_665861f0ad68e0::t_cb3fb1aa5a9755 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/6-2026-01-22/1-macron-fait-une-masterclass-anti-trump.md
+  s_665861f0ad68e0::t_61bf1e71d5c26e 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/6-2026-01-22/2-faure-et-sa-primaire-assassines-par.md
+  s_665861f0ad68e0::t_e156535bd67dd9 1-102
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/6-2026-01-22/3-ruffin-un-president-eco-est-possible.md
+  s_665861f0ad68e0::t_7115ceaa0d4faa 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/6-2026-01-22/CLAUDE.md
+  s_665861f0ad68e0::t_7b6ef40dc98cf1 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/CLAUDE.md
+  s_665861f0ad68e0::t_eef98ce786452a 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE.md
+  s_665861f0ad68e0::t_288a80c2fd5af5 2,7-9,11,13,15,17,26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_665861f0ad68e0::t_f7ca74c3bf8718 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "535a94f7c9d5c7b0b2d22d144bbda89f69e56155",
+  "prompts": {},
+  "sessions": {
+    "s_665861f0ad68e0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a5cb8afaf3ca0eca7",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
