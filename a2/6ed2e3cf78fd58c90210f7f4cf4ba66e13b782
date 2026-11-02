@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/5-2025-04-04/4-le-douanier-roussel-devoile-les-sportives.md
+  s_df0c5a64086f1f::t_b62141f23701f7 1-105
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/5-2025-04-04/CLAUDE.md
+  s_df0c5a64086f1f::t_fbf9c5fa0ed7b4 2,6-9,11,13,15,22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/6-2025-04-10/1-frontieres-nous-cancel-de-sa-cartographie.md
+  s_df0c5a64086f1f::t_8e8426ebbcafb8 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/6-2025-04-10/2-les-cheminots-prennent-en-0tage-sarah.md
+  s_df0c5a64086f1f::t_acae72bfc6dc66 1-80
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/6-2025-04-10/3-france-inter-et-le-point-reprennent.md
+  s_df0c5a64086f1f::t_e572a40c969a61 1-106
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/6-2025-04-10/4-les-livreurs-uber-bourgeois-que-les.md
+  s_df0c5a64086f1f::t_d375740fd1ff70 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/6-2025-04-10/5-comment-melenchon-va-gagner-en-2027.md
+  s_df0c5a64086f1f::t_a63176a12c4d52 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/6-2025-04-10/CLAUDE.md
+  s_df0c5a64086f1f::t_4e27a7e9500542 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/CLAUDE.md
+  s_df0c5a64086f1f::t_e403f3773db611 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE.md
+  s_df0c5a64086f1f::t_c11b4a11ee0013 2,6-9,11,13,15,17,26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_df0c5a64086f1f::t_16367bc59e5bd7 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a26ed2e3cf78fd58c90210f7f4cf4ba66e13b782",
+  "prompts": {},
+  "sessions": {
+    "s_df0c5a64086f1f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a48a90b881329ecc2",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
