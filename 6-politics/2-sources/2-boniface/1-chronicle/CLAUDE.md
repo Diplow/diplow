@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans d'actualité avec les mêmes grilles : multilatéralisme
-  contre unilatéralisme, deux-poids-deux-mesures occidental, autonomie
-  stratégique de l'Europe. Trump, le Covid-19, puis la rivalité
-  sino-américaine et le déclin de l'Occident en sont les terrains successifs.
+  Pascal Boniface lit dix ans de scène internationale par quelques grilles
+  constantes : multilatéralisme contre unilatéralisme, rivalité
+  sino-américaine, déclin de l'Occident, autonomie stratégique européenne, et
+  une question palestinienne qu'il tient pour centrale.
 ---
 # Chronicle
 
-Pascal Boniface applique sur toute la Chronicle un petit nombre de grilles stables. Il oppose le multilatéralisme à l'unilatéralisme, en particulier américain. Il dénonce un deux-poids-deux-mesures occidental et rappelle que le refus de négocier se retourne contre ceux qui le choisissent. Il défend la diplomatie et la fermeté sans rupture. Il presse l'Europe et la France de définir leurs intérêts et de tenir tête à Washington. Cette répétition tient à la cohérence de son analyse, qui reste la même d'une année à l'autre.
+De 2016 à 2019, Pascal Boniface lit l'actualité à travers Trump et quelques grilles qu'il applique de cas en cas : le multilatéralisme contre l'unilatéralisme, le refus de négocier qui se retourne contre ses auteurs, la rationalité des acteurs, le deux-poids-deux-mesures occidental. Il juge Obama meilleur qu'on ne le dit et voit Macron dans la ligne gaullo-mitterrandiste, mais il observe un arms control démantelé et un multilatéralisme en crise, pourtant indispensable. Il presse la France et l'Europe de définir leurs intérêts, de refuser l'unipolarité et de tenir tête à Washington. Il estime que les gilets jaunes affaiblissent Macron à l'international.
 
-De 2016 à 2020, ces grilles passent par Trump. Boniface voit dans son action le démantèlement de l'arms control, un multilatéralisme en crise mais indispensable, une unipolarité que l'Europe doit refuser. Les gilets jaunes affaiblissent selon lui Macron à l'international. Avec le Covid-19, lu comme un révélateur ([[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2020-06-11]]), Trump affaiblit les États-Unis et sert la Chine, tandis que l'Europe pâtit de son manque de solidarité. Fin 2020, il réclame une Europe alignée ni sur Washington ni sur Pékin et refuse de sacrifier l'état de droit à la lutte antiterroriste.
+En 2020, il lit le Covid-19 comme un révélateur : Trump affaiblit les États-Unis et sert la Chine, tandis que l'Europe pâtit de son manque de solidarité. Il défend alors une Europe alignée ni sur Washington ni sur Pékin, la fermeté sans rupture, et le refus de sacrifier l'état de droit au nom de la lutte antiterroriste. L'appel au multilatéralisme et à l'autonomie stratégique européenne traverse toute cette période.
 
-Depuis décembre 2020 ([[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/CLAUDE|2020-12-16 → 2026-10-30]]), l'angle se déplace vers la rivalité sino-américaine née de la montée en puissance de la Chine et vers le déclin de l'Occident. Boniface juge que le débat français néglige les vrais enjeux et il redit la centralité de la question palestinienne. La chaîne s'ouvre alors à des invités et à des chroniques de livres, où il distingue ce qu'il retient des thèses des auteurs de son propre point de vue.
+À partir de la fin 2020, Boniface lit le monde par la rivalité sino-américaine et le déclin de l'Occident. Il demande à la France d'assumer son passé. Il tient la question palestinienne pour centrale, et sans issue tant que les droits des Palestiniens ne sont pas reconnus. D'un bout à l'autre de la Chronicle, ce sont les mêmes grilles, appliquées à des événements qui changent.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Depuis décembre 2020 ([[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-1
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2019-10-10]] (84 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2020-06-11]] (90 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/CLAUDE|2020-06-16 → 2020-12-14]] (78 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/CLAUDE|2020-12-16 → 2026-10-30]] (71 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/CLAUDE|2020-12-16 → 2026-10-30]] (77 Digests)
