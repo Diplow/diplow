@@ -1,20 +1,20 @@
 ---
-title: "2026-03-30 → 2026-03-31"
+title: "2026-03-30 → 2026-04-02"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30
 owner: diplo
 preview: >-
-  La PaduTeam ramène l'actualité des 30 et 31 mars aux blocs de classe : PS,
-  Retailleau, Hollande, Bardella, milliardaires des médias. Elle y voit la fin
-  de la ligne noisette à gauche et veut une gauche de rupture maintenue face
-  au PS.
+  Du 30 mars au 2 avril, la PaduTeam ramène l'actualité aux blocs de classe :
+  2027 comme duel de classe, PS et droite qui se recomposent, milliardaires
+  qui tiennent les médias, Sécu à 100 %. Elle appelle à radicaliser la gauche
+  de rupture et à convaincre son entourage.
 ---
-# 2026-03-30 → 2026-03-31
+# 2026-03-30 → 2026-04-02
 
-Pendant ces deux jours, la PaduTeam rapporte chaque acteur à sa base sociale. Les médecins libéraux sont de petits entrepreneurs, Bardella courtise le patronat, et Hollande serait le recours du bloc bourgeois en 2027 ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/3-2026-03-31/CLAUDE|2026-03-31]]). Elle lit 2027 comme un duel de classe, dans lequel l'union de la droite derrière Retailleau serait la pire configuration.
+Pendant ces quatre jours, la PaduTeam rapporte chaque acteur à sa base sociale. Les médecins libéraux sont de petits entrepreneurs, Bardella courtise le patronat, le PS se reconstitue sur une ligne néokeynésienne, l'écologie est une fausse conscience. Elle lit 2027 comme un duel de classe : Hollande serait le recours du bloc bourgeois, et l'union de la droite derrière Retailleau la pire configuration. Aux municipales, elle voit la fin de la ligne noisette à gauche, et elle défend le maintien ou le désistement selon le risque fasciste.
 
-À gauche, elle voit le PS se reconstituer sur une ligne néokeynésienne. Elle lit les municipales comme la fin de la ligne noisette. Elle en tire un appel à radicaliser la gauche de rupture et à la maintenir face au PS, sauf là où le fascisme menace ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/CLAUDE|2026-03-31]]). L'écologie est présentée comme une fausse conscience.
+Elle soutient que des milliardaires imposent leur ligne par les médias, contre la Sécu et pour la retraite à 70 ans, et que l'attaque contre l'AME vise la Sécu tout entière. Elle défend en réponse une Sécu à 100 % pour tous, et la collectivisation plutôt que le plafonnement des fortunes. À l'international, elle juge le procès de Maduro pipé, voit Trump piégé par son refus de planifier face à la Chine, et défend Cuba contre le blocus américain. Elle rejette la matrice communiste d'Onfray comme une clownerie, lit la yugostalgie comme un symptôme de la crise du néolibéralisme et accuse Thaïs et Valek de naturaliser la domination.
 
-La même grille sert pour le reste. Les milliardaires imposent leur projet aux médias et aux retraites, avec Kretinski à Marianne et Bolloré aux côtés de Naulleau et Hanouna. L'attaque contre l'AME est lue comme un assaut contre la Sécu, à laquelle la PaduTeam oppose une Sécu à 100 % pour tous. Elle préfère la collectivisation au plafonnement des fortunes. Elle juge le procès de Maduro pipé, rejette la matrice communiste d'Onfray comme une clownerie, voit dans la yugostalgie un symptôme de la crise du néolibéralisme et accuse Thaïs et Valek de naturaliser la domination.
+De ces lectures, elle tire une même ligne : radicaliser la gauche de rupture et la convaincre avant 2027. Elle lit le vote des jeunes pour Mélenchon comme une lame de fond. Elle renvoie les médias et Viktorovitch à leurs failles, et oppose à leurs discours la conflictualité de terrain.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ La même grille sert pour le reste. Les milliardaires imposent leur projet aux m
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/2-2026-03-31/CLAUDE|2026-03-31]] (4 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/3-2026-03-31/CLAUDE|2026-03-31]] (4 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/4-2026-03-31/CLAUDE|2026-03-31]] (4 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/CLAUDE|2026-03-31]] (3 Digests)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/CLAUDE|2026-03-31]] (4 Digests)
+6. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/6-2026-03-31/CLAUDE|2026-03-31 → 2026-04-02]] (5 Digests)
