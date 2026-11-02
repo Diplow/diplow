@@ -136,6 +136,8 @@ kinds:
       haut-représentant-de-l-union-européenne: {définition: "Dirige la politique étrangère de l'Union européenne, à la date de la Publication.", statut: proposé, introduit_par: blast/kMIsW_Nm0e4.md}
       libraire: {définition: "Tient une librairie.", statut: proposé, introduit_par: paduteam/gtB7UZM3OD4.md}
       géographe: {définition: "Étudie l'espace, les territoires et les sociétés qui les habitent.", statut: proposé, introduit_par: paduteam/2-yjOa2ug5U.md}
+      président-de-la-commission-européenne: {définition: "Préside la Commission européenne, à la date de la Publication.", statut: proposé, introduit_par: blast/pZ6B-0R_1aA.md}
+      streamer: {définition: "Diffuse en direct sur une plateforme de streaming, devant un public qui le finance par des dons et des abonnements.", statut: proposé, introduit_par: paduteam/Szw7Cli2ltE.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -212,6 +214,7 @@ kinds:
       colonie: {définition: "Implantation civile israélienne en Cisjordanie, illégale au regard du droit international.", statut: proposé, introduit_par: blast/XjqGY3qsQaE.md}
       mer: {définition: "Étendue d'eau salée bordée de terres, comme la Méditerranée.", statut: proposé, introduit_par: paduteam/CtL2h7P8Fe4.md}
       continent: {définition: "Très vaste ensemble de terres et de pays, comme l'Afrique ou l'Europe.", statut: proposé, introduit_par: boniface/o43DHoCZys4.md}
+      fleuve: {définition: "Cours d'eau important qui se jette dans une mer ou un océan.", statut: proposé, introduit_par: boniface/c3M_-nwPYLU.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

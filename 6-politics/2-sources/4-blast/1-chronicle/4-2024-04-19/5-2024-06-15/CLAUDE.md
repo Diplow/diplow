@@ -1,20 +1,20 @@
 ---
-title: "2024-06-15 → 2024-06-28"
+title: "2024-06-15 → 2024-07-02"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15
 owner: diplo
 preview: >-
-  Entre dissolution et législatives, Blast soutient que Macron a ouvert par
-  vanité la voie au RN, que le Nouveau Front populaire est la seule
-  alternative sérieuse, et que des médias bolloréisés et un pouvoir RN
-  menaceraient l'information et la démocratie.
+  Blast soutient que Macron a ouvert par vanité la voie au RN en dissolvant,
+  que les médias dominants préparent son arrivée et que le Nouveau Front
+  populaire est l'alternative sérieuse. Ses invités décrivent un RN
+  néolibéral, voire fasciste.
 ---
-# 2024-06-15 → 2024-06-28
+# 2024-06-15 → 2024-07-02
 
-Blast lit ces deux semaines comme une campagne éclair née de la dissolution. Elle soutient que Macron, par vanité, a ouvert la porte du pouvoir à l'extrême droite, et que seul le Nouveau Front populaire peut l'arrêter. Elle y voit l'alternative sérieuse. Elle ajoute que l'extrême droite gagne aussi la guerre culturelle, des stades aux librairies. La garde à vue d'une de ses journalistes donne à la campagne une dimension plus personnelle.
+Pendant ces trois semaines de campagne, Blast tient un fil constant : la dissolution a ouvert la porte du pouvoir à l'extrême droite, Macron l'a fait par vanité, et seul le Nouveau Front populaire peut l'arrêter. Le ton monte à mesure que le scrutin approche. De la campagne du premier tour ([[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/2-2024-06-19/CLAUDE|2024-06-19 → 2024-06-21]]), on passe à l'alerte sur l'arrivée du RN au pouvoir, puis au constat qu'entre les deux tours tout se joue au second.
 
-Le fil le plus constant est le rôle des médias dominants. Blast dénonce des médias bolloréisés qui préparent l'arrivée du RN, qu'elle décrit comme un mouvement post-fasciste, et soutient que son ascension leur doit beaucoup. Elle lit l'abstention des quartiers populaires comme une mise à distance de la vie politique, non comme de l'indifférence. À l'approche du vote, l'argument se resserre : un pouvoir RN viderait la démocratie de sa substance en asphyxiant l'information, d'où l'appel à s'informer et à résister.
+Blast cherche aussi les causes de cette ascension. Elle dénonce des médias dominants bolloréisés qui préparent l'arrivée du RN, et affirme que l'extrême droite gagne aussi la guerre culturelle, des stades aux librairies. Elle lit l'abstention des quartiers populaires comme une mise à distance de la vie politique, non comme une indifférence. Elle pointe en outre l'asphyxie de l'information par le marché.
 
-Les invités prolongent ce diagnostic sans que Blast leur prête ses thèses. Richi Tibo parle de la répression. Johann Chapoutot estime que le macronisme dégénère en extrême droite. D'autres voix voient dans un pouvoir RN un désastre économique et social. Blast résume aussi le rapport de l'ONU sur Gaza.
+Les invités donnent à ce fil sa profondeur. Johann Chapoutot soutient que le macronisme dégénère en extrême droite. D'autres dénoncent un programme économique néolibéral et une menace pour les libertés, ou décrivent le RN comme un projet fasciste. Blast leur ouvre l'antenne et prend le cas italien comme avertissement. Elle reçoit Richi Tibo sur la répression, résume le rapport de l'ONU sur Gaza et rappelle que la fierté LGBTQIA+ reste un combat.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ Les invités prolongent ce diagnostic sans que Blast leur prête ses thèses. Ri
 2. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/2-2024-06-19/CLAUDE|2024-06-19 → 2024-06-21]] (5 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/3-2024-06-23/CLAUDE|2024-06-23 → 2024-06-24]] (4 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/4-2024-06-25/CLAUDE|2024-06-25 → 2024-06-26]] (3 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/CLAUDE|2024-06-27 → 2024-06-28]] (4 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/CLAUDE|2024-06-27 → 2024-06-29]] (5 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/6-2024-06-30/CLAUDE|2024-06-30 → 2024-07-02]] (5 Digests)

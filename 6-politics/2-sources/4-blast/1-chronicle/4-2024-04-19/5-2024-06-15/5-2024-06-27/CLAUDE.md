@@ -1,18 +1,20 @@
 ---
-title: "2024-06-27 → 2024-06-28"
+title: "2024-06-27 → 2024-06-29"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27
 owner: diplo
 preview: >-
-  Avant le vote, Blast soutient qu'un pouvoir RN viderait la démocratie de sa
-  substance en asphyxiant l'information, et qu'il faut s'informer et résister.
-  Elle donne aussi la parole à des invités qui y voient un désastre économique
-  et social.
+  Blast alerte sur l'arrivée du RN au pouvoir : ses invités dénoncent un
+  programme économique néolibéral et une menace pour les libertés, Blast
+  pointe l'asphyxie de l'information par le marché et rappelle que la fierté
+  LGBTQIA+ reste un combat.
 ---
-# 2024-06-27 → 2024-06-28
+# 2024-06-27 → 2024-06-29
 
-Pendant ces deux jours, Blast met en garde contre l'arrivée du RN au pouvoir et donne la parole à des invités qui en détaillent les risques. Pour l'économiste Dany Lang, le programme du RN est incohérent et néolibéral : ses mesures sociales sont de façade, il avantage les plus riches et prépare, derrière le flou d'un audit, le retour de l'austérité, donc un naufrage économique. Pour Sophie Binet et Manès Nadel, un RN au pouvoir menacerait syndicats, libertés et droits sociaux. Ils appellent à voter pour le Nouveau Front Populaire et, en cas de victoire du RN, à organiser la résistance collective.
+Blast consacre ces journées à l'hypothèse d'un RN au pouvoir et donne la parole à des invités qui la jugent dangereuse. L'économiste Dany Lang soutient que le programme du RN est incohérent et néolibéral, que ses mesures sociales sont de façade et que le flou d'un audit prépare le retour de l'austérité ([[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/1-rn-le-desastre-economique-qui-vient|RN : LE DÉSASTRE ÉCONOMIQUE QUI VIENT]]). Sophie Binet et Manès Nadel soutiennent qu'un RN au pouvoir menacerait syndicats, libertés et droits sociaux : il faut voter pour le Nouveau Front Populaire et, si le RN l'emportait, organiser la résistance collective.
 
-Blast porte ensuite son propre propos sur l'information et la démocratie. Selon elle, un pouvoir RN n'aurait pas à censurer : privatiser le service public et laisser le marché aux milliardaires suffirait à asphyxier l'information, comme en Italie et en Hongrie, et donc à vider la démocratie de sa substance. Elle accuse la télévision, Hanouna et Praud en tête, au service de Bolloré, d'avoir dédiabolisé le RN sans faire de journalisme, alors que policiers, officiers et magistrats redoutent son arrivée au pouvoir. Sa conclusion est qu'il faut s'informer et résister.
+Blast défend ensuite en son nom que le RN n'aurait pas besoin de censurer : privatiser le service public et laisser le marché aux milliardaires suffirait à asphyxier l'information, comme en Italie et en Hongrie, et donc à vider la démocratie de sa substance ([[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/3-democratie-le-debut-de-la-fin|🦏 DÉMOCRATIE : LE DÉBUT DE LA FIN]]). Il soutient aussi que la télévision, Hanouna et Praud en tête, au service de Bolloré, a dédiabolisé le RN sans faire de journalisme, alors que policiers, officiers et magistrats redoutent son arrivée au pouvoir. D'où son appel à s'informer et à résister.
+
+La Period s'achève sur un autre front : Blast soutient que la fierté LGBTQIA+ est née de la révolte de Stonewall contre l'oppression policière, médicale et religieuse, et que, malgré les progrès, thérapies de conversion et agressions rappellent que la visibilité reste un combat.
 
 ## Contenu
 
@@ -20,3 +22,4 @@ Blast porte ensuite son propre propos sur l'information et la démocratie. Selon
 2. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/2-rn-au-pouvoir-l-enjeu-sera|RN AU POUVOIR : "L'ENJEU SERA CLAIREMENT D'ORGANISER LA RÉSISTANCE"]] (2024-06-27)
 3. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/3-democratie-le-debut-de-la-fin|🦏 DÉMOCRATIE : LE DÉBUT DE LA FIN]] (2024-06-28)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/4-la-france-au-bord-du-gouffre|LA FRANCE AU BORD DU GOUFFRE RN : « RÉVEILLEZ-VOUS MERDE ! »]] (2024-06-28)
+5. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/5-lgbtqia-une-fierte-encore-tres-menacee|LGBTQIA+ : UNE FIERTÉ ENCORE TRÈS MENACÉE]] (2024-06-29)
