@@ -175,6 +175,7 @@ kinds:
       établissement-de-santé: {définition: "Hôpital ou clinique qui accueille et soigne des patients.", statut: proposé, introduit_par: paduteam/43_Rj76Mv0Y.md}
       club-de-banques-de-développement: {définition: "Réseau qui rassemble des banques de développement nationales et régionales pour financer des projets ensemble.", statut: proposé, introduit_par: boniface/JEWUezjunds.md}
       communauté-autochtone: {définition: "Communauté d'un peuple autochtone qui vit sur son territoire et le défend.", statut: proposé, introduit_par: blast/uYQez7xkKz8.md}
+      mouvement-islamiste: {définition: "Mouvement politique et religieux se réclamant de l'islam, comme les Frères musulmans.", statut: proposé, introduit_par: paduteam/fE3d7YfY5Sw.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -229,6 +230,7 @@ kinds:
       débat: {définition: "Échange organisé entre plusieurs intervenants autour d'un sujet, en direct ou enregistré.", statut: proposé, introduit_par: paduteam/Im2oLpge17Y.md}
       massacre: {définition: "Tuerie de masse commise contre une population civile ou des manifestants.", statut: proposé, introduit_par: boniface/WVMzhXjYC5c.md}
       foire: {définition: "Salon commercial où des exposants présentent leurs offres au public.", statut: proposé, introduit_par: blast/XjqGY3qsQaE.md}
+      festival-de-cinéma: {définition: "Festival où des films sont projetés et récompensés.", statut: proposé, introduit_par: paduteam/fE3d7YfY5Sw.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -271,6 +273,7 @@ kinds:
       directive: {définition: "Acte de l'Union européenne qui fixe des objectifs que les États membres transposent dans leur droit.", statut: proposé, introduit_par: blast/7lYFVTbvpHg.md}
       appel: {définition: "Texte public signé par plusieurs personnes pour défendre une position ou appeler à agir.", statut: proposé, introduit_par: paduteam/gQes3ZACQmA.md}
       charte: {définition: "Texte fondateur qui fixe les principes d'une organisation ou d'un mouvement.", statut: proposé, introduit_par: paduteam/HZfk8m0cvtU.md}
+      plan-de-paix: {définition: "Proposition de règlement d'un conflit, avancée par une puissance ou un médiateur, sans accord des parties.", statut: proposé, introduit_par: boniface/qHChXvTuJAI.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
