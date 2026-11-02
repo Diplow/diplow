@@ -1,0 +1,53 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_478313dc453daf 232
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/4-2026-03-30/CLAUDE.md
+  s_4e09ea799dffba::t_1cf705b850d02d 6-8,12,14,16
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/5-2026-03-30/1-greve-des-medecins-caprice-de-riches.md
+  s_4e09ea799dffba::t_bb8bdbca99d0a1 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/5-2026-03-30/2-bardella-est-il-le-maillon-faible.md
+  s_4e09ea799dffba::t_645958fc0fa085 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/5-2026-03-30/3-boris-vallaud-n-a-pas-dit.md
+  s_4e09ea799dffba::t_8f218b4d725ce8 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/5-2026-03-30/4-municipales-lfi-perce-le-centre-est.md
+  s_4e09ea799dffba::t_e497d483ddeca9 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/5-2026-03-30/CLAUDE.md
+  s_4e09ea799dffba::t_8c36911f6f519a 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/6-2026-03-31/1-thais-et-valek-nous-apprennent-a.md
+  s_4e09ea799dffba::t_0c24cf41237ea2 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/6-2026-03-31/2-hollande-vs-melenchon-au-2eme-tour.md
+  s_4e09ea799dffba::t_c7c639d5933626 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/6-2026-03-31/3-maduro-kidnappe-et-t0rture-par-les.md
+  s_4e09ea799dffba::t_f6a4aed2ec5a9a 1-112
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/6-2026-03-31/CLAUDE.md
+  s_4e09ea799dffba::t_605fc1aebfd016 1-20
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/CLAUDE.md
+  s_4e09ea799dffba::t_10565998e316c1 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/CLAUDE.md
+  s_4e09ea799dffba::t_60060db764e966 2,6-9,11,13,15,17,26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_4e09ea799dffba::t_e7b842355e6ab7 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "78101a70215b2829463e894b35a0c1013917c109",
+  "prompts": {},
+  "sessions": {
+    "s_4e09ea799dffba": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aac6387071b657ca0",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
