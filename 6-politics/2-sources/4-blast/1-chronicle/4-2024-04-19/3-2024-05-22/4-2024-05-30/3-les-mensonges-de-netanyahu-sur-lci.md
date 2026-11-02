@@ -1,6 +1,6 @@
 ---
 title: "LES MENSONGES DE NETANYAHU SUR LCI/TF1 - DÉCRYPTAGE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/3-2024-05-22/3-2024-05-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/3-2024-05-22/4-2024-05-30
 owner: diplo
 preview: >-
   Blast soutient que Netanyahou a déroulé sur LCI une série de mensonges,
