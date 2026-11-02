@@ -1,6 +1,6 @@
 ---
 title: "\"NAVALNY RAPPELLE LA NÉCESSITÉ DE SE RÉVOLTER FACE À DES RÉGIMES AUTOCRATIQUES\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/3-2024-02-12
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/4-2024-02-16
 owner: diplo
 preview: >-
   Blast donne la parole à un avocat de Navalny : la mort de l'opposant russe
