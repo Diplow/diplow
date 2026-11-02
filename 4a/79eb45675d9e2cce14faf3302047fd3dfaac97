@@ -1,0 +1,49 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/4-2026-04-12/5-debat-lordon-vs-melenchon-genial-ou.md
+  s_10f6f90e3b2f0d::t_fe45e4ea3f482c 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/4-2026-04-12/CLAUDE.md
+  s_10f6f90e3b2f0d::t_fb043c636c4176 6-9,13,15-17,25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/5-2026-04-13/1-guerre-iran-us-trump-va-t.md
+  s_10f6f90e3b2f0d::t_361292e147b26c 1-107
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/5-2026-04-13/2-la-femme-de-bernard-arnault-explique.md
+  s_10f6f90e3b2f0d::t_23a9ca73ab3565 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/5-2026-04-13/3-roussel-tape-encore-sur-lfi-pour.md
+  s_10f6f90e3b2f0d::t_087c3340be34d6 1-101
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/5-2026-04-13/4-bardella-et-la-princesse-le-nouveau.md
+  s_10f6f90e3b2f0d::t_8ff9d27f4e030d 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/5-2026-04-13/5-david-lisnard-milei-de-wish-ou.md
+  s_10f6f90e3b2f0d::t_d7062c158bfe9a 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/5-2026-04-13/CLAUDE.md
+  s_10f6f90e3b2f0d::t_a635890e01e75c 1-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/CLAUDE.md
+  s_10f6f90e3b2f0d::t_46ac8d738b509b 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE.md
+  s_10f6f90e3b2f0d::t_cf992891761f4c 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_f578c60c0d5a1e::t_5bc499a634b7cd 2,7-9,11,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_f578c60c0d5a1e::t_09d5fa0adb4c55 8-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4a79eb45675d9e2cce14faf3302047fd3dfaac97",
+  "prompts": {},
+  "sessions": {
+    "s_10f6f90e3b2f0d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ac24d6a8751b8177e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_f578c60c0d5a1e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a7252fa2d1d9eb8a6",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
