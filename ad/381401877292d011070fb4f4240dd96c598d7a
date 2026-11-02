@@ -1,0 +1,57 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/CLAUDE.md
+  s_3fab8b03d1d977::t_2a2f9f5dbb00de 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/1-2024-04-19/1-scandale-maisons-avec-piscine-israel-met.md
+  s_3fab8b03d1d977::t_946f9b5235e1fd 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/1-2024-04-19/2-rwanda-la-france-n-a-pas.md
+  s_3fab8b03d1d977::t_028ebe73ecd6c8 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/1-2024-04-19/3-man-on-the-moon-andy-kaufman.md
+  s_3fab8b03d1d977::t_24829906b29804 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/1-2024-04-19/4-atos-une-catastrophe-industrielle-en-bande.md
+  s_3fab8b03d1d977::t_23f3333c1b7e22 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/1-2024-04-19/CLAUDE.md
+  s_3fab8b03d1d977::t_f5446fbeb380fc 3,13,21-24
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/2-2024-04-22/1-islamophobie-l-etat-en-guerre-contre.md
+  s_3fab8b03d1d977::t_eef7e8127e2e9f 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/2-2024-04-22/2-rn-parti-des-pauvres-et-des.md
+  s_3fab8b03d1d977::t_02ea7c99bf1c6d 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/2-2024-04-22/3-pro-macron-emploi-fictif-etc-que.md
+  s_3fab8b03d1d977::t_00199c761555ba 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/2-2024-04-22/4-jean-luc-melenchon-rima-hassan-le.md
+  s_3fab8b03d1d977::t_dd2643c0d32861 1-78
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/2-2024-04-22/5-gaza-l-objectif-israelien-est-de.md
+  s_3fab8b03d1d977::t_3e43eea920cb06 1-97
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/2-2024-04-22/CLAUDE.md
+  s_3fab8b03d1d977::t_42b05ffaceace2 2-3,6-9,11,13,15-17,21-25
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/3-2024-04-26/1-la-france-est-elle-en-marche.md
+  s_3fab8b03d1d977::t_8681a7c283004b 1-117
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/3-2024-04-26/2-proces-mediatique-en-antisemitisme-peut-on.md
+  s_3fab8b03d1d977::t_85d7e8adc60cdc 1-85
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/3-2024-04-26/3-entre-guerre-et-famine-le-soudan.md
+  s_3fab8b03d1d977::t_fc0402cd869a59 1-91
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/3-2024-04-26/4-sciences-po-mensonge-mediatique-et-manipulation.md
+  s_3fab8b03d1d977::t_45be93ede1e31d 1-65
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/3-2024-04-26/CLAUDE.md
+  s_3fab8b03d1d977::t_42ddf7527a8a62 1-24
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/CLAUDE.md
+  s_3fab8b03d1d977::t_14eca86f7d5cd0 1-21
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE.md
+  s_3fab8b03d1d977::t_ad3f7b7c952ea3 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_3fab8b03d1d977::t_1772e32db91f97 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ad381401877292d011070fb4f4240dd96c598d7a",
+  "prompts": {},
+  "sessions": {
+    "s_3fab8b03d1d977": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a1446a639cbc43477",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
