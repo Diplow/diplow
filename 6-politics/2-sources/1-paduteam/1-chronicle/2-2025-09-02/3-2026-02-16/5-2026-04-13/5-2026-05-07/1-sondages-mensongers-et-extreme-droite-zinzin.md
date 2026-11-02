@@ -1,6 +1,6 @@
 ---
 title: "SONDAGES MENSONGERS ET EXTRÊME DROITE ZINZIN : LE CAS INCROYABLE DU PÉROU"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/4-2026-05-05
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07
 owner: diplo
 preview: >-
   La PaduTeam soutient que le Pérou prouve que les sondages d'avant-campagne
