@@ -1,6 +1,6 @@
 ---
 title: "DES ÉCOLOS D'EXTRÊME DROITE  (Anti-Tech Résistance) #1"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/5-2025-12-23
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/2-2025-12-29
 owner: diplo
 preview: >-
   La PaduTeam soutient qu'Antitech Résistance n'est pas une écologie égarée

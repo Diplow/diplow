@@ -1,6 +1,6 @@
 ---
 title: "LES PAYSANS SONT-ILS NOS CAMARADES"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/5-2025-12-23
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/1-2025-12-23
 owner: diplo
 preview: >-
   La PaduTeam soutient que les agriculteurs forment une petite bourgeoisie
