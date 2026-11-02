@@ -122,6 +122,7 @@ kinds:
       dignitaire-nazi: {définition: "Dirigeant du parti ou de l'État nazi, notamment ministre du Reich.", statut: proposé, introduit_par: paduteam/oKhLNMPUApY.md}
       démographe: {définition: "Étudie les populations et leur évolution.", statut: proposé, introduit_par: boniface/Tl5hZKRztyw.md}
       chroniqueur: {définition: "Tient une chronique régulière dans un média, à la télévision, à la radio ou dans la presse.", statut: proposé, introduit_par: paduteam/L4b3g_GHEqk.md}
+      espion: {définition: "Mène des opérations de renseignement sous fausse identité, pour un service ou une société privée.", statut: proposé, introduit_par: blast/FUwkLwlpohA.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -193,6 +194,7 @@ kinds:
       infrastructure: {définition: "Ouvrage ou projet d'aménagement du territoire, comme une autoroute.", statut: proposé, introduit_par: blast/E1Yn7k4mlBQ.md}
       département: {définition: "Collectivité territoriale française de niveau départemental, y compris d'outre-mer.", statut: proposé, introduit_par: blast/Bq3_whwwKTg.md}
       colonie: {définition: "Implantation civile israélienne en Cisjordanie, illégale au regard du droit international.", statut: proposé, introduit_par: blast/XjqGY3qsQaE.md}
+      mer: {définition: "Étendue d'eau salée bordée de terres, comme la Méditerranée.", statut: proposé, introduit_par: paduteam/CtL2h7P8Fe4.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
