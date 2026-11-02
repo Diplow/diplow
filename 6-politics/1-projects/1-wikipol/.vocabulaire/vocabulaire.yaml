@@ -161,6 +161,7 @@ kinds:
       commerçant: {définition: "Tient un commerce, comme un café ou une boutique.", statut: proposé, introduit_par: blast/AnnvY4AxufE.md}
       reine-régente: {définition: "Reine qui exerce le pouvoir au nom d'un roi trop jeune pour régner, à la date de la Publication.", statut: proposé, introduit_par: blast/85c-YjO3hfY.md}
       intermédiaire: {définition: "Se glisse entre États et entreprises dans des contrats, notamment d'armement, contre commissions.", statut: proposé, introduit_par: blast/7YW9bXmYMpE.md}
+      interprète: {définition: "Traduit à l'oral, en direct, les propos d'un intervenant qui parle une autre langue.", statut: proposé, introduit_par: blast/TtHgPQYIZL4.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
