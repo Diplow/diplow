@@ -1,24 +1,23 @@
 ---
-title: "2024-06-15 → 2025-03-10"
+title: "2024-06-15 → 2025-03-15"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15
 owner: diplo
 preview: >-
-  Blast lit les neuf mois qui suivent la dissolution comme la marche de
-  l'extrême droite vers le pouvoir : Macron lui déroule le tapis, impose
-  Barnier avec l'aval du RN, et un PS accusé de trahison comme des médias de
-  milliardaires la laissent avancer.
+  Blast soutient que la dissolution de Macron a ouvert la voie du pouvoir à
+  l'extrême droite, qu'il la gouverne par procuration via Barnier puis Bayrou,
+  et que seule la mobilisation collective, à gauche, peut inverser la pente.
 ---
-# 2024-06-15 → 2025-03-10
+# 2024-06-15 → 2025-03-15
 
-Blast soutient que la dissolution a ouvert la voie du pouvoir à l'extrême droite : Macron a déroulé le tapis au RN, et le Nouveau Front populaire est la seule alternative sérieuse. Quand les urnes donnent tort au président, Blast l'accuse de nier le résultat du vote (voir [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/1-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]]).
+Sur ces neuf mois, Blast lit la dissolution comme le point de départ d'une crise démocratique : Macron a déroulé le tapis au RN, puis nié le résultat des urnes en refusant le Nouveau Front populaire, présenté comme la seule alternative sérieuse. L'extrême droite gouverne alors par procuration, Barnier tenant son budget grâce au RN, avant que Bayrou ne prolonge le même schéma avec un PS compromis.
 
-De l'été à l'automne, Blast décrit un pouvoir qui reste aux mains de Macron, battu mais maître du jeu. Il impose Barnier avec l'aval du RN, de sorte que l'extrême droite « gouverne par procuration », jusqu'à un budget que le RN tient. Blast dénonce les médias de milliardaires et reçoit des invités sur Gaza et le Liban. Pour lui, la crise démocratique née de la dissolution ne se referme que par la démission de Macron.
+Le regard s'élargit ensuite à l'échelle internationale et médiatique : l'extrême droite avance sur le terrain laissé par le néolibéralisme et les médias de milliardaires, de Trump à Musk. Blast reçoit aussi des invités sur Gaza et le Liban.
 
-Dans l'hiver 2024-2025, Blast élargit le cadre : l'extrême droite avance de Trump et Musk jusqu'au RN, sur le terrain que laissent le néolibéralisme et les médias dominants. Elle progresse selon lui parce que le pouvoir macroniste, un PS accusé de trahison et les médias patronaux la laissent faire, au mépris de l'État de droit.
+Au fil de la Period, la lecture se durcit : la crise ne se refermerait que par la démission de Macron, et les rapports de classe expliquent ce qui arrive. Le changement, selon Blast, ne viendra pas d'en haut mais du collectif.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/1-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]] (65 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/2-2024-08-14/CLAUDE|2024-08-14 → 2024-10-23]] (72 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE|2024-10-24 → 2024-12-17]] (71 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE|2024-12-18 → 2025-03-10]] (93 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE|2024-12-18 → 2025-03-15]] (99 Digests)
