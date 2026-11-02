@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/3-2025-10-27/4-viktorovitch-vs-paduteam-qui-analyse-mieux.md
+  s_2bd7f88b4bef24::t_0aebe1846bbcf6 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/3-2025-10-27/5-villepin-derape-sur-zyed-et-bouna.md
+  s_2bd7f88b4bef24::t_d4747c8d61b216 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/3-2025-10-27/CLAUDE.md
+  s_2bd7f88b4bef24::t_794d9e854058dd 2,6-8,10,12,14,21-22
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01/1-sardoche-trie-les-bons-et-les.md
+  s_2bd7f88b4bef24::t_4dce5e3f3c294e 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01/2-la-strategie-ruffin-un-autre-glucksman.md
+  s_2bd7f88b4bef24::t_5293971f63add6 1-101
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01/3-new-york-bascule-dans-l-islamo.md
+  s_2bd7f88b4bef24::t_aec7264466c6cf 1-101
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01/4-mamdani-a-gauche-de-melenchon.md
+  s_2bd7f88b4bef24::t_3720707137be51 1-102
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01/CLAUDE.md
+  s_2bd7f88b4bef24::t_6d4094a74baf64 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/CLAUDE.md
+  s_2bd7f88b4bef24::t_1f6ef80cebe440 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE.md
+  s_2bd7f88b4bef24::t_cea16bd53adc65 2,6-9,11,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_2bd7f88b4bef24::t_ba50ef70b001ce 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "af309ae945a772fe13d9a0afffac7cda9690021d",
+  "prompts": {},
+  "sessions": {
+    "s_2bd7f88b4bef24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a69518118e83d2c7b",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
