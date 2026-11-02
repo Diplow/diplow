@@ -3,17 +3,17 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit l'hiver 2023-2024 comme la dérive d'un pouvoir macroniste qui sert
-  les riches et s'aligne sur l'extrême droite, avec un RN banalisé, une colère
-  agricole captée par la FNSEA et une austérité qui frappe les plus pauvres.
+  Blast lit la période comme une même dérive : un pouvoir macroniste qui sert
+  les puissants, s'acharne sur les précaires et s'aligne sur l'extrême droite,
+  pendant que la FNSEA capte la colère agricole. Elle défend l'enquête.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Blast soutient que le pouvoir macroniste gouverne pour les plus riches et glisse vers l'extrême droite : la loi immigration en est l'aboutissement, après un automne où le RN est banalisé et où Gaza et l'antisémitisme font l'objet de deux poids deux mesures. Elle défend l'enquête journalistique et dit sa liberté menacée.
+Du 31 octobre 2023 au 15 mars 2024, Blast décrit un pouvoir macroniste qui gouverne pour les riches et se rapproche de l'extrême droite. L'automne ([[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]]) pose ce cadre. Blast y dénonce deux poids deux mesures sur Gaza et l'antisémitisme et une banalisation du RN. Elle voit dans la loi immigration un alignement sur les positions de l'extrême droite. Elle défend dans le même temps le travail d'enquête et dit sa liberté menacée.
 
-Au début de 2024, ce diagnostic s'étend à l'économie et à la rue. Blast juge que la colère agricole est captée par la FNSEA, que l'austérité comme l'opacité du capitalisme mondialisé frappent d'abord les plus pauvres. Elle reçoit alors des invités sur l'école, Gaza ou l'énergie, dont elle laisse les thèses à ceux qui les soutiennent.
+La suite ([[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-03-15]]) prolonge ce fil. Blast soutient que le pouvoir sert les puissants, cède à la FNSEA, qui capte la colère agricole, et s'acharne sur les précaires. Elle reçoit aussi des invités sur Gaza, l'école, l'énergie et les extrêmes droites. Leurs analyses restent les leurs : Blast leur offre une tribune.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]] (69 Digests)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-03-10]] (97 Digests)
+2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-03-15]] (103 Digests)
