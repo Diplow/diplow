@@ -1,6 +1,6 @@
 ---
 title: "VIOLS SUR MINEURS : DE BÉTHARRAM À BERGERAC, UNE NOUVELLE AFFAIRE ÉTOUFFÉE PAR BAYROU"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/6-2025-02-21
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/2-2025-02-21
 owner: diplo
 preview: >-
   Blast soutient que François Bayrou, qui jure n'avoir rien su de Bétharram,

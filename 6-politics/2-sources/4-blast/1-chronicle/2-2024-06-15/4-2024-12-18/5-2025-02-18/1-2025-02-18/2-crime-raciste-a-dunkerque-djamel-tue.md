@@ -1,6 +1,6 @@
 ---
 title: "CRIME RACISTE À DUNKERQUE : DJAMEL, TUÉ PAR UN NÉONAZI"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/5-2025-02-18
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/1-2025-02-18
 owner: diplo
 preview: >-
   Blast soutient que Jamel Ben Jaballah, éducateur, a été tué par un militant
