@@ -3,18 +3,16 @@ title: "2024-12-18 → 2024-12-19"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/5-2024-12-18
 owner: diplo
 preview: >-
-  Blast démonte le mythe de l'entrepreneur self-made, dénonce le silence des
-  médias sur Amar, tué par un policier, et le choix de Bayrou par Macron
-  contre le vote des législatives. Sur Mayotte, il reçoit Rémy Carayol, pour
-  qui le désastre du cyclone Chido n'a rien de naturel.
+  Blast dénonce le mythe de l'entrepreneur génial, le silence médiatique sur
+  Amar Slimani, tué par un policier, et un Bayrou dont le centrisme penche
+  très à droite. Rémy Carayol, interrogé, voit dans le désastre de Mayotte
+  l'œuvre de l'État et d'une logique coloniale.
 ---
 # 2024-12-18 → 2024-12-19
 
-Ces deux jours tournent autour du même geste : Blast défait les récits qui protègent les puissants ou rendent invisibles ceux qui subissent. Le milliardaire génial et self-made est pour lui un mythe, fabriqué par la presse, la publicité et les intéressés eux-mêmes. Il efface les travailleurs et justifie à la fois l'inégalité et le pouvoir politique des milliardaires.
+Blast s'attaque à des récits qui masquent les rapports de pouvoir. Pour lui, l'entrepreneur génial et self-made est un mythe fabriqué par la presse, la publicité et les intéressés eux-mêmes : il efface les travailleurs et justifie aussi bien l'inégalité que le pouvoir politique des milliardaires ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/5-2024-12-18/1-e-musk-b-gates-etc-les|E. MUSK, B. GATES ETC : LES NOUVEAUX MAÎTRES DU MONDE - CORPORATE EP2]]). Sur la nomination de Bayrou, il juge que Macron bafoue encore le vote des législatives en écartant un Premier ministre de gauche, et que ce prétendu centriste, ménagé par le RN, ne diffère en rien de Barnier.
 
-Le même regard porte sur l'État et les institutions. Blast soutient que Macron, en nommant Bayrou plutôt qu'un Premier ministre de gauche, bafoue encore le vote des législatives, et que ce prétendu centriste, ménagé par le RN, ne diffère en rien de Barnier. Sur la mort d'Amar Slimani, sans-abri algérien abattu dans son sommeil par un policier hors service, il voit un crime de haine de l'étranger. Il ajoute que les médias, qui le réduisent à un SDF ou un squatter, et la proximité du parquet avec la police locale prolongent la déshumanisation.
-
-Pour Mayotte, Blast laisse la thèse à son invité. Le journaliste Rémy Carayol soutient que l'État a fabriqué les bidonvilles, n'a rien anticipé et prolonge une logique coloniale. Blast reçoit cette lecture et la place dans la même série.
+Blast s'arrête aussi sur deux violences d'État. Il soutient qu'Amar Slimani, sans-abri algérien, a été abattu dans son sommeil par un policier hors service, par haine de l'étranger. Selon lui, les médias qui le réduisent à un SDF ou un squatter, et la proximité du parquet avec la police locale, prolongent cette déshumanisation. Sur Mayotte, il donne la parole au journaliste Rémy Carayol, pour qui le désastre du cyclone Chido n'a rien de naturel : l'État a fabriqué les bidonvilles, n'a rien anticipé et prolonge une logique coloniale ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/5-2024-12-18/2-un-drame-ecrit-d-avance-mayotte|"UN DRAME ÉCRIT D'AVANCE" : MAYOTTE FACE AU DÉSASTRE DU CYCLONE CHIDO]]).
 
 ## Contenu
 

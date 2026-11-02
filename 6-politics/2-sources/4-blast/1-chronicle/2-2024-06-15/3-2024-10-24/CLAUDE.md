@@ -1,24 +1,24 @@
 ---
-title: "2024-10-24 → 2024-12-19"
+title: "2024-10-24 → 2024-12-24"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24
 owner: diplo
 preview: >-
-  Blast soutient que l'extrême droite avance sur le terrain laissé par le
-  néolibéralisme, les médias dominants et un Macron qui ignore le vote des
-  législatives, de la victoire de Trump à la nomination de Bayrou. Elle
-  interroge ce qui bloque la gauche.
+  Blast lit la montée de l'extrême droite comme le fruit du néolibéralisme,
+  des médias dominants et de la dissolution de Macron, du budget Barnier à
+  Trump puis Bayrou. Elle dénonce la justice à deux vitesses et interroge ce
+  qui bloque la gauche.
 ---
-# 2024-10-24 → 2024-12-19
+# 2024-10-24 → 2024-12-24
 
-Pendant ces huit semaines, Blast décrit une extrême droite qui progresse sur le terrain que lui laissent le néolibéralisme et les médias dominants. Le budget Barnier tenu par le RN, puis l'élection de Trump, lue comme une prise de tous les pouvoirs, en sont les jalons. La post-vérité devient pour Blast un mode de gouvernement que l'extrême droite française importe, soutenue par Bolloré, Arnault et les médias qu'ils contrôlent.
+Pendant ces deux mois, Blast soutient que l'extrême droite avance sur le terrain laissé par le néolibéralisme et par les médias dominants. Elle le montre d'abord avec le budget Barnier tenu par le RN et l'élection de Trump. Elle y revient avec l'appui que Bolloré, Arnault et les médias dominants apportent à une extrême droite en position de force.
 
-Face à ce rapport de force, Blast dénonce les discours qui masquent la domination et une justice à deux vitesses. Elle relève aussi les dégâts de la politique macroniste sur l'hôpital public et sur la démocratie parlementaire. À mesure que la période avance, Macron concentre la critique : de la dissolution à la nomination de Bayrou, il aggrave la crise démocratique en ignorant le vote des législatives. Blast interroge en parallèle ce qui bloque la gauche.
+Le propos change de cible d'une semaine à l'autre. La victoire de Trump est lue comme une prise de tous les pouvoirs, et la post-vérité comme un mode de gouvernement que l'extrême droite française importe ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/2-2024-11-07/CLAUDE|2024-11-07 → 2024-11-19]]). Blast dénonce ensuite une justice à deux vitesses, une politique macroniste qui abîme l'hôpital public et la démocratie parlementaire, et s'interroge sur ce qui bloque la gauche. En décembre, la crise politique devient l'effet de la dissolution de Macron, que Barnier puis Bayrou aggravent au profit de l'extrême droite ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/CLAUDE|2024-12-05 → 2024-12-24]]).
 
-Blast reçoit aussi des invités qui élargissent le propos : ouvriers en grève, militants, chercheurs, coopératives, paysans, Amnesty sur Gaza, Rémy Carayol sur Mayotte. Leurs thèses sur l'empathie, les services publics ou les territoires restent les leurs.
+Blast suit aussi les ouvriers en grève, dénonce le silence sur les violences policières et sur les ultra-riches, et reçoit militants, chercheurs et coopératives. Ses invités parlent d'empathie, de Gaza, de services publics, de Mayotte et de l'après-Pelicot.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/1-2024-10-24/CLAUDE|2024-10-24 → 2024-11-06]] (18 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/2-2024-11-07/CLAUDE|2024-11-07 → 2024-11-19]] (19 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/CLAUDE|2024-11-21 → 2024-12-04]] (17 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/CLAUDE|2024-12-05 → 2024-12-19]] (21 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/CLAUDE|2024-12-05 → 2024-12-24]] (27 Digests)
