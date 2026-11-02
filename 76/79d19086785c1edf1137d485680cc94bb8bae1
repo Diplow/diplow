@@ -1,0 +1,53 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_3a6dc5f1ae5989 149
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/4-2024-10-09/CLAUDE.md
+  s_9ed70b5f871ae3::t_b23463fd521108 2,7-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12/1-slenderman-le-1er-mythe-d-internet.md
+  s_9ed70b5f871ae3::t_b4e147303b1b9d 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12/2-pas-de-capitalisme-sans-racisme.md
+  s_9ed70b5f871ae3::t_b4d3658d2d9445 1-89
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12/3-jt-et-propagande-de-guerre-une.md
+  s_9ed70b5f871ae3::t_25341f86ac242b 1-93
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12/4-ecologie-la-methode-pour-gagner-face.md
+  s_9ed70b5f871ae3::t_fb53d0a985be70 1-91
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12/CLAUDE.md
+  s_9ed70b5f871ae3::t_93b0d81414caa4 1-22
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/6-2024-10-15/1-blast-n-a-jamais-eu-autant.md
+  s_9ed70b5f871ae3::t_5ae11db1bfb015 1-80
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/6-2024-10-15/2-et-si-la-fin-du-capitalisme.md
+  s_9ed70b5f871ae3::t_b47c9fea58253c 1-97
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/6-2024-10-15/3-bollore-arnault-kretinsky-le-capitalisme-va.md
+  s_9ed70b5f871ae3::t_8c42e3cd1ab98c 1-90
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/6-2024-10-15/CLAUDE.md
+  s_9ed70b5f871ae3::t_2c1f2e0b49007f 1-23
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/CLAUDE.md
+  s_9ed70b5f871ae3::t_45e737f68a02da 2,6-8,10,12,14,16,23-25
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE.md
+  s_9ed70b5f871ae3::t_a17a90a7e9c691 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_9ed70b5f871ae3::t_3563ba020ecdf3 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7679d19086785c1edf1137d485680cc94bb8bae1",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_9ed70b5f871ae3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a253a5551571faa5e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
