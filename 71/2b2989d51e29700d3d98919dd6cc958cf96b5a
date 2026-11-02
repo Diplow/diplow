@@ -1,0 +1,39 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/3-2024-04-26/5-le-gouvernement-declare-la-guerre-a.md
+  s_3fab8b03d1d977::t_db656242b77b4f 1-85
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/3-2024-04-26/6-lip-la-greve-qui-a-fait.md
+  s_3fab8b03d1d977::t_c58a22d831f596 1-99
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/3-2024-04-26/CLAUDE.md
+  s_3fab8b03d1d977::t_17a6b599224409 2,6-9,11,13,15,23-24
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/4-2024-05-02/1-libertes-attaquees-casse-sociale-palestine-un.md
+  s_3fab8b03d1d977::t_7301e7257cba67 1-68
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/4-2024-05-02/2-fascisme-la-situation-italienne-est-elle.md
+  s_3fab8b03d1d977::t_5d19c44e8c4fdb 1-83
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/4-2024-05-02/3-alexandre-la-police-m-a-mutile.md
+  s_3fab8b03d1d977::t_ca53f9ad13b2bb 1-63
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/4-2024-05-02/4-transphobie-la-nouvelle-panique-des-medias.md
+  s_3fab8b03d1d977::t_44016b364bc26d 1-100
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/4-2024-05-02/CLAUDE.md
+  s_3fab8b03d1d977::t_0abd931265c319 1-22
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/CLAUDE.md
+  s_3fab8b03d1d977::t_6f559602afc3b7 2,6-9,11,13,15-17,23-24
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE.md
+  s_3fab8b03d1d977::t_79ad6ddcc05061 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_3fab8b03d1d977::t_a28381022435a4 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "712b2989d51e29700d3d98919dd6cc958cf96b5a",
+  "prompts": {},
+  "sessions": {
+    "s_3fab8b03d1d977": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a1446a639cbc43477",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
