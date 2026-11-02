@@ -1,6 +1,6 @@
 ---
 title: "LUMI ET MODIIE PRENNENT UNE LEÇON SUR L’IA ! (ft.  @LeCanardRéfractaire )"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/1-2026-05-07
 owner: diplo
 preview: >-
   La PaduTeam et le Canard réfractaire répondent à Lumi et Modiie : l'IA n'est

@@ -1,6 +1,6 @@
 ---
 title: "2026-05-07 → 2026-05-09"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/1-2026-05-07
 owner: diplo
 preview: >-
   La PaduTeam tire du Pérou que les sondages d'avant-campagne sont bidons et
@@ -18,7 +18,7 @@ Le reste de la période traite de ce que la gauche doit faire d'elle-même. Avec
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07/1-sondages-mensongers-et-extreme-droite-zinzin|SONDAGES MENSONGERS ET EXTRÊME DROITE ZINZIN : LE CAS INCROYABLE DU PÉROU]] (2026-05-07)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07/2-action-lidl-amazon-l-exploitation-2|ACTION, LIDL, AMAZON  L'EXPLOITATION 2.0 !]] (2026-05-07)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07/3-lumi-et-modiie-prennent-une-lecon|LUMI ET MODIIE PRENNENT UNE LEÇON SUR L’IA ! (ft.  @LeCanardRéfractaire )]] (2026-05-09)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07/4-mathieu-pigasse-l-ultra-riche-qui|MATHIEU PIGASSE  L’ULTRA RICHE QUI VEUT SAUVER LA GAUCHE]] (2026-05-09)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/1-2026-05-07/1-sondages-mensongers-et-extreme-droite-zinzin|SONDAGES MENSONGERS ET EXTRÊME DROITE ZINZIN : LE CAS INCROYABLE DU PÉROU]] (2026-05-07)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/1-2026-05-07/2-action-lidl-amazon-l-exploitation-2|ACTION, LIDL, AMAZON  L'EXPLOITATION 2.0 !]] (2026-05-07)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/1-2026-05-07/3-lumi-et-modiie-prennent-une-lecon|LUMI ET MODIIE PRENNENT UNE LEÇON SUR L’IA ! (ft.  @LeCanardRéfractaire )]] (2026-05-09)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/1-2026-05-07/4-mathieu-pigasse-l-ultra-riche-qui|MATHIEU PIGASSE  L’ULTRA RICHE QUI VEUT SAUVER LA GAUCHE]] (2026-05-09)

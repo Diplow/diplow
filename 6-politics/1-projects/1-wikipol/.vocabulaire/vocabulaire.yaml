@@ -168,6 +168,7 @@ kinds:
       chef-mafieux: {définition: "Dirige une organisation mafieuse.", statut: proposé, introduit_par: blast/FiH9Yw5Kack.md}
       criminologue: {définition: "Étudie la criminalité, la sécurité et la gestion des crises, et en publie des analyses.", statut: proposé, introduit_par: boniface/XiGimU2wvNI.md}
       ancien-vice-président: {définition: "A été vice-président d'un État et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/SVcj1A0jL8E.md}
+      ancien-enseignant: {définition: "A enseigné dans un établissement scolaire et n'enseigne plus, à la date de la Publication.", statut: proposé, introduit_par: blast/eqrUAnS-0cE.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

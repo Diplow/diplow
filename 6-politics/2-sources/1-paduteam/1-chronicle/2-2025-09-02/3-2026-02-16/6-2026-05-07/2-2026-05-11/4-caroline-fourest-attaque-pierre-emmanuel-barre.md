@@ -1,6 +1,6 @@
 ---
 title: "CAROLINE FOUREST ATTAQUE PIERRE EMMANUEL BARRÉ : \"NOVA EST LE CNEWS D’EXTRÊME GAUCHE\""
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/6-2026-05-11
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/2-2026-05-11
 owner: diplo
 preview: >-
   La PaduTeam soutient que l'offensive de Caroline Fourest et du Printemps
