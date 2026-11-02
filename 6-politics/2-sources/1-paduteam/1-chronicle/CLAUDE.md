@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle
 owner: diplo
 preview: >-
-  De 2019 à janvier 2026, la PaduTeam ramène discours et affaires à leurs
-  bases de classe, veut une gauche de rupture réenracinée dans les classes
-  populaires, mise sur Mélenchon contre le PS et répète que seule
-  l'organisation dépasse la droite.
+  De 2019 à janvier 2026, la PaduTeam ramène tout à des bases de classe, fait
+  de l'organisation collective la seule force capable de dépasser la droite,
+  et pousse une gauche de rupture, autour de Mélenchon et d'une FI
+  radicalisée, contre le PS avant 2027.
 ---
 # Chronicle
 
-Sur toute la Chronicle, la PaduTeam applique la même grille : elle ramène discours, affaires et parcours à leurs bases de classe. Elle dénonce un deux poids deux mesures sur Israël et Gaza. Elle défend une gauche de rupture réenracinée dans les classes populaires, et répète que seule l'organisation collective dépasse la droite, face à l'individualisme comme à la dispersion. Elle assume son militantisme comme une bataille d'hégémonie.
+D'un bout à l'autre de la Chronicle, la PaduTeam applique la même grille : discours, affaires et parcours sont ramenés à leurs bases de classe. Elle dénonce un deux poids deux mesures sur Israël et Gaza. Elle veut une gauche de rupture réenracinée dans les classes populaires, et répète que seule l'organisation dépasse la droite. Elle assume son propre militantisme comme une bataille d'hégémonie, face à une extrême droite qui se banalise et à la droitisation de figures de gauche.
 
-Pendant l'hiver 2024-2025, cette lecture par les structures la conduit à juger la censure de Barnier justifiée, à dénoncer la droitisation de figures de gauche et à voir l'extrême droite se banaliser. Au printemps 2025, elle fait de Mélenchon le meilleur atout face au PS pour 2027. Elle lit la condamnation de Marine Le Pen comme une recomposition du fascisme, et la diabolisation de la gauche radicale comme une offensive de l'ordre établi.
+À partir de l'hiver 2024-2025, la ligne se précise autour de 2027. La PaduTeam juge la censure de Barnier justifiée et oppose l'organisation collective à l'individualisme. Elle voit en Mélenchon le meilleur atout face au PS. Elle lit la condamnation de Marine Le Pen comme une recomposition du fascisme et la diabolisation de la gauche radicale comme une offensive de l'ordre établi.
 
-À partir de l'été 2025, la ligne se durcit. La PaduTeam pousse Mélenchon à radicaliser son programme, descend le PS et les autres prétendants à gauche, puis appelle à bloquer l'appareil productif le 10 septembre contre le budget Bayrou. De septembre à janvier ([[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE|2025-09-02 → 2026-01-10]]), elle appelle la rue à faire tomber Macron, fait du PS l'adversaire principal et veut que la gauche de rupture l'emporte sur celle d'accommodement. La Brèche termine la période avec la campagne « Plus jamais PS ».
+Dans la dernière phase, l'été 2025 puis l'automne et l'hiver, le ton devient plus offensif. Elle pousse Mélenchon et la FI à radicaliser leur programme, descend le PS et les autres prétendants à gauche, et appelle à bloquer l'appareil productif le 10 septembre contre le budget Bayrou. Elle appelle ensuite la rue à faire tomber Macron. Le PS devient l'adversaire principal : il faut que la gauche de rupture l'emporte sur celle d'accommodement avant 2027.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Pendant l'hiver 2024-2025, cette lecture par les structures la conduit à juger 
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE|2024-11-27 → 2025-02-14]] (66 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/CLAUDE|2025-02-15 → 2025-06-03]] (70 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/CLAUDE|2025-06-04 → 2025-09-01]] (64 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE|2025-09-02 → 2026-01-10]] (106 Digests)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE|2025-09-02 → 2026-01-26]] (112 Digests)

@@ -153,6 +153,8 @@ kinds:
       prétendant-au-trône: {définition: "Se présente comme l'héritier légitime d'un trône qu'il n'occupe pas, à la date de la Publication.", statut: proposé, introduit_par: paduteam/gFKj4CqjSv4.md}
       vice-président: {définition: "Second du chef de l'État, qui le remplace en cas d'empêchement, à la date de la Publication.", statut: proposé, introduit_par: paduteam/0dXdv0MpE8o.md}
       régicide: {définition: "A tué ou tenté de tuer un roi.", statut: proposé, introduit_par: blast/29aynNz_AcY.md}
+      représentant-du-personnel: {définition: "Élu du comité social et économique d'une entreprise, qui représente les salariés.", statut: proposé, introduit_par: blast/p_FSKLRQs-U.md}
+      vice-président-élu: {définition: "Élu à la vice-présidence d'un État mais pas encore entré en fonction, à la date de la Publication.", statut: proposé, introduit_par: blast/RexzwVwsZBI.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -218,6 +220,7 @@ kinds:
       représentation-diplomatique: {définition: "Ambassade ou mission qui représente un État à l'étranger.", statut: proposé, introduit_par: boniface/SSz3rP2B2PU.md}
       comité-d-action-politique: {définition: "Organisation américaine qui collecte des fonds et mobilise des électeurs pour soutenir un candidat.", statut: proposé, introduit_par: blast/2zYR04KK2Ws.md}
       junte-militaire: {définition: "Groupe de militaires qui a pris le pouvoir par la force et gouverne un État.", statut: proposé, introduit_par: boniface/lHBfr18TWes.md}
+      forum-économique: {définition: "Réunit chaque année des dirigeants politiques et économiques lors d'un forum, sans être un organe d'États.", statut: proposé, introduit_par: paduteam/m_yowJv-TVw.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

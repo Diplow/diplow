@@ -1,6 +1,6 @@
 ---
 title: "ANTI FÉMINISTE, TRANSPH0BE ET EUGÉNISTE  LE VRAI VISAGE D'ANTITECH RESISTANCE #2"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/4-2026-01-06
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/5-2026-01-10
 owner: diplo
 preview: >-
   La PaduTeam soutient qu'Antitech Résistance, en refusant la technique
