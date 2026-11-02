@@ -1,0 +1,63 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_1a4ae13f110153 106
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/CLAUDE.md
+  s_71ef31f25d1e8f::t_037dfbdd4c7279 2,6-9,11,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/1-2025-01-28/1-virginie-vota-est-devenue-woke-avec.md
+  s_71ef31f25d1e8f::t_4ee0b6f5668436 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/1-2025-01-28/2-mos-majorum-croit-debunker-marx-ca.md
+  s_71ef31f25d1e8f::t_6c2a5ae2f2b580 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/1-2025-01-28/3-paye-ton-droitard-6-le-guiz.md
+  s_71ef31f25d1e8f::t_76f599c0d4613d 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/1-2025-01-28/4-ces-libertariens-veulent-retablir-le-travail.md
+  s_71ef31f25d1e8f::t_3ba7c0a41ca54a 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/1-2025-01-28/CLAUDE.md
+  s_71ef31f25d1e8f::t_2e6f85543b7d84 2-3,6-9,11,13,15,19-22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/2-2025-02-01/1-un-droitard-fragile-termine-la-carriere.md
+  s_71ef31f25d1e8f::t_32ee71de9ee4fa 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/2-2025-02-01/2-faut-il-en-finir-avec-le.md
+  s_71ef31f25d1e8f::t_bfb04ea7960628 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/2-2025-02-01/3-paye-ton-droitard-7-1-padu.md
+  s_71ef31f25d1e8f::t_acf7b0317b5aae 1-95
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/2-2025-02-01/4-wissam-et-raz-me-psychanalysent-padu.md
+  s_71ef31f25d1e8f::t_aa428751583ad2 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/2-2025-02-01/CLAUDE.md
+  s_71ef31f25d1e8f::t_ad05b75a0a521c 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/3-2025-02-05/1-michel-onfray-lfi-veut-supprimer-les.md
+  s_71ef31f25d1e8f::t_4bdb19dd87bd99 1-73
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/3-2025-02-05/2-un-hipster-vire-car-musulman-pays.md
+  s_71ef31f25d1e8f::t_7e04ed3e3850fb 1-78
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/3-2025-02-05/3-france-info-vous-offre-10-au.md
+  s_71ef31f25d1e8f::t_8673bd168af270 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/3-2025-02-05/CLAUDE.md
+  s_71ef31f25d1e8f::t_70d64adcc297a9 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/CLAUDE.md
+  s_71ef31f25d1e8f::t_2c32b7951152b0 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE.md
+  s_71ef31f25d1e8f::t_41ac573429d167 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_71ef31f25d1e8f::t_bfa98544d76d26 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "df4a8d9815810131b72f78658ca733ec9d1f0ae1",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_71ef31f25d1e8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a354bad064096da8e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
