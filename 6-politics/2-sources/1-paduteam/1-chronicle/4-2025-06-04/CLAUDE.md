@@ -1,20 +1,20 @@
 ---
-title: "2025-06-04 → 2025-09-28"
+title: "2025-06-04 → 2025-10-01"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04
 owner: diplo
 preview: >-
-  La PaduTeam ramène l'été 2025 à des rapports de classe : elle pousse
-  Mélenchon à radicaliser son programme pour 2027, descend le PS et les autres
-  prétendants, puis appelle à bloquer le pays le 10 septembre pour faire
-  tomber Macron.
+  La PaduTeam fait de l'été 2025 une montée vers le 10 septembre : elle pousse
+  Mélenchon à radicaliser son programme, attaque le PS et les prétendants de
+  2027, et appelle à bloquer l'appareil productif face à un pouvoir qu'elle
+  juge pris de panique.
 ---
-# 2025-06-04 → 2025-09-28
+# 2025-06-04 → 2025-10-01
 
-En juin, la PaduTeam ramène chacune de ses cibles (libéraux, Roussel, Tondelier, Polony, PS, Retailleau, Praud) à ses bases matérielles de classe. Elle défend la flottille pour Gaza et appelle à condenser la gauche face à un empire qui se disloque et à des partis mourants. De fin juin à début juillet, elle pousse Mélenchon à radicaliser son programme et dénonce les attaques contre LFI. Elle juge les projets de Ruffin et de Villepin voués à l'échec et lit la recomposition de la droite et du centre comme un chemin vers Mélenchon en 2027.
+Début juin 2025, la PaduTeam ramène chaque cible (libéraux, Roussel, Tondelier, Polony, PS, Retailleau, Praud) à ses bases matérielles de classe. Elle défend la flottille pour Gaza et appelle à condenser face à un empire qui se disloque et à des partis mourants. Fin juin et en juillet, elle pousse Mélenchon à radicaliser son programme et dénonce les attaques contre LFI. Elle juge les projets de Ruffin et de Villepin voués à l'échec et lit la recomposition de la droite et du centre comme un chemin vers Mélenchon en 2027. Elle voit dans les purges, les congrès et le budget Bayrou une recomposition de la gauche, et descend les prétendants à 2027.
 
-À partir de la mi-juillet, elle voit dans les purges, les congrès et le budget Bayrou une recomposition de la gauche, et elle descend les prétendants pour 2027. Le 10 septembre devient pour elle une situation pré-révolutionnaire où il faut bloquer l'appareil productif. En août, elle lit que Mélenchon peut gagner en 2027, attaque le PS, appelle à la grève du 10 septembre contre le budget Bayrou et dénonce le mépris bourgeois comme les médias de milliardaires.
+L'été tourne ensuite autour du budget Bayrou et du 10 septembre. En août, elle lit que Mélenchon peut gagner en 2027, attaque le PS et dénonce le mépris bourgeois comme les médias de milliardaires. Elle décrit alors une situation pré-révolutionnaire où il faut bloquer l'appareil productif et appelle à la grève. Début septembre, elle fait de la journée du 10 le moment où la rue doit faire tomber Macron, sans répéter l'échec des Gilets jaunes. Elle lit la chute de Bayrou comme un affrontement de classe, puis la répression comme la panique du pouvoir, et appelle à la grève du 18 et aux places le 21 (voir [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/CLAUDE|2025-09-02 → 2025-09-20]]).
 
-En septembre, elle fait de la séquence un affrontement de classe : le 10 septembre doit faire tomber Macron par la rue et le blocage, et la répression trahit la panique du pouvoir. Ni le PS, ni Glucksmann, ni la taxe Zucman ne doivent, selon elle, détourner la colère.
+Fin septembre, elle lit la séquence comme un théâtre d'appareils et de violences de classe : une Palestine reconnue hypocritement, Attal sans base, une justice de classe autour de Sarkozy. La Period se clôt sur un recentrage sur YouTube et la permanence militante.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ En septembre, elle fait de la séquence un affrontement de classe : le 10 septem
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/2-2025-06-26/CLAUDE|2025-06-26 → 2025-07-11]] (14 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/CLAUDE|2025-07-13 → 2025-07-31]] (16 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/CLAUDE|2025-08-01 → 2025-09-01]] (18 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/CLAUDE|2025-09-02 → 2025-09-28]] (22 Digests)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/CLAUDE|2025-09-02 → 2025-09-20]] (17 Digests)
+6. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/CLAUDE|2025-09-22 → 2025-10-01]] (11 Digests)

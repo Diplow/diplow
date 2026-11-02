@@ -1,6 +1,6 @@
 ---
 title: "MARION MARÉCHAL FURIEUSE  ELLE VEUT TERRASSER LA GAUCHE"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/5-2025-09-22
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/1-2025-09-22
 owner: diplo
 preview: >-
   La PaduTeam soutient que le programme de Marion Maréchal, dégauchiser la

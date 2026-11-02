@@ -1,6 +1,6 @@
 ---
 title: "GABRIEL ATTAL DÉMOLIT MACRON  MACRON C'EST LE CHAOS !"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/5-2025-09-22
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/2-2025-09-28
 owner: diplo
 preview: >-
   La PaduTeam soutient que le retournement anti-Macron de Gabriel Attal est

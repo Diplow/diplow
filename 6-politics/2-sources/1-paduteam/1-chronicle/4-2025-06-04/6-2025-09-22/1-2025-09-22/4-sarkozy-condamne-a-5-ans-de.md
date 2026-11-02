@@ -1,6 +1,6 @@
 ---
 title: "SARKOZY CONDAMNÉ À 5 ANS DE PRISON FERME !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/5-2025-09-22
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/1-2025-09-22
 owner: diplo
 preview: >-
   La PaduTeam se réjouit de la condamnation de Sarkozy à 5 ans ferme dans
