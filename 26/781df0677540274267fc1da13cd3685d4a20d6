@@ -1,0 +1,53 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_20d7894bc1df50 111
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/4-2025-02-11/CLAUDE.md
+  s_71ef31f25d1e8f::t_f257a4176cf7bd 2,6-9,11,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/5-2025-02-15/1-gaza-l-illusion-du-cessez-le.md
+  s_71ef31f25d1e8f::t_3eb632be081bba 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/5-2025-02-15/2-yann-moix-plus-gros-p0rc-que.md
+  s_71ef31f25d1e8f::t_41d9d35e0e666e 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/5-2025-02-15/3-on-recadre-psykocouac-le-psychologue-libertarien.md
+  s_71ef31f25d1e8f::t_90beb12e920e20 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/5-2025-02-15/4-papacito-balance-l-enorme-b0dycount-d.md
+  s_71ef31f25d1e8f::t_7bc345c958071b 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/5-2025-02-15/CLAUDE.md
+  s_71ef31f25d1e8f::t_8deff4ff53e7f4 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/6-2025-02-20/1-frederic-lordon-nous-clashe-ces-marxistes.md
+  s_71ef31f25d1e8f::t_c9a090eb54d856 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/6-2025-02-20/2-debrief-de-mon-debat-avec-zawa.md
+  s_71ef31f25d1e8f::t_f71d3071b32880 1-83
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/6-2025-02-20/3-padustream-c-est-deja-fini.md
+  s_71ef31f25d1e8f::t_241978d7bbda01 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/6-2025-02-20/CLAUDE.md
+  s_71ef31f25d1e8f::t_eface0c76f3b09 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/CLAUDE.md
+  s_71ef31f25d1e8f::t_9806a2215b045d 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE.md
+  s_71ef31f25d1e8f::t_cad5ca3f5b32b0 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_71ef31f25d1e8f::t_53ad27d8f0868e 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "26781df0677540274267fc1da13cd3685d4a20d6",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_71ef31f25d1e8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a354bad064096da8e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
