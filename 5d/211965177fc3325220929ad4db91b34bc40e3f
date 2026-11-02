@@ -1,0 +1,53 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/3-2024-05-22/CLAUDE.md
+  s_537995fb9c1570::t_d728fd2beefd42 2,7-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/1-2024-06-03/1-tirs-sur-le-premier-ministre-la.md
+  s_537995fb9c1570::t_6d7b7fff040a12 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/1-2024-06-03/2-exclusif-blast-a-l-interieur-de.md
+  s_537995fb9c1570::t_5e7bf5a92c5085 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/1-2024-06-03/3-macron-darmanin-etc-massacreurs-de-la.md
+  s_537995fb9c1570::t_5ff8668b0802ad 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/1-2024-06-03/4-bardella-m-marechal-tiktok-nouvelle-arme.md
+  s_537995fb9c1570::t_9e292958645c47 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/1-2024-06-03/CLAUDE.md
+  s_537995fb9c1570::t_1b85053028ac5f 2-3,6-9,11,13,15-17,21-24
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/2-2024-06-06/1-europeennes-qui-a-tue-l-ecologie.md
+  s_537995fb9c1570::t_715e129a2f5e1c 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/2-2024-06-06/2-gaza-et-guerre-sociale-macron-champion.md
+  s_537995fb9c1570::t_b7c70387779ad2 1-82
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/2-2024-06-06/3-l-ue-paradis-des-riches-la.md
+  s_537995fb9c1570::t_b8be3301f9e3c0 1-87
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/2-2024-06-06/4-gaza-on-aboutit-a-une-situation.md
+  s_537995fb9c1570::t_500f8756b28979 1-89
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/2-2024-06-06/CLAUDE.md
+  s_537995fb9c1570::t_ab4c3c710c101d 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/3-2024-06-09/1-france-tv-radio-france-la-mise.md
+  s_537995fb9c1570::t_7088895edc04ed 1-86
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/3-2024-06-09/2-dissolution-le-piege-criminel-de-macron.md
+  s_537995fb9c1570::t_2dcf153eb59ab5 1-85
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/3-2024-06-09/3-dissolution-quand-l-extreme-droite-arrive.md
+  s_537995fb9c1570::t_4bce1b0cd3db80 1-94
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/3-2024-06-09/CLAUDE.md
+  s_537995fb9c1570::t_9edb4fe7fcac89 1-21
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/CLAUDE.md
+  s_537995fb9c1570::t_dda6bc79fdbbab 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE.md
+  s_537995fb9c1570::t_2d9252c8f7e303 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_537995fb9c1570::t_20d8912b0b33d0 7-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5d211965177fc3325220929ad4db91b34bc40e3f",
+  "prompts": {},
+  "sessions": {
+    "s_537995fb9c1570": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad22a8219277daf38",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
