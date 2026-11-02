@@ -1,6 +1,6 @@
 ---
 title: "Les ÉTUDIANTS sont EN COLÈRE  VOICI POURQUOI !! (avec l'UNION PIRATE et SOLIDAIRES ÉTUDIANT.E.S)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/4-2025-03-31
 owner: diplo
 preview: >-
   La PaduTeam reçoit des militants de l'Union Pirate et de Solidaires

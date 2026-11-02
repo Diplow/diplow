@@ -3,20 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle
 owner: diplo
 preview: >-
-  Sur 157 Digests, la PaduTeam ramène discours, affaires et parcours à leurs
-  bases de classe, veut une gauche de rupture enracinée dans les classes
-  populaires et répète que seule l'organisation dépasse la droite ; fin 2024,
-  elle fait de Mélenchon le vrai barrage antifasciste.
+  De 2019 à avril 2025, la PaduTeam ramène l'actualité à la classe et aux
+  structures, dénonce la droitisation, l'extrême droite et un deux poids deux
+  mesures sur Israël et Gaza, veut une gauche de rupture enracinée dans les
+  classes populaires et soutient Mélenchon et LFI face au PS pour 2027.
 ---
 # Chronicle
 
-Du 12 septembre 2019 au 31 mars 2025, la PaduTeam lit la politique par la classe : discours, affaires et parcours sont ramenés à leurs bases sociales. Elle dénonce un deux poids deux mesures sur Israël et Gaza. Elle défend une gauche de rupture, réenracinée dans les classes populaires, et répète que seule l'organisation permet de dépasser la droite.
+Le fil de la Chronicle est une lecture par la classe : la PaduTeam ramène discours, affaires et parcours à leurs bases sociales, et en tire une gauche de rupture qui doit se réenraciner dans les classes populaires. Elle dénonce un deux poids deux mesures sur Israël et Gaza, et répète que seule l'organisation permet de dépasser la droite. Ces thèses structurent la longue première Period, [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2024-11-26]], qui couvre 60 Digests.
 
-La première Period, [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2024-11-26]], pose ces thèses sur 60 Digests. La seconde, [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE|2024-11-27 → 2025-03-31]], en compte 97 sur à peine plus de quatre mois. Le rythme s'accélère, et la même grille de lecture par la classe et les rapports de domination s'applique à l'actualité immédiate.
-
-Dans cette dernière Period, la Source juge la censure de Barnier justifiée et dénonce la droitisation de la gauche. Elle fait de Mélenchon le vrai barrage antifasciste.
+La Chronicle s'épaissit ensuite : la seconde Period, [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE|2024-11-27 → 2025-04-07]], compte 103 Digests, soit plus de la moitié du total, pour quatre mois seulement. La même grille y sert l'actualité immédiate. La PaduTeam défend la Sécu, le collectif et le communisme, dénonce la droitisation et l'extrême droite, et prend parti pour Mélenchon et LFI face au PS dans la perspective de 2027.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2024-11-26]] (60 Digests)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE|2024-11-27 → 2025-03-31]] (97 Digests)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE|2024-11-27 → 2025-04-07]] (103 Digests)

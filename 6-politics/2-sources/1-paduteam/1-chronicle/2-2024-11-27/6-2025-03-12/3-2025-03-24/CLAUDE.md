@@ -3,18 +3,16 @@ title: "2025-03-24 → 2025-03-31"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24
 owner: diplo
 preview: >-
-  La PaduTeam lit les urgences saturées, la psychiatrie et les coupes dans le
-  supérieur comme des effets de choix politiques. Elle défend le Graphique
-  face à Bad Mulch et voit en Mélenchon le vrai barrage antifasciste face à
-  Trump et au PS.
+  La PaduTeam renvoie la crise des urgences à des choix politiques et défend
+  le Graphique face à Bad Mulch. Elle voit en Mélenchon le vrai barrage
+  antifasciste et le meilleur atout pour 2027 face au PS. Elle lit la
+  psychiatrie comme tiraillée entre contrôle et soin.
 ---
 # 2025-03-24 → 2025-03-31
 
-La PaduTeam ramène plusieurs crises des services publics à des choix politiques. Les urgences saturent faute de généralistes et de lits, pas parce que les patients seraient bêtes, et le mépris de classe de Vie de Carabin va jusqu'à une logique eugéniste. Padu, interne en psychiatrie, voit dans l'hôpital psy filmé par Tibo InShape l'héritier de la prison et du contrôle asilaire. Il y décrit une contradiction entre contrôle et soin, à combattre de l'intérieur comme de l'extérieur. Reçus par la PaduTeam, des militants de l'Union Pirate et de Solidaires Étudiant·e·s jugent que les coupes de 1,5 milliard dans l'enseignement supérieur sont un choix libéral qui précarise les étudiants. Ils y répondent par le blocage, l'occupation et une coordination nationale.
+La semaine tourne autour d'une lecture de classe, appliquée d'abord à la santé. Face à Vie de Carabin, la PaduTeam soutient que les urgences saturent à cause de la pénurie de généralistes et du manque de lits, pas de patients bêtes, et que ce mépris de classe va jusqu'à une logique eugéniste ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24/1-vie-de-carabin-le-medecin-qui|premier Digest]]). Padu en tire une autre lecture de l'hôpital psychiatrique filmé par Tibo InShape : il reste pour lui l'héritier de la prison et du contrôle asilaire. La psychiatrie est pourtant traversée d'une contradiction entre contrôle et soin, qu'il faut combattre de l'intérieur comme de l'extérieur ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24/4-faut-il-interner-tibo-inshape-en|dernier Digest]]).
 
-Sur le terrain stratégique, la PaduTeam défend ses outils et son camp. Elle répond à Bad Mulch ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24/2-cet-ingenieur-mental-croit-debunker-le|Cet INGÉNIEUR MENTAL croit DÉBUNKER le GRAPHIQUE  ÇA TOURNE MAL !! (Chris X @pasduhring)]]) que ses raisonnements idéalistes ne saisissent ni la logique du Graphique ni l'hétérogénéité du salariat. Elle y avance que le vrai barrage antifasciste est Mélenchon, pas le NFP. Elle salue ensuite dans l'interview de Mélenchon sur Radio Canada une masterclass contre Trump. Il y tient ensemble communisme et posture antisystème et lit Trump en termes de classe. Il y voit aussi dans la social-démocratie une fabrique du fascisme, ce qui prépare 2027 face au PS.
-
-Enfin, la PaduTeam reçoit Linh Lan Dao. Pour elle, l'accent asiatique d'Aymeric Lompret relève d'un racisme antiasiatique banalisé, que le mythe de la minorité modèle invisibilise alors qu'il est structurel.
+L'autre fil est politique : défendre ses outils et sa ligne. La PaduTeam répond à Bad Mulch que ses raisonnements idéalistes, un bloc indifférencié de travailleurs et des amis pris comme exemples, ne saisissent ni la logique du Graphique ni l'hétérogénéité du salariat. Elle juge que le vrai barrage antifasciste est Mélenchon, pas le NFP ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24/2-cet-ingenieur-mental-croit-debunker-le|deuxième Digest]]). Elle prolonge cette ligne avec l'interview de Mélenchon sur Radio Canada, qu'elle tient pour une masterclass : il y tient ensemble communisme et posture antisystème, lit Trump en termes de classe et la social-démocratie comme fabrique du fascisme, et prépare ainsi 2027 face au PS ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24/3-melenchon-lache-une-masterclass-contre-trump|troisième Digest]]).
 
 ## Contenu
 
@@ -22,5 +20,3 @@ Enfin, la PaduTeam reçoit Linh Lan Dao. Pour elle, l'accent asiatique d'Aymeric
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24/2-cet-ingenieur-mental-croit-debunker-le|Cet INGÉNIEUR MENTAL croit DÉBUNKER le GRAPHIQUE  ÇA TOURNE MAL !! (Chris X @pasduhring)]] (2025-03-28)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24/3-melenchon-lache-une-masterclass-contre-trump|MÉLENCHON LÂCHE une MASTERCLASS CONTRE TRUMP au QUÉBEC !! (@pasduhring)]] (2025-03-31)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24/4-faut-il-interner-tibo-inshape-en|Faut-il INTERNER TIBO INSHAPE en PSYCHIATRIE  Ce PSYCHIATRE RÉPOND !! (@pasduhring)]] (2025-03-31)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24/5-racisme-anti-asiatique-aymeric-lompret-derape|RACISME ANTI-ASIATIQUE  AYMERIC LOMPRET DÉRAPE, l'ANALYSE de LINH LAN DAO !!]] (2025-03-31)
-6. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/3-2025-03-24/6-les-etudiants-sont-en-colere-voici|Les ÉTUDIANTS sont EN COLÈRE  VOICI POURQUOI !! (avec l'UNION PIRATE et SOLIDAIRES ÉTUDIANT.E.S)]] (2025-03-31)
