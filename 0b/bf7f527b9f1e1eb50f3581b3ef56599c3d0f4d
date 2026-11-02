@@ -1,0 +1,53 @@
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/CLAUDE.md
+  s_dca7fe1d0e24df::t_f1c6d65c33abd8 2,6-9,11,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/1-2025-09-22/1-macron-hidalgo-etc-ils-reconnaissent-la.md
+  s_dca7fe1d0e24df::t_6972960ee88426 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/1-2025-09-22/2-la-pire-humiliation-devant-des-patrons.md
+  s_dca7fe1d0e24df::t_5d1d89df6841de 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/1-2025-09-22/3-marion-marechal-furieuse-elle-veut-terrasser.md
+  s_dca7fe1d0e24df::t_3c8e315d355d78 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/1-2025-09-22/4-sarkozy-condamne-a-5-ans-de.md
+  s_dca7fe1d0e24df::t_5cbbcfa5ea3e36 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/1-2025-09-22/CLAUDE.md
+  s_dca7fe1d0e24df::t_6f98839a9671c9 2-3,6-9,11,13,15,19-22
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/2-2025-09-28/1-gabriel-attal-demolit-macron-macron-c.md
+  s_dca7fe1d0e24df::t_6c67ea376dc09d 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/2-2025-09-28/2-glucksmann-et-tondelier-s-engueulent-autour.md
+  s_dca7fe1d0e24df::t_f0651c61b9fa4d 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/2-2025-09-28/3-la-masterclass-du-camarade-sarkozy-sur.md
+  s_dca7fe1d0e24df::t_f758f1ddee60fe 1-83
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/2-2025-09-28/4-cnews-pleure-pour-un-criminel.md
+  s_dca7fe1d0e24df::t_419c2c2c5963c0 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/2-2025-09-28/CLAUDE.md
+  s_dca7fe1d0e24df::t_ab7a9d6be34b1a 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01/1-paduteam-c-est-fini.md
+  s_dca7fe1d0e24df::t_5cf1068e73ba76 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01/2-septembre-2025-a-ete-un-enorme.md
+  s_dca7fe1d0e24df::t_a919e3d133f826 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01/3-giulia-sarkozy-traitee-de-pouffe-par.md
+  s_dca7fe1d0e24df::t_7e57ba650f985d 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01/CLAUDE.md
+  s_dca7fe1d0e24df::t_eeb576e9b28759 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/CLAUDE.md
+  s_dca7fe1d0e24df::t_e4dae8ef91fa4a 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/CLAUDE.md
+  s_dca7fe1d0e24df::t_6cc1ead1406139 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_dca7fe1d0e24df::t_cd29b7cf590f10 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0bbf7f527b9f1e1eb50f3581b3ef56599c3d0f4d",
+  "prompts": {},
+  "sessions": {
+    "s_dca7fe1d0e24df": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a03403bed151bd8a3",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
