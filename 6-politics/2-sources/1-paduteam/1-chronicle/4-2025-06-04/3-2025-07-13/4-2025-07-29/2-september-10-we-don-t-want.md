@@ -1,6 +1,6 @@
 ---
 title: "SEPTEMBER 10 WE DON'T WANT ANYMORE!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/3-2025-07-25
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/4-2025-07-29
 owner: diplo
 preview: >-
   La PaduTeam soutient que le 10 septembre 2025 ouvre une situation
