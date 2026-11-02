@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/3-2026-02-14/CLAUDE.md
+  s_042d04fec27413::t_a26ac023ea47fc 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/4-2026-02-16/1-retailleau-presente-son-projet-pour-la.md
+  s_042d04fec27413::t_c2dfab13888ea8 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/4-2026-02-16/2-qui-a-vraiment-tue-quentin-deranque.md
+  s_042d04fec27413::t_b96fd82d852e8e 1-100
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/4-2026-02-16/3-sarah-knafo-la-bourgeoise-hors-sol.md
+  s_042d04fec27413::t_264528fe74a360 1-81
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/4-2026-02-16/4-boris-vallaud-atomise-la-primaire-des.md
+  s_042d04fec27413::t_df0ea7430ce573 1-106
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/4-2026-02-16/5-glucksmann-macron-garrido-qui-veut-tuer.md
+  s_042d04fec27413::t_c924dc219d9201 1-109
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/4-2026-02-16/6-lucbert-et-lordon-psychanalysent-trump-ca.md
+  s_042d04fec27413::t_450c6da7bfcabe 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/4-2026-02-16/CLAUDE.md
+  s_042d04fec27413::t_9139241ecf522c 1-26
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/CLAUDE.md
+  s_042d04fec27413::t_667bedc9a8444c 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/CLAUDE.md
+  s_042d04fec27413::t_7575528d05895c 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_042d04fec27413::t_b70ef8e7cc98b9 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ef6672633d92c26558525b4d6fd97a4cf2cab9cf",
+  "prompts": {},
+  "sessions": {
+    "s_042d04fec27413": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ae5594b2839b5e422",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
