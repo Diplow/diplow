@@ -1,0 +1,53 @@
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/5-2025-06-04/CLAUDE.md
+  s_c0972483285b5f::t_6f1e762e3275b8 2,6-9,11,13,15,17
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/1-2025-06-26/1-melenchon-affronte-une-horde-de-bourgeois.md
+  s_c0972483285b5f::t_6e2a7a37ba6148 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/1-2025-06-26/2-faure-veut-faire-du-melenchon-soft.md
+  s_c0972483285b5f::t_03b0c7ff160a48 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/1-2025-06-26/3-hollande-nargue-les-sans-dents-avec.md
+  s_c0972483285b5f::t_f37af53264696c 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/1-2025-06-26/CLAUDE.md
+  s_c0972483285b5f::t_b85ccaa1e27775 2-3,6-8,10,12,14,18-20
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/2-2025-07-01/1-naulleau-en-panique-devant-le-complot.md
+  s_c0972483285b5f::t_0468f426cbc0dc 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/2-2025-07-01/2-julien-dray-has-revelations-about-melenchon.md
+  s_c0972483285b5f::t_f6e3ef48f05b45 3
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/2-2025-07-01/3-ruffin-launches-his-party-to-double.md
+  s_c0972483285b5f::t_facd2d897a50b6 1-95
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/2-2025-07-01/4-villepin-lance-son-parti-il-se.md
+  s_c0972483285b5f::t_bb90eef8dfa05d 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/2-2025-07-01/CLAUDE.md
+  s_c0972483285b5f::t_64416e23719323 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/3-2025-07-07/1-comment-aider-concretement-le-peuple-palestinien.md
+  s_c0972483285b5f::t_6bc03198c170d1 1-108
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/3-2025-07-07/2-rochedy-catastrophique-sur-l-economie.md
+  s_c0972483285b5f::t_7a8ba269a49520 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/3-2025-07-07/3-le-capitalisme-rend-votre-travail-inefficace.md
+  s_c0972483285b5f::t_8f9c38ac6c4b47 1-76
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/3-2025-07-07/4-the-most-ridiculous-candidates-for-2027.md
+  s_c0972483285b5f::t_9ace8505afd2f9 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/3-2025-07-07/CLAUDE.md
+  s_c0972483285b5f::t_ba11c089bdf58a 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/CLAUDE.md
+  s_c0972483285b5f::t_b6c1404d1758e3 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/CLAUDE.md
+  s_c0972483285b5f::t_aed0c1ab73d52b 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_c0972483285b5f::t_8c2cb6ec8dae59 6-9,13,15-17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "67d6912a74847405377c088299d84689aa01bff7",
+  "prompts": {},
+  "sessions": {
+    "s_c0972483285b5f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad9ccfce646dda139",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
