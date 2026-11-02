@@ -144,6 +144,7 @@ kinds:
       ancien-directeur-d-établissement: {définition: "A dirigé un établissement d'enseignement et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Udn6iu_F2vU.md}
       mathématicien: {définition: "Étudie les mathématiques et en démontre les résultats.", statut: proposé, introduit_par: paduteam/oDlbLE_aTPM.md}
       ancien-dirigeant-de-parti: {définition: "A dirigé un parti et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/4PV9RBcvic4.md}
+      ancien-sportif: {définition: "A pratiqué un sport en compétition et ne le pratique plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/q9BfkJS0cQs.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
