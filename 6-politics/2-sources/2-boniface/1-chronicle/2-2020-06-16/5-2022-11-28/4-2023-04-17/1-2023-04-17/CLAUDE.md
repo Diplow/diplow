@@ -1,22 +1,26 @@
 ---
-title: "2023-04-17 → 2026-10-14"
+title: "2023-04-17 → 2023-04-24"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/1-2023-04-17
 owner: diplo
 preview: >-
-  Pascal Boniface y reçoit Hatem Nafti sur la dérive autoritaire de la Tunisie
-  et Sylvie Bermann sur la parité entre États-Unis et Chine, et chronique le
-  livre d'Alexander Stubb sur un monde en trois blocs.
+  Boniface juge trop manichéen l'affrontement démocraties/dictatures : le vrai
+  clivage oppose l'Occident au reste du monde, et la France peut y faire pont.
+  Il reçoit aussi des auteurs et un invité sur la Tunisie, l'Asie, l'Ukraine
+  et le jihad en Afrique, et rend hommage à Philippe Séguin.
 ---
-# 2023-04-17 → 2026-10-14
+# 2023-04-17 → 2023-04-24
 
-Sur ces dates, Pascal Boniface ne commente pas l'actualité à chaud : il donne la parole à des auteurs et à une ancienne ambassadrice, ou chronique leur livre. Les trois Digests portent sur la Tunisie, sur le nouvel ordre mondial vu par un dirigeant finlandais, et sur la place de la Chine face aux États-Unis et à l'Europe. Les thèses restent à ceux qui les soutiennent, Boniface les recevant ou les lisant.
+Boniface soutient que réduire le monde à un affrontement entre démocraties et dictatures est trop manichéen. Pour lui, le clivage majeur oppose l'Occident au reste du monde, démocraties du Sud comprises, et la France peut y jeter un pont ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/1-2023-04-17/2-democraties-dictatures-c-est-plus-complique|Démocraties/dictatures : c'est plus compliqué que ça]]). Cette grille éclaire le reste de la semaine, consacrée pour l'essentiel à des lectures et à un entretien.
 
-En 2023, il reçoit Hatem Nafti, auteur d'un livre sur la Tunisie. Pour lui, des élites n'ont jamais accepté la transition démocratique et Kaïs Saïed en a profité, et la crise économique, la répression et la menace sur la société civile rendent l'avenir sombre. En octobre 2026, Boniface chronique *Le Triangle du pouvoir* d'Alexander Stubb, président finlandais. Selon le livre, le monde se divise en trois blocs (Occident, Orient, Sud global), et l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Boniface chronique trois ouvrages et laisse leurs thèses à leurs auteurs. Hatem Nafti explique que des élites n'ont jamais accepté la transition démocratique tunisienne et que Kaïs Saïed en a profité, pour un avenir sombre. Barthélémy Courmont voit en Asie la principale zone de tension, qui sait pourtant éviter le pire depuis 1979, et juge que la rivalité Chine/États-Unis glisse vers une bipolarité excessive. Luis Martinez soutient que l'Afrique sera pendant vingt ans le champ de bataille du jihad, et que la France s'est trompée en s'enlisant au Sahel.
 
-Le dernier Digest tourne autour de la Chine : Boniface y reçoit Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Elle voit une Chine qui joue la patience sur Taïwan, qui n'est pas anti-européenne, mais dont l'excédent commercial met l'Europe en difficulté.
+Son invité Alain Bauer défend de son côté que la fin de l'URSS puis le Kosovo ont ouvert avec Moscou un conflit que l'Occident n'a pas voulu voir, et que la guerre en Ukraine sera longue et d'usure. Boniface clôt la période par un hommage à Philippe Séguin, gaulliste social d'une grande franchise, partisan d'une France active, alliée mais non alignée.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/1-2023-04-17/1-j-ai-lu-tunisie-vers-un|J'ai lu... "Tunisie : vers un populisme autoritaire ?", ouvrage de Hatem Nafti]] (2023-04-17)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/1-2023-04-17/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/1-2023-04-17/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/1-2023-04-17/2-democraties-dictatures-c-est-plus-complique|Démocraties/dictatures : c'est plus compliqué que ça]] (2023-04-18)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/1-2023-04-17/3-au-commencement-etait-la-guerre-avec|Au commencement était la guerre. Avec Alain Bauer - Entretiens géopo]] (2023-04-19)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/1-2023-04-17/4-j-ai-lu-geopolitique-des-mondes|J'ai lu... "Géopolitique des mondes asiatiques", ouvrage de Barthélémy Courmont]] (2023-04-20)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/1-2023-04-17/5-hommage-a-philippe-seguin|Hommage à Philippe Séguin]] (2023-04-21)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/1-2023-04-17/6-j-ai-lu-l-afrique-le|J'ai lu... "L'Afrique, le prochain califat ?", ouvrage de Luis Martinez]] (2023-04-24)

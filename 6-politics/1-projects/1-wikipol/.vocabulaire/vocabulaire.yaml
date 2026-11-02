@@ -239,6 +239,7 @@ kinds:
       état: {définition: "Un État en tant que pouvoir constitué, avec son régime et ses institutions.", statut: proposé, introduit_par: paduteam/YKdEbgZZg1Q.md}
       groupe-musical: {définition: "Groupe de musiciens qui compose et se produit ensemble.", statut: proposé, introduit_par: blast/0qT5qNEF76Y.md}
       milice: {définition: "Groupe paramilitaire privé qui s'arme et s'entraîne en vue d'affrontements, hors de toute armée d'État.", statut: proposé, introduit_par: blast/rr3ED9-O228.md}
+      groupe-parlementaire: {définition: "Groupe politique constitué au sein d'un parlement, comme au Parlement européen.", statut: proposé, introduit_par: paduteam/V-HmXl_Jrz4.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
