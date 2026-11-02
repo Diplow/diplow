@@ -1,0 +1,39 @@
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/4-2024-11-01/4-etats-unis-l-election-qui-va.md
+  s_70e2b8820e4c39::t_d74a7bcc095844 1-83
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/4-2024-11-01/5-retraites-le-jeu-dangereux-et-hypocrite.md
+  s_70e2b8820e4c39::t_400f59c3c6d98f 1-82
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/4-2024-11-01/6-victoire-du-fascisme-aux-usa-on.md
+  s_70e2b8820e4c39::t_f6f7b46e5fb512 1-80
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/4-2024-11-01/CLAUDE.md
+  s_70e2b8820e4c39::t_f8687ef5db9534 2,6-9,11,13,15-17,24-26
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/5-2024-11-07/1-trump-vers-le-pouvoir-absolu.md
+  s_70e2b8820e4c39::t_c52c18b0848fed 1-88
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/5-2024-11-07/2-trump-bhl-retailleau-le-mensonge-sans.md
+  s_70e2b8820e4c39::t_5b5fb63bc4f20d 1-83
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/5-2024-11-07/3-comment-le-systeme-educatif-a-conditionne.md
+  s_70e2b8820e4c39::t_17425ba062a6cf 1-99
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/5-2024-11-07/CLAUDE.md
+  s_70e2b8820e4c39::t_cd6fff90e508a8 1-23
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/CLAUDE.md
+  s_70e2b8820e4c39::t_47c2a35fc3cf15 2,7-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE.md
+  s_70e2b8820e4c39::t_549b3f604872ca 2,7-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_7f3451e2e09880 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4797acd0400e493c2f69e3ee7f427527a2cb76b9",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
