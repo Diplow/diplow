@@ -1,6 +1,6 @@
 ---
 title: "ATOMISATION du BRAS DROIT de BENOIT HAMON par un PETIT-BOURGEOIS en DIRECT !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/5-2025-11-10
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/1-2025-11-10
 owner: diplo
 preview: >-
   La PaduTeam soutient que l'artisan de BFM TV qui traite la gauche de « parti

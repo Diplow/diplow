@@ -1,6 +1,6 @@
 ---
 title: "TONDELIER  FEMME SANDWICH POUR LE CAPITALISME VERT"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/5-2025-11-10
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/2-2025-11-14
 owner: diplo
 preview: >-
   La PaduTeam soutient que Marine Tondelier, en vantant les jeans 1083 face à
