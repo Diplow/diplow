@@ -1,0 +1,55 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_0582896406c72b 115
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/4-2025-03-08/CLAUDE.md
+  s_61e2a3b05a1a51::t_ed8d504ee8643c 2,6-9,11,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12/1-delavier-leak-sur-le-jarl-c.md
+  s_61e2a3b05a1a51::t_4c9f2b41b1d799 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12/2-notre-avis-sur-l-affaire-dany.md
+  s_61e2a3b05a1a51::t_e4adf7ced3fe8c 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12/3-dr-zoe-apprend-a-b4i-er.md
+  s_61e2a3b05a1a51::t_2b10397b8a5860 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12/4-daniel-woirin-et-cyril-diabate-detruisent.md
+  s_61e2a3b05a1a51::t_4cd5138c5ceb4c 1-57
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12/CLAUDE.md
+  s_61e2a3b05a1a51::t_4e34ea9c015004 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/6-2025-03-16/1-cette-organisation-trans-a-besoin-de.md
+  s_61e2a3b05a1a51::t_8c85ea25b2d095 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/6-2025-03-16/2-infame-est-devenu-woke-dr-zoe.md
+  s_61e2a3b05a1a51::t_57ab0673182f17 1-73
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/6-2025-03-16/3-glucksmann-adore-la-democratie-sauf-a.md
+  s_61e2a3b05a1a51::t_5467c59852361e 1-79
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/6-2025-03-16/4-affiche-ant1semite-pour-fabien-roussel-melenchon.md
+  s_61e2a3b05a1a51::t_c3c20811d32fb9 1-105
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/6-2025-03-16/CLAUDE.md
+  s_61e2a3b05a1a51::t_aa156e2dcdfa3f 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/CLAUDE.md
+  s_61e2a3b05a1a51::t_ca931d6c3e7663 2,6-9,11,13,15-17,24-26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE.md
+  s_61e2a3b05a1a51::t_0dd5db269ac2b8 2,6-9,11,13,15,17,25
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_61e2a3b05a1a51::t_334c62ea8e40f8 7-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e89c601e9c849a2827e2e43a6f85de04574c4641",
+  "prompts": {},
+  "sessions": {
+    "s_61e2a3b05a1a51": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ac6fc6ee0137646c9",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
