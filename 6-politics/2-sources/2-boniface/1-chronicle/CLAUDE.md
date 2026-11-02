@@ -3,21 +3,22 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans d'actualité mondiale par quelques grilles stables : le
-  multilatéralisme contre l'unilatéralisme, un deux poids deux mesures
-  occidental, des Européens trop alignés sur Washington, l'autonomie
-  stratégique à conquérir, des rapports de force entre États.
+  De 2016 à 2026, Boniface lit l'actualité internationale par quelques grilles
+  constantes : le multilatéralisme contre l'unilatéralisme, le deux poids deux
+  mesures occidental, les rapports de force entre États. Il presse la France
+  et l'Europe de gagner leur autonomie stratégique face à Washington.
 ---
 # Chronicle
 
-De 2016 à 2019, Boniface lit la scène internationale à travers Trump. Il y applique le multilatéralisme contre l'unilatéralisme, le refus de négocier qui se retourne contre ses auteurs et la rationalité des acteurs. Il voit l'arms control démantelé, un multilatéralisme en crise mais indispensable, et une unipolarité que l'Europe doit refuser. Il juge Obama meilleur qu'on ne le dit et place Macron dans la ligne gaullo-mitterrandiste, tout en voyant les gilets jaunes l'affaiblir à l'international.
+Les premières années de la Chronicle tournent autour de Trump. Boniface applique à la scène internationale les mêmes grilles : le multilatéralisme contre l'unilatéralisme, le refus de négocier qui se retourne contre ses auteurs, la rationalité des acteurs. Il juge Obama meilleur qu'on ne le dit et place Macron dans la ligne gaullo-mitterrandiste, avant de voir les gilets jaunes l'affaiblir à l'international.
 
-Les mêmes outils reviennent ensuite sur toute la période, jusqu'en 2026. Boniface dénonce un deux poids deux mesures occidental et des Européens trop alignés sur Washington. Il appelle la France et l'Europe à l'autonomie stratégique, et il défend un multilatéralisme qu'il juge à préserver. Il ramène les crises à des rapports de force entre États plutôt qu'à des récits d'événements.
+Sur 2018 et 2019, son propos se précise autour de l'Europe. Il décrit un arms control démantelé et un multilatéralisme en crise mais indispensable. Il refuse l'unipolarité et presse la France et l'Europe d'accéder à l'autonomie stratégique, de définir leurs intérêts et de tenir tête à Washington. Il défend la diplomatie, et le deux-poids-deux-mesures occidental devient l'une de ses grilles récurrentes.
 
-La Chronicle montre ainsi une grille de lecture qui reste très stable d'une actualité à l'autre : ce qui change, c'est l'événement auquel il l'applique. Dans la dernière période, Boniface reçoit aussi des invités.
+La dernière période, la plus longue en durée, garde ces outils et les étend : rapports de force entre États, deux poids deux mesures occidental, multi-alignement, multilatéralisme. Boniface y défend aussi les salaires des footballeurs et y reçoit des invités. La cohérence de ses grilles d'un sujet à l'autre est ce qui distingue sa Chronicle.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]] (78 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2019-01-09]] (72 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2026-10-30]] (131 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2019-10-10]] (84 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2026-10-30]] (53 Digests)
