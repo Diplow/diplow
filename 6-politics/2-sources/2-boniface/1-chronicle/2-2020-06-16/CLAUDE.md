@@ -3,21 +3,21 @@ title: "2020-06-16 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16
 owner: diplo
 preview: >-
-  Boniface lit le monde par les rapports de puissance : multilatéralisme
-  contre unilatéralisme américain, rivalité sino-américaine, Europe autonome
-  sans alignement sur Washington, question palestinienne centrale, échecs
-  occidentaux de Kaboul au Sahel.
+  Boniface lit l'actualité internationale par le multilatéralisme, la rivalité
+  sino-américaine et l'échec des interventions extérieures, plaide pour une
+  Europe autonome mais alliée des États-Unis et juge morte la solution à deux
+  États.
 ---
 # 2020-06-16 → 2026-10-30
 
-Le fil qui traverse ces six années est une lecture de l'ordre mondial par les rapports de puissance. Dès 2020, Boniface oppose le multilatéralisme à l'unilatéralisme américain et veut une Europe alignée ni sur Washington ni sur Pékin. En 2021, il lit l'actualité par la rivalité sino-américaine, que Biden ne change guère. Il plaide pour une Europe autonome mais alliée des États-Unis, puis refuse d'aligner l'Europe sur Washington et défend le multi-alignement.
+Sur toute la Chronicle, Boniface applique les mêmes grilles de lecture à l'actualité. Il oppose le multilatéralisme à l'unilatéralisme américain, veut une Europe qui ne s'aligne ni sur Washington ni sur Pékin, et refuse que la lutte antiterroriste sacrifie l'état de droit. Dès [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/1-2020-06-16/CLAUDE|2020-06-16 → 2020-12-14]], il défend la fermeté sans rupture. La constance de ces outils d'une vidéo à l'autre fait la cohérence de son propos.
 
-Il applique cette grille aux crises. Il tient la question palestinienne pour centrale, puis la solution à deux États pour morte. Il voit dans Kaboul une défaite américaine et dans le Sahel un échec. À la France, il demande d'assumer son passé en Libye et au Rwanda. En 2020, il défend déjà la fermeté sans rupture et refuse de sacrifier l'état de droit à la lutte antiterroriste.
+Entre fin 2020 et mi-2021, la rivalité sino-américaine devient son fil principal : pour lui, Biden ne la change guère. Il demande à la France d'assumer son passé en Libye et au Rwanda, tient la question palestinienne pour centrale et plaide pour une Europe autonome tout en restant alliée des États-Unis ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/2-2020-12-16/CLAUDE|2020-12-16 → 2021-06-28]]).
 
-Le ton reste celui d'un analyste qui applique des grilles stables à des événements successifs, plus que celui d'un commentateur de l'instant. Dans la dernière période, il reçoit aussi invités et auteurs, dont les thèses restent les leurs.
+Dans la dernière période, qui est la plus longue, il lit les crises internationales comme l'échec des interventions extérieures et de l'alignement sur Washington. Il juge morte la solution à deux États et décrit un monde de rivalités de puissances et de multi-alignement. La chaîne s'ouvre alors davantage : Boniface y reçoit des invités et chronique des livres.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/1-2020-06-16/CLAUDE|2020-06-16 → 2020-12-14]] (78 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/2-2020-12-16/CLAUDE|2020-12-16 → 2021-06-28]] (78 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/CLAUDE|2021-06-30 → 2026-10-30]] (53 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/CLAUDE|2021-06-30 → 2026-10-30]] (59 Digests)
