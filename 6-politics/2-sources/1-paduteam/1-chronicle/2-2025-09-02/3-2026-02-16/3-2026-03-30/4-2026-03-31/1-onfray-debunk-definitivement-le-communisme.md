@@ -1,6 +1,6 @@
 ---
 title: "ONFRAY DÉBUNK DÉFINITIVEMENT LE COMMUNISME !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/3-2026-03-31
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/4-2026-03-31
 owner: diplo
 preview: >-
   La PaduTeam soutient que l'article d'Onfray sur la matrice communiste est
