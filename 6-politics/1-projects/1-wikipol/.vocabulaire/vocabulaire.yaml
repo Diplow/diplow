@@ -132,6 +132,7 @@ kinds:
       collaborateur-de-l-élysée: {définition: "Travaille auprès du président de la République, au palais de l'Élysée.", statut: proposé, introduit_par: blast/LSlUPiGbl7o.md}
       impératrice: {définition: "Épouse d'un empereur, notamment romain.", statut: proposé, introduit_par: blast/QonpAL18ydE.md}
       ancien-magistrat: {définition: "A été juge ou procureur et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/c3RX1PhRhI4.md}
+      mis-en-examen: {définition: "Est mis en examen dans une procédure pénale, sans avoir été jugé, à la date de la Publication.", statut: proposé, introduit_par: paduteam/KglA4OFVYy0.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
