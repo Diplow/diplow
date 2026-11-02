@@ -1,6 +1,6 @@
 ---
 title: "SOCIOLOGIE : UNE ARME POUR COMPRENDRE LE MONDE (ET NE PAS FINIR DE DROITE)"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/6-2024-12-31
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/2-2024-12-31
 owner: diplo
 preview: >-
   Blast soutient que la sociologie est une science par ses méthodes (enquête

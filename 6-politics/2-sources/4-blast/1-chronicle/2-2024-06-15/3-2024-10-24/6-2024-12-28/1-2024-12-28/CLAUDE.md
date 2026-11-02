@@ -1,6 +1,6 @@
 ---
 title: "2024-12-28 → 2024-12-30"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/1-2024-12-28
 owner: diplo
 preview: >-
   Blast soutient que la démocratie recule et que la science-fiction aide à le
@@ -18,7 +18,7 @@ Charlotte Bienaimé, créatrice du podcast Un podcast à soi, clôt la Period su
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28/1-qui-veut-la-mort-de-la|QUI VEUT LA MORT DE LA DÉMOCRATIE ?]] (2024-12-28)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28/2-depuis-charlie-et-hara-kiri-une|DEPUIS CHARLIE ET HARA KIRI, UNE VIE À RÉSISTER À LA CONNERIE AMBIANTE]] (2024-12-29)
-3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28/3-dissolution-repression-etc-la-fin-du|DISSOLUTION, RÉPRESSION, ETC. : LA FIN DU MYTHE DE L’ÉTAT DE DROIT]] (2024-12-30)
-4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28/4-luttes-feministes-tout-a-change-et|LUTTES FÉMINISTES : “TOUT A CHANGÉ ET RIEN N’A CHANGÉ”]] (2024-12-30)
+1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/1-2024-12-28/1-qui-veut-la-mort-de-la|QUI VEUT LA MORT DE LA DÉMOCRATIE ?]] (2024-12-28)
+2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/1-2024-12-28/2-depuis-charlie-et-hara-kiri-une|DEPUIS CHARLIE ET HARA KIRI, UNE VIE À RÉSISTER À LA CONNERIE AMBIANTE]] (2024-12-29)
+3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/1-2024-12-28/3-dissolution-repression-etc-la-fin-du|DISSOLUTION, RÉPRESSION, ETC. : LA FIN DU MYTHE DE L’ÉTAT DE DROIT]] (2024-12-30)
+4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/1-2024-12-28/4-luttes-feministes-tout-a-change-et|LUTTES FÉMINISTES : “TOUT A CHANGÉ ET RIEN N’A CHANGÉ”]] (2024-12-30)

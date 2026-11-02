@@ -1,6 +1,6 @@
 ---
 title: "LUTTES FÉMINISTES : “TOUT A CHANGÉ ET RIEN N’A CHANGÉ”"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/1-2024-12-28
 owner: diplo
 preview: >-
   Blast reçoit Charlotte Bienaimé, créatrice du podcast Un podcast à soi. Elle

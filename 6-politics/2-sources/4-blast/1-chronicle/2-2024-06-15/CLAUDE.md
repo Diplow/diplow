@@ -1,23 +1,22 @@
 ---
-title: "2024-06-15 → 2025-01-02"
+title: "2024-06-15 → 2025-01-09"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15
 owner: diplo
 preview: >-
   Blast soutient que la dissolution a ouvert la voie du pouvoir à l'extrême
-  droite, que Macron, battu dans les urnes, garde la main en imposant Barnier
-  avec l'aval du RN, et que la crise démocratique ne se résout que par sa
-  démission.
+  droite, que Macron nie le résultat des urnes et garde la main, et que seule
+  sa démission sort de la crise. Il dénonce les médias de milliardaires.
 ---
-# 2024-06-15 → 2025-01-02
+# 2024-06-15 → 2025-01-09
 
-Sur toute la Period, Blast déroule une même thèse : en dissolvant l'Assemblée, Macron a déroulé le tapis au RN et ouvert à l'extrême droite la voie du pouvoir. Avant le vote, le Nouveau Front populaire est présenté comme la seule alternative sérieuse. Après, Blast accuse Macron de nier le résultat des urnes.
+Sur toute la période, Blast tient le même fil : la dissolution a déroulé le tapis au RN. Après les législatives, Macron nie le résultat des urnes. Battu, il garde la main en imposant Barnier avec l'aval du RN, de sorte que l'extrême droite gouverne par procuration. Face à elle, Blast présente le Nouveau Front populaire comme la seule alternative sérieuse. À l'automne, il juge que la crise née de la dissolution s'aggrave et que seule la démission de Macron en sort.
 
-Cette accusation structure la suite. Battu aux législatives, Macron garde la main en imposant Barnier avec l'aval du RN, de sorte que l'extrême droite gouverne par procuration. Blast lit ensuite la progression de l'extrême droite, du budget Barnier à l'élection de Trump, comme celle d'un camp qui avance sur le terrain laissé par le néolibéralisme et les médias dominants.
+Blast explique aussi cette progression de l'extrême droite. Elle avance sur le terrain laissé par le néolibéralisme et par les médias dominants, et Blast dénonce en particulier les médias de milliardaires. Le propos passe ainsi de l'événement électoral, en juin et juillet, à la critique du pouvoir et de l'information, puis à une crise jugée sans issue.
 
-Blast dénonce aussi les médias de milliardaires et reçoit des invités sur Gaza et le Liban. La Period se termine sur la conviction que la crise démocratique née de la dissolution ne se résout que par la démission de Macron.
+Blast reçoit en parallèle des invités sur l'international et la société : Gaza et le Liban, puis Trump, Mayotte et le procès Pelicot. Leurs analyses restent les leurs : Blast les accueille sans les prendre à son compte.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/1-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]] (65 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/2-2024-08-14/CLAUDE|2024-08-14 → 2024-10-23]] (72 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE|2024-10-24 → 2025-01-02]] (93 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE|2024-10-24 → 2025-01-09]] (99 Digests)
