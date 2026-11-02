@@ -3,20 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans de géopolitique à travers le multilatéralisme contre
-  l'unilatéralisme et le deux-poids-deux-mesures occidental, puis l'échec des
-  interventions occidentales. Il plaide pour la négociation et pour une Europe
-  autonome, alliée des États-Unis mais non alignée.
+  Pendant dix ans, Boniface applique les mêmes grilles à l'actualité :
+  multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
+  rivalité sino-américaine. Il veut une Europe autonome qui défende ses
+  intérêts et plaide pour négocier en Ukraine.
 ---
 # Chronicle
 
-Dans la première moitié de la Chronicle ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]]), Pascal Boniface applique les mêmes grilles à Trump et à la scène internationale : le multilatéralisme contre l'unilatéralisme, le deux-poids-deux-mesures occidental. Il presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur.
+Sur toute la Chronicle, Pascal Boniface mobilise quelques grilles de lecture stables, qu'il applique à l'actualité du moment. La plus constante oppose multilatéralisme et unilatéralisme. S'y ajoutent le deux-poids-deux-mesures occidental et, dans la seconde moitié, la rivalité sino-américaine et l'échec des interventions occidentales. Ces redites sont la cohérence de son propos : la même grille sert à lire des événements différents.
 
-La seconde moitié ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]]) reprend ces grilles pour lire six ans de géopolitique comme l'échec des interventions occidentales et d'un Occident que le reste du monde ne suit plus, sous la rivalité sino-américaine. Boniface y plaide pour la négociation.
-
-D'un bout à l'autre, le fil reste l'Europe : il la veut autonome, alliée des États-Unis mais non alignée. Les mêmes outils d'analyse servent de la présidence Trump à la rivalité entre la Chine et les États-Unis.
+De 2016 à juin 2020 ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]]), il les applique à Trump et à la scène internationale. Il presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur. De juin 2020 à 2026 ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]]), la rivalité sino-américaine prend plus de place. Il veut toujours une Europe autonome qui défende ses intérêts, et il plaide pour négocier en Ukraine.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (281 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (287 Digests)

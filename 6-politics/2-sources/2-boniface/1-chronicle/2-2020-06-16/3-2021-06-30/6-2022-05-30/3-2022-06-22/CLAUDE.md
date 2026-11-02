@@ -1,20 +1,25 @@
 ---
-title: "2022-06-22 → 2026-10-14"
+title: "2022-06-22 → 2022-07-07"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/6-2022-05-30/3-2022-06-22
 owner: diplo
 preview: >-
-  Boniface met en débat l'ordre mondial : Thierry de Montbrial voit la guerre
-  en Ukraine durer, Sylvie Bermann une parité États-Unis–Chine, et le livre
-  d'Alexander Stubb un Sud global arbitre du nouvel ordre.
+  Boniface lit la guerre en Ukraine à travers la rivalité sino-américaine,
+  qu'il juge désormais globale : l'OTAN et le numérique en sont des fronts. Il
+  appelle les Européens à défendre leurs intérêts et la France à préserver ses
+  marges de manœuvre.
 ---
-# 2022-06-22 → 2026-10-14
+# 2022-06-22 → 2022-07-07
 
-Sur ces trois Digests, Boniface laisse surtout la parole à d'autres pour penser l'ordre mondial. Reçu en 2022, [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/6-2022-05-30/3-2022-06-22/1-comprendre-le-monde-s5-40-thierry|Thierry de Montbrial]] juge que la guerre en Ukraine va durer, car personne ne veut céder le premier et Washington tient la ligne. Pour lui, les Européens élargissent l'Union sans stratégie, et une négociation finira par s'imposer.
+Le fil de la Period est la rivalité entre la Chine et les États-Unis, qui déborde selon Boniface la guerre en Ukraine. Il soutient que l'agression russe a ressuscité l'OTAN, mais que Washington s'en sert pour en faire un instrument contre la Chine. Il soutient aussi que cette rivalité est désormais globale et que le numérique en est le front décisif, où aux GAFAM répondent des champions chinois soutenus par Pékin. C'est cette lutte, et non l'opposition Moscou-Washington, qui structurera l'avenir.
 
-Les deux autres Digests, d'octobre 2026, déplacent le regard vers le rapport de forces entre blocs. Boniface chronique [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/6-2022-05-30/3-2022-06-22/2-j-ai-lu-le-triangle-du|Le Triangle du pouvoir]] d'Alexander Stubb : selon le président finlandais, le monde se divise en trois blocs, et un Occident affaibli par ses échecs et son deux poids deux mesures doit montrer l'exemple s'il veut peser sur un Sud qui décidera. Avec [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/6-2022-05-30/3-2022-06-22/3-la-chine-a-t-elle-plie|Sylvie Bermann]], ancienne ambassadrice à Pékin, il aborde la Chine : pour elle, le sommet Trump-Xi consacre une parité avec les États-Unis sans que Pékin ait gagné, et son excédent commercial met l'Europe en difficulté.
+Il en tire une consigne pour les Européens, qui n'ont pas à faire leur la querelle sino-américaine et doivent défendre leurs propres intérêts. Pour la France, la guerre met fin à l'ADN stratégique français, avec son lien spécifique à Moscou et son autonomie stratégique européenne. Boniface demande donc de préserver ses marges de manœuvre en jouant le multilatéralisme et en écoutant les pays non occidentaux.
+
+La Period laisse aussi la parole à deux autres voix, que Boniface reçoit ou lit. Pour Thierry de Montbrial, son invité, la guerre va durer, car personne ne veut céder le premier et Washington tient la ligne. Il juge que les Européens, sans stratégie, élargissent l'Union et qu'une négociation finira par s'imposer. Boniface chronique ensuite le livre de Thierry Coville sur l'Iran, qui sort des clichés : selon l'auteur, le régime s'appuie d'abord sur le nationalisme, sa politique étrangère vise la défense du territoire et l'économie politique des fondations freine les réformes.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/6-2022-05-30/3-2022-06-22/1-comprendre-le-monde-s5-40-thierry|Comprendre le monde S5#40 – Thierry de Montbrial – "Guerre en Ukraine : perspectives et prospective"]] (2022-06-22)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/6-2022-05-30/3-2022-06-22/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/6-2022-05-30/3-2022-06-22/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/6-2022-05-30/3-2022-06-22/2-l-otan-une-alliance-anti-chinoise|L'OTAN : une alliance anti-chinoise ?]] (2022-06-29)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/6-2022-05-30/3-2022-06-22/3-les-gafam-et-les-batx-expliquez|Les GAFAM et les BATX - Expliquez-moi... (HACHETTE)]] (2022-06-30)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/6-2022-05-30/3-2022-06-22/4-j-ai-lu-l-iran-une|J'ai lu... "L'Iran, une puissance en mouvement" par Thierry Coville]] (2022-07-05)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/6-2022-05-30/3-2022-06-22/5-guerre-en-ukraine-l-adn-strategique|Guerre en Ukraine : l’ADN stratégique français en question]] (2022-07-07)
