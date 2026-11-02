@@ -1,6 +1,6 @@
 ---
 title: "GAZA : \"LE MOT GÉNOCIDE N'EST PLUS TABOU\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/4-2024-05-19
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/5-2024-05-22
 owner: diplo
 preview: >-
   Pour l'avocat Johann Soufi, les mandats d'arrêt demandés par le procureur de
