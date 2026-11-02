@@ -1,6 +1,6 @@
 ---
 title: "Un maire français agressé en Palestine"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/5-2026-10-15
+parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/2-2026-10-15
 owner: diplo
 preview: >-
   Pascal Boniface soutient que l'agression d'un maire français en Cisjordanie

@@ -3,20 +3,22 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans d'actualité mondiale par le multilatéralisme contre
-  l'unilatéralisme, le deux poids deux mesures occidental et les rapports de
-  force entre États, et presse les Européens d'une autonomie stratégique face
-  à Washington.
+  Boniface lit dix ans d'actualité mondiale avec les mêmes grilles :
+  multilatéralisme contre unilatéralisme, deux poids deux mesures occidental,
+  autonomie stratégique des Européens face à Washington. Trump domine d'abord
+  ses analyses, puis les rapports de force et la montée de la Chine.
 ---
 # Chronicle
 
-De 2016 à 2019, Boniface lit l'actualité à travers Trump et l'unilatéralisme américain. Il oppose à celui-ci un multilatéralisme en crise mais indispensable, et voit dans l'arms control démantelé et dans l'unipolarité des dangers que l'Europe doit refuser. Il applique à la scène internationale les mêmes grilles : le refus de négocier qui se retourne contre ses auteurs, la rationalité des acteurs, le deux-poids-deux-mesures occidental. Côté français, il juge Obama meilleur qu'on ne le dit, place Macron dans la ligne gaullo-mitterrandiste, puis estime que les gilets jaunes l'affaiblissent à l'international.
+De 2016 à 2019, Boniface lit la scène internationale à travers Trump. Il oppose le multilatéralisme à l'unilatéralisme et voit dans le refus de négocier un choix qui se retourne contre ses auteurs. Il juge Obama meilleur qu'on ne le dit et Macron dans la ligne gaullo-mitterrandiste ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]]). En 2018, il constate le démantèlement de l'arms control et un multilatéralisme en crise mais indispensable. Il voit aussi les gilets jaunes affaiblir Macron à l'international ([[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2019-01-09]]).
 
-Un appel revient d'une période à l'autre : que la France et l'Europe définissent leurs intérêts, gagnent en autonomie stratégique et tiennent tête à Washington, dont les Européens dépendent. À partir d'octobre 2019, la chaîne garde cette lecture par les rapports de force entre États et par le deux poids deux mesures, et dénonce des Européens alignés sur Washington. Elle y ajoute le multilatéralisme et le multi-alignement. Boniface reçoit aussi des invités et chronique des livres.
+Un message revient d'un bout à l'autre : la France et l'Europe doivent refuser l'unipolarité, viser l'autonomie stratégique, définir leurs propres intérêts et tenir tête à Washington. En 2019, Boniface ajoute à cette lecture le deux-poids-deux-mesures occidental et la dépendance des Européens, et il défend la diplomatie ([[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2019-10-10]]).
+
+Dans la dernière Period, les grilles restent les mêmes, avec plus de poids donné aux rapports de force : deux poids deux mesures occidental, multilatéralisme, Chine qui gagne du terrain, Européens alignés sur Washington. En 2026, il juge qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens ([[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2026-10-30]]).
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]] (78 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2019-01-09]] (72 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2019-10-10]] (84 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2026-10-30]] (71 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2026-10-30]] (77 Digests)
