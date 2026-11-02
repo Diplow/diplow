@@ -1,23 +1,26 @@
 ---
-title: "2021-04-06 → 2026-10-14"
+title: "2021-04-06 → 2021-04-19"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/3-2021-03-29/2-2021-04-06
 owner: diplo
 preview: >-
-  Boniface juge faux remède le boycott de la Coupe du monde au Qatar,
-  chronique le livre d'Alexander Stubb sur un monde à trois blocs et reçoit
-  Sylvie Bermann, pour qui le sommet Trump-Xi consacre la parité entre les
-  États-Unis et la Chine.
+  Boniface juge faux remèdes le boycott du Mondial au Qatar et le refus de
+  principe de Spoutnik V, voit en Biden un vrai leader et défend sa liberté de
+  parole face à France Inter et France Culture. Il reçoit Natacha Polony et
+  Aurélien Taché.
 ---
-# 2021-04-06 → 2026-10-14
+# 2021-04-06 → 2021-04-19
 
-Les trois Digests de cette Period sont très espacés dans le temps. Le plus ancien, en 2021, porte sur le Qatar : Boniface soutient qu'appeler à boycotter la Coupe du monde est un faux remède, parce qu'on ne sanctionne que le sport et jamais les relations économiques, alors que la compétition peut servir de levier pour les ouvriers immigrés du Golfe.
+Boniface soutient que boycotter la Coupe du monde au Qatar est un faux remède : on ne sanctionne que le sport, jamais les relations économiques, alors que la compétition peut servir de levier pour les ouvriers immigrés du Golfe. Il applique le même pragmatisme à Spoutnik V : le vaccin est certes un instrument d'influence russe, mais la seule question est son efficacité, et le refuser par principe relève d'un raidissement idéologique, au détriment de la réouverture. Il lit enfin Joe Biden comme un vrai leader, à l'intérieur comme à l'international, plus ouvert que Trump et plus ferme qu'Obama. Il met en garde contre un discours de choc des civilisations et un nouveau climat bipolaire, et appelle à un rapport de force aussi avec Washington.
 
-Les deux autres, en octobre 2026, relèvent de la lecture de l'ordre mondial. Boniface chronique Le Triangle du pouvoir d'Alexander Stubb, président finlandais. Selon le livre, le monde se divise en trois blocs : l'Occident, l'Orient et le Sud global. L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Deux émissions avec invité donnent la parole à des lectures de la démocratie et de la France vue de l'étranger. Pour Natacha Polony, les gilets jaunes et le Covid-19 révèlent quarante ans de néolibéralisme qui ont soustrait les décisions au peuple et coupé les élus de lui ; défendre la souveraineté, c'est défendre la démocratie. Pour Aurélien Taché, les débats français sur l'islam et la laïcité sont perçus à l'étranger comme hostiles aux musulmans, et la droite comme une partie de la gauche, Macron compris, cèdent à l'extrême droite.
 
-Boniface reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. La Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Dans sa réponse sur la liste noire, Boniface maintient qu'il est blacklisté par France Culture et France Inter depuis son livre de 2011. Selon lui, les chiffres avancés par Sandrine Treiner et Laurence Bloch ne prouvent rien, et il continuera de s'exprimer librement.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/3-2021-03-29/2-2021-04-06/1-boycotter-la-coupe-du-monde-au|Boycotter la Coupe du Monde au Qatar ?]] (2021-04-06)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/3-2021-03-29/2-2021-04-06/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/3-2021-03-29/2-2021-04-06/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/3-2021-03-29/2-2021-04-06/2-clm-s4-30-natacha-polony-quelle|CLM S4#30 - Natacha Polony - "Quelle menace sur la démocratie ?"]] (2021-04-07)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/3-2021-03-29/2-2021-04-06/3-spoutnik-v-un-vaccin-diplomatique|Spoutnik V : un vaccin diplomatique]] (2021-04-12)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/3-2021-03-29/2-2021-04-06/4-clm-s4-31-aurelien-tache-nos|CLM S4#31-Aurélien Taché – "Nos débats de politique intérieure & leurs conséquences internationales"]] (2021-04-14)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/3-2021-03-29/2-2021-04-06/5-liste-noire-france-inter-france-culture|Liste noire France Inter - France Culture : ma réponse]] (2021-04-16)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/3-2021-03-29/2-2021-04-06/6-de-sleepy-joe-a-super-biden|De Sleepy Joe à Super Biden]] (2021-04-19)
