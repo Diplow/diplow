@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans d'actualité par quelques grilles stables :
-  multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
-  déclin de l'Occident, autonomie d'une Europe alignée ni sur Washington ni
-  sur Pékin, dialogue plutôt que sanctions.
+  Boniface applique les mêmes grilles à dix ans d'actualité : multilatéralisme
+  contre unilatéralisme américain, deux-poids-deux-mesures occidental, déclin
+  de l'Occident. Il défend une Europe autonome, alignée ni sur Washington ni
+  sur Pékin.
 ---
 # Chronicle
 
-D'un bout à l'autre de la Chronicle, Boniface applique les mêmes outils d'analyse à des événements très différents. Il oppose le multilatéralisme à l'unilatéralisme, dénonce le deux-poids-deux-mesures occidental et juge que le refus de négocier se retourne contre ses auteurs. Il défend la diplomatie et le dialogue plutôt que les sanctions, et il décrit un Occident en déclin face à l'émergence d'autres puissances.
+Sur toute la Chronicle, Boniface relit l'actualité à travers un petit nombre de grilles qui reviennent d'une année à l'autre. La première est l'opposition entre multilatéralisme et unilatéralisme : dès 2016-2017, il lit Trump par l'unilatéralisme et le refus de négocier, qui se retourne contre ses auteurs. En 2018, il voit l'arms control démantelé et un multilatéralisme en crise mais indispensable. Il y ajoute le deux-poids-deux-mesures occidental et la rationalité des acteurs, et défend la diplomatie face aux rapports de force bruts.
 
-De 2016 à 2019, ces grilles passent largement par Trump. Boniface voit dans son unilatéralisme un facteur de démantèlement de l'arms control et de crise du multilatéralisme, qu'il juge pourtant indispensable. Il juge Obama meilleur qu'on ne le dit. Il situe Macron dans la ligne gaullo-mitterrandiste et estime que les gilets jaunes l'affaiblissent à l'international. Il presse la France et l'Europe de définir leurs intérêts, de refuser l'unipolarité et de tenir tête à Washington.
+Le second fil est l'Europe. Boniface la presse de définir ses intérêts, de refuser l'unipolarité et de tenir tête à Washington, et fait de l'autonomie stratégique européenne un mot d'ordre constant. Le Covid-19 est pour lui un révélateur : Trump affaiblit les États-Unis et sert la Chine, tandis que l'Europe pâtit de son manque de solidarité. Côté français, il situe Macron dans la ligne gaullo-mitterrandiste et voit les gilets jaunes l'affaiblir à l'international.
 
-Avec le Covid-19, qu'il lit comme un révélateur, il observe que Trump affaiblit les États-Unis et sert la Chine, et que l'Europe pâtit de son manque de solidarité. La dernière période reprend ces constats autour du duel entre la Chine et les États-Unis, que Biden ne change pas. Boniface en tire une même conclusion : l'autonomie stratégique européenne, pour une Europe qui ne s'aligne ni sur Washington ni sur Pékin.
+À partir de 2020, la rivalité sino-américaine et le déclin de l'Occident deviennent le cadre dominant de ses analyses. Il maintient la même exigence d'une Europe alignée ni sur Washington ni sur Pékin, et soutient qu'il faut combattre le terrorisme sans sacrifier l'état de droit. D'un bout à l'autre, les sujets changent, mais les grilles restent stables.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Avec le Covid-19, qu'il lit comme un révélateur, il observe que Trump affaibli
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2019-01-09]] (72 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2019-10-10]] (84 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2020-06-11]] (90 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (95 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (101 Digests)
