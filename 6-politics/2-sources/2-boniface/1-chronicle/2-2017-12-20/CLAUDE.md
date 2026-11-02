@@ -3,18 +3,18 @@ title: "2017-12-20 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20
 owner: diplo
 preview: >-
-  Boniface lit 2017-2026 à travers l'unilatéralisme de Trump, qu'il oppose à
-  un multilatéralisme indispensable et à l'autonomie stratégique de l'Europe.
-  Il suit aussi la Corée, la Chine et le Proche-Orient, voit dans le football
-  un soft power et reçoit de nombreux invités.
+  Boniface lit l'actualité à travers l'unilatéralisme de Trump, un
+  multilatéralisme en crise mais indispensable et l'autonomie stratégique que
+  la France et l'Europe doivent chercher. Il passe ensuite aux rivalités entre
+  puissances et au multi-alignement, et reçoit de nombreux invités.
 ---
 # 2017-12-20 → 2026-10-30
 
-Le fil le plus constant chez Boniface est sa lecture de l'ordre mondial à travers Trump. Il voit dans la dénonciation du traité FNI le rejet de l'Arms control et du multilatéralisme, et dans la rupture de l'accord nucléaire iranien une tentative d'imposer un monde unipolaire que l'Europe doit refuser. Le multilatéralisme est en crise mais reste indispensable, l'ONU aussi. Il en tire un appel répété à l'autonomie stratégique de la France et de l'Europe, dont il constate la dépendance. Il nuance toutefois : au Venezuela, la contestation de Maduro est d'abord nationale.
+De fin 2017 à 2018, Boniface lit l'actualité par la Corée et par Trump. La participation nord-coréenne aux JO ouvre une trêve, et le sommet Trump–Kim est bon pour la paix sans qu'il faille s'en réjouir à l'excès. Il juge la guerre d'Afghanistan perdue et voit Israël perdre la bataille des opinions publiques à Gaza. Dans la rupture de l'accord nucléaire iranien, il lit une tentative de Trump d'imposer un monde unipolaire que l'Europe doit refuser.
 
-Sur l'Asie et le Proche-Orient, il applique des grilles de réalisme et d'intérêts. Il lit l'hiver 2017-2018 par la Corée, où la trêve des JO et le sommet Trump–Kim sont bons pour la paix sans justifier un optimisme excessif. Il juge la guerre d'Afghanistan perdue. Il tient la guerre entre la Chine et les États-Unis pour loin d'être écrite, la dissuasion nucléaire l'excluant, et voit dans l'OCS le signe d'un multi-alignement. Il soutient que le soutien à MBS relève d'un calcul d'intérêts, que l'assassinat de Khashoggi est une faute stratégique, qu'Israël perd la bataille des opinions publiques à Gaza et qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens.
+Le fil se resserre autour de l'unilatéralisme américain. En dénonçant le traité FNI, Trump rejette l'Arms control et le multilatéralisme. Boniface soutient que l'ONU reste indispensable et que le multilatéralisme, en crise, est toujours nécessaire. Il appelle la France et l'Europe à l'autonomie stratégique, y compris face au Venezuela ou à la Corée du Nord, tout en nuançant : la contestation de Maduro est d'abord nationale. Il analyse aussi le soutien à MBS comme un calcul d'intérêts et l'assassinat de Khashoggi comme une faute stratégique. Les gilets jaunes affaiblissent Macron à l'international, et la victoire des Bleus est un gain de prestige par le soft power, le football étant pour lui un objet géopolitique.
 
-Il traite aussi le football comme un objet géopolitique : la victoire des Bleus est pour lui un gain de prestige par le soft power. Il lit les gilets jaunes comme un affaiblissement de Macron à l'international. Tout au long de la période, il reçoit des invités qui traitent des Rohingya, de la Chine ou de la dissuasion, et qui discutent son Requiem pour le monde occidental ; leurs thèses restent les leurs.
+Dans la dernière partie de la Chronicle, il lit l'actualité par les rivalités entre puissances et le multi-alignement. L'OCS n'est pas une OTAN asiatique, et un départ de Netanyahou ne changerait presque rien pour les Palestiniens. Tout au long de la Period, il reçoit de nombreux invités, sur les Rohingya, la Chine, la dissuasion ou son Requiem pour le monde occidental, et il chronique des livres.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Il traite aussi le football comme un objet géopolitique : la victoire des Bleus
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/CLAUDE|2018-06-20 → 2018-10-24]] (18 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/CLAUDE|2018-10-25 → 2019-01-09]] (18 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/CLAUDE|2019-01-14 → 2019-02-15]] (23 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/6-2019-02-20/CLAUDE|2019-02-20 → 2026-10-30]] (12 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/6-2019-02-20/CLAUDE|2019-02-20 → 2026-10-30]] (18 Digests)
