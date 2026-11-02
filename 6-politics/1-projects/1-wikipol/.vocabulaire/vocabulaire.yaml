@@ -149,6 +149,7 @@ kinds:
       coach: {définition: "Entraîne des personnes à la prise de parole et à la communication.", statut: proposé, introduit_par: paduteam/PBDnxew6e34.md}
       publicitaire: {définition: "Conçoit des campagnes de publicité et de relations publiques.", statut: proposé, introduit_par: blast/buz6BTSdR2Q.md}
       fondateur-de-mouvement: {définition: "Fonde un mouvement politique ou idéologique.", statut: proposé, introduit_par: blast/79U-Auozz6E.md}
+      suspect: {définition: "Soupçonné par l'enquête d'avoir participé à un crime, sans avoir été jugé.", statut: proposé, introduit_par: boniface/ezPoHfgR6GQ.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

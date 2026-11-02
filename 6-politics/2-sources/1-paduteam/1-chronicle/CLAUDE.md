@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle
 owner: diplo
 preview: >-
-  Depuis 2019, la PaduTeam ramène discours, affaires et parcours à leurs bases
-  de classe, veut une gauche de rupture ancrée dans les classes populaires,
-  défend l'organisation collective et fait du PS l'adversaire principal de la
-  FI avant 2027.
+  La PaduTeam ramène discours, affaires et partis à leurs bases de classe et
+  répète que seule l'organisation l'emporte. Elle veut une gauche de rupture
+  enracinée dans les classes populaires, derrière Mélenchon et contre le PS,
+  et appelle à bloquer le pays puis à faire tomber Macron.
 ---
 # Chronicle
 
-Sur toute la Chronicle, la PaduTeam applique la même grille : discours, affaires et parcours se ramènent à leurs bases de classe. Elle dénonce un deux poids deux mesures sur Israël et Gaza. Elle veut une gauche de rupture réenracinée dans les classes populaires, et répète que seule l'organisation permet de dépasser la droite. Cette ligne s'oppose à l'individualisme et assume le militantisme comme une bataille d'hégémonie.
+D'un bout à l'autre de la Chronicle, la PaduTeam ramène les discours, les affaires et les parcours à leurs bases de classe. Elle dénonce un deux poids deux mesures sur Israël et Gaza, voit l'extrême droite se banaliser et lit la diabolisation de la gauche radicale comme une offensive de l'ordre établi. Elle oppose à l'individualisme l'organisation collective, seule capable de dépasser la droite, et assume son militantisme comme une bataille d'hégémonie. Elle veut une gauche de rupture réenracinée dans les classes populaires.
 
-À partir de l'hiver 2024-2025, la lecture par les structures et la classe se tourne vers l'actualité immédiate. La PaduTeam juge la censure de Barnier justifiée, dénonce la droitisation de figures de gauche et voit l'extrême droite se banaliser. Elle lit la condamnation de Marine Le Pen comme une recomposition du fascisme, et la diabolisation de la gauche radicale comme une offensive de l'ordre établi. Elle fait de Mélenchon le meilleur atout face au PS pour 2027.
+Cette ligne se précise à mesure qu'approche 2027. Dès l'hiver 2024-2025, elle juge la censure de Barnier justifiée et dénonce la droitisation de figures de gauche. Au printemps, elle fait de Mélenchon le meilleur atout face au PS et lit la condamnation de Marine Le Pen comme une recomposition du fascisme. Pendant l'été ([[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/CLAUDE|2025-06-04 → 2025-09-01]]), elle pousse Mélenchon à radicaliser son programme, descend le PS et les autres prétendants à gauche, puis appelle à bloquer l'appareil productif le 10 septembre contre le budget Bayrou.
 
-Au fil de 2025, la ligne se durcit. Elle pousse Mélenchon, puis la FI, à radicaliser leur programme, et descend le PS et les autres prétendants à gauche. À la rentrée, elle appelle à bloquer l'appareil productif le 10 septembre contre le budget Bayrou, puis passe de la rue contre Macron à une offensive contre le PS, devenu adversaire principal. Elle finit en défendant le mot communisme.
+À l'automne ([[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE|2025-09-02 → 2025-12-22]]), elle appelle la rue à faire tomber Macron, puis fait du PS l'adversaire principal et pousse la FI à radicaliser son programme, pour que la gauche de rupture batte celle d'accommodement.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Au fil de 2025, la ligne se durcit. Elle pousse Mélenchon, puis la FI, à radic
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE|2024-11-27 → 2025-02-14]] (66 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/CLAUDE|2025-02-15 → 2025-06-03]] (70 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/CLAUDE|2025-06-04 → 2025-09-01]] (64 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE|2025-09-02 → 2025-12-15]] (82 Digests)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE|2025-09-02 → 2025-12-22]] (88 Digests)

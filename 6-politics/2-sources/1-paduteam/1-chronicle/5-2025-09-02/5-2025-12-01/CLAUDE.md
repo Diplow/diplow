@@ -1,21 +1,22 @@
 ---
-title: "2025-12-01 → 2025-12-15"
+title: "2025-12-01 → 2025-12-22"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01
 owner: diplo
 preview: >-
-  La PaduTeam lit tout en termes de classes : un PCF devenu SFIO derrière un
-  PS rangé auprès des macronistes, un budget Macron sauvé pour 2027, la
-  solidarité de classe des puissants dans l'affaire Abittan, et Usul accusé de
-  glisser vers l'impérialisme libéral.
+  La PaduTeam reproche à la gauche ses renoncements : un PCF devenu SFIO qui
+  suit le PS, un PS qui calcule pour 2027 et se range derrière les
+  macronistes, des écolos tournés vers leur primaire. Elle veut que la gauche
+  de rupture batte celle d'accommodement.
 ---
-# 2025-12-01 → 2025-12-15
+# 2025-12-01 → 2025-12-22
 
-La PaduTeam ouvre la quinzaine en lisant l'actualité par les rapports de classe : à Dubaï, la domestique est subalternisée par l'accumulation de capital ; la monnaie est dépassée par l'abondance ; Mélenchon sort vainqueur de sa commission ; Bardella est un produit fabriqué, sans substance.
+Pendant ces trois semaines de décembre, la PaduTeam lit l'actualité en termes de classes et en tire un réquisitoire contre les renoncements de la gauche. Le PCF de Roussel, devenu SFIO, suit le PS et reprend la valeur travail de Sarkozy. Le PS, après avoir laissé passer le budget de la Sécu par calcul pour 2027, se range derrière les macronistes pendant que Hollande reprend la main sur la gauche social-libérale. Les écolos servent leur primaire plutôt que les classes populaires. La PaduTeam en conclut que la gauche de rupture doit battre celle d'accommodement, et que le PCF social-démocrate refuse l'expropriation.
 
-Le fil principal est ensuite la décomposition de la gauche institutionnelle. Dans [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/2-2025-12-01/CLAUDE|2025-12-01 → 2025-12-05]], le PCF de Roussel, devenu SFIO, suit le PS et reprend la valeur travail de Sarkozy, Hollande reprend la main sur la gauche social-libérale, et le PS se range derrière les macronistes. La suite, [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/3-2025-12-10/CLAUDE|2025-12-10 → 2025-12-15]], prolonge ce constat : le budget Macron, sauvé par le PS et les Écologistes, est un calcul pour 2027. L'affaire Abittan montre la solidarité de classe des puissants. La PaduTeam accuse enfin Usul de glisser vers l'impérialisme libéral sur la guerre.
+Elle oppose à ces renoncements l'abondance, que la monnaie ne sait plus penser, et elle la dresse contre l'anthropologie libérale. Elle suit aussi l'évolution d'Usul, qui glisse selon elle vers l'impérialisme libéral. Elle répond à Naulleau en assumant l'histoire du mouvement ouvrier. Du côté adverse, elle présente Bardella comme un produit fabriqué et sans substance, et Mélenchon comme le vainqueur de sa commission.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/1-2025-12-01/CLAUDE|2025-12-01]] (4 Digests)
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/2-2025-12-01/CLAUDE|2025-12-01 → 2025-12-05]] (4 Digests)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/3-2025-12-10/CLAUDE|2025-12-10 → 2025-12-15]] (3 Digests)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/3-2025-12-10/CLAUDE|2025-12-10 → 2025-12-16]] (5 Digests)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/4-2025-12-17/CLAUDE|2025-12-17 → 2025-12-22]] (4 Digests)
