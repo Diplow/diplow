@@ -1,0 +1,49 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_7261da2d8161eb 144
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/4-2025-10-07/5-lecornu-deja-censure.md
+  s_acaf6d88d9ecff::t_3af7032f7ddeab 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/4-2025-10-07/CLAUDE.md
+  s_acaf6d88d9ecff::t_7bff6a1086fd1b 2,6-9,11,13,15,17,25
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/5-2025-10-15/1-le-ps-a-trahi-episode-24873.md
+  s_acaf6d88d9ecff::t_aff6c26367f0eb 1-108
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/5-2025-10-15/2-melenchon-diabolise-il-humilie-benjamin-duhamel.md
+  s_acaf6d88d9ecff::t_d362a0efc34460 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/5-2025-10-15/3-tondelier-corbieres-autain-panique-au-royaume.md
+  s_acaf6d88d9ecff::t_705b48bcec8102 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/5-2025-10-15/4-alliance-ps-macroniste-lr-les-assass.md
+  s_acaf6d88d9ecff::t_697daf76e11d58 1-96
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/5-2025-10-15/5-explosion-des-droites-le-rn-et.md
+  s_acaf6d88d9ecff::t_fee8130dd8adb2 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/5-2025-10-15/CLAUDE.md
+  s_acaf6d88d9ecff::t_f4663d4d5b7520 1-25
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/CLAUDE.md
+  s_acaf6d88d9ecff::t_7298b47e3a6075 2,6-8,10,12,14,16,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/CLAUDE.md
+  s_acaf6d88d9ecff::t_e8a6fb8d5a7f43 2,6-9,11,13,15,17,26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_acaf6d88d9ecff::t_db46674c6d3e97 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fa31933d6498b7d851bf7f5b6d51e5b1668face8",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_acaf6d88d9ecff": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-adc666cca62973d67",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
