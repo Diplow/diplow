@@ -1,0 +1,45 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/3-2026-03-31/CLAUDE.md
+  s_9ac8336533d24a::t_8342a066e4291e 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/4-2026-03-31/1-onfray-debunk-definitivement-le-communisme.md
+  s_9ac8336533d24a::t_28461346182ade 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/4-2026-03-31/2-zoe-et-chris-sont-nostalgiques-de.md
+  s_9ac8336533d24a::t_cb80685ef4b0df 1-96
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/4-2026-03-31/3-le-ps-et-les-noisettes-en.md
+  s_9ac8336533d24a::t_3582573652b5f3 1-95
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/4-2026-03-31/4-barnier-hanouna-marion-marechal-ils-mentent.md
+  s_9ac8336533d24a::t_ea5eb463b98cd3 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/4-2026-03-31/CLAUDE.md
+  s_9ac8336533d24a::t_8eccaa5b480440 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/1-marianne-le-journal-nega-sionniste.md
+  s_9ac8336533d24a::t_239ba714bec89f 1-79
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/2-naulleau-et-hanouna-contre-la-secu.md
+  s_9ac8336533d24a::t_9ee8e2b22de567 1-77
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/3-les-pires-et-les-meilleures-villes.md
+  s_9ac8336533d24a::t_583e03a87c1443 1-108
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/CLAUDE.md
+  s_9ac8336533d24a::t_2616a2d626c45b 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/CLAUDE.md
+  s_9ac8336533d24a::t_3bd9992d0d7f02 6-9,13,15-17,23-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE.md
+  s_9ac8336533d24a::t_077231fd2a0707 6-9,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_9ac8336533d24a::t_f67a7c30c9e486 6-9,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_9ac8336533d24a::t_e31b88481ff47f 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dce22adebec37443992629cf3d1a4e58c1120f59",
+  "prompts": {},
+  "sessions": {
+    "s_9ac8336533d24a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a0f38b6ec36ccf8cc",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
