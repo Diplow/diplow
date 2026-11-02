@@ -1,23 +1,23 @@
 ---
-title: "2024-06-15 → 2024-12-01"
+title: "2024-06-15 → 2024-12-06"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15
 owner: diplo
 preview: >-
   Blast soutient que la dissolution a ouvert la voie du pouvoir à l'extrême
-  droite, que Macron, battu aux législatives, garde la main en imposant
-  Barnier avec l'aval du RN, et que l'extrême droite avance sur le terrain
-  laissé par le néolibéralisme.
+  droite, que Macron, battu, garde pourtant la main avec Barnier et le RN, et
+  que sa démission est la seule sortie de crise. Elle lit la victoire de Trump
+  comme une prise de tous les pouvoirs.
 ---
-# 2024-06-15 → 2024-12-01
+# 2024-06-15 → 2024-12-06
 
-Blast tient d'un bout à l'autre de la Period un même fil : l'extrême droite progresse par les choix de ceux qui gouvernent. Dans l'été, la dissolution lui a ouvert la voie du pouvoir, Macron a déroulé le tapis au RN, et le Nouveau Front populaire est présenté comme la seule alternative sérieuse. Après le vote, Blast accuse Macron de nier le résultat des urnes ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/1-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]]).
+Pendant ces six mois, Blast soutient que la dissolution a ouvert la voie du pouvoir à l'extrême droite et que Macron a déroulé le tapis au RN. Dans l'entre-deux-tours, le Nouveau Front populaire est pour elle la seule alternative sérieuse. Après le vote, elle accuse Macron de nier le résultat des urnes.
 
-À l'automne, le constat se déplace vers l'exercice du pouvoir. Battu aux législatives, Macron garde la main en imposant Barnier avec l'aval du RN, de sorte que l'extrême droite gouverne par procuration. Blast dénonce les médias de milliardaires et reçoit des invités sur Gaza et le Liban, dont les thèses restent les leurs ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/2-2024-08-14/CLAUDE|2024-08-14 → 2024-10-23]]).
+Elle voit ensuite Macron, battu aux législatives, garder la main en imposant Barnier avec l'aval du RN, si bien que l'extrême droite gouverne par procuration. Elle dénonce les médias de milliardaires. Elle reçoit aussi des invités sur Gaza et le Liban, dont les analyses restent les leurs.
 
-La fin de la Period élargit l'explication. Blast soutient que l'extrême droite avance sur le terrain laissé par le néolibéralisme et les médias dominants. Il lit la victoire de Trump comme une prise de pouvoir méthodique. Il dénonce aussi une justice à deux vitesses qui épargne Marine Le Pen ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE|2024-10-24 → 2024-12-01]]).
+À l'automne, Blast soutient que l'extrême droite avance sur le terrain laissé par le néolibéralisme et par les médias dominants. Elle lit la victoire de Trump comme une prise de tous les pouvoirs. La censure de Barnier est pour elle l'échec de Macron, dont la démission serait la seule sortie de crise.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/1-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]] (65 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/2-2024-08-14/CLAUDE|2024-08-14 → 2024-10-23]] (72 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE|2024-10-24 → 2024-12-01]] (51 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE|2024-10-24 → 2024-12-06]] (57 Digests)

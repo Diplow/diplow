@@ -3,18 +3,18 @@ title: "2024-11-29 → 2024-12-01"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/3-2024-11-29
 owner: diplo
 preview: >-
-  Blast accuse les macronistes de laisser mourir l'hôpital public et
-  d'enterrer la démocratie parlementaire, ce qui profite au RN, lit la
-  victoire de Trump comme une prise de pouvoir méthodique de l'extrême droite,
-  et reçoit la coordinatrice européenne de BDS.
+  Blast lit la mort de Meggy et le blocage des retraites comme les effets
+  d'une politique macroniste qui abîme l'hôpital public et la démocratie
+  parlementaire. Elle voit dans l'extrême droite un pouvoir conquis
+  méthodiquement, et reçoit BDS pour défendre le boycott.
 ---
 # 2024-11-29 → 2024-12-01
 
-Le fil de ces quatre jours est une charge contre le pouvoir macroniste. Blast soutient que la mort de Meggy, 25 ans, faute de secours malgré cinq appels au SAMU, n'a rien d'un accident isolé : elle est le symptôme d'un hôpital public rendu malade par les économies, la rentabilité et la privatisation ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/3-2024-11-29/1-meggy-25-ans-morte-aux-urgences|Meggy, 25 ans, morte aux urgences]]). Le même reproche vaut pour le Parlement : en bloquant par l'obstruction l'abrogation de la réforme des retraites lors de la niche LFI, les macronistes évitent un symbole désastreux et piétinent la démocratie parlementaire, ce qui profite au RN.
+Le fil principal de la Period est une charge contre le macronisme, jugé responsable d'un délitement des institutions. Blast soutient que la mort de Meggy, 25 ans, faute de secours malgré cinq appels au SAMU, n'est pas un accident isolé. Elle y voit le symptôme d'un hôpital public rendu malade par les économies, la rentabilité et la privatisation. Elle applique la même grille au Parlement : en bloquant par l'obstruction l'abrogation de la réforme des retraites lors de la niche LFI, les macronistes auraient évité un symbole désastreux et piétiné la démocratie parlementaire, ce qui profite au RN.
 
-Blast déplace ensuite le regard vers l'extrême droite. Pour la Source, la victoire de Trump est l'aboutissement d'une prise de pouvoir méthodique de la droite radicale. La même stratégie de respectabilité normalise l'extrême droite en Europe et prépare le RN dédiabolisé à gouverner ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/3-2024-11-29/3-le-plan-redoutable-de-l-extreme|Le plan redoutable de l'extrême droite]]).
+Ce dernier point mène au second axe, la progression de l'extrême droite. Blast présente la victoire de Trump comme l'aboutissement d'une prise de pouvoir méthodique de la droite radicale. Selon elle, la même stratégie de respectabilité normalise l'extrême droite en Europe et prépare un RN dédiabolisé à gouverner.
 
-La Period se clôt sur Gaza, où Blast reçoit la coordinatrice européenne de BDS. C'est elle qui soutient que le boycott ciblé des entreprises complices fonctionne et isole Israël, malgré la criminalisation du mouvement en France.
+La Period se ferme sur la Palestine, dans un registre différent : Blast y reçoit la coordinatrice européenne de BDS. C'est l'invitée qui soutient que le boycott ciblé d'entreprises complices fonctionne et isole Israël, malgré la criminalisation du mouvement en France.
 
 ## Contenu
 
