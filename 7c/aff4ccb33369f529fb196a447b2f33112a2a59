@@ -1,0 +1,49 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_41fcfd0725f662 147
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/3-2024-10-05/5-l-argent-magique-la-solution-a.md
+  s_f690ffc7638323::t_a1621af76349f6 1-87
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/3-2024-10-05/CLAUDE.md
+  s_f690ffc7638323::t_2ac5b9f6a814fc 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/4-2024-10-09/1-affaire-des-viols-de-mazan-la.md
+  s_f690ffc7638323::t_bde57c106d0bcc 1-80
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/4-2024-10-09/2-je-ne-sais-pas-si-je.md
+  s_f690ffc7638323::t_65299b791a5486 1-58
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/4-2024-10-09/3-le-principal-danger-n-est-pas.md
+  s_f690ffc7638323::t_1d7c199aa55b0e 1-69
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/4-2024-10-09/4-le-rn-est-il-deja-au.md
+  s_f690ffc7638323::t_6cda4efb4e6b39 1-94
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/4-2024-10-09/5-slenderman-le-1er-mythe-d-internet.md
+  s_f690ffc7638323::t_6cb1f0f6aaa99a 1-94
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/4-2024-10-09/CLAUDE.md
+  s_f690ffc7638323::t_669ca649fe2919 1-25
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/CLAUDE.md
+  s_f690ffc7638323::t_54adaff1f9fa4f 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE.md
+  s_f690ffc7638323::t_b7940a873cb4bd 2,6-8,10,12,14,16,22
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_f690ffc7638323::t_0c8b351bbb2a70 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7caff4ccb33369f529fb196a447b2f33112a2a59",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_f690ffc7638323": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a3dc0c2a80d325a72",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
