@@ -1,0 +1,49 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_f765dff107ffcb 270
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01/5-leaument-en-sueur-contre-la-corpo.md
+  s_2bd7f88b4bef24::t_471804741baf02 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01/CLAUDE.md
+  s_2bd7f88b4bef24::t_7ac4e931a5679f 6-8,12,14-16,24
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/5-2025-11-10/1-melenchon-vs-le-pen-2027-les.md
+  s_2bd7f88b4bef24::t_f52955e3647b47 1-105
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/5-2025-11-10/2-l-arme-du-ps-pour-battre.md
+  s_2bd7f88b4bef24::t_b274a7b98a2259 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/5-2025-11-10/3-atomisation-du-bras-droit-de-benoit.md
+  s_2bd7f88b4bef24::t_b936203abe7bdf 1-100
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/5-2025-11-10/4-17-700-mois-mais-pris-a.md
+  s_2bd7f88b4bef24::t_95fe168dd5d002 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/5-2025-11-10/5-tondelier-femme-sandwich-pour-le-capitalisme.md
+  s_2bd7f88b4bef24::t_c6471fec52fdcc 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/5-2025-11-10/CLAUDE.md
+  s_2bd7f88b4bef24::t_c366092d860e40 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/CLAUDE.md
+  s_2bd7f88b4bef24::t_900182e4f72fb3 2,6-10,12,14,16,18,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE.md
+  s_2bd7f88b4bef24::t_69d8cdb0e463b3 2,6-9,11,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_2bd7f88b4bef24::t_1bff43cdabadd4 6-10,14,16,18,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "86a02d91edd06cd64078e912c79f8103c96789ff",
+  "prompts": {},
+  "sessions": {
+    "s_2bd7f88b4bef24": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a69518118e83d2c7b",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
