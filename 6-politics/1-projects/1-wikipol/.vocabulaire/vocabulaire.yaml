@@ -164,6 +164,7 @@ kinds:
       interprète: {définition: "Traduit à l'oral, en direct, les propos d'un intervenant qui parle une autre langue.", statut: proposé, introduit_par: blast/TtHgPQYIZL4.md}
       président-du-conseil-européen: {définition: "Préside le Conseil européen, qui réunit les chefs d'État et de gouvernement de l'Union européenne, à la date de la Publication.", statut: proposé, introduit_par: boniface/ZuJ0luBkoAw.md}
       pompier: {définition: "Sapeur-pompier qui intervient et transporte des patients en urgence.", statut: proposé, introduit_par: blast/m_3eBCypDlE.md}
+      éducateur-spécialisé: {définition: "Accompagne des jeunes en difficulté dans des structures sociales et éducatives.", statut: proposé, introduit_par: blast/rr3ED9-O228.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -235,6 +236,7 @@ kinds:
       service-de-renseignement: {définition: "Service d'un État chargé du renseignement et de la sécurité intérieure ou extérieure.", statut: proposé, introduit_par: boniface/5JLYioWHr38.md}
       état: {définition: "Un État en tant que pouvoir constitué, avec son régime et ses institutions.", statut: proposé, introduit_par: paduteam/YKdEbgZZg1Q.md}
       groupe-musical: {définition: "Groupe de musiciens qui compose et se produit ensemble.", statut: proposé, introduit_par: blast/0qT5qNEF76Y.md}
+      milice: {définition: "Groupe paramilitaire privé qui s'arme et s'entraîne en vue d'affrontements, hors de toute armée d'État.", statut: proposé, introduit_par: blast/rr3ED9-O228.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
