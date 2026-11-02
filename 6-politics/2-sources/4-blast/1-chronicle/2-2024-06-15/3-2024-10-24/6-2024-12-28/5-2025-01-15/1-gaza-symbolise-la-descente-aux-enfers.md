@@ -1,6 +1,6 @@
 ---
 title: "GAZA SYMBOLISE LA DESCENTE AUX ENFERS DU DROIT INTERNATIONAL"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/4-2025-01-11
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/5-2025-01-15
 owner: diplo
 preview: >-
   Agnès Callamard, secrétaire générale d'Amnesty International, soutient

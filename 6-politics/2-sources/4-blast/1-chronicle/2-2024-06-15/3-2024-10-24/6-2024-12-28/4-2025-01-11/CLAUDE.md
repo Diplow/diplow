@@ -1,17 +1,18 @@
 ---
-title: "2025-01-11 → 2025-01-15"
+title: "2025-01-11 → 2025-01-14"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/4-2025-01-11
 owner: diplo
 preview: >-
-  Blast dénonce le spectacle antidrogue de Darmanin et Retailleau et défend
-  les services publics contre la tronçonneuse de Trump-Musk et de Milei. Elle
-  reçoit aussi des voix sur la corruption, le fascisme de Macron et Gaza.
+  Blast dénonce le spectacle antidrogue de Darmanin et Retailleau et la
+  tronçonneuse de Trump-Musk et de Milei contre l'État, et défend des services
+  publics à réformer plutôt qu'à couper. Elle reçoit aussi Élise Van Beneden
+  sur la corruption et un chercheur sur Macron et le fascisme.
 ---
-# 2025-01-11 → 2025-01-15
+# 2025-01-11 → 2025-01-14
 
-Blast soutient que Darmanin et Retailleau font de la répression antidrogue un spectacle de communication, relayé par des médias complaisants, qui n'apporte aucun résultat et ramène le débat vers le vocabulaire de l'extrême droite. Elle soutient aussi que la tronçonneuse de Trump-Musk et de Milei vise à démanteler l'État, alors que les services publics sont souvent plus efficaces que le privé : il faut les critiquer et les réformer, pas les couper.
+Blast soutient que le pouvoir politique se met en scène plus qu'il n'agit. Darmanin et Retailleau font de la répression antidrogue un spectacle de communication, relayé par des médias complaisants, qui n'apporte aucun résultat et ramène le débat vers le vocabulaire de l'extrême droite. À l'international, la tronçonneuse de Trump-Musk et de Milei vise à démanteler l'État, alors que les services publics sont souvent plus efficaces que le privé : Blast défend qu'il faut les critiquer et les réformer, pas les couper.
 
-Autour de ces deux fils, la Period donne la parole à des invités. Élise Van Beneden défend l'idée que la corruption, qui coûterait 120 milliards d'euros par an à la France, est un détournement de pouvoir grave et banalisé, que la justice, les associations anticorruption et les lanceurs d'alerte peuvent combattre. Un chercheur lit Macron comme un avatar du termidorien de l'extrême centre, glissé vers une modernité réactionnaire proche du fascisme, et appelle la gauche à se réapproprier la question de l'immigration. Agnès Callamard, secrétaire générale d'Amnesty International, soutient qu'Israël commet un génocide à Gaza, que ses alliés risquent la complicité, et que les États-Unis et la Russie détruisent en connaissance de cause l'ordre international né de 1945.
+Blast reçoit aussi deux analyses qu'elle laisse à leurs auteurs. Élise Van Beneden soutient que la corruption, qui coûterait 120 milliards d'euros par an à la France, est un détournement de pouvoir grave et banalisé, mais que la justice, les associations anticorruption et les lanceurs d'alerte peuvent la combattre malgré les verrous institutionnels. Un chercheur invité soutient que Macron, avatar du termidorien de l'extrême centre, a glissé vers une modernité réactionnaire proche du fascisme, et que la gauche doit se réapproprier la question de l'immigration que l'extrême droite a monopolisée.
 
 ## Contenu
 
@@ -19,4 +20,3 @@ Autour de ces deux fils, la Period donne la parole à des invités. Élise Van B
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/4-2025-01-11/2-darmanin-retailleau-l-overdose|🦏 DARMANIN/RETAILLEAU : L'OVERDOSE]] (2025-01-12)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/4-2025-01-11/3-comprendre-le-fascisme-pour-comprendre-macron|COMPRENDRE LE FASCISME POUR COMPRENDRE MACRON]] (2025-01-13)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/4-2025-01-11/4-qui-veut-tuer-les-services-publics|QUI VEUT TUER LES SERVICES PUBLICS ? - AVEC @Heu7reka et @StupidEco]] (2025-01-14)
-5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/4-2025-01-11/5-gaza-symbolise-la-descente-aux-enfers|GAZA SYMBOLISE LA DESCENTE AUX ENFERS DU DROIT INTERNATIONAL]] (2025-01-15)
