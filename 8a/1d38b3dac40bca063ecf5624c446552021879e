@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/4-2025-08-24/5-le-rn-et-la-droite-attaquent.md
+  s_0a89858285c82e::t_c39cbe0bde4c9c 1-102
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/4-2025-08-24/CLAUDE.md
+  s_0a89858285c82e::t_512dc8816dca6c 6-9,13,15-17,25
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/5-2025-09-02/1-10-septembre-comment-ne-pas-reproduire.md
+  s_0a89858285c82e::t_bdfb8f13059d2c 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/5-2025-09-02/2-faure-ps-veut-etre-premier-ministre.md
+  s_0a89858285c82e::t_c61844af1843bd 1-103
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/5-2025-09-02/3-legrand-et-cohen-complotent-pour-placer.md
+  s_0a89858285c82e::t_f9bcd0c5063145 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/5-2025-09-02/4-propagande-anti-macron-on-peut-tous.md
+  s_0a89858285c82e::t_157d750f4c4351 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/5-2025-09-02/5-cecile-duflot-veut-laisser-les-ultra.md
+  s_0a89858285c82e::t_34d745031b2fd2 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/5-2025-09-02/CLAUDE.md
+  s_0a89858285c82e::t_ffc658e9562dd5 1-25
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/CLAUDE.md
+  s_0a89858285c82e::t_d5acf457ea5828 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/CLAUDE.md
+  s_0a89858285c82e::t_cd70a99a133620 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_0a89858285c82e::t_262c834db3ed03 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8a1d38b3dac40bca063ecf5624c446552021879e",
+  "prompts": {},
+  "sessions": {
+    "s_0a89858285c82e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ac0ece7e2506bbb3e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
