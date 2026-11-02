@@ -3,18 +3,20 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Pendant dix ans, Boniface lit l'actualité par les mêmes grilles :
-  multilatéralisme contre unilatéralisme américain, deux-poids-deux-mesures
-  occidental, rivalité sino-américaine, Europe autonome face à Washington,
-  question palestinienne, échec des interventions extérieures.
+  Boniface lit dix ans de géopolitique à travers le multilatéralisme contre
+  l'unilatéralisme et le deux-poids-deux-mesures occidental, puis l'échec des
+  interventions occidentales. Il plaide pour la négociation et pour une Europe
+  autonome, alliée des États-Unis mais non alignée.
 ---
 # Chronicle
 
-Sur l'ensemble de la Chronicle, Boniface applique à l'actualité un petit nombre de grilles de lecture qui ne changent pas. La plus constante oppose le multilatéralisme à l'unilatéralisme américain. Elle sert d'abord à lire Trump et la scène internationale de 2016 à 2020, puis la suite de la période. Le deux-poids-deux-mesures occidental revient lui aussi, surtout dans la première moitié.
+Dans la première moitié de la Chronicle ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]]), Pascal Boniface applique les mêmes grilles à Trump et à la scène internationale : le multilatéralisme contre l'unilatéralisme, le deux-poids-deux-mesures occidental. Il presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur.
 
-Il presse l'Europe d'acquérir son autonomie stratégique et de ne pas s'aligner sur Washington. Dans la première période, il lit le Covid-19 comme un révélateur. Dans la seconde, la rivalité sino-américaine, la question palestinienne et l'échec des interventions extérieures occupent davantage de place. Les cas changent, mais les mêmes outils d'analyse reviennent d'une vidéo à l'autre.
+La seconde moitié ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]]) reprend ces grilles pour lire six ans de géopolitique comme l'échec des interventions occidentales et d'un Occident que le reste du monde ne suit plus, sous la rivalité sino-américaine. Boniface y plaide pour la négociation.
+
+D'un bout à l'autre, le fil reste l'Europe : il la veut autonome, alliée des États-Unis mais non alignée. Les mêmes outils d'analyse servent de la présidence Trump à la rivalité entre la Chine et les États-Unis.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (275 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (281 Digests)
