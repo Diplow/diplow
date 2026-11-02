@@ -155,6 +155,9 @@ kinds:
       équipe-nationale: {définition: "Équipe qui représente un pays dans les compétitions sportives internationales.", statut: proposé, introduit_par: boniface/9X9jOh-GdcM.md}
       coopérative-agricole: {définition: "Coopérative d'agriculteurs qui produit, transforme et commercialise des produits agricoles.", statut: proposé, introduit_par: blast/mkLUrap_xfM.md}
       fonds-d-investissement: {définition: "Société qui réunit des capitaux pour les investir dans des entreprises.", statut: proposé, introduit_par: blast/mkLUrap_xfM.md}
+      ligue-politique: {définition: "Mouvement ou ligue politique qui agit hors des élections, sans être un parti.", statut: proposé, introduit_par: paduteam/7JKcdnkGji8.md}
+      cabinet-d-avocats: {définition: "Cabinet qui conseille et défend des entreprises, notamment par des enquêtes internes.", statut: proposé, introduit_par: blast/ow61t9N6KEE.md}
+      troupe-humoristique: {définition: "Groupe d'humoristes qui écrivent et jouent ensemble.", statut: proposé, introduit_par: blast/tUXPDn1iCHA.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
