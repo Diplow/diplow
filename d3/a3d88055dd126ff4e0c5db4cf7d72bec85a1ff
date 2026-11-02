@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/3-2026-01-03/4-trump-veut-annexer-le-groenland.md
+  s_665861f0ad68e0::t_c95d9c3525927e 1-96
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/3-2026-01-03/CLAUDE.md
+  s_665861f0ad68e0::t_1b33d503cbf0eb 6-9,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/4-2026-01-06/1-proces-chikirou-justice-ou-manipulation.md
+  s_665861f0ad68e0::t_db21f6e8d260f1 1-96
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/4-2026-01-06/2-anasse-kazib-atomise-maduro-c-est.md
+  s_665861f0ad68e0::t_6acfda7474a070 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/4-2026-01-06/3-1000-capsule-on-fait-le-proces.md
+  s_665861f0ad68e0::t_d6371425198c77 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/4-2026-01-06/4-anti-feministe-transph0be-et-eugeniste-le.md
+  s_665861f0ad68e0::t_2e3dfcf25325ec 1-99
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/4-2026-01-06/5-municipales-philippe-martinez-soutient-le-ps.md
+  s_665861f0ad68e0::t_9170a085b1b1f0 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/4-2026-01-06/CLAUDE.md
+  s_665861f0ad68e0::t_e90539ed7aadcd 1-25
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/CLAUDE.md
+  s_665861f0ad68e0::t_14720bf3e80ed1 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE.md
+  s_665861f0ad68e0::t_12e80607997ead 2,6-9,11,13,15,17,26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_665861f0ad68e0::t_dad66d7870511a 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d3a3d88055dd126ff4e0c5db4cf7d72bec85a1ff",
+  "prompts": {},
+  "sessions": {
+    "s_665861f0ad68e0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a5cb8afaf3ca0eca7",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
