@@ -3,19 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Pascal Boniface lit dix ans d'actualité par la fin du monopole occidental :
-  multilatéralisme contre unilatéralisme américain, deux poids deux mesures,
-  Europe autonome mais alliée, Sud global qui ne suit plus.
+  Pascal Boniface applique pendant dix ans les mêmes grilles à l'actualité :
+  multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
+  rivalité sino-américaine. Il presse l'Europe d'être autonome et lit
+  l'Occident comme privé de son monopole face au Sud global.
 ---
 # Chronicle
 
-Sur dix ans, Pascal Boniface applique les mêmes grilles de lecture à une actualité qui change. Les principales sont le multilatéralisme contre l'unilatéralisme américain, le deux-poids-deux-mesures occidental et la fin du monopole occidental sur les affaires du monde. Cette constance est le fil de la Chronicle : les sujets se renouvellent, les outils d'analyse restent.
+De 2016 à 2026, Boniface déploie une même grille de lecture sur l'actualité internationale : le multilatéralisme contre l'unilatéralisme, et le deux-poids-deux-mesures occidental. Du premier mandat de Trump au Covid-19, il lit les événements comme des révélateurs d'un ordre mondial qui change, et il presse l'Europe d'acquérir son autonomie stratégique.
 
-Dans la première moitié, [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|de 2016 à juin 2020]], ces grilles servent surtout à lire Trump et la scène internationale. Boniface presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur.
-
-Dans la seconde, [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|de juin 2020 à 2026]], les mêmes grilles couvrent la rivalité sino-américaine et la guerre en Ukraine, où il défend la négociation. Il y ajoute un Sud global qui ne suit plus l'Occident. L'Europe reste pour lui autonome mais alliée.
+Dans la seconde moitié de la Chronicle, de 2020 à 2026, les mêmes outils servent à analyser la rivalité sino-américaine, l'échec des interventions extérieures et la guerre d'Ukraine, qu'il faut selon lui terminer par la négociation. Le fil qui relie les deux périodes est celui d'un Occident qui perd son monopole face au Sud global.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (345 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (351 Digests)

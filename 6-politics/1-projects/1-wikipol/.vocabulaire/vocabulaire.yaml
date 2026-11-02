@@ -230,6 +230,7 @@ kinds:
       service-d-urgence: {définition: "Service médical qui répond aux appels de secours ou accueille les patients en urgence.", statut: proposé, introduit_par: blast/DEaeCHgCKIk.md}
       société-militaire-privée: {définition: "Société qui fournit des combattants et des services militaires, souvent proche d'un État.", statut: proposé, introduit_par: boniface/-NlfQ3Te0Qg.md}
       service-de-renseignement: {définition: "Service d'un État chargé du renseignement et de la sécurité intérieure ou extérieure.", statut: proposé, introduit_par: boniface/5JLYioWHr38.md}
+      état: {définition: "Un État en tant que pouvoir constitué, avec son régime et ses institutions.", statut: proposé, introduit_par: paduteam/YKdEbgZZg1Q.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
