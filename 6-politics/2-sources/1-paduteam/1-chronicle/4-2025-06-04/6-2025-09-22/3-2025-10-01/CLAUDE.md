@@ -1,23 +1,25 @@
 ---
-title: "2025-10-01"
+title: "2025-10-01 → 2025-10-03"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01
 owner: diplo
 preview: >-
-  La PaduTeam ferme son Twitch pour se recentrer sur YouTube et la discipline
-  de terrain avec La Brèche, soutient que septembre 2025 n'a pas été un flop
-  mais appelle une permanence militante, et lit l'article de Marianne sur la
-  fille de Sarkozy comme un conservatisme de classe.
+  La PaduTeam quitte Twitch pour se recentrer sur YouTube et sur
+  l'organisation avec La Brèche. Elle soutient que la tâche décisive est la
+  permanence militante, que l'intersyndicale refroidit un moment
+  prérévolutionnaire, et lit le patronat et la presse en termes de classe.
 ---
-# 2025-10-01
+# 2025-10-01 → 2025-10-03
 
-Ce 1er octobre 2025, la PaduTeam tire les conséquences organisationnelles de son projet. Elle ferme sa chaîne Twitch, parce que le format streaming, avec ses dons et sa relation parasociale, lui paraît incompatible avec un projet militant collectif, et elle se recentre sur YouTube ainsi que sur l'organisation et la discipline de terrain avec La Brèche (voir [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01/1-paduteam-c-est-fini|PADUTEAM C'EST FINI !]]).
+La PaduTeam ferme sa chaîne Twitch, jugeant le format streaming, ses dons et sa relation parasociale incompatibles avec un projet militant collectif, et se recentre sur YouTube et sur l'organisation et la discipline de terrain avec La Brèche. Cette orientation rejoint son bilan de septembre 2025 : elle y voit une étape marquée par une répression inédite plutôt qu'un échec, et fait de la permanence militante entre les grandes dates la tâche décisive des organisations révolutionnaires, là où les gilets jaunes n'ont rien laissé.
 
-Le même fil traverse son bilan de septembre 2025. Pour elle, ce mois n'a pas été un flop mais une étape marquée par une répression inédite. La tâche décisive des organisations révolutionnaires est de bâtir une permanence militante entre les grandes dates, là où les gilets jaunes n'ont rien laissé ([[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01/2-septembre-2025-a-ete-un-enorme|SEPTEMBRE 2025 A ÉTÉ UN ÉNORME FLOP !]]).
+Le même fil traverse son regard sur le mouvement social. Selon elle, le monde vit un moment prérévolutionnaire, mais l'intersyndicale, qui attend la copie de Lecornu et espace les journées, dépolitise et refroidit la mobilisation. Elle appelle à se syndiquer, à coordonner les luttes et à bloquer, comme en Italie.
 
-Sur un terrain plus médiatique, elle soutient que l'article de Marianne sur la fille de Sarkozy relève non d'un féminisme protecteur mais d'un conservatisme de classe : il moque une adolescente et ignore les vraies violences, dont les causes sont le patriarcat et le capitalisme.
+Elle applique enfin une grille de classe à ses adversaires et à la presse. Le rapprochement du patronat avec l'extrême droite tiendrait à la baisse du taux de profit, non à un changement de valeurs, et les patrons de gauche auraient fait le néolibéralisme. De même, l'article de Marianne sur la fille de Sarkozy relèverait d'un conservatisme de classe, qui ignore les vraies violences, dues au patriarcat et au capitalisme.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01/1-paduteam-c-est-fini|PADUTEAM C'EST FINI !]] (2025-10-01)
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01/2-septembre-2025-a-ete-un-enorme|SEPTEMBRE 2025 A ÉTÉ UN ÉNORME FLOP !]] (2025-10-01)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01/3-giulia-sarkozy-traitee-de-pouffe-par|GIULIA SARKOZY TRAITÉE DE POUFFE PAR MARIANNE !!!]] (2025-10-01)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01/4-interview-catastrophique-de-salome-saque-et|INTERVIEW CATASTROPHIQUE DE SALOMÉ SAQUÉ ET LAURENT MAUDUIT LES ✨️PATRONS DE GAUCHE✨️]] (2025-10-01)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/6-2025-09-22/3-2025-10-01/5-les-syndicats-empechent-la-revolution-en|LES SYNDICATS EMPÊCHENT LA RÉVOLUTION EN FRANCE !]] (2025-10-03)
