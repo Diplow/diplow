@@ -165,6 +165,7 @@ kinds:
       président-du-conseil-européen: {définition: "Préside le Conseil européen, qui réunit les chefs d'État et de gouvernement de l'Union européenne, à la date de la Publication.", statut: proposé, introduit_par: boniface/ZuJ0luBkoAw.md}
       pompier: {définition: "Sapeur-pompier qui intervient et transporte des patients en urgence.", statut: proposé, introduit_par: blast/m_3eBCypDlE.md}
       éducateur-spécialisé: {définition: "Accompagne des jeunes en difficulté dans des structures sociales et éducatives.", statut: proposé, introduit_par: blast/rr3ED9-O228.md}
+      chef-mafieux: {définition: "Dirige une organisation mafieuse.", statut: proposé, introduit_par: blast/FiH9Yw5Kack.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

@@ -1,24 +1,24 @@
 ---
-title: "2024-12-18 → 2025-02-18"
+title: "2024-12-18 → 2025-02-24"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18
 owner: diplo
 preview: >-
-  Blast décrit un recul de la démocratie : impunité des puissants sous Macron,
-  médias défaillants ou concentrés, PS complice du budget Bayrou et de la
-  banalisation du RN, fascisme qui monte autour de Trump. Il défend aussi le
-  féminisme et une légalisation encadrée du cannabis.
+  Blast lit l'hiver 2024-2025 comme un recul démocratique : impunité des
+  puissants, médias défaillants, PS qui trahit le Nouveau Front populaire puis
+  se rend complice du budget Bayrou, droite qui banalise le RN, fascisme
+  autour de Trump. Elle reçoit de nombreux invités.
 ---
-# 2024-12-18 → 2025-02-18
+# 2024-12-18 → 2025-02-24
 
-Sur ces deux mois, Blast soutient que le pouvoir a installé l'impunité des puissants et que Macron est peu crédible face à l'extrême droite. Il lit les coups de force du pouvoir, relayés par des médias défaillants, comme un recul de la démocratie, et juge que le désintérêt pour l'information profite à l'extrême droite. Il dénonce aussi des médias et une IA aux mains de quelques puissants. Cette ligne court de [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/1-2024-12-18/CLAUDE|2024-12-18 → 2024-12-27]] à [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/CLAUDE|2025-02-01 → 2025-02-18]].
+Pendant ces semaines, Blast décrit un pouvoir qui s'affranchit des contrepouvoirs. Macron a installé l'impunité des puissants, il est peu crédible face à l'extrême droite, et ses coups de force sont relayés par des médias défaillants. Le désintérêt pour l'information profite à l'extrême droite. Blast voit aussi dans le spectacle antidrogue et dans la tronçonneuse contre l'État des symptômes de ce recul démocratique.
 
-Le propos se resserre sur la gauche au fil des semaines. Blast soutient d'abord que le PS a trahi le Nouveau Front populaire en négociant avec Bayrou, puis le juge complice du budget Bayrou et de la banalisation du RN. Il note que la droite se durcit sans que la presse dominante le nomme, et décrit la montée d'un fascisme autour de Trump ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/CLAUDE|2025-01-15 → 2025-01-31]]). Il présente le féminisme comme un combat arraché à l'ordre patriarcal et défend une légalisation encadrée du cannabis, après avoir vu dans le spectacle antidrogue une mise en scène du pouvoir.
+Le deuxième fil est la gauche et le PS. Blast soutient que le PS a trahi le Nouveau Front populaire en négociant avec Bayrou, puis qu'il s'est rendu complice du budget. En face, la droite se durcit sans que la presse dominante le nomme, et elle banalise le RN. Blast voit Retailleau et Trump vouloir faire plier l'État de droit, décrit la montée d'un fascisme autour de Trump et accuse Bayrou d'avoir menti sur Bétharram.
 
-Blast reçoit tout au long de la Period de nombreux invités : sur Mayotte, Pelicot et le saumon d'élevage en décembre, puis Callamard, Albanese et Stiglitz fin janvier, enfin des syndicalistes en février. Leurs thèses restent les leurs : la Source les reçoit.
+Blast présente aussi le féminisme comme un combat arraché à l'ordre patriarcal. Dans ces semaines, elle reçoit de nombreux invités : Callamard, Albanese et Stiglitz, des syndicalistes, un historien, des autrices et un écrivain, ainsi que des invités sur Mayotte, Pelicot et le saumon d'élevage. Leurs thèses restent les leurs.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/1-2024-12-18/CLAUDE|2024-12-18 → 2024-12-27]] (15 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/2-2024-12-28/CLAUDE|2024-12-28 → 2025-01-14]] (18 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/CLAUDE|2025-01-15 → 2025-01-31]] (16 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/CLAUDE|2025-02-01 → 2025-02-18]] (21 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/CLAUDE|2025-02-01 → 2025-02-24]] (27 Digests)
