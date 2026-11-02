@@ -1,18 +1,20 @@
 ---
-title: "2025-11-24 → 2025-11-27"
+title: "2025-11-24 → 2025-11-28"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/4-2025-11-24
 owner: diplo
 preview: >-
-  La PaduTeam enterre Glucksmann, centre gauche tactique déjà fini, que le PS
-  sacrifierait pour Vallaud. Elle lit la dissidence de Caron comme un calcul
-  de fief, fait des municipales la répétition de l'affrontement avec le PS et
-  juge le sondage Odoxa Mélenchon-Bardella fabriqué.
+  La PaduTeam enterre Glucksmann, centre gauche tactique que le PS sacrifie,
+  défend la FI face à la dissidence de Caron et dénonce un sondage
+  Mélenchon-Bardella fabriqué. Elle voit dans le travail épanoui un mensonge
+  du capitalisme en crise.
 ---
-# 2025-11-24 → 2025-11-27
+# 2025-11-24 → 2025-11-28
 
-Le fil de la semaine est la mise à mort de Glucksmann comme candidat de la gauche. La PaduTeam le décrit comme un centre gauche tactique, qui se fait attraper par un jeune militant insoumis, dont le passé géorgien d'agent de l'impérialisme et le refus de rompre avec le capitalisme disent la limite. Deux jours plus tard, elle le tient pour déjà fini après son fiasco de trois heures sur LCI, faute de conflictualité. Le PS de Hollande l'aurait sacrifié pour imposer son propre candidat, Boris Vallaud.
+Le fil de la semaine est l'enterrement de Glucksmann. La PaduTeam en fait un centre gauche tactique, attrapé en direct par un jeune militant insoumis. Elle rappelle son passé géorgien d'agent de l'impérialisme et son refus de rompre avec le capitalisme. Après son fiasco de trois heures sur LCI, faute de conflictualité, elle le juge déjà fini : le PS de Hollande l'aurait sacrifié pour imposer son propre candidat, Boris Vallaud.
 
-Le reste de la Period ramène à la FI et à son rapport de force avec le PS. La PaduTeam lit la dissidence d'Aymeric Caron dans le 18e comme un calcul de fief personnel : la FI, qui ne laisse pas se former de baronnies, serre les rangs. Elle en fait des municipales la répétition générale de l'affrontement avec le PS. Elle termine en contestant le sondage Odoxa qui donne Bardella à 74 % face à Mélenchon, qu'elle juge fabriqué de A à Z : échantillon sans jeunes ni classes populaires, reports de voix absurdes, électeurs de Mélenchon qui disparaissent entre les deux tours.
+Le même affrontement avec le PS organise la lecture de la France insoumise. La dissidence d'Aymeric Caron dans le 18e est présentée comme un calcul de fief personnel. La FI, qui ne laisse pas se former de baronnies, serre les rangs, et les municipales doivent servir de répétition générale face au PS. Côté rapport de forces, la PaduTeam démonte le sondage Odoxa qui donne Bardella à 74 % face à Mélenchon : l'échantillon écarte jeunes et classes populaires, les reports de voix sont absurdes et des électeurs de Mélenchon disparaissent entre les deux tours.
+
+La semaine se clôt sur un terrain plus théorique : la conférence de Comte-Sponville devant des managers avoue, sans le vouloir, que le capitalisme en crise renonce au travail épanouissant pour la contrainte nue. La PaduTeam lui oppose l'aliénation et le travail collectif.
 
 ## Contenu
 
@@ -20,3 +22,4 @@ Le reste de la Period ramène à la FI et à son rapport de force avec le PS. La
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/4-2025-11-24/2-glucksmann-est-deja-finito-voici-pourquoi|GLUCKSMANN EST DÉJÀ FINITO  VOICI POURQUOI !]] (2025-11-26)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/4-2025-11-24/3-aymeric-caron-purge-de-lfi-on|AYMERIC CARON PURGÉ DE LFI ! ON FAIT LE POINT !]] (2025-11-26)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/4-2025-11-24/4-sondage-melenchon-bardella-c-est-pire|SONDAGE MÉLENCHON - BARDELLA C’EST PIRE QUE CE QUE VOUS CROYEZ !!]] (2025-11-27)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/4-2025-11-24/5-on-analyse-le-pire-philosophe-dans|On ANALYSE le PIRE PHILOSOPHE dans un TEAM BUILDING de MANAGERS !]] (2025-11-28)
