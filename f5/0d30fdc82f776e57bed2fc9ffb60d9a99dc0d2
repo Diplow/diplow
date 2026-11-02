@@ -1,0 +1,39 @@
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/3-2024-11-13/CLAUDE.md
+  s_64c1fbd180ee43::t_574ab0d1d87ff5 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/1-climat-et-capitalisme-faire-face-pour.md
+  s_64c1fbd180ee43::t_4532334db3a13b 1-79
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/2-assassiner-les-puissants-une-tradition-francaise.md
+  s_64c1fbd180ee43::t_09167133413e36 1-108
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/3-emmaus-duralex-inventer-de-nouveaux-modes.md
+  s_64c1fbd180ee43::t_61363e0e4b0a9d 1-94
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/4-technopolice-vers-un-neofascisme-en-france.md
+  s_64c1fbd180ee43::t_b7594ff6d4b665 1-99
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/5-le-pen-cie-la-justice-trop.md
+  s_64c1fbd180ee43::t_03563b367faafe 1-89
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/6-quel-avenir-pour-la-france-et.md
+  s_64c1fbd180ee43::t_059712aebefa63 1-68
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/CLAUDE.md
+  s_64c1fbd180ee43::t_4db2bf31785d2e 1-26
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/CLAUDE.md
+  s_64c1fbd180ee43::t_f9348a29af8922 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE.md
+  s_64c1fbd180ee43::t_2e9911b6941063 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_64c1fbd180ee43::t_b6e9a1115cd32b 6-8,12,14,16,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f50d30fdc82f776e57bed2fc9ffb60d9a99dc0d2",
+  "prompts": {},
+  "sessions": {
+    "s_64c1fbd180ee43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a4cf73c14bb0ad6c6",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
