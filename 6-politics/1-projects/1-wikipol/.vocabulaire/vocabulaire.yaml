@@ -152,6 +152,7 @@ kinds:
       suspect: {définition: "Soupçonné par l'enquête d'avoir participé à un crime, sans avoir été jugé.", statut: proposé, introduit_par: boniface/ezPoHfgR6GQ.md}
       prétendant-au-trône: {définition: "Se présente comme l'héritier légitime d'un trône qu'il n'occupe pas, à la date de la Publication.", statut: proposé, introduit_par: paduteam/gFKj4CqjSv4.md}
       vice-président: {définition: "Second du chef de l'État, qui le remplace en cas d'empêchement, à la date de la Publication.", statut: proposé, introduit_par: paduteam/0dXdv0MpE8o.md}
+      régicide: {définition: "A tué ou tenté de tuer un roi.", statut: proposé, introduit_par: blast/29aynNz_AcY.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
