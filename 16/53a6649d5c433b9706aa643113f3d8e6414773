@@ -1,0 +1,69 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_7e22c83e5c53d9 105
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/CLAUDE.md
+  s_ac131fde4f8fe4::t_b7d067889d56f2 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/1-2024-02-07/1-tri-social-a-l-ecole-c.md
+  s_ac131fde4f8fe4::t_973fb6c176be01 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/1-2024-02-07/2-terrorisme-genocide-crime-de-guerre-ce.md
+  s_ac131fde4f8fe4::t_aba8f4032b9cb5 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/1-2024-02-07/3-macron-le-pen-les-deux-faces.md
+  s_ac131fde4f8fe4::t_0ba96bcb2f338f 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/1-2024-02-07/4-classe-ouvriere-les-vrais-heros-invisibles.md
+  s_ac131fde4f8fe4::t_fb61a25e8ea3ae 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/1-2024-02-07/CLAUDE.md
+  s_ac131fde4f8fe4::t_12f8f573a56059 3,13,15,19-22
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/2-2024-02-10/1-cahiers-de-doleances-meme-si-macron.md
+  s_ac131fde4f8fe4::t_50c49691b4fd14 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/2-2024-02-10/2-comment-gaza-est-devenue-un-cimetiere.md
+  s_ac131fde4f8fe4::t_9d582f292b4c93 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/2-2024-02-10/3-valeurs-actuelles-quand-la-bourgeoisie-s.md
+  s_ac131fde4f8fe4::t_825f1378203daa 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/2-2024-02-10/4-histoire-de-france-clovis-charlemagne-les.md
+  s_ac131fde4f8fe4::t_a895a761953519 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/2-2024-02-10/CLAUDE.md
+  s_ac131fde4f8fe4::t_a3e00e8bedda24 3,6-9,13,15,19-22
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/3-2024-02-12/1-le-comportement-des-possedants-est-suicidaire.md
+  s_ac131fde4f8fe4::t_c3359bc4de8b97 1-93
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/3-2024-02-12/2-attal-macron-une-guerre-sociale-contre.md
+  s_ac131fde4f8fe4::t_971d4a53c88f5f 1-86
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/3-2024-02-12/3-oudea-castera-vs-l-education-nationale.md
+  s_ac131fde4f8fe4::t_849e35853508b0 1-98
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/3-2024-02-12/4-rsa-chomage-la-macronie-en-guerre.md
+  s_ac131fde4f8fe4::t_b864d21a646b65 1-77
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/3-2024-02-12/5-haut-karabagh-l-armenie-va-t.md
+  s_ac131fde4f8fe4::t_5493e73ef0211d 1-71
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/3-2024-02-12/6-navalny-rappelle-la-necessite-de-se.md
+  s_ac131fde4f8fe4::t_ae1163a2b7211b 1-72
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/3-2024-02-12/CLAUDE.md
+  s_ac131fde4f8fe4::t_508625c8269093 1-26
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/CLAUDE.md
+  s_ac131fde4f8fe4::t_1f4baf9426d1e8 1-23
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE.md
+  s_ac131fde4f8fe4::t_1202e5f8db1b92 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_ac131fde4f8fe4::t_dd636a9f33bf43 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1653a6649d5c433b9706aa643113f3d8e6414773",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_ac131fde4f8fe4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a7675e41afbe264be",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
