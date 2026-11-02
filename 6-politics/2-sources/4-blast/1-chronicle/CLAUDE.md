@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast soutient que le macronisme sert les puissants et fait le jeu de
-  l'extrême droite, de la loi immigration au gouvernement Barnier en passant
-  par la dissolution, et que la gauche, forte du Nouveau Front populaire,
-  s'est vu confisquer sa victoire.
+  Blast lit l'année du 31 octobre 2023 à octobre 2024 comme une dérive : un
+  macronisme qui protège les puissants, banalise le RN puis lui déroule le
+  tapis, avant d'imposer Barnier contre le vote. Elle dénonce le double
+  standard sur Gaza et défend son indépendance.
 ---
 # Chronicle
 
-D'octobre 2023 au printemps 2024, Blast décrit un pouvoir macroniste qui protège les riches et fait payer les précaires, tandis que l'argent, le pouvoir et l'information se concentrent entre peu de mains. Elle y voit une dérive qui banalise le RN : la loi immigration s'aligne sur l'extrême droite, le gouvernement Attal poursuit dans cette voie, et le RN doit sa place en tête des sondages à ceux qui reprennent ses thèmes. Elle dénonce aussi deux poids deux mesures sur Gaza et l'antisémitisme, puis la criminalisation de la solidarité avec la Palestine. Elle défend l'enquête et dit sa liberté menacée.
+Du 31 octobre 2023 à octobre 2024, Blast soutient que le pouvoir macroniste sert les riches et fait payer les précaires, tandis que l'argent, le pouvoir et l'information se concentrent entre peu de mains. Elle voit dans la loi immigration un alignement sur l'extrême droite, puis dans le gouvernement Attal la même pente. Elle lit la crise agricole comme un système de dette que la FNSEA confisque, et accuse une indulgence sélective envers les paysans.
 
-Cette lecture s'étend à d'autres terrains. Blast accuse une indulgence sélective envers les paysans et lit la crise agricole comme un système de dette que la FNSEA confisque. Au fil des mois, elle présente le macronisme comme faisant reculer les libertés et érigeant le RN en seul opposant.
+Le RN est au centre de ce fil. Blast soutient qu'il a été banalisé et qu'il doit sa place en tête des sondages à ceux qui reprennent ses thèmes. Elle accuse l'État et le macronisme de criminaliser la solidarité avec la Palestine et de faire reculer les libertés, en dénonçant déjà deux poids deux mesures sur Gaza et l'antisémitisme. La dissolution est pour elle un calcul de Macron, qui s'érige en rempart et ouvre à l'extrême droite la voie du pouvoir. Le Nouveau Front populaire apparaît alors comme la seule alternative sérieuse.
 
-La dissolution est pour elle le tournant. Blast la lit comme un calcul de Macron pour se poser en rempart, qui a pourtant ouvert la voie du pouvoir à l'extrême droite. Elle fait du Nouveau Front populaire la seule alternative sérieuse, puis accuse Macron de nier le résultat des urnes. À la rentrée, elle soutient qu'il a confisqué la victoire de la gauche en imposant Barnier avec l'aval du RN. Ce gouvernement, sous tutelle du RN, applique selon elle son programme et sacrifie l'écologie.
+Après le vote, Blast accuse Macron de nier le résultat des urnes : battu aux législatives, il garde la main et impose Barnier avec l'aval du RN. Elle juge ce gouvernement illégitime et estime qu'il sacrifie l'écologie. Elle dénonce le même double standard sur Gaza et le Liban. Tout au long de la période, elle défend l'enquête et son indépendance face aux puissants, dont elle dit la liberté menacée.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ La dissolution est pour elle le tournant. Blast la lit comme un calcul de Macron
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-18]] (68 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE|2024-04-19 → 2024-06-14]] (65 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]] (65 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE|2024-08-14 → 2024-10-12]] (57 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE|2024-08-14 → 2024-10-16]] (63 Digests)

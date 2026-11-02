@@ -1,6 +1,6 @@
 ---
 title: "SLENDERMAN : LE 1ER MYTHE D'INTERNET"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/4-2024-10-09
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12
 owner: diplo
 preview: >-
   Blast soutient que Slenderman, né en 2009 d'un simple photomontage, est un
