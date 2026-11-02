@@ -3,22 +3,20 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans d'actualité internationale, Trump en tête, par les
-  mêmes grilles : rapports de force entre États, deux poids deux mesures
-  occidental, multilatéralisme affaibli. Il presse la France et l'Europe de
-  rechercher leur autonomie stratégique face à Washington.
+  Boniface lit dix ans d'actualité mondiale par le multilatéralisme contre
+  l'unilatéralisme, le deux poids deux mesures occidental et les rapports de
+  force entre États, et presse les Européens d'une autonomie stratégique face
+  à Washington.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Boniface applique quelques grilles de lecture stables. Les rapports de force entre États et la rationalité des acteurs expliquent les événements. Le multilatéralisme, qu'il juge indispensable, s'oppose à l'unilatéralisme. Un refus de négocier finit par se retourner contre ceux qui le choisissent. Le deux poids deux mesures occidental revient d'une année à l'autre. Ces grilles servent à lire Trump dès 2016, puis le démantèlement de l'arms control et un multilatéralisme en crise.
+De 2016 à 2019, Boniface lit l'actualité à travers Trump et l'unilatéralisme américain. Il oppose à celui-ci un multilatéralisme en crise mais indispensable, et voit dans l'arms control démantelé et dans l'unipolarité des dangers que l'Europe doit refuser. Il applique à la scène internationale les mêmes grilles : le refus de négocier qui se retourne contre ses auteurs, la rationalité des acteurs, le deux-poids-deux-mesures occidental. Côté français, il juge Obama meilleur qu'on ne le dit, place Macron dans la ligne gaullo-mitterrandiste, puis estime que les gilets jaunes l'affaiblissent à l'international.
 
-Face à Washington, Boniface répète que l'Europe doit définir ses propres intérêts, refuser l'unipolarité et tenir tête aux États-Unis. Il appelle la France et l'Europe à l'autonomie stratégique, et défend la diplomatie. Côté français, il juge Obama meilleur qu'on ne le dit, place Macron dans la ligne gaullo-mitterrandiste et voit les gilets jaunes l'affaiblir à l'international.
-
-Dans la dernière période, la plus longue, ces grilles se prolongent : un multilatéralisme que Trump affaiblit, et un multi-alignement plutôt que des blocs.
+Un appel revient d'une période à l'autre : que la France et l'Europe définissent leurs intérêts, gagnent en autonomie stratégique et tiennent tête à Washington, dont les Européens dépendent. À partir d'octobre 2019, la chaîne garde cette lecture par les rapports de force entre États et par le deux poids deux mesures, et dénonce des Européens alignés sur Washington. Elle y ajoute le multilatéralisme et le multi-alignement. Boniface reçoit aussi des invités et chronique des livres.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]] (78 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2019-01-09]] (72 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2019-10-10]] (84 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2026-10-30]] (65 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2026-10-30]] (71 Digests)
