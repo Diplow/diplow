@@ -1,23 +1,22 @@
 ---
-title: "2022-10-04 → 2026-10-14"
+title: "2022-10-04 → 2022-10-06"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04
 owner: diplo
 preview: >-
-  Boniface juge hypocrite le boycott de la Coupe du monde au Qatar, chronique
-  le livre d'Alexander Stubb sur un monde en trois blocs où le Sud global
-  décidera, et reçoit Sylvie Bermann sur la parité entre les États-Unis et la
-  Chine.
+  Boniface lit la guerre en Ukraine comme une perte pour l'Europe et pour
+  Poutine, un gain pour les États-Unis, avec un Sud global qui ne suit pas
+  l'Occident. Il juge hypocrite le boycott du Qatar et voit en Iran une
+  contestation nationale, sans ingérence étrangère.
 ---
-# 2022-10-04 → 2026-10-14
+# 2022-10-04 → 2022-10-06
 
-Sur cette Period, Boniface soutient d'abord, à propos du Qatar, que boycotter la Coupe du monde est hypocrite : la situation des travailleurs immigrés est mauvaise, mais moins que dans la région, et le sport sert de variable d'ajustement aux protestations morales ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04/1-coupe-du-monde-au-qatar-controverse|Coupe du Monde au Qatar : controverse et polémique]]).
+Le fil de la Period est la guerre en Ukraine et ce qu'elle change dans le rapport de forces mondial. Boniface soutient que les erreurs occidentales envers la Russie n'excusent ni la guerre ni les crimes de Poutine, qui a déjà perdu et dilapide son héritage. Pour lui, l'Europe, la France et l'Allemagne y perdent, les États-Unis y gagnent, et le Sud global ne suit pas l'Occident. Il reçoit aussi Francis Laloupo, pour qui le vote africain est contrasté : la neutralité de l'Union africaine, l'abstention comme message à l'Occident et l'équilibre sud-africain traduisent la diversité du continent, tandis que la Russie avance là où l'Occident recule.
 
-Il chronique ensuite Le Triangle du pouvoir d'Alexander Stubb, président finlandais. Pour Stubb, le monde se divise en trois blocs : l'Occident, l'Orient et le Sud global. L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]]).
-
-Enfin, Boniface reçoit Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. La Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]]).
+Deux autres sujets d'actualité reçoivent le même regard, sans lien direct avec l'Ukraine. Sur la Coupe du monde au Qatar, Boniface juge le boycott hypocrite : la situation des travailleurs immigrés est mauvaise, mais moins que dans la région, et le sport sert de variable d'ajustement aux protestations morales. Sur l'Iran, il décrit une contestation devenue générale et nationale, sans ingérence étrangère. Le régime joue sa survie et peut encore durcir la répression, il est donc trop tôt pour le dire condamné, et l'enjeu dépasse l'Iran.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04/1-coupe-du-monde-au-qatar-controverse|Coupe du Monde au Qatar : controverse et polémique]] (2022-10-04)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04/2-comprendre-le-monde-s6-5-francis|Comprendre le monde S6#5 – Francis Laloupo – "L'Afrique et la guerre en Ukraine "]] (2022-10-05)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04/3-geopolitiques-de-nantes-2022-lecon-inaugurale|Géopolitiques de Nantes 2022 - Leçon inaugurale : conséquences géopolitiques de la guerre en Ukraine]] (2022-10-06)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04/4-iran-le-regime-peut-il-tomber|Iran : le régime peut-il tomber ?]] (2022-10-06)

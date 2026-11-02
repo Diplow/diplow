@@ -3,21 +3,22 @@ title: "2022-10-04 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04
 owner: diplo
 preview: >-
-  Boniface juge hypocrite le boycott du Qatar, voit dans l'OCS un
-  multi-alignement plutôt qu'une OTAN asiatique et estime qu'un départ de
-  Netanyahou ne changerait presque rien pour les Palestiniens. Il reçoit aussi
-  des invités et chronique des livres.
+  Boniface lit l'ordre mondial à travers le recul de l'Occident : une guerre
+  en Ukraine qui coûte à l'Europe et à Poutine, un Sud global qui ne suit pas,
+  un multi-alignement qui s'installe. Il juge que la France se contente de
+  protestations face à l'impunité des colons.
 ---
 # 2022-10-04 → 2026-10-30
 
-Sur ces onze Digests, qui vont de 2022 à la fin d'octobre 2026, Boniface applique ses grilles à l'actualité plutôt qu'il ne raconte les événements. Il juge hypocrite le boycott de la Coupe du monde au Qatar. Il soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement. Sur la Palestine, il estime qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens, et que la France se contente de protestations face à l'impunité des colons.
+Boniface lit d'abord la guerre en Ukraine comme une perte pour l'Europe et pour Poutine, un gain pour les États-Unis, avec un Sud global qui ne suit pas l'Occident. Il juge que l'escalade de Poutine après Kertch ne le sauve pas et ferme la porte aux négociations. La même grille nourrit ses lectures du boycott du Qatar, qu'il juge hypocrite, et de l'Iran, où il voit une contestation nationale, sans ingérence étrangère.
 
-Une part importante de la Period laisse la parole à d'autres. Boniface reçoit Sylvie Bermann sur la parité entre les États-Unis et la Chine, Didier Billion, pour qui l'avenir des Kurdes passe par l'autonomie, puis des invités sur Gaza, Lula et le Japon. Ces thèses restent à ceux qui les soutiennent : il les reçoit et les met en perspective.
+Sur l'ordre mondial, il chronique Alexander Stubb et son monde en trois blocs, et reçoit Sylvie Bermann sur la parité entre les États-Unis et la Chine. Il soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement. D'autres invités l'accompagnent sur Gaza, Lula et le Japon.
 
-Les chroniques de livres complètent le tableau. Il lit l'ouvrage d'Alexander Stubb sur un monde en trois blocs où le Sud global décidera, et juge passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins. Presque tous les Digests datent d'octobre 2026, la Period tenant donc surtout à ce dernier mois, avec la Coupe du monde au Qatar comme seul repère plus ancien.
+Le Proche et le Moyen-Orient reviennent comme un fil à part. Boniface soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens et que la France se contente de protestations face à l'impunité des colons. Il reçoit Didier Billion, pour qui l'avenir des Kurdes passe par l'autonomie. Il juge passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins.
 
 ## Contenu
 
-1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04/CLAUDE|2022-10-04 → 2026-10-14]] (3 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/2-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/3-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
+1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/1-2022-10-04/CLAUDE|2022-10-04 → 2022-10-06]] (4 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/2-2022-10-11/CLAUDE|2022-10-11 → 2026-10-14]] (3 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/3-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/4-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)

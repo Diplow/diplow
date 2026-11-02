@@ -3,20 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface applique pendant dix ans les mêmes grilles à l'actualité :
+  Pendant dix ans, Pascal Boniface applique les mêmes grilles à l'actualité :
   multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
-  rivalité sino-américaine. Il presse l'Europe d'être autonome et, sur
-  l'Ukraine, défend la négociation avec Poutine.
+  recul de l'Occident. Il défend la négociation et une Europe qui défend ses
+  intérêts.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Pascal Boniface lit l'actualité internationale à travers un petit nombre de grilles qu'il retrouve d'un événement à l'autre. Le multilatéralisme s'oppose à l'unilatéralisme, et il dénonce un deux-poids-deux-mesures occidental dans le traitement des crises. Il presse l'Europe d'acquérir son autonomie stratégique face à Washington.
+D'un bout à l'autre de la Chronicle, Pascal Boniface revient aux mêmes grilles de lecture : le multilatéralisme contre l'unilatéralisme, le deux-poids-deux-mesures occidental, l'échec des interventions extérieures. Il les applique à Trump, à la rivalité sino-américaine et aux crises du moment. Les sujets changent, les outils restent, et cette constance est ce qui fait la cohérence de son propos.
 
-De 2016 à juin 2020, ces grilles s'appliquent à Trump et à la scène internationale, et le Covid-19 est lu comme un révélateur. À partir de juin 2020, elles servent à lire la rivalité sino-américaine et l'échec des interventions extérieures.
-
-Sur l'Ukraine, Boniface défend la négociation avec Poutine et voit un Occident que le reste du monde ne suit plus. La cohérence de ces grilles, reprises d'une vidéo à l'autre, fait l'unité de la Chronicle.
+De 2016 à juin 2020 ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]]), il presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur. De juin 2020 à 2026 ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]]), l'Ukraine devient le cas à travers lequel il lit le recul de l'Occident. Il y défend la négociation et une Europe qui défend ses intérêts.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (311 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (315 Digests)
