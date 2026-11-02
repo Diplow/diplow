@@ -1,6 +1,6 @@
 ---
 title: "QUEL AVENIR POUR LA FRANCE ET L’EUROPE ENTRE TRUMP ET POUTINE ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/5-2024-11-21
 owner: diplo
 preview: >-
   Blast soutient que la victoire de Trump place l'Europe devant un dilemme de

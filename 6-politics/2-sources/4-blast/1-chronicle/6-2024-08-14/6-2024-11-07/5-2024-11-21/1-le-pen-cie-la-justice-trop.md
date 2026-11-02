@@ -1,6 +1,6 @@
 ---
 title: "LE PEN & CIE : LA JUSTICE \"TROP LAXISTE\", SAUF QUAND ÇA LES CONCERNE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/5-2024-11-21
 owner: diplo
 preview: >-
   Blast soutient que la droite et l'extrême droite, si promptes à réclamer la

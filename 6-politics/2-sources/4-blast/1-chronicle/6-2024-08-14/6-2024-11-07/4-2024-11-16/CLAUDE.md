@@ -1,20 +1,18 @@
 ---
-title: "2024-11-16 → 2024-11-22"
+title: "2024-11-16 → 2024-11-19"
 parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16
 owner: diplo
 preview: >-
-  Blast reçoit Alain Deneault et Félix Tréguer sur l'effondrement écologique
-  et la technopolice, donne la parole à Oxfam et aux salariés de Duralex sur
-  les coopératives, et soutient que la droite veut une justice qui épargne les
-  puissants et que l'Europe de la défense restera un discours.
+  Blast reçoit Alain Deneault, Félix Tréguer et des acteurs d'Oxfam, des
+  Licornes et de Duralex autour de la crise écologique, de la technopolice et
+  des coopératives, et soutient que le régicide de Ravaillac révèle une
+  inégalité sociale.
 ---
-# 2024-11-16 → 2024-11-22
+# 2024-11-16 → 2024-11-19
 
-Pendant cette semaine, Blast laisse d'abord ses invités porter les thèses sur la crise et le pouvoir. Pour Alain Deneault, la crise écologique n'est plus maîtrisable par les humains, le développement durable et l'extrême centre maquillent l'angoisse qu'elle produit, et l'issue passe par la biorégion et l'entraide à l'échelle régionale ([[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/1-climat-et-capitalisme-faire-face-pour|CLIMAT ET CAPITALISME : FAIRE FACE POUR ÉVITER L’EFFONDREMENT]]). Pour Félix Tréguer, la technopolice s'impose sans débat, au profit des industriels, et arme une bascule néofasciste ([[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/4-technopolice-vers-un-neofascisme-en-france|TECHNOPOLICE : VERS UN NEOFASCISME EN FRANCE ?]]). Face à une politique qui aggrave inégalités et crise écologique, Blast réunit aussi Oxfam, les Licornes et les salariés de Duralex, qui défendent l'alliance ONG-syndicats-coopératives et les coopératives comme alternative concrète.
+Deux invités posent le diagnostic. Alain Deneault juge la crise écologique sans précédent et hors de la maîtrise humaine : pour lui, le développement durable et l'« extrême centre » maquillent l'angoisse qu'elle produit, et la biorégion, une organisation par l'entraide à l'échelle régionale, serait l'issue. Félix Tréguer décrit de son côté une technopolice (reconnaissance faciale, vidéosurveillance algorithmique, drones) qui s'impose sans débat, au profit des industriels. Selon lui, elle arme une bascule néofasciste dès lors que l'« extrême centre » gouverne avec l'extrême droite.
 
-Le second fil, porté par Blast lui-même, est celui d'une justice et d'un pouvoir à deux vitesses. Blast soutient que la droite et l'extrême droite, promptes à réclamer la sévérité contre les plus pauvres, crient au procès politique dès que la loi frappe Marine Le Pen. Il relit de même le régicide de Ravaillac comme le geste d'hommes du petit peuple, déclassés, qui révèle une inégalité sociale que le mythe du bon roi Henri masque.
-
-Le dernier épisode tourne le regard vers l'extérieur : pour Blast, la victoire de Trump place l'Europe devant un dilemme de sécurité, et l'Europe de la défense restera un discours, entre une UE divisée, un moteur franco-allemand en panne et une dépendance croissante aux armes américaines.
+Blast donne ensuite la parole à ceux qui cherchent une réponse concrète. Oxfam, les Licornes et les salariés de Duralex, devenue scop, défendent l'alliance entre ONG, syndicats et coopératives, la régulation des multinationales et les coopératives comme alternative face à une politique qui aggrave inégalités et crise écologique. Dans la série sur les assassinats de puissants, Blast soutient que le geste de Ravaillac révèle une inégalité sociale que le mythe du bon roi Henri masque.
 
 ## Contenu
 
@@ -22,5 +20,3 @@ Le dernier épisode tourne le regard vers l'extérieur : pour Blast, la victoire
 2. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/2-assassiner-les-puissants-une-tradition-francaise|ASSASSINER LES PUISSANTS, UNE TRADITION FRANÇAISE - ÉPISODE 9]] (2024-11-17)
 3. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/3-emmaus-duralex-inventer-de-nouveaux-modes|EMMAÜS, DURALEX : INVENTER DE NOUVEAUX MODES D'ACTIONS POLITIQUES]] (2024-11-18)
 4. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/4-technopolice-vers-un-neofascisme-en-france|TECHNOPOLICE : VERS UN NEOFASCISME EN FRANCE ?]] (2024-11-19)
-5. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/5-le-pen-cie-la-justice-trop|LE PEN & CIE : LA JUSTICE "TROP LAXISTE", SAUF QUAND ÇA LES CONCERNE]] (2024-11-21)
-6. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/6-quel-avenir-pour-la-france-et|QUEL AVENIR POUR LA FRANCE ET L’EUROPE ENTRE TRUMP ET POUTINE ?]] (2024-11-22)
