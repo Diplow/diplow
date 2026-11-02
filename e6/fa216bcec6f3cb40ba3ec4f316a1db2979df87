@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/4-2024-12-13/4-f-bayrou-premier-ministre-macron-aggrave.md
+  s_9badd1c28e9953::t_332ff672a65455 1-69
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/4-2024-12-13/5-peres-de-famille-l-arnaque-derriere.md
+  s_9badd1c28e9953::t_c1bdd412512bcf 1-81
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/4-2024-12-13/CLAUDE.md
+  s_9badd1c28e9953::t_de122046e5d6dc 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/5-2024-12-18/1-e-musk-b-gates-etc-les.md
+  s_9badd1c28e9953::t_1d591d31fc0d1b 1-75
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/5-2024-12-18/2-un-drame-ecrit-d-avance-mayotte.md
+  s_9badd1c28e9953::t_16bd38e3c6a584 1-85
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/5-2024-12-18/3-amar-tue-par-un-policier-6.md
+  s_9badd1c28e9953::t_229f87ec338465 1-72
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/5-2024-12-18/4-f-bayrou-un-premier-ministre-tres.md
+  s_9badd1c28e9953::t_eec16c2a34f954 1-85
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/5-2024-12-18/CLAUDE.md
+  s_9badd1c28e9953::t_0f439b56cebdd0 1-24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/CLAUDE.md
+  s_9badd1c28e9953::t_8f486250f2c946 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE.md
+  s_9badd1c28e9953::t_4aa02fa422740f 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_9badd1c28e9953::t_c2eefe411cd65e 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_9badd1c28e9953::t_d5c012127cb325 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e6fa216bcec6f3cb40ba3ec4f316a1db2979df87",
+  "prompts": {},
+  "sessions": {
+    "s_9badd1c28e9953": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a802a7046092eba00",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
