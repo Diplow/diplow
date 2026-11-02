@@ -110,6 +110,8 @@ kinds:
       conseiller-politique: {définition: "Conseille un dirigeant politique, notamment à la Maison-Blanche.", statut: proposé, introduit_par: boniface/yTDiNIy50xE.md}
       graphiste: {définition: "Conçoit l'identité visuelle et les visuels d'une chaîne ou d'une publication.", statut: proposé, introduit_par: paduteam/LxwZ1JIvNtE.md}
       porte-parole: {définition: "Parle au nom d'une organisation, d'une famille ou d'un mouvement.", statut: proposé, introduit_par: blast/LE_ZVLBJ5Mk.md}
+      épidémiologiste: {définition: "Étudie la répartition et les causes des maladies dans les populations.", statut: proposé, introduit_par: blast/ArZwQC88qgY.md}
+      rédacteur: {définition: "Écrit et dirige une revue ou un site de réflexion.", statut: proposé, introduit_par: paduteam/SQN9eTGn1Cg.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -249,6 +251,7 @@ kinds:
       code: {définition: "Recueil de lois qui organise une matière du droit, comme le Code civil.", statut: proposé, introduit_par: blast/HFuCQg-owpw.md}
       règlement: {définition: "Acte de l'Union européenne, directement applicable dans tous les États membres.", statut: proposé, introduit_par: boniface/0vlim-vqHn0.md}
       serment: {définition: "Engagement solennel prêté par les membres d'une profession.", statut: proposé, introduit_par: paduteam/p1f7yn8b7XU.md}
+      directive: {définition: "Acte de l'Union européenne qui fixe des objectifs que les États membres transposent dans leur droit.", statut: proposé, introduit_par: blast/7lYFVTbvpHg.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}

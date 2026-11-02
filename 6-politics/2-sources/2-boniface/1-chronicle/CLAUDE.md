@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans d'actualité par l'unilatéralisme américain, la
-  dépendance des Européens et le deux poids deux mesures occidental. Il plaide
-  pour l'autonomie stratégique de la France et de l'Europe et pour un
-  multilatéralisme en crise mais indispensable, en nuançant.
+  Boniface lit l'actualité internationale avec les mêmes grilles :
+  multilatéralisme contre unilatéralisme, dépendance des Européens envers les
+  États-Unis, deux poids deux mesures occidental. Il presse la France et
+  l'Europe de se donner une politique autonome.
 ---
 # Chronicle
 
-Du début de la Chronicle à aujourd'hui, Boniface applique les mêmes grilles à une actualité qui change. Dès 2016-2017, Trump est lu à travers le multilatéralisme contre l'unilatéralisme, le refus de négocier qui se retourne contre ses auteurs et la rationalité des acteurs. En 2018, le même regard voit l'arms control démantelé et une unipolarité que l'Europe doit refuser. Plus tard, il y ajoute la dépendance des Européens et un deux poids deux mesures occidental.
+Sur toute la Chronicle, Boniface applique à l'actualité un petit nombre de grilles stables. La plus constante est l'opposition entre multilatéralisme et unilatéralisme. Il la mobilise d'abord pour lire Trump et la scène internationale, en y ajoutant le refus de négocier qui se retourne contre ses auteurs et la rationalité des acteurs. Il juge aussi Obama meilleur qu'on ne le dit, et voit Macron dans la ligne gaullo-mitterrandiste.
 
-Sur la France et l'Europe, sa position est stable : il appelle à l'autonomie stratégique. Il situe Macron dans la ligne gaullo-mitterrandiste et estime qu'Obama était meilleur qu'on ne le dit. Il voit aussi les gilets jaunes affaiblir Macron à l'international.
+En 2018, la grille se précise autour de Trump : l'arms control est démantelé, le multilatéralisme est en crise mais reste indispensable, et l'Europe doit refuser l'unipolarité. Boniface appelle alors la France et l'Europe à l'autonomie stratégique. Il voit aussi les gilets jaunes affaiblir Macron à l'international.
 
-Avec le temps, l'accent se déplace. Le multilatéralisme, jugé en crise mais indispensable, reste son horizon, et il plaide pour une mondialisation à réguler. Boniface nuance et contextualise ses analyses : la cohérence de ses grilles d'une vidéo à l'autre en fait la force.
+Sur la période la plus longue, qui court de 2019 à 2026, il lit l'actualité par l'unilatéralisme américain et par la dépendance des Européens. Il les presse de tenir tête aux États-Unis et de se donner une politique autonome. Il relève un deux poids deux mesures occidental et décrit un monde multi-aligné. La même cohérence de fond court donc sur les dix ans.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]] (78 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2019-01-09]] (72 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2026-10-30]] (59 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2026-10-30]] (65 Digests)
