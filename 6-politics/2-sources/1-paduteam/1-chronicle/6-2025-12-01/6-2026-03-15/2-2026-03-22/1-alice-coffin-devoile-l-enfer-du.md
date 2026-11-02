@@ -1,6 +1,6 @@
 ---
 title: "ALICE COFFIN DÉVOILE L'ENFER DU SYSTÈME EMMANUEL GRÉGOIRE !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/5-2026-02-16/5-2026-03-15
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/2-2026-03-22
 owner: diplo
 preview: >-
   La PaduTeam lit le texte d'Alice Coffin, qui votera LFI à Paris, comme la
