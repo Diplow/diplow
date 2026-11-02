@@ -3,16 +3,16 @@ title: "2025-06-04 → 2025-06-07"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/5-2025-06-04
 owner: diplo
 preview: >-
-  La PaduTeam lit en matérialiste deux figures du web, un masculiniste qui
-  marchandise les femmes et un streamer qui met sa cagnotte en concurrence
-  avec Gaza, et leur oppose la même issue : l'organisation collective, pas la
-  solution individuelle.
+  La PaduTeam lit dans la marchandisation des femmes comme des dons une
+  logique libérale : le calculateur de Marc ruine la famille qu'il défend, et
+  la mise en concurrence de Linguisticae avec Gaza est une fausse conscience.
+  Sa réponse est collective.
 ---
 # 2025-06-04 → 2025-06-07
 
-Du 4 au 7 juin, la PaduTeam applique sa grille de classe à deux figures du web. Dans [[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/5-2025-06-04/1-les-incels-ont-enfin-leur-saint|la première vidéo]], elle soutient que le calculateur de passe maritale de Marc, masculiniste expatrié en Thaïlande, réduit les femmes à une marchandise au point de détruire la famille patriarcale qu'il prétend défendre. Seule une organisation collective, non la fin du mariage, protège selon elle les femmes.
+Sur ces quelques jours, la PaduTeam traite trois fois du même mécanisme : l'économie libérale réduit les rapports sociaux à des marchandises et fabrique des consciences qui la reproduisent sans le savoir. Pour le calculateur de passe maritale de Marc, masculiniste expatrié en Thaïlande, elle soutient qu'il réduit les femmes à une marchandise au point de détruire la famille patriarcale qu'il prétend défendre ([[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/5-2025-06-04/1-les-incels-ont-enfin-leur-saint|Les INCELS ont ENFIN leur SAINT GRAPHIQUE !!]]). Et elle ajoute que ce n'est pas la fin du mariage qui protège les femmes, mais une organisation collective.
 
-Les deux vidéos suivantes tournent autour de Linguisticae et de sa cagnotte, qu'il dit en concurrence avec celles pour Gaza et le Yémen. La PaduTeam y voit l'expression d'une fausse conscience produite par l'économie libérale des streamers, et l'issue est la même : démarchandiser, mutualiser, créer une sécurité sociale des médias. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/5-2025-06-04/3-chris-derape-sur-linguisticae-t-as|La dernière]] défend Chris contre l'accusation de dérapage : 400 € représentent une semaine d'intérim au SMIC, et une telle mise en concurrence est obscène de la part d'un petit bourgeois qui évite le travail que font les immigrés.
+Le reste de la Period porte sur Linguisticae, qui se dit en concurrence avec les cagnottes pour Gaza et le Yémen. La PaduTeam y voit une fausse conscience produite par l'économie libérale des streamers, et en tire une issue elle aussi collective : démarchandiser, mutualiser, créer une «sécurité sociale des médias». Elle défend ensuite Chris, qui n'a selon elle pas dérapé ([[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/5-2025-06-04/3-chris-derape-sur-linguisticae-t-as|CHRIS DÉRAPE sur LINGUISTICAE  T'AS QU'À ALLER BOSSER EN INTÉRIM !!]]). Face à Linguisticae, 400 € représentent une semaine d'intérim au SMIC, et mettre sa cagnotte en concurrence avec celles de Gaza est obscène de la part d'un petit bourgeois qui évite le travail que font les immigrés.
 
 ## Contenu
 

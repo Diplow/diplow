@@ -196,6 +196,7 @@ kinds:
       département: {définition: "Collectivité territoriale française de niveau départemental, y compris d'outre-mer.", statut: proposé, introduit_par: blast/Bq3_whwwKTg.md}
       colonie: {définition: "Implantation civile israélienne en Cisjordanie, illégale au regard du droit international.", statut: proposé, introduit_par: blast/XjqGY3qsQaE.md}
       mer: {définition: "Étendue d'eau salée bordée de terres, comme la Méditerranée.", statut: proposé, introduit_par: paduteam/CtL2h7P8Fe4.md}
+      continent: {définition: "Très vaste ensemble de terres et de pays, comme l'Afrique ou l'Europe.", statut: proposé, introduit_par: boniface/o43DHoCZys4.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -234,6 +235,7 @@ kinds:
       massacre: {définition: "Tuerie de masse commise contre une population civile ou des manifestants.", statut: proposé, introduit_par: boniface/WVMzhXjYC5c.md}
       foire: {définition: "Salon commercial où des exposants présentent leurs offres au public.", statut: proposé, introduit_par: blast/XjqGY3qsQaE.md}
       festival-de-cinéma: {définition: "Festival où des films sont projetés et récompensés.", statut: proposé, introduit_par: paduteam/fE3d7YfY5Sw.md}
+      pandémie: {définition: "Épidémie qui s'étend à l'ensemble du monde.", statut: proposé, introduit_par: boniface/o43DHoCZys4.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

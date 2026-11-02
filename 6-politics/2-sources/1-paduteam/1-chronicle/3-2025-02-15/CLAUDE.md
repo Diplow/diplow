@@ -1,24 +1,24 @@
 ---
-title: "2025-02-15 → 2025-06-07"
+title: "2025-02-15 → 2025-06-15"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15
 owner: diplo
 preview: >-
-  De février à juin 2025, la PaduTeam oppose partout l'organisation collective
-  aux solutions individuelles, voit en Mélenchon le meilleur atout face au PS
-  pour 2027, et lit les offensives contre la gauche comme celles de l'ordre
-  établi et d'une droite qui se rapproche du RN.
+  De février à mi-juin 2025, la PaduTeam oppose l'organisation collective à la
+  défection individuelle, mise sur Mélenchon contre le PS pour 2027, lit la
+  répression de la gauche comme une offensive de l'ordre établi et voit
+  l'extrême droite se recomposer.
 ---
-# 2025-02-15 → 2025-06-07
+# 2025-02-15 → 2025-06-15
 
-Le fil qui traverse toute la Period est l'opposition du collectif à la défection individuelle. La PaduTeam défend une Sécu gérée par les cotisants et une lecture de classe qui va de la grève au rapport de production. Elle veut une contre-société militante à gauche et présente le communisme comme la sortie de la pénurie. Cette ligne revient jusqu'en juin, où l'organisation collective reste opposée aux solutions individuelles.
+Le fil de ces quatre mois est la défense du collectif contre la défection individuelle. La PaduTeam défend une Sécu gérée par les cotisants et présente le communisme comme la sortie de la pénurie ([[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/1-2025-02-15/CLAUDE|2025-02-15 → 2025-03-11]]). Elle lit les événements avec une grille de classe, de la grève au rapport de production, et appelle à bâtir à gauche une contre-société militante ([[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/CLAUDE|2025-04-04 → 2025-05-05]]). Elle revient sans cesse à l'organisation collective, qu'elle oppose à tout le reste jusqu'à la mi-juin.
 
-Face à la droite et à l'extrême droite, elle décrit une pente continue. L'extrême droite de rue est pour elle la supplétive de l'État policier, et l'offensive contre LFI est le ralliement de la droite au RN. Elle voit la droite se banaliser, et elle lit la condamnation de Marine Le Pen comme une recomposition du fascisme. En mai et juin, la diabolisation de la gauche, de Mélenchon aux dissolutions, devient pour elle une offensive de l'ordre établi.
+Sur la gauche, la PaduTeam voit en Mélenchon le meilleur atout face au PS pour 2027 et accuse Glucksmann ([[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/2-2025-03-12/CLAUDE|2025-03-12 → 2025-04-03]]). Elle juge catastrophiques les militants de L'Après et les pro-Roussel, puis tire de plus en plus sur le PS et la gauche institutionnelle. La dissolution de la Jeune Garde et la diabolisation de Mélenchon sont pour elle une offensive de l'ordre établi contre la gauche ([[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/CLAUDE|2025-05-07 → 2025-06-15]]).
 
-À gauche, elle tranche. Mélenchon est selon elle le meilleur atout face au PS pour 2027, et elle accuse Glucksmann. Elle juge catastrophiques les militants de L'Après et les pro-Roussel, puis continue de tirer sur le PS et sur ses recompositions.
+Face à elle, la PaduTeam décrit une droite qui se banalise et se rallie au RN dans l'offensive contre LFI, et une extrême droite de rue supplétive de l'État policier. Elle lit la condamnation de Marine Le Pen comme une recomposition du fascisme. En fin de période, elle voit le RN se scinder et l'empire américain se disloquer.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/1-2025-02-15/CLAUDE|2025-02-15 → 2025-03-11]] (17 Digests)
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/2-2025-03-12/CLAUDE|2025-03-12 → 2025-04-03]] (17 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/CLAUDE|2025-04-04 → 2025-05-05]] (17 Digests)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/CLAUDE|2025-05-07 → 2025-06-07]] (22 Digests)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/CLAUDE|2025-05-07 → 2025-06-15]] (28 Digests)
