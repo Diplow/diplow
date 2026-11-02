@@ -1,6 +1,6 @@
 ---
 title: "QUI VEUT LA MORT DE LA DÉMOCRATIE ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/4-2024-12-26
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28
 owner: diplo
 preview: >-
   Blast soutient que la démocratie recule et que la science-fiction aide à le
