@@ -1,20 +1,20 @@
 ---
-title: "2017-12-20 → 2026-10-30"
+title: "2017-12-20 → 2019-01-09"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20
 owner: diplo
 preview: >-
-  Boniface lit la géopolitique par les rapports de force : l'unilatéralisme de
-  Trump et le démantèlement de l'arms control, un multilatéralisme en crise
-  mais indispensable, un Occident affaibli, une Europe qui doit conquérir son
-  autonomie stratégique, le sport comme soft power.
+  Boniface lit 2018 à travers Trump : arms control démantelé, multilatéralisme
+  en crise mais indispensable, unipolarité que l'Europe doit refuser. Il
+  appelle la France et l'Europe à l'autonomie stratégique et voit les gilets
+  jaunes affaiblir Macron à l'international.
 ---
-# 2017-12-20 → 2026-10-30
+# 2017-12-20 → 2019-01-09
 
-Pendant toute la Chronicle, Boniface applique la même grille : les États-Unis de Trump rompent avec le multilatéralisme et l'arms control, qu'il s'agisse de l'accord nucléaire iranien ou du traité FNI, et cherchent à imposer un monde unipolaire. Il soutient que l'ONU et le multilatéralisme, en crise, restent indispensables. Il appelle la France et l'Europe à l'autonomie stratégique, et juge que l'Europe pèse si Paris et Berlin s'unissent. L'Occident, selon lui, s'affaiblit.
+Le fil de la Period est la présidence Trump, que Boniface lit comme une remise en cause de l'ordre multilatéral. La rupture de l'accord nucléaire iranien est pour lui une tentative d'imposer un monde unipolaire que l'Europe doit refuser. En dénonçant le traité FNI, Trump rejette l'Arms control et le multilatéralisme. Boniface soutient pourtant que l'ONU reste indispensable, même si le multilatéralisme est en crise. De là vient son appel à l'autonomie stratégique de la France et de l'Europe, formulé surtout en fin de Period (voir [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/CLAUDE|2018-10-25 → 2019-01-09]]).
 
-Il applique cette grille à des cas très divers, avec ses nuances. Il juge que le sommet Trump–Kim est bon pour la paix sans excès d'optimisme, que la guerre d'Afghanistan est perdue, qu'Israël perd la bataille des opinions publiques à Gaza et que l'assassinat de Khashoggi est une faute stratégique. Le soutien américain à MBS relève pour lui d'un calcul d'intérêts. Sur le Venezuela, il rappelle que la contestation de Maduro est d'abord nationale. Il voit dans les gilets jaunes un affaiblissement de Macron à l'international. Il tient aussi le football, avec la victoire des Bleus, pour un objet géopolitique et un gain de prestige par le soft power.
+Boniface applique la même grille d'analyse aux crises successives. L'hiver 2017-2018 passe par la Corée : la participation nord-coréenne aux JO ouvre une trêve, et le sommet Trump–Kim est bon pour la paix, sans excès d'optimisme. Il juge la guerre d'Afghanistan perdue. Au printemps, il voit Israël perdre la bataille des opinions publiques à Gaza. À l'automne, il tient l'assassinat de Khashoggi pour une faute stratégique, et le soutien à MBS pour un calcul d'intérêts.
 
-Dans les dernières années de la Chronicle, il lit un monde de rapports de force où la guerre Chine/États-Unis est loin d'être écrite et où l'OCS relève du multi-alignement. Il soutient la rue algérienne et juge qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens. Ses invités, dont les thèses restent les leurs, élargissent le propos aux Rohingya, à la Chine, à la dissuasion et à son *Requiem pour le monde occidental*, discuté début 2019 ([[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/CLAUDE|2019-01-14 → 2019-02-15]]).
+Le football et le soft power occupent une place à part : il fait du football un objet géopolitique et lit la victoire des Bleus comme un gain de prestige. La Period s'achève sur la politique intérieure vue de l'étranger, avec les gilets jaunes, qui affaiblissent Macron à l'international. Boniface reçoit de nombreux invités, qui traitent notamment des Rohingya, de la Chine et de la dissuasion.
 
 ## Contenu
 
@@ -22,5 +22,3 @@ Dans les dernières années de la Chronicle, il lit un monde de rapports de forc
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/2-2018-04-04/CLAUDE|2018-04-04 → 2018-06-13]] (18 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/CLAUDE|2018-06-20 → 2018-10-24]] (18 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/CLAUDE|2018-10-25 → 2019-01-09]] (18 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/CLAUDE|2019-01-14 → 2019-02-15]] (23 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/6-2019-02-20/CLAUDE|2019-02-20 → 2026-10-30]] (24 Digests)

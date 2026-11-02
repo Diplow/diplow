@@ -170,6 +170,7 @@ kinds:
       territoire: {définition: "Une zone au statut disputé ou particulier.", statut: accepté}
       site: {définition: "Un lieu précis : une usine, une place, un bâtiment.", statut: accepté}
       infrastructure: {définition: "Ouvrage ou projet d'aménagement du territoire, comme une autoroute.", statut: proposé, introduit_par: blast/E1Yn7k4mlBQ.md}
+      département: {définition: "Collectivité territoriale française de niveau départemental, y compris d'outre-mer.", statut: proposé, introduit_par: blast/Bq3_whwwKTg.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
