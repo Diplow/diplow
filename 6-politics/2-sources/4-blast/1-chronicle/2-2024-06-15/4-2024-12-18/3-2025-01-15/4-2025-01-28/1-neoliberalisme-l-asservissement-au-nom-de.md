@@ -1,6 +1,6 @@
 ---
 title: "NÉOLIBÉRALISME : L'ASSERVISSEMENT AU NOM DE LA “LIBERTÉ”"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/3-2025-01-24
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/4-2025-01-28
 owner: diplo
 preview: >-
   Joseph Stiglitz soutient que la droite et l'extrême droite ont accaparé la
