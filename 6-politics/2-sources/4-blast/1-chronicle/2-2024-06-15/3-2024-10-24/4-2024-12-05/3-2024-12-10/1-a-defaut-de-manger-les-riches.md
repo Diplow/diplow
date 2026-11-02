@@ -1,6 +1,6 @@
 ---
 title: "À DÉFAUT DE MANGER LES RICHES, TAXONS-LES - AVEC @Heu7reka et @StupidEco"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/6-2024-12-08
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/3-2024-12-10
 owner: diplo
 preview: >-
   Blast soutient que taxer les ultra-riches est possible et nécessaire : ils

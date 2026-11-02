@@ -1,6 +1,6 @@
 ---
 title: "🦏 ISLAMOPHOBIE : QUAND LES MÉDIAS FRANÇAIS DÉSIGNENT LES BONS ET MAUVAIS ARABES"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/6-2024-12-08
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/2-2024-12-08
 owner: diplo
 preview: >-
   Blast soutient que les médias français distinguent le bon Arabe, qui

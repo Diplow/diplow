@@ -1,6 +1,6 @@
 ---
 title: "COUPLE : POURQUOI LES FEMMES SONT LES GRANDES PERDANTES"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/6-2024-12-08
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/3-2024-12-10
 owner: diplo
 preview: >-
   Lucile Quillet et Tiffany Cooper soutiennent que le couple hétérosexuel

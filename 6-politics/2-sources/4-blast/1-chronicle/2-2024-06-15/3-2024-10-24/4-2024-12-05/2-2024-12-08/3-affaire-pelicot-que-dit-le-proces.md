@@ -1,6 +1,6 @@
 ---
 title: "AFFAIRE PELICOT : QUE DIT LE PROCÈS DES VIOLS DE MAZAN DE NOTRE SOCIÉTÉ ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/6-2024-12-08
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/2-2024-12-08
 owner: diplo
 preview: >-
   Blast et ses invitées soutiennent que le procès Pelicot juge aussi la
