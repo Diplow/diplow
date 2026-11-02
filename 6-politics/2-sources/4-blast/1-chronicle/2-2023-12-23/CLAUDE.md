@@ -1,20 +1,20 @@
 ---
-title: "2023-12-23 → 2024-03-03"
+title: "2023-12-23 → 2024-03-10"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23
 owner: diplo
 preview: >-
-  Blast soutient que le pouvoir macroniste banalise l'extrême droite, sert les
-  puissants et cède à la FNSEA pendant la colère agricole, tout en menant une
-  guerre sociale contre les plus pauvres ; elle reçoit des invités sur
-  l'école, Gaza et les extrêmes droites.
+  Blast soutient que le pouvoir macroniste sert les puissants et l'extrême
+  droite, que la colère agricole est captée par la FNSEA et que l'austérité
+  comme l'opacité du capitalisme mondialisé frappent les plus pauvres. Elle
+  reçoit des invités sur l'école, Gaza ou l'énergie.
 ---
-# 2023-12-23 → 2024-03-03
+# 2023-12-23 → 2024-03-10
 
-Tout au long de ces mois, Blast soutient que le pouvoir macroniste a banalisé l'extrême droite et sert les puissants. Elle voit dans la crise de la loi immigration une crise fabriquée pour déplacer le débat vers la droite. Elle dit aussi que la BCE fabrique du chômage au service de la finance. Quand le gouvernement Attal s'installe, elle lui reproche de s'aligner sur l'extrême droite et de mener une guerre sociale contre les plus pauvres. Elle ajoute que les matinales dépolitisent l'information et que le journalisme de cour prospère.
+Sur ces onze semaines, Blast construit un réquisitoire continu contre le pouvoir macroniste. Elle soutient que Macron a banalisé l'extrême droite et que la crise de la loi immigration est fabriquée pour déplacer le débat à droite. Ensuite, le gouvernement Attal cède à la FNSEA, s'aligne sur l'extrême droite et mène une guerre sociale contre les plus pauvres. Le pouvoir désinforme, force le passage de l'A69 en toute illégalité, et l'aile gauche de la macronie est pour elle une fiction. Elle juge son action injuste et inefficace, du droit du sol à Mayotte à l'austérité de Le Maire.
 
-La colère agricole devient le fil de la fin janvier et de février (voir [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/CLAUDE|2024-01-30 → 2024-02-06]]). Blast accuse le pouvoir d'une indulgence sélective envers les paysans, lit la crise comme un système de dette que la FNSEA confisque, puis juge que le gouvernement cède à ce syndicat. Elle soutient aussi que les frappes occidentales renforcent les Houthis et lit le conflit du Haut-Karabagh comme un conflit territorial. À la fin de la Period, elle dénonce la désinformation du pouvoir macroniste et un passage en force de l'A69, en toute illégalité. Elle estime que la baisse de la violence sous Bukele a un coût autoritaire.
+La colère agricole, qui domine la fin de janvier et le début de février, est lue à deux niveaux. Blast accuse le pouvoir d'une indulgence sélective envers les paysans, et voit dans la crise un système de dette que la FNSEA confisque. Elle élargit la critique aux mécanismes qui servent la finance et les puissants : la BCE qui fabrique du chômage, l'opacité du capitalisme mondialisé, des matinales qui dépolitisent l'info et un journalisme de cour qui prospère. À l'international, elle soutient que les frappes occidentales renforcent les Houthis et lit le conflit du Haut-Karabagh comme territorial.
 
-Blast reçoit en parallèle des invités qui éclairent la montée des extrêmes droites, puis critiquent l'école, l'énergie, l'accueil et la FIFA. D'autres parlent de Gaza, de la propriété privée, de la transition et du masculinisme. Leurs analyses restent les leurs : Blast les reçoit et les relaie.
+Autour de ce fil, Blast reçoit des invités qui éclairent la montée des extrêmes droites, l'école, l'énergie, l'accueil, la FIFA, Gaza, la propriété privée, la transition, la monnaie et le masculinisme. La période se clôt avec Damasio, Golshifteh Farahani, Christian Laval et Violaine Lucas.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ Blast reçoit en parallèle des invités qui éclairent la montée des extrêmes
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/2-2024-01-08/CLAUDE|2024-01-08 → 2024-01-29]] (22 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/CLAUDE|2024-01-30 → 2024-02-06]] (15 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/CLAUDE|2024-02-07 → 2024-02-18]] (16 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/CLAUDE|2024-02-19 → 2024-03-03]] (21 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/CLAUDE|2024-02-19 → 2024-02-29]] (16 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/CLAUDE|2024-03-01 → 2024-03-10]] (11 Digests)

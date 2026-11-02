@@ -1,6 +1,6 @@
 ---
 title: "GOLSHIFTEH FARAHANI - L'INCROYABLE HISTOIRE D'UNE ACTRICE DEVENUE LA VOIX DE LA RÉVOLUTION IRANIENNE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/5-2024-03-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/1-2024-03-01
 owner: diplo
 preview: >-
   Blast reçoit Golshifteh Farahani, actrice iranienne exilée à Paris. Pour

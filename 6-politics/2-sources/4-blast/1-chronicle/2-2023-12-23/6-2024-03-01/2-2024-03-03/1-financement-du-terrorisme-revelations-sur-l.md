@@ -1,6 +1,6 @@
 ---
 title: "FINANCEMENT DU TERRORISME : RÉVÉLATIONS SUR L’AFFAIRE LAFARGE / DAESH"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/5-2024-03-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/2-2024-03-03
 owner: diplo
 preview: >-
   Blast soutient que Lafarge a piloté le rapport Baker McKenzie pour désigner

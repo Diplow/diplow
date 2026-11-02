@@ -1,6 +1,6 @@
 ---
 title: "LUTTER GRÂCE AUX IMAGINAIRES : AVEC ALAIN DAMASIO, LI-CAM ET PALOMA MORITZ"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/5-2024-03-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/1-2024-03-01
 owner: diplo
 preview: >-
   Damasio, Li-Cam et Paloma Moritz soutiennent que la fiction fertilise les

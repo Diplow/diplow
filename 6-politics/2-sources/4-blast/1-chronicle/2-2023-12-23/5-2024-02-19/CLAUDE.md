@@ -1,18 +1,20 @@
 ---
-title: "2024-02-19 → 2024-03-03"
+title: "2024-02-19 → 2024-02-29"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19
 owner: diplo
 preview: >-
-  Blast soutient que le pouvoir macroniste désinforme, que l'État force le
-  passage de l'A69 en toute illégalité et que la baisse de la violence sous
-  Bukele a un coût autoritaire. Il reçoit aussi des invités sur la transition,
-  Gaza et le masculinisme.
+  Blast soutient que le pouvoir macroniste désinforme, que la colère agricole
+  est captée par la FNSEA, que l'État force le passage de l'A69 en toute
+  illégalité et que l'aile gauche de la macronie est une fiction. Il reçoit
+  aussi des invités sur la transition, la monnaie, Gaza et le masculinisme.
 ---
-# 2024-02-19 → 2024-03-03
+# 2024-02-19 → 2024-02-29
 
-Pendant ces deux semaines, Blast dénonce l'impunité et les manœuvres des pouvoirs en place. Il accuse le pouvoir macroniste de désinformer tout en dénonçant la désinformation russe, tient l'aile gauche de la macronie pour une fiction et montre la colère agricole captée par la FNSEA, dans une agriculture française verrouillée par un cercle fermé. Il soutient que l'État force le passage de l'A69 en toute illégalité, que la décision du Conseil d'État met CNews en difficulté face à l'Arcom, que l'affaire DSK révélait un système d'impunité, que Lafarge a orienté son audit pour protéger ses actionnaires, et que supprimer le droit du sol à Mayotte heurterait les principes de la République sans réduire l'immigration irrégulière. Sur le Salvador, il estime que la baisse de la violence sous Bukele a un coût autoritaire. Le détail du premier de ces fils se trouve dans [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/2-2024-02-21/CLAUDE|2024-02-21 → 2024-02-23]].
+Sur ces onze jours, Blast s'en prend d'abord au pouvoir et à ses relais. Il accuse le pouvoir macroniste de désinformer tout en dénonçant la désinformation russe, et tient l'aile gauche de la macronie pour une fiction. Il soutient que la décision du Conseil d'État met CNews en difficulté face à l'Arcom et que l'État force le passage de l'A69 en toute illégalité. Il juge que l'affaire DSK révélait un système d'impunité, et que la baisse de la violence sous Bukele a un coût autoritaire.
 
-Blast donne aussi la parole à des invités, dont les thèses restent les leurs : Celia Izoard et Renaud Duterme sur les limites matérielles de la transition, Pauline Ferrari sur le masculinisme, Augustin Sersiron sur la monnaie, un membre de MSF sur Gaza, puis Damasio et Golshifteh Farahani. La Period fait également une place à la mémoire : Blast rappelle les résistants communistes et étrangers effacés de la panthéonisation de Manouchian et suit Léon Landini au Panthéon. Il fête son million d'abonnés en revendiquant un journalisme qui dérange, et lit les Monty Python comme un excès de sens.
+Le monde agricole revient comme un second fil. Blast montre une colère agricole captée par la FNSEA, puis décrit une agriculture française verrouillée par un cercle fermé.
+
+Le reste de la Period est fait d'invités et de mémoire. Blast reçoit Celia Izoard et Renaud Duterme sur les limites matérielles de la transition, Augustin Sersiron sur la monnaie, un membre de MSF sur Gaza et Pauline Ferrari sur le masculinisme. Il rappelle les résistants communistes et étrangers effacés de la panthéonisation de Manouchian, et suit Léon Landini au Panthéon. Il fête aussi son million d'abonnés en revendiquant un journalisme qui dérange.
 
 ## Contenu
 
@@ -20,4 +22,3 @@ Blast donne aussi la parole à des invités, dont les thèses restent les leurs 
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/2-2024-02-21/CLAUDE|2024-02-21 → 2024-02-23]] (4 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/3-2024-02-25/CLAUDE|2024-02-25 → 2024-02-26]] (3 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/4-2024-02-27/CLAUDE|2024-02-27 → 2024-02-29]] (5 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/5-2024-03-01/CLAUDE|2024-03-01 → 2024-03-03]] (5 Digests)
