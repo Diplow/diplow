@@ -1,0 +1,51 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_04c9daa89b04b7 160
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/5-2024-12-05/4-la-france-au-service-des-neo.md
+  s_6a2502bfeb577d::t_35b34bfef6ee93 1-91
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/5-2024-12-05/CLAUDE.md
+  s_6a2502bfeb577d::t_1ded79c2f1c58a 2,6-9,11,13,15,22
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/6-2024-12-08/1-islamophobie-quand-les-medias-francais-designent.md
+  s_6a2502bfeb577d::t_0571917eccc771 1-99
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/6-2024-12-08/2-genocide-a-gaza-les-preuves-accablantes.md
+  s_6a2502bfeb577d::t_a8688a5f8137e9 1-86
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/6-2024-12-08/3-affaire-pelicot-que-dit-le-proces.md
+  s_6a2502bfeb577d::t_1251df9565dcaf 1-101
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/6-2024-12-08/4-a-defaut-de-manger-les-riches.md
+  s_6a2502bfeb577d::t_d8d82edb370617 1-75
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/6-2024-12-08/5-couple-pourquoi-les-femmes-sont-les.md
+  s_6a2502bfeb577d::t_c23d6c52ee357c 1-95
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/6-2024-12-08/CLAUDE.md
+  s_6a2502bfeb577d::t_49cd0c363d0be2 1-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/CLAUDE.md
+  s_6a2502bfeb577d::t_65ee160f2dac7c 2,6-10,12,14,16,18,26-27
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE.md
+  s_6a2502bfeb577d::t_10e98f9fa8315f 2,7-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_6a2502bfeb577d::t_d027fa97426c85 2,7-8,10,12,14,16,22
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_6a2502bfeb577d::t_a1d818ccb2d51a 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ccf400e95522ba27a2ed36ba3f9c910b7cbff8b3",
+  "prompts": {},
+  "sessions": {
+    "s_6a2502bfeb577d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ae7422e89c55477ac",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
