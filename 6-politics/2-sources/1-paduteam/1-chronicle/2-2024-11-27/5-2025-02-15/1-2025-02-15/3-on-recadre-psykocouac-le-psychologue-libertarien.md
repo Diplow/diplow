@@ -1,6 +1,6 @@
 ---
 title: "On RECADRE PSYKOCOUAC le PSYCHOLOGUE LIBERTARIEN ANTI-SÉCU !! (avec @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/5-2025-02-15
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/1-2025-02-15
 owner: diplo
 preview: >-
   La PaduTeam soutient que refuser le conventionnement avec la Sécu, comme

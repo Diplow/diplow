@@ -1,6 +1,6 @@
 ---
 title: "PADUSTREAM C'EST DÉJÀ FINI !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/6-2025-02-20
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/2-2025-02-20
 owner: diplo
 preview: >-
   La PaduTeam annonce la fin de Pas du stream : la chaîne devient le canal

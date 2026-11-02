@@ -1,6 +1,6 @@
 ---
 title: "2025-02-15 → 2025-02-19"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/5-2025-02-15
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/1-2025-02-15
 owner: diplo
 preview: >-
   La PaduTeam reçoit Paul Elek sur Gaza, fait de Yann Moix un complice de
@@ -18,7 +18,7 @@ Avec Papacito, elle revient à l'analyse de classe. Opposer ruralité et urbanit
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/5-2025-02-15/1-gaza-l-illusion-du-cessez-le|GAZA  L'ILLUSION DU CESSEZ-LE-FEU !! (avec Paul Elek)]] (2025-02-15)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/5-2025-02-15/2-yann-moix-plus-gros-p0rc-que|YANN MOIX  PLUS GROS P0RC QUE DEPARDIEU  (avec @Dr_Zoé_YT)]] (2025-02-17)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/5-2025-02-15/3-on-recadre-psykocouac-le-psychologue-libertarien|On RECADRE PSYKOCOUAC le PSYCHOLOGUE LIBERTARIEN ANTI-SÉCU !! (avec @Dr_Zoé_YT)]] (2025-02-18)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/5-2025-02-15/4-papacito-balance-l-enorme-b0dycount-d|PAPACITO BALANCE L'ÉNORME B0DYCOUNT D'ALICE CORDIER (collectif NÉMÉSIS) !! (avec ‪@Dr_Zoé_YT‬)]] (2025-02-19)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/1-2025-02-15/1-gaza-l-illusion-du-cessez-le|GAZA  L'ILLUSION DU CESSEZ-LE-FEU !! (avec Paul Elek)]] (2025-02-15)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/1-2025-02-15/2-yann-moix-plus-gros-p0rc-que|YANN MOIX  PLUS GROS P0RC QUE DEPARDIEU  (avec @Dr_Zoé_YT)]] (2025-02-17)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/1-2025-02-15/3-on-recadre-psykocouac-le-psychologue-libertarien|On RECADRE PSYKOCOUAC le PSYCHOLOGUE LIBERTARIEN ANTI-SÉCU !! (avec @Dr_Zoé_YT)]] (2025-02-18)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/1-2025-02-15/4-papacito-balance-l-enorme-b0dycount-d|PAPACITO BALANCE L'ÉNORME B0DYCOUNT D'ALICE CORDIER (collectif NÉMÉSIS) !! (avec ‪@Dr_Zoé_YT‬)]] (2025-02-19)

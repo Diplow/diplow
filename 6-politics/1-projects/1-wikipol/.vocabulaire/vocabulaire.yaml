@@ -109,6 +109,7 @@ kinds:
       producteur: {définition: "Finance et supervise la production de films.", statut: proposé, introduit_par: blast/cKYSNkedyek.md}
       conseiller-politique: {définition: "Conseille un dirigeant politique, notamment à la Maison-Blanche.", statut: proposé, introduit_par: boniface/yTDiNIy50xE.md}
       graphiste: {définition: "Conçoit l'identité visuelle et les visuels d'une chaîne ou d'une publication.", statut: proposé, introduit_par: paduteam/LxwZ1JIvNtE.md}
+      porte-parole: {définition: "Parle au nom d'une organisation, d'une famille ou d'un mouvement.", statut: proposé, introduit_par: blast/LE_ZVLBJ5Mk.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -208,6 +209,7 @@ kinds:
       famine: {définition: "Pénurie alimentaire extrême qui provoque une mortalité de masse dans une population.", statut: proposé, introduit_par: paduteam/C1MLgXQ7fJA.md}
       crise: {définition: "Tension politique ou militaire majeure entre États, sans guerre ouverte.", statut: proposé, introduit_par: boniface/TpKoDXZ7mQY.md}
       génocide: {définition: "Extermination systématique d'un groupe national, ethnique ou religieux.", statut: proposé, introduit_par: blast/9sBrrpX8Ywg.md}
+      débat: {définition: "Échange organisé entre plusieurs intervenants autour d'un sujet, en direct ou enregistré.", statut: proposé, introduit_par: paduteam/Im2oLpge17Y.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

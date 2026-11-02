@@ -1,6 +1,6 @@
 ---
 title: "DÉBRIEF de mon DÉBAT avec @Zawa_Prod et @PsykoCouac sur la PSY ! (x @Dr_Zoé_YT et Chris de PR)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/6-2025-02-20
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/2-2025-02-20
 owner: diplo
 preview: >-
   La PaduTeam débriefe son débat sur la psychiatrie : elle oppose
