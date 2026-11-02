@@ -1,0 +1,47 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/4-2026-05-05/CLAUDE.md
+  s_6608030a78f30e::t_8312a0b86b5e4c 2,6-8,10,12,14
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07/1-sondages-mensongers-et-extreme-droite-zinzin.md
+  s_6608030a78f30e::t_2d2be6cc99f319 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07/2-action-lidl-amazon-l-exploitation-2.md
+  s_6608030a78f30e::t_5eeb56a2f4a903 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07/3-lumi-et-modiie-prennent-une-lecon.md
+  s_6608030a78f30e::t_2b5183a79d0e7d 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07/4-mathieu-pigasse-l-ultra-riche-qui.md
+  s_6608030a78f30e::t_d1fdc9c8346c37 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/5-2026-05-07/CLAUDE.md
+  s_6608030a78f30e::t_7f3855e5b7831c 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/6-2026-05-11/1-primaire-des-noisettes-le-meeting-plus.md
+  s_6608030a78f30e::t_9c0095f189b5df 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/6-2026-05-11/2-master-poulet-vs-bouamrane-le-combat.md
+  s_6608030a78f30e::t_436a65559c74e8 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/6-2026-05-11/3-glucksmann-leaks-son-plan-secret-pour.md
+  s_6608030a78f30e::t_e1c4b2c0c4f03e 1-80
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/6-2026-05-11/4-caroline-fourest-attaque-pierre-emmanuel-barre.md
+  s_6608030a78f30e::t_a81046301205b5 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/6-2026-05-11/CLAUDE.md
+  s_6608030a78f30e::t_2fba96a7dd5ba2 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/CLAUDE.md
+  s_6608030a78f30e::t_c57ec613e3c3c5 2,6-8,10,12,14-16,23-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE.md
+  s_6608030a78f30e::t_d037a7c9128a5e 2,6-8,10,12,14,16,24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_6608030a78f30e::t_1634f319526329 2,6-8,10,12,14,16,22
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_6608030a78f30e::t_fe379c019981a3 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0db0195ab4f462586133faac90a19f5584ed5e1a",
+  "prompts": {},
+  "sessions": {
+    "s_6608030a78f30e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a35cec7138ecef602",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
