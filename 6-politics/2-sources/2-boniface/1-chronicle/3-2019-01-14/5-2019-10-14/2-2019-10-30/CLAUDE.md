@@ -1,24 +1,23 @@
 ---
-title: "2019-10-30 → 2026-10-14"
+title: "2019-10-30 → 2019-11-13"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30
 owner: diplo
 preview: >-
-  Boniface lit le débat sur les mamans voilées comme une diversion qui révèle
-  un problème de la France avec l'islam. Il reçoit Pierre Grosser sur
-  l'héritage de 1989 et Sylvie Bermann sur la Chine, et chronique le livre
-  d'Alexander Stubb sur un monde en trois blocs.
+  Boniface lit le débat sur les mamans voilées comme une diversion, l'Ukraine
+  comme un pays pris entre deux récits inconciliables, et veut une Europe
+  regroupée à 27 face à la Chine. Il reçoit Pierre Grosser sur l'héritage de
+  1989 et Irina Bokova sur l'UNESCO.
 ---
-# 2019-10-30 → 2026-10-14
+# 2019-10-30 → 2019-11-13
 
-Dans la seule vidéo où Boniface parle en son nom, [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30/1-que-cache-mal-le-debat-sur|Que cache (mal) le débat sur les mamans voilées ?]], il soutient que ce débat est une diversion qui masque les vraies préoccupations des Français. Pour lui, il révèle surtout un problème de la France avec l'islam, attisé par des médias en quête de buzz.
+Boniface soutient que le débat sur les mamans voilées est une diversion qui masque les vraies préoccupations des Français. Il y voit surtout le révélateur d'un problème de la France avec l'islam, attisé par des médias en quête de buzz. Sur l'Ukraine, il décrit un pays écartelé entre Occident et Russie, pris entre deux récits inconciliables sur Maïdan et la Crimée. Selon lui, l'Europe a besoin de la Russie et doit pousser Zelensky et Poutine à régler le Donbass. Face à la Chine, il plaide pour une Europe qui se regroupe sans que la France dilue sa politique nationale, qui défend ses intérêts sur les nouvelles routes de la soie et qui aborde les droits de l'homme discrètement et à 27.
 
-Le reste de la Period est fait de rencontres et d'une lecture, où chaque thèse reste à qui la porte. Boniface reçoit l'historien Pierre Grosser, pour qui la chute du mur de Berlin a éclipsé un processus plus long, la fin de l'URSS n'était pas jouée d'avance, et le manque d'imagination, non une promesse trahie, a miné l'après-1989. Il reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans que Pékin ait gagné ; la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
-
-Boniface chronique aussi [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]]. Le livre divise le monde en trois blocs (Occident, Orient, Sud global) et voit dans le Sud celui qui décidera du nouvel ordre. L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit selon lui montrer l'exemple s'il veut peser.
+Deux émissions de Comprendre le monde donnent la parole à des invités, dont les thèses restent les leurs. Dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30/2-comprendre-le-monde-s3-9-pierre|Comprendre le monde S3#9 - Pierre Grosser - "1989 : quel héritage ?"]], l'historien soutient que la chute du mur de Berlin a éclipsé un processus plus long, que la fin de l'URSS n'était pas jouée d'avance, et que c'est le manque d'imagination, non une promesse trahie, qui a miné l'après-1989. Dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30/5-comprendre-le-monde-s3-11-irina|Comprendre le monde S3#11 - Irina Bokova - "L'indispensable UNESCO"]], l'ancienne directrice générale de l'UNESCO défend le multilatéralisme face à un monde qui dérive vers l'unilatéralisme, la course aux armements et la guerre commerciale. Pour elle, le retrait américain de l'UNESCO est une perte pour les États-Unis et laisse la place à la Chine.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30/1-que-cache-mal-le-debat-sur|Que cache (mal) le débat sur les mamans voilées ?]] (2019-10-30)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30/2-comprendre-le-monde-s3-9-pierre|Comprendre le monde S3#9 - Pierre Grosser - "1989 : quel héritage ?"]] (2019-10-30)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30/4-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30/3-la-situation-en-ukraine-expliquez-moi|La situation en Ukraine - Expliquez-moi...]] (2019-10-31)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30/4-macron-comment-faire-face-a-la|Macron : comment faire face à la Chine ? Je réponds à vos questions]] (2019-11-12)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/5-2019-10-14/2-2019-10-30/5-comprendre-le-monde-s3-11-irina|Comprendre le monde S3#11 - Irina Bokova - "L'indispensable UNESCO"]] (2019-11-13)
