@@ -1,0 +1,63 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_830061c07096b4 199
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/CLAUDE.md
+  s_0a89858285c82e::t_87f2ebd8dd56b3 2,6-9,11,13,15,17
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/1-2025-09-02/1-10-septembre-comment-ne-pas-reproduire.md
+  s_0a89858285c82e::t_26729562b174a7 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/1-2025-09-02/2-faure-ps-veut-etre-premier-ministre.md
+  s_0a89858285c82e::t_aacbe064b6b89d 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/1-2025-09-02/3-legrand-et-cohen-complotent-pour-placer.md
+  s_0a89858285c82e::t_284b5efe51aa16 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/1-2025-09-02/4-propagande-anti-macron-on-peut-tous.md
+  s_0a89858285c82e::t_d2f709bfd7a315 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/1-2025-09-02/CLAUDE.md
+  s_0a89858285c82e::t_5315f357ed914c 3,6-9,13,15,19-22
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/2-2025-09-05/1-cecile-duflot-veut-laisser-les-ultra.md
+  s_0a89858285c82e::t_459072472acd2b 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/2-2025-09-05/2-derniers-jours-de-bayrou-il-se.md
+  s_0a89858285c82e::t_c77faaf7e1e451 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/2-2025-09-05/3-glucksmann-s-oppose-aux-blocages-du.md
+  s_0a89858285c82e::t_fdd76de112c698 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/2-2025-09-05/4-bayrou-annonce-sa-demission-le-8.md
+  s_0a89858285c82e::t_07741bbba53eea 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/2-2025-09-05/CLAUDE.md
+  s_0a89858285c82e::t_4b18a08c79fbd2 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/3-2025-09-08/1-les-grandes-gueules-pormanove-a-ete.md
+  s_0a89858285c82e::t_4f5d4303856890 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/3-2025-09-08/2-depart-de-bayrou-aidons-macron-a.md
+  s_0a89858285c82e::t_3a9a0476344db0 1-103
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/3-2025-09-08/3-le-medef-pleure-et-veut-faire.md
+  s_0a89858285c82e::t_d30c72a2327d37 1-101
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/3-2025-09-08/CLAUDE.md
+  s_0a89858285c82e::t_ff618023b92ddc 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/CLAUDE.md
+  s_0a89858285c82e::t_24ea1e5e1dbb93 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/CLAUDE.md
+  s_0a89858285c82e::t_85dbbccde4e66f 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_0a89858285c82e::t_f630ae7ab8c4e7 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3a7265eceb6b01a1891180e833c918ee02c673a6",
+  "prompts": {},
+  "sessions": {
+    "s_0a89858285c82e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ac0ece7e2506bbb3e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
