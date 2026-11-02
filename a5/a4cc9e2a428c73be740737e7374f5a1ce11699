@@ -1,0 +1,55 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_4215d8f29e4243 102-103
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/4-2024-02-05/CLAUDE.md
+  s_e74c862a1dd458::t_d36584e6954f61 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/5-2024-02-07/1-tri-social-a-l-ecole-c.md
+  s_e74c862a1dd458::t_2c73750bad0222 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/5-2024-02-07/2-terrorisme-genocide-crime-de-guerre-ce.md
+  s_e74c862a1dd458::t_d03e3a49ebac2f 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/5-2024-02-07/3-macron-le-pen-les-deux-faces.md
+  s_e74c862a1dd458::t_2fb260ce3c45cd 1-75
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/5-2024-02-07/4-classe-ouvriere-les-vrais-heros-invisibles.md
+  s_e74c862a1dd458::t_f486f76b81369e 1-88
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/5-2024-02-07/CLAUDE.md
+  s_e74c862a1dd458::t_d419966fbf7f7a 1-22
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/6-2024-02-10/1-cahiers-de-doleances-meme-si-macron.md
+  s_e74c862a1dd458::t_dd9fbc75972fc8 1-82
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/6-2024-02-10/2-comment-gaza-est-devenue-un-cimetiere.md
+  s_e74c862a1dd458::t_7405b29d69e2ef 1-92
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/6-2024-02-10/3-valeurs-actuelles-quand-la-bourgeoisie-s.md
+  s_e74c862a1dd458::t_96e1d47ad43520 1-100
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/6-2024-02-10/4-histoire-de-france-clovis-charlemagne-les.md
+  s_e74c862a1dd458::t_ba3c74c369d01e 1-98
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/6-2024-02-10/CLAUDE.md
+  s_e74c862a1dd458::t_4642a08ac87974 1-22
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/CLAUDE.md
+  s_e74c862a1dd458::t_0c2ef0ad756c49 2,6-9,11,13,15-17,24-26
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE.md
+  s_e74c862a1dd458::t_83fe4b736b6779 2,7-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_e74c862a1dd458::t_ab6df67c642b1b 6-9,13,15,17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a5a4cc9e2a428c73be740737e7374f5a1ce11699",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_e74c862a1dd458": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a448d523aa705b993",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
