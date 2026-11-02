@@ -1,0 +1,43 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/3-2024-06-23/CLAUDE.md
+  s_e016b68829cdfc::t_1f4768c7823c85 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/4-2024-06-25/1-banlieues-ici-on-parle-pas-souvent.md
+  s_e016b68829cdfc::t_01bb0f981f9a90 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/4-2024-06-25/2-ascension-de-l-extreme-droite-les.md
+  s_e016b68829cdfc::t_2aa381afbff2df 1-84
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/4-2024-06-25/3-macron-attal-bardella-c-est-une.md
+  s_e016b68829cdfc::t_667b5b8399923b 1-82
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/4-2024-06-25/CLAUDE.md
+  s_e016b68829cdfc::t_773eff4bec26d7 1-21
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/1-rn-le-desastre-economique-qui-vient.md
+  s_e016b68829cdfc::t_c243c7f82f1561 1-99
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/2-rn-au-pouvoir-l-enjeu-sera.md
+  s_e016b68829cdfc::t_e922d2b7762176 1-103
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/3-democratie-le-debut-de-la-fin.md
+  s_e016b68829cdfc::t_2123ef73ea1168 1-88
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/4-la-france-au-bord-du-gouffre.md
+  s_e016b68829cdfc::t_515f2ab447096a 1-88
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/5-2024-06-27/CLAUDE.md
+  s_e016b68829cdfc::t_2316b8a1951c9e 1-22
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/CLAUDE.md
+  s_e016b68829cdfc::t_7018adee57b3ce 2,6-9,11,13,15,17,23-25
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE.md
+  s_e016b68829cdfc::t_e4be0f8cbf1832 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_e016b68829cdfc::t_0c0bd54bc24188 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9d1b533bf64022a35ef31ad35cc48eeecf19bd84",
+  "prompts": {},
+  "sessions": {
+    "s_e016b68829cdfc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aaa9c13e1b7839e9d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
