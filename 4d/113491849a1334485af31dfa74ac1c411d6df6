@@ -1,0 +1,70 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_8a1f9e7b13edd3 137
+  s_70e2b8820e4c39::t_5efe06a3af3f29 136
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/CLAUDE.md
+  s_537995fb9c1570::t_7e67f97827f2f1 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/1-2024-06-15/1-legislatives-la-france-est-en-danger.md
+  s_537995fb9c1570::t_364300cd6e2870 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/1-2024-06-15/2-melancholia-la-fin-du-monde-et.md
+  s_537995fb9c1570::t_c01d591d4c7f45 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/1-2024-06-15/3-macron-rn-les-vrais-extremes-contre.md
+  s_537995fb9c1570::t_f4496dbb48bbf7 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/1-2024-06-15/4-la-terrifiante-progression-de-l-extreme.md
+  s_537995fb9c1570::t_8f2bd82e4f96fa 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/1-2024-06-15/CLAUDE.md
+  s_537995fb9c1570::t_9349eaff4780fc 3,12,14,16,20-23
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/2-2024-06-19/1-une-journaliste-de-blast-en-garde.md
+  s_537995fb9c1570::t_8df0ce5f2f53c5 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/2-2024-06-19/2-le-programme-du-nouveau-front-populaire.md
+  s_537995fb9c1570::t_a8f6d31079707a 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/2-2024-06-19/3-lfi-rn-lrem-ou-est-vraiment.md
+  s_537995fb9c1570::t_d5c6c9984280b5 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/2-2024-06-19/4-legislatives-chaos-politique-et-fiasco-mediatique.md
+  s_537995fb9c1570::t_d8fae31d29981b 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/2-2024-06-19/5-le-macronisme-est-la-cause-et.md
+  s_537995fb9c1570::t_aace9910642c14 1-94
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/2-2024-06-19/CLAUDE.md
+  s_537995fb9c1570::t_d582a1458c044d 2-3,6-9,11,15,17,21-25
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/3-2024-06-23/1-poursuivi-par-macron-et-bardella-le.md
+  s_537995fb9c1570::t_3d77d67d79b38c 1-102
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/3-2024-06-23/2-desastre-mediatique-les-chiens-aboient-pour.md
+  s_537995fb9c1570::t_5c75e4a0a47505 1-93
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/3-2024-06-23/3-legislatives-comment-le-rn-s-empare.md
+  s_537995fb9c1570::t_3bca1cffc1255a 1-87
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/3-2024-06-23/4-gaza-l-onu-accuse-israel-de.md
+  s_537995fb9c1570::t_0561a747f1f40d 1-80
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/3-2024-06-23/5-banlieues-ici-on-parle-pas-souvent.md
+  s_537995fb9c1570::t_5d29b5c34f915c 1-75
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/3-2024-06-23/CLAUDE.md
+  s_537995fb9c1570::t_2e0ccf2672fdae 1-25
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/CLAUDE.md
+  s_537995fb9c1570::t_93b96f91b59fcb 1-22
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE.md
+  s_537995fb9c1570::t_0608d9da04053d 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_537995fb9c1570::t_e17407fa78b140 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4d113491849a1334485af31dfa74ac1c411d6df6",
+  "prompts": {},
+  "sessions": {
+    "s_537995fb9c1570": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad22a8219277daf38",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
