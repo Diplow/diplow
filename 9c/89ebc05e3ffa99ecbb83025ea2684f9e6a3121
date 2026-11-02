@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/4-2025-12-17/CLAUDE.md
+  s_941f420f57ecdc::t_184b88e5cd6711 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/5-2025-12-23/1-rochedy-le-dictateur-qui-veut-du.md
+  s_941f420f57ecdc::t_099bf136679575 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/5-2025-12-23/2-rochedy-veut-detruire-la-france-voici.md
+  s_941f420f57ecdc::t_6d5f212c16ab4c 1-83
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/5-2025-12-23/3-la-porte-parole-du-pcf-a.md
+  s_941f420f57ecdc::t_f9dcf3341bd640 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/5-2025-12-23/4-les-paysans-sont-ils-nos-camarades.md
+  s_941f420f57ecdc::t_f9a2bdc3ddca5b 1-95
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/5-2025-12-23/5-des-ecolos-d-extreme-droite-anti.md
+  s_941f420f57ecdc::t_ebb231ae3a12f5 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/5-2025-12-23/6-lfi-rn-pourquoi-les-medias-ont.md
+  s_941f420f57ecdc::t_44778590472a26 1-103
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/5-2025-12-23/CLAUDE.md
+  s_941f420f57ecdc::t_7cc66b38fad570 1-27
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/CLAUDE.md
+  s_941f420f57ecdc::t_51f19156d818b0 2,6-8,10,12,14,22
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE.md
+  s_941f420f57ecdc::t_34aa64ca7703d8 2,6-9,11,13,15,17,25
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_941f420f57ecdc::t_88c3e7f833ed8b 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9c89ebc05e3ffa99ecbb83025ea2684f9e6a3121",
+  "prompts": {},
+  "sessions": {
+    "s_941f420f57ecdc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a6ecaac6796b37fa3",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
