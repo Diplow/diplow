@@ -1,0 +1,68 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_75f75d06f274d0 112
+  s_70e2b8820e4c39::t_5016076a06e46e 212
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/CLAUDE.md
+  s_71ef31f25d1e8f::t_329d331687467e 2,6-9,11,13,15,17
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/1-2025-02-15/1-gaza-l-illusion-du-cessez-le.md
+  s_71ef31f25d1e8f::t_9a1040b7840d42 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/1-2025-02-15/2-yann-moix-plus-gros-p0rc-que.md
+  s_71ef31f25d1e8f::t_d1279ed4a1019b 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/1-2025-02-15/3-on-recadre-psykocouac-le-psychologue-libertarien.md
+  s_71ef31f25d1e8f::t_01039aa4292548 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/1-2025-02-15/4-papacito-balance-l-enorme-b0dycount-d.md
+  s_71ef31f25d1e8f::t_900183857e7176 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/1-2025-02-15/CLAUDE.md
+  s_71ef31f25d1e8f::t_9e0b1f0a5bbade 3,21-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/2-2025-02-20/1-frederic-lordon-nous-clashe-ces-marxistes.md
+  s_71ef31f25d1e8f::t_bb8afc492a646b 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/2-2025-02-20/2-debrief-de-mon-debat-avec-zawa.md
+  s_71ef31f25d1e8f::t_c5f62a5cb35bd6 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/2-2025-02-20/3-padustream-c-est-deja-fini.md
+  s_71ef31f25d1e8f::t_921a5f428487e5 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/2-2025-02-20/4-dr-zoe-en-sueur-face-a.md
+  s_71ef31f25d1e8f::t_e141628857c60a 1-72
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/2-2025-02-20/5-bouteldja-a-capitule-debat-tendu-avec.md
+  s_71ef31f25d1e8f::t_714e583143480d 1-106
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/2-2025-02-20/CLAUDE.md
+  s_71ef31f25d1e8f::t_8f7dfbc8591abe 2-3,6-10,12,14,16,20-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/3-2025-02-27/1-aurore-berge-fait-barrage-a-lfi.md
+  s_71ef31f25d1e8f::t_f2a41bdb0201ca 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/3-2025-02-27/2-fdesouche-nous-attaque-padu-et-dr.md
+  s_71ef31f25d1e8f::t_4cf6af9392e683 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/3-2025-02-27/3-les-fans-de-begaudeau-sont-ils.md
+  s_71ef31f25d1e8f::t_b8b5942f19bbd2 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/3-2025-02-27/4-raz-et-wissam-ont-ils-gache.md
+  s_71ef31f25d1e8f::t_c1bce666ef5efa 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/3-2025-02-27/CLAUDE.md
+  s_71ef31f25d1e8f::t_4f69d231c7beea 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/CLAUDE.md
+  s_71ef31f25d1e8f::t_f9bc1c34bf30de 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE.md
+  s_71ef31f25d1e8f::t_a5f26da2b09a0a 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_71ef31f25d1e8f::t_91291ba28cc535 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4231c811bdb39b070eb19936eeeb2320a50263b3",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_71ef31f25d1e8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a354bad064096da8e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
