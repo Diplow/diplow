@@ -143,6 +143,7 @@ kinds:
       ancien-dirigeant-patronal: {définition: "A présidé ou dirigé une organisation patronale et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/yIq2MjL2sc4.md}
       ancien-directeur-d-établissement: {définition: "A dirigé un établissement d'enseignement et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Udn6iu_F2vU.md}
       mathématicien: {définition: "Étudie les mathématiques et en démontre les résultats.", statut: proposé, introduit_par: paduteam/oDlbLE_aTPM.md}
+      ancien-dirigeant-de-parti: {définition: "A dirigé un parti et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/4PV9RBcvic4.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -205,6 +206,7 @@ kinds:
       fondation: {définition: "Organisme privé qui finance des projets d'intérêt général.", statut: proposé, introduit_par: boniface/MPf_VEFQRc0.md}
       intersyndicale: {définition: "Front commun de plusieurs confédérations syndicales qui appellent ensemble à l'action.", statut: proposé, introduit_par: paduteam/F0x4OhYVpTk.md}
       coopérative: {définition: "Entreprise détenue et contrôlée démocratiquement par ses membres, à lucrativité limitée.", statut: proposé, introduit_par: blast/FA3IpqdI7k0.md}
+      représentation-diplomatique: {définition: "Ambassade ou mission qui représente un État à l'étranger.", statut: proposé, introduit_par: boniface/SSz3rP2B2PU.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
