@@ -1,23 +1,23 @@
 ---
-title: "2025-12-01 → 2026-01-30"
+title: "2025-12-01 → 2026-02-07"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01
 owner: diplo
 preview: >-
-  La PaduTeam pousse la gauche de rupture contre celle d'accommodement, défend
-  LFI et Mélenchon et combat le PS, qu'elle dit voué à trahir avant 2027. Elle
-  lit Maduro, le Groenland, le Venezuela et l'Iran comme un impérialisme
-  américain assumé, avec Bardella vassal de Trump.
+  La PaduTeam lit ces deux mois par les classes et l'impérialisme : elle
+  combat le PS et l'accommodement de la gauche au macronisme, défend LFI et
+  Mélenchon, et voit dans le Venezuela et le Groenland un impérialisme
+  américain assumé.
 ---
-# 2025-12-01 → 2026-01-30
+# 2025-12-01 → 2026-02-07
 
-Pendant ces deux mois, la PaduTeam lit l'actualité par les classes et les rapports de force matériels. Dès décembre ([[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/1-2025-12-01/CLAUDE|2025-12-01 → 2025-12-22]]), PCF, PS et Écologistes lui semblent s'accommoder du social-libéralisme et du macronisme. Elle en tire un enjeu stratégique : la gauche de rupture doit l'emporter sur celle d'accommodement.
+Du 1er décembre au 7 février, la PaduTeam applique la même grille de lecture : la gauche de rupture doit l'emporter sur celle d'accommodement. Dès décembre, elle juge que le PCF, le PS et les Écologistes s'accommodent du social-libéralisme et du macronisme ([[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/1-2025-12-01/CLAUDE|2025-12-01 → 2025-12-22]]). Le PS devient ensuite sa cible principale : elle le voit se reconstituer puis trahir.
 
-Le combat contre le PS devient ensuite le fil de la Period. La PaduTeam défend LFI et Mélenchon contre les médias et contre le PS, qu'elle combat avec la campagne « Plus jamais PS » ([[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/2-2025-12-23/CLAUDE|2025-12-23 → 2026-01-08]]). En janvier, elle voit un PS qui se reconstitue et trahit avant 2027, un Macron en PDG à Davos et un Ruffin dans la charité. Rochedy et les agriculteurs sont pour elle dans le camp réactionnaire.
+Contre lui, elle défend LFI et Mélenchon face aux médias et au PS, et mène la campagne « Plus jamais PS » ([[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/2-2025-12-23/CLAUDE|2025-12-23 → 2026-01-08]]). Fin janvier, elle estime que Mélenchon gagne la bataille des deux gauches ([[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/CLAUDE|2026-01-10 → 2026-02-07]]). Macron y apparaît tantôt en PDG, tantôt en guerre. Rochedy et les agriculteurs sont rangés dans le camp réactionnaire.
 
-Sur le plan international, elle lit l'enlèvement de Maduro et la revendication du Groenland comme un impérialisme américain assumé. La fin de la Period ([[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/CLAUDE|2026-01-10 → 2026-01-30]]) y ajoute l'étau de l'empire sur le Venezuela et l'Iran, et fait de Bardella un vassal de Trump.
+À l'international, elle lit l'enlèvement de Maduro et la revendication du Groenland comme un impérialisme américain assumé. En janvier et février, elle juge que le Venezuela et l'Iran sont traités sous propagande. Ces lectures s'appuient sur les rapports de force matériels plutôt que sur le commentaire de l'actualité.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/1-2025-12-01/CLAUDE|2025-12-01 → 2025-12-22]] (17 Digests)
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/2-2025-12-23/CLAUDE|2025-12-23 → 2026-01-08]] (16 Digests)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/CLAUDE|2026-01-10 → 2026-01-30]] (14 Digests)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/CLAUDE|2026-01-10 → 2026-02-07]] (20 Digests)
