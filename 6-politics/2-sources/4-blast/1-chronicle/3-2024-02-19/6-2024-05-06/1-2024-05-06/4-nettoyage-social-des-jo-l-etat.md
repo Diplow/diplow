@@ -1,6 +1,6 @@
 ---
 title: "\"NETTOYAGE SOCIAL\" DES JO : L'ÉTAT FRANÇAIS CHASSE LES SANS-ABRIS, LES TDS, ETC"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/5-2024-05-06
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/1-2024-05-06
 owner: diplo
 preview: >-
   Paul Alauzy, de Médecins du Monde, dénonce un « nettoyage social » à

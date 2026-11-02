@@ -1,6 +1,6 @@
 ---
 title: "COVID, L'ENQUÊTE : DES ESPIONS AU CŒUR DES POLITIQUES DE LA SANTÉ"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/5-2024-05-06
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/2-2024-05-10
 owner: diplo
 preview: >-
   Blast soutient qu'une PME belge, évincée de la logistique des vaccins pour

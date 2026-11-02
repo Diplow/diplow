@@ -1,6 +1,6 @@
 ---
 title: "L’EFFONDREMENT PEUT-IL ÊTRE HEUREUX ? - AVEC MATHIEU BABLET"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/5-2024-05-06
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/2-2024-05-10
 owner: diplo
 preview: >-
   Mathieu Bablet explique qu'une SF utile ne doit plus être une dystopie de

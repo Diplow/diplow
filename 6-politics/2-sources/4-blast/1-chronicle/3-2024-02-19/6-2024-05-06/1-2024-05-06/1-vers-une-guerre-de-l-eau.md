@@ -1,6 +1,6 @@
 ---
 title: "VERS UNE GUERRE DE L'EAU ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/5-2024-05-06
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/1-2024-05-06
 owner: diplo
 preview: >-
   Selon Simon Porcher, reçu par Blast, la pénurie d'eau est déjà là et frappe
