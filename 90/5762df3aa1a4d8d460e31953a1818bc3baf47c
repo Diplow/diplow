@@ -1,0 +1,49 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_eeef33f18a64b2 164
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/3-2024-03-07/4-conversation-avec-pierre-carles-des-farc.md
+  s_91164028bdc12a::t_76d30ac6ae7aab 1-85
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/3-2024-03-07/5-economie-il-n-y-a-aucune.md
+  s_91164028bdc12a::t_ad75f4bd99ef86 1-76
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/3-2024-03-07/CLAUDE.md
+  s_91164028bdc12a::t_4f2e1b7bca0cf5 2,6-9,11,13,15,22-23
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/4-2024-03-13/1-ivg-dans-la-constitution-une-arnaque.md
+  s_91164028bdc12a::t_d7490f3ae41f52 1-78
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/4-2024-03-13/2-30-milliards-d-economies-les-riches.md
+  s_91164028bdc12a::t_672e5f5edc9193 1-77
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/4-2024-03-13/3-pour-sauver-la-democratie-en-finir.md
+  s_91164028bdc12a::t_314f346164e96a 1-100
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/4-2024-03-13/4-les-paysans-les-pesticides-et-l.md
+  s_91164028bdc12a::t_4aee74a53e3d91 1-92
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/4-2024-03-13/CLAUDE.md
+  s_91164028bdc12a::t_3d2389df1fb368 1-22
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/CLAUDE.md
+  s_91164028bdc12a::t_cce1d9c49a8b1f 2,6-9,11,13,15-17,23-24
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE.md
+  s_91164028bdc12a::t_13c97b4a25ba3a 2,7-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_91164028bdc12a::t_9006d331c2effe 6-8,12,14,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "905762df3aa1a4d8d460e31953a1818bc3baf47c",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_91164028bdc12a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-afdc34d513524dce3",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
