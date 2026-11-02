@@ -1,18 +1,17 @@
 ---
-title: "2025-01-05 → 2025-01-09"
+title: "2025-01-05 → 2025-01-10"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/3-2025-01-05
 owner: diplo
 preview: >-
-  Blast reçoit Kergoat sur le financement libyen de Sarkozy, Colombi et
-  Framont sur le travail et les patrons, Olivet sur l'échec de la prohibition,
-  et soutient que Macron, malgré sa dénonciation de Musk, n'est pas crédible
-  face à l'extrême droite.
+  Blast reçoit Kergoat sur l'affaire libyenne, Colombi et Framont sur le
+  travail, Olivet sur la drogue. Elle soutient que Macron n'est pas crédible
+  face à l'extrême droite et que la Suisse profite de la France.
 ---
-# 2025-01-05 → 2025-01-09
+# 2025-01-05 → 2025-01-10
 
-Pendant ces quelques jours, Blast fait surtout parler ses invités, chacun sur un terrain où il met en cause un pouvoir ou un ordre établi. Le réalisateur Yannick Kergoat reconstitue, à la veille du procès, l'enquête sur le financement libyen de la campagne Sarkozy de 2007, et dénonce la défense de Sarkozy comme la complaisance de certains médias. Les sociologues Denis Colombi et Nicolas Framont soutiennent que le travail d'exécution est invisibilisé et mal mesuré, que la hiérarchie en fait une source de souffrance au service du profit, et que seule l'action collective, la grève d'abord, rétablit un rapport de force. Pour Fabrice Olivet (ASUD), la guerre à la drogue, née aux États-Unis sous Nixon, sert à stigmatiser les Noirs et les Arabes des quartiers populaires, et aggrave le sida et la délinquance.
+Cette semaine, Blast donne la parole à des invités qui dénoncent chacun un système. Yannick Kergoat reconstitue l'enquête sur le financement libyen de la campagne Sarkozy de 2007, à la veille du procès, et critique la défense de Sarkozy et la complaisance de certains médias. Les sociologues Denis Colombi et Nicolas Framont jugent que le travail d'exécution est invisibilisé et que la hiérarchie en fait une source de souffrance au service du profit. Pour eux, seule l'action collective, la grève d'abord, rétablit un rapport de force. Fabrice Olivet (ASUD) lit la guerre à la drogue comme un outil de stigmatisation des habitants des quartiers populaires, qui aggrave le sida et la délinquance.
 
-Le dernier Digest est le seul où Blast prend lui-même la parole. Il soutient qu'Emmanuel Macron dit une partie de la vérité en dénonçant l'internationale réactionnaire d'Elon Musk, mais qu'il n'est pas crédible : il reçoit Musk à l'Élysée, arme Israël et aide l'extrême droite à peser en France.
+Deux Digests portent des thèses que Blast soutient elle-même. Sur Emmanuel Macron, elle estime qu'il dit une partie de la vérité en dénonçant l'internationale réactionnaire d'Elon Musk, mais qu'il n'est pas crédible : il reçoit Musk à l'Élysée, arme Israël et aide l'extrême droite à peser en France. Sur la Suisse, hors de l'UE mais dans son marché intérieur, elle soutient que le pays en tire les avantages sans les inconvénients, aux dépens de la France, qui paie le chômage des frontaliers et voit ses hôpitaux se vider à la frontière.
 
 ## Contenu
 
@@ -20,3 +19,4 @@ Le dernier Digest est le seul où Blast prend lui-même la parole. Il soutient q
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/3-2025-01-05/2-vous-ne-detestez-pas-le-travail|VOUS NE DÉTESTEZ PAS LE TRAVAIL, MAIS LES PATRONS ET LE CAPITALISME]] (2025-01-07)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/3-2025-01-05/3-guerre-a-la-drogue-l-echec|GUERRE À LA DROGUE : L'ÉCHEC PERMANENT DE LA PROHIBITION]] (2025-01-08)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/3-2025-01-05/4-de-musk-a-le-pen-macron|DE MUSK À LE PEN : MACRON FAIT DES COURBETTES À L’EXTRÊME DROITE]] (2025-01-09)
+5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/6-2024-12-28/3-2025-01-05/5-la-suisse-une-exception-au-milieu|LA SUISSE : UNE EXCEPTION AU MILIEU DE L'EUROPE]] (2025-01-10)

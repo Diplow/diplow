@@ -1,21 +1,25 @@
 ---
-title: "2022-11-28 → 2026-10-14"
+title: "2022-11-28 → 2022-12-06"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/5-2022-11-28/1-2022-11-28
 owner: diplo
 preview: >-
-  Boniface soutient que les sociétés civiles, même sous des régimes
-  autoritaires, finissent par se faire entendre. Il chronique le livre de
-  Stubb sur trois blocs mondiaux et reçoit Sylvie Bermann, pour qui le sommet
-  Trump-Xi consacre la parité États-Unis–Chine.
+  Boniface voit dans les colères chinoise et iranienne des sociétés civiles
+  qui se font entendre sans renverser le pouvoir, et dans les États-Unis des
+  alliés stratégiques mais des rivaux économiques face auxquels l'Europe doit
+  défendre ses intérêts.
 ---
-# 2022-11-28 → 2026-10-14
+# 2022-11-28 → 2022-12-06
 
-Boniface ouvre la Period par une lecture des colères chinoise contre le zéro covid et iranienne contre le régime : pour lui, les sociétés civiles, même sous des régimes autoritaires, finissent par se faire entendre et arrachent des marges de manœuvre, sans pour autant renverser le pouvoir. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/5-2022-11-28/1-2022-11-28/1-chine-et-iran-les-societes-civiles|Chine et Iran : les sociétés civiles contre leur régime]] reste le seul Digest de 2022.
+Boniface lit les colères chinoise contre le zéro covid et iranienne contre le régime comme la preuve que les sociétés civiles, même sous des régimes autoritaires, finissent par se faire entendre et arrachent des marges de manœuvre, sans pour autant renverser le pouvoir. Il applique la même attention aux rapports de force entre alliés. Les États-Unis sont des alliés stratégiques face à la Russie, mais restent des rivaux commerciaux : Macron est rentré de sa visite d'État sans résultat concret sur le plan d'investissement américain. Pour Boniface, l'Europe doit sortir de sa naïveté et défendre ses intérêts.
 
-Les deux suivants, datés de 2026, tournent autour du rapport de force entre blocs. Boniface chronique Le Triangle du pouvoir d'Alexander Stubb, président finlandais, pour qui le monde se divise en trois blocs (Occident, Orient, Sud global). Selon Stubb, l'Occident, affaibli par ses échecs, doit montrer l'exemple s'il veut peser sur un Sud qui décidera du nouvel ordre. Boniface reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Elle voit une Chine qui joue la patience sur Taïwan et n'est pas anti-européenne, mais dont l'excédent commercial met l'Europe en difficulté.
+Deux vidéos donnent la parole à des interlocuteurs, et leurs thèses restent les leurs. Dominique Vidal présente à Boniface *Le Monde ne sera plus comme avant*, ouvrage dirigé avec Bertrand Badie : il combat les faux retours, à la guerre froide ou aux années 30, et plaide pour réformer l'ONU plutôt que l'abandonner. Reçu par Boniface, Maurice Gourdault-Montagne soutient que la guerre en Ukraine accélère la fin de la domination occidentale, et que l'Occident, qui applique ses valeurs de façon sélective, doit chercher le compromis et sortir de l'entre-soi.
+
+La Period se termine sur une vidéo plus personnelle : Boniface présente les portraits que C215 a peints dans les salles de l'IRIS et explique ses choix de noms. De Gaulle et Mitterrand y représentent une diplomatie indépendante, Mandela et Gorbatchev des dirigeants qui ont fait du bien au monde, Tillion la lucidité.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/5-2022-11-28/1-2022-11-28/1-chine-et-iran-les-societes-civiles|Chine et Iran : les sociétés civiles contre leur régime]] (2022-11-28)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/5-2022-11-28/1-2022-11-28/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/5-2022-11-28/1-2022-11-28/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/5-2022-11-28/1-2022-11-28/2-j-ai-lu-le-monde-ne|J'ai lu... "Le Monde ne sera plus comme avant", ouvrage dirigé par Bertrand Badie et Dominique Vidal]] (2022-11-29)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/5-2022-11-28/1-2022-11-28/3-clm-s6-13-maurice-gourdault-montagne|CLM S6#13 – Maurice Gourdault-Montagne – "Les autres ne pensent pas comme nous"]] (2022-11-30)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/5-2022-11-28/1-2022-11-28/4-france-etats-unis-allies-strategiques-rivaux|France / États-Unis : alliés stratégiques, rivaux économiques]] (2022-12-05)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/5-2022-11-28/1-2022-11-28/5-c215-l-art-et-l-iris|C215, l'art et l'IRIS]] (2022-12-06)
