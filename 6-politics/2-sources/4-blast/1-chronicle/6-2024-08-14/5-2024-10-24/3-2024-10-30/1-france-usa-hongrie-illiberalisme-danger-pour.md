@@ -1,6 +1,6 @@
 ---
 title: "FRANCE, USA, HONGRIE : ILLIBÉRALISME, DANGER POUR LES DÉMOCRATIES ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/6-2024-10-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/3-2024-10-30
 owner: diplo
 preview: >-
   Blast définit la démocratie illibérale comme un régime à élections sans État

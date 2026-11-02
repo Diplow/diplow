@@ -1,6 +1,6 @@
 ---
 title: "\"ON N'EST PAS DES CHIENS\" : L’ULTIME COMBAT DE LA DERNIÈRE USINE AUTOMOBILE DU 93"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/1-2024-10-24
 owner: diplo
 preview: >-
   Blast suit les ouvriers de l'usine CLN d'Aulnay-sous-Bois, en grève depuis

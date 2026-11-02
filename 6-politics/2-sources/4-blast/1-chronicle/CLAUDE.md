@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit l'année comme une dérive du macronisme, qui sert les puissants et
-  ouvre la voie à l'extrême droite, de la loi immigration à Barnier imposé
-  après la dissolution. Elle défend l'enquête face à la concentration de
-  l'argent, du pouvoir et des médias.
+  Blast lit un an de vie politique comme une dérive : un macronisme qui sert
+  les puissants, fait payer les précaires et ouvre la voie à l'extrême droite,
+  de la loi immigration à Barnier, et une information indépendante à défendre
+  face aux milliardaires.
 ---
 # Chronicle
 
-Pendant ces douze mois, Blast soutient que le pouvoir macroniste gouverne pour les riches et fait payer les précaires. De l'automne 2023 au gouvernement Attal, elle relève une macronie des riches, une loi immigration alignée sur l'extrême droite et des libertés qui reculent. Elle y ajoute un deux poids deux mesures sur Gaza et l'antisémitisme, puis la criminalisation de la solidarité avec la Palestine. Elle lit aussi la crise agricole comme un système de dette que la FNSEA confisque, et accuse une indulgence sélective envers les paysans.
+Du début à la fin de la Chronicle, Blast soutient que le pouvoir macroniste protège les puissants et fait payer les précaires, dans un monde où l'argent, le pouvoir et l'information se concentrent entre peu de mains. Cette lecture traverse l'automne 2023, avec une macronie des riches et une loi immigration alignée sur l'extrême droite, puis le gouvernement Attal. Elle se prolonge dans la défense de l'information indépendante face aux milliardaires propriétaires de médias, et dans celle de l'enquête, dont Blast dit la liberté menacée.
 
-Le deuxième fil est la montée du RN, qu'elle présente comme le produit de ceux qui reprennent ses thèmes. Banalisé dès l'automne 2023, le RN est en tête des sondages au printemps 2024, puis érigé en seul opposant. Blast lit la dissolution comme un calcul de Macron pour se poser en rempart. Elle soutient qu'il a en réalité déroulé le tapis à l'extrême droite, et que le Nouveau Front populaire était la seule alternative sérieuse.
+Le fil politique le plus net est la montée de l'extrême droite, que Blast attribue à ceux qui la servent. Le RN est banalisé, et il doit sa place en tête des sondages à ceux qui reprennent ses thèmes. Blast lit la dissolution comme un calcul de Macron pour se poser en rempart, et soutient qu'elle a ouvert au RN la voie du pouvoir. Elle fait du Nouveau Front populaire la seule alternative sérieuse. Après le vote, elle accuse Macron de nier le résultat des urnes, de confisquer la victoire de la gauche en imposant Barnier avec l'aval du RN, et de laisser ainsi l'extrême droite gouverner par procuration.
 
-Après le vote, le ton se durcit : Macron nie le résultat des urnes et confisque la victoire de la gauche en imposant Barnier avec l'aval du RN. L'extrême droite gouverne alors par procuration. Sous cette chronique court la défense de l'enquête : Blast dit sa liberté menacée et dénonce la concentration de l'argent, du pouvoir et de l'information entre peu de mains, les puissants tenant les médias.
+D'autres sujets reviennent dans cette dérive. Blast dénonce un deux poids deux mesures sur Gaza et l'antisémitisme, puis soutient que l'État et le macronisme criminalisent la solidarité avec la Palestine et font reculer les libertés. Elle accuse aussi une indulgence sélective envers les paysans, et lit la crise agricole comme un système de dette que la FNSEA confisque.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Après le vote, le ton se durcit : Macron nie le résultat des urnes et confisqu
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-18]] (68 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE|2024-04-19 → 2024-06-14]] (65 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]] (65 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE|2024-08-14 → 2024-10-30]] (81 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE|2024-08-14 → 2024-11-03]] (87 Digests)

@@ -1,6 +1,6 @@
 ---
 title: "VOYAGE À GAZA : AU CŒUR D'UNE PRISON À CIEL OUVERT"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/6-2024-10-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/2-2024-10-28
 owner: diplo
 preview: >-
   Le réalisateur Pierre Usberti, revenu de Gaza en 2018, décrit un territoire

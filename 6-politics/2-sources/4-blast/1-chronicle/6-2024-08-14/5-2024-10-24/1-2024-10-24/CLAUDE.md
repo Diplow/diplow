@@ -1,6 +1,6 @@
 ---
 title: "2024-10-24 → 2024-10-27"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/1-2024-10-24
 owner: diplo
 preview: >-
   Blast accuse la presse dominante de manipuler le langage, juge le budget
@@ -18,8 +18,8 @@ Le regard se porte enfin outre-Atlantique : la présidentielle américaine, port
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/1-extreme-gauche-tensions-au-proche-orient|"EXTRÊME GAUCHE", "TENSIONS" AU PROCHE-ORIENT : L'ART DE MANIPULER LE LANGAGE ET LA VÉRITÉ]] (2024-10-24)
-2. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/2-on-n-est-pas-des-chiens|"ON N'EST PAS DES CHIENS" : L’ULTIME COMBAT DE LA DERNIÈRE USINE AUTOMOBILE DU 93]] (2024-10-24)
-3. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/3-austerite-programmee-tout-comprendre-au-budget|AUSTÉRITÉ PROGRAMMÉE : TOUT COMPRENDRE AU BUDGET 2025 PRÉSENTÉ PAR LE GOUVERNEMENT]] (2024-10-25)
-4. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/4-des-etats-unis-a-la-france|DES ÉTATS-UNIS À LA FRANCE : L'EXPLOSION DU CHAOS POLITIQUE]] (2024-10-26)
-5. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/5-les-grandes-gueules-une-certaine-idee|🦏 LES GRANDES GUEULES : UNE CERTAINE IDÉE DU "VRAI PEUPLE"]] (2024-10-27)
+1. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/1-2024-10-24/1-extreme-gauche-tensions-au-proche-orient|"EXTRÊME GAUCHE", "TENSIONS" AU PROCHE-ORIENT : L'ART DE MANIPULER LE LANGAGE ET LA VÉRITÉ]] (2024-10-24)
+2. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/1-2024-10-24/2-on-n-est-pas-des-chiens|"ON N'EST PAS DES CHIENS" : L’ULTIME COMBAT DE LA DERNIÈRE USINE AUTOMOBILE DU 93]] (2024-10-24)
+3. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/1-2024-10-24/3-austerite-programmee-tout-comprendre-au-budget|AUSTÉRITÉ PROGRAMMÉE : TOUT COMPRENDRE AU BUDGET 2025 PRÉSENTÉ PAR LE GOUVERNEMENT]] (2024-10-25)
+4. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/1-2024-10-24/4-des-etats-unis-a-la-france|DES ÉTATS-UNIS À LA FRANCE : L'EXPLOSION DU CHAOS POLITIQUE]] (2024-10-26)
+5. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/1-2024-10-24/5-les-grandes-gueules-une-certaine-idee|🦏 LES GRANDES GUEULES : UNE CERTAINE IDÉE DU "VRAI PEUPLE"]] (2024-10-27)

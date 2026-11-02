@@ -1,6 +1,6 @@
 ---
 title: "COMMENT RÉSISTER À LA CULPABILISATION, AVEC MONA CHOLLET"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/6-2024-10-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/2-2024-10-28
 owner: diplo
 preview: >-
   Mona Chollet soutient que la petite voix qui culpabilise est une domination

@@ -1,6 +1,6 @@
 ---
 title: "\"EXTRÊME GAUCHE\", \"TENSIONS\" AU PROCHE-ORIENT : L'ART DE MANIPULER LE LANGAGE ET LA VÉRITÉ"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/1-2024-10-24
 owner: diplo
 preview: >-
   Blast soutient que la presse dominante manipule le vocabulaire : elle range
