@@ -1,0 +1,65 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_6f204a5e05ab0a 154
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/CLAUDE.md
+  s_665861f0ad68e0::t_c5aa9032ff8308 2,6-9,11,13,15-17
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/1-2025-12-23/1-rochedy-le-dictateur-qui-veut-du.md
+  s_665861f0ad68e0::t_f9df6a9347502c 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/1-2025-12-23/2-rochedy-veut-detruire-la-france-voici.md
+  s_665861f0ad68e0::t_5543d0ea2e975d 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/1-2025-12-23/3-la-porte-parole-du-pcf-a.md
+  s_665861f0ad68e0::t_85ba2218d0f96a 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/1-2025-12-23/4-les-paysans-sont-ils-nos-camarades.md
+  s_665861f0ad68e0::t_31cca2d9b0ab69 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/1-2025-12-23/CLAUDE.md
+  s_665861f0ad68e0::t_dcca1b3f79872c 2-3,6-9,11,13,15,19-22
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/2-2025-12-29/1-des-ecolos-d-extreme-droite-anti.md
+  s_665861f0ad68e0::t_6d2cc33c4ab280 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/2-2025-12-29/2-lfi-rn-pourquoi-les-medias-ont.md
+  s_665861f0ad68e0::t_edc82bb37bdcd9 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/2-2025-12-29/3-usul-cette-gauche-qui-veut-nous.md
+  s_665861f0ad68e0::t_a389b6ee30f5ae 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/2-2025-12-29/4-garrido-ses-methodes-honteuses-pour-regler.md
+  s_665861f0ad68e0::t_4b849571f7e8c2 1-106
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/2-2025-12-29/5-les-seigneurs-des-noisettes-vol-1.md
+  s_665861f0ad68e0::t_232eb884d52040 1-101
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/2-2025-12-29/CLAUDE.md
+  s_665861f0ad68e0::t_875ec66452a97e 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/3-2026-01-03/1-decryptage-trump-bombarde-le-venezuela-et.md
+  s_665861f0ad68e0::t_c23791843cea15 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/3-2026-01-03/2-macr0n-serpillere-des-etats-unis-apres.md
+  s_665861f0ad68e0::t_a60ea3b0eb0670 1-100
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/3-2026-01-03/3-surprise-non-le-pcf-s-allie.md
+  s_665861f0ad68e0::t_9931770f6f6b2c 1-100
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/3-2026-01-03/CLAUDE.md
+  s_665861f0ad68e0::t_8f804346c2ca69 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/CLAUDE.md
+  s_665861f0ad68e0::t_e20ba73b9140ae 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE.md
+  s_665861f0ad68e0::t_978fb9a42eb8ac 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_665861f0ad68e0::t_61f2f4084b4bad 6-8,12,14,16,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c9a6121f9eadee8ee405c4c962d90e192aa62ab6",
+  "prompts": {},
+  "sessions": {
+    "s_665861f0ad68e0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a5cb8afaf3ca0eca7",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
