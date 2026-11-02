@@ -1,0 +1,43 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/3-2024-11-29/CLAUDE.md
+  s_201bb435387a30::t_0b8e15aee99880 6-9,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/4-2024-12-02/1-comment-gagner-la-bataille-politique-sur.md
+  s_201bb435387a30::t_97f4d375fdb46d 1-88
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/4-2024-12-02/2-naomi-klein-seule-la-gauche-peut.md
+  s_201bb435387a30::t_cac5c53b92d67c 1-97
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/4-2024-12-02/3-il-y-a-ceux-qui-reussissent.md
+  s_201bb435387a30::t_beccfd371ba889 1-89
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/4-2024-12-02/CLAUDE.md
+  s_201bb435387a30::t_e5b2926db70248 1-21
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/5-2024-12-05/1-barnier-macron-apres-la-honte-la.md
+  s_201bb435387a30::t_3814e961ee7293 1-77
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/5-2024-12-05/2-sauvez-les-paysans-mangez-un-trader.md
+  s_201bb435387a30::t_d5193ee1c56dbf 1-56
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/5-2024-12-05/3-censure-historique-macron-champion-du-chaos.md
+  s_201bb435387a30::t_21dbf33fbcc1c8 1-85
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/5-2024-12-05/CLAUDE.md
+  s_201bb435387a30::t_745d64c3887c0a 1-21
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/3-2024-11-21/CLAUDE.md
+  s_201bb435387a30::t_432198541a8517 2,6-9,11,13,15-17,24-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE.md
+  s_201bb435387a30::t_627b2dedc3bbd2 2,7-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_201bb435387a30::t_c1b34d2403641c 2,7-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_201bb435387a30::t_3aba856ae09958 8-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1e93656035a997ef5465f1593fa25b03289a8960",
+  "prompts": {},
+  "sessions": {
+    "s_201bb435387a30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a79aa0b8db8002af2",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
