@@ -5,16 +5,16 @@ owner: diplo
 preview: >-
   Pendant dix ans, Boniface applique les mêmes grilles à l'actualité :
   multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
-  Sud global. Il plaide pour une Europe autonome, pour la négociation en
-  Ukraine et pour une France qui fasse pont.
+  monde qui échappe à l'Occident. Il presse l'Europe d'être autonome et défend
+  la négociation en Ukraine.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Pascal Boniface reste fidèle aux mêmes outils d'analyse. Il lit l'actualité internationale à travers le multilatéralisme contre l'unilatéralisme et le deux-poids-deux-mesures occidental. Ces grilles reviennent d'une période à l'autre, appliquées à des événements différents. Elles aboutissent à une idée constante : l'Europe doit gagner en autonomie.
+D'un bout à l'autre de la Chronicle, Boniface mobilise des grilles de lecture stables. Il oppose le multilatéralisme à l'unilatéralisme, dénonce un deux-poids-deux-mesures occidental et soutient que l'Europe doit acquérir son autonomie stratégique. Cette cohérence tient à la méthode : il applique les mêmes outils à des événements différents plutôt que de changer de lecture à chaque actualité.
 
-De [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]], il les applique à Trump et à la scène internationale. Il presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur. Dans [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]], sa lecture s'organise autour du clivage entre l'Occident et le reste du monde, avec le double standard occidental et le Sud global. Il y plaide aussi pour la négociation en Ukraine et pour une France qui fasse pont.
+Les objets changent avec les époques. De 2016 à juin 2020 ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]]), il lit Trump et la scène internationale à travers ces grilles, puis voit dans le Covid-19 un révélateur. Dans la seconde moitié ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]]), ces mêmes grilles servent à lire un monde qui échappe à l'Occident. Boniface y défend la négociation en Ukraine, et la critique du double standard occidental y devient plus insistante.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (405 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (411 Digests)
