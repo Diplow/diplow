@@ -1,6 +1,6 @@
 ---
 title: "Ces INSOUMISES FONT EXPLOSER les ÉCOLOGISTES !! (CHIKIROU, LAHOUARIA ADDOUCHE et CO)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/5-2026-02-16/4-2026-03-08
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/5-2026-02-16/5-2026-03-15
 owner: diplo
 preview: >-
   La PaduTeam soutient qu'EELV est la grande perdante des municipales :
