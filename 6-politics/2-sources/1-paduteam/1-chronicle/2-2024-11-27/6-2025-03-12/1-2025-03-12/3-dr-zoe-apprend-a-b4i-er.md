@@ -1,6 +1,6 @@
 ---
 title: "DR ZOÉ apprend à B4I$ER à ce PUCIX !! (@pasduhring x @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/1-2025-03-12
 owner: diplo
 preview: >-
   Padu et Zoé commentent la vidéo d'un jeune de 18 ans, surnommé Brunel, qui

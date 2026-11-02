@@ -1,6 +1,6 @@
 ---
 title: "DANIEL WOIRIN et CYRIL DIABATÉ DÉTRUISENT LE JARL  il a été CONDAMNÉ pour ESCROQUERIE !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/1-2025-03-12
 owner: diplo
 preview: >-
   La PaduTeam soutient que Le Jarl, invité partout par l'extrême droite, est
@@ -46,7 +46,7 @@ relations:
 
 ## 3. Ce podcast permet de recouper l'accusation de Laavier, jusque-là peu vérifiable.
 
-Voir [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12/1-delavier-leak-sur-le-jarl-c|Delavier leak sur Le Jarl]], où cette accusation est exposée.
+Voir [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/1-2025-03-12/1-delavier-leak-sur-le-jarl-c|Delavier leak sur Le Jarl]], où cette accusation est exposée.
 
 > [1:00](https://www.youtube.com/watch?v=QZKe7o1CF1Y&t=60s) « il m'a escroqué le Yar il m'a il me doit des dizaines de milliers d'euros il a été condamné parce qu'il ne m'a pas rendu mes droits d'auteur »
 

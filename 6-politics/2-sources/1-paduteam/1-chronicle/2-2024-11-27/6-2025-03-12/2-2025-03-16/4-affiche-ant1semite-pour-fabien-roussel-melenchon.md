@@ -1,6 +1,6 @@
 ---
 title: "AFFICHE ANT1SÉMITE  pour FABIEN ROUSSEL MÉLENCHON fait du TRUMP !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/6-2025-03-16
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/2-2025-03-16
 owner: diplo
 preview: >-
   La PaduTeam juge l'affiche LFI sur Hanouna antisémite et justement retirée,

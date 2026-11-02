@@ -1,6 +1,6 @@
 ---
 title: "Cette ORGANISATION TRANS a BESOIN de VOUS !! (OST x @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/6-2025-03-16
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/2-2025-03-16
 owner: diplo
 preview: >-
   La PaduTeam relaie l'appel de l'OST : pour sa porte-parole Lou Girard,

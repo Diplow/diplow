@@ -114,6 +114,7 @@ kinds:
       rédacteur: {définition: "Écrit et dirige une revue ou un site de réflexion.", statut: proposé, introduit_par: paduteam/SQN9eTGn1Cg.md}
       designer: {définition: "Conçoit des objets, des interfaces ou des images, en indépendant ou en agence.", statut: proposé, introduit_par: blast/06KQ5dB1EnU.md}
       dessinateur: {définition: "Dessine des planches de bande dessinée ou des illustrations et les publie.", statut: proposé, introduit_par: paduteam/CI-C05V074k.md}
+      comte: {définition: "Seigneur qui dirige un comté, à la date de la Publication.", statut: proposé, introduit_par: blast/V2yr9N2jK-0.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

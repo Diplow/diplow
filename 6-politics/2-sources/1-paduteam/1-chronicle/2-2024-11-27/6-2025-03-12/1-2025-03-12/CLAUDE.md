@@ -1,6 +1,6 @@
 ---
 title: "2025-03-12 → 2025-03-15"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/1-2025-03-12
 owner: diplo
 preview: >-
   La PaduTeam s'attaque à Le Jarl, escroc insolvable et condamné que l'extrême
@@ -16,7 +16,7 @@ Les deux autres vidéos, avec Zoé et Padu, portent sur les rapports de genre. E
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12/1-delavier-leak-sur-le-jarl-c|DELAVIER LEAK sur LE JARL  c'est un ESCR0C INSOLVABLE MULTI-CONDAMNÉ par la JUSTICE !!]] (2025-03-12)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12/2-notre-avis-sur-l-affaire-dany|Notre AVIS sur l'AFFAIRE DANY CALIGULA !! (@Dr_Zoé_YT X @pasduhring)]] (2025-03-13)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12/3-dr-zoe-apprend-a-b4i-er|DR ZOÉ apprend à B4I$ER à ce PUCIX !! (@pasduhring x @Dr_Zoé_YT)]] (2025-03-14)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/5-2025-02-15/5-2025-03-12/4-daniel-woirin-et-cyril-diabate-detruisent|DANIEL WOIRIN et CYRIL DIABATÉ DÉTRUISENT LE JARL  il a été CONDAMNÉ pour ESCROQUERIE !!]] (2025-03-15)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/1-2025-03-12/1-delavier-leak-sur-le-jarl-c|DELAVIER LEAK sur LE JARL  c'est un ESCR0C INSOLVABLE MULTI-CONDAMNÉ par la JUSTICE !!]] (2025-03-12)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/1-2025-03-12/2-notre-avis-sur-l-affaire-dany|Notre AVIS sur l'AFFAIRE DANY CALIGULA !! (@Dr_Zoé_YT X @pasduhring)]] (2025-03-13)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/1-2025-03-12/3-dr-zoe-apprend-a-b4i-er|DR ZOÉ apprend à B4I$ER à ce PUCIX !! (@pasduhring x @Dr_Zoé_YT)]] (2025-03-14)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/6-2025-03-12/1-2025-03-12/4-daniel-woirin-et-cyril-diabate-detruisent|DANIEL WOIRIN et CYRIL DIABATÉ DÉTRUISENT LE JARL  il a été CONDAMNÉ pour ESCROQUERIE !!]] (2025-03-15)
