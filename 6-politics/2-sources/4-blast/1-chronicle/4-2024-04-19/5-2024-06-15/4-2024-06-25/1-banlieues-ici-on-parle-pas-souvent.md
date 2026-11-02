@@ -1,6 +1,6 @@
 ---
 title: "BANLIEUES : \"ICI ON PARLE PAS SOUVENT DE POLITIQUE, MAIS ON EN CRÈVE\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/3-2024-06-23
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/4-2024-06-25
 owner: diplo
 preview: >-
   Blast soutient que l'abstention des quartiers populaires n'est pas de
