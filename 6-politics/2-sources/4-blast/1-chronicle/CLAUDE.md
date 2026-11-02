@@ -4,20 +4,20 @@ parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
   Blast soutient que le pouvoir macroniste sert les riches et fait le jeu de
-  l'extrême droite, de la loi immigration au gouvernement Attal, et dénonce un
-  capitalisme mondialisé opaque où argent, pouvoir et information se
-  concentrent, de Drahi à Bolloré.
+  l'extrême droite, du RN banalisé à la loi immigration, que la FNSEA
+  confisque la colère agricole, et dénonce l'opacité de l'argent, du pouvoir
+  et de l'information.
 ---
 # Chronicle
 
-Sur toute la période, Blast tient un même fil : un pouvoir macroniste qui sert les puissants, protège les ultra-riches et s'acharne sur les précaires, tandis que l'extrême droite avance. À l'automne 2023, elle lit cette trajectoire comme une dérive. Elle y voit une macronie des riches, un deux poids deux mesures sur Gaza et l'antisémitisme, un RN banalisé, puis une loi immigration alignée sur l'extrême droite. Elle défend dans le même temps le travail d'enquête et dit sa liberté menacée.
+Sur toute la Chronicle, Blast lit le macronisme comme un pouvoir qui protège les plus riches et désinforme. Dès l'automne 2023, elle y voit une dérive : une macronie des riches, un RN banalisé, puis une loi immigration alignée sur l'extrême droite. Le gouvernement Attal prolonge cette lecture, et au printemps 2024 le RN prospère, selon elle, grâce à ceux qui reprennent ses thèmes. Elle dénonce aussi deux poids deux mesures sur Gaza et l'antisémitisme.
 
-Pendant l'hiver, Blast poursuit ce constat avec le gouvernement Attal, qu'elle présente comme le prolongement de la loi immigration au service de l'extrême droite. Elle accuse une indulgence sélective envers les paysans et lit la crise agricole comme un système de dette que la FNSEA confisque.
+Au cœur de l'hiver, la crise agricole devient un second front. Blast accuse une indulgence sélective envers les paysans et lit cette crise comme un système de dette que la FNSEA confisque. Elle soutient ensuite que la colère agricole est captée par ce syndicat. Elle ajoute que les sondages fabriquent l'opinion au lieu de la mesurer.
 
-Au printemps 2024, Blast élargit le propos. Elle dénonce un pouvoir qui désinforme et un capitalisme mondialisé opaque, où l'argent, le pouvoir et l'information se concentrent, de l'empire Drahi à Bolloré.
+Ce qui relie ces thèses, c'est la dénonciation de l'opacité : celle de l'argent, du pouvoir et de l'information. Blast défend l'enquête comme réponse et dit sa propre liberté menacée.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]] (69 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-18]] (70 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-19]] (69 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-24]] (75 Digests)

@@ -1,6 +1,6 @@
 ---
 title: "SCANDALE \"MAISONS AVEC PISCINE\" : ISRAËL MET EN VENTE LA CISJORDANIE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/4-2024-04-15
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/5-2024-04-19
 owner: diplo
 preview: >-
   Blast montre que des foires immobilières, au Canada puis à Paris, proposent
