@@ -3,21 +3,21 @@ title: "2022-03-29 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29
 owner: diplo
 preview: >-
-  Boniface lit la guerre en Ukraine comme un révélateur, juge les sanctions
-  impuissantes et demande de négocier, puis voit un monde multipolaire où le
-  Sud global pèse ; sur la Palestine, il reproche à la France de se contenter
-  de protestations.
+  Boniface lit la guerre en Ukraine comme un révélateur : sanctions
+  impuissantes, Europe fracturée, Occident que le reste du monde ne suit plus.
+  Il défend la négociation avec Poutine et juge hypocrite le boycott du Qatar.
 ---
 # 2022-03-29 → 2026-10-30
 
-Sur toute la Period, la guerre en Ukraine est le fil principal de Boniface. En 2022, il la lit comme un révélateur : les Occidentaux en tirent de fausses leçons, l'Ukraine en sort amputée, l'Europe se fracture et le reste du monde ne suit plus l'Occident sur les sanctions. Il défend la négociation avec Poutine et refuse que l'émotion décide d'une adhésion à l'UE.
+Pendant la première année, qui concentre 60 des 71 Digests, Boniface lit la guerre en Ukraine comme un révélateur. Il y voit de fausses leçons tirées par les Occidentaux, une Ukraine amputée, une Europe fracturée et un Occident que le reste du monde ne suit plus sur les sanctions. Il les juge impuissantes. Il applique à la guerre un deux-poids-deux-mesures occidental et la rivalité sino-américaine. Il refuse que l'émotion décide d'une adhésion à l'UE, veut que l'Europe défende ses intérêts et appelle l'Occident à négocier avec Poutine, puis à négocier les buts de guerre.
 
-Au milieu de 2022, il élargit la lecture au clivage européen, à la rivalité sino-américaine et à un deux-poids-deux-mesures occidental. Il juge alors les sanctions impuissantes, veut que l'Occident négocie et que l'Europe défende ses intérêts. Il tient cette ligne ensuite : la guerre est durable et il faut négocier.
+Le fil évolue à l'automne 2022. Boniface juge que la guerre va durer. Selon lui, Poutine n'est pas isolé grâce à l'Inde et à la Chine, mais la mobilisation partielle l'affaiblit. Il élargit ensuite sa grille à d'autres terrains : le boycott du Qatar lui paraît hypocrite, l'OCS relève à ses yeux du multi-alignement plutôt que d'une OTAN asiatique, et un départ de Netanyahou ne changerait presque rien pour les Palestiniens.
 
-Son regard s'élargit ensuite à un monde multipolaire, où le Sud global pèse et où l'OCS signe un multi-alignement. Sur la Palestine, il reproche à la France de se contenter de protestations.
+Tout au long de la Period, il reçoit de nombreux invités, dont les thèses restent les leurs, et chronique des livres. Les dernières années, jusqu'en 2026, ne comptent que onze Digests.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/1-2022-03-29/CLAUDE|2022-03-29 → 2022-05-25]] (22 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/2-2022-05-30/CLAUDE|2022-05-30 → 2022-07-27]] (20 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/3-2022-08-03/CLAUDE|2022-08-03 → 2026-10-30]] (23 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/3-2022-08-03/CLAUDE|2022-08-03 → 2022-09-30]] (18 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/CLAUDE|2022-10-04 → 2026-10-30]] (11 Digests)
