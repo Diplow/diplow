@@ -3,19 +3,18 @@ title: "2019-10-14 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14
 owner: diplo
 preview: >-
-  Boniface lit l'actualité par les rapports de force entre puissances : un
-  Occident qui ne domine plus, un multilatéralisme nécessaire, des États-Unis
-  et une Chine face à face, une Europe qui doit gagner son autonomie
-  stratégique, et une France qui se contente de protestations sur la
-  Palestine.
+  De 2019 à 2026, Boniface lit l'actualité par les rapports de force entre
+  États : multilatéralisme contre unilatéralisme américain, Occident qui ne
+  domine plus, deux poids deux mesures, Europe appelée à l'autonomie
+  stratégique. Le Covid-19 fait office de révélateur.
 ---
 # 2019-10-14 → 2026-10-30
 
-Depuis l'automne 2019, Boniface applique la même grille aux événements : ce sont les rapports de force entre États qui expliquent l'actualité. L'offensive turque suit le retrait américain, l'Europe à 27 se mesure à la Chine, l'OTAN s'adapte mal au terrorisme. Il relève un deux poids deux mesures occidental, par exemple après l'assassinat de Soleimani, et des Européens alignés sur Washington. Il note aussi le silence des capitales sur les Ouïghours.
+Dès l'automne 2019, Boniface lit les événements par les rapports de force entre États : l'offensive turque comme suite du retrait américain, une OTAN mal adaptée au terrorisme, une Europe à 27 face à la Chine. Il y ajoute un deux poids deux mesures occidental, qu'il applique à l'assassinat de Soleimani et au plan Trump-Kushner, et reproche à des Européens d'être alignés sur Washington.
 
-Le Covid-19 devient en 2020 son révélateur principal. Il y voit une Europe éprouvée faute de solidarité, un Trump qui affaiblit les États-Unis et sert la Chine, et une Chine qui gagne du terrain grâce aux défaillances américaines sans pour autant dépasser les États-Unis. Il juge que la rivalité sino-américaine doit être traitée avec lucidité. Face à cela, il en appelle au multilatéralisme et à l'autonomie stratégique européenne. Il demande aussi de débattre des libertés, de l'impôt et de la solidarité hors de l'urgence.
+Le coronavirus devient ensuite son terrain d'application. Il voit dans le Covid-19 un révélateur : une Europe éprouvée faute de solidarité, un Trump qui affaiblit les États-Unis et sert la Chine, une Chine qui gagne du terrain sans dépasser les États-Unis ([[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/CLAUDE|2020-04-06 → 2020-06-11]]). Il en tire un appel au multilatéralisme et à l'autonomie stratégique européenne. À l'été 2020, les mêmes grilles reviennent : un Occident qui doit être cohérent, le dialogue exigeant plutôt que les sanctions, une Europe qui ne doit pas choisir entre Washington et Pékin.
 
-Sur la longue durée qui suit, le fil reste le même. Boniface décrit un Occident qui ne domine plus, des États-Unis et une Chine face à face, et un multi-alignement qui s'installe. Le multilatéralisme lui paraît nécessaire pour y répondre. Sur Israël et la Palestine, il juge que la France se contente de protestations, après avoir lu dès 2020 dans le plan Trump-Kushner un enterrement des deux États.
+Dans la dernière période, qui court jusqu'en 2026, Boniface soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement. Il estime qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens et que la France se contente de protestations. Il reçoit aussi des invités et chronique des livres : leurs thèses restent les leurs, et il y ajoute son appréciation.
 
 ## Contenu
 
@@ -23,4 +22,5 @@ Sur la longue durée qui suit, le fil reste le même. Boniface décrit un Occide
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/2-2019-12-11/CLAUDE|2019-12-11 → 2020-02-06]] (20 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/CLAUDE|2020-02-07 → 2020-04-03]] (24 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/CLAUDE|2020-04-06 → 2020-06-11]] (24 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (23 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/CLAUDE|2020-06-16 → 2020-09-02]] (18 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/6-2020-09-03/CLAUDE|2020-09-03 → 2026-10-30]] (11 Digests)
