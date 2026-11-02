@@ -1,6 +1,6 @@
 ---
 title: "SANDRA LUCBERT nous ATOMISE chez DANY et RAZ !! (@pasduhring x Chris)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/5-2025-05-07
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/1-2025-05-07
 owner: diplo
 preview: >-
   La PaduTeam soutient que le marxisme, science totale qui dépasse le

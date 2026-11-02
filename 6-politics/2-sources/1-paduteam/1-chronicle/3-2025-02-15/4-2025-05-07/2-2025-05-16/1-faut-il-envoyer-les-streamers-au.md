@@ -1,6 +1,6 @@
 ---
 title: "Faut-il ENVOYER les STREAMERS au G0ULAG  (@pasduhring x Chris)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/6-2025-05-16
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/2-2025-05-16
 owner: diplo
 preview: >-
   La PaduTeam soutient qu'un streamer auto-entrepreneur ne peut pas être

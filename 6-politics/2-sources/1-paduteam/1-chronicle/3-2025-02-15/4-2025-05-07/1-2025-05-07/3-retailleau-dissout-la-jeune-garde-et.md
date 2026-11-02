@@ -1,6 +1,6 @@
 ---
 title: "RETAILLEAU DISSOUT la JEUNE GARDE et URGENCE PALESTINE !! (avec Cem Yoldas)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/5-2025-05-07
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/1-2025-05-07
 owner: diplo
 preview: >-
   La PaduTeam et Cem Yoldas soutiennent que la dissolution de la Jeune Garde

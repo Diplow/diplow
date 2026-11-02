@@ -1,6 +1,6 @@
 ---
 title: "LÉNA SITUATIONS et JEAN-FRANÇOIS COPÉ sont-ils VRAIMENT FRÉRISTES"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/6-2025-05-16
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/3-2025-05-20
 owner: diplo
 preview: >-
   La PaduTeam soutient que l'accusation d'entrisme frériste contre Léna

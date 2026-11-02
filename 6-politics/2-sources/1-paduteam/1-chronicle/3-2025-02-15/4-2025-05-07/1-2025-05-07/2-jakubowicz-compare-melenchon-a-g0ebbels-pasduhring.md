@@ -1,6 +1,6 @@
 ---
 title: "JAKUBOWICZ COMPARE MÉLENCHON à G0EBBELS ! (@pasduhring x Chris de Positions Revue)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/5-2025-05-07
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/1-2025-05-07
 owner: diplo
 preview: >-
   La PaduTeam soutient que la comparaison de Mélenchon à Goebbels n'est pas

@@ -1,6 +1,6 @@
 ---
 title: "EUTHANASIE  MACRON veut-il RENTABILISER ta FIN de VIE  (@Dr_Zoé_YT X @pasduhring)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/6-2025-05-16
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/2-2025-05-16
 owner: diplo
 preview: >-
   La PaduTeam soutient que la loi sur la fin de vie ne laisse aucun libre

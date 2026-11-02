@@ -1,6 +1,6 @@
 ---
 title: "RETAILLEAU MET FIN au WAUQUISME !! (@pasduhring X Chris)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/6-2025-05-16
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/3-2025-05-20
 owner: diplo
 preview: >-
   La PaduTeam soutient que Retailleau a écrasé Wauquiez parce qu'il n'existe
@@ -44,7 +44,7 @@ relations:
 
 ## 1. Wauquiez s'est fracassé : il n'y a aucun espace entre le macronisme déporté à droite et l'extrême droite.
 
-Les adhérents ont préféré l'original à la copie. Wauquiez, resté hors du gouvernement, n'a pas compris la configuration, et Retailleau s'est installé à sa place. Sur le même personnage, voir [[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/5-2025-05-07/4-bompard-detruit-la-carriere-de-wauquiez|Bompard détruit la carrière de Wauquiez]].
+Les adhérents ont préféré l'original à la copie. Wauquiez, resté hors du gouvernement, n'a pas compris la configuration, et Retailleau s'est installé à sa place. Sur le même personnage, voir [[6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/4-2025-05-07/1-2025-05-07/4-bompard-detruit-la-carriere-de-wauquiez|Bompard détruit la carrière de Wauquiez]].
 
 > [5:12](https://www.youtube.com/watch?v=INz1Lv6qyXQ&t=312s) « Vokier il est complètement désynchronisé de la politique »
 

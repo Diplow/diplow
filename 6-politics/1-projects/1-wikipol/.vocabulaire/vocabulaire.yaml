@@ -247,6 +247,7 @@ kinds:
       chanson: {définition: "Une chanson, un morceau.", statut: accepté}
       jeu-vidéo: {définition: "Un jeu vidéo.", statut: accepté}
       tableau: {définition: "Une peinture, œuvre d'un peintre.", statut: proposé, introduit_par: blast/ZK9AqciwH1A.md}
+      encyclopédie: {définition: "Ouvrage de référence qui rassemble le savoir de nombreux domaines, imprimé ou en ligne.", statut: proposé, introduit_par: boniface/cE1htuHgQoQ.md}
     qualifiers:
       cité: {définition: "Lue, montrée ou diffusée dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
