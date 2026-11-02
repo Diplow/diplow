@@ -1,6 +1,6 @@
 ---
 title: "2026-02-19 → 2026-02-23"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/5-2026-02-19
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/5-2026-02-16/2-2026-02-19
 owner: diplo
 preview: >-
   La PaduTeam lit la mort de Quentin Déranque comme un prétexte de Macron,
@@ -18,7 +18,7 @@ La Period compte aussi une vidéo sur la lecture de Trump par Lucbert et Lordon,
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/5-2026-02-19/1-glucksmann-macron-garrido-qui-veut-tuer|GLUCKSMANN, MACRON GARRIDO  QUI VEUT TUER LA FI]] (2026-02-19)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/5-2026-02-19/2-lucbert-et-lordon-psychanalysent-trump-ca|LUCBERT et LORDON PSYCHANALYSENT TRUMP  ÇA TOURNE au CACA !!]] (2026-02-21)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/5-2026-02-19/3-harcele-par-la-meute-lfi-lyes|HARCELÉ par la MEUTE LFI  LYES LOUFFOK TRAITRE ou VICTIME]] (2026-02-23)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/5-2026-02-19/4-hollande-contre-attaque-melenchon-ne-sera|HOLLANDE CONTRE-ATTAQUE  MÉLENCHON NE SERA PAS AU 2ÈME TOUR !!]] (2026-02-23)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/5-2026-02-16/2-2026-02-19/1-glucksmann-macron-garrido-qui-veut-tuer|GLUCKSMANN, MACRON GARRIDO  QUI VEUT TUER LA FI]] (2026-02-19)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/5-2026-02-16/2-2026-02-19/2-lucbert-et-lordon-psychanalysent-trump-ca|LUCBERT et LORDON PSYCHANALYSENT TRUMP  ÇA TOURNE au CACA !!]] (2026-02-21)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/5-2026-02-16/2-2026-02-19/3-harcele-par-la-meute-lfi-lyes|HARCELÉ par la MEUTE LFI  LYES LOUFFOK TRAITRE ou VICTIME]] (2026-02-23)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/5-2026-02-16/2-2026-02-19/4-hollande-contre-attaque-melenchon-ne-sera|HOLLANDE CONTRE-ATTAQUE  MÉLENCHON NE SERA PAS AU 2ÈME TOUR !!]] (2026-02-23)

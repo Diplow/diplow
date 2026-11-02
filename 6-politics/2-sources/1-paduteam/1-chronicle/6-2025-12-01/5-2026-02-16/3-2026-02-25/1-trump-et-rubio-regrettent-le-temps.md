@@ -1,6 +1,6 @@
 ---
 title: "TRUMP et RUBIO REGRETTENT le TEMPS BÉNI des COLONIES !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/6-2026-02-25
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/5-2026-02-16/3-2026-02-25
 owner: diplo
 preview: >-
   La PaduTeam soutient que le discours de Rubio à Munich est du colonialisme

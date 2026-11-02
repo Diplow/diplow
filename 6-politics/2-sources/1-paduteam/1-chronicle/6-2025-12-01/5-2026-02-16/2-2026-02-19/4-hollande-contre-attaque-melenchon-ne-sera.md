@@ -1,6 +1,6 @@
 ---
 title: "HOLLANDE CONTRE-ATTAQUE  MÉLENCHON NE SERA PAS AU 2ÈME TOUR !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/5-2026-02-19
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/5-2026-02-16/2-2026-02-19
 owner: diplo
 preview: >-
   La PaduTeam soutient que Hollande exploite la mort de Quentin Deranque pour
