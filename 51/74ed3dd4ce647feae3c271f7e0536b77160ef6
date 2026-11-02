@@ -1,0 +1,65 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_94d118c0268821 174
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/CLAUDE.md
+  s_e50cb4d0c900bc::t_dc0a2b56738cc6 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/1-2024-04-02/1-testosterror-ou-comment-etre-un-homme.md
+  s_e50cb4d0c900bc::t_c50ff625bd689c 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/1-2024-04-02/2-pierre-messmer-heros-en-france-bourreau.md
+  s_e50cb4d0c900bc::t_68dade81627815 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/1-2024-04-02/3-comment-e-macron-va-encore-voler.md
+  s_e50cb4d0c900bc::t_f3f49c420d7be1 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/1-2024-04-02/4-vol-de-donnees-de-43-millions.md
+  s_e50cb4d0c900bc::t_e72791879c77c9 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/1-2024-04-02/CLAUDE.md
+  s_e50cb4d0c900bc::t_34267a38de5235 2-3,6-9,11,13,15,19-22
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/2-2024-04-06/1-poutine-du-contrat-social-a-la.md
+  s_e50cb4d0c900bc::t_de53e20d3ccc26 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/2-2024-04-06/2-bfmtv-rachetee-par-le-milliardaire-prefere.md
+  s_e50cb4d0c900bc::t_62187111689271 3
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/2-2024-04-06/3-journalistes-politiques-revelations-sur-les-taupes.md
+  s_e50cb4d0c900bc::t_261b1411a7151d 1-93
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/2-2024-04-06/4-sexisme-et-violences-la-face-sombre.md
+  s_e50cb4d0c900bc::t_c38de01fe85858 1-83
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/2-2024-04-06/5-raphael-glucksmann-un-autre-macron-est.md
+  s_e50cb4d0c900bc::t_37d3f93ba464c9 1-75
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/2-2024-04-06/CLAUDE.md
+  s_e50cb4d0c900bc::t_0fa0e4aae71557 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/3-2024-04-12/1-h-m-ikea-etc-le-vrai.md
+  s_e50cb4d0c900bc::t_dc25160857b95a 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/3-2024-04-12/2-enseignement-prive-mettre-fin-a-l.md
+  s_e50cb4d0c900bc::t_a6506f165fbcfd 1-73
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/3-2024-04-12/3-quotidien-pourquoi-l-extreme-droite-attaque.md
+  s_e50cb4d0c900bc::t_a36e6a430f06f2 1-78
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/3-2024-04-12/CLAUDE.md
+  s_e50cb4d0c900bc::t_2752cfa3755abf 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/CLAUDE.md
+  s_e50cb4d0c900bc::t_3be836262ee96a 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE.md
+  s_e50cb4d0c900bc::t_96807110544f7b 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_e50cb4d0c900bc::t_012642d40d40bf 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5174ed3dd4ce647feae3c271f7e0536b77160ef6",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_e50cb4d0c900bc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a04ac8fb99ce7ac86",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
