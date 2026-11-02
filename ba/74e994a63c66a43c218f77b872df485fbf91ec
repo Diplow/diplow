@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/3-2025-07-07/CLAUDE.md
+  s_c0972483285b5f::t_8764fd209c4f5e 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/4-2025-07-08/1-bardella-betrays-marine-and-dines-with.md
+  s_c0972483285b5f::t_367aa0e2d7e3a2 1-96
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/4-2025-07-08/2-la-verite-sur-nicolas-qui-paye.md
+  s_c0972483285b5f::t_199ba6047e6724 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/4-2025-07-08/3-macron-annonce-sa-candidature-pour-2032.md
+  s_c0972483285b5f::t_cc1f133820a442 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/4-2025-07-08/4-purges-pour-islamo-gauchisme-ca-bouge.md
+  s_c0972483285b5f::t_cdb30633b613d5 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/4-2025-07-08/5-garrido-vire-ce-streamer-du-congres.md
+  s_c0972483285b5f::t_b4b4e3625e0e20 1-103
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/4-2025-07-08/6-glucksmann-ne-choisit-pas-entre-melenchon.md
+  s_c0972483285b5f::t_2f2183908e6082 1-99
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/4-2025-07-08/CLAUDE.md
+  s_c0972483285b5f::t_739030f6e5e0c9 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/CLAUDE.md
+  s_c0972483285b5f::t_ac092c6ae0d437 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/CLAUDE.md
+  s_c0972483285b5f::t_232cf70e3c390c 2,6-9,11,13,15,17,26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_c0972483285b5f::t_891aaf89909cb4 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ba74e994a63c66a43c218f77b872df485fbf91ec",
+  "prompts": {},
+  "sessions": {
+    "s_c0972483285b5f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad9ccfce646dda139",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
