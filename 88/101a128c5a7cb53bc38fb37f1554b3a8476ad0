@@ -1,0 +1,63 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_bd0676699444e7 159
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/CLAUDE.md
+  s_042d04fec27413::t_212d9014638ccf 2,6-9,11,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/1-2026-02-06/1-alain-duhamel-decrypte-glucksmann-melenchon-et.md
+  s_042d04fec27413::t_498ea571b3d033 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/1-2026-02-06/2-le-plan-mediapart-pour-empecher-melenchon.md
+  s_042d04fec27413::t_e5d9a2d3645911 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/1-2026-02-06/3-tondelier-va-a-des-diners-de.md
+  s_042d04fec27413::t_2457b436bb317d 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/1-2026-02-06/CLAUDE.md
+  s_042d04fec27413::t_f71d2e5786f3e1 2-3,6-9,11,13,15,19-21
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/2-2026-02-07/1-melenchon-tondelier-hollande-on-continue-l.md
+  s_042d04fec27413::t_d9cbf4151879b4 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/2-2026-02-07/2-loic-chaigneau-revient-pour-casser-du.md
+  s_042d04fec27413::t_6749e308c89d83 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/2-2026-02-07/3-sandrine-rousseau-privee-de-primaire-des.md
+  s_042d04fec27413::t_52d6285dc0498a 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/2-2026-02-07/4-todd-desastreux-sur-la-natalite-il.md
+  s_042d04fec27413::t_3c742e3bdf4f47 1-76
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/2-2026-02-07/CLAUDE.md
+  s_042d04fec27413::t_b1c1d5351e51aa 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/3-2026-02-14/1-guedj-candidat-a-la-presidentielle-le.md
+  s_042d04fec27413::t_4026cd57c11edc 1-102
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/3-2026-02-14/2-mensonges-pro-ps-chez-backseat-les.md
+  s_042d04fec27413::t_1ab20d8482aad3 1-106
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/3-2026-02-14/3-chapoutot-detruit-marianne-en-live-ils.md
+  s_042d04fec27413::t_f296d4b49fbffe 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/3-2026-02-14/4-clement-viktorovitch-le-meilleur-militant-anti.md
+  s_042d04fec27413::t_fa495f4de8e251 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/3-2026-02-14/CLAUDE.md
+  s_042d04fec27413::t_aa14ed3038d7a3 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/4-2026-02-06/CLAUDE.md
+  s_042d04fec27413::t_5c627b46c76fcd 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/CLAUDE.md
+  s_042d04fec27413::t_133483de6da399 2,6-8,10,12,14,16,22-23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_042d04fec27413::t_58ca1826dd8305 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "88101a128c5a7cb53bc38fb37f1554b3a8476ad0",
+  "prompts": {},
+  "sessions": {
+    "s_042d04fec27413": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ae5594b2839b5e422",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
