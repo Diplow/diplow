@@ -1,6 +1,6 @@
 ---
 title: "LA PORTE-PAROLE DU PCF DÉRAPE SUR LE VOILE !"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/5-2025-12-01
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/2-2025-12-01
 owner: diplo
 preview: >-
   La PaduTeam soutient que la porte-parole du PCF, Cécile Cukierman,
