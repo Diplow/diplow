@@ -1,0 +1,53 @@
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/CLAUDE.md
+  s_941f420f57ecdc::t_5ab95d1e86c3f9 2,7-8,10,12,14,16
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/1-2025-12-01/1-cette-influenceuse-a-dubai-se-justifie.md
+  s_941f420f57ecdc::t_fecd6d513094c0 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/1-2025-12-01/2-on-eduque-ce-streamer-pro-business.md
+  s_941f420f57ecdc::t_b6b32f0425fe79 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/1-2025-12-01/3-commission-melenchon-les-droitards-s-avouent.md
+  s_941f420f57ecdc::t_515edc914d093e 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/1-2025-12-01/4-bardella-est-il-le-plus-nul.md
+  s_941f420f57ecdc::t_248cc79d45cd29 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/1-2025-12-01/CLAUDE.md
+  s_941f420f57ecdc::t_9c471d8b9c1b4b 3,6-9,13,15,19-22
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/2-2025-12-01/1-la-porte-parole-du-pcf-derape.md
+  s_941f420f57ecdc::t_572cdc384b00b1 3
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/2-2025-12-01/2-le-pcf-rejoint-sarkozy-sur-la.md
+  s_941f420f57ecdc::t_2ab7500c04f540 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/2-2025-12-01/3-hollande-prepare-t-il-son-retour.md
+  s_941f420f57ecdc::t_506fc4cb73b33c 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/2-2025-12-01/4-surprise-le-ps-trahit-et-s.md
+  s_941f420f57ecdc::t_60e7c64d938a96 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/2-2025-12-01/CLAUDE.md
+  s_941f420f57ecdc::t_6191a8e8d95216 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/3-2025-12-10/1-le-ps-et-les-ecolos-sauvent.md
+  s_941f420f57ecdc::t_e06803e3deadf4 1-105
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/3-2025-12-10/2-brigitte-macron-insulte-les-militantes-de.md
+  s_941f420f57ecdc::t_729b13e0195c52 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/3-2025-12-10/3-usul-rejoint-glucksmann-son-avis-catastrophique.md
+  s_941f420f57ecdc::t_1b2c207d963a2f 1-101
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/3-2025-12-10/CLAUDE.md
+  s_941f420f57ecdc::t_2bf25a43b41d33 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/CLAUDE.md
+  s_941f420f57ecdc::t_2fe697917a2100 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE.md
+  s_941f420f57ecdc::t_524df5578b5376 2,6-9,11,13,15-17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_941f420f57ecdc::t_ced56bd9e56294 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "33fbe4085b9131887d4b4a12ee9ff741db857988",
+  "prompts": {},
+  "sessions": {
+    "s_941f420f57ecdc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a6ecaac6796b37fa3",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
