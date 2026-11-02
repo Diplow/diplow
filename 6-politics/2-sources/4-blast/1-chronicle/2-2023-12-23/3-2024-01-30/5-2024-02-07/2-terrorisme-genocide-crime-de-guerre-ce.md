@@ -1,6 +1,6 @@
 ---
 title: "TERRORISME ? GÉNOCIDE ? CRIME DE GUERRE ? CE QUE DIT LE DROIT INTERNATIONAL"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/4-2024-02-05
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/3-2024-01-30/5-2024-02-07
 owner: diplo
 preview: >-
   Blast soutient que le droit international permet de qualifier les
