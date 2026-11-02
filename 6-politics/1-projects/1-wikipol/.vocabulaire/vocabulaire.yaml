@@ -112,6 +112,7 @@ kinds:
       porte-parole: {définition: "Parle au nom d'une organisation, d'une famille ou d'un mouvement.", statut: proposé, introduit_par: blast/LE_ZVLBJ5Mk.md}
       épidémiologiste: {définition: "Étudie la répartition et les causes des maladies dans les populations.", statut: proposé, introduit_par: blast/ArZwQC88qgY.md}
       rédacteur: {définition: "Écrit et dirige une revue ou un site de réflexion.", statut: proposé, introduit_par: paduteam/SQN9eTGn1Cg.md}
+      designer: {définition: "Conçoit des objets, des interfaces ou des images, en indépendant ou en agence.", statut: proposé, introduit_par: blast/06KQ5dB1EnU.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
