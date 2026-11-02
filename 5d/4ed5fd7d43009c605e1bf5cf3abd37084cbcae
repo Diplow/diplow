@@ -1,0 +1,45 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/4-2024-12-26/CLAUDE.md
+  s_70e2b8820e4c39::t_ba3f0feb733c82 2,7-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28/1-qui-veut-la-mort-de-la.md
+  s_70e2b8820e4c39::t_f7b1ec61a80d5d 3
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28/2-depuis-charlie-et-hara-kiri-une.md
+  s_70e2b8820e4c39::t_4313f4b2504eea 1-92
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28/3-dissolution-repression-etc-la-fin-du.md
+  s_70e2b8820e4c39::t_385570b3d24e29 1-99
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28/4-luttes-feministes-tout-a-change-et.md
+  s_70e2b8820e4c39::t_4b49e01da7ffdd 1-94
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/5-2024-12-28/CLAUDE.md
+  s_70e2b8820e4c39::t_6ddcf909f226e6 1-24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/6-2024-12-31/1-gaza-casse-sociale-dissolution-etc-une.md
+  s_70e2b8820e4c39::t_b9da7c97c5dea5 1-87
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/6-2024-12-31/2-sociologie-une-arme-pour-comprendre-le.md
+  s_70e2b8820e4c39::t_fa34ef82f036d5 1-87
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/6-2024-12-31/3-donald-trump-hyper-capitalisme-racisme-et.md
+  s_70e2b8820e4c39::t_16ba4edabdc6e4 1-109
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/6-2024-12-31/CLAUDE.md
+  s_70e2b8820e4c39::t_c5a08000bc1269 1-23
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/CLAUDE.md
+  s_70e2b8820e4c39::t_5a40ed5cb71959 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE.md
+  s_70e2b8820e4c39::t_d6692d8a0cb28b 2,7-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_70e2b8820e4c39::t_6efdfe57b45363 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_09eaf06c900839 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5d4ed5fd7d43009c605e1bf5cf3abd37084cbcae",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
