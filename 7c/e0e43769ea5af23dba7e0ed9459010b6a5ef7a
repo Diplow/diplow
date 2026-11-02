@@ -1,0 +1,39 @@
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/5-2024-11-07/4-victoire-de-l-extreme-droite-l.md
+  s_64c1fbd180ee43::t_7c520ab00e167c 1-92
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/5-2024-11-07/5-revoltes-aux-antilles-nous-souhaitons-briser.md
+  s_64c1fbd180ee43::t_f4abd668b6e898 1-83
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/5-2024-11-07/6-inondations-meurtrieres-en-espagne-le-pire.md
+  s_64c1fbd180ee43::t_930ffa33ce9d7a 1-81
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/5-2024-11-07/CLAUDE.md
+  s_64c1fbd180ee43::t_a54fb958f0af88 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/6-2024-11-10/1-au-boulot-portrait-d-une-france.md
+  s_64c1fbd180ee43::t_4f816a822e0a99 1-89
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/6-2024-11-10/2-de-trump-a-bardella-jusqu-ou.md
+  s_64c1fbd180ee43::t_ad0002d5dbd2a1 1-96
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/6-2024-11-10/3-criminalisation-des-activistes-une-menace-majeure.md
+  s_64c1fbd180ee43::t_0d0922a3bbfaa5 1-99
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/6-2024-11-10/CLAUDE.md
+  s_64c1fbd180ee43::t_a1e14266f2032f 1-21
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/CLAUDE.md
+  s_64c1fbd180ee43::t_c8de80645c72b3 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE.md
+  s_64c1fbd180ee43::t_6c2517ba9175e9 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_64c1fbd180ee43::t_3c7caf99e9df46 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7ce0e43769ea5af23dba7e0ed9459010b6a5ef7a",
+  "prompts": {},
+  "sessions": {
+    "s_64c1fbd180ee43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a4cf73c14bb0ad6c6",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
