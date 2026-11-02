@@ -1,20 +1,19 @@
 ---
-title: "2025-09-02 → 2026-01-26"
+title: "2025-09-02 → 2025-11-28"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02
 owner: diplo
 preview: >-
-  De septembre à janvier, la PaduTeam appelle la rue à faire tomber Macron,
-  fait du PS l'adversaire principal et pousse la FI à radicaliser son
-  programme. Elle veut que la gauche de rupture l'emporte sur celle
-  d'accommodement avant 2027.
+  De septembre à fin novembre, la PaduTeam passe du 10 septembre contre Macron
+  au PS comme adversaire principal, puis pousse la FI à radicaliser son
+  programme, défend le mot communisme et porte le 100 % Sécu.
 ---
-# 2025-09-02 → 2026-01-26
+# 2025-09-02 → 2025-11-28
 
-La Period s'ouvre sur le 10 septembre, que la PaduTeam présente comme le moment où la rue doit faire tomber Macron sans répéter l'échec des Gilets jaunes. Elle lit la chute de Bayrou comme un affrontement de classe et la répression comme la panique du pouvoir, puis appelle à la grève du 18 et aux places le 21. De fin septembre à mi-octobre, elle voit dans l'actualité un théâtre d'appareils et de violences de classe qui mène à l'épuisement du camp Macron. À ce théâtre, elle oppose la permanence militante avec La Brèche et la lutte internationale contre le génocide à Gaza.
+La Period s'ouvre sur le 10 septembre, que la PaduTeam présente comme le moment où la rue doit faire tomber Macron, sans répéter l'échec des Gilets jaunes. Elle lit la chute de Bayrou comme un affrontement de classe et la répression qui suit comme la panique du pouvoir, et appelle à la grève du 18 puis aux places le 21. De fin septembre à mi-octobre, elle voit dans l'actualité un théâtre d'appareils et de violences de classe, qui mène à l'épuisement du camp Macron. À cela elle oppose la permanence militante avec La Brèche et la lutte internationale contre le génocide à Gaza.
 
-À partir de la mi-octobre, le PS devient son adversaire principal, après son refus de censurer Lecornu. Elle décrit une gauche vidée de son contenu concret et une extrême droite qui monte avec la crise du capitalisme, et réclame le 100 % Sécu. En novembre, elle pousse la FI à radicaliser son programme face à un PS qui prend le lead à gauche. Elle défait les fausses sorties du capitalisme, défend le mot communisme et enterre Glucksmann, centre gauche tactique que le PS sacrifie.
+À partir de mi-octobre, le PS devient son adversaire principal, après son refus de censurer Lecornu. La PaduTeam décrit une gauche vidée de son contenu concret et une extrême droite qui monte avec la crise du capitalisme. Face à elles, elle réclame le 100 % Sécu.
 
-Décembre est lu en termes de classes et de stratégie : PCF, PS et Écologistes lui semblent s'accommoder du social-libéralisme et du macronisme, et la gauche de rupture doit l'emporter sur celle d'accommodement. L'hiver 2025-2026 est pour elle une recomposition avant 2027. Elle y défend LFI et Mélenchon et dénonce un PS qui trahit. Elle voit dans l'enlèvement de Maduro un impérialisme américain assumé, et dans Macron un accompagnateur de la guerre.
+En novembre, elle pousse la FI à radicaliser son programme, alors que le PS prend le lead à gauche. Elle défait les fausses sorties du capitalisme et défend le mot communisme. Elle enterre aussi Glucksmann, qu'elle présente comme un centre gauche tactique que le PS sacrifie.
 
 ## Contenu
 
@@ -22,5 +21,3 @@ Décembre est lu en termes de classes et de stratégie : PCF, PS et Écologistes
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/2-2025-09-22/CLAUDE|2025-09-22 → 2025-10-14]] (18 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/CLAUDE|2025-10-15 → 2025-11-06]] (18 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/CLAUDE|2025-11-10 → 2025-11-28]] (18 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/5-2025-12-01/CLAUDE|2025-12-01 → 2025-12-22]] (17 Digests)
-6. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/6-2025-12-23/CLAUDE|2025-12-23 → 2026-01-26]] (24 Digests)
