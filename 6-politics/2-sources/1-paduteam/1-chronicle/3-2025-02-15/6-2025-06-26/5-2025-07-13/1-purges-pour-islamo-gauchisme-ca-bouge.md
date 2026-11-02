@@ -1,6 +1,6 @@
 ---
 title: "PURGÉS pour ISLAMO-GAUCHISME  ÇA BOUGE CHEZ les JEUNESSES COMMUNISTES !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/4-2025-07-08
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/6-2025-06-26/5-2025-07-13
 owner: diplo
 preview: >-
   La PaduTeam soutient que le MJCF, piloté par le PCF, purge ses jeunes
