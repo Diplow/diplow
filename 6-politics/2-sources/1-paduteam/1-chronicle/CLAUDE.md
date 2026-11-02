@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle
 owner: diplo
 preview: >-
-  De 2019 à avril 2025, la PaduTeam ramène l'actualité à la classe et aux
-  structures, dénonce la droitisation, l'extrême droite et un deux poids deux
-  mesures sur Israël et Gaza, veut une gauche de rupture enracinée dans les
-  classes populaires et soutient Mélenchon et LFI face au PS pour 2027.
+  La PaduTeam ramène discours, affaires et actualité aux rapports de classe,
+  dénonce un deux poids deux mesures sur Israël et Gaza, veut une gauche de
+  rupture ancrée dans les classes populaires, fait de Mélenchon l'atout face
+  au PS pour 2027 et mise sur l'organisation.
 ---
 # Chronicle
 
-Le fil de la Chronicle est une lecture par la classe : la PaduTeam ramène discours, affaires et parcours à leurs bases sociales, et en tire une gauche de rupture qui doit se réenraciner dans les classes populaires. Elle dénonce un deux poids deux mesures sur Israël et Gaza, et répète que seule l'organisation permet de dépasser la droite. Ces thèses structurent la longue première Period, [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2024-11-26]], qui couvre 60 Digests.
+Sur toute la Chronicle, la PaduTeam applique la même grille : discours, affaires et parcours politiques sont ramenés à leurs bases de classe, et l'actualité se lit par les rapports de domination. Cette lecture sert à démonter la droite et l'extrême droite, et à dénoncer un deux poids deux mesures sur Israël et Gaza.
 
-La Chronicle s'épaissit ensuite : la seconde Period, [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE|2024-11-27 → 2025-04-07]], compte 103 Digests, soit plus de la moitié du total, pour quatre mois seulement. La même grille y sert l'actualité immédiate. La PaduTeam défend la Sécu, le collectif et le communisme, dénonce la droitisation et l'extrême droite, et prend parti pour Mélenchon et LFI face au PS dans la perspective de 2027.
+Le fil politique est celui d'une gauche de rupture, à réenraciner dans les classes populaires. Dans la [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|première Period]], qui couvre l'essentiel de la Chronicle, la Source répète que seule l'organisation permet de dépasser la droite. Dans la [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE|seconde]], bien plus dense avec 109 Digests en cinq mois, cette ligne se précise face à l'échéance de 2027 : Mélenchon devient le meilleur atout face au PS, et la gauche est appelée à bâtir une contre-société militante.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2024-11-26]] (60 Digests)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE|2024-11-27 → 2025-04-07]] (103 Digests)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE|2024-11-27 → 2025-04-21]] (109 Digests)
