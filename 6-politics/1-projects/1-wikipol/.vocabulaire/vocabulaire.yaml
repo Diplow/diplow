@@ -155,6 +155,7 @@ kinds:
       régicide: {définition: "A tué ou tenté de tuer un roi.", statut: proposé, introduit_par: blast/29aynNz_AcY.md}
       représentant-du-personnel: {définition: "Élu du comité social et économique d'une entreprise, qui représente les salariés.", statut: proposé, introduit_par: blast/p_FSKLRQs-U.md}
       vice-président-élu: {définition: "Élu à la vice-présidence d'un État mais pas encore entré en fonction, à la date de la Publication.", statut: proposé, introduit_par: blast/RexzwVwsZBI.md}
+      ancien-commissaire-européen: {définition: "A été membre de la Commission européenne et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Ax11S6NfGvc.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -285,6 +286,7 @@ kinds:
       défilé-de-mode: {définition: "Défilé où des mannequins, ici des bénéficiaires du RSA, présentent des vêtements devant un public.", statut: proposé, introduit_par: paduteam/NiyULKHmm0k.md}
       crise-financière: {définition: "Effondrement de banques ou de marchés qui menace le système financier et appelle des sauvetages.", statut: proposé, introduit_par: blast/SHpGen_J318.md}
       convention-citoyenne: {définition: "Assemblée de citoyens tirés au sort qui délibèrent sur un sujet et formulent des propositions.", statut: proposé, introduit_par: blast/9Cor6NP5qH4.md}
+      dîner: {définition: "Repas mondain, souvent annuel, qui réunit des personnalités d'un milieu autour d'une table.", statut: proposé, introduit_par: paduteam/mCek51AyK50.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
