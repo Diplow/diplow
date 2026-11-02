@@ -1,0 +1,53 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/CLAUDE.md
+  s_41fc2be3f74e0d::t_ddc773c5ff6655 2,6-9,11,13,15-17
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/1-2024-03-01/1-fin-du-droit-du-sol-a.md
+  s_41fc2be3f74e0d::t_526dd154d7c7df 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/1-2024-03-01/2-lutter-grace-aux-imaginaires-avec-alain.md
+  s_41fc2be3f74e0d::t_5717609d8a173c 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/1-2024-03-01/3-golshifteh-farahani-l-incroyable-histoire-d.md
+  s_41fc2be3f74e0d::t_62d59a46ac894d 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/1-2024-03-01/CLAUDE.md
+  s_41fc2be3f74e0d::t_f4a2a1a0504513 2-3,6-9,11,13,15-17,21-23
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/2-2024-03-03/1-financement-du-terrorisme-revelations-sur-l.md
+  s_41fc2be3f74e0d::t_72b641dfe5a6db 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/2-2024-03-03/2-sacre-graal-les-monty-python-plus.md
+  s_41fc2be3f74e0d::t_b4dd9a84d3a055 3
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/2-2024-03-03/3-rdc-6-millions-de-morts-et.md
+  s_41fc2be3f74e0d::t_efdd26f3f536c9 1-98
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/2-2024-03-03/4-un-desastre-economique-et-social-le.md
+  s_41fc2be3f74e0d::t_5fbe1d3b3aad0b 1-91
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/2-2024-03-03/5-macron-le-choix-de-la-guerre.md
+  s_41fc2be3f74e0d::t_3d0506ef9d823e 1-85
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/2-2024-03-03/CLAUDE.md
+  s_41fc2be3f74e0d::t_d719eca83bdff2 1-25
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/3-2024-03-07/1-comment-la-macronie-veut-achever-les.md
+  s_41fc2be3f74e0d::t_7d673dcb7d938d 1-81
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/3-2024-03-07/2-droits-des-femmes-en-france-avancee.md
+  s_41fc2be3f74e0d::t_0e10a79b492bf5 1-103
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/3-2024-03-07/3-patron-incognito-employes-pieges-ou-pdg.md
+  s_41fc2be3f74e0d::t_0ae459f8fd58b8 1-79
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/3-2024-03-07/CLAUDE.md
+  s_41fc2be3f74e0d::t_c588842b1394a2 1-23
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/6-2024-03-01/CLAUDE.md
+  s_41fc2be3f74e0d::t_ecfd4c9ada2b45 1-21
+6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE.md
+  s_41fc2be3f74e0d::t_c1e705677bc37f 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_41fc2be3f74e0d::t_33fcac103a07d2 6-8,12,14,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e45cf36e06d841eb658aad55e6be365a8912dd2c",
+  "prompts": {},
+  "sessions": {
+    "s_41fc2be3f74e0d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a58d2d7dd9ebc3bb2",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
