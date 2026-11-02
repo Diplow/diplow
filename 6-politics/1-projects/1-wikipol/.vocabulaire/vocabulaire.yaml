@@ -108,6 +108,7 @@ kinds:
       condamné: {définition: "A été condamné par la justice pénale, à la date de la Publication.", statut: proposé, introduit_par: paduteam/7OzlCXM5t-U.md}
       producteur: {définition: "Finance et supervise la production de films.", statut: proposé, introduit_par: blast/cKYSNkedyek.md}
       conseiller-politique: {définition: "Conseille un dirigeant politique, notamment à la Maison-Blanche.", statut: proposé, introduit_par: boniface/yTDiNIy50xE.md}
+      graphiste: {définition: "Conçoit l'identité visuelle et les visuels d'une chaîne ou d'une publication.", statut: proposé, introduit_par: paduteam/LxwZ1JIvNtE.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
