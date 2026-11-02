@@ -3,16 +3,17 @@ title: "2025-11-01 → 2025-11-06"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01
 owner: diplo
 preview: >-
-  La PaduTeam lit la gauche par les classes : le tri des immigrés est du
-  racisme, Ruffin vise les électeurs Glucksmann et mène au hollandisme,
-  Mamdani a gagné New York par les classes intermédiaires diplômées mais sera
-  contenu sans masse populaire derrière lui.
+  La PaduTeam critique la stratégie de Ruffin vers le centre et le racisme de
+  Sardoche sur l'immigration, lit la victoire de Mamdani à New York comme un
+  vote de classes intermédiaires diplômées, et réclame le 100 % Sécu.
 ---
 # 2025-11-01 → 2025-11-06
 
-Début novembre, la PaduTeam ramène chaque débat à ses bases matérielles. Face à Sardoche, elle soutient que opposer expatriés et immigrés relève du racisme présenté comme du factuel : l'immigration est un besoin structurel du capitalisme et produit de la valeur, si bien que s'en prendre aux immigrés revient à viser l'effet plutôt que la cause. Sur la stratégie de Ruffin, elle soutient qu'il avoue viser les électeurs Glucksmann du bloc central, que sa fable des bourgs est démentie par sa circonscription urbaine, et que ce retournement de veste mène au hollandisme. Pour elle, mieux vaut deux gauches au premier tour.
+Sur la gauche française, la PaduTeam s'en prend à la stratégie de Ruffin, qui avoue viser les électeurs Glucksmann du bloc central. Sa fable des bourgs est démentie par sa circonscription urbaine, et ce retournement de veste mène au hollandisme : mieux vaut deux gauches au premier tour. Même registre sur l'immigration : l'opposition de Sardoche entre expatriés et immigrés est du racisme présenté comme du factuel, alors que l'immigration est un besoin structurel du capitalisme et produit de la valeur. S'en prendre aux immigrés, c'est viser l'effet et non la cause.
 
-La seconde moitié de la Period se tourne vers New York. La PaduTeam explique la victoire de Mamdani par un vote de classes intermédiaires diplômées, jeunes femmes en tête (84 %), et par la crise du logement, tout en rappelant que New York n'est pas représentative des États-Unis. Elle soutient que le Parti démocrate se « moïse » vers la gauche et que le programme de Mamdani et de la DSA est plus radical que le NFP, voire que LFI. Mais sans masse populaire, grèves et syndicats derrière lui, il sera contenu, comme en 1936.
+Deux vidéos sont consacrées à Mamdani. Il a gagné New York grâce à un vote de classes intermédiaires diplômées, jeunes femmes en tête (84 %), et à la crise du logement, mais New York n'est pas représentative des États-Unis. Le Parti démocrate se « moïse » vers la gauche, et le programme de Mamdani et de la DSA est plus radical que le NFP, voire que LFI. Sans masse populaire, grèves et syndicats derrière lui, il sera contenu, comme en 1936.
+
+La semaine se clôt sur la santé, qui n'est pas une marchandise : secteur 2 et dépassements d'honoraires font une médecine à deux vitesses, sur fond de pénurie organisée par la corporation médicale. La gauche doit viser le 100 % Sécu et la fin de la tarification à l'acte.
 
 ## Contenu
 
@@ -20,3 +21,4 @@ La seconde moitié de la Period se tourne vers New York. La PaduTeam explique la
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01/2-la-strategie-ruffin-un-autre-glucksman|LA STRATÉGIE RUFFIN  UN AUTRE GLUCKSMAN EST POSSIBLE]] (2025-11-03)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01/3-new-york-bascule-dans-l-islamo|NEW YORK BASCULE DANS L’ISLAMO-GAUCHISME COMMENT ZOHRAN MAMDANI A GAGNÉ]] (2025-11-05)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01/4-mamdani-a-gauche-de-melenchon|MAMDANI  À GAUCHE DE MÉLENCHON]] (2025-11-06)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/3-2025-10-15/4-2025-11-01/5-leaument-en-sueur-contre-la-corpo|LÉAUMENT EN SUEUR CONTRE LA CORPO MÉDICALE  ZOÉ LE COACH]] (2025-11-06)

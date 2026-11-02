@@ -267,6 +267,7 @@ kinds:
       bataille: {définition: "Affrontement armé décisif entre deux armées, en un lieu et un jour précis.", statut: proposé, introduit_par: blast/FlQyQXxBQDU.md}
       défilé-de-mode: {définition: "Défilé où des mannequins, ici des bénéficiaires du RSA, présentent des vêtements devant un public.", statut: proposé, introduit_par: paduteam/NiyULKHmm0k.md}
       crise-financière: {définition: "Effondrement de banques ou de marchés qui menace le système financier et appelle des sauvetages.", statut: proposé, introduit_par: blast/SHpGen_J318.md}
+      convention-citoyenne: {définition: "Assemblée de citoyens tirés au sort qui délibèrent sur un sujet et formulent des propositions.", statut: proposé, introduit_par: blast/9Cor6NP5qH4.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
