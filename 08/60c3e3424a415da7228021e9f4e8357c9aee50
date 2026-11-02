@@ -1,0 +1,61 @@
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/CLAUDE.md
+  s_ca0406ecc8ac27::t_4edf69e657b5a7 2,7-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/1-2024-11-07/1-trump-vers-le-pouvoir-absolu.md
+  s_ca0406ecc8ac27::t_85c5ece2cae59a 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/1-2024-11-07/2-trump-bhl-retailleau-le-mensonge-sans.md
+  s_ca0406ecc8ac27::t_e44d8256c5a1d3 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/1-2024-11-07/3-comment-le-systeme-educatif-a-conditionne.md
+  s_ca0406ecc8ac27::t_5c07d1ddd6c7a4 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/1-2024-11-07/4-victoire-de-l-extreme-droite-l.md
+  s_ca0406ecc8ac27::t_1f5e9afa2a0e79 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/1-2024-11-07/5-revoltes-aux-antilles-nous-souhaitons-briser.md
+  s_ca0406ecc8ac27::t_88c834c49b97bd 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/1-2024-11-07/6-inondations-meurtrieres-en-espagne-le-pire.md
+  s_ca0406ecc8ac27::t_7bd159ee0e7cff 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/1-2024-11-07/CLAUDE.md
+  s_ca0406ecc8ac27::t_84113c93da1771 3,13,21-26
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/2-2024-11-10/1-au-boulot-portrait-d-une-france.md
+  s_ca0406ecc8ac27::t_9f248a87e1ad08 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/2-2024-11-10/2-de-trump-a-bardella-jusqu-ou.md
+  s_ca0406ecc8ac27::t_853ce036c9ca57 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/2-2024-11-10/3-criminalisation-des-activistes-une-menace-majeure.md
+  s_ca0406ecc8ac27::t_5ceb7a0570d689 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/2-2024-11-10/4-risque-d-ineligibilite-etc-le-proces.md
+  s_ca0406ecc8ac27::t_d1f570256bea88 1-93
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/2-2024-11-10/5-la-france-est-elle-en-decrochage.md
+  s_ca0406ecc8ac27::t_ec7e8a744a5ce5 1-85
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/2-2024-11-10/CLAUDE.md
+  s_ca0406ecc8ac27::t_80646d622a616f 2-3,6-9,11,13,15,19-23
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/3-2024-11-13/1-manipulation-de-masse-les-marques-aux.md
+  s_ca0406ecc8ac27::t_a8ea2a3d82caec 1-76
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/3-2024-11-13/2-israel-coloniser-et-massacrer-au-nom.md
+  s_ca0406ecc8ac27::t_792b079e53070f 1-99
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/3-2024-11-13/3-sarkozy-cope-le-figaro-les-vrais.md
+  s_ca0406ecc8ac27::t_ff358535213256 1-80
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/3-2024-11-13/4-budget-rejete-macronistes-et-rn-s.md
+  s_ca0406ecc8ac27::t_08e61ec8249d3b 1-73
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/3-2024-11-13/CLAUDE.md
+  s_ca0406ecc8ac27::t_0d1cb1883d2cdd 1-22
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/CLAUDE.md
+  s_ca0406ecc8ac27::t_4518b72bc0b2a3 1-23
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE.md
+  s_ca0406ecc8ac27::t_9ac6633c791a77 2,8-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_ca0406ecc8ac27::t_4588ed313d108d 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0860c3e3424a415da7228021e9f4e8357c9aee50",
+  "prompts": {},
+  "sessions": {
+    "s_ca0406ecc8ac27": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a6c31300ea0e55b7e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
