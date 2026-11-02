@@ -1,6 +1,6 @@
 ---
 title: "CÉCILE DUFLOT VEUT LAISSER LES ULTRA RICHES TRANQUILLES"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/5-2025-09-02
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/2-2025-09-05
 owner: diplo
 preview: >-
   La PaduTeam soutient que ce n'est pas parler des ultra-riches qui fait voter

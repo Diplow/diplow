@@ -1,6 +1,6 @@
 ---
 title: "10 SEPTEMBRE  COMMENT ne PAS REPRODUIRE les ERREURS des GILETS JAUNES  (@OnNeVeutPlus)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/4-2025-08-01/5-2025-09-02
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/5-2025-09-02/1-2025-09-02
 owner: diplo
 preview: >-
   La PaduTeam soutient que les Gilets jaunes ont échoué faute d'organisation

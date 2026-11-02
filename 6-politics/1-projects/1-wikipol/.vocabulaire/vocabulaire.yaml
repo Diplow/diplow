@@ -196,6 +196,7 @@ kinds:
       organisme-de-formation: {définition: "Forme des militants, des journalistes ou des cadres à l'engagement politique et médiatique.", statut: proposé, introduit_par: blast/C48PbGgqyDo.md}
       organisation-de-jeunesse: {définition: "Organisation de jeunes rattachée à un parti ou à un courant politique, ou indépendante d'eux.", statut: proposé, introduit_par: paduteam/kmJDHYGIm9c.md}
       mécanisme-d-achats-groupés: {définition: "Dispositif international qui regroupe les commandes de plusieurs pays pour acheter des produits de santé en commun.", statut: proposé, introduit_par: boniface/yjQYl9LEl0g.md}
+      organisation-patronale: {définition: "Représente et défend les intérêts des employeurs et des chefs d'entreprise.", statut: proposé, introduit_par: paduteam/YcsA0DOXtQw.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
