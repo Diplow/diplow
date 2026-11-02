@@ -1,0 +1,43 @@
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/3-2024-08-01/CLAUDE.md
+  s_acaf6d88d9ecff::t_747b0106687451 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/4-2024-08-06/1-antiterrorisme-une-arme-juridique-utilisee-pour.md
+  s_acaf6d88d9ecff::t_c2d71aab4fd992 3
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/4-2024-08-06/2-l-enfance-sacrifiee-dans-l-enfer.md
+  s_acaf6d88d9ecff::t_ad0495887c4957 1-78
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/4-2024-08-06/3-vivre-au-camping-a-l-annee.md
+  s_acaf6d88d9ecff::t_790c01314f729e 1-89
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/4-2024-08-06/4-azerbaidjan-ce-pays-qui-veut-destabiliser.md
+  s_acaf6d88d9ecff::t_a78c85ec4b15f9 1-90
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/4-2024-08-06/CLAUDE.md
+  s_acaf6d88d9ecff::t_eaa27569fd0636 1-24
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14/1-le-diable-est-un-drole-de.md
+  s_acaf6d88d9ecff::t_6c6bbd9c01e3c1 1-76
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14/2-grand-patronat-et-extreme-droite-les.md
+  s_acaf6d88d9ecff::t_65fab071ff9c71 1-88
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14/3-sortir-de-l-amour-romantique-comme.md
+  s_acaf6d88d9ecff::t_e0e7c338e08970 1-81
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/5-2024-08-14/CLAUDE.md
+  s_acaf6d88d9ecff::t_da5120c34348e7 1-23
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/CLAUDE.md
+  s_acaf6d88d9ecff::t_b715d63a47d33d 2,6-9,11,13,15,21-23
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/CLAUDE.md
+  s_acaf6d88d9ecff::t_aa76301679a8fc 2,6-9,11,13,15-17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_acaf6d88d9ecff::t_2b4481987683f2 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b0a1c5512423af367f92c8fe7cfd59952d7ea657",
+  "prompts": {},
+  "sessions": {
+    "s_acaf6d88d9ecff": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-adc666cca62973d67",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
