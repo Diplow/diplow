@@ -1,25 +1,22 @@
 ---
-title: "2020-10-28 → 2026-10-14"
+title: "2020-10-28 → 2020-11-03"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28
 owner: diplo
 preview: >-
-  Boniface veut qu'on garde la tête froide face au terrorisme et récuse les
-  faux concepts qui servent à diaboliser. Il reçoit Hélène Carrère d'Encausse
-  puis Sylvie Bermann, et chronique le livre d'Alexander Stubb sur un monde en
-  trois blocs.
+  Après de nouveaux attentats, Boniface plaide pour garder la tête froide et
+  récuse islamo-gauchisme et islamo-fascisme comme faux concepts. Il reçoit
+  Hélène Carrère d'Encausse sur la Russie de Poutine et chronique un livre qui
+  fait du genre une grille géopolitique.
 ---
-# 2020-10-28 → 2026-10-14
+# 2020-10-28 → 2020-11-03
 
-À l'automne 2020, après de nouveaux attentats, Boniface soutient que la France doit [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28/2-terrorisme-garder-la-tete-froide|garder la tête froide]] : ne pas se dire en guerre, ne pas renoncer à ses libertés ni stigmatiser les musulmans, sous peine de faire le jeu des terroristes. Il prolonge ce refus du durcissement en récusant, dans [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28/3-islamogauchisme-islamofascisme-concepts-pieges|« concepts pièges »]], « islamogauchisme » et « islamofascisme », de faux concepts contradictoires qui diabolisent au lieu d'analyser. Le terrorisme islamiste est un vrai défi, mais il faut l'analyser, pas l'anathématiser.
+L'actualité des attentats domine la Period. Boniface soutient que la France doit garder la tête froide : ne pas se dire en guerre, ne pas renoncer à ses libertés ni stigmatiser les musulmans, car une société qui se déchire ou durcit ses règles ferait le jeu des terroristes. Il prolonge cette ligne en refusant les étiquettes islamo-gauchisme et islamo-fascisme, qu'il juge contradictoires et destinées à diaboliser plutôt qu'à comprendre. Le terrorisme islamiste est pour lui un vrai défi, mais sans commune mesure avec Hitler et Staline, et il faut l'analyser plutôt que l'anathématiser.
 
-La chaîne donne aussi la parole à des invités, dont les thèses restent les leurs. En 2020, [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28/1-comprendre-le-monde-s4-9-helene|Hélène Carrère d'Encausse]] défend une lecture de la Russie de Poutine, réaliste et sans filiation avec Staline. En 2026, Sylvie Bermann, ancienne ambassadrice à Pékin, analyse dans [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28/5-la-chine-a-t-elle-plie|l'entretien sur la Chine]] la parité entre les États-Unis et la Chine, la patience de Pékin sur Taïwan et le déséquilibre commercial qui met l'Europe en difficulté.
-
-Le fil le plus récent est celui des grilles de lecture de l'ordre mondial. Boniface chronique [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28/4-j-ai-lu-le-triangle-du|Le Triangle du pouvoir]] d'Alexander Stubb, qui divise le monde en trois blocs (Occident, Orient, Sud global). Selon ce livre, l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Le reste de la Period ouvre sur d'autres terrains. Dans *Comprendre le monde*, son invitée Hélène Carrère d'Encausse défend sa propre lecture d'un Poutine réaliste, qui a rendu à la Russie sa place mondiale et ne doit pas dépasser 2024. Boniface chronique ensuite *La démocratie féministe* de Marie-Cécile Naves. Il y voit un livre novateur, qui fait du genre une grille de lecture géopolitique, de la posture de l'homme fort au terrorisme, et montre que le patriarcat structure toute la société.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28/1-comprendre-le-monde-s4-9-helene|Comprendre le monde S4#9 – Hélène Carrère d'Encausse - "La Russie et nous"]] (2020-10-28)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28/2-terrorisme-garder-la-tete-froide|Terrorisme : garder la tête froide]] (2020-10-30)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28/3-islamogauchisme-islamofascisme-concepts-pieges|"Islamogauchisme", "Islamofascisme" : concepts pièges]] (2020-11-02)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28/4-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28/5-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/3-2020-10-20/2-2020-10-28/4-j-ai-lu-la-democratie-feministe|J'ai lu... La démocratie féministe de Marie-Cécile Naves]] (2020-11-03)
