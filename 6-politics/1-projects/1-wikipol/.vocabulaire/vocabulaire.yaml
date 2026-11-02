@@ -138,6 +138,8 @@ kinds:
       géographe: {définition: "Étudie l'espace, les territoires et les sociétés qui les habitent.", statut: proposé, introduit_par: paduteam/2-yjOa2ug5U.md}
       président-de-la-commission-européenne: {définition: "Préside la Commission européenne, à la date de la Publication.", statut: proposé, introduit_par: blast/pZ6B-0R_1aA.md}
       streamer: {définition: "Diffuse en direct sur une plateforme de streaming, devant un public qui le finance par des dons et des abonnements.", statut: proposé, introduit_par: paduteam/Szw7Cli2ltE.md}
+      commandant-de-groupe-armé: {définition: "Haut responsable militaire d'un groupe armé, sans en être le chef.", statut: proposé, introduit_par: blast/CdHELptA-5U.md}
+      ancien-chef-d-entreprise: {définition: "A dirigé une entreprise et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/SMZq-871veQ.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -257,6 +259,7 @@ kinds:
       festival-de-cinéma: {définition: "Festival où des films sont projetés et récompensés.", statut: proposé, introduit_par: paduteam/fE3d7YfY5Sw.md}
       pandémie: {définition: "Épidémie qui s'étend à l'ensemble du monde.", statut: proposé, introduit_par: boniface/o43DHoCZys4.md}
       bataille: {définition: "Affrontement armé décisif entre deux armées, en un lieu et un jour précis.", statut: proposé, introduit_par: blast/FlQyQXxBQDU.md}
+      défilé-de-mode: {définition: "Défilé où des mannequins, ici des bénéficiaires du RSA, présentent des vêtements devant un public.", statut: proposé, introduit_par: paduteam/NiyULKHmm0k.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -301,6 +304,7 @@ kinds:
       appel: {définition: "Texte public signé par plusieurs personnes pour défendre une position ou appeler à agir.", statut: proposé, introduit_par: paduteam/gQes3ZACQmA.md}
       charte: {définition: "Texte fondateur qui fixe les principes d'une organisation ou d'un mouvement.", statut: proposé, introduit_par: paduteam/HZfk8m0cvtU.md}
       plan-de-paix: {définition: "Proposition de règlement d'un conflit, avancée par une puissance ou un médiateur, sans accord des parties.", statut: proposé, introduit_par: boniface/qHChXvTuJAI.md}
+      plan-d-action: {définition: "Plan public qui fixe des objectifs et des mesures sur un sujet, sans être une loi.", statut: proposé, introduit_par: blast/MgSxfC58dfM.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
