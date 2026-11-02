@@ -1,20 +1,20 @@
 ---
-title: "2026-03-31 → 2026-04-17"
+title: "2026-03-31 → 2026-04-12"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31
 owner: diplo
 preview: >-
-  La PaduTeam lit ces semaines comme un affrontement de blocs : milliardaires
-  et médias contre la Sécu, pôle de gauche anti-Mélenchon et droitisation des
-  Verts, recul américain face à l'Iran, bloc bourgeois qui se met en ordre.
-  Elle défend le 100 % Sécu et Mélenchon.
+  La PaduTeam dénonce des milliardaires qui imposent leur ligne par les
+  médias, défend le 100 % Sécu et Cuba, lit dans le vote Mélenchon une lame de
+  fond générationnelle et voit se former, après les municipales, un pôle de
+  gauche anti-Mélenchon visant 2027.
 ---
-# 2026-03-31 → 2026-04-17
+# 2026-03-31 → 2026-04-12
 
-La période s'ouvre sur la mainmise des milliardaires sur les médias : la PaduTeam soutient que Kretinski à Marianne, Bolloré avec Naulleau et Hanouna imposent leur ligne, contre la Sécu et pour la retraite à 70 ans. Elle défend le 100 % Sécu et, aux municipales, le maintien ou le désistement selon le risque fasciste. Le 31 mars, elle voit dans le vote Mélenchon des enfants de Praud et Ménard une lame de fond générationnelle, retourne aux journalistes le reproche de tri, et soutient avec ses invités que Lucien Sève fonde une théorie marxiste de la personnalité.
+Sur ces deux semaines, la PaduTeam revient sur le poids des milliardaires dans les médias : Kretinski à Marianne, Bolloré avec Naulleau et Hanouna imposent leur ligne, contre la Sécu et pour la retraite à 70 ans. Elle leur oppose le 100 % Sécu. Aux municipales, elle défend le maintien ou le désistement selon le risque fasciste. Elle lit ensuite l'explosion des Verts comme la fin d'un vote macroniste déçu.
 
-Début avril, elle récuse le pessimisme de Viktorovitch sur Mélenchon et la critique de la démocratie de Lagasnerie, défend Cuba contre le blocus américain, et lit l'explosion des Verts après les municipales comme la fin d'un vote macroniste déçu. Autour du 12 avril, elle voit se former un pôle de gauche anti-Mélenchon visant 2027 et la droitisation de Tondelier. Elle dénonce un montage judiciaire et médiatique contre Rima Hassan, critique les start-up à impact et juge décevant le débat Lordon-Mélenchon.
+Le fil le plus constant est Mélenchon. Elle voit dans le vote des enfants de Praud et Ménard pour lui une lame de fond générationnelle, et récuse le pessimisme de Viktorovitch à son sujet. Elle récuse aussi la critique de la démocratie de Lagasnerie. Au fil des jours, elle décrit la formation d'un pôle de gauche anti-Mélenchon tourné vers 2027, ainsi que la droitisation de Tondelier. Elle juge décevant le débat Lordon-Mélenchon.
 
-La dernière semaine élargit le regard : la PaduTeam y lit le recul de l'hégémonie américaine face à l'Iran et la mise en ordre du bloc bourgeois, avec Roussel contre LFI, un RN normalisé et pro-business, Lisnard en pose libertarienne et une grande bourgeoise en fausse conscience.
+Le reste de la Period la voit défendre Cuba contre le blocus américain, dénoncer un montage judiciaire et médiatique contre Rima Hassan et critiquer les start-up à impact. Elle retourne aux journalistes le reproche de tri. Avec ses invités, elle reçoit la thèse selon laquelle Lucien Sève fonde une théorie marxiste de la personnalité.
 
 ## Contenu
 
@@ -22,4 +22,3 @@ La dernière semaine élargit le regard : la PaduTeam y lit le recul de l'hégé
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/2-2026-03-31/CLAUDE|2026-03-31]] (3 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/3-2026-04-02/CLAUDE|2026-04-02 → 2026-04-04]] (4 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/4-2026-04-12/CLAUDE|2026-04-12]] (5 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/5-2026-04-13/CLAUDE|2026-04-13 → 2026-04-17]] (5 Digests)

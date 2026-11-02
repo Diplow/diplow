@@ -1,6 +1,6 @@
 ---
 title: "GUERRE IRAN-US : TRUMP va-t-il TERMINER L'HÉGÉMONIE des USA ?"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/5-2026-04-13
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/5-2026-04-13/1-2026-04-13
 owner: diplo
 preview: >-
   La PaduTeam soutient que Trump a perdu sa guerre contre l'Iran, que

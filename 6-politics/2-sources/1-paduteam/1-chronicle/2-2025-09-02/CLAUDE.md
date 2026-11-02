@@ -1,23 +1,23 @@
 ---
-title: "2025-09-02 → 2026-04-17"
+title: "2025-09-02 → 2026-04-28"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02
 owner: diplo
 preview: >-
-  De septembre 2025 à avril 2026, la PaduTeam fait du PS l'adversaire
-  principal et appelle la gauche de rupture à rompre avec lui avant 2027. Elle
-  défend LFI et Mélenchon, porte le 100 % Sécu et lit l'impérialisme
-  américain, de Maduro à l'Iran, comme une défense de l'ordre existant.
+  La PaduTeam passe de la bataille contre Macron à celle contre le PS : elle
+  veut une gauche de rupture qui radicalise son programme, défend LFI et
+  Mélenchon, lit l'impérialisme américain et la guerre d'Iran, et voit
+  s'ouvrir une fenêtre pour 2027.
 ---
-# 2025-09-02 → 2026-04-17
+# 2025-09-02 → 2026-04-28
 
-La Period s'ouvre sur le 10 septembre contre Macron, puis le PS devient l'adversaire principal de la PaduTeam. Elle pousse la FI à radicaliser son programme, défend le mot communisme et porte le 100 % Sécu ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/1-2025-09-02/CLAUDE|2025-09-02 → 2025-11-28]]). Ce fil ne se rompt pas de tout l'automne et de l'hiver.
+De septembre à fin novembre ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/1-2025-09-02/CLAUDE|2025-09-02 → 2025-11-28]]), la PaduTeam part du 10 septembre contre Macron, puis fait du PS son adversaire principal. Elle pousse la FI à radicaliser son programme, défend le mot communisme et porte le 100 % Sécu.
 
-L'hiver est lu comme une recomposition avant 2027. Le PS se reconstitue et trahit, et la gauche de rupture doit l'emporter sur celle d'accommodement. LFI et Mélenchon sont à défendre. Sur le plan international, la PaduTeam voit l'impérialisme américain s'afficher, de Maduro au Groenland ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/2-2025-12-01/CLAUDE|2025-12-01 → 2026-02-15]]).
+L'hiver ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/2-2025-12-01/CLAUDE|2025-12-01 → 2026-02-15]]) est lu comme une recomposition avant 2027. Le PS se reconstitue et trahit, la gauche de rupture doit l'emporter sur celle d'accommodement, et LFI comme Mélenchon sont à défendre. L'impérialisme américain s'affiche, de Maduro au Groenland.
 
-Les deux derniers mois radicalisent cette lecture en affrontement de blocs. La PaduTeam appelle la FI à rompre avec le PS, prédit un PS qui revient en absorbant le centre, et voit dans la guerre contre l'Iran une manœuvre pour sauver le pétrodollar. Elle continue de défendre le 100 % Sécu et Mélenchon ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE|2026-02-16 → 2026-04-17]]).
+Au printemps ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE|2026-02-16 → 2026-04-28]]), la PaduTeam appelle la gauche à rompre avec le PS et à radicaliser son programme. Elle lit les municipales comme un succès de LFI et la guerre d'Iran comme un recul américain. Elle voit s'ouvrir une fenêtre pour la gauche radicale en vue de 2027.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/1-2025-09-02/CLAUDE|2025-09-02 → 2025-11-28]] (71 Digests)
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/2-2025-12-01/CLAUDE|2025-12-01 → 2026-02-15]] (59 Digests)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE|2026-02-16 → 2026-04-17]] (69 Digests)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE|2026-02-16 → 2026-04-28]] (75 Digests)
