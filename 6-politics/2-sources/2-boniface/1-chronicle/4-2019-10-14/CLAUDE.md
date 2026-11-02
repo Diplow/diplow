@@ -3,22 +3,21 @@ title: "2019-10-14 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14
 owner: diplo
 preview: >-
-  Boniface lit sept ans d'actualité avec les mêmes grilles : un deux poids
-  deux mesures occidental, le multilatéralisme, l'autonomie stratégique
-  européenne, et la fin du monopole occidental, que l'OCS illustre par le
-  multi-alignement.
+  Boniface lit l'actualité internationale avec les mêmes grilles : rapports de
+  force entre États, deux poids deux mesures occidental, unilatéralisme de
+  Trump, Chine qui gagne du terrain. Il plaide pour le multilatéralisme.
 ---
 # 2019-10-14 → 2026-10-30
 
-À l'automne 2019, Boniface lit l'actualité par les rapports de force entre États : l'offensive turque comme suite du retrait américain, une Europe à 27 face à la Chine, une OTAN mal adaptée au terrorisme, et le silence des capitales sur les Ouïghours. L'hiver suivant, il applique à l'assassinat de Soleimani la grille d'un deux poids deux mesures occidental. Il note que les Européens s'alignent sur Washington et que le plan Trump-Kushner enterre les deux États.
+Des premières vidéos de l'automne 2019 aux plus récentes, Boniface lit l'actualité par les rapports de force entre États. L'offensive turque lui apparaît comme la suite du retrait américain, l'OTAN comme mal adaptée au terrorisme, l'Europe comme une puissance qui doit se placer face à la Chine. Il relève aussi le silence des capitales sur les Ouïghours.
 
-Avec le coronavirus, le multilatéralisme devient sa grille centrale : il juge qu'il fonctionne face à l'épidémie, et il confronte Sanders et Trump. Il voit une Chine qui gagne du terrain grâce aux défaillances américaines sans dépasser les États-Unis, et il appelle à débattre des libertés, de l'impôt et de la solidarité hors de l'urgence.
+Cette lecture se durcit en grille avec l'hiver 2019-2020. Il dénonce un deux poids deux mesures occidental après l'assassinat de Soleimani et des Européens alignés sur Washington. Il juge que le plan Trump-Kushner enterre les deux États. Face au coronavirus, il oppose un multilatéralisme qui fonctionne à l'unilatéralisme de Trump. Il voit une Chine qui gagne du terrain grâce aux défaillances américaines, sans dépasser les États-Unis.
 
-Du Covid-19 à 2026, ces lectures s'élargissent en un constat : la fin du monopole occidental. Boniface défend le multilatéralisme et l'autonomie stratégique européenne. Il juge que la France se contente de protester face à l'impunité des colons, et il voit dans l'OCS un multi-alignement.
+La suite de la Chronicle fait du Covid-19 un révélateur : il éprouve l'Europe et expose l'unilatéralisme américain. Boniface relève que la France se contente de protestations face à l'impunité des colons, et que l'OCS signe un multi-alignement. D'une période à l'autre, il en revient au multilatéralisme, qu'il plaide, et appelle à débattre des libertés, de l'impôt et de la solidarité hors de l'urgence.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/1-2019-10-14/CLAUDE|2019-10-14 → 2019-12-10]] (22 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/2-2019-12-11/CLAUDE|2019-12-11 → 2020-02-06]] (20 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/CLAUDE|2020-02-07 → 2020-04-03]] (24 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/CLAUDE|2020-04-06 → 2026-10-30]] (17 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/CLAUDE|2020-04-06 → 2026-10-30]] (23 Digests)
