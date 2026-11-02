@@ -1,6 +1,6 @@
 ---
 title: "PRO-MACRON, EMPLOI FICTIF ETC : QUE SE PASSE-T-IL AU CANARD ENCHAÎNÉ ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/6-2024-04-22
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/2-2024-04-22
 owner: diplo
 preview: >-
   Christophe Nobili, journaliste du Canard enchaîné, raconte que la découverte

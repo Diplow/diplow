@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast soutient que le pouvoir macroniste sert les riches et fait le jeu de
-  l'extrême droite, du RN banalisé à la loi immigration, que la FNSEA
-  confisque la colère agricole, et dénonce l'opacité de l'argent, du pouvoir
-  et de l'information.
+  Blast lit ces six mois comme une dérive : un macronisme qui sert les
+  puissants et fait payer les précaires, une extrême droite banalisée et
+  confortée par le pouvoir, un débat public verrouillé par l'argent et les
+  médias, une parole sur Gaza étouffée.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Blast lit le macronisme comme un pouvoir qui protège les plus riches et désinforme. Dès l'automne 2023, elle y voit une dérive : une macronie des riches, un RN banalisé, puis une loi immigration alignée sur l'extrême droite. Le gouvernement Attal prolonge cette lecture, et au printemps 2024 le RN prospère, selon elle, grâce à ceux qui reprennent ses thèmes. Elle dénonce aussi deux poids deux mesures sur Gaza et l'antisémitisme.
+Le fil qui traverse toute la Chronicle est celui d'un pouvoir macroniste qui gouverne pour les riches et les puissants, et qui fait le jeu de l'extrême droite. Blast le voit à l'automne dans une macronie des riches, puis dans une loi immigration alignée sur l'extrême droite. Elle le retrouve avec le gouvernement Attal, et au printemps dans une politique qui fait payer les précaires. Le RN, dans cette lecture, sort banalisé de ce glissement.
 
-Au cœur de l'hiver, la crise agricole devient un second front. Blast accuse une indulgence sélective envers les paysans et lit cette crise comme un système de dette que la FNSEA confisque. Elle soutient ensuite que la colère agricole est captée par ce syndicat. Elle ajoute que les sondages fabriquent l'opinion au lieu de la mesurer.
+Blast ajoute à cette critique du pouvoir celle de la concentration de l'argent et des médias. Elle cite Bolloré et Drahi comme ceux qui verrouillent le débat public. Elle défend l'enquête et dit sa propre liberté menacée. Sur Gaza, elle dénonce un traitement à deux vitesses de l'antisémitisme, puis l'impunité en Cisjordanie et l'étouffement de la parole sur la guerre.
 
-Ce qui relie ces thèses, c'est la dénonciation de l'opacité : celle de l'argent, du pouvoir et de l'information. Blast défend l'enquête comme réponse et dit sa propre liberté menacée.
+Le milieu de la période est marqué par la crise agricole. Blast accuse une indulgence sélective envers les paysans et la lit comme un système de dette que la FNSEA confisque.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]] (69 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-18]] (70 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-24]] (75 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-30]] (81 Digests)

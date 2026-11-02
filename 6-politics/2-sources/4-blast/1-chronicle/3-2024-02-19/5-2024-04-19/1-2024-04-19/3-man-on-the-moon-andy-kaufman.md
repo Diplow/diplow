@@ -1,6 +1,6 @@
 ---
 title: "MAN ON THE MOON : ANDY KAUFMAN OU POURQUOI PASCAL PRAUD VA DISPARAÎTRE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/5-2024-04-19
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/1-2024-04-19
 owner: diplo
 preview: >-
   Pour Blast, Andy Kaufman a fait de l'humour un yoga qui dissout l'illusion

@@ -1,6 +1,6 @@
 ---
 title: "ATOS : UNE CATASTROPHE INDUSTRIELLE EN BANDE ORGANISÉE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/5-2024-04-19
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/1-2024-04-19
 owner: diplo
 preview: >-
   Blast soutient qu'Atos, pilier numérique de la souveraineté française, a été
