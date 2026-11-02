@@ -1,6 +1,6 @@
 ---
 title: "LA TERRIFIANTE PROGRESSION DE L’EXTRÊME DROITE AU DELÀ DES URNES"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/5-2024-06-15
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/1-2024-06-15
 owner: diplo
 preview: >-
   Blast soutient que l'extrême droite mène une guerre culturelle assumée, et

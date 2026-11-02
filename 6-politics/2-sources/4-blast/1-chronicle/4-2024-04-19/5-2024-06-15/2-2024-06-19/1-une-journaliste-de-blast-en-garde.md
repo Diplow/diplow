@@ -1,6 +1,6 @@
 ---
 title: "UNE JOURNALISTE DE BLAST EN GARDE À VUE : SOUS MACRON, INFORMER EST UN DÉLIT"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/6-2024-06-19
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/2-2024-06-19
 owner: diplo
 preview: >-
   Blast dénonce la garde à vue d'une de ses journalistes, arrêtée en couvrant

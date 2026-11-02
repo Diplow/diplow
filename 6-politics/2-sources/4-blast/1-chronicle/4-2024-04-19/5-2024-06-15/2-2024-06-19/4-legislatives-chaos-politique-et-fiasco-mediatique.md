@@ -1,6 +1,6 @@
 ---
 title: "LÉGISLATIVES : CHAOS POLITIQUE ET FIASCO MÉDIATIQUE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/6-2024-06-19
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/5-2024-06-15/2-2024-06-19
 owner: diplo
 preview: >-
   Blast soutient que la dissolution de Macron a ouvert la porte du pouvoir à
