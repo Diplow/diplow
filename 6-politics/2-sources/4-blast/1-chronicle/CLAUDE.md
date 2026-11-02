@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit d'octobre 2023 à février 2024 comme une dérive du pouvoir : Macron
-  sert les puissants, mène une guerre sociale contre les plus pauvres et
-  banalise l'extrême droite, jusque dans la loi immigration. Elle soutient que
-  le droit international permet de parler de génocide à Gaza.
+  Blast soutient, d'octobre 2023 à février 2024, que le pouvoir macroniste
+  sert les puissants et banalise l'extrême droite, du RN à la loi immigration,
+  et que le gouvernement Attal cède à la FNSEA, qui confisque la colère
+  agricole. Elle défend l'enquête et reçoit des invités sur Gaza.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Blast soutient que le pouvoir macroniste sert les plus riches et les puissants, et qu'il a banalisé l'extrême droite. Elle le voit d'abord dans un RN rendu fréquentable, puis dans une loi immigration alignée sur l'extrême droite ([[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]]). Elle voit ensuite un pouvoir qui cède à la FNSEA et mène une guerre sociale contre les plus pauvres ([[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-25]]).
+Sur ces quatre mois, Blast déroule un même fil : un pouvoir macroniste qui sert les plus riches et laisse l'extrême droite s'installer. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|L'automne 2023]] est lu comme une dérive. Elle dénonce une macronie des riches, deux poids deux mesures sur Gaza et l'antisémitisme, un RN banalisé, puis une loi immigration alignée sur l'extrême droite. Dans le même temps, elle défend l'enquête et dit sa liberté menacée.
 
-Gaza est l'autre fil. À l'automne, Blast dénonce un deux poids deux mesures entre Gaza et l'antisémitisme. Début 2024, elle soutient que le droit international permet de qualifier de génocide les agissements d'Israël. Entre les deux, elle fait de la colère agricole un fil central, défend l'enquête et dit sa liberté menacée.
+[[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|La seconde période]] prolonge cette lecture : le pouvoir banalise l'extrême droite et sert les puissants. Blast ajoute que le gouvernement Attal cède à la FNSEA et que celle-ci confisque la colère agricole. Elle reçoit aussi des invités sur Gaza, l'école et les extrêmes droites, dont les thèses restent les leurs.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]] (69 Digests)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-25]] (79 Digests)
+2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-28]] (85 Digests)

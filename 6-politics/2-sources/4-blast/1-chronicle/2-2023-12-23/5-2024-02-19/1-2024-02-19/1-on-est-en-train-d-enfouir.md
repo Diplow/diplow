@@ -1,6 +1,6 @@
 ---
 title: "\"ON EST EN TRAIN D‘ENFOUIR LA CRISE CLIMATIQUE ET ÉCOLOGIQUE AU FOND DES MINES\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/1-2024-02-19
 owner: diplo
 preview: >-
   Pour Celia Izoard, la transition bas carbone repose sur une ruée minière

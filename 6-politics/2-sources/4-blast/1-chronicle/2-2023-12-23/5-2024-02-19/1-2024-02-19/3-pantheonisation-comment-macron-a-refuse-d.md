@@ -1,6 +1,6 @@
 ---
 title: "PANTHÉONISATION : COMMENT MACRON A REFUSÉ D'INVITER LE DERNIER CAMARADE VIVANT DE MANOUCHIAN"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/1-2024-02-19
 owner: diplo
 preview: >-
   Blast raconte la Résistance par Léon Landini, dernier FTP-MOI vivant, ni

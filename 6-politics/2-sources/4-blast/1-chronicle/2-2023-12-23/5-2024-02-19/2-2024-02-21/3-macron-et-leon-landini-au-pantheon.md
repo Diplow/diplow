@@ -1,6 +1,6 @@
 ---
 title: "MACRON ET LÉON LANDINI AU PANTHÉON : LES COULISSES D’UNE IMPROVISATION"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/6-2024-02-21
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/2-2024-02-21
 owner: diplo
 preview: >-
   Blast suit Léon Landini, ancien FTP-MOI, à la panthéonisation de Manouchian
@@ -35,7 +35,7 @@ relations:
 
 ## 1. Landini juge que Macron ne l'a invité qu'après l'avoir ignoré, quand le buzz l'y a contraint.
 
-Landini raconte que ses lettres sont restées sans réponse directe et que l'invitation est arrivée in extremis, comme une manœuvre de dernière minute. Pour le contexte de la cérémonie, voir [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19/3-pantheonisation-comment-macron-a-refuse-d|Panthéonisation : Macron et le dernier camarade de Manouchian]].
+Landini raconte que ses lettres sont restées sans réponse directe et que l'invitation est arrivée in extremis, comme une manœuvre de dernière minute. Pour le contexte de la cérémonie, voir [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/1-2024-02-19/3-pantheonisation-comment-macron-a-refuse-d|Panthéonisation : Macron et le dernier camarade de Manouchian]].
 
 > [1:03](https://www.youtube.com/watch?v=lfaLoMJBRWU&t=63s) « c'est une belle victoire et puis ça ça démontre ça démontre que euh les présidents de la République ils savent pas ce qu'ils font »
 

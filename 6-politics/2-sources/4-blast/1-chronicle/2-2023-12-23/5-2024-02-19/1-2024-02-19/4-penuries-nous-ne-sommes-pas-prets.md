@@ -1,6 +1,6 @@
 ---
 title: "PÉNURIES : NOUS NE SOMMES PAS PRÊTS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/1-2024-02-19
 owner: diplo
 preview: >-
   Pour Renaud Duterme, énergie, minerais, logistique, alimentation et santé

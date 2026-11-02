@@ -1,6 +1,6 @@
 ---
 title: "AGRICULTURE : POUSSÉE DE COLÈRE D’UN MONDE EN CRISE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/6-2024-02-21
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/2-2024-02-21
 owner: diplo
 preview: >-
   Blast montre que la colère agricole, captée par la FNSEA, cogestionnaire de

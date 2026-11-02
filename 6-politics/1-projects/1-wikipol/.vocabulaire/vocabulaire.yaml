@@ -106,6 +106,8 @@ kinds:
       dirigeant-patronal: {définition: "Préside ou dirige une organisation patronale d'un secteur d'activité.", statut: proposé, introduit_par: paduteam/fZJh9PLgXdw.md}
       responsable-nazi: {définition: "Sert l'appareil répressif de l'Allemagne nazie, police politique ou SS.", statut: proposé, introduit_par: blast/-Z9ixgPo36M.md}
       condamné: {définition: "A été condamné par la justice pénale, à la date de la Publication.", statut: proposé, introduit_par: paduteam/7OzlCXM5t-U.md}
+      producteur: {définition: "Finance et supervise la production de films.", statut: proposé, introduit_par: blast/cKYSNkedyek.md}
+      conseiller-politique: {définition: "Conseille un dirigeant politique, notamment à la Maison-Blanche.", statut: proposé, introduit_par: boniface/yTDiNIy50xE.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -150,6 +152,8 @@ kinds:
       maison-d-édition: {définition: "Publie des livres et dirige des collections.", statut: proposé, introduit_par: paduteam/NBOUwkc60fc.md}
       plateforme-vidéo: {définition: "Héberge et diffuse des vidéos mises en ligne par ses utilisateurs.", statut: proposé, introduit_par: paduteam/KI1sQj8QvUo.md}
       équipe-nationale: {définition: "Équipe qui représente un pays dans les compétitions sportives internationales.", statut: proposé, introduit_par: boniface/9X9jOh-GdcM.md}
+      coopérative-agricole: {définition: "Coopérative d'agriculteurs qui produit, transforme et commercialise des produits agricoles.", statut: proposé, introduit_par: blast/mkLUrap_xfM.md}
+      fonds-d-investissement: {définition: "Société qui réunit des capitaux pour les investir dans des entreprises.", statut: proposé, introduit_par: blast/mkLUrap_xfM.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

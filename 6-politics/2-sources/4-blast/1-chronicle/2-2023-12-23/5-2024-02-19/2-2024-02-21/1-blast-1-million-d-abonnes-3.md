@@ -1,6 +1,6 @@
 ---
 title: "BLAST, 1 MILLION D’ABONNÉS, 3 ANS DE COMBAT POUR VOUS INFORMER"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/6-2024-02-21
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/2-2024-02-21
 owner: diplo
 preview: >-
   Blast fête le million d'abonnés de sa chaîne par un montage de trois ans

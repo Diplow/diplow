@@ -1,6 +1,6 @@
 ---
 title: "2024-02-19 → 2024-02-20"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/1-2024-02-19
 owner: diplo
 preview: >-
   Blast reçoit Celia Izoard et Renaud Duterme sur les limites matérielles de
@@ -16,7 +16,7 @@ Les deux autres Digests portent des thèses que Blast formule elle-même. Sur Bu
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19/1-on-est-en-train-d-enfouir|"ON EST EN TRAIN D‘ENFOUIR LA CRISE CLIMATIQUE ET ÉCOLOGIQUE AU FOND DES MINES"]] (2024-02-19)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19/2-bukele-au-salvador-le-dictateur-le|BUKELE : AU SALVADOR, LE "DICTATEUR LE PLUS COOL DU MONDE"]] (2024-02-19)
-3. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19/3-pantheonisation-comment-macron-a-refuse-d|PANTHÉONISATION : COMMENT MACRON A REFUSÉ D'INVITER LE DERNIER CAMARADE VIVANT DE MANOUCHIAN]] (2024-02-20)
-4. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/4-2024-02-07/5-2024-02-19/4-penuries-nous-ne-sommes-pas-prets|PÉNURIES : NOUS NE SOMMES PAS PRÊTS]] (2024-02-20)
+1. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/1-2024-02-19/1-on-est-en-train-d-enfouir|"ON EST EN TRAIN D‘ENFOUIR LA CRISE CLIMATIQUE ET ÉCOLOGIQUE AU FOND DES MINES"]] (2024-02-19)
+2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/1-2024-02-19/2-bukele-au-salvador-le-dictateur-le|BUKELE : AU SALVADOR, LE "DICTATEUR LE PLUS COOL DU MONDE"]] (2024-02-19)
+3. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/1-2024-02-19/3-pantheonisation-comment-macron-a-refuse-d|PANTHÉONISATION : COMMENT MACRON A REFUSÉ D'INVITER LE DERNIER CAMARADE VIVANT DE MANOUCHIAN]] (2024-02-20)
+4. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/5-2024-02-19/1-2024-02-19/4-penuries-nous-ne-sommes-pas-prets|PÉNURIES : NOUS NE SOMMES PAS PRÊTS]] (2024-02-20)
