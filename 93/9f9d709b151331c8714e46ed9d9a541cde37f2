@@ -1,0 +1,53 @@
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/5-2026-02-16/CLAUDE.md
+  s_90344ffe4dc509::t_c1e08ab9f0bda2 2,6-9,11,13,15,17
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/1-2026-03-15/1-ces-insoumises-font-exploser-les-ecologistes.md
+  s_90344ffe4dc509::t_58c6a59d4b77f9 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/1-2026-03-15/2-trump-prend-une-fessee-en-iran.md
+  s_90344ffe4dc509::t_4e88dc7682f871 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/1-2026-03-15/3-sondage-anti-melenchon-l-ifop-met.md
+  s_90344ffe4dc509::t_67f9678bfd5c3f 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/1-2026-03-15/4-ces-bourgeois-paniques-face-a-la.md
+  s_90344ffe4dc509::t_307a474eae4628 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/1-2026-03-15/CLAUDE.md
+  s_90344ffe4dc509::t_5774d574cb4cef 2-3,6-9,11,13,15,17,21-24
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/2-2026-03-22/1-alice-coffin-devoile-l-enfer-du.md
+  s_90344ffe4dc509::t_61b8edf96f683f 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/2-2026-03-22/2-garrido-corbiere-et-guedj-diabolisent-melenchon.md
+  s_90344ffe4dc509::t_39ac735fc6e966 1-99
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/2-2026-03-22/3-chris-devoile-comment-melenchon-va-gagner.md
+  s_90344ffe4dc509::t_4a54a70f43346c 1-99
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/2-2026-03-22/4-backseat-vs-paduteam-comment-empecher-le.md
+  s_90344ffe4dc509::t_2eff008638183c 1-101
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/2-2026-03-22/CLAUDE.md
+  s_90344ffe4dc509::t_8aab071488d184 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/3-2026-03-30/1-sarah-knafo-plus-cringe-que-louis.md
+  s_90344ffe4dc509::t_054667cebe1ad9 1-99
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/3-2026-03-30/2-la-primaire-des-noisettes-tourne-a.md
+  s_90344ffe4dc509::t_32f37924b82a23 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/3-2026-03-30/3-ruffin-veut-que-la-gauche-arrete.md
+  s_90344ffe4dc509::t_924294bb605c44 1-100
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/3-2026-03-30/CLAUDE.md
+  s_90344ffe4dc509::t_88f2cf8142dc34 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/6-2026-03-15/CLAUDE.md
+  s_90344ffe4dc509::t_8a740d69b91aaa 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/CLAUDE.md
+  s_90344ffe4dc509::t_109f7576c6a204 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_90344ffe4dc509::t_f2737a31417b6b 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "939f9d709b151331c8714e46ed9d9a541cde37f2",
+  "prompts": {},
+  "sessions": {
+    "s_90344ffe4dc509": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a3b974190b3d3c991",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
