@@ -3,18 +3,18 @@ title: "2017-12-20 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20
 owner: diplo
 preview: >-
-  Boniface lit l'actualité à travers l'unilatéralisme de Trump, un
-  multilatéralisme en crise mais indispensable et l'autonomie stratégique que
-  la France et l'Europe doivent chercher. Il passe ensuite aux rivalités entre
-  puissances et au multi-alignement, et reçoit de nombreux invités.
+  Boniface lit la géopolitique par les rapports de force : l'unilatéralisme de
+  Trump et le démantèlement de l'arms control, un multilatéralisme en crise
+  mais indispensable, un Occident affaibli, une Europe qui doit conquérir son
+  autonomie stratégique, le sport comme soft power.
 ---
 # 2017-12-20 → 2026-10-30
 
-De fin 2017 à 2018, Boniface lit l'actualité par la Corée et par Trump. La participation nord-coréenne aux JO ouvre une trêve, et le sommet Trump–Kim est bon pour la paix sans qu'il faille s'en réjouir à l'excès. Il juge la guerre d'Afghanistan perdue et voit Israël perdre la bataille des opinions publiques à Gaza. Dans la rupture de l'accord nucléaire iranien, il lit une tentative de Trump d'imposer un monde unipolaire que l'Europe doit refuser.
+Pendant toute la Chronicle, Boniface applique la même grille : les États-Unis de Trump rompent avec le multilatéralisme et l'arms control, qu'il s'agisse de l'accord nucléaire iranien ou du traité FNI, et cherchent à imposer un monde unipolaire. Il soutient que l'ONU et le multilatéralisme, en crise, restent indispensables. Il appelle la France et l'Europe à l'autonomie stratégique, et juge que l'Europe pèse si Paris et Berlin s'unissent. L'Occident, selon lui, s'affaiblit.
 
-Le fil se resserre autour de l'unilatéralisme américain. En dénonçant le traité FNI, Trump rejette l'Arms control et le multilatéralisme. Boniface soutient que l'ONU reste indispensable et que le multilatéralisme, en crise, est toujours nécessaire. Il appelle la France et l'Europe à l'autonomie stratégique, y compris face au Venezuela ou à la Corée du Nord, tout en nuançant : la contestation de Maduro est d'abord nationale. Il analyse aussi le soutien à MBS comme un calcul d'intérêts et l'assassinat de Khashoggi comme une faute stratégique. Les gilets jaunes affaiblissent Macron à l'international, et la victoire des Bleus est un gain de prestige par le soft power, le football étant pour lui un objet géopolitique.
+Il applique cette grille à des cas très divers, avec ses nuances. Il juge que le sommet Trump–Kim est bon pour la paix sans excès d'optimisme, que la guerre d'Afghanistan est perdue, qu'Israël perd la bataille des opinions publiques à Gaza et que l'assassinat de Khashoggi est une faute stratégique. Le soutien américain à MBS relève pour lui d'un calcul d'intérêts. Sur le Venezuela, il rappelle que la contestation de Maduro est d'abord nationale. Il voit dans les gilets jaunes un affaiblissement de Macron à l'international. Il tient aussi le football, avec la victoire des Bleus, pour un objet géopolitique et un gain de prestige par le soft power.
 
-Dans la dernière partie de la Chronicle, il lit l'actualité par les rivalités entre puissances et le multi-alignement. L'OCS n'est pas une OTAN asiatique, et un départ de Netanyahou ne changerait presque rien pour les Palestiniens. Tout au long de la Period, il reçoit de nombreux invités, sur les Rohingya, la Chine, la dissuasion ou son Requiem pour le monde occidental, et il chronique des livres.
+Dans les dernières années de la Chronicle, il lit un monde de rapports de force où la guerre Chine/États-Unis est loin d'être écrite et où l'OCS relève du multi-alignement. Il soutient la rue algérienne et juge qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens. Ses invités, dont les thèses restent les leurs, élargissent le propos aux Rohingya, à la Chine, à la dissuasion et à son *Requiem pour le monde occidental*, discuté début 2019 ([[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/CLAUDE|2019-01-14 → 2019-02-15]]).
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Dans la dernière partie de la Chronicle, il lit l'actualité par les rivalités
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/3-2018-06-20/CLAUDE|2018-06-20 → 2018-10-24]] (18 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/4-2018-10-25/CLAUDE|2018-10-25 → 2019-01-09]] (18 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/5-2019-01-14/CLAUDE|2019-01-14 → 2019-02-15]] (23 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/6-2019-02-20/CLAUDE|2019-02-20 → 2026-10-30]] (18 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/6-2019-02-20/CLAUDE|2019-02-20 → 2026-10-30]] (24 Digests)
