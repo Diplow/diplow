@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans d'actualité par les mêmes grilles : multilatéralisme
-  contre unilatéralisme, deux-poids-deux-mesures occidental, fin de la
-  domination occidentale. Il presse l'Europe de gagner son autonomie
-  stratégique et défend la diplomatie et l'état de droit.
+  Boniface lit dix ans d'actualité par le multilatéralisme contre
+  l'unilatéralisme américain, le deux-poids-deux-mesures occidental et la
+  dépendance des Européens, qu'il presse d'accéder à l'autonomie stratégique.
+  Trump, puis le Covid-19, lui servent de révélateurs.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Boniface applique les mêmes grilles à l'actualité internationale. Il oppose le multilatéralisme, en crise mais indispensable, à l'unilatéralisme. Il dénonce le deux-poids-deux-mesures occidental et juge que la domination occidentale touche à sa fin. Il tient que le refus de négocier se retourne contre ses auteurs, et il défend la diplomatie et la rationalité des acteurs. Ses analyses reviennent à ces outils d'une vidéo à l'autre, et c'est cette cohérence qui structure l'ensemble.
+D'une Period à l'autre, Pascal Boniface applique les mêmes grilles de lecture. Il oppose le multilatéralisme, en crise mais indispensable, à l'unilatéralisme américain. Il dénonce le deux-poids-deux-mesures occidental et défend la diplomatie, y compris contre le refus de négocier, qu'il juge se retourner contre ses auteurs. Il appelle la France et l'Europe à définir leurs intérêts, à tenir tête à Washington et à se doter d'une autonomie stratégique plutôt que de subir une unipolarité.
 
-De 2016 à 2020, Trump est le point de départ de sa lecture. Il voit dans l'unilatéralisme de Washington un démantèlement de l'arms control et un affaiblissement des États-Unis qui sert la Chine. Il juge Obama meilleur qu'on ne le dit et place Macron dans la ligne gaullo-mitterrandiste, tout en voyant les gilets jaunes l'affaiblir à l'international. De là vient son appel constant à l'Europe et à la France : définir leurs intérêts, tenir tête à Washington, conquérir une autonomie stratégique. Le Covid-19 prolonge cette lecture, comme un révélateur du manque de solidarité européenne ([[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2020-06-11]]).
+De 2016 à 2019, Trump est la clé de lecture dominante : le démantèlement de l'arms control, l'unilatéralisme et la dépendance des Européens. Boniface juge dans le même temps Obama meilleur qu'on ne le dit, voit Macron dans la ligne gaullo-mitterrandiste et estime que les gilets jaunes l'affaiblissent à l'international. Le Covid-19 est ensuite lu comme un révélateur : Trump affaiblit les États-Unis et sert la Chine, tandis que l'Europe pâtit de son manque de solidarité.
 
-À partir de mi-2020, sa lecture se resserre sur les rapports de force entre puissants et dominés, toujours adossée au multilatéralisme et à l'autonomie européenne. Il veut combattre le terrorisme sans sacrifier l'état de droit. La Chronicle change aussi de forme : Boniface reçoit beaucoup plus d'invités et chronique des livres, et c'est alors que la distinction entre ses thèses et celles de ses interlocuteurs compte le plus.
+Dans les années les plus récentes, Boniface insiste sur un Occident qui ne domine plus et sur une Europe qui ne choisit pas entre Washington et Pékin. Il veut combattre le terrorisme sans sacrifier l'état de droit.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ De 2016 à 2020, Trump est le point de départ de sa lecture. Il voit dans l'uni
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2019-01-09]] (72 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2019-10-10]] (84 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2020-06-11]] (90 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (83 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (89 Digests)
