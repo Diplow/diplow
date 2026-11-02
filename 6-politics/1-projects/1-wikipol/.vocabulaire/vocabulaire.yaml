@@ -98,6 +98,7 @@ kinds:
       agronome: {définition: "Spécialiste de l'agriculture, qui étudie et conseille les pratiques agricoles.", statut: proposé, introduit_par: blast/nhOpTPh57zA.md}
       microbiologiste: {définition: "Étudie les micro-organismes, notamment ceux des sols.", statut: proposé, introduit_par: blast/nhOpTPh57zA.md}
       philanthrope: {définition: "Finance des causes et des organisations d'intérêt général.", statut: proposé, introduit_par: boniface/ol_r9vI3FpA.md}
+      consultant: {définition: "Conseille des organisations ou des pouvoirs publics, ici en démocratie participative.", statut: proposé, introduit_par: blast/9S0VA52zcxM.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
