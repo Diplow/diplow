@@ -1,6 +1,6 @@
 ---
 title: "🦏 BAYROU, MACRON ET LES AUTRES : LES FRANÇAIS N’EN ONT PLUS RIEN À FOUTRE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/6-2024-12-20
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/2-2024-12-20
 owner: diplo
 preview: >-
   Blast soutient que les Français se détournent de l'information parce que les

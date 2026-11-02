@@ -1,6 +1,6 @@
 ---
 title: "AMAR, TUÉ PAR UN POLICIER : 6 BALLES ET UN SILENCE MÉDIATIQUE ASSOURDISSANT"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/5-2024-12-18
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/1-2024-12-18
 owner: diplo
 preview: >-
   Blast soutient qu'Amar Slimani, sans-abri algérien, a été abattu dans son

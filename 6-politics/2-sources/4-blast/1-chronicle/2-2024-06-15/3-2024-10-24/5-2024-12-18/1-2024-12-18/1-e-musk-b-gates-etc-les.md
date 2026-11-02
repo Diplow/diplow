@@ -1,6 +1,6 @@
 ---
 title: "E. MUSK, B. GATES ETC : LES NOUVEAUX MAÎTRES DU MONDE - CORPORATE EP2"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/5-2024-12-18
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/5-2024-12-18/1-2024-12-18
 owner: diplo
 preview: >-
   Blast soutient que l'entrepreneur génial et self-made est un mythe, fabriqué
