@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface applique dix ans durant les mêmes grilles : le multilatéralisme
-  contre l'unilatéralisme, une Europe autonome qui ne s'aligne ni sur
-  Washington ni sur Pékin, la rivalité sino-américaine et le déclin de
-  l'Occident, et une question palestinienne qu'il tient pour centrale.
+  Pascal Boniface lit dix ans d'actualité avec les mêmes grilles :
+  multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
+  rivalité sino-américaine. Il presse l'Europe d'une autonomie stratégique,
+  alignée ni sur Washington ni contre Pékin.
 ---
 # Chronicle
 
-De 2016 à 2020, Boniface lit l'actualité à travers Trump. Il y voit un unilatéralisme qui démantèle l'arms control, affaiblit les États-Unis et sert la Chine, face auquel il juge le multilatéralisme en crise mais indispensable. Il en tire un appel constant à l'Europe et à la France : définir leurs intérêts, viser l'autonomie stratégique, refuser l'unipolarité et tenir tête à Washington. Il applique aussi la grille du deux-poids-deux-mesures occidental, juge Obama meilleur qu'on ne le dit, place Macron dans la ligne gaullo-mitterrandiste et estime que les gilets jaunes l'affaiblissent à l'international. Il défend la diplomatie et le refus de négocier, selon lui, se retourne contre ses auteurs.
+Pascal Boniface applique d'un bout à l'autre de la Chronicle un petit nombre de grilles stables. Il oppose le multilatéralisme, qu'il juge en crise mais indispensable, à l'unilatéralisme américain, dont Trump est la figure centrale de 2016 à 2020. Il dénonce un deux-poids-deux-mesures occidental et soutient que le refus de négocier se retourne contre ses auteurs. Il défend la diplomatie et la rationalité des acteurs, et refuse de sacrifier l'état de droit à la lutte antiterroriste. Ces grilles servent à lire chaque événement : le démantèlement de l'arms control, les sommets, puis le Covid-19, qu'il traite comme un révélateur.
 
-Le Covid-19 est pour lui un révélateur : il montre un Trump qui fragilise les États-Unis et une Europe qui pâtit de son manque de solidarité. À la fin de 2020, les mêmes grilles continuent de structurer son regard : une Europe alignée ni sur Washington ni sur Pékin, la fermeté sans rupture, et le refus de sacrifier l'état de droit au nom de la lutte antiterroriste.
+Pour l'Europe, il répète la même demande. Elle doit définir ses intérêts, tenir tête à Washington et rechercher l'autonomie stratégique, sans s'aligner sur Washington ni sur Pékin. Selon lui, Trump affaiblit les États-Unis et sert la Chine, tandis que l'Europe pâtit de son manque de solidarité. Côté français, il situe Macron dans la ligne gaullo-mitterrandiste, voit les gilets jaunes l'affaiblir à l'international et juge Obama meilleur qu'on ne le dit.
 
-Sur les années 2020 à 2026, Boniface place au centre la rivalité sino-américaine et le déclin de l'Occident. Il continue de défendre le multilatéralisme et une Europe qui ne s'aligne pas. Il tient la question palestinienne pour centrale et sans issue tant que les droits des Palestiniens ne sont pas reconnus.
+À partir de 2020, la tonalité se resserre autour de la rivalité sino-américaine et du déclin de l'Occident. Boniface y plaide pour la fermeté sans rupture et pour un multilatéralisme qu'il continue de défendre. Dans la dernière période, il juge morte la solution à deux États.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Sur les années 2020 à 2026, Boniface place au centre la rivalité sino-améric
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2019-10-10]] (84 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/CLAUDE|2019-10-14 → 2020-06-11]] (90 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/5-2020-06-16/CLAUDE|2020-06-16 → 2020-12-14]] (78 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/CLAUDE|2020-12-16 → 2026-10-30]] (113 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/CLAUDE|2020-12-16 → 2026-10-30]] (119 Digests)
