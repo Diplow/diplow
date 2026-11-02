@@ -1,6 +1,6 @@
 ---
 title: "MACRON, BAYROU, LE PEN, ETC. : CORROMPUS, COLLABOS (OU LES 2 ?)"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/5-2025-03-02
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/1-2025-03-02
 owner: diplo
 preview: >-
   Blast soutient que la corruption s'installe dans la classe politique

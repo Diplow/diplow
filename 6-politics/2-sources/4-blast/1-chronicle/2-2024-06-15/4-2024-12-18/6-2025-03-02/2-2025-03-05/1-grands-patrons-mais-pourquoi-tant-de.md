@@ -1,6 +1,6 @@
 ---
 title: "GRANDS PATRONS : MAIS POURQUOI TANT DE HAINE ? - CORPORATE EP4"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/5-2025-03-02
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/2-2025-03-05
 owner: diplo
 preview: >-
   Blast soutient que l'assassinat du PDG Brian Thompson par Luigi Mangione

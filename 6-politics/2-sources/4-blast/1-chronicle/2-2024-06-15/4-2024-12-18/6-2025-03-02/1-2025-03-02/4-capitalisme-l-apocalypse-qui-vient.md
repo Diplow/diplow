@@ -1,6 +1,6 @@
 ---
 title: "CAPITALISME : L'APOCALYPSE QUI VIENT"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/5-2025-03-02
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/1-2025-03-02
 owner: diplo
 preview: >-
   Selon Quinn Slobodian, le capitalisme contemporain ne cherche plus à
