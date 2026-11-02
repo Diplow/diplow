@@ -3,18 +3,17 @@ title: "2021-06-30 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30
 owner: diplo
 preview: >-
-  Boniface lit cinq ans d'actualité par la rivalité des puissances et l'échec
-  des interventions extérieures, de Kaboul au Sahel et à l'Ukraine. Il plaide
-  pour la négociation, refuse l'alignement de l'Europe sur Washington et juge
-  fausses les leçons que l'Occident tire de la guerre.
+  De Kaboul à l'Ukraine, Boniface lit un monde qui ne suit plus l'Occident :
+  échec des interventions extérieures, rivalité des puissances, Europe trop
+  alignée. Il plaide partout la négociation, sans rien excuser à Poutine.
 ---
 # 2021-06-30 → 2026-10-30
 
-Sur l'ensemble de la Chronicle, Boniface applique une même grille : un monde où la rivalité des puissances et les ingérences dominent, et où les interventions extérieures échouent. Il lit la chute de Kaboul comme une défaite américaine et le Sahel comme l'échec d'une guerre réduite au terrorisme. Il plaide pour négocier avec les talibans. Il refuse que l'Europe s'aligne sur Washington contre Pékin, juge que les sanctions risquent de refaire un monde bipolaire et regrette une Europe absente face à la Russie. Il voit dans le Covid-19 un accélérateur plus qu'une rupture.
+Boniface ouvre la période sur la chute de Kaboul, qu'il lit comme une défaite américaine et l'échec des interventions extérieures. Il en tire une position constante : négocier avec les talibans, voir dans le Sahel l'échec d'une guerre réduite au terrorisme, et refuser que l'Europe s'aligne sur Washington contre Pékin. Dans l'affaire des sous-marins, il demande une réparation pour la France.
 
-Face à la crise ukrainienne, il défend d'abord la négociation. Quand la guerre éclate, il l'analyse comme une faute de Poutine, qui soude l'OTAN et isole la Russie, sans rien excuser. Il refuse pourtant le tout-Poutine comme le tout-OTAN et juge un compromis réaliste. Dans la dernière période, il soutient que les leçons que l'Occident tire de cette guerre sont fausses, et lit l'OCS comme un multi-alignement plutôt qu'une OTAN asiatique.
+Sa grille devient celle de la rivalité des puissances et des ingérences. Il juge que les sanctions risquent de refaire un monde bipolaire et que l'Europe est absente face à la Russie. Face à la crise ukrainienne, il plaide d'abord la négociation. Après l'invasion, il y voit une faute de Poutine, qui soude l'OTAN et l'isole, sans rien l'excuser. Il juge toutefois un compromis réaliste et refuse le tout-Poutine comme le tout-OTAN ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/4-2022-02-11/CLAUDE|2022-02-11 → 2022-03-25]]).
 
-Sur le Proche-Orient, il juge morte la solution à deux États. Il soutient aussi qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens. Entre ces prises de position, il reçoit de nombreux invités, de Taubira à Gnesotto, dont les propos restent les leurs.
+Dans la dernière partie, la guerre en Ukraine devient pour lui le révélateur d'un monde qui ne suit pas l'Occident, et il continue de plaider la négociation avec Poutine. Il applique la même grille au Moyen-Orient, où il juge morte la solution à deux États et constate que rien ne bouge pour les Palestiniens, puis à l'OCS, qu'il lit comme un multi-alignement. Il reçoit aussi de nombreux invités, de Taubira à Gnesotto.
 
 ## Contenu
 
@@ -22,4 +21,4 @@ Sur le Proche-Orient, il juge morte la solution à deux États. Il soutient auss
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/2-2021-09-29/CLAUDE|2021-09-29 → 2021-12-06]] (24 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/3-2021-12-08/CLAUDE|2021-12-08 → 2022-02-09]] (23 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/4-2022-02-11/CLAUDE|2022-02-11 → 2022-03-25]] (19 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/CLAUDE|2022-03-29 → 2026-10-30]] (11 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/CLAUDE|2022-03-29 → 2026-10-30]] (17 Digests)
