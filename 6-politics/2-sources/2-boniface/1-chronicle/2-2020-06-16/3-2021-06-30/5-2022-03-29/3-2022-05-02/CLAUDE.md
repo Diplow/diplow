@@ -1,23 +1,25 @@
 ---
-title: "2022-05-02 → 2026-10-14"
+title: "2022-05-02 → 2022-05-18"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/3-2022-05-02
 owner: diplo
 preview: >-
-  Boniface juge légales les livraisons d'armes à l'Ukraine tout en tenant la
-  non-belligérance pour une fiction, retient de Stubb un Occident affaibli par
-  son deux poids deux mesures face au Sud global, et reçoit Sylvie Bermann sur
-  la Chine.
+  Boniface juge les livraisons d'armes à l'Ukraine légales mais la
+  non-belligérance fictive, sans solution territoriale en vue. Ses invités
+  Lamy, Mbembe et Morin lisent la guerre à leur façon ; il recommande
+  Géopolitique de la mer.
 ---
-# 2022-05-02 → 2026-10-14
+# 2022-05-02 → 2022-05-18
 
-Sur la guerre en Ukraine, Boniface soutient que les livraisons d'armes occidentales sont légales, au titre de la légitime défense, mais que la non-belligérance est une fiction commode. Il ajoute qu'aucune solution territoriale ne permet encore à Kiev et à Moscou de sauver la face ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/3-2022-05-02/1-guerre-en-ukraine-legitime-defense-cobelligerance|Guerre en Ukraine : légitime défense, cobelligérance, 3e guerre mondiale ?]]).
+Pascal Boniface applique à la guerre en Ukraine une lecture juridique et lucide : les livraisons d'armes occidentales sont légales au titre de la légitime défense, mais la non-belligérance est une fiction commode, et aucune solution territoriale ne permet encore à Kiev et à Moscou de sauver la face ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/3-2022-05-02/1-guerre-en-ukraine-legitime-defense-cobelligerance|Guerre en Ukraine : légitime défense, cobelligérance, 3e guerre mondiale ?]]).
 
-Plus tard, Boniface lit l'ordre mondial à travers un livre. Dans sa chronique du *Triangle du pouvoir* d'Alexander Stubb, il retient un monde divisé en trois blocs (Occident, Orient, Sud global). L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/3-2022-05-02/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]]).
+Il consacre ensuite trois émissions de *Comprendre le monde* à des invités, dont les thèses restent les leurs. Pour Pascal Lamy, la guerre n'est pas une démondialisation mais le retour de la géopolitique sur la géoéconomie, et l'Europe doit éviter un Ouest contre le reste. Achille Mbembe juge la France à court d'idées sur l'Afrique et lit la neutralité africaine comme une lassitude du deux poids deux mesures. Pour Edgar Morin, seul un compromis évitera une escalade aux risques imprévisibles.
 
-Enfin, Boniface reçoit Sylvie Bermann, ancienne ambassadrice à Pékin, et c'est elle qui porte les thèses sur la Chine. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, sans qu'on puisse dire que Pékin a gagné. Elle voit une Chine patiente sur Taïwan et non anti-européenne, dont l'excédent commercial met pourtant l'Europe en difficulté.
+Entre ces entretiens, Boniface chronique Géopolitique de la mer, de Julia Tasse et Sébastien Abis : pour les auteurs, la mer est un baromètre des tensions mondiales, et il en recommande vivement la lecture.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/3-2022-05-02/1-guerre-en-ukraine-legitime-defense-cobelligerance|Guerre en Ukraine : légitime défense, cobelligérance, 3e guerre mondiale ?]] (2022-05-02)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/3-2022-05-02/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/3-2022-05-02/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/3-2022-05-02/2-comprendre-le-monde-s5-33-pascal|Comprendre le monde S5#33 – Pascal Lamy – "Guerre en Ukraine : fin de la mondialisation ?"]] (2022-05-04)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/3-2022-05-02/3-comprendre-le-monde-s5-34-achille|Comprendre le monde S5#34 – Achille Mbembe – "Géopolitique vue d'Afrique"]] (2022-05-11)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/3-2022-05-02/4-j-ai-lu-geopolitique-de-la|J'ai lu..."Géopolitique de la mer" par Julia Tasse et Sébastien Abis]] (2022-05-13)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/5-2022-03-29/3-2022-05-02/5-comprendre-le-monde-s5-35-edgar|Comprendre le monde S5#35 – Edgar Morin – "La guerre en Ukraine vue par Edgar Morin"]] (2022-05-18)
