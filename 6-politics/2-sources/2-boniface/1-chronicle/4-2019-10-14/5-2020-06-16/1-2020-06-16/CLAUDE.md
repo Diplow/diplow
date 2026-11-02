@@ -1,22 +1,25 @@
 ---
-title: "2020-06-16 → 2026-10-14"
+title: "2020-06-16 → 2020-06-25"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16
 owner: diplo
 preview: >-
-  Boniface lit la Libye comme un conflit gelé dont la Russie et la Turquie
-  tirent profit, puis chronique le livre d'Alexander Stubb sur un monde en
-  trois blocs et reçoit Sylvie Bermann sur la parité sino-américaine.
+  Boniface lit la Libye comme un chaos qui profite à la Russie et à la
+  Turquie, refuse que l'Europe choisisse entre Washington et Pékin, voit Trump
+  affaibli mais pas battu et Netanyahou hésitant sur l'annexion de la
+  Cisjordanie.
 ---
-# 2020-06-16 → 2026-10-14
+# 2020-06-16 → 2020-06-25
 
-Boniface applique à la Libye une grille qu'il pose en 2020 : neuf ans après l'intervention occidentale, le pays reste plongé dans le chaos, la démocratie promise n'est jamais venue, et ce conflit gelé profite à la Russie et à la Turquie, qui s'en partagent les dépouilles ([[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/1-le-chaos-libyen|Le chaos libyen]]).
+Boniface applique à l'actualité une même grille : les grandes puissances poursuivent leurs intérêts, et ceux qui les suivent sans les défendre en paient le prix. Neuf ans après l'intervention occidentale, la Libye reste dans le chaos, un conflit gelé dont la Russie et la Turquie tirent profit, sans la démocratie promise. De la même façon, l'Europe n'a pas à choisir entre Washington et Pékin, dont la rivalité est une lutte pour la suprématie mondiale. Elle doit défendre ses propres intérêts face à la Chine, sans suivre aveuglément les États-Unis.
 
-Les deux Digests suivants, datés d'octobre 2026, passent à l'ordre mondial. Boniface chronique le livre d'Alexander Stubb, président finlandais, selon lequel le monde se divise en trois blocs : Occident, Orient et Sud global. Boniface en retient que l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Sur les États-Unis et Israël, il pèse les rapports de force sans trancher d'avance. Trump lui paraît affaibli par un meeting à moitié vide, par sa gestion du Covid-19, par le livre de Bolton et par une radicalisation qui lui coûte des voix jusque dans son camp, mais sa réélection reste ouverte et rien n'est joué pour Biden. Netanyahou hésite à annexer une partie de la Cisjordanie : l'annexion servirait l'idéologie des colons sans apporter de sécurité, et le statu quo lui est plus confortable. Boniface ajoute que l'Europe, après la Crimée, serait gênée de ne rien faire.
 
-Il reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin, et c'est elle qui porte la thèse : le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Pour elle, la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté ([[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]]).
+Dans l'émission *Comprendre le monde*, c'est son invité Emmanuel Hache qui tient la thèse sur le pétrole : pour lui, l'effondrement du printemps 2020 est un choc de demande dû au confinement, qui frappe surtout les producteurs fragiles. Le pétrole n'est pas fini pour autant, et la Chine prépare à moyen terme un contrat en yuan face au dollar.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/1-le-chaos-libyen|Le chaos libyen]] (2020-06-16)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/2-comprendre-le-monde-s3-30-emmanuel|Comprendre le monde S3#30 - Emmanuel Hache - "Le Covid-19 a-t-il tué le pétrole ?"]] (2020-06-17)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/3-l-europe-doit-elle-choisir-entre|L'Europe doit-elle choisir entre Washington et Pékin ?]] (2020-06-18)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/4-clap-de-fin-pour-trump|Clap de fin pour Trump ?]] (2020-06-22)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/5-2020-06-16/1-2020-06-16/5-netanyahou-va-t-il-risquer-l|Netanyahou va-t-il risquer l'annexion ?]] (2020-06-25)
