@@ -3,16 +3,16 @@ title: "2024-06-09 → 2024-06-11"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/3-2024-06-09
 owner: diplo
 preview: >-
-  Blast dénonce la fusion de l'audiovisuel public comme une reprise en main
-  politique, puis lit la dissolution comme un triple coup de Macron qui fait
-  la courte échelle au RN. Elle reçoit un sociologue et un économiste sur
-  l'enracinement de l'extrême droite.
+  Blast lit la dissolution comme un piège de Macron qui fait la courte échelle
+  au RN, et la fusion de l'audiovisuel public voulue par Rachida Dati comme
+  une reprise en main politique. Elle reçoit Félicien Faury et Stefano
+  Palombarini pour penser l'extrême droite au pouvoir.
 ---
 # 2024-06-09 → 2024-06-11
 
-Pendant ces trois jours, Blast décrit un pouvoir qui verrouille le terrain. Elle soutient que la fusion de l'audiovisuel public voulue par Rachida Dati est une reprise en main politique et un carnage social. À ses yeux, elle affaiblirait la seule concurrence aux médias des milliardaires et pourrait préparer l'ouverture du capital.
+Pendant ces trois jours, Blast défend deux thèses de reprise en main du pouvoir. La première porte sur l'audiovisuel public : la fusion voulue par Rachida Dati est une reprise en main politique et un carnage social. Elle affaiblirait la seule concurrence aux médias des milliardaires et pourrait préparer l'ouverture du capital.
 
-Le reste de la Period est consacré à la dissolution. Blast n'y voit pas un recours démocratique au peuple, mais un triple coup politique de Macron : enterrer l'échec des européennes, diviser ses adversaires, puis faire la courte échelle au RN en pariant sur 2027. Elle reçoit ensuite Félicien Faury et Stefano Palombarini. Pour le sociologue et l'économiste, cette dissolution piège la gauche et ouvre la voie à une extrême droite qui s'enracine, portée par le racisme, le déclin social et la crise du néolibéralisme.
+La seconde, qui domine la Period, porte sur la dissolution. Blast soutient qu'elle n'est pas un recours démocratique au peuple mais un triple coup politique de Macron : enterrer l'échec des européennes, diviser ses adversaires, puis faire la courte échelle au RN en pariant sur 2027. Le dernier Digest prolonge cette lecture en recevant le sociologue Félicien Faury et l'économiste Stefano Palombarini. Leur analyse relie la dissolution au piège tendu à la gauche et à l'enracinement d'une extrême droite portée par le racisme, le déclin social et la crise du néolibéralisme.
 
 ## Contenu
 
