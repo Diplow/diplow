@@ -1,6 +1,6 @@
 ---
 title: "VOL DE DONNÉES DE 43 MILLIONS DE FRANÇAIS : QUE RISQUEZ VOUS ? QUI EST RESPONSABLE ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/1-2024-04-02
 owner: diplo
 preview: >-
   Un juriste de la Quadrature du Net soutient que la fuite de données de

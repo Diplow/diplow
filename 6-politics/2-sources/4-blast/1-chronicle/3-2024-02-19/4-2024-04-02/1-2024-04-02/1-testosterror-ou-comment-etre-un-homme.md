@@ -1,6 +1,6 @@
 ---
 title: "TESTOSTERROR, OU COMMENT ÊTRE UN HOMME À L'HEURE DU FÉMINISME"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/1-2024-04-02
 owner: diplo
 preview: >-
   Le dessinateur Luz, avec sa BD Testostérror, soutient que la virilité est un

@@ -1,6 +1,6 @@
 ---
 title: "🦏 BFMTV RACHETÉE PAR LE MILLIARDAIRE PRÉFÉRÉ DE MACRON : QUI EST R. SAADÉ ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/2-2024-04-06
 owner: diplo
 preview: >-
   Blast soutient que le rachat de BFM TV par Rodolphe Saadé, milliardaire

@@ -3,20 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast soutient que le pouvoir macroniste sert les puissants et fait le jeu
-  de l'extrême droite, de la loi immigration à l'austérité, et défend
-  l'enquête face à une liberté qu'elle dit menacée.
+  Blast lit 2023-2024 comme une dérive du pouvoir macroniste, qui sert les
+  riches et les puissants et fait le jeu de l'extrême droite, de la loi
+  immigration à Attal. Elle y voit l'argent, le pouvoir et l'information
+  concentrés entre peu de mains.
 ---
 # Chronicle
 
-De fin octobre 2023 à avril 2024, Blast lit la séquence comme une dérive du pouvoir macroniste. Il gouverne pour les riches et s'aligne sur l'extrême droite, de la loi immigration au gouvernement Attal. Elle dénonce aussi un RN banalisé et deux poids deux mesures sur Gaza et l'antisémitisme.
+Blast soutient que le pouvoir macroniste gouverne pour les plus riches et s'aligne sur l'extrême droite. À l'automne 2023, elle dénonce une macronie des riches, deux poids deux mesures sur Gaza et l'antisémitisme, un RN banalisé, puis une loi immigration alignée sur l'extrême droite. Elle défend l'enquête et dit sa propre liberté menacée.
 
-Au fil des mois, le propos s'élargit du politique à l'économique et à l'information. Blast voit dans la crise agricole un système de dette que la FNSEA confisque, et reproche une indulgence sélective envers les paysans. Elle décrit ensuite un pouvoir qui désinforme, mène l'austérité et s'acharne sur les précaires. Pour elle, l'argent, le pouvoir et l'information vont de pair.
+Cette lecture se prolonge de la loi immigration au gouvernement Attal, que Blast présente comme au service des puissants. Elle accuse une indulgence sélective envers les paysans et lit la crise agricole comme un système de dette que la FNSEA confisque.
 
-Tout au long de la période, Blast défend l'enquête et dit sa propre liberté menacée. Elle ouvre aussi son antenne à des auteurs, des militants, des étudiants et d'autres invités. Leurs thèses restent les leurs : Blast les reçoit.
+Au printemps 2024, Blast affirme que le pouvoir désinforme, s'acharne sur les précaires et protège les ultra-riches. Pour elle, l'argent, le pouvoir et l'information se concentrent entre peu de mains, de l'empire Drahi à Bolloré.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]] (69 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-18]] (70 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-07]] (57 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-14]] (63 Digests)

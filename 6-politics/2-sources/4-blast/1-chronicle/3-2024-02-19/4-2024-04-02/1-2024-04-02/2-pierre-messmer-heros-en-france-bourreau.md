@@ -1,6 +1,6 @@
 ---
 title: "PIERRE MESSMER : HÉROS EN FRANCE, BOURREAU AU CAMEROUN"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/1-2024-04-02
 owner: diplo
 preview: >-
   Blast soutient que Pierre Messmer, résistant devenu administrateur colonial,

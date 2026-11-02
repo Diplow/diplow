@@ -1,6 +1,6 @@
 ---
 title: "POUTINE : DU \"CONTRAT SOCIAL\" À LA GUERRE, 24 ANS AU SOMMET DE LA RUSSIE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/5-2024-04-02
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/2-2024-04-06
 owner: diplo
 preview: >-
   Selon la politiste Anna Colin Lebedev, le pouvoir de Poutine repose sur un
