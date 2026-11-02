@@ -3,18 +3,19 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Pendant dix ans, Pascal Boniface lit l'actualité par le multilatéralisme
-  contre l'unilatéralisme américain, le deux-poids-deux-mesures occidental et
-  la fin du monopole occidental. Il plaide pour la négociation et une Europe
-  autonome, et tient l'invasion de l'Ukraine pour une faute de Poutine.
+  Pascal Boniface lit pendant dix ans l'actualité avec les mêmes grilles :
+  multilatéralisme contre unilatéralisme américain, deux-poids-deux-mesures
+  occidental. Il presse l'Europe d'acquérir son autonomie stratégique, juge
+  l'Occident de moins en moins suivi et veut un compromis en Ukraine, sans
+  excuser Poutine.
 ---
 # Chronicle
 
-D'un bout à l'autre de la Chronicle, Pascal Boniface applique les mêmes grilles à l'actualité internationale : le multilatéralisme contre l'unilatéralisme, en particulier américain, et le deux-poids-deux-mesures occidental. Il y ajoute l'idée d'une fin du monopole occidental, que la rivalité sino-américaine rend plus visible. Ces outils reviennent d'une période à l'autre, d'abord avec Trump et la scène internationale, ensuite avec la Chine et les États-Unis. Ils font la cohérence de sa lecture plus que les événements qu'il commente.
+De 2016 à juin 2020, Boniface applique les mêmes grilles à Trump et à la scène internationale : le multilatéralisme contre l'unilatéralisme, le deux-poids-deux-mesures occidental. Il presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur.
 
-Sur la durée, il presse l'Europe d'acquérir son autonomie stratégique et plaide pour la négociation. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] est dominée par Trump et par le Covid-19, qu'il lit comme un révélateur. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] se resserre sur la rivalité sino-américaine et sur l'invasion de l'Ukraine, qu'il tient pour une faute de Poutine.
+Depuis 2020, ces grilles restent les mêmes et se déplacent vers de nouveaux terrains : l'unilatéralisme américain, la rivalité sino-américaine et l'échec des interventions extérieures. Il juge l'Occident de moins en moins suivi dans le monde. Sur l'Ukraine, il veut un compromis, sans excuser Poutine. D'une période à l'autre, la cohérence de ces outils d'analyse est ce qui distingue la Chronicle.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (363 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (369 Digests)
