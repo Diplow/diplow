@@ -1,0 +1,43 @@
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/3-2024-10-17/CLAUDE.md
+  s_ffc43dc7436333::t_669c4e765c6d9b 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/4-2024-10-20/1-gaza-c-est-un-genocide-qui.md
+  s_ffc43dc7436333::t_5fa8c6b41b5a15 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/4-2024-10-20/2-geo-ingenierie-manipuler-le-climat-pour.md
+  s_ffc43dc7436333::t_083a9586782c1c 1-89
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/4-2024-10-20/3-jo-d-hiver-2030-barnier-enneige.md
+  s_ffc43dc7436333::t_3cfb3515c86d7e 1-80
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/4-2024-10-20/4-on-ne-peut-pas-chanter-les.md
+  s_ffc43dc7436333::t_eb483d6251004a 1-93
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/4-2024-10-20/CLAUDE.md
+  s_ffc43dc7436333::t_95cc6dcb2a8f61 1-22
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/1-extreme-gauche-tensions-au-proche-orient.md
+  s_ffc43dc7436333::t_87975b4521951d 1-70
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/2-on-n-est-pas-des-chiens.md
+  s_ffc43dc7436333::t_59082bdb588ba3 1-60
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/3-austerite-programmee-tout-comprendre-au-budget.md
+  s_ffc43dc7436333::t_2696a4f8d3aad3 1-92
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/5-2024-10-24/CLAUDE.md
+  s_ffc43dc7436333::t_4ec78f4ddba9b5 1-23
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/CLAUDE.md
+  s_ffc43dc7436333::t_f106c802728f2f 2,6-9,11,13,15-17,23-25
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE.md
+  s_ffc43dc7436333::t_a6e159cc99cf97 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_ffc43dc7436333::t_0622c7c066c505 6-8,12,14,16,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c33dd8011618a72e49925e78386f2c21f0ad9a87",
+  "prompts": {},
+  "sessions": {
+    "s_ffc43dc7436333": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ae8a6ef7041b2aa05",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
