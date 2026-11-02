@@ -1,6 +1,6 @@
 ---
 title: "🦏 DE TRUMP À BARDELLA : JUSQU’OÙ L’EXTRÊME DROITE POURRA MENTIR ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/5-2024-10-24/6-2024-11-10
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/2-2024-11-10
 owner: diplo
 preview: >-
   Blast soutient que l'extrême droite française importe la post-vérité de
