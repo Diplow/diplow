@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/5-2024-12-18/CLAUDE.md
+  s_9badd1c28e9953::t_ef8cda17165e6a 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/6-2024-12-20/1-affaire-pelicot-metoo-etc-la-justice.md
+  s_9badd1c28e9953::t_1bf82eaac3bbb4 1-90
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/6-2024-12-20/2-revolution-feministe-ce-n-est-que.md
+  s_9badd1c28e9953::t_e3d99d3ab4722b 1-93
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/6-2024-12-20/3-la-veritable-histoire-des-arabes-a.md
+  s_9badd1c28e9953::t_f0e274a472edfb 1-104
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/6-2024-12-20/4-bayrou-macron-et-les-autres-les.md
+  s_9badd1c28e9953::t_6c0a5a8f64279a 1-78
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/6-2024-12-20/5-bayrou-macron-rn-gaza-etc-en.md
+  s_9badd1c28e9953::t_7c52ca29d0bd98 1-77
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/6-2024-12-20/6-saumon-un-poisson-a-boycotter-pour.md
+  s_9badd1c28e9953::t_8201a46410b185 1-87
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/6-2024-12-20/CLAUDE.md
+  s_9badd1c28e9953::t_af67f7a2d1ec81 1-27
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/4-2024-12-05/CLAUDE.md
+  s_9badd1c28e9953::t_28c1f7feb48bc9 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE.md
+  s_9badd1c28e9953::t_a93b2e3a3c6ebd 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_9badd1c28e9953::t_aaa05d1c46586d 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_9badd1c28e9953::t_ab889cd5565f66 6-9,13,15-17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "57ad11e0801274da1c389b1f41cdcbd4c02d315e",
+  "prompts": {},
+  "sessions": {
+    "s_9badd1c28e9953": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a802a7046092eba00",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
