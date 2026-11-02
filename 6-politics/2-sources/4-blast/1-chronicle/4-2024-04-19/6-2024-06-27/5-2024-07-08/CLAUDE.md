@@ -4,17 +4,17 @@ parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/6-2024-06-27/5-202
 owner: diplo
 preview: >-
   Blast lit les législatives de 2024 comme le produit de la stratégie de
-  Macron et d'une haine libérée par l'extrême droite, appelle le Nouveau Front
-  populaire à gouverner par majorités de projet et accuse les médias dominants
-  d'avoir nourri le RN.
+  Macron et d'une extrême droite que les médias dominants ont servie ; il
+  demande à la gauche de gouverner par majorités de projet et de rétablir le
+  sens des mots face aux médias.
 ---
 # 2024-07-08 → 2024-07-11
 
-Pendant ces quatre jours, Blast soutient que l'ingouvernabilité née des législatives de 2024 est l'œuvre de la stratégie de Macron. La gauche a empêché l'extrême droite d'arriver au pouvoir, mais celle-ci a libéré la haine malgré sa défaite en sièges. Le Nouveau Front populaire doit donc gouverner par majorités de projet.
+Sur ces quatre jours, Blast revient sur les législatives de 2024. Pour Blast, l'ingouvernabilité qui en sort est l'œuvre de la stratégie de Macron. L'extrême droite a libéré la haine malgré sa défaite en sièges, et la gauche l'a empêchée d'arriver au pouvoir. Le Nouveau Front populaire doit donc gouverner par majorités de projet.
 
-Le second fil est celui des médias. Blast juge que les médias dominants ont déroulé le tapis rouge à Bardella en inversant la réalité, alors que le RN est bien un parti d'extrême droite. Il ajoute que Macron et ces médias ont falsifié le réel, en imputant l'antisémitisme à LFI et en niant la victoire de la gauche, et qu'ils ont ainsi nourri le RN. Il en conclut qu'il faut rétablir le sens des mots et s'attaquer aux médias, et que seule une information indépendante peut freiner la montée de l'extrême droite.
+Le second fil est celui des médias. Blast soutient que le RN est bien un parti d'extrême droite et que les médias dominants ont déroulé le tapis rouge à Bardella en inversant la réalité. Macron et ces médias auraient aussi falsifié le réel en imputant l'antisémitisme à LFI et en niant la victoire de la gauche, et ainsi nourri le RN. Blast en conclut qu'il faut rétablir le sens des mots, s'attaquer aux médias et défendre une information indépendante.
 
-Entre les deux, Blast reçoit le politologue Bastien François ([[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/6-2024-06-27/5-2024-07-08/2-cinquieme-republique-il-faut-en-finir|CINQUIÈME RÉPUBLIQUE : "IL FAUT EN FINIR"]]). Pour lui, la Ve République a fait du président un gouvernant suprême, et cette conception du pouvoir est obsolète. Il faut changer le mode de scrutin, puis lancer une convention citoyenne.
+Blast reçoit aussi le politologue Bastien François, qui soutient que la Ve République a fait du président un gouvernant suprême et que cette conception du pouvoir est obsolète. Pour lui, il faut changer le mode de scrutin puis lancer une convention citoyenne. Blast donne ainsi une assise institutionnelle à sa lecture de la crise.
 
 ## Contenu
 

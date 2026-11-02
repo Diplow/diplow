@@ -3,22 +3,22 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit le macronisme comme un pouvoir au service des riches qui ouvre la
-  voie à l'extrême droite. Elle dénonce les deux poids, deux mesures sur Gaza,
-  défend l'enquête et finit par demander au Nouveau Front populaire de
-  gouverner.
+  Blast soutient que le macronisme sert les puissants, fait payer les
+  précaires et banalise le RN, de la loi immigration à la dissolution. Elle
+  dénonce la criminalisation de la solidarité avec la Palestine et défend le
+  Nouveau Front populaire.
 ---
 # Chronicle
 
-Du début à la fin de la Chronicle, Blast soutient que le macronisme protège les puissants et fait payer les précaires. De la loi immigration au gouvernement Attal, elle le voit s'aligner sur l'extrême droite et en faire le jeu. Elle y ajoute une concentration de l'argent, du pouvoir et de l'information entre peu de mains.
+D'octobre 2023 à juillet 2024, Blast lit la politique française comme une dérive du pouvoir macroniste : une macronie des riches qui protège les puissants et fait payer les précaires, tandis que l'argent, le pouvoir et l'information se concentrent entre peu de mains. Elle voit la loi immigration s'aligner sur l'extrême droite, puis le gouvernement Attal poursuivre dans le même sens. Elle défend l'enquête et dit sa propre liberté menacée.
 
-Le RN est le deuxième fil. Banalisé dès l'automne 2023, il arrive en tête des sondages, et Blast en rend responsables ceux qui reprennent ses thèmes. Au printemps 2024, elle tient Macron et les médias dominants pour responsables de sa poussée. Le ton se fait alors plus politique : elle demande au Nouveau Front populaire de gouverner.
+Le RN est au centre de cette lecture. Blast soutient qu'il doit sa place en tête des sondages à ceux qui reprennent ses thèmes, et que Macron et les médias le banalisent. Au printemps, elle lit la dissolution comme un calcul de Macron. Elle défend le Nouveau Front populaire et juge le barrage contre le RN provisoire.
 
-Elle dénonce aussi une indulgence sélective. Elle dit deux poids, deux mesures sur Gaza et l'antisémitisme, puis l'impunité et la criminalisation de la solidarité avec la Palestine. Elle l'applique aussi aux paysans, dont elle lit la crise comme un système de dette que la FNSEA confisque. Elle défend l'enquête et dit sa liberté menacée.
+Sur la Palestine, elle dénonce un deux poids deux mesures sur Gaza et l'antisémitisme, puis la criminalisation de la solidarité et l'impunité. Elle lit aussi la crise agricole comme un système de dette que la FNSEA confisque, et accuse une indulgence sélective envers les paysans.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]] (69 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-18]] (70 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-18]] (68 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE|2024-04-19 → 2024-07-11]] (103 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE|2024-04-19 → 2024-07-17]] (109 Digests)
