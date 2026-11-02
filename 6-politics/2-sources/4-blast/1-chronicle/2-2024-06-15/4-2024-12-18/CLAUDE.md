@@ -1,23 +1,22 @@
 ---
-title: "2024-12-18 → 2025-02-02"
+title: "2024-12-18 → 2025-02-07"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18
 owner: diplo
 preview: >-
-  Blast lit ces semaines comme un recul de la démocratie : impunité des
-  puissants sous Macron, médias défaillants, extrême droite en progression,
-  broligarchie trumpiste, et un PS qui a trahi le Nouveau Front populaire en
-  négociant avec Bayrou.
+  Blast soutient que le pouvoir macroniste a installé l'impunité des puissants
+  et fait reculer la démocratie, que l'extrême droite progresse de Trump et
+  Musk jusqu'en France avec l'appui des médias, et que le PS cède à Bayrou.
 ---
-# 2024-12-18 → 2025-02-02
+# 2024-12-18 → 2025-02-07
 
-Pendant ces six semaines, Blast décrit un pouvoir qui s'affranchit des règles et un espace public qui ne le contrôle plus. Il soutient que Macron a installé l'impunité des puissants, que des coups de force sont relayés par des médias défaillants et que le désintérêt pour l'information profite à l'extrême droite. Il juge aussi Macron peu crédible face à cette extrême droite et lit le spectacle antidrogue comme un symptôme de ce recul.
+Pendant ces huit semaines, Blast décrit un pouvoir qui s'affranchit des règles : Macron a installé l'impunité des puissants, multiplie les coups de force et se montre peu crédible face à l'extrême droite. Les médias défaillants relaient ces coups de force, et le désintérêt pour l'information profite à l'extrême droite. Le féminisme apparaît comme un combat arraché à l'ordre patriarcal.
 
-Le propos s'élargit au fil de la Period. De la fin décembre à la mi-janvier, la critique vise le pouvoir français, avec la tronçonneuse contre l'État. Elle se tourne ensuite vers les États-Unis, où Blast dénonce une broligarchie trumpiste et lit le salut de Musk comme une marche vers l'internationale fasciste. Il en conclut que la France est extrême droitisée et que le PS a trahi le Nouveau Front populaire en négociant avec Bayrou. Le féminisme apparaît comme un combat arraché à l'ordre patriarcal.
+Le fil se tend à mesure que la Period avance. Blast lit ces semaines comme un recul de la démocratie, entre spectacle antidrogue et tronçonneuse contre l'État. Puis il dénonce un PS qui cède à Bayrou et à la Macronie, et une extrême droite qui progresse de Trump et Musk jusqu'en France avec l'appui des médias.
 
-Blast reçoit en parallèle de nombreux invités, notamment sur Mayotte, Pelicot et le saumon d'élevage. Leurs thèses restent les leurs : la Source les accueille sans les faire siennes.
+Blast reçoit de nombreux invités, parmi lesquels Callamard, Albanese et Stiglitz, ainsi que des invités sur Mayotte, Pelicot et le saumon d'élevage. Il dénonce la banalisation d'un déplacement forcé à Gaza.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/1-2024-12-18/CLAUDE|2024-12-18 → 2024-12-27]] (15 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/2-2024-12-28/CLAUDE|2024-12-28 → 2025-01-14]] (18 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/CLAUDE|2025-01-15 → 2025-02-02]] (19 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/CLAUDE|2025-01-15 → 2025-02-07]] (25 Digests)

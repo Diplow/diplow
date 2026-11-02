@@ -162,6 +162,7 @@ kinds:
       reine-régente: {définition: "Reine qui exerce le pouvoir au nom d'un roi trop jeune pour régner, à la date de la Publication.", statut: proposé, introduit_par: blast/85c-YjO3hfY.md}
       intermédiaire: {définition: "Se glisse entre États et entreprises dans des contrats, notamment d'armement, contre commissions.", statut: proposé, introduit_par: blast/7YW9bXmYMpE.md}
       interprète: {définition: "Traduit à l'oral, en direct, les propos d'un intervenant qui parle une autre langue.", statut: proposé, introduit_par: blast/TtHgPQYIZL4.md}
+      président-du-conseil-européen: {définition: "Préside le Conseil européen, qui réunit les chefs d'État et de gouvernement de l'Union européenne, à la date de la Publication.", statut: proposé, introduit_par: boniface/ZuJ0luBkoAw.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

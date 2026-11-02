@@ -1,23 +1,21 @@
 ---
-title: "2024-06-15 → 2025-02-02"
+title: "2024-06-15 → 2025-02-07"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15
 owner: diplo
 preview: >-
-  Blast lit ces mois comme un recul de la démocratie : la dissolution a ouvert
-  la voie à l'extrême droite, Macron garde la main malgré les urnes, et le PS
-  a trahi le Nouveau Front populaire en négociant avec Bayrou.
+  Blast soutient que la dissolution a ouvert la voie du pouvoir à l'extrême
+  droite, que Macron garde la main malgré les urnes et que la crise
+  démocratique ne se referme que par sa démission. Le PS cède à Bayrou.
 ---
-# 2024-06-15 → 2025-02-02
+# 2024-06-15 → 2025-02-07
 
-Blast soutient d'un bout à l'autre que la dissolution a ouvert la voie du pouvoir à l'extrême droite. Dans la première phase ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/1-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]]), Macron a déroulé le tapis au RN, le Nouveau Front populaire est la seule alternative sérieuse, et Macron nie le résultat des urnes. Cette accusation s'installe ensuite : battu aux législatives, il garde la main en imposant Barnier avec l'aval du RN, et l'extrême droite gouverne par procuration ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/2-2024-08-14/CLAUDE|2024-08-14 → 2024-10-23]]).
+Blast tient d'un bout à l'autre de la Period le même fil : la dissolution a déroulé le tapis au RN, et le Nouveau Front populaire est la seule alternative sérieuse. Après le vote, Macron nie le résultat des urnes et garde la main en imposant Barnier avec l'aval du RN. L'extrême droite gouverne alors par procuration, jusqu'au budget Barnier tenu par le RN.
 
-Le propos s'élargit ensuite à un diagnostic sur les médias et le néolibéralisme. Blast dénonce les médias de milliardaires et juge que l'extrême droite avance sur le terrain que le néolibéralisme et les médias dominants lui ont laissé, de Trump au budget Barnier tenu par le RN. La crise démocratique née de la dissolution ne se refermerait que par la démission de Macron ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE|2024-10-24 → 2024-12-17]]). Sur la scène internationale, Blast reçoit des invités sur Gaza et le Liban.
-
-Les dernières semaines ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE|2024-12-18 → 2025-02-02]]) rassemblent ces fils sous l'idée d'un recul de la démocratie : impunité des puissants sous Macron, médias défaillants, extrême droite en progression, broligarchie trumpiste. Blast y ajoute un reproche à gauche : le PS a trahi le Nouveau Front populaire en négociant avec Bayrou.
+Le propos s'élargit ensuite à la progression de l'extrême droite, qui avance sur le terrain laissé par le néolibéralisme et par les médias dominants, de Trump et Musk jusqu'en France. Blast dénonce les médias de milliardaires et un pouvoir macroniste qui a installé l'impunité des puissants et fait reculer la démocratie. Il juge que la crise née de la dissolution ne se referme que par la démission de Macron, et lit dans la reddition du PS à Bayrou un nouveau recul. Au fil des mois, Blast reçoit aussi des invités sur Gaza et le Liban.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/1-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]] (65 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/2-2024-08-14/CLAUDE|2024-08-14 → 2024-10-23]] (72 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE|2024-10-24 → 2024-12-17]] (71 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE|2024-12-18 → 2025-02-02]] (52 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE|2024-12-18 → 2025-02-07]] (58 Digests)
