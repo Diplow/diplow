@@ -147,6 +147,8 @@ kinds:
       ancien-sportif: {définition: "A pratiqué un sport en compétition et ne le pratique plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/q9BfkJS0cQs.md}
       explorateur: {définition: "Part découvrir et conquérir des terres nouvelles pour une couronne.", statut: proposé, introduit_par: blast/umxy2AcM_R0.md}
       coach: {définition: "Entraîne des personnes à la prise de parole et à la communication.", statut: proposé, introduit_par: paduteam/PBDnxew6e34.md}
+      publicitaire: {définition: "Conçoit des campagnes de publicité et de relations publiques.", statut: proposé, introduit_par: blast/buz6BTSdR2Q.md}
+      fondateur-de-mouvement: {définition: "Fonde un mouvement politique ou idéologique.", statut: proposé, introduit_par: blast/79U-Auozz6E.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -290,6 +292,7 @@ kinds:
       jeu-vidéo: {définition: "Un jeu vidéo.", statut: accepté}
       tableau: {définition: "Une peinture, œuvre d'un peintre.", statut: proposé, introduit_par: blast/ZK9AqciwH1A.md}
       encyclopédie: {définition: "Ouvrage de référence qui rassemble le savoir de nombreux domaines, imprimé ou en ligne.", statut: proposé, introduit_par: boniface/cE1htuHgQoQ.md}
+      bande-dessinée: {définition: "Une bande dessinée ou un comics.", statut: proposé, introduit_par: blast/buz6BTSdR2Q.md}
     qualifiers:
       cité: {définition: "Lue, montrée ou diffusée dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

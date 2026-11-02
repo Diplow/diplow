@@ -1,6 +1,6 @@
 ---
 title: "BOLLORÉ, ARNAULT, KRETINSKY : LE CAPITALISME VA TUER L’ÉDITION"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/6-2024-10-15
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/2-2024-10-15
 owner: diplo
 preview: >-
   Blast soutient que l'édition française est captée par quelques oligarques

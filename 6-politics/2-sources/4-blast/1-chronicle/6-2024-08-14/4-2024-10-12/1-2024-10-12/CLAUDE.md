@@ -1,6 +1,6 @@
 ---
 title: "2024-10-12 → 2024-10-14"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/1-2024-10-12
 owner: diplo
 preview: >-
   Blast lit Slenderman comme un folklore collectif né sur Internet, reproche
@@ -16,7 +16,7 @@ Deux invitées donnent le reste de la Period leurs grilles de lecture. Pour l'hi
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12/1-slenderman-le-1er-mythe-d-internet|SLENDERMAN : LE 1ER MYTHE D'INTERNET]] (2024-10-12)
-2. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12/2-pas-de-capitalisme-sans-racisme|PAS DE CAPITALISME, SANS RACISME]] (2024-10-13)
-3. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12/3-jt-et-propagande-de-guerre-une|🦏 JT ET PROPAGANDE DE GUERRE : UNE SEMAINE DEVANT LE 20H DE FRANCE 2]] (2024-10-13)
-4. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12/4-ecologie-la-methode-pour-gagner-face|ÉCOLOGIE : LA MÉTHODE POUR GAGNER FACE AUX LOBBIES]] (2024-10-14)
+1. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/1-2024-10-12/1-slenderman-le-1er-mythe-d-internet|SLENDERMAN : LE 1ER MYTHE D'INTERNET]] (2024-10-12)
+2. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/1-2024-10-12/2-pas-de-capitalisme-sans-racisme|PAS DE CAPITALISME, SANS RACISME]] (2024-10-13)
+3. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/1-2024-10-12/3-jt-et-propagande-de-guerre-une|🦏 JT ET PROPAGANDE DE GUERRE : UNE SEMAINE DEVANT LE 20H DE FRANCE 2]] (2024-10-13)
+4. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/1-2024-10-12/4-ecologie-la-methode-pour-gagner-face|ÉCOLOGIE : LA MÉTHODE POUR GAGNER FACE AUX LOBBIES]] (2024-10-14)

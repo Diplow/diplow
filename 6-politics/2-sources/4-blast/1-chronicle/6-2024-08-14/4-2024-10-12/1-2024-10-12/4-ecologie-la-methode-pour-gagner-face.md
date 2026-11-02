@@ -1,6 +1,6 @@
 ---
 title: "ÉCOLOGIE : LA MÉTHODE POUR GAGNER FACE AUX LOBBIES"
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/3-2024-09-29/5-2024-10-12
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/1-2024-10-12
 owner: diplo
 preview: >-
   Claire Nouvian (Bloom) soutient que les victoires écologiques restent
