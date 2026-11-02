@@ -3,18 +3,16 @@ title: "2024-09-09 → 2024-09-12"
 parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/4-2024-09-09
 owner: diplo
 preview: >-
-  Blast soutient que la crise climatique va plus vite que prévu et que la
-  politique reste en décalage, puis dénonce le coup de force de Macron
-  imposant Barnier malgré le vote. Il donne aussi la parole à une infirmière
-  en garde à vue et à Mathilde François sur le validisme.
+  Blast soutient que l'urgence climatique dépasse les prévisions et que Macron
+  a confisqué le vote en imposant Barnier avec l'aval du RN. Il reçoit aussi
+  deux témoignages : sur le validisme des Paralympiques, sur la garde à vue
+  d'une infirmière.
 ---
 # 2024-09-09 → 2024-09-12
 
-Blast ouvre la période sur l'urgence climatique : le réchauffement s'aggrave plus vite que prévu, entre chaleur mortelle, puits de carbone qui s'effondrent, forêts qui brûlent et glaces qui cèdent. Face à une politique en décalage, il faut selon lui traverser colère et désespoir pour agir collectivement ([[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/4-2024-09-09/1-rechauffement-climatique-pourquoi-c-est-bien|RÉCHAUFFEMENT CLIMATIQUE : POURQUOI C’EST BIEN PIRE QUE PRÉVU]]).
+Blast ouvre la période sur l'alarme climatique : le réchauffement s'aggrave plus vite que prévu, entre chaleur mortelle, puits de carbone qui s'effondrent, forêts qui brûlent et glaces qui cèdent. Face à une politique en décalage, il faut selon lui traverser colère et désespoir pour agir collectivement. Il la referme sur le terrain institutionnel : en imposant Michel Barnier à Matignon avec l'aval du RN malgré la victoire du NFP, Macron a confisqué le vote des Français, un coup de force antidémocratique que la presse dénonce chez Maduro mais pas en France.
 
-Le fil politique est celui d'un vote confisqué. Blast soutient qu'en imposant Michel Barnier à Matignon avec l'aval du RN, malgré la victoire du NFP, Macron a opéré un coup de force antidémocratique, que la presse dénonce chez Maduro mais pas en France ([[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/4-2024-09-09/4-macron-joue-la-comme-maduro|MACRON : JOUE-LA COMME MADURO]]).
-
-Blast donne aussi la parole à ceux que les institutions écartent. Mathilde François (Les dévalideuses) estime que les Jeux paralympiques reproduisent le validisme, tandis que l'accès aux droits, aux transports et à l'autonomie reste refusé aux personnes handicapées. Une infirmière humanitaire placée en garde à vue nie toute menace, y voit une criminalisation du soutien à la Palestine et témoigne de ce qu'elle a vu à Gaza.
+Entre les deux, Blast donne la parole à deux voix qui dénoncent une exclusion ou une criminalisation. Mathilde François (Les dévalideuses) soutient que les Jeux paralympiques, fondés sur la compétition des capacités et sur un regard misérabiliste ou inspirant, reproduisent le validisme, tandis que l'accès aux droits, aux transports et à l'autonomie reste refusé aux personnes handicapées. Une infirmière humanitaire, placée en garde à vue après avoir appelé un salon immobilier israélien, nie toute menace, y voit une criminalisation du soutien à la Palestine et témoigne de ce qu'elle a vu à Gaza.
 
 ## Contenu
 

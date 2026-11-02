@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit l'année comme la dérive d'un pouvoir macroniste qui sert les
-  puissants, fait payer les précaires et ouvre la voie à l'extrême droite, de
-  la loi immigration à Barnier. Elle voit dans le Nouveau Front populaire la
-  seule alternative sérieuse.
+  Blast soutient que le macronisme sert les puissants, banalise l'extrême
+  droite et rogne les libertés, de la loi immigration à la dissolution puis à
+  Barnier. Elle voit dans le Nouveau Front populaire la seule alternative
+  sérieuse et défend l'enquête face aux médias de milliardaires.
 ---
 # Chronicle
 
-D'octobre 2023 à septembre 2024, Blast soutient une même thèse : le macronisme protège les puissants et fait payer les précaires. Elle y ajoute que l'argent, le pouvoir et l'information se concentrent entre peu de mains, ce qui nourrit sa dénonciation des médias de milliardaires. Elle défend l'enquête et dit sa liberté menacée.
+D'octobre 2023 à septembre 2024, Blast déroule un même fil : le pouvoir macroniste protège les riches et les puissants et fait payer les précaires. L'argent, le pouvoir et l'information se concentrent entre peu de mains. À l'automne, elle lit cette dérive dans une macronie des riches, dans un traitement à deux poids deux mesures de Gaza et de l'antisémitisme, puis dans une loi immigration alignée sur l'extrême droite. Elle prolonge cette lecture avec le gouvernement Attal et avec la crise agricole, qu'elle décrit comme un système de dette que la FNSEA confisque, en dénonçant une indulgence sélective envers les paysans.
 
-Face à l'extrême droite, elle décrit une pente qui s'accentue. À l'automne 2023, elle voit un RN banalisé et une loi immigration alignée sur l'extrême droite. Elle estime ensuite que le RN doit sa place en tête des sondages à ceux qui reprennent ses thèmes, puis qu'il est érigé en seul opposant. Elle lit la dissolution comme un calcul de Macron pour se poser en rempart. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/CLAUDE|La dernière Period]] retient que la dissolution a ouvert la voie du pouvoir à l'extrême droite, que le Nouveau Front populaire est la seule alternative sérieuse, et que Macron nie le vote des Français jusqu'à imposer Barnier.
+Au fil des mois, Blast présente le RN comme le bénéficiaire de ceux qui reprennent ses thèmes : banalisé, en tête des sondages, érigé en seul opposant. Elle soutient que l'État français et le macronisme font reculer les libertés et criminalisent la solidarité avec la Palestine. La dissolution est pour elle un calcul de Macron, qui cherche à se poser en rempart.
 
-Deux autres fils traversent la Chronicle. Blast dénonce un deux poids deux mesures sur Gaza et l'antisémitisme, puis une criminalisation de la solidarité avec la Palestine qui fait reculer les libertés. Elle accuse aussi une indulgence sélective envers les paysans et lit la crise agricole comme un système de dette que la FNSEA confisque.
+Après les législatives, Blast soutient que Macron a ouvert la voie du pouvoir à l'extrême droite, puis nié le vote des Français avec la nomination de Barnier. Elle voit dans le Nouveau Front populaire la seule alternative sérieuse et accuse les médias de milliardaires. Tout au long de la Chronicle, elle défend l'enquête comme son travail et dit sa liberté menacée.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Deux autres fils traversent la Chronicle. Blast dénonce un deux poids deux mesu
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-18]] (70 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-18]] (68 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE|2024-04-19 → 2024-06-14]] (65 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/CLAUDE|2024-06-15 → 2024-09-12]] (86 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/CLAUDE|2024-06-15 → 2024-09-17]] (92 Digests)
