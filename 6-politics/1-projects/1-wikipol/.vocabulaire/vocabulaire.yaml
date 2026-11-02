@@ -142,6 +142,7 @@ kinds:
       ancien-chef-d-entreprise: {définition: "A dirigé une entreprise et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/SMZq-871veQ.md}
       ancien-dirigeant-patronal: {définition: "A présidé ou dirigé une organisation patronale et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/yIq2MjL2sc4.md}
       ancien-directeur-d-établissement: {définition: "A dirigé un établissement d'enseignement et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Udn6iu_F2vU.md}
+      mathématicien: {définition: "Étudie les mathématiques et en démontre les résultats.", statut: proposé, introduit_par: paduteam/oDlbLE_aTPM.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
