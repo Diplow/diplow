@@ -3,19 +3,20 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Pendant dix ans, Boniface applique les mêmes grilles à l'actualité :
+  De 2016 à 2026, Boniface applique les mêmes grilles à l'actualité :
   multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
-  fin du monopole occidental. Il presse l'Europe d'acquérir son autonomie
-  stratégique, plaide pour la négociation en Ukraine et critique l'impunité
-  d'Israël.
+  fin du monopole occidental. Il presse l'Europe d'acquérir son autonomie et
+  veut conclure la guerre en Ukraine par la négociation.
 ---
 # Chronicle
 
-D'un bout à l'autre de la Chronicle, Pascal Boniface revient aux mêmes grilles de lecture. Le multilatéralisme s'oppose pour lui à l'unilatéralisme, et le deux-poids-deux-mesures occidental sert d'étalon pour juger les réactions aux crises. De 2016 à juin 2020, il les applique à Trump et à la scène internationale, et il presse l'Europe d'acquérir son autonomie stratégique. Il lit le Covid-19 comme un révélateur.
+Sur dix ans, la Chronicle de Boniface est d'abord celle de grilles de lecture qui reviennent d'un événement à l'autre. Multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental et fin du monopole occidental structurent ses analyses, qu'il s'agisse de Trump, de la rivalité entre la Chine et les États-Unis ou des crises du moment. Chaque nouvelle actualité lui sert à appliquer ces mêmes outils.
 
-Depuis juin 2020, ces grilles se resserrent autour d'une idée : la fin du monopole occidental. Boniface y inscrit la rivalité sino-américaine et l'échec des interventions extérieures. Il plaide pour la négociation en Ukraine et critique l'impunité d'Israël. La constance de ces outils d'une période à l'autre fait la cohérence de sa lecture, bien plus qu'elle ne la rend répétitive.
+De 2016 à juin 2020, il les applique à Trump et à la scène internationale. Il presse l'Europe d'acquérir son autonomie stratégique, et il lit le Covid-19 comme un révélateur.
+
+À partir de juin 2020, il garde ces grilles et y ajoute la rivalité sino-américaine et un monde où l'Occident n'a plus le monopole. L'Europe autonome reste son horizon. Pour lui, l'Ukraine est une faute de Poutine, et il veut que la guerre se conclue par la négociation.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (327 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (333 Digests)

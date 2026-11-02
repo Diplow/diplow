@@ -3,20 +3,23 @@ title: "2022-03-29 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29
 owner: diplo
 preview: >-
-  Boniface lit le monde à travers la fin du monopole occidental. Dans la
-  guerre en Ukraine, il juge les sanctions impuissantes, dénonce un
-  deux-poids-deux-mesures et défend la négociation. Il appelle aussi à traiter
-  la Chine avec réalisme et critique l'impunité d'Israël.
+  Pascal Boniface lit la guerre en Ukraine comme la fin du monopole occidental
+  : sanctions impuissantes, Sud global qui ne suit pas, Europe fracturée. Il
+  défend la négociation avec Poutine, puis chronique des livres et reçoit des
+  invités, dont les thèses restent les leurs.
 ---
 # 2022-03-29 → 2026-10-30
 
-Pendant ces quatre années, Boniface fait de la guerre en Ukraine le révélateur d'un Occident que le reste du monde ne suit plus. Dès les premiers mois ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/1-2022-03-29/CLAUDE|2022-03-29 → 2022-05-25]]), il dénonce les fausses leçons tirées du conflit, une Europe fracturée et des sanctions que ni l'Inde ni la Chine ne relaient. Il défend la négociation avec Poutine et refuse que l'émotion décide d'une adhésion à l'UE. Au fil de l'été 2022, il juge les sanctions impuissantes. Il lit le conflit à travers le clivage européen, la rivalité sino-américaine et un deux-poids-deux-mesures occidental. Il estime que la guerre va durer, que Poutine n'est pas isolé mais que la mobilisation partielle l'affaiblit, et il demande que l'Occident négocie ses buts de guerre et que l'Europe défende ses intérêts.
+Pendant ces quatre ans, la guerre en Ukraine est le fil dominant de Pascal Boniface. Il la lit comme un révélateur : de fausses leçons tirées par les Occidentaux, une Europe fracturée, un Occident que le reste du monde ne suit plus, notamment sur les sanctions, qu'il juge impuissantes. Il défend la négociation avec Poutine et appelle à discuter des buts de guerre. Il veut que l'Europe défende ses intérêts, et refuse que l'émotion décide d'une adhésion à l'UE.
 
-Sur la période la plus longue ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/CLAUDE|2022-10-04 → 2026-10-30]]), la grille s'élargit à l'ensemble de l'ordre mondial. Il décrit une guerre en Ukraine sans issue, une Chine rivale à traiter avec réalisme et un Sud global qui se multi-aligne. Il pointe aussi une impunité israélienne que la France ne conteste qu'en paroles. D'une année à l'autre, la thèse reste la même : le monopole occidental est fini, et les Occidentaux doivent en tirer les conséquences au lieu de les nier. Les nombreux invités qu'il reçoit, surtout en 2022, gardent leurs propres thèses.
+La lecture se précise au fil des mois. Au printemps 2022, il parle d'une Ukraine amputée. L'été ajoute la rivalité sino-américaine et un deux-poids-deux-mesures occidental. À l'automne, la guerre devient pour lui une impasse qui coûte à l'Europe et à Poutine et sert les États-Unis. Il estime que Poutine n'est pas isolé, grâce à l'Inde et à la Chine, mais que la mobilisation partielle l'affaiblit. Il juge que la Chine appelle du réalisme, et que le Mondial au Qatar est à utiliser plutôt qu'à boycotter. Il reçoit aussi de nombreux invités, dont les thèses restent les leurs.
+
+Dans la dernière Period, qui court jusqu'en 2026, l'Ukraine cède de la place à d'autres sujets. Boniface soutient que l'OCS relève du multi-alignement et non d'une OTAN asiatique, qu'un départ de Netanyahou changerait presque rien pour les Palestiniens, et que les sociétés civiles finissent par se faire entendre. Il chronique des livres, en donnant son appréciation, et continue de recevoir des invités.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/1-2022-03-29/CLAUDE|2022-03-29 → 2022-05-25]] (22 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/2-2022-05-30/CLAUDE|2022-05-30 → 2022-07-27]] (20 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/3-2022-08-03/CLAUDE|2022-08-03 → 2022-09-30]] (18 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/CLAUDE|2022-10-04 → 2026-10-30]] (27 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/4-2022-10-04/CLAUDE|2022-10-04 → 2022-11-23]] (22 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/5-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (11 Digests)
