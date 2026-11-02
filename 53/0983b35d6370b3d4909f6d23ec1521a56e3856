@@ -1,0 +1,45 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/4-2024-06-12/CLAUDE.md
+  s_537995fb9c1570::t_cf957476b6f42e 2,6-8,10,12,14
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/5-2024-06-15/1-legislatives-la-france-est-en-danger.md
+  s_537995fb9c1570::t_c5c70087a55cf4 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/5-2024-06-15/2-melancholia-la-fin-du-monde-et.md
+  s_537995fb9c1570::t_c0b8d0a56a43a1 3
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/5-2024-06-15/3-macron-rn-les-vrais-extremes-contre.md
+  s_537995fb9c1570::t_cb8db9be773999 1-99
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/5-2024-06-15/4-la-terrifiante-progression-de-l-extreme.md
+  s_537995fb9c1570::t_95f771d42fbc12 1-93
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/5-2024-06-15/CLAUDE.md
+  s_537995fb9c1570::t_c94240de44ecda 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/6-2024-06-19/1-une-journaliste-de-blast-en-garde.md
+  s_537995fb9c1570::t_6563992fcc9c2c 1-53
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/6-2024-06-19/2-le-programme-du-nouveau-front-populaire.md
+  s_537995fb9c1570::t_56461bfef467c2 1-88
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/6-2024-06-19/3-lfi-rn-lrem-ou-est-vraiment.md
+  s_537995fb9c1570::t_29417ed712ee5b 1-91
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/6-2024-06-19/4-legislatives-chaos-politique-et-fiasco-mediatique.md
+  s_537995fb9c1570::t_15673e8cbdbea4 1-94
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/6-2024-06-19/CLAUDE.md
+  s_537995fb9c1570::t_48b9db5fa1aeff 1-24
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/CLAUDE.md
+  s_537995fb9c1570::t_b6f8b46ec9e33a 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE.md
+  s_537995fb9c1570::t_99b05eeaee28f8 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_537995fb9c1570::t_f74f7a713e0b13 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "530983b35d6370b3d4909f6d23ec1521a56e3856",
+  "prompts": {},
+  "sessions": {
+    "s_537995fb9c1570": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad22a8219277daf38",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
