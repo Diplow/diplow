@@ -1,25 +1,25 @@
 ---
-title: "2016-10-03 → 2016-10-11"
+title: "2016-10-03 → 2017-01-23"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03
 owner: diplo
 preview: >-
-  Boniface applique une même grille à Alep, à la Corée du Nord, au sport et à
-  la diplomatie française : pas d'indignation sélective, des régimes
-  détestables mais rationnels, et un monde moins en guerre mais moins
-  supportable faute de sécurité collective.
+  Boniface lit l'automne 2016 avec les mêmes grilles : pas d'indignation
+  sélective, un monde moins en guerre mais moins supportable. Il tient le
+  bilan d'Obama pour meilleur qu'on ne le dit, Trump pour promis à la
+  déception, Xi Jinping pour le plus puissant.
 ---
-# 2016-10-03 → 2016-10-11
+# 2016-10-03 → 2017-01-23
 
-Pendant ces dates, Boniface juge l'actualité à partir d'une exigence de cohérence. Les bombardements d'Alep par l'armée syrienne et son allié russe sont pour lui des crimes de guerre, et condamner Alep n'exonère personne : qui a condamné l'Irak ou Gaza doit aussi condamner Alep ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03/1-pascal-boniface-crimes-de-guerre-a|Crimes de guerre à Alep]]). Il refuse de même de prendre le régime nord-coréen pour un fou : détestable mais pas irrationnel, il brandit l'arme nucléaire pour survivre, et le statu quo dure parce qu'aucun des acteurs concernés ne veut vraiment la réunification.
+Boniface applique une même grille à Alep, à la Corée du Nord, au sport et à la diplomatie française : pas d'indignation sélective, des régimes détestables mais rationnels, et un monde moins en guerre mais moins supportable faute de sécurité collective. Dans le même esprit, il juge l'ONU trop sévèrement traitée et voit en Guterres une bonne nouvelle. Il soutient aussi que l'islamophobie est un rejet des musulmans, que courtisent des responsables politiques.
 
-Le deuxième fil est un état du monde. Avec l'Atlas des crises et des conflits, écrit avec Hubert Védrine, Boniface soutient qu'il y a moins de conflits qu'avant mais qu'ils sont moins supportables, faute d'une vraie communauté internationale et d'un système de sécurité collective depuis la fin de la guerre froide. Il lit le sport dans la même logique de puissance : élément essentiel de l'image et du soft power, objet d'une diplomatie sportive qui vise le prestige, la compétition sportive sublimant la guerre au lieu de l'attiser.
+Sur les États-Unis, il estime le bilan d'Obama meilleur qu'on ne le dit, positif malgré des décisions tardives, et l'élection de Trump promise à la déception. À l'arrivée de ce dernier, il voit dans la contestation de l'OTAN une chance d'autonomie pour la défense européenne, et il redoute un retour de la torture, inefficace et contraire aux valeurs des démocraties.
 
-Ces grilles reviennent dans son regard sur la diplomatie française, qui fait face selon lui à une Pologne voulant les avantages de l'Europe sans les obligations, et à une Russie qui assume les crimes d'Alep. Sa conclusion est de garder le contact avec Moscou tout en cherchant de nouveaux moyens de pression.
+Pour la France, il juge le bilan de Hollande pragmatique mais sans ligne, et lit Fillon et Juppé comme relevant d'une même France autonome, qui divergent pourtant sur la Russie, la Syrie et le terrorisme. En passant en revue les puissants de 2016, il juge que Poutine s'est montré stratège mais reste limité, et que Xi Jinping est sans doute le plus puissant. Il se prononce sans manichéisme sur Castro et approuve la Coupe du monde à 48.
 
 ## Contenu
 
-1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03/1-pascal-boniface-crimes-de-guerre-a|(Pascal Boniface) Crimes de guerre à Alep : indignation sélective ?]] (2016-10-03)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03/2-pascal-boniface-essais-nucleaires-le-bluff|(Pascal Boniface) Essais nucléaires : le bluff nord-coréen]] (2016-10-04)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03/3-pascal-boniface-portrait-d-un-monde|(Pascal Boniface) Portrait d’un monde en crise - Présentation de l’Atlas des crises et des conflits]] (2016-10-06)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03/4-pascal-boniface-une-geopolitique-du-sport|(Pascal Boniface) Une géopolitique du sport ?]] (2016-10-07)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03/5-pascal-boniface-diplomatie-francaise-les-problemes|(Pascal Boniface) Diplomatie française : les problèmes russe et polonais]] (2016-10-11)
+1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03/1-2016-10-03/CLAUDE|2016-10-03 → 2016-10-11]] (5 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03/2-2016-10-14/CLAUDE|2016-10-14 → 2016-11-14]] (4 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03/3-2016-11-23/CLAUDE|2016-11-23 → 2016-12-21]] (3 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03/4-2017-01-03/CLAUDE|2017-01-03 → 2017-01-11]] (4 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/1-2016-10-03/5-2017-01-12/CLAUDE|2017-01-12 → 2017-01-23]] (3 Digests)

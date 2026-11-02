@@ -1,24 +1,24 @@
 ---
-title: "2016-10-03 → 2017-12-19"
+title: "2016-10-03 → 2020-06-11"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03
 owner: diplo
 preview: >-
-  Boniface lit Trump et la scène internationale avec les mêmes grilles : le
-  multilatéralisme contre l'unilatéralisme, le refus de négocier qui se
-  retourne contre ses auteurs, la rationalité des acteurs. Il juge Obama
-  meilleur qu'on ne le dit et Macron dans la ligne gaullo-mitterrandiste.
+  De 2016 à juin 2020, Boniface applique les mêmes grilles à Trump et à la
+  scène internationale : multilatéralisme contre unilatéralisme,
+  deux-poids-deux-mesures occidental. Il presse l'Europe d'acquérir son
+  autonomie stratégique, et lit le Covid-19 comme un révélateur.
 ---
-# 2016-10-03 → 2017-12-19
+# 2016-10-03 → 2020-06-11
 
-De l'automne 2016 à la fin 2017, Boniface applique à l'actualité les mêmes grilles. Il refuse l'indignation sélective et voit un monde moins en guerre mais moins supportable. Il tient le bilan d'Obama pour meilleur qu'on ne le dit, Xi Jinping pour le dirigeant le plus puissant, et Trump pour promis à la déception.
+Pendant ces quatre ans, Boniface lit l'actualité internationale à travers la présidence de Donald Trump et quelques grilles stables. Il oppose le multilatéralisme à l'unilatéralisme, observe que le refus de négocier se retourne contre ceux qui le pratiquent, et tient les acteurs pour rationnels. Il juge Obama meilleur qu'on ne le dit. Il situe Macron dans la ligne gaullo-mitterrandiste, avant de voir les gilets jaunes l'affaiblir à l'international.
 
-Les premiers mois de la présidence Trump sont lus par la rationalité des acteurs : un pari risqué pour l'intérêt américain, une course aux armements qui produit de l'insécurité, un refus de la confrontation avec les régimes qui provoquent. Boniface relève aussi l'absence de diplomatie dans la campagne présidentielle française. Avec l'élection de Macron, il voit une diplomatie qui prolonge la ligne gaullo-mitterrandiste, face à un Trump qui isole les États-Unis et ouvre une fenêtre à l'autonomie stratégique européenne.
+Au fil des années, le constat se durcit. En 2018 et 2019, Boniface décrit un arms control démantelé, une unipolarité que l'Europe doit refuser et un multilatéralisme en crise mais indispensable. Le deux-poids-deux-mesures occidental devient un fil de ses analyses. Il presse les Européens de définir leurs intérêts, de sortir de leur dépendance et de tenir tête à Washington, et il défend la diplomatie ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/3-2019-01-14/CLAUDE|2019-01-14 → 2019-10-10]]).
 
-La fin de la Period fixe le fil principal : Boniface défend le multilatéralisme contre l'unilatéralisme de Trump. L'ONU est imparfaite mais indispensable, et le refus de négocier se retourne contre ceux qui le pratiquent. Ses invités élargissent alors le propos à la France, à la Chine, au chiisme et à l'Arabie saoudite.
+Le Covid-19 clôt la période comme un révélateur ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/4-2019-10-14/CLAUDE|2019-10-14 → 2020-06-11]]). Pour Boniface, Trump affaiblit les États-Unis et sert la Chine, et l'Europe pâtit de son manque de solidarité. Il en tire le même appel au multilatéralisme et à l'autonomie stratégique européenne.
 
 ## Contenu
 
-1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/CLAUDE|2016-10-03 → 2017-01-23]] (19 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/2-2017-01-30/CLAUDE|2017-01-30 → 2017-04-21]] (17 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/3-2017-04-24/CLAUDE|2017-04-24 → 2017-09-06]] (18 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/4-2017-09-14/CLAUDE|2017-09-14 → 2017-12-19]] (24 Digests)
+1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]] (78 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/2-2017-12-20/CLAUDE|2017-12-20 → 2019-01-09]] (72 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/3-2019-01-14/CLAUDE|2019-01-14 → 2019-10-10]] (84 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/4-2019-10-14/CLAUDE|2019-10-14 → 2020-06-11]] (90 Digests)

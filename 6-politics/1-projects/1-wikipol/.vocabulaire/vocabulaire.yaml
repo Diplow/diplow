@@ -212,6 +212,7 @@ kinds:
       intersyndicale: {définition: "Front commun de plusieurs confédérations syndicales qui appellent ensemble à l'action.", statut: proposé, introduit_par: paduteam/F0x4OhYVpTk.md}
       coopérative: {définition: "Entreprise détenue et contrôlée démocratiquement par ses membres, à lucrativité limitée.", statut: proposé, introduit_par: blast/FA3IpqdI7k0.md}
       représentation-diplomatique: {définition: "Ambassade ou mission qui représente un État à l'étranger.", statut: proposé, introduit_par: boniface/SSz3rP2B2PU.md}
+      comité-d-action-politique: {définition: "Organisation américaine qui collecte des fonds et mobilise des électeurs pour soutenir un candidat.", statut: proposé, introduit_par: blast/2zYR04KK2Ws.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
