@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/3-2025-02-05/4-paye-ton-droitard-7-2-padu.md
+  s_71ef31f25d1e8f::t_fbccd1ccd9fac5 1-95
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/3-2025-02-05/CLAUDE.md
+  s_71ef31f25d1e8f::t_fd82606f1ea407 2,6-9,11,13,15,22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/4-2025-02-11/1-m-urtre-de-louise-l-extreme.md
+  s_71ef31f25d1e8f::t_c45e11021b1761 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/4-2025-02-11/2-affaire-betharram-bayrou-protege-les-p.md
+  s_71ef31f25d1e8f::t_ab2974935f3488 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/4-2025-02-11/3-le-coach-en-seduction-le-flippant.md
+  s_71ef31f25d1e8f::t_fe0df0e3493d65 1-76
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/4-2025-02-11/4-mos-majorum-ce-sont-les-salaries.md
+  s_71ef31f25d1e8f::t_bf26b21ce3af31 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/4-2025-02-11/5-gaza-l-illusion-du-cessez-le.md
+  s_71ef31f25d1e8f::t_9d3f62a48c0698 1-81
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/4-2025-02-11/CLAUDE.md
+  s_71ef31f25d1e8f::t_39c887fcef787d 1-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/CLAUDE.md
+  s_71ef31f25d1e8f::t_bf929f670f08d0 2,6-9,11,13,15-17,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE.md
+  s_71ef31f25d1e8f::t_7c8917dd9af42c 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_71ef31f25d1e8f::t_1f9774e7565aa3 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fc6a65d23ee7380beb4b69d60766b26815747dc3",
+  "prompts": {},
+  "sessions": {
+    "s_71ef31f25d1e8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a354bad064096da8e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
