@@ -1,25 +1,26 @@
 ---
-title: "2019-12-11 → 2026-10-14"
+title: "2019-12-11 → 2020-01-06"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11
 owner: diplo
 preview: >-
-  Boniface soutient que l'élection algérienne n'éteint pas la crise et que la
-  mondialisation a multiplié les frontières au lieu de les abolir. Il
-  chronique ensuite Stubb sur un monde en trois blocs et reçoit Sylvie Bermann
-  sur la Chine.
+  Boniface lit la fin 2019 par ses grilles : une crise algérienne que
+  l'élection ne clôt pas, des frontières qui se multiplient, un Sahel où la
+  France s'enlise, un duel Iran-USA où Trump a parié sur la retenue de
+  Téhéran.
 ---
-# 2019-12-11 → 2026-10-14
+# 2019-12-11 → 2020-01-06
 
-Fin 2019, Boniface s'attache à la crise algérienne. Il reçoit l'historien Jean-Pierre Filiu, pour qui le mouvement est une seconde indépendance, portée par une jeunesse pacifique contre l'armée. Dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11/2-elections-en-algerie-le-bras-de|Élections en Algérie : le bras de fer entre le pouvoir et la population continue]], il soutient lui-même que le scrutin ne clôt rien : les candidats viennent du système, l'abstention est massive, et le pouvoir ne peut pas miser sur l'usure du mouvement sans faire une vraie concession.
+Boniface consacre le début de la Period à l'Algérie. Il soutient que l'élection ne clôt pas la crise : les candidats viennent du système, l'abstention est massive, et c'est la protestation de la population qui invalide le scrutin. Le pouvoir ne peut pas compter sur l'usure du mouvement sans une vraie concession. Dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11/1-comprendre-le-monde-s3-15-jean|l'entretien avec Jean-Pierre Filiu]], c'est l'historien qui y voit une seconde indépendance, portée par une jeunesse pacifique contre l'armée qui a confisqué la première.
 
-Dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11/3-les-frontieres-expliquez-moi|Les frontières - Expliquez-moi...]], il défend que la mondialisation n'a pas aboli les frontières. Elles se sont multipliées et ont changé de sens, puisqu'on les dresse désormais pour empêcher d'entrer. Selon lui, la plupart des conflits sont des conflits de territoire, pas de religion ni d'idéologie.
+Boniface passe ensuite aux frontières et aux migrations. Il soutient que la mondialisation n'a pas aboli les frontières : elles se sont multipliées, ont changé de sens (on les dresse pour empêcher d'entrer), et la plupart des conflits sont des conflits de territoire, pas de religion ni d'idéologie. Reçue par lui, Catherine Wihtol de Wenden soutient que les migrations ont triplé en nombre sans croître en proportion, que le monde valorise la mobilité tout en la bridant, et que les décideurs écoutent les sondages plutôt que les chercheurs.
 
-Les deux derniers enfants datent de 2026 et portent sur l'ordre mondial. Boniface chronique Le Triangle du pouvoir d'Alexander Stubb, qui divise le monde en trois blocs. L'Occident y est jugé affaibli par ses échecs et son deux poids deux mesures, et le Sud global y décidera du nouvel ordre. Il reçoit ensuite Sylvie Bermann, qui juge que le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, que Pékin joue la patience sur Taïwan et que son excédent commercial met l'Europe en difficulté.
+Les deux dernières vidéos reviennent à l'actualité stratégique. Boniface soutient que l'intervention française au Sahel, justifiée en 2013 pour empêcher la chute de Bamako, s'enlise face à l'immensité du territoire : la France doit passer la main, mais pas tout de suite, à une force africaine renforcée et à un cadre onusien. Après la mort de Soleimani, il soutient que Trump a parié sur le fait que l'Iran n'oserait pas répliquer. Pour lui, Téhéran réagira par alliés interposés, au risque d'un retrait américain humiliant d'Irak, et l'OTAN devient un piège pour les Européens.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11/1-comprendre-le-monde-s3-15-jean|Comprendre le monde S3#15 - Jean-Pierre Filiu - "Algérie, la nouvelle indépendance ?"]] (2019-12-11)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11/2-elections-en-algerie-le-bras-de|Élections en Algérie : le bras de fer entre le pouvoir et la population continue]] (2019-12-16)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11/3-les-frontieres-expliquez-moi|Les frontières - Expliquez-moi...]] (2019-12-17)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11/4-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11/5-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11/4-comprendre-le-monde-s3-16-catherine|Comprendre le monde S3#16 - Catherine Wihtol de Wenden - "Géopolitique des migrations"]] (2019-12-18)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11/5-la-france-au-sahel-quels-enjeux|La France au Sahel : quels enjeux ? Je réponds à vos questions]] (2019-12-20)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/6-2019-12-11/1-2019-12-11/6-jusqu-ou-ira-le-duel-iran|Jusqu'où ira le duel Iran-USA ? Je réponds à vos questions.]] (2020-01-06)

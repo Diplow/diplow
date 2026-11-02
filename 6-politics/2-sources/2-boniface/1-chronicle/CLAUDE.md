@@ -3,21 +3,19 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans d'actualité avec les mêmes grilles : unilatéralisme
-  américain contre multilatéralisme, deux-poids-deux-mesures occidental,
-  autonomie stratégique que la France et l'Europe doivent conquérir. Il défend
-  la diplomatie, le dialogue et la négociation.
+  Pascal Boniface lit dix ans d'actualité par quelques grilles constantes :
+  multilatéralisme contre unilatéralisme américain, deux poids deux mesures
+  occidental, Europe qui doit définir ses intérêts et gagner en autonomie, Sud
+  global. Il défend la diplomatie, en nuançant.
 ---
 # Chronicle
 
-Pascal Boniface applique d'un bout à l'autre de la Chronicle une même lecture des relations internationales. Il oppose le multilatéralisme à l'unilatéralisme, notamment américain, d'abord à travers Trump. Il juge que le refus de négocier finit par se retourner contre ses auteurs, et il tient les acteurs pour rationnels. Il voit Obama meilleur qu'on ne le dit et Macron dans la ligne gaullo-mitterrandiste.
+Sur toute la Chronicle, Pascal Boniface revient aux mêmes grilles de lecture. La première oppose le multilatéralisme à l'unilatéralisme. Dès l'arrivée de Trump, il lit la scène internationale à travers elle. Il juge le refus de négocier contre-productif pour ceux qui le pratiquent, et il tient les acteurs pour rationnels. Il voit en 2018 un contrôle des armements démantelé et un multilatéralisme en crise mais indispensable. Dans la suite de la période, cette grille devient une critique de l'unilatéralisme américain, à laquelle s'ajoute celle d'un deux poids deux mesures occidental.
 
-À partir de 2017-2018, la lecture s'élargit. Le démantèlement de l'arms control et la crise du multilatéralisme, qu'il juge pourtant indispensable, lui font refuser l'unipolarité. Il appelle la France et l'Europe à l'autonomie stratégique et voit les gilets jaunes affaiblir Macron à l'international.
-
-Dans la dernière période, ces grilles servent à lire l'actualité, avec le deux-poids-deux-mesures occidental en plus. Boniface défend la diplomatie et le multilatéralisme, et reçoit des invités sur la Chine, les Kurdes ou Gaza, dont les thèses restent les leurs.
+Boniface en tire un message à l'adresse de la France et de l'Europe. Elles doivent refuser l'unipolarité, viser l'autonomie stratégique et définir leurs propres intérêts, plutôt que rester dépendantes de Washington. Il lit aussi la montée du Sud global comme un changement durable de l'ordre mondial. Côté français, il situe Macron dans la ligne gaullo-mitterrandiste et voit les gilets jaunes l'affaiblir à l'international. Il juge Obama meilleur qu'on ne le dit. Tout au long, il défend la diplomatie et le multilatéralisme, et ses lectures restent nuancées.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]] (78 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2019-01-09]] (72 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2026-10-30]] (119 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2019-01-14/CLAUDE|2019-01-14 → 2026-10-30]] (125 Digests)
