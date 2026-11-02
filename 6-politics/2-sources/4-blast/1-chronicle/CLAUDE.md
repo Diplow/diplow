@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast soutient que le macronisme sert les puissants et banalise le RN
-  jusqu'à lui ouvrir la voie du pouvoir, que le Nouveau Front populaire était
-  la seule alternative et que Macron a confisqué sa victoire. Elle dénonce
-  aussi la criminalisation de la solidarité avec la Palestine.
+  De l'automne 2023 à novembre 2024, Blast lit la macronie comme un pouvoir
+  qui sert les puissants et déroule le tapis à l'extrême droite, de la loi
+  immigration à Barnier imposé avec l'aval du RN, et dénonce la concentration
+  des médias.
 ---
 # Chronicle
 
-Pendant ces douze mois, Blast lit la vie politique française comme une dérive continue : un pouvoir macroniste qui protège les riches et les puissants, fait payer les précaires et laisse l'argent, le pouvoir et l'information se concentrer entre peu de mains. De la loi immigration alignée sur l'extrême droite au gouvernement Attal, elle y voit une politique qui fait le jeu du RN, installé en tête des sondages par ceux qui reprennent ses thèmes.
+Sur toute la Chronicle, Blast soutient que le macronisme protège les riches et fait payer les précaires. À l'automne 2023, elle y voit une dérive : deux poids deux mesures sur Gaza et l'antisémitisme, un RN banalisé, puis une loi immigration alignée sur l'extrême droite. Ce fil se prolonge avec le gouvernement Attal et, au printemps 2024, avec la criminalisation de la solidarité avec la Palestine et le recul des libertés. Elle défend l'enquête et dit sa propre liberté menacée.
 
-Le tournant de la période est la dissolution, que Blast lit comme un calcul de Macron pour se poser en rempart et qui a, selon elle, déroulé le tapis à l'extrême droite. Elle présente le Nouveau Front populaire comme la seule alternative sérieuse. Après le vote, elle accuse Macron de nier le résultat des urnes puis de confisquer la victoire de la gauche en imposant Barnier avec l'aval du RN : l'extrême droite gouverne alors par procuration.
+Blast lit aussi l'argent, le pouvoir et l'information comme concentrés entre peu de mains. Elle relève une indulgence sélective envers les paysans et analyse la crise agricole comme un système de dette que la FNSEA confisque. Elle estime que le RN doit sa place en tête des sondages à ceux qui reprennent ses thèmes, et que le macronisme l'érige en seul opposant.
 
-Autour de ce fil, Blast dénonce deux poids deux mesures sur Gaza et l'antisémitisme, puis une criminalisation de la solidarité avec la Palestine qui fait reculer les libertés. Elle défend l'enquête et dit sa propre liberté menacée. Elle lit la crise agricole comme un système de dette que la FNSEA confisque, tout en accusant une indulgence sélective envers les paysans. Elle voit enfin des milliardaires et des médias dominants pousser vers l'autoritarisme, jusqu'à la victoire de Trump.
+La dissolution marque un tournant. Blast y voit un calcul de Macron pour se poser en rempart, qui a ouvert à l'extrême droite la voie du pouvoir, et fait du Nouveau Front populaire la seule alternative sérieuse. Après le vote, elle accuse Macron de nier le résultat des urnes et d'avoir confisqué la victoire de la gauche en imposant Barnier avec l'aval du RN. L'extrême droite gouverne alors par procuration, et les milliardaires propriétaires de médias, Bolloré en tête, poussent vers l'autoritarisme.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Autour de ce fil, Blast dénonce deux poids deux mesures sur Gaza et l'antisémi
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-18]] (68 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE|2024-04-19 → 2024-06-14]] (65 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]] (65 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE|2024-08-14 → 2024-11-08]] (93 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE|2024-08-14 → 2024-11-11]] (99 Digests)
