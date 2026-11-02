@@ -1,0 +1,50 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_9e910263620fc8 122
+  s_70e2b8820e4c39::t_849dabbff763aa 123
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/4-2025-04-28/4-les-manifestations-des-medecins-sont-elles.md
+  s_df0c5a64086f1f::t_2375525777aa15 1-75
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/4-2025-04-28/5-ces-pdg-se-font-detruire-par.md
+  s_df0c5a64086f1f::t_e476bee2c34ee6 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/4-2025-04-28/CLAUDE.md
+  s_df0c5a64086f1f::t_e10dd0650d116f 2,6-10,12,14,16-18,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/5-2025-05-07/1-sandra-lucbert-nous-atomise-chez-dany.md
+  s_df0c5a64086f1f::t_64d66cedf4ec4e 1-103
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/5-2025-05-07/2-jakubowicz-compare-melenchon-a-g0ebbels-pasduhring.md
+  s_df0c5a64086f1f::t_8b59430eedbc4b 1-96
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/5-2025-05-07/3-retailleau-dissout-la-jeune-garde-et.md
+  s_df0c5a64086f1f::t_a0a65f1e472d84 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/5-2025-05-07/4-bompard-detruit-la-carriere-de-wauquiez.md
+  s_df0c5a64086f1f::t_55fb00fe6086b0 1-104
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/5-2025-05-07/CLAUDE.md
+  s_df0c5a64086f1f::t_b671c28ac44fc0 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/3-2025-04-04/CLAUDE.md
+  s_df0c5a64086f1f::t_861c2cba7a35f3 2,6-10,12,14,16,18,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/3-2025-02-15/CLAUDE.md
+  s_df0c5a64086f1f::t_80bbd96b5c2983 2,6-9,11,13,15,21
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_df0c5a64086f1f::t_844fc32bb130bb 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1fc76e59c4addbe8c5ad6c42db44ffba02ded750",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_df0c5a64086f1f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a48a90b881329ecc2",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
