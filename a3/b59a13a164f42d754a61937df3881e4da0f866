@@ -1,0 +1,41 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/4-macron-nous-ment-pour-tuer-la.md
+  s_9ac8336533d24a::t_8c0422993996e5 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/CLAUDE.md
+  s_9ac8336533d24a::t_675a960518fbba 6-9,13,15-17,24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/6-2026-03-31/1-praud-et-menard-en-sueur-leurs.md
+  s_9ac8336533d24a::t_6676c0362ca4aa 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/6-2026-03-31/2-melenchon-le-stalinien-trie-les-medias.md
+  s_9ac8336533d24a::t_89df9459c5a2e2 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/6-2026-03-31/3-lucien-seve-une-psychologie-marxiste-est.md
+  s_9ac8336533d24a::t_7e932a4f6e46d7 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/6-2026-03-31/4-viktorovitch-melenchon-ne-sera-pas-au.md
+  s_9ac8336533d24a::t_1eb7e2653ca35a 1-100
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/6-2026-03-31/5-cuba-sauvee-par-poutine.md
+  s_9ac8336533d24a::t_6dea91b77868d7 1-99
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/6-2026-03-31/CLAUDE.md
+  s_9ac8336533d24a::t_27293951284f94 1-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/CLAUDE.md
+  s_9ac8336533d24a::t_f5dfca0aa45727 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE.md
+  s_9ac8336533d24a::t_a15d89851ede77 2,6-9,11,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_9ac8336533d24a::t_4f544b0d33b146 2,6-8,10,12,14,16,22
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_9ac8336533d24a::t_c0398ff739f257 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a3b59a13a164f42d754a61937df3881e4da0f866",
+  "prompts": {},
+  "sessions": {
+    "s_9ac8336533d24a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a0f38b6ec36ccf8cc",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
