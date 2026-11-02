@@ -1,22 +1,24 @@
 ---
-title: "2020-05-28 → 2026-10-14"
+title: "2020-05-28 → 2020-06-08"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/4-2020-05-28
 owner: diplo
 preview: >-
-  Boniface lit la rivalité sino-américaine comme une guerre froide en partie
-  seulement, où la détente reste possible, et juge que Chine et Inde en
-  resteront aux escarmouches. Il chronique ensuite Alexander Stubb et reçoit
-  Sylvie Bermann sur la place de la Chine.
+  Boniface lit la rivalité Chine/États-Unis comme une guerre froide en partie
+  seulement, sans guerre directe, et la rivalité sino-indienne comme de
+  simples escarmouches. Il voit Poutine s'effacer et juge hypocrite la défense
+  des Ouïghours par Trump. Il reçoit Marie-Cécile Naves sur l'Amérique.
 ---
-# 2020-05-28 → 2026-10-14
+# 2020-05-28 → 2020-06-08
 
-Au fil de ces quatre Digests, Boniface revient sur la Chine et l'ordre mondial. En 2020, il soutient que la guerre froide sino-américaine ne ressemble à l'ancienne qu'en partie : la dissuasion nucléaire exclut la guerre directe, mais les alliances, la parité et l'économie diffèrent. L'enjeu reste la suprématie mondiale, et une détente est possible. Il juge de même que la rivalité sino-indienne restera au stade des escarmouches, et que les BRICS, devenus moins militants, survivent parce que leurs membres y gagnent.
+Le fil de la Period est le duel entre Pékin et Washington. Boniface soutient que cette guerre froide ne ressemble à l'ancienne qu'en partie : la dissuasion nucléaire exclut la guerre directe, mais les alliances, la parité et l'économie diffèrent. L'enjeu reste la suprématie mondiale, et une détente est possible. Il applique la même grille à l'Asie. La rivalité sino-indienne, nourrie par l'essor de la Chine et le rapprochement de l'Inde avec les États-Unis, restera selon lui au stade des escarmouches. Les BRICS, devenus moins militants, survivent parce que leurs membres y gagnent.
 
-Six ans plus tard, il passe par deux voix. Il chronique *Le Triangle du pouvoir* d'Alexander Stubb, pour qui le monde se divise en trois blocs (Occident, Orient, Sud global) : l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre. Puis il reçoit Sylvie Bermann, pour qui le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Elle voit une Chine patiente sur Taïwan, qui n'est pas anti-européenne, mais dont l'excédent commercial met l'Europe en difficulté.
+Cette lecture sert aussi à situer les autres acteurs. Boniface voit Poutine s'effacer, usé et éclipsé par le duel Chine/États-Unis, tandis que Taïwan gagne en visibilité comme démocratie opposée à Pékin. Sur les Ouïghours, il juge hypocrite la défense de Trump, qui n'est crédible que si l'on défend partout les minorités opprimées.
+
+Boniface consacre aussi un entretien à l'Amérique. Pour son invitée Marie-Cécile Naves, la mort de George Floyd est l'étincelle d'une colère raciale ancienne, que Trump attise par une rhétorique d'ordre et de polarisation. Elle estime que l'élection du 3 novembre reste ouverte.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/4-2020-05-28/1-washington-pekin-la-guerre-froide|Washington / Pékin : la guerre froide ?]] (2020-05-28)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/4-2020-05-28/2-rivalite-chine-inde-avenir-des-brics|Rivalité Chine/Inde, avenir des BRICS - je réponds à vos questions]] (2020-06-02)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/4-2020-05-28/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/4-2020-05-28/4-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/4-2020-05-28/3-comprendre-le-monde-s3-28-marie|Comprendre le monde S3#28 - Marie-Cécile Naves - "George Floyd / Trump : l'Amérique s'embrase"]] (2020-06-03)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/4-2020-05-28/4-poutine-en-baisse-taiwan-en-hausse|Poutine en baisse, Taïwan en hausse. Et les Ouïghours ?]] (2020-06-08)
