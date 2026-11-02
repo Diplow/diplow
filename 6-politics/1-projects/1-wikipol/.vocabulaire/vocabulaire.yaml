@@ -222,6 +222,7 @@ kinds:
       crise: {définition: "Tension politique ou militaire majeure entre États, sans guerre ouverte.", statut: proposé, introduit_par: boniface/TpKoDXZ7mQY.md}
       génocide: {définition: "Extermination systématique d'un groupe national, ethnique ou religieux.", statut: proposé, introduit_par: blast/9sBrrpX8Ywg.md}
       débat: {définition: "Échange organisé entre plusieurs intervenants autour d'un sujet, en direct ou enregistré.", statut: proposé, introduit_par: paduteam/Im2oLpge17Y.md}
+      massacre: {définition: "Tuerie de masse commise contre une population civile ou des manifestants.", statut: proposé, introduit_par: boniface/WVMzhXjYC5c.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
