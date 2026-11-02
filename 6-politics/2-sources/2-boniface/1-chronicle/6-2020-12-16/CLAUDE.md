@@ -3,17 +3,18 @@ title: "2020-12-16 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16
 owner: diplo
 preview: >-
-  Boniface lit le monde par la rivalité sino-américaine, le déclin de
-  l'Occident et le multilatéralisme. Il juge morte la solution à deux États et
-  veut une Europe autonome, alignée ni sur Washington ni contre Pékin.
+  Boniface lit le monde par la montée de la Chine et le déclin de l'Occident,
+  plaide pour une Europe autonome mais alliée des États-Unis, tient la
+  question palestinienne pour centrale et juge vouées à l'échec les
+  interventions extérieures.
 ---
 # 2020-12-16 → 2026-10-30
 
-Sur toute la Period, Boniface lit l'actualité internationale par la montée en puissance de la Chine et la rivalité qu'elle nourrit avec les États-Unis, rivalité que Biden ne change guère. Il voit dans le Covid un accélérateur du déclin de l'Occident, dans la chute de Kaboul une défaite américaine et l'échec des interventions extérieures, et plaide pour négocier avec les talibans. À l'inverse, l'impôt mondial minimum lui apparaît comme un progrès du multilatéralisme, et l'OCS comme un multi-alignement.
+Sur toute la Chronicle, Boniface applique les mêmes grilles à l'actualité. La rivalité sino-américaine tient à la montée en puissance de la Chine, que Biden ne change guère, et le Covid accélère le déclin de l'Occident. Il lit la chute de Kaboul comme une défaite américaine et l'échec des interventions extérieures, plaide pour négocier avec les talibans, et décrit plus tard des guerres réduites au terrorisme qui échouent, dans un monde qui se multi-aligne. Il y voit aussi un progrès du multilatéralisme, par exemple dans l'impôt mondial minimum.
 
-Le conflit israélo-palestinien est le fil le plus constant. Boniface tient la question palestinienne pour centrale et estime qu'aucune issue n'est possible sans reconnaissance des droits des Palestiniens. Sa lecture se durcit avec le temps : la solution à deux États est morte, et un départ de Netanyahou ne changerait presque rien. Il applique la même attention aux continuités de la politique américaine, avec un Biden qui revient sans rompre avec Riyad, et aux cas nationaux des révoltes arabes ou de la survie d'Assad.
+Pour l'Europe, il défend une autonomie qui ne s'aligne ni sur Washington ni contre Pékin, tout en restant alliée des États-Unis. Il demande à la France d'assumer son passé en Libye et au Rwanda et d'obtenir réparation dans l'affaire des sous-marins. Il tient la question palestinienne pour centrale. Sans reconnaissance des droits des Palestiniens, aucune issue n'est en vue entre Israël et le Hamas, et la solution à deux États est morte.
 
-Côté français et européen, il demande à la France d'assumer son passé en Libye et au Rwanda et d'obtenir réparation dans l'affaire des sous-marins. Il veut une Europe autonome, qui ne s'aligne ni sur Washington ni contre Pékin. Il juge faux remèdes le boycott du Mondial au Qatar et le refus de principe de Spoutnik V, lit le sport comme un terrain politique et défend sa liberté de parole. Ses invités, nombreux, élargissent les sujets au climat, à l'Amérique latine, à l'Afrique et à BlackRock.
+Le sport, le tourisme et la surveillance numérique sont pour lui des terrains politiques, et il défend sa liberté de parole. Aux premières périodes, ses invités traitent de climat, d'Amérique latine, d'Afrique et de BlackRock. Les dernières années sont nettement plus longues et plus resserrées autour de ces mêmes grilles, et il y reçoit de nombreux invités.
 
 ## Contenu
 
@@ -22,4 +23,4 @@ Côté français et européen, il demande à la France d'assumer son passé en L
 3. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/3-2021-03-29/CLAUDE|2021-03-29 → 2021-05-17]] (22 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/4-2021-05-18/CLAUDE|2021-05-18 → 2021-06-28]] (18 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/5-2021-06-30/CLAUDE|2021-06-30 → 2021-09-23]] (18 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/CLAUDE|2021-09-29 → 2026-10-30]] (23 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/CLAUDE|2021-09-29 → 2026-10-30]] (29 Digests)

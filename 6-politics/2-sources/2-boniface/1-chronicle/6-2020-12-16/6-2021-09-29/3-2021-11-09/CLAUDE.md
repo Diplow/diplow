@@ -1,21 +1,26 @@
 ---
-title: "2021-11-09 → 2026-10-14"
+title: "2021-11-09 → 2021-11-19"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/3-2021-11-09
 owner: diplo
 preview: >-
-  Boniface explique l'enlisement français au Sahel par une réponse trop
-  étroite au terrorisme, chronique le livre d'Alexander Stubb sur un monde en
-  trois blocs où le Sud global pèsera, et reçoit Sylvie Bermann sur la parité
-  entre les États-Unis et la Chine.
+  Boniface lit le Sahel comme l'échec d'une guerre réduite au terrorisme et la
+  crise des migrants à la frontière polonaise comme la nuisance de
+  Loukachenko, qui ne doit pas rester impuni. Il reçoit Karim Bitar sur le
+  Liban et deux chercheuses sur la COP26.
 ---
-# 2021-11-09 → 2026-10-14
+# 2021-11-09 → 2021-11-19
 
-Sur ces trois Digests, Boniface déplace son regard du Sahel vers l'ordre mondial. Pour le Sahel, il écarte l'explication par le seul terrorisme : l'instabilité tient à un faisceau de facteurs (pauvreté, démographie, tensions ethniques, trafics, climat, chute de Kadhafi). La France s'y est enlisée en menant une simple guerre contre le terrorisme, et seule une réponse globale peut stabiliser la région.
+Boniface applique cette quinzaine une même exigence : regarder les causes d'ensemble plutôt que le seul affrontement. Dans [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/3-2021-11-09/1-le-sahel-expliquez-moi|Le Sahel - Expliquez-moi...]], il explique l'instabilité de la région par un faisceau de facteurs, de la pauvreté au climat en passant par la chute de Kadhafi, et soutient que la France s'est enlisée en se contentant de mener une guerre contre le terrorisme : seule une réponse globale peut stabiliser le Sahel. Face à la frontière polonaise, il soutient que Loukachenko, qui n'a pas la puissance, use de son pouvoir de nuisance en attirant des migrants pour se venger des sanctions de l'UE et jouer sur ses divisions, et que ce crime ne doit pas rester impuni.
 
-Les deux Digests suivants portent sur le rapport de forces entre les blocs. Dans sa chronique du livre d'Alexander Stubb, Boniface retient l'idée d'un monde divisé en trois blocs (Occident, Orient, Sud global), le Sud global décidant du nouvel ordre, et d'un Occident affaibli par ses échecs et son deux poids deux mesures, qui doit montrer l'exemple s'il veut peser. Avec son invitée Sylvie Bermann, ancienne ambassadrice à Pékin, l'angle est celui de la Chine. Pour elle, le sommet Trump-Xi consacre la parité entre les deux puissances sans qu'on puisse dire que Pékin a gagné ; la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Deux émissions donnent la parole à des invités, dont les thèses restent les leurs. Pour Karim Bitar, le Liban traverse une crise sans précédent, État tampon des guerres par procuration entre Saoudiens et Iraniens, et seuls une citoyenneté transcommunautaire et un nouveau contrat social peuvent l'en sortir. Pour les deux chercheuses reçues sur la COP26, c'est un échec : les ambitions n'ont pas été relevées, les pays vulnérables n'ont rien obtenu sur l'adaptation et les pertes et préjudices, et le monde reste au-delà de deux degrés de réchauffement.
+
+La période se clôt sur deux vidéos plus personnelles. Boniface recommande deux coffrets consacrés à Léo Ferré, dont il tient 1968-1974 pour la période la plus créative. Il présente ensuite « La géopolitique, tout simplement », coécrit avec Anne Sénéquier, et soutient que tout citoyen est concerné par la géopolitique, car sa vie quotidienne en dépend.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/3-2021-11-09/1-le-sahel-expliquez-moi|Le Sahel - Expliquez-moi...]] (2021-11-09)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/3-2021-11-09/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/3-2021-11-09/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/3-2021-11-09/2-clm-s5-11-karim-emile-bitar|CLM S5#11 – Karim Émile Bitar – "Liban : jusqu'où la descente aux enfers ?"]] (2021-11-10)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/3-2021-11-09/3-loukachenko-nuisance-et-puissance|Loukachenko : nuisance et puissance]] (2021-11-15)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/3-2021-11-09/4-leo-ferre-deux-magnifiques-offrandes|Léo Ferré : deux magnifiques offrandes]] (2021-11-16)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/3-2021-11-09/5-comprendre-le-monde-s5-12-julia|Comprendre le monde S5#12 – Julia Tasse & Sofia Kabbej – "COP26 : tops et flops"]] (2021-11-17)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/6-2020-12-16/6-2021-09-29/3-2021-11-09/6-parution-la-geopolitique-tout-simplement|(PARUTION) La géopolitique, tout simplement]] (2021-11-19)
