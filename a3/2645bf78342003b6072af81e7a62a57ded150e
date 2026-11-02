@@ -1,0 +1,45 @@
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/3-2026-01-30/CLAUDE.md
+  s_042d04fec27413::t_04d96ccd6eb85a 6-9,13,15-17
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/4-2026-01-30/1-bardella-s-aplatit-devant-trump-c.md
+  s_042d04fec27413::t_c28ee1cd04740a 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/4-2026-01-30/2-mathilde-panot-refuse-de-condamner-maduro.md
+  s_042d04fec27413::t_08033a2f5fe885 3
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/4-2026-01-30/3-knafo-la-catastrophe-continue-ses-solutions.md
+  s_042d04fec27413::t_a3ff7c79449500 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/4-2026-01-30/CLAUDE.md
+  s_042d04fec27413::t_9ea20b918a9086 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/5-2026-02-06/1-alain-duhamel-decrypte-glucksmann-melenchon-et.md
+  s_042d04fec27413::t_7ccc9e1f6258d3 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/5-2026-02-06/2-le-plan-mediapart-pour-empecher-melenchon.md
+  s_042d04fec27413::t_0d0167c4f5b86e 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/5-2026-02-06/3-tondelier-va-a-des-diners-de.md
+  s_042d04fec27413::t_0d2586c462f275 1-81
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/5-2026-02-06/4-melenchon-tondelier-hollande-on-continue-l.md
+  s_042d04fec27413::t_dd6574227c3235 1-99
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/5-2026-02-06/5-loic-chaigneau-revient-pour-casser-du.md
+  s_042d04fec27413::t_8d9195f11f1a6b 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/5-2026-02-06/CLAUDE.md
+  s_042d04fec27413::t_72d503bb336a86 1-25
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/3-2026-01-10/CLAUDE.md
+  s_042d04fec27413::t_97111f4d0b2cd5 2,6-9,11,13,15,17,23-25
+6-politics/2-sources/1-paduteam/1-chronicle/6-2025-12-01/CLAUDE.md
+  s_042d04fec27413::t_2a56ee2e714389 2,6-9,11,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_042d04fec27413::t_a942baf70aaf9d 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a32645bf78342003b6072af81e7a62a57ded150e",
+  "prompts": {},
+  "sessions": {
+    "s_042d04fec27413": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ae5594b2839b5e422",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
