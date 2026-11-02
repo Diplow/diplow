@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/4-2025-01-20/4-wtf-raz-et-cassandre-me-traitent.md
+  s_70e2b8820e4c39::t_bb50b9bfaeb9d1 1-77
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/4-2025-01-20/CLAUDE.md
+  s_70e2b8820e4c39::t_0ae508726736e7 2,7-9,11,13,15,22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/5-2025-01-28/1-virginie-vota-est-devenue-woke-avec.md
+  s_70e2b8820e4c39::t_a0101d735f2995 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/5-2025-01-28/2-mos-majorum-croit-debunker-marx-ca.md
+  s_70e2b8820e4c39::t_7c42e4c5e05add 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/5-2025-01-28/3-paye-ton-droitard-6-le-guiz.md
+  s_70e2b8820e4c39::t_f929be4379a821 1-95
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/5-2025-01-28/4-ces-libertariens-veulent-retablir-le-travail.md
+  s_70e2b8820e4c39::t_5aa9c5ad901f15 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/5-2025-01-28/5-un-droitard-fragile-termine-la-carriere.md
+  s_70e2b8820e4c39::t_64adfe04b68ca1 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/5-2025-01-28/CLAUDE.md
+  s_70e2b8820e4c39::t_d91b7dd50c1b9f 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/CLAUDE.md
+  s_70e2b8820e4c39::t_5d8ba7066abdad 2,7-9,11,13,15-17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/CLAUDE.md
+  s_70e2b8820e4c39::t_bce8c8d437a468 2,7-9,11,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_0bb70308be7242 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "68fbd290a4139243556ac088382c53c81c38f74b",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
