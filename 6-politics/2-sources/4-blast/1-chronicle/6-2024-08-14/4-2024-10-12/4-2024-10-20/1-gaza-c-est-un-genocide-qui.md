@@ -1,6 +1,6 @@
 ---
 title: "GAZA : \"C'EST UN GÉNOCIDE QUI A TOUTE UNE SÉRIE DE PRÉMISSES\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/3-2024-10-17
+parent: 6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/4-2024-10-12/4-2024-10-20
 owner: diplo
 preview: >-
   L'historien Enzo Traverso soutient que Gaza est un génocide aux longues
