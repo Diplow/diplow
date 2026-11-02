@@ -1,6 +1,6 @@
 ---
 title: "VIRGINIE VOTA EST DEVENUE WOKE !! (avec @Dr_Zoé_YT)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/5-2025-01-28
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/1-2025-01-28
 owner: diplo
 preview: >-
   La PaduTeam soutient que Virginie Vota, ex-influenceuse catholique d'extrême

@@ -1,6 +1,6 @@
 ---
 title: "Un DROITARD FRAGILE TERMINE la CARRIÈRE de CHRIS sur le MARXISME !! (avec Chris de Positions Revue)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/3-2025-01-06/5-2025-01-28
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2024-11-27/4-2025-01-28/2-2025-02-01
 owner: diplo
 preview: >-
   La PaduTeam soutient que, chez Marx, le prix relève de l'échange et la
