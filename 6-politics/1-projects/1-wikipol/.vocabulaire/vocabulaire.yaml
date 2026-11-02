@@ -101,6 +101,7 @@ kinds:
       consultant: {définition: "Conseille des organisations ou des pouvoirs publics, ici en démocratie participative.", statut: proposé, introduit_par: blast/9S0VA52zcxM.md}
       roi: {définition: "Dirige un royaume par héritage ou par conquête, à la date de la Publication.", statut: proposé, introduit_par: blast/J99oFBtEsAE.md}
       maire-du-palais: {définition: "Plus haut dignitaire d'un royaume franc après le roi, dont il finit par prendre le pouvoir.", statut: proposé, introduit_par: blast/J99oFBtEsAE.md}
+      dirigeant-de-think-tank: {définition: "Préside ou dirige un think tank ou une fondation de réflexion.", statut: proposé, introduit_par: boniface/D7fNMG-163A.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -192,6 +193,7 @@ kinds:
       festival: {définition: "Rencontre publique de plusieurs jours, faite de débats ou de conférences.", statut: proposé, introduit_par: boniface/Ecn08O4RQFs.md}
       famine: {définition: "Pénurie alimentaire extrême qui provoque une mortalité de masse dans une population.", statut: proposé, introduit_par: paduteam/C1MLgXQ7fJA.md}
       crise: {définition: "Tension politique ou militaire majeure entre États, sans guerre ouverte.", statut: proposé, introduit_par: boniface/TpKoDXZ7mQY.md}
+      génocide: {définition: "Extermination systématique d'un groupe national, ethnique ou religieux.", statut: proposé, introduit_par: blast/9sBrrpX8Ywg.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

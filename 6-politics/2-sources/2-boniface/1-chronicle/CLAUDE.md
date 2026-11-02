@@ -3,18 +3,19 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Boniface lit dix ans de relations internationales, de 2016 à 2026, avec les
-  mêmes grilles : Trump, le multilatéralisme contre l'unilatéralisme,
-  l'autonomie stratégique de l'Europe, et un monde que Washington voudrait
-  unipolaire.
+  Depuis 2016, Boniface lit l'actualité avec les mêmes grilles : le
+  multilatéralisme contre l'unilatéralisme, la rationalité des acteurs (Trump,
+  Kim Jong-un), une Europe qui doit s'affranchir de Washington, une menace
+  russe qu'il tient pour une fiction, et Israël qui perd la bataille des
+  opinions.
 ---
 # Chronicle
 
-Dès les premiers Digests ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]]), Boniface lit Trump et la scène internationale avec les mêmes outils : le multilatéralisme contre l'unilatéralisme, le refus de négocier qui se retourne contre ses auteurs, la rationalité des acteurs. Il juge Obama meilleur qu'on ne le dit et situe Macron dans la ligne gaullo-mitterrandiste.
+Sur toute la Chronicle, Boniface applique les mêmes outils à l'actualité internationale. Le premier est l'opposition entre multilatéralisme et unilatéralisme. Le deuxième est l'idée que le refus de négocier se retourne contre ses auteurs. Le troisième est la rationalité des acteurs : il juge Trump et Kim Jong-un rationnels. Dans la première période ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]]), ces grilles servent à lire Trump et la scène internationale. Boniface y juge Obama meilleur qu'on ne le dit et place Macron dans la ligne gaullo-mitterrandiste.
 
-Ces grilles tiennent sur toute la durée de la Chronicle ([[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]]). Trump, le multilatéralisme et l'autonomie stratégique de l'Europe organisent sa lecture des relations internationales jusqu'en 2026. La Corée, l'Iran, l'Arabie saoudite ou le Venezuela sont pour lui des cas d'une même grille : celle d'un monde que Washington voudrait unipolaire.
+Dans la seconde ([[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]]), qui compte plus de Digests, la même grille se durcit autour de quelques thèses. Trump défait l'Arms control et le multilatéralisme. L'Europe doit s'affranchir de Washington. La menace russe est une fiction. Boniface voit aussi Israël perdre la bataille des opinions. D'une période à l'autre, les sujets changent mais les grilles restent les mêmes.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2017-12-19]] (78 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]] (95 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2017-12-20/CLAUDE|2017-12-20 → 2026-10-30]] (101 Digests)
