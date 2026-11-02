@@ -1,0 +1,45 @@
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/4-2024-11-16/CLAUDE.md
+  s_64c1fbd180ee43::t_934743c8998db1 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/5-2024-11-21/1-le-pen-cie-la-justice-trop.md
+  s_64c1fbd180ee43::t_562783c15304e8 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/5-2024-11-21/2-quel-avenir-pour-la-france-et.md
+  s_64c1fbd180ee43::t_82d3fd3c68ac1a 3
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/5-2024-11-21/3-ue-mercosur-la-catastrophe-sociale-et.md
+  s_64c1fbd180ee43::t_ba90f5c6a2da4e 1-84
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/5-2024-11-21/4-ecoles-de-journalisme-la-fabrique-du.md
+  s_64c1fbd180ee43::t_9c07d399522373 1-101
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/5-2024-11-21/5-abattre-les-animaux-massacrer-les-humains.md
+  s_64c1fbd180ee43::t_4402bb547201f0 1-94
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/5-2024-11-21/CLAUDE.md
+  s_64c1fbd180ee43::t_cfebc017884c69 1-25
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/6-2024-11-25/1-pop-fascisme-une-armee-d-influenceurs.md
+  s_64c1fbd180ee43::t_ad2d44bf9848d2 1-92
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/6-2024-11-25/2-nfp-nous-devrions-etre-en-train.md
+  s_64c1fbd180ee43::t_6322b6dedcc5ae 1-84
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/6-2024-11-25/3-marine-le-pen-ineligible-la-fin.md
+  s_64c1fbd180ee43::t_a76c29e2c593d2 1-88
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/6-2024-11-25/CLAUDE.md
+  s_64c1fbd180ee43::t_409f97db1ea030 1-23
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/6-2024-11-07/CLAUDE.md
+  s_64c1fbd180ee43::t_2cae85f8281cb4 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/6-2024-08-14/CLAUDE.md
+  s_64c1fbd180ee43::t_bf98e0fd420253 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_64c1fbd180ee43::t_5f0dce54cf2183 6-10,14,16,18,27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c8c55c6ec339767eef4585ce7cbdf24394045312",
+  "prompts": {},
+  "sessions": {
+    "s_64c1fbd180ee43": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a4cf73c14bb0ad6c6",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
