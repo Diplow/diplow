@@ -1,21 +1,25 @@
 ---
-title: "2020-05-15 → 2026-10-14"
+title: "2020-05-15 → 2020-05-27"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/3-2020-05-15
 owner: diplo
 preview: >-
-  Boniface chronique deux livres, de Mahbubani sur la montée de la Chine et de
-  Stubb sur un monde en trois blocs, puis reçoit Sylvie Bermann sur le sommet
-  Trump-Xi ; il leur laisse leurs thèses et juge le premier livre stimulant
-  mais contestable pour un Occidental.
+  Boniface lit la montée de la Chine comme une rivalité de puissance à traiter
+  lucidement, non comme une menace existentielle. Il juge l'Afrique plus
+  résistante au Covid-19 que craint, et reçoit Sylvie Matelly, qui doute d'un
+  rebond rapide de l'économie mondiale.
 ---
-# 2020-05-15 → 2026-10-14
+# 2020-05-15 → 2020-05-27
 
-Les trois Digests de cette Period tournent autour de la Chine et de l'ordre mondial qui se recompose. Boniface chronique d'abord [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/3-2020-05-15/1-mahbubani-la-chine-a-gagne|Mahbubani : La Chine a gagné]] : pour l'auteur, Pékin marque des points parce qu'il fait moins d'erreurs que des États-Unis qui s'épuisent à vouloir rester suprêmes. Boniface juge le livre très stimulant, mais contestable pour un Occidental. Il chronique ensuite *Le Triangle du pouvoir*, où Alexander Stubb, président finlandais, divise le monde en trois blocs (Occident, Orient, Sud global). Pour Stubb, l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur un Sud qui décidera du nouvel ordre.
+Le fil de la Period est la Chine. Boniface chronique le livre de Kishore Mahbubani, pour qui Pékin marque des points parce qu'il fait moins d'erreurs que des États-Unis épuisés à vouloir rester suprêmes. Il le juge très stimulant, mais contestable pour un Occidental. Il soutient lui-même que la Chine de Xi Jinping fait plus peur que celle de Mao par sa puissance et non par son régime, pourtant moins dur : c'est une rivale à traiter lucidement, pas une menace communiste existentielle comme l'était l'URSS. Sur Hong Kong, il estime que la loi de sûreté nationale ruine le principe une nation, deux systèmes, que Pékin ne cédera pas et que l'appui de Washington ne fait que le durcir.
 
-Le dernier Digest passe de la lecture à l'entretien : Boniface reçoit Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Elle voit une Chine qui joue la patience sur Taïwan et qui n'est pas anti-européenne, mais dont l'excédent commercial met l'Europe en difficulté. Dans ces trois Digests, les thèses sont celles des auteurs et de l'invitée, que Boniface présente et apprécie, et la rapport de force entre Washington et Pékin en est le fil commun.
+Boniface applique la même lecture à d'autres terrains. L'Afrique résiste mieux au Covid-19 qu'on ne le craignait, sans qu'il exclue une sous-estimation des chiffres, mais le choc économique sera lourd. Aider le continent, le vaccin comme bien public mondial compris, sert aussi les Européens. Au Venezuela, l'échec de l'opération Gédéon enferme le pays dans l'impasse, que seule une médiation peut dénouer.
+
+La Period se clôt sur l'économie d'après-crise, avec son invitée Sylvie Matelly. Pour elle, un rebond rapide est douteux : la crise est inédite, la confiance manque, les dettes ne tiennent que grâce aux taux bas, et l'Europe ne progresse que sous la pression des crises.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/3-2020-05-15/1-mahbubani-la-chine-a-gagne|Mahbubani : La Chine a gagné]] (2020-05-15)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/3-2020-05-15/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/3-2020-05-15/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/3-2020-05-15/2-le-covid-19-et-l-afrique|Le Covid-19 et l'Afrique]] (2020-05-18)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/3-2020-05-15/3-pourquoi-xi-jinping-fait-il-plus|Pourquoi Xi Jinping fait-il plus peur que Mao ?]] (2020-05-22)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/3-2020-05-15/4-hong-kong-et-venezuela|Hong Kong et Venezuela]] (2020-05-25)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/4-2020-04-06/3-2020-05-15/5-comprendre-le-monde-s3-27-sylvie|Comprendre le monde S3#27 - Sylvie Matelly - "L'économie mondiale après le Covid-19"]] (2020-05-27)
