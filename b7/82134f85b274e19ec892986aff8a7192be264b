@@ -1,0 +1,39 @@
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/4-2025-11-24/5-on-analyse-le-pire-philosophe-dans.md
+  s_476768b412b3fc::t_aa35354e35dd0f 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/4-2025-11-24/CLAUDE.md
+  s_476768b412b3fc::t_80e92e753e1a91 2,6-9,11,13,15-17,25
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/5-2025-12-01/1-cette-influenceuse-a-dubai-se-justifie.md
+  s_476768b412b3fc::t_e6a2578b5ba788 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/5-2025-12-01/2-on-eduque-ce-streamer-pro-business.md
+  s_476768b412b3fc::t_11c4e1c96f309f 1-96
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/5-2025-12-01/3-commission-melenchon-les-droitards-s-avouent.md
+  s_476768b412b3fc::t_d46e90a1f3066c 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/5-2025-12-01/4-bardella-est-il-le-plus-nul.md
+  s_476768b412b3fc::t_094902fc9df9cb 1-80
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/5-2025-12-01/5-la-porte-parole-du-pcf-derape.md
+  s_476768b412b3fc::t_506d54afe7be3d 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/5-2025-12-01/CLAUDE.md
+  s_476768b412b3fc::t_cb5623e5cc5dd7 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/4-2025-11-10/CLAUDE.md
+  s_476768b412b3fc::t_f54a6167e5e944 2,7-9,11,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/5-2025-09-02/CLAUDE.md
+  s_476768b412b3fc::t_35e47e7c5792e5 2,6-9,11,13,15,22
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_476768b412b3fc::t_1289c478ce592c 6,8-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b782134f85b274e19ec892986aff8a7192be264b",
+  "prompts": {},
+  "sessions": {
+    "s_476768b412b3fc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-adfa37184c4b197b7",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
