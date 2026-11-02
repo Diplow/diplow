@@ -1,6 +1,6 @@
 ---
 title: "QATAR : UN ANCIEN DIRECTEUR DE BEIN DÉTENU 700 JOURS SANS PROCÈS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/3-2024-07-08/5-2024-07-25
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/1-2024-07-25
 owner: diplo
 preview: >-
   Ali Salem, ingénieur égyptien de beIN Sports, raconte ses 700 jours de

@@ -1,6 +1,6 @@
 ---
 title: "JO 2024 : UNE ABERRATION SOCIALE, ÉCOLOGIQUE ET DÉMOCRATIQUE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/3-2024-07-08/5-2024-07-25
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/1-2024-07-25
 owner: diplo
 preview: >-
   Jade Lingart soutient que les JO de Paris 2024, décidés sans consultation,

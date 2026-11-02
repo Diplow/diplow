@@ -1,6 +1,6 @@
 ---
 title: "E. MACRON, UN VOL DÉMOCRATIQUE D’UNE GRAVITÉ INOUÏE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/3-2024-07-08/5-2024-07-25
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/1-2024-07-25
 owner: diplo
 preview: >-
   Blast soutient qu'Emmanuel Macron nie le résultat des législatives en

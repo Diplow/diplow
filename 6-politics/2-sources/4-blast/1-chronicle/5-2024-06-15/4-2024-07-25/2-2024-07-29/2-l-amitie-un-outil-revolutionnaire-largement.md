@@ -1,6 +1,6 @@
 ---
 title: "L’AMITIÉ : UN OUTIL RÉVOLUTIONNAIRE LARGEMENT SOUS-ESTIMÉ"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/3-2024-07-08/5-2024-07-25
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/4-2024-07-25/2-2024-07-29
 owner: diplo
 preview: >-
   Invitée de Blast, la journaliste Alice Raybaud soutient que l'amitié,
