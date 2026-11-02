@@ -1,0 +1,39 @@
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/4-2024-09-25/CLAUDE.md
+  s_180a5f58a1de2b::t_4c736b6c1f7042 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/5-2024-09-29/1-fachosphere-et-climat-le-nouveau-filon.md
+  s_180a5f58a1de2b::t_43d51668ba34b9 1-100
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/5-2024-09-29/2-e-macron-un-grand-pervers-a.md
+  s_180a5f58a1de2b::t_77a37569d55d18 1-94
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/5-2024-09-29/3-gouvernement-barnier-la-droite-dure-a.md
+  s_180a5f58a1de2b::t_0863542d267833 1-103
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/5-2024-09-29/4-gouvernement-barnier-la-honte-internationale-pour.md
+  s_180a5f58a1de2b::t_a7ca37ea931a3b 1-95
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/5-2024-09-29/5-macron-barnier-la-politique-est-elle.md
+  s_180a5f58a1de2b::t_3e61546134d6df 1-95
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/5-2024-09-29/6-polemiques-proces-etc-blast-re-fait.md
+  s_180a5f58a1de2b::t_30270063c7b013 1-94
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/5-2024-09-29/CLAUDE.md
+  s_180a5f58a1de2b::t_36674509e043aa 1-26
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/CLAUDE.md
+  s_180a5f58a1de2b::t_c1f760b27cfd93 2,6-9,11,13,15,23
+6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/CLAUDE.md
+  s_180a5f58a1de2b::t_8bec4f83716997 2,6-8,10,12,14,16,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_180a5f58a1de2b::t_b7df514b41c613 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "38061ab91b76c82b15397be6271ce68faacea07f",
+  "prompts": {},
+  "sessions": {
+    "s_180a5f58a1de2b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aef0a3b53861fca02",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
