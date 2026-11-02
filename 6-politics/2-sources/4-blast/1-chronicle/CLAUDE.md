@@ -3,21 +3,20 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast soutient que le pouvoir macroniste sert les puissants, banalise
-  l'extrême droite et désinforme, de la loi immigration à l'austérité
-  annoncée, avec des médias dominants complaisants et deux poids deux mesures
-  sur Gaza.
+  Blast soutient que le pouvoir macroniste sert les puissants et fait le jeu
+  de l'extrême droite, de la loi immigration à l'austérité, et défend
+  l'enquête face à une liberté qu'elle dit menacée.
 ---
 # Chronicle
 
-Sur l'ensemble de la Chronicle, Blast lit le macronisme comme une dérive au service des riches : une « macronie des riches » qui gouverne pour les puissants, puis une loi immigration alignée sur l'extrême droite, un gouvernement Attal qui prolonge cette ligne et, en fin de période, un pouvoir qui désinforme, inverse le réel et prépare l'austérité contre les plus précaires. Le RN, dans cette lecture, est banalisé plutôt que combattu.
+De fin octobre 2023 à avril 2024, Blast lit la séquence comme une dérive du pouvoir macroniste. Il gouverne pour les riches et s'aligne sur l'extrême droite, de la loi immigration au gouvernement Attal. Elle dénonce aussi un RN banalisé et deux poids deux mesures sur Gaza et l'antisémitisme.
 
-Le deuxième fil est celui du deux poids deux mesures. Gaza et l'antisémitisme sont traités selon Blast avec une indulgence ou une sévérité sélectives, et les médias dominants se montrent complaisants ou muets. Pendant l'hiver, la même logique s'applique aux paysans : Blast accuse une indulgence sélective à leur égard et lit la crise agricole comme un système de dette que la FNSEA confisque.
+Au fil des mois, le propos s'élargit du politique à l'économique et à l'information. Blast voit dans la crise agricole un système de dette que la FNSEA confisque, et reproche une indulgence sélective envers les paysans. Elle décrit ensuite un pouvoir qui désinforme, mène l'austérité et s'acharne sur les précaires. Pour elle, l'argent, le pouvoir et l'information vont de pair.
 
-Blast se place enfin en défenseur de l'enquête, qu'elle dit menacée dans sa liberté, et dénonce une France qui arme des régimes répressifs.
+Tout au long de la période, Blast défend l'enquête et dit sa propre liberté menacée. Elle ouvre aussi son antenne à des auteurs, des militants, des étudiants et d'autres invités. Leurs thèses restent les leurs : Blast les reçoit.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]] (69 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-18]] (70 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-01]] (51 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-07]] (57 Digests)
