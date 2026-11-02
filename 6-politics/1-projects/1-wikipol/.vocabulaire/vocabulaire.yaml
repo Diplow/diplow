@@ -126,6 +126,7 @@ kinds:
       conférencier: {définition: "Donne des conférences publiques sur un sujet.", statut: proposé, introduit_par: boniface/QVFIXch9zL8.md}
       duc: {définition: "Grand seigneur qui dirige un duché, à la date de la Publication.", statut: proposé, introduit_par: blast/FlQyQXxBQDU.md}
       poète: {définition: "Écrit de la poésie et la publie.", statut: proposé, introduit_par: blast/FlQyQXxBQDU.md}
+      chef-politique-de-groupe-armé: {définition: "Dirige la branche politique d'un groupe armé.", statut: proposé, introduit_par: blast/7tYGSp4jvDM.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

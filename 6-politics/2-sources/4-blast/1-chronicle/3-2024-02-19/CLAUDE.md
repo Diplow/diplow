@@ -1,20 +1,19 @@
 ---
-title: "2024-02-19 → 2024-05-17"
+title: "2024-02-19 → 2024-05-22"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19
 owner: diplo
 preview: >-
-  Blast dénonce un macronisme qui désinforme, protège les ultra-riches et
-  banalise le RN, et l'emprise de l'argent sur les médias. Elle voit reculer
-  les libertés, notamment pour la gauche pro-palestinienne, et reçoit des
-  invités sur la transition, l'eau et les JO.
+  Blast dénonce un pouvoir macroniste qui désinforme, protège les ultra-riches
+  et fait payer les pauvres, l'emprise de Bolloré et des médias dominants sur
+  le débat, puis la criminalisation de la solidarité avec la Palestine.
 ---
-# 2024-02-19 → 2024-05-17
+# 2024-02-19 → 2024-05-22
 
-Pendant ces trois mois, Blast revient sur un même constat : le pouvoir macroniste désinforme, mène l'austérité avec Le Maire, s'acharne sur les précaires et protège les ultra-riches en faisant payer les pauvres. Elle soutient que l'aile gauche de la macronie est une fiction. Selon elle, une morale macroniste banalise le RN, qui doit sa place en tête des sondages à ceux qui reprennent ses thèmes depuis quarante ans, et diabolise la gauche. Elle soutient aussi que l'IVG dans la Constitution change réellement les choses.
+Pendant ces trois mois, Blast voit dans le macronisme un pouvoir qui désinforme et qui protège les ultra-riches en faisant payer les pauvres. Elle dénonce l'austérité de Le Maire et l'acharnement sur les précaires. Elle tient l'aile gauche de la macronie pour une fiction et juge illégal le passage en force de l'A69. Elle estime que la colère agricole est captée par la FNSEA. Elle soutient aussi que l'IVG dans la Constitution change réellement les choses.
 
-Un deuxième fil porte sur qui détient l'argent, le pouvoir et l'information. Blast dénonce l'opacité du capitalisme mondialisé et soutient que les sondages fabriquent l'opinion et que le libre-échange est une croyance fausse. Elle suit cette concentration dans les médias, de l'empire Drahi au rachat de BFM TV, qui n'offre aucune alternative à Bolloré, jusqu'à l'emprise des médias et des lobbies sur le débat public. Elle relève aussi que la France arme des régimes répressifs, que l'État force le passage de l'A69 et que la colère agricole est captée par la FNSEA.
+Un deuxième fil traverse la période : qui détient l'argent, le pouvoir et l'information. Blast dénonce l'opacité du capitalisme mondialisé, l'empire Drahi, l'emprise de Bolloré, des lobbies et des médias dominants sur le débat. Elle soutient que les sondages fabriquent l'opinion, que le libre-échange est une croyance fausse et que le rachat de BFM TV n'offre aucune alternative à Bolloré. Elle ajoute que la France arme des régimes répressifs et que le RN doit sa place en tête des sondages à ceux qui reprennent ses thèmes depuis quarante ans.
 
-Le ton se durcit au fil de la période sur les libertés. À partir d'avril, Blast dénonce l'impunité, les deux poids, deux mesures, puis un traitement médiatique et policier biaisé de la gauche pro-palestinienne et la criminalisation de la solidarité avec la Palestine. Elle voit l'extrême droite et le macronisme faire reculer les libertés, des Insoumis aux personnes LGBT et trans. Tout au long de la période, elle reçoit auteurs, militants et étudiants, dont des invités sur la transition, la monnaie, Gaza, le masculinisme, l'eau et les JO.
+À partir d'avril, la dénonciation se concentre sur l'impunité, les deux poids, deux mesures et un traitement médiatique et policier biaisé de la gauche pro-palestinienne. Elle devient en mai celle de la criminalisation de la solidarité avec la Palestine. Blast voit l'extrême droite et le macronisme faire reculer les libertés, des Insoumis aux personnes LGBT et trans, et reproche aux élites leur aveuglement face au racisme. Tout au long de la période, elle reçoit aussi des auteurs, des militants et des invités sur la transition, la monnaie, Gaza, le masculinisme, l'eau, les JO et la CPI.
 
 ## Contenu
 
@@ -23,4 +22,4 @@ Le ton se durcit au fil de la période sur les libertés. À partir d'avril, Bla
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/3-2024-03-16/CLAUDE|2024-03-16 → 2024-04-01]] (17 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/4-2024-04-02/CLAUDE|2024-04-02 → 2024-04-18]] (17 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/5-2024-04-19/CLAUDE|2024-04-19 → 2024-05-05]] (19 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/CLAUDE|2024-05-06 → 2024-05-17]] (12 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/6-2024-05-06/CLAUDE|2024-05-06 → 2024-05-22]] (18 Digests)
