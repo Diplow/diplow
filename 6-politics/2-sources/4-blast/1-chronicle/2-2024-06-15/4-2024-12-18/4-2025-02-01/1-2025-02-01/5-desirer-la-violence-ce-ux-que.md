@@ -1,6 +1,6 @@
 ---
 title: "DÉSIRER LA VIOLENCE : CE(UX) QUE LA POP CULTURE NOUS APPREND À AIMER"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/5-2025-02-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/1-2025-02-01
 owner: diplo
 preview: >-
   Chloé Thibaud soutient que la pop culture érotise la violence : baisers

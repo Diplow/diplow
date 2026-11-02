@@ -1,6 +1,6 @@
 ---
 title: "TRANSFORMER GAZA EN RIVIERA : LÉGITIMER UN GÉNOCIDE EN 5'57\" CHRONO"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/6-2025-02-05
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/2-2025-02-05
 owner: diplo
 preview: >-
   Blast monte des extraits de médias qui prennent au sérieux le projet de

@@ -1,6 +1,6 @@
 ---
 title: "EN MARCHE VERS L'INTERNATIONALE FASCISTE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/5-2025-02-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/1-2025-02-01
 owner: diplo
 preview: >-
   Blast soutient que le salut nazi d'Elon Musk à l'investiture de Trump ne se

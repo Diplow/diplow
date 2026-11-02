@@ -1,6 +1,6 @@
 ---
 title: "POURQUOI TRUMP VEUT S'EMPARER DU GROENLAND ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/6-2025-02-05
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/2-2025-02-05
 owner: diplo
 preview: >-
   Blast soutient que Trump n'a pas de vraie raison d'acheter le Groenland :

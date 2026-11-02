@@ -1,6 +1,6 @@
 ---
 title: "2025-02-01 → 2025-02-04"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/5-2025-02-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/1-2025-02-01
 owner: diplo
 preview: >-
   Blast soutient que l'IA concentrée entre quelques géants nourrit la
@@ -18,8 +18,8 @@ La Period se clôt sur une lecture culturelle : Chloé Thibaud soutient que la p
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/5-2025-02-01/1-ia-une-des-pires-menaces-pour|IA : UNE DES PIRES MENACES POUR L’HUMANITÉ]] (2025-02-01)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/5-2025-02-01/2-en-marche-vers-l-internationale-fasciste|EN MARCHE VERS L'INTERNATIONALE FASCISTE]] (2025-02-02)
-3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/5-2025-02-01/3-bayrou-retailleau-etc-les-nouveaux-visages|BAYROU, RETAILLEAU, ETC. : LES NOUVEAUX VISAGES DU RACISME D'ÉTAT]] (2025-02-02)
-4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/5-2025-02-01/4-nous-sommes-tous-contamines-pfas-l|"NOUS SOMMES TOUS CONTAMINÉS". PFAS : L'HUMANITÉ FACE À UN DANGER INÉDIT ET INVISIBLE]] (2025-02-03)
-5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/5-2025-02-01/5-desirer-la-violence-ce-ux-que|DÉSIRER LA VIOLENCE : CE(UX) QUE LA POP CULTURE NOUS APPREND À AIMER]] (2025-02-04)
+1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/1-2025-02-01/1-ia-une-des-pires-menaces-pour|IA : UNE DES PIRES MENACES POUR L’HUMANITÉ]] (2025-02-01)
+2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/1-2025-02-01/2-en-marche-vers-l-internationale-fasciste|EN MARCHE VERS L'INTERNATIONALE FASCISTE]] (2025-02-02)
+3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/1-2025-02-01/3-bayrou-retailleau-etc-les-nouveaux-visages|BAYROU, RETAILLEAU, ETC. : LES NOUVEAUX VISAGES DU RACISME D'ÉTAT]] (2025-02-02)
+4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/1-2025-02-01/4-nous-sommes-tous-contamines-pfas-l|"NOUS SOMMES TOUS CONTAMINÉS". PFAS : L'HUMANITÉ FACE À UN DANGER INÉDIT ET INVISIBLE]] (2025-02-03)
+5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/1-2025-02-01/5-desirer-la-violence-ce-ux-que|DÉSIRER LA VIOLENCE : CE(UX) QUE LA POP CULTURE NOUS APPREND À AIMER]] (2025-02-04)
