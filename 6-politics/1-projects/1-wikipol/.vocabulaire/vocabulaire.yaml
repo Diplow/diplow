@@ -304,6 +304,7 @@ kinds:
       dîner: {définition: "Repas mondain, souvent annuel, qui réunit des personnalités d'un milieu autour d'une table.", statut: proposé, introduit_par: paduteam/mCek51AyK50.md}
       opération-policière: {définition: "Opération de police d'envergure menée par l'État, comme une campagne de démolitions et d'expulsions.", statut: proposé, introduit_par: blast/LYkjqB8XUe8.md}
       coup-de-force: {définition: "Tentative d'imposer ou de conserver le pouvoir par des moyens d'exception, comme une loi martiale.", statut: proposé, introduit_par: blast/1RD7TpXlcgA.md}
+      mouvement-social: {définition: "Mobilisation collective durable, sans organisateur unique, qui conteste l'ordre politique ou social.", statut: proposé, introduit_par: blast/6wX46WLb85o.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

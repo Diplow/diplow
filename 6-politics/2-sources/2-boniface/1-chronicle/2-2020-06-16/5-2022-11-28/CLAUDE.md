@@ -3,21 +3,21 @@ title: "2022-11-28 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28
 owner: diplo
 preview: >-
-  Boniface lit le monde depuis fin 2022 comme un ordre qui échappe aux
-  États-Unis et à l'Occident : il réclame cohérence face au Sud global et
-  clarté sur l'Ukraine, et soutient qu'on peut condamner Moscou sans être
-  pro-Poutine.
+  Boniface lit le monde de fin 2022 à 2026 comme un ordre qui échappe à
+  l'Occident : les doubles standards le fragilisent, le Sud global va vers le
+  multi-alignement, et il demande de la cohérence ainsi que des buts de guerre
+  clairs en Ukraine.
 ---
 # 2022-11-28 → 2026-10-30
 
-Sur toute la Period, Boniface décrit un monde qui se diversifie et que l'Occident ne dirige plus. Fin 2022 ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/1-2022-11-28/CLAUDE|2022-11-28 → 2023-01-04]]), il y voit des sociétés civiles chinoise et iranienne qui se font entendre, un Golfe qui joue la carte chinoise et une Coupe du monde au Qatar qui révèle une fracture avec l'Occident. La guerre en Ukraine affaiblit la Russie et renforce Washington.
+Boniface lit la période comme un monde qui se diversifie et échappe de plus en plus aux États-Unis. Fin 2022, il voit des sociétés civiles chinoise et iranienne qui se font entendre, un Golfe qui joue la carte chinoise et une Coupe du monde au Qatar qui révèle une fracture avec l'Occident. Début 2023, il prolonge cette lecture : l'ordre mondial n'est plus dicté par Washington.
 
-L'Ukraine reste le fil principal du début 2023 ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/2-2023-01-05/CLAUDE|2023-01-05 → 2023-02-10]]). Selon Boniface, il faut aider Kiev à reprendre ses territoires sans l'intégrer vite à l'UE. Il soutient aussi qu'on peut condamner Moscou sans être pro-Poutine, dans un ordre mondial qui échappe aux États-Unis.
+Sur l'Ukraine, il tient une ligne constante. La guerre affaiblit la Russie et renforce Washington, il faut aider Kiev à reprendre ses territoires sans l'intégrer vite à l'UE, et l'on peut condamner Moscou sans être pro-Poutine. Plus tard, il demande des buts de guerre clairs.
 
-Dans la dernière partie ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/3-2023-02-15/CLAUDE|2023-02-15 → 2026-10-30]]), la même grille devient une exigence adressée aux Occidentaux : cohérence face au Sud global, clarté sur leurs buts de guerre en Ukraine. Boniface soutient qu'un départ de Netanyahou ne changerait presque rien et voit dans l'OCS un multi-alignement. Il reçoit aussi des invités et chronique des livres.
+À partir de février 2023, sa grille s'élargit. Les doubles standards occidentaux nourrissent le clivage entre l'Occident et le reste du monde, ce qui fragilise l'Occident. Le monde va selon lui vers le multi-alignement, et face au Sud global il réclame de la cohérence.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/1-2022-11-28/CLAUDE|2022-11-28 → 2023-01-04]] (17 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/2-2023-01-05/CLAUDE|2023-01-05 → 2023-02-10]] (18 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/3-2023-02-15/CLAUDE|2023-02-15 → 2026-10-30]] (18 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/3-2023-02-15/CLAUDE|2023-02-15 → 2026-10-30]] (24 Digests)
