@@ -1,6 +1,6 @@
 ---
 title: "LÉGISLATIVES : LA FRANCE EST EN DANGER DE MORT"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/4-2024-06-12
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/4-2024-06-03/5-2024-06-15
 owner: diplo
 preview: >-
   Selon Jean-François Bayart, Macron a dissous l'Assemblée sur un coup d'ego,

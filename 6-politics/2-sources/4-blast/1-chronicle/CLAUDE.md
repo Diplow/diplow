@@ -3,22 +3,22 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit la période comme une dérive : un macronisme qui protège les
-  puissants et fait payer les précaires, un RN banalisé par ceux qui
-  reprennent ses thèmes, deux poids deux mesures sur Gaza, jusqu'à une
-  dissolution qui livre le pouvoir au RN pour 2027.
+  De l'automne 2023 à la dissolution de juin 2024, Blast soutient que le
+  macronisme sert les puissants et banalise l'extrême droite, de la loi
+  immigration au RN en tête des sondages, dénonce deux poids deux mesures sur
+  Gaza, et défend le Nouveau Front populaire comme seul rempart.
 ---
 # Chronicle
 
-Du 31 octobre 2023 au 16 juin 2024, Blast soutient que le pouvoir macroniste sert les riches et les puissants et fait payer les précaires. De la loi immigration au gouvernement Attal, elle y lit un alignement sur l'extrême droite. Elle ajoute que l'argent, le pouvoir et l'information se concentrent entre peu de mains. Le RN, banalisé, doit selon elle sa place en tête des sondages à ceux qui reprennent ses thèmes.
+Pendant ces huit mois, Blast tient un même fil : le pouvoir macroniste protège les riches et les puissants, et fait payer les précaires. Elle lit la loi immigration et le gouvernement Attal comme un alignement sur l'extrême droite, et soutient que le RN doit sa place en tête des sondages à ceux qui reprennent ses thèmes. Elle y ajoute une critique de la concentration de l'argent, du pouvoir et de l'information entre peu de mains, et défend l'enquête en disant sa liberté menacée ([[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]]).
 
-Un deuxième fil traverse la période : les deux poids, deux mesures. Ils touchent d'abord Gaza et l'antisémitisme, puis l'impunité et la criminalisation de la solidarité avec la Palestine. Blast voit aussi dans le macronisme un prolongement de la colonisation. Elle accuse une indulgence sélective envers les paysans, et lit la crise agricole comme un système de dette que la FNSEA confisque.
+Elle dénonce aussi, d'une période à l'autre, des poids et des mesures différents : sur Gaza et l'antisémitisme à l'automne, puis dans l'indulgence qu'elle reproche envers les paysans pendant la crise agricole, qu'elle lit comme un système de dette que la FNSEA confisque ([[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-18]]).
 
-Blast défend l'enquête et dit sa propre liberté menacée. Au terme de la période, elle lit la dissolution comme un calcul de Macron, qui livre le pouvoir au RN pour 2027.
+Au printemps, le ton se durcit. Blast dénonce la criminalisation de la solidarité avec la Palestine et la colonisation en Nouvelle-Calédonie. Elle lit ensuite la dissolution comme un piège de Macron qui ouvre la voie au RN, et défend le Nouveau Front populaire comme seul rempart ([[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE|2024-04-19 → 2024-06-20]]).
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2023-12-22]] (69 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2023-12-23/CLAUDE|2023-12-23 → 2024-02-18]] (70 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2024-02-19/CLAUDE|2024-02-19 → 2024-04-18]] (68 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE|2024-04-19 → 2024-06-16]] (67 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/4-2024-04-19/CLAUDE|2024-04-19 → 2024-06-20]] (73 Digests)
