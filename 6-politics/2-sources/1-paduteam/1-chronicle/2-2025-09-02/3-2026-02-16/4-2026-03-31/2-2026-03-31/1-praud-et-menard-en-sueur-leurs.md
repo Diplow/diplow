@@ -1,6 +1,6 @@
 ---
 title: "PRAUD ET MÉNARD EN SUEUR  LEURS ENFANTS VOTENT MÉLENCHON !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/6-2026-03-31
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/2-2026-03-31
 owner: diplo
 preview: >-
   La PaduTeam soutient que les enfants de Praud et Ménard qui votent Mélenchon

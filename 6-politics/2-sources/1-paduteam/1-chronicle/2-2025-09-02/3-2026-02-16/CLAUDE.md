@@ -1,23 +1,23 @@
 ---
-title: "2026-02-16 → 2026-04-02"
+title: "2026-02-16 → 2026-04-12"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16
 owner: diplo
 preview: >-
-  La PaduTeam appelle la gauche de rupture à couper avec le PS dès le premier
-  tour et à radicaliser son programme. Elle lit la mort de Quentin Déranque
-  comme un piège tendu à la FI, les municipales comme un succès de LFI, et
-  2027 comme un duel de classe.
+  La PaduTeam pousse la FI à rompre avec le PS et à radicaliser son programme.
+  Elle lit les municipales comme un succès de LFI et voit 2027 en duel de
+  classe, où un pôle Glucksmann-Hollande se dresse contre Mélenchon.
 ---
-# 2026-02-16 → 2026-04-02
+# 2026-02-16 → 2026-04-12
 
-De la mi-février à la mi-mars, la PaduTeam voit dans la mort de Quentin Déranque un prétexte pour enfermer la FI dans l'extrême gauche. Elle y répond en appelant la FI à rompre avec le PS et à radicaliser son programme. Sur la guerre contre l'Iran, elle y lit une manœuvre pour sauver le pétrodollar.
+Pendant ces huit semaines, la PaduTeam tient une même ligne : la FI doit rompre avec le PS et radicaliser son programme. Elle lit la mort de Quentin Déranque comme un prétexte pour enfermer la FI dans l'extrême gauche. Elle défend ensuite qu'il n'y a pas d'unité sans programme, et que le refus du PS se joue dès le premier tour. Le PS, selon elle, revient en absorbant le centre, avec un programme néokeynésien.
 
-Les municipales font ensuite de la rupture avec le PS la ligne de la période ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/2-2026-03-15/CLAUDE|2026-03-15 → 2026-03-30]]). La PaduTeam y voit un succès de LFI et un échec des écologistes alliés au PS. Elle annonce un PS qui revient en absorbant le centre, et répète qu'il n'y a pas d'unité sans programme : le plus jamais PS se joue dès le premier tour.
+Elle lit l'actualité par les bases sociales et les blocs de classe. Les municipales de 2026 sont pour elle un succès de LFI et un échec des écologistes alliés au PS. Elle fait de 2027 un duel de classe, où Hollande est le recours du bloc bourgeois. Elle voit des milliardaires et des médias pousser à droite, puis un pôle Glucksmann-Hollande se dresser contre Mélenchon, qu'elle dit porté par une lame de fond générationnelle. Aux municipales, elle défend le maintien ou le désistement selon le risque fasciste.
 
-Dans les derniers jours, du 30 mars au 2 avril, elle ramène l'actualité aux blocs de classe ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/CLAUDE|2026-03-30 → 2026-04-02]]). Elle présente 2027 comme un duel de classe, avec un PS et une droite qui se recomposent, des milliardaires qui tiennent les médias et une Sécu à 100 % à défendre. L'appel est le même d'un bout à l'autre : radicaliser la gauche de rupture et convaincre son entourage.
+Hors de la stratégie électorale, elle lit la guerre contre l'Iran comme une manœuvre pour sauver le pétrodollar. Elle défend aussi le 100 % Sécu et Cuba.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/1-2026-02-16/CLAUDE|2026-02-16 → 2026-03-11]] (16 Digests)
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/2-2026-03-15/CLAUDE|2026-03-15 → 2026-03-30]] (16 Digests)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/CLAUDE|2026-03-30 → 2026-04-02]] (25 Digests)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/CLAUDE|2026-03-30 → 2026-03-31]] (16 Digests)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/CLAUDE|2026-03-31 → 2026-04-12]] (15 Digests)

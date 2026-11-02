@@ -1,6 +1,6 @@
 ---
 title: "2026-03-31"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/1-2026-03-31
 owner: diplo
 preview: >-
   La PaduTeam soutient que des milliardaires, Kretinski à Marianne, Bolloré
@@ -18,7 +18,7 @@ Le dernier volet est électoral. La veille du premier tour des municipales, la P
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/1-marianne-le-journal-nega-sionniste|MARIANNE  le journal NÉGA-SIONNISTE !]] (2026-03-31)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/2-naulleau-et-hanouna-contre-la-secu|NAULLEAU et HANOUNA CONTRE la SÉCU et POUR la RETRAITE À 70 ANS !!]] (2026-03-31)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/3-les-pires-et-les-meilleures-villes|LES PIRES ET LES MEILLEURES VILLES DE FRANCE  COMMENT VOTER...]] (2026-03-31)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/3-2026-03-30/5-2026-03-31/4-macron-nous-ment-pour-tuer-la|MACRON NOUS MENT POUR TUER LA SÉCU ( @Dr_Zoé_YT  X Chris)]] (2026-03-31)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/1-2026-03-31/1-marianne-le-journal-nega-sionniste|MARIANNE  le journal NÉGA-SIONNISTE !]] (2026-03-31)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/1-2026-03-31/2-naulleau-et-hanouna-contre-la-secu|NAULLEAU et HANOUNA CONTRE la SÉCU et POUR la RETRAITE À 70 ANS !!]] (2026-03-31)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/1-2026-03-31/3-les-pires-et-les-meilleures-villes|LES PIRES ET LES MEILLEURES VILLES DE FRANCE  COMMENT VOTER...]] (2026-03-31)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/4-2026-03-31/1-2026-03-31/4-macron-nous-ment-pour-tuer-la|MACRON NOUS MENT POUR TUER LA SÉCU ( @Dr_Zoé_YT  X Chris)]] (2026-03-31)
