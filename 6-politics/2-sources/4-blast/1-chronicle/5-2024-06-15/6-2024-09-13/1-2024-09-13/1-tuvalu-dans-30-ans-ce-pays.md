@@ -1,6 +1,6 @@
 ---
 title: "TUVALU : DANS 30 ANS, CE PAYS N'EXISTERA PLUS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/5-2024-09-13
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/1-2024-09-13
 owner: diplo
 preview: >-
   Blast soutient que Tuvalu, que la montée des eaux pourrait submerger d'ici

@@ -1,6 +1,6 @@
 ---
 title: "COMMENT FAIRE POUR QUE DES HOMMES ARRÊTENT D’AGRESSER ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/5-2024-08-14/5-2024-09-13
+parent: 6-politics/2-sources/4-blast/1-chronicle/5-2024-06-15/6-2024-09-13/2-2024-09-16
 owner: diplo
 preview: >-
   Chloé Delaume présente son roman Fers, où des femmes détruisent d'un regard
