@@ -1,0 +1,45 @@
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/3-2025-07-25/CLAUDE.md
+  s_c3a70794f1547e::t_a9d7173542d232 2,6-9,11,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/4-2025-07-29/1-valek-accuses-zoe-of-being-an.md
+  s_c3a70794f1547e::t_7ae874c899017f 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/4-2025-07-29/2-september-10-we-don-t-want.md
+  s_c3a70794f1547e::t_1995cdcf6a2be8 3
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/4-2025-07-29/3-nicolas-who-pays-subject-to-macron.md
+  s_c3a70794f1547e::t_a9917f4d15f349 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/4-2025-07-29/CLAUDE.md
+  s_c3a70794f1547e::t_47eb018689f9c5 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/5-2025-08-01/1-the-right-winger-the-most-panic.md
+  s_c3a70794f1547e::t_f2fd88bc97bfbf 1-79
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/5-2025-08-01/2-poutou-d-ouvrier-revolutionnaire-a-libraire.md
+  s_c3a70794f1547e::t_e4c74ab71b8e96 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/5-2025-08-01/3-bernard-arnault-le-pire-esclavagiste.md
+  s_c3a70794f1547e::t_c013d43df547a7 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/5-2025-08-01/4-la-paduteam-hom0phobes-envers-lagasnerie-echaarpe.md
+  s_c3a70794f1547e::t_2cf13e1bce3071 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/5-2025-08-01/5-lordon-melenchon-peut-gagner-en-2027.md
+  s_c3a70794f1547e::t_2b430f8a0b6709 1-80
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/5-2025-08-01/CLAUDE.md
+  s_c3a70794f1547e::t_fe562f89d29f2e 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/3-2025-07-13/CLAUDE.md
+  s_c3a70794f1547e::t_584661d75c059d 2,6-9,11,13,15,17,23-25
+6-politics/2-sources/1-paduteam/1-chronicle/4-2025-06-04/CLAUDE.md
+  s_c3a70794f1547e::t_4f1a2bdd1dc4f6 2,6-9,11,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_c3a70794f1547e::t_8fa0a039e25193 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a5b187ab39f05dc9d8b3f45d43adccf71d01facd",
+  "prompts": {},
+  "sessions": {
+    "s_c3a70794f1547e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ab073ea470fd90d19",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
