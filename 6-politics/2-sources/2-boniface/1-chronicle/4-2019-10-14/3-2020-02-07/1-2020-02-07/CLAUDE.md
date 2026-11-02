@@ -1,23 +1,26 @@
 ---
-title: "2020-02-07 → 2026-10-14"
+title: "2020-02-07 → 2020-02-19"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/1-2020-02-07
 owner: diplo
 preview: >-
-  Boniface défend les salaires des footballeurs contre le mépris social. Il
-  chronique le livre d'Alexander Stubb, où l'Occident, affaibli par son deux
-  poids deux mesures, doit montrer l'exemple au Sud global, et reçoit Sylvie
-  Bermann sur la parité États-Unis–Chine.
+  Boniface refuse de s'indigner des salaires des footballeurs, exclut un
+  affrontement à Idlib, juge le bilan du Hirak positif mais inachevé et voit
+  dans les nouvelles technologies un gain pour la réflexion géopolitique. Il
+  reçoit Abis et Cypel.
 ---
-# 2020-02-07 → 2026-10-14
+# 2020-02-07 → 2020-02-19
 
-La Period est très inégale : un Digest de 2020 sur le football, puis deux de 2026 sur l'ordre mondial. En 2020, Boniface soutient que les salaires des footballeurs, fixés par un marché mondialisé que personne n'est forcé d'alimenter, ne sont pas plus choquants que ceux des artistes ou des patrons. Pour lui, les critiquer relève d'un mépris social pour le sport populaire, et c'est par la fiscalité qu'on corrige l'injustice.
+Sur cette quinzaine, Boniface applique à chaque sujet la même méthode : chercher les intérêts et les mécanismes plutôt que s'indigner. Les salaires des footballeurs, fixés par un marché mondialisé, ne sont pas plus choquants que ceux des artistes ou des patrons. Les critiquer relève selon lui d'un mépris social pour le sport populaire, et l'injustice se corrige par la fiscalité. À Idlib, il écarte un affrontement entre la Syrie et la Turquie : Russes et Turcs, liés par des intérêts communs, savent jusqu'où ne pas aller, même si Poutine instrumentalise Erdogan.
 
-En 2026, Boniface se tourne vers la rivalité entre grandes puissances et le rôle du Sud global. Il chronique Le Triangle du pouvoir d'Alexander Stubb, président finlandais. Pour Stubb, le monde se divise en trois blocs : Occident, Orient et Sud global. L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Il revient aussi sur sa propre discipline et sur l'Algérie. Les nouvelles technologies ont mis fin au monopole américain en géopolitique et libèrent du temps pour la réflexion, à condition d'en faire des serviteurs et de garder le temps long face à la réactivité. Il juge le bilan du Hirak aux deux tiers positif mais inachevé : faute de leader, le mouvement risque de s'essouffler, et tout se joue sur la nouvelle Constitution. Il y ajoute la rivalité Algérie-Maroc et la position inconfortable de la France.
 
-Boniface reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, sans qu'on puisse dire que Pékin a gagné. Elle voit une Chine qui joue la patience sur Taïwan et n'est pas anti-européenne, mais dont l'excédent commercial met l'Europe en difficulté.
+Deux émissions de *Comprendre le monde* donnent la parole à des invités, dont les thèses restent les leurs. Pour Sébastien Abis, la Chine, premier importateur agricole mondial, étend la mondialisation jusqu'à l'assiette en sécurisant ses approvisionnements et en préparant ses propres normes. Pour Sylvain Cypel, Israël, sous Netanyahou, s'allie à des régimes identitaires et tolère leur antisémitisme au lieu de protéger les Juifs.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/1-2020-02-07/1-reflexions-sur-l-argent-fou-du|Réflexions sur l'argent fou du foot]] (2020-02-07)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/1-2020-02-07/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/1-2020-02-07/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/1-2020-02-07/2-vers-un-affrontement-entre-la-syrie|Vers un affrontement entre la Syrie et la Turquie à Idlib ? Je réponds à vos questions.]] (2020-02-10)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/1-2020-02-07/3-comprendre-le-monde-s3-22-sebastien|Comprendre le monde S3#22 - Sébastien Abis - "Vers une sino-mondialisation agricole ?"]] (2020-02-12)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/1-2020-02-07/4-la-recherche-en-geopolitique-et-les|La recherche en géopolitique et les NTIC]] (2020-02-13)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/1-2020-02-07/5-algerie-le-hirak-an-ii-je|Algérie : le Hirak, an II. Je réponds à vos questions.]] (2020-02-18)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/4-2019-10-14/3-2020-02-07/1-2020-02-07/6-comprendre-le-monde-s3-23-sylvain|Comprendre le monde S3#23 - Sylvain Cypel - "L'État d'Israël contre les Juifs"]] (2020-02-19)
