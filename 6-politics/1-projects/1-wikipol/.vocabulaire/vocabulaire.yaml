@@ -117,6 +117,8 @@ kinds:
       comte: {définition: "Seigneur qui dirige un comté, à la date de la Publication.", statut: proposé, introduit_par: blast/V2yr9N2jK-0.md}
       négociateur: {définition: "Mène une négociation pour le compte d'un État ou d'une organisation, ici le Brexit pour l'Union européenne.", statut: proposé, introduit_par: boniface/DRcmNXr-nCw.md}
       ancien-dirigeant-sportif: {définition: "A dirigé une instance, une fédération ou un comité du sport et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/kk3SmKSCNXM.md}
+      politologue: {définition: "Étudie la vie politique et en publie des analyses.", statut: proposé, introduit_par: blast/rPaHsMZ7pts.md}
+      pilote: {définition: "Pilote un aéronef, notamment pour une compagnie aérienne.", statut: proposé, introduit_par: blast/N_GWbPTMLqA.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -261,6 +263,7 @@ kinds:
       serment: {définition: "Engagement solennel prêté par les membres d'une profession.", statut: proposé, introduit_par: paduteam/p1f7yn8b7XU.md}
       directive: {définition: "Acte de l'Union européenne qui fixe des objectifs que les États membres transposent dans leur droit.", statut: proposé, introduit_par: blast/7lYFVTbvpHg.md}
       appel: {définition: "Texte public signé par plusieurs personnes pour défendre une position ou appeler à agir.", statut: proposé, introduit_par: paduteam/gQes3ZACQmA.md}
+      charte: {définition: "Texte fondateur qui fixe les principes d'une organisation ou d'un mouvement.", statut: proposé, introduit_par: paduteam/HZfk8m0cvtU.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
