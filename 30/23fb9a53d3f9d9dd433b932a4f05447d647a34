@@ -1,0 +1,31 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_a48772518d873a 175
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/6-2025-04-01/4-le-rn-ne-comprend-rien-a.md
+  s_70e2b8820e4c39::t_65e629c05f3ec6 1-64
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/6-2025-04-01/CLAUDE.md
+  s_70e2b8820e4c39::t_d7e1687624f6c4 2,6-9,11,13,15,22
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/CLAUDE.md
+  s_70e2b8820e4c39::t_41b395ecabff5d 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/CLAUDE.md
+  s_70e2b8820e4c39::t_4f73de38baf767 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_70e2b8820e4c39::t_ca6de1f2d99151 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_f01c4f41f5f51d 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3023fb9a53d3f9d9dd433b932a4f05447d647a34",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
