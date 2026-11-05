@@ -1,0 +1,47 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_507d7ec3d935fe 174
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/4-2025-03-26/CLAUDE.md
+  s_70e2b8820e4c39::t_34229907c42446 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/5-2025-03-29/1-foule-haineuse-ecoterroristes-etc-comment-le.md
+  s_70e2b8820e4c39::t_99fd288a0e8afa 3
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/5-2025-03-29/2-loi-narcotrafic-le-rn-en-revait.md
+  s_70e2b8820e4c39::t_c238af234488f7 3
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/5-2025-03-29/3-petit-conseil-pour-ne-pas-devenir.md
+  s_70e2b8820e4c39::t_df97c4445eff9b 1-74
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/5-2025-03-29/4-infiltre-chez-les-neonazis-etc-le.md
+  s_70e2b8820e4c39::t_f903fe7155ce69 1-92
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/5-2025-03-29/CLAUDE.md
+  s_70e2b8820e4c39::t_11e71caf2300a2 1-21
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/6-2025-04-01/1-marine-le-pen-l-incarnation-de.md
+  s_70e2b8820e4c39::t_a999ae10e7a70d 1-95
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/6-2025-04-01/2-gentrification-pourquoi-les-bobos-viennent-vivre.md
+  s_70e2b8820e4c39::t_98df753976f7f1 1-87
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/6-2025-04-01/3-frantz-fanon-la-realite-coloniale-que.md
+  s_70e2b8820e4c39::t_d8a4e939f0fcb9 1-94
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/6-2025-04-01/CLAUDE.md
+  s_70e2b8820e4c39::t_22560ad3627e0e 1-21
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/CLAUDE.md
+  s_70e2b8820e4c39::t_5fc46d820a53ba 2,6-9,11,13,15-17,24-26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/CLAUDE.md
+  s_70e2b8820e4c39::t_d7a1d11da56254 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_70e2b8820e4c39::t_300fd0e0df0f03 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_84098a5974bce1 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5ed6216648a6d395ccf5dfacfcbaa5cae79f745f",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
