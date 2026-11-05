@@ -1,6 +1,6 @@
 ---
 title: "UN \"TRUMP\" POURRAIT-IL ÊTRE ÉLU EN FRANCE ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/6-2025-06-15
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/2-2025-06-15
 owner: diplo
 preview: >-
   Le journaliste Cole Stangler soutient que la France suit la trajectoire

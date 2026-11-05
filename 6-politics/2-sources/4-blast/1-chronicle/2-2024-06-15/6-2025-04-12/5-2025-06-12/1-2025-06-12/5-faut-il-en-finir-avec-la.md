@@ -1,6 +1,6 @@
 ---
 title: "FAUT-IL EN FINIR AVEC LA PRISON ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/5-2025-06-12
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/1-2025-06-12
 owner: diplo
 preview: >-
   Blast et ses deux intervenants soutiennent que la prison est inhumaine,
