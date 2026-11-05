@@ -1,20 +1,20 @@
 ---
-title: "2024-06-15 → 2025-04-30"
+title: "2024-06-15 → 2025-05-07"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15
 owner: diplo
 preview: >-
   Blast soutient que la dissolution a ouvert la voie du pouvoir à l'extrême
-  droite, que Macron nie le verdict des urnes et que le RN gouverne par
-  procuration, avec le PS et les médias dominants défaillants. Il juge la
-  condamnation de Marine Le Pen relever de la justice.
+  droite, que Macron nie le résultat des urnes et que le pouvoir ment et
+  protège les puissants, pendant que médias et droite banalisent le RN. Elle
+  suit Gaza et les révoltes.
 ---
-# 2024-06-15 → 2025-04-30
+# 2024-06-15 → 2025-05-07
 
-Sur ces dix mois, Blast déroule un même fil : la dissolution décidée par Macron a déroulé le tapis au RN, et le Nouveau Front populaire est la seule alternative sérieuse. Après le vote ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/1-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]]), Blast accuse Macron de nier le résultat des urnes. Il lit ensuite l'arrivée de Barnier, puis celle de Bayrou, comme la preuve que le pouvoir reste à Macron avec l'aval du RN, qui tient le budget et gouverne par procuration. La crise démocratique née de la dissolution ne se refermerait, selon Blast, que par la démission de Macron.
+Tout au long de la Period, Blast lit la dissolution comme le point de départ d'une crise démocratique. Elle soutient que Macron a déroulé le tapis au RN, puis refusé le verdict des urnes en faisant du Nouveau Front populaire la seule alternative sérieuse mais écartée ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/1-2024-06-15/CLAUDE|2024-06-15 → 2024-08-12]]). L'imposition de Barnier avec l'aval du RN, puis le budget qu'il fait voter, lui servent à montrer que l'extrême droite gouverne par procuration. Cette crise ne se refermerait que par la démission de Macron ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE|2024-10-24 → 2024-12-17]]).
 
-Le deuxième fil porte sur ce qui laisse l'extrême droite avancer. Blast dénonce les médias de milliardaires, défaillants ou acquis à l'extrême droite, le néolibéralisme qui lui laisse le terrain, une droite qui banalise le RN et un PS complice du budget Bayrou. Il voit un fascisme se former autour de Trump. L'hiver 2024-2025 ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE|2024-12-18 → 2025-02-17]]) est lu comme un recul démocratique : pouvoir impuni, médias défaillants, normalisation du RN.
+Le diagnostic s'étend ensuite : l'extrême droite avance sur le terrain laissé par le néolibéralisme et par des médias dominants, dénoncés comme médias de milliardaires, défaillants ou acquis à ses idées. Pendant l'hiver 2024-2025, Blast voit un PS complice du budget Bayrou, une droite qui banalise le RN et un fascisme qui prend forme autour de Trump ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE|2024-12-18 → 2025-02-17]]). Au printemps 2025, l'accent se déplace vers l'État de droit : la justice doit tenir face à la droite et au RN, et le pouvoir ment et protège les puissants ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/CLAUDE|2025-02-18 → 2025-05-07]]).
 
-Au printemps 2025 ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/CLAUDE|2025-02-18 → 2025-04-30]]), Blast soutient que l'extrême droite avance au mépris de l'État de droit et que la condamnation de Marine Le Pen est de la justice, non un acte politique. Il voit dans le réarmement une austérité et dans l'affaire Nestlé Waters un scandale d'État. Le reste de la période mêle des invités sur Gaza et le Liban et une défense du cannabis légalisé.
+Blast regarde aussi hors de France. Elle reçoit des invités sur Gaza et le Liban à l'automne 2024, puis suit le carnage à Gaza et les révoltes, de la Serbie à la Turquie. Elle défend par ailleurs un cannabis légalisé.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Au printemps 2025 ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-202
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/2-2024-08-14/CLAUDE|2024-08-14 → 2024-10-23]] (72 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE|2024-10-24 → 2024-12-17]] (71 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE|2024-12-18 → 2025-02-17]] (68 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/CLAUDE|2025-02-18 → 2025-04-30]] (85 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/CLAUDE|2025-02-18 → 2025-05-07]] (91 Digests)
