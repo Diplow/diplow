@@ -1,0 +1,29 @@
+6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/2-j-ai-lu-l-economie-tout.md
+  s_9aa5b4ec02292e::t_31c5214670e4e8 1-66
+6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/CLAUDE.md
+  s_9aa5b4ec02292e::t_c4d3d4c9a31912 6-9,13,15,20-22
+6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/CLAUDE.md
+  s_9aa5b4ec02292e::t_2681b833f424ae 6-9,13,15,19
+6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/CLAUDE.md
+  s_9aa5b4ec02292e::t_cb08e666d9dba5 6-9,13,15,17,24
+6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE.md
+  s_9aa5b4ec02292e::t_ec83ceb9b94e25 6,8-9,13,15,17,26
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_9aa5b4ec02292e::t_e866691be68802 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cd869f8a8900ba54abf512f26fa07ad46e081818",
+  "prompts": {},
+  "sessions": {
+    "s_9aa5b4ec02292e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aac01fd52557b7126",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
