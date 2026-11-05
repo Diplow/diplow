@@ -4,17 +4,17 @@ parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16
 owner: diplo
 preview: >-
   De 2020 à 2026, Boniface applique les mêmes grilles à l'actualité :
-  multilatéralisme contre unilatéralisme américain, deux-poids-deux-mesures
-  occidental, Sud global qui échappe à l'Occident, et une Europe et une France
-  plus autonomes envers Washington.
+  multilatéralisme, rivalité sino-américaine, deux-poids-deux-mesures,
+  autonomie de l'Europe et de la France. L'Ukraine puis Gaza lui montrent un
+  Occident qui perd le monopole et que le Sud global ne suit plus.
 ---
 # 2020-06-16 → 2026-10-30
 
-Pendant six ans, Boniface déroule une cohérence plutôt qu'une succession d'événements. Dès 2020, il défend le multilatéralisme contre l'unilatéralisme américain, une Europe alignée ni sur Washington ni sur Pékin, et la fermeté sans rupture. Il refuse aussi de sacrifier l'état de droit à la lutte antiterroriste. En 2021, il lit le monde par la rivalité sino-américaine, que Biden ne change guère, et tient la question palestinienne pour centrale. Il demande à la France d'assumer son passé en Libye et au Rwanda, et plaide pour une Europe autonome mais alliée des États-Unis.
+Dès 2020, Boniface oppose le multilatéralisme à l'unilatéralisme américain. Il veut une Europe alignée ni sur Washington ni sur Pékin, une fermeté sans rupture, et refuse de sacrifier l'état de droit à la lutte antiterroriste. En 2021, il lit le monde par la rivalité sino-américaine, que Biden ne change guère. Il demande à la France d'assumer son passé en Libye et au Rwanda, tient la question palestinienne pour centrale et plaide pour une Europe autonome mais alliée des États-Unis.
 
-Le tournant vient avec Kaboul, le Sahel et surtout l'Ukraine. Boniface y voit l'échec des interventions extérieures, puis tient l'invasion russe pour une faute de Poutine, sans l'excuser. Il décrit ensuite une guerre sans issue qui coûte à l'Europe comme à la Russie, juge les sanctions impuissantes et réclame une négociation. De là découle sa thèse d'un clivage entre l'Occident et le reste du monde, qui ne le suit plus.
+Le deuxième temps tourne autour de l'échec des interventions extérieures (Kaboul, Sahel) et de la guerre en Ukraine. Boniface tient l'invasion pour une faute de Poutine, sans l'excuser. Il y voit une impasse qui coûte à l'Europe comme à Poutine, juge les sanctions impuissantes et plaide pour un compromis et une négociation. Il observe déjà un Occident que le reste du monde ne suit plus.
 
-Dans les années suivantes, cette lecture s'étend aux guerres de 2023 à 2026 : l'Occident perd son monopole, applique un deux-poids-deux-mesures entre l'Ukraine et Gaza et s'isole du Sud global. La France, pour Boniface, devrait défendre ses intérêts sans suivisme envers Washington, et l'autonomie stratégique européenne reste le fil qui relie toute la Period.
+Cette thèse domine la dernière période. Boniface parle de double standard, de Sud global et d'un clivage entre l'Occident et le reste du monde. Il applique la même grille à un Gaza où le deux-poids-deux-mesures isole l'Occident. Il demande à la France de défendre ses intérêts sans suivisme envers Washington, dans un monde qui se multi-aligne et où l'Occident a perdu son monopole.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Dans les années suivantes, cette lecture s'étend aux guerres de 2023 à 2026 :
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/CLAUDE|2021-06-30 → 2022-03-25]] (84 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/CLAUDE|2022-03-29 → 2022-11-23]] (82 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/CLAUDE|2022-11-28 → 2023-06-01]] (76 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/CLAUDE|2023-06-02 → 2026-10-30]] (108 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/CLAUDE|2023-06-02 → 2026-10-30]] (114 Digests)

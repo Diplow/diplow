@@ -3,18 +3,18 @@ title: "2023-06-02 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02
 owner: diplo
 preview: >-
-  Boniface lit trois ans de guerres par la perte du monopole occidental : un
-  Occident qui applique un deux-poids-deux-mesures entre l'Ukraine et Gaza et
-  s'isole du Sud global, et une France qui devrait défendre ses intérêts sans
-  suivisme envers Washington.
+  Boniface lit trois ans de crises par la perte du monopole occidental : une
+  Ukraine sans issue, un Gaza où le deux-poids-deux-mesures isole l'Occident
+  du Sud global, une France qui doit défendre ses intérêts sans suivisme
+  envers Washington, et un monde qui se multi-aligne.
 ---
 # 2023-06-02 → 2026-10-30
 
-Sur l'Ukraine, Boniface soutient dès 2023 que le temps ne joue pour personne et que la Chine en tire le plus grand bénéfice. Il note la lassitude des alliés, juge l'année 2023 catastrophique sur le terrain et voit une Russie fragilisée par la guerre, mais moins isolée. Il en déduit que Poutine n'a pas les moyens d'une guerre victorieuse contre l'OTAN. Le Haut-Karabakh lui sert d'exemple d'un basculement décidé par le rapport de force. Il lit aussi l'essor des BRICS et les coups d'État africains, symptômes de régimes corrompus, comme la marque d'un monde où l'Occident n'a plus le monopole, et un multilatéralisme freiné par la mésentente des grandes puissances.
+Sur l'Ukraine, Boniface soutient dès 2023 que le temps ne joue pour personne et que la Chine en tire le plus grand bénéfice. Il y voit la lassitude des alliés, juge 2023 catastrophique pour Kiev et craint un OTAN tourné contre la Chine. Il décrit une Russie fragilisée par la guerre mais moins isolée, des BRICS en essor, des coups d'État africains qui seraient les symptômes de régimes corrompus, et un multilatéralisme freiné par la mésentente des grandes puissances. Le Haut-Karabakh lui apparaît comme un basculement par le rapport de force.
 
-À partir du 7 octobre, Gaza devient la grille centrale. Boniface décrit un cycle de violence sans issue militaire et juge l'offensive israélienne sans horizon politique, doutant qu'elle apporte la sécurité à Israël. Il y lit le deux-poids-deux-mesures occidental : les valeurs invoquées pour l'Ukraine sont tues pour Gaza, ce qui isole l'Occident du Sud global. Confondre antisionisme et antisémitisme empêche selon lui de critiquer le gouvernement israélien. Il met en cause l'alliance américano-israélienne et la passivité occidentale, et soutient que seule une pression réelle sur Israël peut imposer un État palestinien.
+Après le 7 octobre, Gaza devient sa grille principale. Il y lit un cycle de violence sans issue militaire, juge l'offensive israélienne sans horizon politique et doute qu'elle apporte la sécurité à Israël. Il y voit le deux-poids-deux-mesures d'un Occident qui tait pour Gaza les valeurs qu'il invoque pour l'Ukraine, passif face à l'alliance américano-israélienne et de plus en plus isolé du Sud global. Il soutient aussi que confondre antisionisme et antisémitisme empêche de critiquer le gouvernement israélien. En 2024, il avance que Netanyahou a intérêt à prolonger la guerre et que seule une pression réelle sur Israël peut imposer un État palestinien.
 
-Côté français, il juge la diplomatie en panne et la voit sortir de l'impasse en faisant pont avec le Sud global. Il plaide pour une France qui défend ses intérêts, sans suivisme envers Washington, et craint un OTAN anti-chinois. Il lit l'OCS comme un multi-alignement plutôt qu'une OTAN asiatique. Dans la dernière période, la chaîne reçoit aussi des invités et chronique des livres.
+Pour la France, il juge la diplomatie en panne et plaide pour qu'elle défende ses intérêts, sans suivisme envers Washington. Il la voit sortir de l'impasse en faisant pont avec le Sud global. Ses analyses de l'Ukraine, de la Chine et de l'OCS décrivent un monde qui se multi-aligne, et la chaîne s'ouvre dans la dernière période à de nombreux invités.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Côté français, il juge la diplomatie en panne et la voit sortir de l'impasse 
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/3-2023-09-22/CLAUDE|2023-09-22 → 2023-10-23]] (18 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/CLAUDE|2023-10-25 → 2023-11-29]] (19 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/5-2023-11-30/CLAUDE|2023-11-30 → 2024-01-18]] (20 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/6-2024-01-22/CLAUDE|2024-01-22 → 2026-10-30]] (14 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/6-2024-01-22/CLAUDE|2024-01-22 → 2026-10-30]] (20 Digests)
