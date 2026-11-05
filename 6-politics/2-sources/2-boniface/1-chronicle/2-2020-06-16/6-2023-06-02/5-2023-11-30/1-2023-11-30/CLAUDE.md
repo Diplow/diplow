@@ -1,23 +1,24 @@
 ---
-title: "2023-11-30 → 2026-10-14"
+title: "2023-11-30 → 2023-12-12"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/5-2023-11-30/1-2023-11-30
 owner: diplo
 preview: >-
-  Boniface lit l'alliance américano-israélienne comme indéfectible et fissurée
-  par Gaza. Il chronique le livre de Stubb, pour qui l'Occident, affaibli par
-  son deux poids deux mesures, doit montrer l'exemple au Sud global, et reçoit
-  Sylvie Bermann sur la parité sino-américaine.
+  Boniface lit Gaza à travers l'alliance américano-israélienne, qui rend
+  Washington suiveur d'Israël, et dénonce un Occident passif face aux
+  bombardements ; il juge les photos de prisonniers humiliés
+  contre-productives pour Israël.
 ---
-# 2023-11-30 → 2026-10-14
+# 2023-11-30 → 2023-12-12
 
-Fin 2023, Boniface applique sa grille à la relation entre les États-Unis et Israël. Il soutient que l'alliance, forgée par la guerre froide puis entretenue par la politique intérieure américaine, est devenue indéfectible : Washington suit Israël plus qu'il ne l'influence. La guerre à Gaza commence pourtant à fissurer le consensus américain.
+Boniface applique à la guerre à Gaza une même grille : l'alliance entre les États-Unis et Israël, forgée par la guerre froide puis entretenue par la politique intérieure américaine, est devenue indéfectible, et Washington suit Israël plus qu'il ne l'influence. Il note pourtant que la guerre commence à fissurer le consensus américain. Dans [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/5-2023-11-30/1-2023-11-30/3-gaza-le-pire-est-a-venir|Gaza : le pire est à venir]], il soutient qu'après le 7 octobre il y a aussi un avant et un après les bombardements de Gaza : une population piégée, un système de santé détruit, des ONG discréditées, et un Occident qui ne fait pas pression sur Israël, au risque d'alimenter la haine.
 
-En octobre 2026, deux vidéos déplacent le regard vers l'ordre mondial. Dans sa chronique du *Triangle du pouvoir*, Boniface retient la thèse d'Alexander Stubb, président finlandais : le monde se divise en trois blocs (Occident, Orient, Sud global). L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Cette logique de la haine revient dans la dernière vidéo de la Period : pour Boniface, diffuser des photos de prisonniers palestiniens dénudés, agenouillés et entassés humilie ces hommes pour rien, ne fonde aucune victoire politique et dessert Israël.
 
-Boniface reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin, qui porte l'analyse de cette dernière vidéo. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans que Pékin ait gagné. La Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Entre les deux, Boniface reçoit Emmanuel Hache à propos de son livre sur les métaux. Pour l'invité, la transition bas carbone remplace la dépendance au pétrole par une dépendance aux métaux, dominée par la Chine, et sera plus coûteuse et plus lente que prévu, faute d'investissements.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/5-2023-11-30/1-2023-11-30/1-la-relation-entre-les-etats-unis|La relation entre les États-Unis et Israël - Expliquez-moi...]] (2023-11-30)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/5-2023-11-30/1-2023-11-30/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/5-2023-11-30/1-2023-11-30/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/5-2023-11-30/1-2023-11-30/2-geopolitique-des-metaux-le-nouvel-or|Géopolitique des métaux : le nouvel or noir ? Avec Emmanuel Hache - Entretiens géopo]] (2023-12-06)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/5-2023-11-30/1-2023-11-30/3-gaza-le-pire-est-a-venir|Gaza : le pire est à venir]] (2023-12-07)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/5-2023-11-30/1-2023-11-30/4-prisonniers-a-gaza-le-choc-des|Prisonniers à Gaza : le choc des photos]] (2023-12-12)
