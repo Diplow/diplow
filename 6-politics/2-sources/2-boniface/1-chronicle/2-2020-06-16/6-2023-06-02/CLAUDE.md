@@ -3,22 +3,22 @@ title: "2023-06-02 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02
 owner: diplo
 preview: >-
-  Boniface lit trois ans d'actualité par la fin du monopole occidental : une
-  Ukraine où le temps ne joue pour personne, un deux poids deux mesures qui
-  isole l'Occident à propos de Gaza, un multilatéralisme freiné par les
-  grandes puissances et un Sud global qui s'aligne à sa guise.
+  Boniface lit trois ans de guerres et de recompositions par la perte du
+  monopole occidental : en Ukraine, le temps ne joue pour personne, à Gaza
+  l'Occident s'isole par son deux-poids-deux-mesures, et le Sud global
+  s'affirme face à lui.
 ---
 # 2023-06-02 → 2026-10-30
 
-Dès juin 2023, Boniface soutient que le temps ne joue pour personne en Ukraine et que la Chine en tire le plus grand bénéfice. Il craint un OTAN tourné contre elle et juge la diplomatie française en panne, qui trouverait une issue en s'appuyant sur le Sud global. Pendant l'été, il décrit une Russie fragilisée par la guerre mais moins isolée, des BRICS en essor et un multilatéralisme freiné par la mésentente des grandes puissances. Les coups d'État africains lui apparaissent comme les symptômes de régimes corrompus.
+Boniface lit l'Ukraine comme une guerre où le temps ne joue pour personne et dont la Chine tire le plus grand bénéfice. Il craint un OTAN tourné contre la Chine et juge la diplomatie française en panne, qu'il voit sortir de l'impasse en faisant pont avec le Sud global. À l'automne 2023, il y ajoute la lassitude des alliés, tandis que la Russie, fragilisée par la guerre, reste moins isolée qu'attendu.
 
-À l'automne 2023, il lit l'Ukraine par la lassitude des alliés et le Haut-Karabakh comme un basculement dû au rapport de force. Le 7 octobre devient pour lui un cycle de violence sans issue militaire. L'Occident s'isole, selon lui, en taisant pour Gaza les valeurs qu'il invoque pour l'Ukraine.
+Cette lecture s'élargit à un monde qui échappe au monopole occidental. Boniface y range l'essor des BRICS, les coups d'État africains qu'il tient pour des symptômes de régimes corrompus, et un multilatéralisme freiné par la mésentente des grandes puissances. Le Haut-Karabakh lui sert d'exemple d'un basculement par le rapport de force.
 
-Au-delà, la Period est dominée par quelques grilles qui reviennent d'une vidéo à l'autre : le deux poids deux mesures occidental, l'impasse politique à Gaza, l'impunité des colons et le multi-alignement des pays du Sud. Boniface reçoit aussi des invités sur l'Afrique, les Kurdes, Lula ou le Japon. Leurs thèses leur appartiennent et ne sont pas les siennes.
+Le 7 octobre et Gaza deviennent ensuite la grille centrale. Pour Boniface, le cycle de violence n'a pas d'issue militaire et l'offensive israélienne n'a pas d'horizon politique. L'Occident s'isole en taisant pour Gaza les valeurs qu'il invoque pour l'Ukraine, et l'antisionisme n'est pas l'antisémitisme. Face à cet Occident contesté, il lit l'OCS comme la marque d'un multi-alignement.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/1-2023-06-02/CLAUDE|2023-06-02 → 2023-07-17]] (19 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/2-2023-07-20/CLAUDE|2023-07-20 → 2023-09-20]] (18 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/3-2023-09-22/CLAUDE|2023-09-22 → 2023-10-23]] (18 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/CLAUDE|2023-10-25 → 2026-10-30]] (18 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/CLAUDE|2023-10-25 → 2026-10-30]] (24 Digests)
