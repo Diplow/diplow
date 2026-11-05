@@ -1,25 +1,24 @@
 ---
-title: "2023-06-02 → 2026-10-14"
+title: "2023-06-02 → 2023-06-12"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/1-2023-06-02
 owner: diplo
 preview: >-
-  Boniface lit le Sénégal et les États-Unis de Trump comme des démocraties
-  menacées. Ses invités Jean de Gliniasty et Sylvie Bermann pèsent la Russie
-  et la Chine. Il chronique le livre d'Alexander Stubb sur un monde en trois
-  blocs.
+  Boniface lit la condamnation de Sonko comme un parfum de procès politique
+  qui menace la démocratie sénégalaise, juge l'inculpation de Trump rassurante
+  pour la justice mais inquiétante pour le Parti républicain, reçoit Jean de
+  Gliniasty sur la Russie et présente un livre sur le football.
 ---
-# 2023-06-02 → 2026-10-14
+# 2023-06-02 → 2023-06-12
 
-Boniface soutient que la démocratie est fragilisée là où le pouvoir ou les partis préfèrent la logique partisane au droit. Au Sénégal, la condamnation d'Ousmane Sonko a un parfum de procès politique, et écarter l'opposant principal de la présidentielle menace la démocratie sans servir la France. Aux États-Unis, l'inculpation de Trump est rassurante pour la justice, mais le soutien du Parti républicain inquiète et rappelle à l'Europe de ne pas dépendre des États-Unis.
+Pendant ces dix jours, Boniface revient sur deux démocraties mises à l'épreuve. Au Sénégal, il soutient que la condamnation d'Ousmane Sonko a un parfum de procès politique : couper les réseaux sociaux et écarter l'opposant principal de la présidentielle menace la démocratie sénégalaise et ne sert pas l'intérêt de la France. Aux États-Unis, il juge l'inculpation de Trump rassurante pour la justice américaine, mais le soutien du Parti républicain, qui préfère le clivage partisan au respect de la loi, l'inquiète pour la démocratie. Il y voit aussi un rappel à l'Europe de ne pas dépendre des États-Unis.
 
-Deux entretiens donnent la parole à des invités, dont les thèses restent les leurs. Pour Jean de Gliniasty, Poutine garde la main en misant sur la durée et sur l'usure du soutien occidental, mais le divorce avec l'Ukraine et la dépendance envers la Chine affaiblissent la Russie à terme. Pour Sylvie Bermann, ancienne ambassadrice à Pékin, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, sans qu'on puisse dire que Pékin a gagné, et l'excédent commercial chinois met l'Europe en difficulté.
+Il reçoit ensuite Jean de Gliniasty pour un entretien sur la Russie ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/1-2023-06-02/2-poutine-en-difficulte-avec-jean-de|Poutine en difficulté ? Avec Jean de Gliniasty - Entretiens géopo]]). La thèse est celle de l'invité : Poutine garde la main, mise sur la durée et sur l'usure du soutien occidental, et l'économie russe s'adapte en se tournant vers le Sud, mais le divorce avec l'Ukraine et la dépendance envers la Chine affaiblissent la Russie à terme.
 
-Boniface chronique aussi Le Triangle du pouvoir d'Alexander Stubb. Selon Stubb, le monde se divise en trois blocs, Occident, Orient et Sud global, et l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+La période se clôt sur un registre plus léger : Boniface présente le livre de Chérif Ghemmour sur les 200 dates du football, un recueil à picorer rempli de madeleines de Proust, et en pioche quelques-unes, de la finale perdue par Reims en 1956 à la demi-finale de 2016.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/1-2023-06-02/1-senegal-la-democratie-en-danger|Sénégal : la démocratie en danger ?]] (2023-06-02)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/1-2023-06-02/2-poutine-en-difficulte-avec-jean-de|Poutine en difficulté ? Avec Jean de Gliniasty - Entretiens géopo]] (2023-06-07)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/1-2023-06-02/3-trump-la-maison-blanche-ou-la|Trump : la Maison-Blanche ou la prison ?]] (2023-06-09)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/1-2023-06-02/4-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/1-2023-06-02/5-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/1-2023-06-02/4-j-ai-lu-so-foot-nos|J'ai lu... "So Foot - Nos 200 dates", ouvrage de Chérif Ghemmour]] (2023-06-12)
