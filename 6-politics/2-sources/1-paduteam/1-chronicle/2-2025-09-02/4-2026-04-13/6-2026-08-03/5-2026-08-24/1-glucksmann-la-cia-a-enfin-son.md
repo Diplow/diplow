@@ -1,6 +1,6 @@
 ---
 title: "GLUCKSMANN : LA CIA A ENFIN SON CANDIDAT POUR 2027 !?"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/4-2026-08-19
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/5-2026-08-24
 owner: diplo
 preview: >-
   La PaduTeam soutient que Glucksmann est un candidat artificiel, sans

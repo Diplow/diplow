@@ -1,20 +1,20 @@
 ---
-title: "2026-04-13 → 2026-08-24"
+title: "2026-04-13 → 2026-09-01"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13
 owner: diplo
 preview: >-
-  La PaduTeam défend Mélenchon pour 2027 et refuse l'union avec le PS,
-  Glucksmann et le PCF : la gauche doit assumer la conflictualité, choisir son
-  camp et lire l'actualité par la classe, pendant que les États-Unis
-  s'affaiblissent.
+  La PaduTeam mise sur Mélenchon et la rupture pour 2027 : elle refuse l'union
+  de la gauche avec le PS et le PCF, attaque Glucksmann, lit l'actualité par
+  la classe et voit dans l'abondance et la radicalité de quoi faire reculer le
+  RN.
 ---
-# 2026-04-13 → 2026-08-24
+# 2026-04-13 → 2026-09-01
 
-Sur ces quatre mois, le fil est constant : la PaduTeam fait de 2027 un affrontement de classe et défend Mélenchon et la FI comme la seule option de rupture. Elle conteste les sondages d'avant-campagne, juge la primaire morte et tient le virage du PS pour tactique. Glucksmann, Ruffin, les écologistes et le PCF sont pour elle des impasses, voire des sociaux-traîtres. Elle dénonce aussi le lawfare contre la gauche radicale.
+D'avril à septembre, la PaduTeam défend sans relâche Mélenchon et la FI pour 2027. Elle conteste les sondages d'avant-campagne ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/2-2026-05-07/CLAUDE|2026-05-07 → 2026-05-30]]), dénonce le lawfare contre la gauche radicale et lit 2027 comme un affrontement de classe. Sa ligne est de faire élire la FI puis de la déborder, avec une gauche qui assume la conflictualité et choisit son camp. Elle juge la primaire morte et veut de la radicalité et une rupture plutôt qu'une union de la gauche au premier tour.
 
-Le mot d'ordre se précise d'une Period à l'autre. D'abord opposer à la gestion de la pénurie une gauche de rupture. Ensuite faire élire la FI pour la déborder, avec une bourgeoisie qui devra choisir entre Mélenchon et le RN, que seule l'abondance fera reculer. Enfin refuser l'union au premier tour et miser sur la radicalité contre l'attrape-tout. En été, elle voit le PS déchiré par sa primaire et poussé vers Mélenchon. Elle annonce pour le RN une rupture Bardella-Le Pen inéluctable et arme la gauche radicale par le marxisme.
+Ses adversaires sont à gauche. Le virage du PS est tenu pour tactique, Glucksmann, Ruffin et les écologistes sont attaqués, et Glucksmann comme le PS finissent par incarner une ligne libérale pro-américaine. Le PCF et le PS sont renvoyés à l'impasse, et l'été durcit le refus de toute union avec eux ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/5-2026-07-11/CLAUDE|2026-07-11 → 2026-08-01]]). Le marxisme sert à armer la gauche radicale pour ces débats.
 
-Le cadre international suit la même grille : la guerre d'Iran est lue comme un recul américain, l'extrême droite comme en reflux, et l'UE comme soumise à Trump, dans des États-Unis affaiblis.
+La lecture de classe s'étend à l'actualité et au monde. Au printemps, la guerre d'Iran est lue comme un recul américain et l'extrême droite comme en reflux. Vers l'été, la bourgeoisie devra choisir entre Mélenchon et le RN, que seule l'abondance fera reculer, et la rupture Bardella-Le Pen paraît promise au RN. En août, la Chine et un monde sans les États-Unis sont présentés comme l'avenir ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/CLAUDE|2026-08-03 → 2026-09-01]]).
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Le cadre international suit la même grille : la guerre d'Iran est lue comme un 
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/CLAUDE|2026-06-01 → 2026-06-20]] (18 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/CLAUDE|2026-06-22 → 2026-07-10]] (16 Digests)
 5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/5-2026-07-11/CLAUDE|2026-07-11 → 2026-08-01]] (18 Digests)
-6. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/CLAUDE|2026-08-03 → 2026-08-24]] (20 Digests)
+6. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/CLAUDE|2026-08-03 → 2026-09-01]] (26 Digests)
