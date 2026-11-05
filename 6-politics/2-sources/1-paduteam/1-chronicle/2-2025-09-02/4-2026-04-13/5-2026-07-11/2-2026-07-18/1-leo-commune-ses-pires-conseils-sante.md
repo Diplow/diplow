@@ -1,6 +1,6 @@
 ---
 title: "LÉO COMMUNE : SES PIRES CONSEILS SANTÉ (LE GARS EST DANGEREUX)"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/6-2026-07-18
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/5-2026-07-11/2-2026-07-18
 owner: diplo
 preview: >-
   La PaduTeam soutient que Léo Commune, créateur écolo antitechnologie,

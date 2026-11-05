@@ -1,6 +1,6 @@
 ---
 title: "ESSENTIELS #7 - LUCIEN SÈVE, PSYCHOLOGIE et L'INDIVIDU DANS LE MARXISME"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/6-2026-07-18
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/5-2026-07-11/2-2026-07-18
 owner: diplo
 preview: >-
   Avec Floé (Éditions sociales) et Benoît Lepinat, la PaduTeam soutient que

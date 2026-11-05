@@ -1,6 +1,6 @@
 ---
 title: "FAURE HUMILIÉ, GLUCKSMANN COINCÉ : LA PRIMAIRE VERSION PS"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/5-2026-07-11
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/5-2026-07-11/1-2026-07-11
 owner: diplo
 preview: >-
   La PaduTeam soutient que le vote des militants PS pour une primaire fermée
