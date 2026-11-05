@@ -3,18 +3,19 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Pascal Boniface applique dix ans durant les mêmes grilles à l'actualité :
+  De 2016 à 2026, Boniface applique les mêmes grilles à l'actualité :
   multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
-  fin du monopole occidental. Il défend une Europe autonome mais alliée des
-  États-Unis et la négociation en Ukraine.
+  perte du monopole occidental. Il presse l'Europe d'acquérir son autonomie
+  stratégique et tient la guerre en Ukraine pour une impasse qui appelle une
+  négociation.
 ---
 # Chronicle
 
-De 2016 à 2026, Pascal Boniface lit l'actualité internationale avec un petit nombre de grilles stables. Le multilatéralisme s'oppose à l'unilatéralisme, l'Occident pratique un deux-poids-deux-mesures, et son monopole sur l'ordre mondial prend fin. Les événements changent d'une vidéo à l'autre, mais la grille reste la même. Cette constance fait la cohérence de sa chaîne.
+Sur dix ans, Boniface reste fidèle à quelques grilles de lecture qu'il applique à l'événement du moment. De 2016 à juin 2020, il les passe sur Trump et sur la scène internationale : le multilatéralisme contre l'unilatéralisme, le deux-poids-deux-mesures occidental. Il presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur.
 
-La première partie, [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]], applique ces grilles à Trump et à la scène internationale. Boniface presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur. La seconde, [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]], y ajoute la rivalité sino-américaine. Il y défend une Europe autonome mais alliée des États-Unis, voit dans la guerre en Ukraine un conflit à clore par la négociation et décrit un Sud global en essor.
+Depuis juin 2020, les mêmes outils portent sur six ans d'actualité, avec en plus la rivalité sino-américaine et la fin du monopole occidental. Boniface tient la guerre en Ukraine pour une impasse qui appelle une négociation. Il voit un Sud global que l'Occident ne mène plus. La constance de ces grilles, d'une époque à l'autre, est ce qui distingue sa Chronicle.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (441 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2026-10-30]] (447 Digests)
