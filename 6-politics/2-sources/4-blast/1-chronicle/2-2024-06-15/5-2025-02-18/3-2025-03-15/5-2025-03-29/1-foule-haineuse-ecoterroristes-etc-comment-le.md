@@ -1,6 +1,6 @@
 ---
 title: "\"FOULE HAINEUSE\", \"ÉCOTERRORISTES\", ETC. : COMMENT LE POUVOIR ÉCRASE TOUTE RÉSISTANCE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/4-2025-03-26
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/5-2025-03-29
 owner: diplo
 preview: >-
   Les révoltes, des gilets jaunes à l'A69, ne surgissent pas par hasard :

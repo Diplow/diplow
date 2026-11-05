@@ -1,6 +1,6 @@
 ---
 title: "LOI NARCOTRAFIC : LE RN EN RÊVAIT, MACRON L’A FAIT"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/4-2025-03-26
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/5-2025-03-29
 owner: diplo
 preview: >-
   Blast soutient que la loi narcotrafic, sous couvert de s'attaquer aux
