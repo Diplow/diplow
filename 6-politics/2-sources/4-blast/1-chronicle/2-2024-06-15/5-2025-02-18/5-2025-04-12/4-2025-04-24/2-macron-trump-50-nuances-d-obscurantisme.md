@@ -1,6 +1,6 @@
 ---
 title: "MACRON / TRUMP : 50 NUANCES D’OBSCURANTISME"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/3-2025-04-21
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/4-2025-04-24
 owner: diplo
 preview: >-
   Blast soutient que Macron, en offrant refuge aux chercheurs américains
