@@ -1,0 +1,45 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/4-2025-03-12/CLAUDE.md
+  s_6c2e2be0b757c5::t_17a50283603186 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/5-2025-03-15/1-les-super-heros-ne-nous-sauveront.md
+  s_6c2e2be0b757c5::t_cb4afe995281e2 3
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/5-2025-03-15/2-entre-la-turquie-et-la-syrie.md
+  s_6c2e2be0b757c5::t_b09bf937619e7f 1-91
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/5-2025-03-15/3-record-de-dissolutions-d-associations-un.md
+  s_6c2e2be0b757c5::t_551748e08cbf17 1-90
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/5-2025-03-15/4-comment-vivre-avec-le-risque-de.md
+  s_6c2e2be0b757c5::t_98678123d04db3 1-83
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/5-2025-03-15/CLAUDE.md
+  s_6c2e2be0b757c5::t_fb8574c8bc239b 1-22
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/6-2025-03-19/1-les-sociologues-de-droite-existent-ils.md
+  s_6c2e2be0b757c5::t_c7864d1dc12da3 1-92
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/6-2025-03-19/2-exploitation-destruction-et-techno-fascisme-la.md
+  s_6c2e2be0b757c5::t_2209bfcb3364aa 1-86
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/6-2025-03-19/3-censure-de-bayrou-le-ps-la.md
+  s_6c2e2be0b757c5::t_a8e6244a60e5c6 1-83
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/6-2025-03-19/CLAUDE.md
+  s_6c2e2be0b757c5::t_f974262165a71f 1-23
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/CLAUDE.md
+  s_6c2e2be0b757c5::t_59633944a53549 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE.md
+  s_6c2e2be0b757c5::t_ad9c137db3c388 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_6c2e2be0b757c5::t_815316c3f2cfb6 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_6c2e2be0b757c5::t_15ecaf33f97dc7 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "95343a6f098a08ff04fc927300ea0fa25045b0cd",
+  "prompts": {},
+  "sessions": {
+    "s_6c2e2be0b757c5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a01e27248216d3327",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
