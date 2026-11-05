@@ -255,6 +255,7 @@ kinds:
       groupe-de-médiation: {définition: "Groupe d'États chargé de médier dans un conflit sous l'égide d'une organisation internationale.", statut: proposé, introduit_par: boniface/YBLtbkrDB0M.md}
       cabinet-de-lobbying: {définition: "Cabinet qui défend auprès des pouvoirs publics les intérêts de ses clients, notamment de grandes entreprises.", statut: proposé, introduit_par: blast/COKf1MUd0_o.md}
       plateforme-numérique: {définition: "Service en ligne de messagerie et de paiement utilisé par des centaines de millions de personnes.", statut: proposé, introduit_par: boniface/uDH1UuXeuQw.md}
+      club-de-motards: {définition: "Groupe de motards organisé en club ou en bande, autour de la moto et d'un mode de vie.", statut: proposé, introduit_par: blast/E4TVXCDbcM4.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
