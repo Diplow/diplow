@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/3-2025-03-23/CLAUDE.md
+  s_6c2e2be0b757c5::t_04ad7f9c6f0772 6-8,12,14
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/4-2025-03-26/1-sarkozy-libye-le-clap-de-fin.md
+  s_6c2e2be0b757c5::t_a58d8ebf78e154 1-95
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/4-2025-03-26/2-antisemitisme-les-vrais-pyromanes-sont-a.md
+  s_6c2e2be0b757c5::t_4803bfb0834b87 1-95
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/4-2025-03-26/3-la-cour-penale-internationale-fonctionne-parfois.md
+  s_6c2e2be0b757c5::t_9523058d3a6db3 1-67
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/4-2025-03-26/4-socayna-une-vie-volee-par-le.md
+  s_6c2e2be0b757c5::t_c931f84d763792 1-66
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/4-2025-03-26/5-foule-haineuse-ecoterroristes-etc-comment-le.md
+  s_6c2e2be0b757c5::t_39abda84bd7f10 1-84
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/4-2025-03-26/6-loi-narcotrafic-le-rn-en-revait.md
+  s_6c2e2be0b757c5::t_b25f12d329c994 1-98
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/4-2025-03-26/CLAUDE.md
+  s_6c2e2be0b757c5::t_3ab3246ccaf559 1-24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/CLAUDE.md
+  s_6c2e2be0b757c5::t_ce1e66f3f18aaf 2,6-9,11,13,15,22
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/CLAUDE.md
+  s_6c2e2be0b757c5::t_5b137306dc961d 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_6c2e2be0b757c5::t_58b08ef55565ad 2,6-8,10,12,14,16,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_6c2e2be0b757c5::t_b9f00773c4498e 6-8,12,14,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "03b465461a7000968230ddecc985f190561ed780",
+  "prompts": {},
+  "sessions": {
+    "s_6c2e2be0b757c5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a01e27248216d3327",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
