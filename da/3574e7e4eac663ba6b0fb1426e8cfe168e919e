@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/4-2025-05-25/4-pourquoi-et-comment-abolir-l-heritage.md
+  s_22ea2ce2a8ae73::t_c9dd2f29953d4d 1-84
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/4-2025-05-25/CLAUDE.md
+  s_22ea2ce2a8ae73::t_3b0b64bef2202b 2,7-8,10,12,14,21
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/5-2025-05-28/1-comment-le-pantouflage-detruit-la-democratie.md
+  s_22ea2ce2a8ae73::t_75892f438953b4 1-92
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/5-2025-05-28/2-comment-les-lobbies-ont-detricote-la.md
+  s_22ea2ce2a8ae73::t_526d991ce739bf 1-90
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/5-2025-05-28/3-de-rothschild-a-nestle-revelations-sur.md
+  s_22ea2ce2a8ae73::t_0c3adcd1484c0f 1-93
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/5-2025-05-28/4-2027-qui-veut-faire-perdre-la.md
+  s_22ea2ce2a8ae73::t_bae7a3b499edc1 1-94
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/5-2025-05-28/5-ia-l-humanite-remplacee.md
+  s_22ea2ce2a8ae73::t_fad6751bdbc345 1-84
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/5-2025-05-28/CLAUDE.md
+  s_22ea2ce2a8ae73::t_cb9c7a66492999 1-23
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/CLAUDE.md
+  s_22ea2ce2a8ae73::t_c7971d8c5ff794 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/CLAUDE.md
+  s_22ea2ce2a8ae73::t_e84fba3821550c 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_22ea2ce2a8ae73::t_b646f3ced2bc47 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_22ea2ce2a8ae73::t_8e9888ef5a042b 6-9,13,15-17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "da3574e7e4eac663ba6b0fb1426e8cfe168e919e",
+  "prompts": {},
+  "sessions": {
+    "s_22ea2ce2a8ae73": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a96623671ee33cb97",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
