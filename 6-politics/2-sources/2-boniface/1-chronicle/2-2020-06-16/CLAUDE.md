@@ -3,17 +3,18 @@ title: "2020-06-16 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16
 owner: diplo
 preview: >-
-  Boniface lit ces six ans par un monde qui échappe à l'hégémonie occidentale
-  : il plaide pour le multilatéralisme, une Europe autonome, un compromis en
-  Ukraine et dénonce le double standard occidental.
+  Boniface lit six ans d'actualité comme un monde qui échappe à l'Occident :
+  multilatéralisme contre unilatéralisme, rivalité sino-américaine, guerre en
+  Ukraine à clore par la négociation, Europe à rendre autonome, double
+  standard occidental.
 ---
 # 2020-06-16 → 2026-10-30
 
-De 2020 à 2026, Boniface applique les mêmes grilles à l'actualité : le multilatéralisme contre l'unilatéralisme américain, une Europe qui ne s'aligne ni sur Washington ni sur Pékin, la fermeté sans rupture et le refus de sacrifier l'état de droit à la lutte antiterroriste. En 2021, il lit le monde par la rivalité sino-américaine que Biden ne change guère, demande à la France d'assumer son passé en Libye et au Rwanda, et tient la question palestinienne pour centrale. L'échec des interventions extérieures, de Kaboul au Sahel, nourrit sa méfiance envers les ingérences.
+En 2020 et 2021, Boniface applique à l'actualité une même grille : le multilatéralisme contre l'unilatéralisme américain, une Europe qui ne s'aligne ni sur Washington ni sur Pékin, la fermeté sans rupture, le refus de sacrifier l'état de droit à la lutte antiterroriste. Il lit 2021 par la rivalité sino-américaine, que Biden ne change guère. Il demande à la France d'assumer son passé en Libye et au Rwanda, tient la question palestinienne pour centrale et plaide pour une Europe autonome mais alliée des États-Unis.
 
-L'invasion de l'Ukraine devient ensuite le cœur de son analyse. Boniface la tient pour une faute de Poutine, sans l'excuser, et la lit comme une impasse qui coûte à l'Europe comme à la Russie. Il juge les sanctions impuissantes, plaide pour une négociation et voit un Occident que le reste du monde ne suit plus.
+À partir de l'été 2021, l'échec des interventions extérieures (Kaboul, Sahel) et la rivalité des puissances structurent son analyse, jusqu'à l'Ukraine. Il y tient l'invasion pour une faute de Poutine, sans l'excuser, et plaide pour un compromis. La guerre devient pour lui une impasse qui coûte à l'Europe comme à Poutine. Les sanctions sont à ses yeux impuissantes, une négociation est nécessaire, et il constate un Occident que le reste du monde ne suit plus.
 
-Sur les années suivantes, cette lecture s'élargit à un monde qui se diversifie et échappe aux États-Unis : double standard occidental, Sud global, multi-alignement. Il veut qu'on aide l'Ukraine et qu'on clarifie les buts de guerre, mais on peut selon lui condamner Moscou sans être pro-Poutine.
+Dans les années suivantes, ce constat devient le fil de toute sa lecture. Il voit une guerre sans vainqueur qui profite à la Chine, un Sud global qui s'affirme, une Europe qui doit gagner son autonomie et un double standard occidental qui discrédite l'Occident, puis l'impunité israélienne.
 
 ## Contenu
 
@@ -21,4 +22,4 @@ Sur les années suivantes, cette lecture s'élargit à un monde qui se diversifi
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/2-2020-12-16/CLAUDE|2020-12-16 → 2021-06-28]] (78 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/CLAUDE|2021-06-30 → 2022-03-25]] (84 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/CLAUDE|2022-03-29 → 2022-11-23]] (82 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (107 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (113 Digests)
