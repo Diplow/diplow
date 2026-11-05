@@ -1,20 +1,20 @@
 ---
-title: "2024-12-18 → 2025-03-15"
+title: "2024-12-18 → 2025-03-20"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18
 owner: diplo
 preview: >-
-  Blast lit ces trois mois comme une avancée de l'extrême droite, de Trump et
-  Musk au RN, que Macron, la droite et un PS compromis avec Bayrou laissent
-  prospérer. Elle y voit des rapports de classe, et un changement qui vient du
-  collectif.
+  Blast lit ces trois mois comme l'avancée d'une extrême droite, de Trump et
+  Musk au RN, que sert un PS qui a trahi le NFP et s'est fait complice du
+  budget Bayrou. Elle défend le collectif contre l'austérité, le réarmement et
+  les sauveurs.
 ---
-# 2024-12-18 → 2025-03-15
+# 2024-12-18 → 2025-03-20
 
-Le fil de la Period est l'avancée de l'extrême droite. Blast la suit de Trump et Musk à Retailleau et au RN, au mépris de l'État de droit. Elle décrit la montée d'un fascisme autour de Trump et dénonce le projet de Trump sur Gaza. Elle affirme que la droite banalise le RN sans que la presse dominante nomme son durcissement, et que les maîtres des médias soutiennent l'extrême droite.
+De fin décembre à la mi-mars, Blast soutient que l'extrême droite avance sur un terrain préparé : Macron a installé l'impunité des puissants, le désintérêt pour l'information la sert, la droite banalise le RN et les maîtres des médias la soutiennent. Autour de Trump et Musk, elle décrit un fascisme qui progresse au mépris de l'État de droit, jusque dans le projet de Trump sur Gaza.
 
-Blast fait du pouvoir en place le complice de cette pente. Elle soutient que Macron a installé l'impunité des puissants et qu'il est peu crédible face à l'extrême droite. Les coups de force du pouvoir sont à ses yeux relayés par des médias défaillants. Le PS a trahi le Nouveau Front populaire en négociant avec Bayrou, et Blast dénonce sa complicité avec le budget Bayrou. Elle juge que Bayrou a menti sur Bétharram et dénonce un scandale d'État chez Nestlé Waters.
+Le PS tient le second fil. Blast dénonce sa trahison du Nouveau Front populaire en négociant avec Bayrou, puis sa complicité avec le budget Bayrou ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/CLAUDE|2025-01-15 → 2025-01-31]]). Elle juge que Bayrou a menti sur Bétharram. En mars, elle lit l'actualité par les rapports de classe : le réarmement et l'austérité sont payés par le social, l'extrême droite s'adosse à l'industrie fossile et aux héritiers, la classe politique est corrompue, et le collectif doit se défendre contre les sauveurs ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/CLAUDE|2025-03-02 → 2025-03-20]]).
 
-Du début à la fin de la Period, la lecture se durcit. Elle passe d'un recul de la démocratie à une lecture par les rapports de classe : classe politique corrompue, patronat gagnant au réarmement et à l'austérité. Pour Blast, le changement vient du collectif, pas d'un sauveur. Elle reçoit Callamard, Albanese et Stiglitz, suit le soulèvement serbe, défend un cannabis légalisé et juge la dette sans danger.
+Blast défend aussi un cannabis légalisé et juge la dette sans danger. Elle dénonce un scandale d'État chez Nestlé Waters et suit le soulèvement serbe. Elle reçoit de nombreux invités, sur Mayotte, Pelicot ou le saumon d'élevage, ainsi que Callamard, Albanese et Stiglitz.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Du début à la fin de la Period, la lecture se durcit. Elle passe d'un recul de
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/3-2025-01-15/CLAUDE|2025-01-15 → 2025-01-31]] (16 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/4-2025-02-01/CLAUDE|2025-02-01 → 2025-02-17]] (19 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/5-2025-02-18/CLAUDE|2025-02-18 → 2025-03-01]] (14 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/CLAUDE|2025-03-02 → 2025-03-15]] (17 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/6-2025-03-02/CLAUDE|2025-03-02 → 2025-03-20]] (23 Digests)
