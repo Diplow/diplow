@@ -1,0 +1,41 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/3-2026-05-19/5-paye-ton-droitard-final-el-rayan.md
+  s_6d041170ddd1c7::t_5f8dcd97ca1d76 1-83
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/3-2026-05-19/6-amixem-indecent-ce-riche-youtubeur-ne.md
+  s_6d041170ddd1c7::t_d49e7dd7e34ae1 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/3-2026-05-19/CLAUDE.md
+  s_6d041170ddd1c7::t_0ed9450cc28076 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/4-2026-05-27/1-melenchon-2027-va-t-il-perdre.md
+  s_6d041170ddd1c7::t_4037cca07316dd 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/4-2026-05-27/2-melenchon-a-16-dans-les-sondages.md
+  s_6d041170ddd1c7::t_b355c31b1e519e 1-95
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/4-2026-05-27/3-gabriel-attal-nous-devoile-son-projet.md
+  s_6d041170ddd1c7::t_4678e0ac799839 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/4-2026-05-27/4-joffrin-tape-sur-melenchon-le-sav.md
+  s_6d041170ddd1c7::t_8dc14ea8551ffe 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/4-2026-05-27/CLAUDE.md
+  s_6d041170ddd1c7::t_8df5602b83bad5 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/CLAUDE.md
+  s_6d041170ddd1c7::t_efad406fd1e0f7 2,6-9,11,13,15,21-22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE.md
+  s_6d041170ddd1c7::t_520aef3505cbab 2,6-8,10,12,14,16,25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_6d041170ddd1c7::t_72ca589cb75faf 2,6-9,11,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_6d041170ddd1c7::t_089a8a2a685ca6 6-8,12,14,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2cded8b73860680f1b496764ecd2fd77c7b790e7",
+  "prompts": {},
+  "sessions": {
+    "s_6d041170ddd1c7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ae032954674ba0ceb",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
