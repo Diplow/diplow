@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/3-2025-06-04/4-supremacistes-masculinistes-frustres-quand-les-hommes.md
+  s_b0de3e9b295631::t_0b961c95ad53a8 1-73
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/3-2025-06-04/CLAUDE.md
+  s_b0de3e9b295631::t_26c372501aa8fb 2,6-9,11,13,15,22
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/4-2025-06-08/1-paysan-deconstruction-d-un-mythe-francais.md
+  s_b0de3e9b295631::t_d8e5fc5d653def 1-91
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/4-2025-06-08/2-travail-les-jeunes-sont-ils-vraiment.md
+  s_b0de3e9b295631::t_d51818cd14fb2d 1-85
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/4-2025-06-08/3-on-a-appris-a-normaliser-un.md
+  s_b0de3e9b295631::t_8c944ff9aad096 1-92
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/4-2025-06-08/4-flottille-resister-face-a-la-decheance.md
+  s_b0de3e9b295631::t_8bc5cf2b182ba7 1-86
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/4-2025-06-08/5-bateau-pour-gaza-macron-et-le.md
+  s_b0de3e9b295631::t_c672f5dd4e4ceb 1-77
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/4-2025-06-08/CLAUDE.md
+  s_b0de3e9b295631::t_f1001535fdec78 1-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/CLAUDE.md
+  s_b0de3e9b295631::t_3eb619551f4b3a 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/CLAUDE.md
+  s_b0de3e9b295631::t_ce0d3d2933dd45 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_b0de3e9b295631::t_3dee15619afcdd 2,7-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_b0de3e9b295631::t_8423bd156a93e6 6-9,13,15-17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a74c0199b237b8ffb0b30c779726c9a5598c7d4e",
+  "prompts": {},
+  "sessions": {
+    "s_b0de3e9b295631": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a3a6e4cb412484fb3",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
