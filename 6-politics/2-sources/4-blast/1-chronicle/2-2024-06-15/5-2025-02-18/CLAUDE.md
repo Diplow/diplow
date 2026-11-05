@@ -1,23 +1,23 @@
 ---
-title: "2025-02-18 → 2025-04-03"
+title: "2025-02-18 → 2025-04-10"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18
 owner: diplo
 preview: >-
-  Blast dénonce une extrême droite qui avance au mépris de l'État de droit,
-  une classe politique corrompue et des médias patronaux. Elle lit le
-  réarmement comme une austérité imposée aux plus modestes et défend le
-  collectif face à la répression.
+  Blast soutient que l'extrême droite avance, de Trump et Musk à Retailleau et
+  au RN, contre l'État de droit, et dénonce une classe politique corrompue,
+  des médias patronaux et un réarmement qui pèse sur les plus modestes.
 ---
-# 2025-02-18 → 2025-04-03
+# 2025-02-18 → 2025-04-10
 
-Pendant ces sept semaines, Blast soutient que l'extrême droite progresse sur tous les fronts, de Trump et Musk à Retailleau et au RN, au mépris de l'État de droit. Elle la voit avancer avec l'industrie fossile, et elle affirme que Bayrou a menti sur Bétharram. Quand Marine Le Pen est condamnée, Blast juge que cette décision applique la loi.
+Pendant ces huit semaines, Blast décrit une extrême droite qui progresse partout, de Trump et Musk à Retailleau et au RN, au mépris de l'État de droit. Elle accuse Bayrou d'avoir menti, sur Bétharram puis sur les retraites, et dénonce un scandale d'État chez Nestlé Waters. Elle suit aussi le soulèvement serbe. Le RN est présenté comme un parti qui sert les patrons et non le peuple, et la condamnation de Marine Le Pen comme une affaire de justice et non un acte politique.
 
-Elle décrit aussi une classe politique corrompue, relayée par des médias patronaux. Elle dénonce un scandale d'État chez Nestlé Waters. Elle lit le réarmement comme une austérité imposée aux plus modestes. Elle suit en parallèle le soulèvement serbe.
+Elle lit la classe politique comme corrompue et les médias comme patronaux. Le réarmement est vu comme une austérité imposée aux plus modestes, et l'extrême droite comme alliée de l'industrie fossile. Le PS est accusé de trahir la gauche, et l'État de dériver vers l'autoritarisme, avec la répression des révoltes et une loi narcotrafic d'exception.
 
-À mesure que la Period avance, l'accent se déplace vers la défense du collectif contre les sauveurs et les pouvoirs. Blast dénonce les dissolutions, la répression et les lois d'exception. Ses invités traitent du racisme, de la précarité étudiante, de l'IA, de l'UNRWA, de l'ultradroite et de Fanon.
+Face à ces pouvoirs, Blast défend le collectif contre les sauveurs providentiels. Elle reçoit des invités sur le racisme, la répression, la précarité étudiante, l'IA, l'UNRWA et le voile, dont elle relaie les analyses sans les faire siennes.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/1-2025-02-18/CLAUDE|2025-02-18 → 2025-03-01]] (14 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/2-2025-03-02/CLAUDE|2025-03-02 → 2025-03-14]] (16 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/CLAUDE|2025-03-15 → 2025-04-03]] (25 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/CLAUDE|2025-03-15 → 2025-03-28]] (17 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/4-2025-03-29/CLAUDE|2025-03-29 → 2025-04-10]] (14 Digests)
