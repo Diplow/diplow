@@ -172,6 +172,7 @@ kinds:
       informaticien: {définition: "Conçoit ou écrit des programmes et des systèmes informatiques.", statut: proposé, introduit_par: boniface/w1ilRGaZOiA.md}
       banquier: {définition: "Dirige une banque ou exerce dans la banque d'affaires.", statut: proposé, introduit_par: paduteam/Kmj7W1JPRYY.md}
       secrétaire: {définition: "Assiste une personnalité et tape ou met en forme ses textes.", statut: proposé, introduit_par: blast/xSXsQtFy2Dg.md}
+      banquier-central: {définition: "Dirige une banque centrale, à la date de la Publication.", statut: proposé, introduit_par: paduteam/D9frhw2Dwhk.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
