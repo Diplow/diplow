@@ -1,24 +1,24 @@
 ---
-title: "2025-09-02 → 2026-07-06"
+title: "2025-09-02 → 2026-07-13"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02
 owner: diplo
 preview: >-
-  La PaduTeam pousse une gauche de rupture, derrière Mélenchon pour 2027, à
-  rompre avec le PS et à assumer le conflit de classe. Elle lit l'impérialisme
-  américain, la guerre d'Iran, l'extrême droite et la crise en rapports de
-  force.
+  Sur dix mois, la PaduTeam pousse la gauche de rupture à se radicaliser et à
+  rompre avec le PS, défend LFI et Mélenchon pour 2027, et lit l'actualité, du
+  10 septembre à la guerre contre l'Iran, par la classe et l'impérialisme
+  américain.
 ---
-# 2025-09-02 → 2026-07-06
+# 2025-09-02 → 2026-07-13
 
-Sur ces dix mois, la PaduTeam tient une ligne constante : la gauche de rupture doit l'emporter sur celle d'accommodement et rompre avec le PS. Celui-ci est d'abord son adversaire principal, puis une force qui se reconstitue et trahit, enfin une impasse, au même titre que Glucksmann, Ruffin et le PCF. À l'automne ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/1-2025-09-02/CLAUDE|2025-09-02 → 2025-11-28]]), elle part du 10 septembre contre Macron, pousse la FI à radicaliser son programme, défend le mot communisme et porte le 100 % Sécu.
+Le fil qui tient toute la Period est la bataille interne à la gauche. La PaduTeam part du 10 septembre contre Macron, puis fait du PS l'adversaire principal. Elle pousse la FI à radicaliser son programme, défend le mot communisme et porte le 100 % Sécu. L'hiver est lu comme une recomposition avant 2027 : le PS se reconstitue et trahit, et la gauche de rupture doit l'emporter sur celle d'accommodement. LFI et Mélenchon sont à défendre.
 
-Mélenchon et LFI sont à défendre tout du long. L'hiver est lu comme une recomposition avant 2027, les municipales comme un succès de LFI, et la formation d'un pôle de gauche anti-Mélenchon visant 2027 y est dénoncée. Au printemps et en été ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/CLAUDE|2026-04-13 → 2026-07-06]]), la PaduTeam défend Mélenchon pour 2027 et une gauche qui assume le conflit de classe.
+Cette ligne se durcit au printemps. Les municipales sont lues comme un succès de LFI. Après le scrutin, la PaduTeam voit se former un pôle de gauche anti-Mélenchon qui vise 2027. Elle tient le PS, Glucksmann et le PCF pour des impasses et défend Mélenchon pour 2027, avec une gauche de rupture qui doit rompre avec le PS.
 
-Sur la scène internationale, elle voit l'impérialisme américain s'afficher, de Maduro au Groenland, et lit la guerre contre l'Iran comme une défense du pétrodollar. L'extrême droite et la crise sont analysées en rapports de force.
+Sur le plan international, la PaduTeam voit l'impérialisme américain s'afficher, de Maduro au Groenland, et lit la guerre contre l'Iran comme une défense du pétrodollar. Dans l'ensemble, elle lit l'actualité par la classe. Le dernier trimestre mise sur un affrontement entre la bourgeoisie, le RN et la gauche radicale.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/1-2025-09-02/CLAUDE|2025-09-02 → 2025-11-28]] (71 Digests)
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/2-2025-12-01/CLAUDE|2025-12-01 → 2026-02-15]] (59 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE|2026-02-16 → 2026-04-12]] (64 Digests)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/CLAUDE|2026-04-13 → 2026-07-06]] (65 Digests)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/CLAUDE|2026-04-13 → 2026-07-13]] (71 Digests)
