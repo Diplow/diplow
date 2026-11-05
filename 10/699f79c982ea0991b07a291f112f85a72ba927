@@ -1,0 +1,51 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_031b13f587eaf0 258
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/5-2025-05-13/5-de-la-nakba-a-gaza-le.md
+  s_22ea2ce2a8ae73::t_cb1fe549c2deb0 1-92
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/5-2025-05-13/CLAUDE.md
+  s_22ea2ce2a8ae73::t_3f6429dfbdb39f 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/6-2025-05-17/1-macron-bayrou-menteurs.md
+  s_22ea2ce2a8ae73::t_3093f25c3baac4 1-93
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/6-2025-05-17/2-retailleau-et-l-islam-l-extreme.md
+  s_22ea2ce2a8ae73::t_019e3d58a70f79 1-79
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/6-2025-05-17/3-le-mythe-du-beauf-ou-comment.md
+  s_22ea2ce2a8ae73::t_491f50fa8b2b3f 1-94
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/6-2025-05-17/4-neo-fascistes-comprendre-le-renouveau-de.md
+  s_22ea2ce2a8ae73::t_24965924bac8c8 1-107
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/6-2025-05-17/5-communautes-les-fans-sont-ils-des.md
+  s_22ea2ce2a8ae73::t_c16b19036a903b 1-82
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/6-2025-05-17/CLAUDE.md
+  s_22ea2ce2a8ae73::t_53789ed2fe4ea5 1-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/CLAUDE.md
+  s_22ea2ce2a8ae73::t_c1a125a096fecb 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/CLAUDE.md
+  s_22ea2ce2a8ae73::t_0091f31f58abbf 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_22ea2ce2a8ae73::t_ecc714e1eb3a83 2,7-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_22ea2ce2a8ae73::t_1d547d51e2600b 6-9,13,15-17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "10699f79c982ea0991b07a291f112f85a72ba927",
+  "prompts": {},
+  "sessions": {
+    "s_22ea2ce2a8ae73": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a96623671ee33cb97",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
