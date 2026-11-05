@@ -3,21 +3,21 @@ title: "2022-11-28 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28
 owner: diplo
 preview: >-
-  Boniface lit 2022-2026 par quelques grilles stables : un deux poids deux
-  mesures qui isole l'Occident du Sud global, une Ukraine où la négociation ne
-  doit pas être taboue, Gaza vue à travers l'alliance américano-israélienne,
-  une France qui défend ses intérêts sans suivisme.
+  Pascal Boniface lit de fin 2022 à fin 2026 un monde qui échappe à l'Occident
+  : deux poids deux mesures, Sud global qui monte, Occident affaibli. De
+  l'Ukraine à Gaza, il veut une négociation en Ukraine et une France qui
+  défend ses intérêts.
 ---
 # 2022-11-28 → 2026-10-30
 
-D'un bout à l'autre de la Chronicle, Pascal Boniface applique les mêmes grilles à l'actualité. La première est celle d'un monde qui échappe à l'Occident. Il y voit un clivage entre l'Occident et le reste du monde, la montée du Sud global et la perte du monopole occidental. Le deux poids deux mesures est le fil qui relie l'Ukraine à Gaza et qui isole l'Occident.
+Sur toute la Chronicle, Pascal Boniface applique la même grille à l'actualité : l'Occident a perdu le monopole de la lecture du monde. Il commence par la guerre en Ukraine, où il décrit un clivage entre l'Occident et le reste du monde. Il y voit un double standard, un Sud global qui s'affirme et la nécessité d'une autonomie stratégique européenne. Dès 2023, il estime qu'en Ukraine le temps ne joue pour personne et que la Chine en profite.
 
-Sur l'Ukraine, qui domine l'hiver et le printemps 2022-2023, Boniface estime que le temps ne joue pour personne et que la Chine en profite. Il plaide ensuite pour une négociation qui ne doit pas être taboue. Il ajoute une autonomie stratégique européenne et, pour la France, la défense de ses intérêts sans suivisme.
+Avec Gaza, à partir de l'automne 2023, le deux-poids-deux-mesures devient son angle central. Il soutient qu'il isole l'Occident face au Sud global et que l'offensive israélienne n'a pas d'horizon politique. La crise israélo-iranienne vient ensuite, lue par le même double standard et par le risque d'engrenage.
 
-À partir de l'automne 2023, Gaza prend la première place. Boniface lit la guerre à travers l'alliance américano-israélienne et juge que l'offensive n'a pas d'horizon politique. Ces thèses reviennent d'une période à l'autre sous des formulations proches. Cette cohérence est celle d'un analyste qui réapplique ses outils à chaque nouvel événement.
+D'un bout à l'autre, la conclusion pratique reste constante : une négociation en Ukraine plutôt qu'une guerre qui s'éternise, et une France qui défend ses propres intérêts, sans s'aligner sur un Occident qu'il juge affaibli.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/1-2022-11-28/CLAUDE|2022-11-28 → 2023-06-01]] (76 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/2-2023-06-02/CLAUDE|2023-06-02 → 2023-11-29]] (74 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/CLAUDE|2023-11-30 → 2026-10-30]] (70 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/CLAUDE|2023-11-30 → 2026-10-30]] (76 Digests)
