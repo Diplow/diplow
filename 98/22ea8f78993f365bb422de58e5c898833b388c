@@ -1,0 +1,41 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/4-2026-05-27/CLAUDE.md
+  s_6d041170ddd1c7::t_4607714a2a66c1 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/5-2026-06-01/1-melenchon-porte-plainte-contre-le-pen.md
+  s_6d041170ddd1c7::t_e58044315b3f93 1-81
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/5-2026-06-01/2-glucksmann-annonce-qu-il-va-peut.md
+  s_6d041170ddd1c7::t_de71d4d8f57049 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/5-2026-06-01/3-sardoche-prefere-le-naz-sme-au.md
+  s_6d041170ddd1c7::t_25a4fb3090b553 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/5-2026-06-01/4-poutou-trouve-melenchon-trop-nationaliste.md
+  s_6d041170ddd1c7::t_ec955ead5e439d 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/5-2026-06-01/5-elections-en-colombie-les-libertariens-reprennent.md
+  s_6d041170ddd1c7::t_e7aaed40e7497c 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/5-2026-06-01/6-le-1er-meeting-d-attal-tourne.md
+  s_6d041170ddd1c7::t_39449132c6a658 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/5-2026-06-01/CLAUDE.md
+  s_6d041170ddd1c7::t_8cb1c16dd37b5d 1-26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/6-2026-05-07/CLAUDE.md
+  s_6d041170ddd1c7::t_cccae7fd4e45d2 2,6-8,10,12,14-16,24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE.md
+  s_6d041170ddd1c7::t_15ec0b09181be8 2,6-9,11,13,15,17,26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_6d041170ddd1c7::t_7315e245f43955 2,6-9,11,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_6d041170ddd1c7::t_509efc58fb118a 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9822ea8f78993f365bb422de58e5c898833b388c",
+  "prompts": {},
+  "sessions": {
+    "s_6d041170ddd1c7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ae032954674ba0ceb",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
