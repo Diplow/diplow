@@ -1,19 +1,19 @@
 ---
-title: "2026-04-13 → 2026-08-03"
+title: "2026-04-13 → 2026-08-10"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13
 owner: diplo
 preview: >-
-  La PaduTeam défend Mélenchon pour 2027 et mise sur la rupture avec le
-  système plutôt que sur l'union de la gauche : PS, Glucksmann et PCF sont des
-  impasses, et la bourgeoisie devra choisir entre la FI et le RN.
+  La PaduTeam arme la gauche radicale derrière Mélenchon et LFI pour 2027 :
+  rupture avec le système plutôt qu'union avec le PS, lecture de classe de
+  chaque actualité, et une extrême droite que seule l'abondance fera reculer.
 ---
-# 2026-04-13 → 2026-08-03
+# 2026-04-13 → 2026-08-10
 
-D'avril à début août, la PaduTeam fait de 2027 un affrontement de classe et de Mélenchon le candidat de la gauche de rupture. Elle lit l'actualité en rapports de force. Elle oppose à la gestion de la pénurie une gauche qui assume la conflictualité et choisit son camp, et elle conteste les sondages d'avant-campagne ainsi que la primaire, qu'elle juge morte. Elle dénonce aussi le lawfare contre la gauche radicale.
+Pendant ces quatre mois, la PaduTeam tient une ligne : Mélenchon est le candidat de la gauche de rupture pour 2027, et la tâche est de l'armer politiquement. Elle commence par juger la primaire morte et contester les sondages d'avant-campagne ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/2-2026-05-07/CLAUDE|2026-05-07 → 2026-05-30]]). En juin, elle veut faire élire la FI puis la déborder, avec une gauche qui assume la conflictualité et choisit son camp ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/CLAUDE|2026-06-01 → 2026-06-20]]). De la fin juin à l'été, elle écarte l'union de la gauche : la bourgeoisie devra choisir entre Mélenchon et le RN.
 
-Ses cibles à gauche se précisent au fil de la période. Le virage du PS est jugé tactique. Glucksmann, Ruffin et les écologistes sont attaqués, puis Glucksmann, le PS et le PCF sont tenus pour des impasses. En juillet, elle refuse toute union avec le PCF et le PS. Sa stratégie est de faire élire la FI puis de la déborder.
+Le PS, Glucksmann, Ruffin, les écologistes et le PCF sont tour à tour traités en impasses. Le virage du PS est lu comme tactique, et la PaduTeam refuse toute union avec lui comme avec le PCF. Elle dénonce aussi le lawfare contre la gauche radicale. À ses yeux, l'enjeu de 2027 est un affrontement de classe, pas un arbitrage entre sensibilités de gauche.
 
-Face à la droite, elle lit dans la guerre d'Iran un recul américain et dans l'extrême droite un reflux. Elle avance que la bourgeoisie devra choisir entre Mélenchon et le RN, et que seule l'abondance fera reculer ce dernier. La fin de la période ajoute une lecture d'impasses pour le RN, le PS et l'UE.
+Ce même prisme de classe sert à lire l'actualité : la guerre d'Iran comme recul américain, l'extrême droite en reflux, la soumission de l'UE aux États-Unis, les rivalités du RN comme des détournements du conflit de classe. À la gestion de la pénurie, elle oppose une gauche de rupture et l'abondance, seule capable selon elle de faire reculer le RN.
 
 ## Contenu
 
@@ -21,4 +21,4 @@ Face à la droite, elle lit dans la guerre d'Iran un recul américain et dans l'
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/2-2026-05-07/CLAUDE|2026-05-07 → 2026-05-30]] (20 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/CLAUDE|2026-06-01 → 2026-06-20]] (18 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/CLAUDE|2026-06-22 → 2026-07-10]] (16 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/5-2026-07-11/CLAUDE|2026-07-11 → 2026-08-03]] (20 Digests)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/5-2026-07-11/CLAUDE|2026-07-11 → 2026-08-10]] (26 Digests)

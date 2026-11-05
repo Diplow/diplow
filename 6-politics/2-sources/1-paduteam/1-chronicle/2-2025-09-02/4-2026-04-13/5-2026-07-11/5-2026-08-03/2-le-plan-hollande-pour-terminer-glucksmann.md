@@ -1,6 +1,6 @@
 ---
 title: "LE PLAN HOLLANDE POUR TERMINER GLUCKSMANN !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/5-2026-07-11/4-2026-07-30
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/5-2026-07-11/5-2026-08-03
 owner: diplo
 preview: >-
   La PaduTeam soutient que la primaire du PS est un traquenard monté pour
