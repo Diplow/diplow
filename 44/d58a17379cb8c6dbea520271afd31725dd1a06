@@ -1,0 +1,52 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_7b1d9bf18841e7 176
+  s_70e2b8820e4c39::t_c5602d39250551 252
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/3-2026-06-10/5-marine-tondelier-abandonne-l-idee-de.md
+  s_1994e1c305febe::t_1f1890d13035f0 1-95
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/3-2026-06-10/6-1er-meeting-de-glucksmann-le-public.md
+  s_1994e1c305febe::t_0df8ad213ad892 1-101
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/3-2026-06-10/CLAUDE.md
+  s_1994e1c305febe::t_5bbf38a7aeb114 2,6-8,10,12,14-16,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/4-2026-06-17/1-sandrine-rousseau-denonce-la-violence-qu.md
+  s_1994e1c305febe::t_4f26d8c58c387f 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/4-2026-06-17/2-trump-humilie-par-l-iran-il.md
+  s_1994e1c305febe::t_482b6fe2b5fd60 1-100
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/4-2026-06-17/3-backseat-analyse-bardella-elu-serait-une.md
+  s_1994e1c305febe::t_7044cc3ad64e92 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/4-2026-06-17/4-emmanuel-todd-avoue-qu-il-s.md
+  s_1994e1c305febe::t_5a4ff7e7e49599 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/4-2026-06-17/CLAUDE.md
+  s_1994e1c305febe::t_db35626fbf0d24 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/CLAUDE.md
+  s_1994e1c305febe::t_8cd1e1314fd130 2,6-8,10,12,14,16,22-23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/CLAUDE.md
+  s_1994e1c305febe::t_0f133389ef5428 2,6-8,11,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_1994e1c305febe::t_e98676a3d94b8c 2,6-8,10,12,14,16,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_1994e1c305febe::t_21199799af675d 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "44d58a17379cb8c6dbea520271afd31725dd1a06",
+  "prompts": {},
+  "sessions": {
+    "s_1994e1c305febe": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a71b8164391104f27",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
