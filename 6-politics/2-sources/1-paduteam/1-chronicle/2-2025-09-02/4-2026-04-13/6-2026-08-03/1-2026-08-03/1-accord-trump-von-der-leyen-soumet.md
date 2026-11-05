@@ -1,6 +1,6 @@
 ---
 title: "ACCORD TRUMP  VON DER LEYEN soumet L'UE aux USA"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/5-2026-07-11/5-2026-08-03
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/1-2026-08-03
 owner: diplo
 preview: >-
   La PaduTeam soutient que l'accord à 15 % signé par von der Leyen est une
