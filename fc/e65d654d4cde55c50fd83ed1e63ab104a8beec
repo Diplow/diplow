@@ -1,0 +1,47 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/4-2026-07-07/CLAUDE.md
+  s_ee480904bb37cc::t_c8540afd4977e8 2,6-9,11,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/5-2026-07-11/1-essentiels-4-patrons-de-gauche-sociotraitres.md
+  s_ee480904bb37cc::t_d6ae7a543d8116 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/5-2026-07-11/2-roussel-2027-taper-sur-lfi-et.md
+  s_ee480904bb37cc::t_b4520ca9769cd7 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/5-2026-07-11/3-faure-humilie-glucksmann-coince-la-primaire.md
+  s_ee480904bb37cc::t_38fda869f797dd 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/5-2026-07-11/4-roussel-2027-enfin-un-communisme-de.md
+  s_ee480904bb37cc::t_f48d3d858f8d8e 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/5-2026-07-11/5-essentiels-5-agriculture-rac-sme-et.md
+  s_ee480904bb37cc::t_51166eb8327471 1-110
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/5-2026-07-11/CLAUDE.md
+  s_ee480904bb37cc::t_546f9df0e05916 1-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/6-2026-07-18/1-leo-commune-ses-pires-conseils-sante.md
+  s_ee480904bb37cc::t_db5147a348e3ae 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/6-2026-07-18/2-essentiels-6-marxisme-epistemologie-et-l.md
+  s_ee480904bb37cc::t_ea5d7fdaf4aa53 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/6-2026-07-18/3-essentiels-7-lucien-seve-psychologie-et.md
+  s_ee480904bb37cc::t_1b2aef1f339e3c 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/6-2026-07-18/CLAUDE.md
+  s_ee480904bb37cc::t_4546ec98cc37ed 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/CLAUDE.md
+  s_ee480904bb37cc::t_f3d223de670bef 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/CLAUDE.md
+  s_ee480904bb37cc::t_fdd7f3bd2b7e98 2,6-9,11,13,15-17,24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_ee480904bb37cc::t_02ca51888e62b2 2,6-9,11,13,15,22
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_ee480904bb37cc::t_42db315adfd41f 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fce65d654d4cde55c50fd83ed1e63ab104a8beec",
+  "prompts": {},
+  "sessions": {
+    "s_ee480904bb37cc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a9ef9bf3b705c06c1",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
