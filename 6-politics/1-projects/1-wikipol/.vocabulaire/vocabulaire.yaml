@@ -325,6 +325,7 @@ kinds:
       coup-de-force: {définition: "Tentative d'imposer ou de conserver le pouvoir par des moyens d'exception, comme une loi martiale.", statut: proposé, introduit_par: blast/1RD7TpXlcgA.md}
       mouvement-social: {définition: "Mobilisation collective durable, sans organisateur unique, qui conteste l'ordre politique ou social.", statut: proposé, introduit_par: blast/6wX46WLb85o.md}
       raid-humanitaire: {définition: "Course automobile étudiante en plusieurs étapes, qui reverse une partie de ses bénéfices à une association humanitaire.", statut: proposé, introduit_par: paduteam/gpsNkg378yI.md}
+      catastrophe-industrielle: {définition: "Accident industriel majeur, comme l'effondrement d'une usine, qui fait de nombreuses victimes.", statut: proposé, introduit_par: blast/sTed1yTvqW0.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
