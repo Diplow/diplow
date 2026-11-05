@@ -1,0 +1,49 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_6065ea81756563 180
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/3-2025-06-20/CLAUDE.md
+  s_b0de3e9b295631::t_2693922102fcc1 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/4-2025-06-23/1-l-ecologie-de-la-liberation-une.md
+  s_b0de3e9b295631::t_77139a0798e72a 1-108
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/4-2025-06-23/2-israel-iran-les-vraies-raisons-derriere.md
+  s_b0de3e9b295631::t_112345e663328d 1-79
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/4-2025-06-23/3-pourquoi-les-gens-ne-savent-pas.md
+  s_b0de3e9b295631::t_ad463f9cab04d2 1-96
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/4-2025-06-23/4-immigration-repression-le-debut-de-la.md
+  s_b0de3e9b295631::t_e758afe467b597 1-77
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/4-2025-06-23/5-trump-macron-pas-la-meme-methode.md
+  s_b0de3e9b295631::t_6c385d002e1974 1-74
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/4-2025-06-23/CLAUDE.md
+  s_b0de3e9b295631::t_60a58a4cd72f23 1-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/CLAUDE.md
+  s_b0de3e9b295631::t_ac947f09d0bc42 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/CLAUDE.md
+  s_b0de3e9b295631::t_2b3b83fecead2d 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_b0de3e9b295631::t_98203225ad1702 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_b0de3e9b295631::t_20486d984dba8d 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cf5132e0a74f0210664df2e9b5bce95a7b4ea25d",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_b0de3e9b295631": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a3a6e4cb412484fb3",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
