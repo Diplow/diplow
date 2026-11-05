@@ -1,6 +1,6 @@
 ---
 title: "IA : L’HUMANITÉ REMPLACÉE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/5-2025-05-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/2-2025-05-31
 owner: diplo
 preview: >-
   Blast soutient, par la science-fiction, que la peur d'être remplacé par les

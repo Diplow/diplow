@@ -347,6 +347,7 @@ kinds:
       encyclopédie: {définition: "Ouvrage de référence qui rassemble le savoir de nombreux domaines, imprimé ou en ligne.", statut: proposé, introduit_par: boniface/cE1htuHgQoQ.md}
       bande-dessinée: {définition: "Une bande dessinée ou un comics.", statut: proposé, introduit_par: blast/buz6BTSdR2Q.md}
       fable: {définition: "Court récit en vers qui met en scène des animaux pour en tirer une morale.", statut: proposé, introduit_par: paduteam/-Q-ulX_kTmU.md}
+      numéro-spécial: {définition: "Numéro hors série d'un journal ou d'un magazine consacré à un thème unique.", statut: proposé, introduit_par: blast/E9Y11DuoXuY.md}
     qualifiers:
       cité: {définition: "Lue, montrée ou diffusée dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

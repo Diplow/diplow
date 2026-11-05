@@ -1,6 +1,6 @@
 ---
 title: "COMMENT LES LOBBIES ONT DÉTRICOTÉ LA LOI FAST FASHION"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/5-2025-05-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/1-2025-05-28
 owner: diplo
 preview: >-
   Blast soutient que le Sénat a vidé de sa substance la loi anti-fast fashion
