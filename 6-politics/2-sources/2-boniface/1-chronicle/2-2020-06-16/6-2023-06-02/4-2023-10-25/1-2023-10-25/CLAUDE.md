@@ -1,22 +1,24 @@
 ---
-title: "2023-10-25 → 2026-10-14"
+title: "2023-10-25 → 2023-11-02"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25
 owner: diplo
 preview: >-
-  Entre entretiens et chroniques de livres, Boniface fait lire la
-  recomposition de l'ordre mondial : l'Afrique souveraine selon Jean-Yves
-  Ollivier, trois blocs et un Occident affaibli selon Alexander Stubb, parité
-  sino-américaine selon Sylvie Bermann.
+  Du 25 octobre au 2 novembre 2023, Boniface lit la guerre Hamas-Israël à
+  travers le deux-poids-deux-mesures occidental, qui peut nourrir un choc des
+  civilisations, juge le conflit du Kosovo gelé, et reçoit des invités sur
+  l'Afrique, l'histoire et l'économie.
 ---
-# 2023-10-25 → 2026-10-14
+# 2023-10-25 → 2023-11-02
 
-Sur ces quatre Digests, Boniface donne surtout la parole à des invités et à des auteurs pour décrire un ordre mondial qui se déplace. Reçu par lui, Jean-Yves Ollivier soutient que l'Afrique est passée de l'indépendance à la souveraineté : elle refuse les leçons et les menaces de l'Occident, que la France n'écoute plus, et se sent peu concernée par la guerre Hamas-Israël. Sylvie Bermann, ancienne ambassadrice à Pékin, juge pour sa part que le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Selon elle, la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Le fil de la Period est la guerre Hamas-Israël, que Boniface lit avec sa grille habituelle. Il rappelle que Huntington décrivait le choc des civilisations sans le souhaiter. Pour lui, le sentiment d'un deux-poids-deux-mesures occidental peut faire de ce choc une prophétie autoréalisatrice, mais rien n'est inéluctable. Il applique la même attention aux conflits qui menacent de se rouvrir : au Kosovo, il juge le conflit gelé, tout dialogue bloqué, et le risque d'une reprise réel.
 
-Deux chroniques de livres complètent ce fil. Dans Le Triangle du pouvoir, Alexander Stubb divise le monde en trois blocs (Occident, Orient, Sud global) : l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur un Sud qui décidera du nouvel ordre. Avec Sylvie Matelly, Boniface revient sur L'économie, tout simplement : selon elle, le désintérêt des Français pour l'économie pèse sur leurs choix politiques, et l'économie ne se comprend qu'adossée à l'histoire, à la géopolitique et au social.
+Le reste de la Period donne la parole à des invités et à des auteurs, dont les thèses leur restent. Pour Jean-Yves Ollivier, l'Afrique est passée de l'indépendance à la souveraineté et se sent peu concernée par la guerre Hamas-Israël. Pour Michel Taubmann, l'attaque du 7 octobre est un traumatisme sans équivalent depuis 1948, et la guerre à Gaza n'a pour l'instant aucun débouché politique. Boniface chronique aussi deux ouvrages. Selon Sylvie Matelly, l'économie ne se comprend qu'adossée à l'histoire, à la géopolitique et au social. Pour Pierre Grosser, le monde actuel est à la fois repolarisé et dépolarisé, et Boniface fait de son livre un ouvrage de référence.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/1-l-afrique-face-aux-conflits-hamas|L'Afrique face aux conflits Hamas-Israël et Russie-Ukraine - Entretiens géopo]] (2023-10-25)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/2-j-ai-lu-l-economie-tout|J'ai lu... "L'économie, tout simplement", ouvrage de Sylvie Matelly]] (2023-10-26)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/4-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/3-j-ai-lu-histoire-mondiale-des|J'ai lu... "Histoire mondiale des relations internationales", ouvrage de Pierre Grosser]] (2023-10-30)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/4-la-guerre-hamas-israel-et-le|La guerre Hamas-Israël et le choc des civilisations]] (2023-10-31)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/5-le-kosovo-expliquez-moi|Le Kosovo - Expliquez-moi...]] (2023-11-01)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/6-hamas-israel-quels-scenarios-apres-la|Hamas-Israël : quels scénarios après la guerre ? Avec Michel Taubmann - Entretiens géopo]] (2023-11-02)

@@ -3,18 +3,18 @@ title: "2020-06-16 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16
 owner: diplo
 preview: >-
-  Boniface lit six ans d'actualité par la perte du monopole occidental :
-  multilatéralisme contre unilatéralisme, rivalité sino-américaine, guerre
-  d'Ukraine sans vainqueur, deux poids deux mesures, essor du Sud global, et
-  une Europe qui doit gagner en autonomie.
+  Depuis 2020, Boniface lit l'actualité par la fin du monopole occidental :
+  multilatéralisme contre unilatéralisme, rivalité sino-américaine, Europe
+  autonome, guerre en Ukraine à clore par la négociation, deux poids deux
+  mesures et Sud global.
 ---
 # 2020-06-16 → 2026-10-30
 
-Dès 2020, Boniface applique à l'actualité des grilles qui ne varient guère : le multilatéralisme contre l'unilatéralisme américain, une Europe qui ne s'aligne ni sur Washington ni sur Pékin, la fermeté sans rupture, et le refus de sacrifier l'état de droit à la lutte antiterroriste. En 2021, la rivalité sino-américaine devient son fil directeur, car Biden ne la change guère. Il demande alors à la France d'assumer son passé en Libye et au Rwanda, tient la question palestinienne pour centrale et plaide pour une Europe autonome mais alliée des États-Unis. La fin de 2021 est marquée par l'échec des interventions extérieures, de Kaboul au Sahel.
+Pendant six ans, Boniface applique les mêmes grilles à l'actualité. Il défend le multilatéralisme contre l'unilatéralisme américain et lit le monde par la rivalité sino-américaine, que Biden ne change guère. Il veut une Europe autonome, alignée ni sur Washington ni sur Pékin, mais alliée des États-Unis. Il tient la question palestinienne pour centrale, demande à la France d'assumer son passé en Libye et au Rwanda, et refuse de sacrifier l'état de droit à la lutte antiterroriste. Kaboul et le Sahel lui servent à dire l'échec des interventions extérieures.
 
-Avec l'invasion de l'Ukraine, il tient la guerre pour une faute de Poutine, sans l'excuser, et plaide d'emblée pour un compromis. Dans [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/CLAUDE|2022-03-29 → 2022-11-23]], il la lit comme une impasse qui coûte à l'Europe comme à Poutine. Il juge les sanctions impuissantes et réclame une négociation. Cette lecture se prolonge jusqu'en 2026 : une guerre sans vainqueur, dont la Chine sort gagnante.
+L'Ukraine devient le cœur de son analyse à partir de 2022. Il tient l'invasion pour une faute de Poutine, sans l'excuser, puis voit dans la guerre une impasse qui coûte à l'Europe comme à Poutine. Il juge les sanctions impuissantes et plaide pour un compromis et une négociation. Plus tard, il estime que le temps ne joue pour personne.
 
-Le fil qui relie ces années est un monde qui échappe à l'Occident. Boniface y voit un clivage réel entre l'Occident et le reste du monde, qui ne suit plus, et dénonce un double standard, surtout entre l'Ukraine et Gaza. Dans [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/CLAUDE|2023-06-02 → 2026-10-30]], il met en avant l'essor du Sud global et des BRICS, et juge la diplomatie française en panne.
+Sa lecture s'élargit à un monde qui échappe à l'Occident : un double standard qui l'isole, notamment à propos de Gaza, et un clivage entre l'Occident et le reste du monde. Il y voit un Sud global qui s'aligne à sa guise, un multilatéralisme freiné par les grandes puissances et une autonomie stratégique européenne à construire.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Le fil qui relie ces années est un monde qui échappe à l'Occident. Boniface y
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/CLAUDE|2021-06-30 → 2022-03-25]] (84 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/CLAUDE|2022-03-29 → 2022-11-23]] (82 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/CLAUDE|2022-11-28 → 2023-06-01]] (76 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/CLAUDE|2023-06-02 → 2026-10-30]] (67 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/CLAUDE|2023-06-02 → 2026-10-30]] (73 Digests)
