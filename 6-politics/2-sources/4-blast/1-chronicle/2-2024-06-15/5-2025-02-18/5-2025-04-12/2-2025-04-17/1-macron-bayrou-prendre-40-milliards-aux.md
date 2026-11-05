@@ -1,6 +1,6 @@
 ---
 title: "MACRON/BAYROU : PRENDRE 40 MILLIARDS AUX PAUVRES POUR RÉGALER LES RICHES"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/4-2025-03-29/6-2025-04-17
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/2-2025-04-17
 owner: diplo
 preview: >-
   Blast soutient que les 40 milliards d'économies annoncés par le gouvernement

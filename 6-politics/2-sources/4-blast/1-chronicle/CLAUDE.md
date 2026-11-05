@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit les années Macron comme une dérive : un pouvoir qui sert les
-  puissants et fait payer les précaires, banalise le RN et lui ouvre la voie,
-  de la loi immigration à la dissolution, puis de Barnier à Bayrou jusqu'à la
-  condamnation de Marine Le Pen.
+  Blast lit la période comme une dérive : une macronie qui sert les puissants
+  et fait payer les précaires, un RN banalisé, une dissolution qui ouvre à
+  l'extrême droite la voie du pouvoir, un PS qui trahit la gauche et des
+  médias dominants qui font avancer l'extrême droite.
 ---
 # Chronicle
 
-Du 31 octobre 2023 à juin 2024, Blast décrit une macronie qui sert les puissants et fait payer les précaires. Le RN est banalisé et érigé en seul opposant. La loi immigration aligne le pouvoir sur l'extrême droite, et la dissolution est lue comme un calcul de Macron.
+Dans la première partie de la Chronicle, jusqu'à la mi-juin 2024 ([[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]]), Blast décrit une macronie qui sert les puissants et fait payer les précaires. Le RN y est banalisé et érigé en seul opposant, tandis que la loi immigration s'aligne sur l'extrême droite. La dissolution est lue comme un calcul de Macron.
 
-À partir de la mi-juin 2024, la même pente continue. Pour Blast, la dissolution a ouvert la voie du pouvoir à l'extrême droite. Macron a prolongé ce mouvement en imposant Barnier avec l'aval du RN. Le recul démocratique se poursuit sous Bayrou et sous Trump, jusqu'à la condamnation de Marine Le Pen.
+Dans la seconde ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-04-24]]), Blast tire les conséquences de cette dissolution : elle a ouvert à l'extrême droite la voie du pouvoir. Macron nie le vote et gouverne avec l'aval du RN. Le PS trahit la gauche, et les médias dominants font avancer l'extrême droite. Le fil reste le même d'un bout à l'autre : une démocratie qui se vide de l'intérieur au profit des puissants et de l'extrême droite.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-04-19]] (349 Digests)
+2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-04-24]] (355 Digests)

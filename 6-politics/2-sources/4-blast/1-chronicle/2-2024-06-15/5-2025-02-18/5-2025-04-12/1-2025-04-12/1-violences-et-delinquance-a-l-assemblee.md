@@ -1,6 +1,6 @@
 ---
 title: "VIOLENCES ET DÉLINQUANCE : À L'ASSEMBLÉE, LES POLITIQUES EXIGENT LEUR IMPUNITÉ"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/4-2025-03-29/5-2025-04-12
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/1-2025-04-12
 owner: diplo
 preview: >-
   Blast soutient que les macronistes méprisent le Parlement (Dati, Kohler) et
