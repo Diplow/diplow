@@ -3,23 +3,23 @@ title: "2024-03-04 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/3-2024-03-04
 owner: diplo
 preview: >-
-  Boniface soutient que débattre de l'engagement en Ukraine n'est pas faire le
-  jeu de Poutine, voit s'éroder le soutien inconditionnel à Israël aux
-  États-Unis et lit l'OCS comme un multi-alignement plutôt qu'une OTAN
-  asiatique. Il reçoit des invités sur la Chine, les Kurdes, Gaza, Lula et le
-  Japon.
+  Boniface soutient que débattre de l'Ukraine n'est pas faire le jeu de
+  Poutine et que le droit de la guerre contraint peu les grandes puissances.
+  Il lit Gaza comme un deux poids deux mesures, et voit dans l'OCS un
+  multi-alignement plutôt qu'une OTAN asiatique.
 ---
 # 2024-03-04 → 2026-10-30
 
-En mars 2024, Boniface soutient que débattre de l'engagement en Ukraine n'est pas faire le jeu de Poutine, et qu'envoyer des soldats français risque l'engrenage vers une guerre directe avec la Russie. Il rappelle aussi que le droit de la guerre contraint peu les grandes puissances.
+Sur près de deux ans et demi, Boniface applique quelques grilles stables à l'actualité. Sur l'Ukraine, il soutient que débattre de l'engagement n'est pas faire le jeu de Poutine, et que l'envoi de soldats français risque l'engrenage vers une guerre directe avec la Russie. Il rappelle que le droit de la guerre contraint peu les grandes puissances, et il reprend la thèse de Walt sur le divorce entre experts et opinion. Sur Gaza, il décrit l'érosion du soutien inconditionnel à Israël, un deux poids deux mesures et une couverture médiatique à sens unique.
 
-Une partie de ses analyses porte sur Israël et la Palestine. Il voit le soutien inconditionnel à Israël s'éroder aux États-Unis. Il soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens et que la France se contente de protestations face à l'impunité des colons. Il juge passionnant un livre sur le lobby pro-israélien.
+La même lecture se prolonge vers la fin de la Period. Boniface soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens et que la France se contente de protestations face à l'impunité des colons. Il juge passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins. Sur l'ordre mondial, il soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement. De la même veine, il retient d'Alexander Stubb un monde à trois blocs où l'Occident doit montrer l'exemple.
 
-Le reste décrit un monde qui ne se range plus derrière un seul bloc. Boniface chronique Stubb sur un monde en trois blocs où le Sud global décidera, et soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement. Ses invités prolongent ces lectures : Sylvie Bermann sur la parité sino-américaine et les difficultés de l'Europe face à la Chine, Didier Billion, pour qui l'avenir des Kurdes passe par l'autonomie, et d'autres sur Gaza, Lula et le Japon.
+Boniface reçoit aussi de nombreux invités, dont les thèses restent les leurs : Hakim El Karoui sur les musulmans de France, Sylvie Bermann sur la parité entre États-Unis et Chine, Didier Billion, pour qui l'avenir des Kurdes passe par l'autonomie, puis des invités sur Gaza, Lula et le Japon.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/3-2024-03-04/1-2024-03-04/CLAUDE|2024-03-04 → 2024-03-14]] (6 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/3-2024-03-04/2-2024-03-15/CLAUDE|2024-03-15 → 2026-10-14]] (3 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/3-2024-03-04/3-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/3-2024-03-04/4-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/3-2024-03-04/2-2024-03-15/CLAUDE|2024-03-15 → 2024-03-25]] (6 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/3-2024-03-04/3-2024-03-27/CLAUDE|2024-03-27 → 2026-10-14]] (3 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/3-2024-03-04/4-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/3-2024-03-04/5-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
