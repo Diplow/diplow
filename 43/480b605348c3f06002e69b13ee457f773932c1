@@ -1,0 +1,57 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_d503b902afcff0 260
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/4-2025-06-08/CLAUDE.md
+  s_b0de3e9b295631::t_d518265bb199e8 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/5-2025-06-12/1-flottille-resister-face-a-la-decheance.md
+  s_b0de3e9b295631::t_3d6363f5b567fe 3
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/5-2025-06-12/2-bateau-pour-gaza-macron-et-le.md
+  s_b0de3e9b295631::t_a1dc817f667d15 3
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/5-2025-06-12/3-dissolution-comment-macron-a-mis-le.md
+  s_b0de3e9b295631::t_8aae9b5f386873 1-91
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/5-2025-06-12/4-l-etat-francais-doit-agir-immediatement.md
+  s_b0de3e9b295631::t_7bc88146c1566d 1-52
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/5-2025-06-12/5-faut-il-en-finir-avec-la.md
+  s_b0de3e9b295631::t_5ea6941cf2f97e 1-100
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/5-2025-06-12/CLAUDE.md
+  s_b0de3e9b295631::t_dd072f00c7bb82 1-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/6-2025-06-15/1-independance-du-service-public-le-debut.md
+  s_b0de3e9b295631::t_70e70ab93ae167 1-90
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/6-2025-06-15/2-un-trump-pourrait-il-etre-elu.md
+  s_b0de3e9b295631::t_9ef40c9882286b 1-103
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/6-2025-06-15/3-comment-l-extreme-droite-recupere-les.md
+  s_b0de3e9b295631::t_948afe6c587b53 1-96
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/6-2025-06-15/CLAUDE.md
+  s_b0de3e9b295631::t_e83feb2275b310 1-21
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/CLAUDE.md
+  s_b0de3e9b295631::t_1962ff1dd65e44 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/CLAUDE.md
+  s_b0de3e9b295631::t_75cbedab754042 2,7-8,10,12,14,16,23
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_b0de3e9b295631::t_cb7508e06c8143 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_b0de3e9b295631::t_64edf3ba63b533 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "43480b605348c3f06002e69b13ee457f773932c1",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_b0de3e9b295631": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a3a6e4cb412484fb3",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
