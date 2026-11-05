@@ -3,16 +3,18 @@ title: "2020-06-16 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16
 owner: diplo
 preview: >-
-  Pascal Boniface lit six ans d'actualité par quelques grilles : le
-  multilatéralisme contre l'unilatéralisme, la rivalité sino-américaine, le
-  deux-poids-deux-mesures de l'Occident, l'essor du Sud global. Il plaide pour
-  une Europe autonome et une France alliée mais non alignée.
+  Boniface lit six ans d'actualité par une même grille : un Occident qui perd
+  son monopole, applique un deux-poids-deux-mesures et s'isole, face à une
+  Chine, des BRICS et un Sud global qui gagnent du terrain. Il plaide pour la
+  négociation et une Europe autonome.
 ---
 # 2020-06-16 → 2026-10-30
 
-Pascal Boniface applique d'un bout à l'autre de la Chronicle les mêmes grilles de lecture. Il défend le multilatéralisme contre l'unilatéralisme américain. Il lit la rivalité sino-américaine comme un fait structurant que Biden ne change guère. Il voit un Occident qui perd le monopole sur la marche du monde. Il demande une Europe autonome mais alliée des États-Unis, et une France alliée mais non alignée, qui assume son passé en Libye et au Rwanda. Il garde la fermeté sans rupture et refuse de sacrifier l'état de droit à la lutte antiterroriste ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/1-2020-06-16/CLAUDE|2020-06-16 → 2020-12-14]]). La question palestinienne reste pour lui centrale ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/2-2020-12-16/CLAUDE|2020-12-16 → 2021-06-28]]).
+D'une année à l'autre, Boniface applique à l'actualité les mêmes outils d'analyse. Il défend le multilatéralisme contre l'unilatéralisme américain et lit le monde par la rivalité sino-américaine, que Biden ne change guère. L'Europe qu'il appelle de ses vœux n'est alignée ni sur Washington ni sur Pékin : autonome, mais alliée des États-Unis. Il demande à la France d'assumer son passé, en Libye comme au Rwanda, tient la question palestinienne pour centrale et refuse de sacrifier l'état de droit à la lutte antiterroriste.
 
-Le centre de gravité se déplace avec la guerre en Ukraine. Après l'échec des interventions extérieures, de Kaboul au Sahel, Boniface tient l'invasion pour une faute de Poutine, sans l'excuser. Il y voit ensuite une impasse qui coûte à l'Europe comme à la Russie, juge les sanctions impuissantes et plaide pour un compromis et une négociation ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/CLAUDE|2021-06-30 → 2022-03-25]], [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/CLAUDE|2022-03-29 → 2022-11-23]]). Il relève aussi un clivage entre l'Occident et le reste du monde, qui ne le suit plus. Cette lecture s'élargit ensuite au double standard entre l'Ukraine et Gaza et à l'essor du Sud global ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/CLAUDE|2023-06-02 → 2026-10-30]]).
+Il juge aussi que les interventions extérieures échouent, de Kaboul au Sahel. Sa position face aux puissances tient en une fermeté sans rupture. Dans cette lecture, la guerre en Ukraine occupe une place à part. Il tient l'invasion pour une faute de Poutine, sans l'excuser. Il la décrit comme une impasse qui coûte à l'Europe comme à Poutine, juge les sanctions impuissantes et veut une négociation, un compromis.
+
+À partir de 2022-2023, ces thèses se rejoignent dans un constat qui s'impose peu à peu : un vrai clivage sépare l'Occident du reste du monde, qui ne le suit plus. Le double standard devient la clé de lecture de l'Ukraine comme de Gaza. Boniface voit un Occident qui perd son monopole et s'isole, pendant que la Chine, les BRICS et l'OCS gagnent du terrain.
 
 ## Contenu
 
@@ -21,4 +23,4 @@ Le centre de gravité se déplace avec la guerre en Ukraine. Après l'échec des
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/3-2021-06-30/CLAUDE|2021-06-30 → 2022-03-25]] (84 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/4-2022-03-29/CLAUDE|2022-03-29 → 2022-11-23]] (82 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/CLAUDE|2022-11-28 → 2023-06-01]] (76 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/CLAUDE|2023-06-02 → 2026-10-30]] (90 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/CLAUDE|2023-06-02 → 2026-10-30]] (96 Digests)
