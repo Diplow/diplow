@@ -1,6 +1,6 @@
 ---
 title: "ROUSSEL 2027 : TAPER SUR LFI ET RASSURER LA POLICE !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/4-2026-07-07
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/5-2026-07-11
 owner: diplo
 preview: >-
   La PaduTeam soutient que le congrès du PCF, verrouillé par la direction

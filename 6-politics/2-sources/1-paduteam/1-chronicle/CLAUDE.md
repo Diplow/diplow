@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle
 owner: diplo
 preview: >-
-  De 2019 à 2026, la PaduTeam ramène discours, affaires et actualité à leurs
-  bases de classe, veut une gauche de rupture réenracinée dans les classes
-  populaires, la pousse à rompre avec le PS, défend Mélenchon et LFI pour 2027
-  et répète que seule l'organisation dépasse la droite.
+  La PaduTeam ramène discours, affaires et actualité à la classe et à
+  l'impérialisme américain. Elle veut une gauche de rupture réenracinée dans
+  les classes populaires, mise sur Mélenchon et LFI contre le PS pour 2027 et
+  oppose l'abondance à la pénurie.
 ---
 # Chronicle
 
-Sur toute la Chronicle, la PaduTeam applique la même grille : discours, affaires et parcours politiques sont ramenés à leurs bases de classe. De là vient sa ligne, une gauche de rupture réenracinée dans les classes populaires et qui rompt avec le PS. Elle mise sur Mélenchon et sur LFI pour 2027, et elle répète que seule l'organisation permet de dépasser la droite.
+Sur toute la Chronicle, la PaduTeam applique la même méthode : ramener discours, affaires et parcours à leurs bases de classe. De 2019 à 2025 ([[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2025-09-01]]), elle défend une gauche de rupture réenracinée dans les classes populaires. Elle mise sur Mélenchon contre le PS pour 2027 et répète que seule l'organisation dépasse la droite.
 
-Cette ligne se précise avec le temps. Le premier ensemble, [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|de 2019 à septembre 2025]], pose les bases : lecture par la classe, choix de Mélenchon contre le PS, primat de l'organisation. Le second, [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE|de septembre 2025 à juillet 2026]], garde ce cadre, appelle la gauche de rupture à se radicaliser et à rompre avec le PS, et défend LFI et Mélenchon pour 2027. Il lit aussi l'actualité par la classe et l'impérialisme américain, du 10 septembre à la guerre contre l'Iran.
+Dans la dernière période ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE|2025-09-02 → 2026-07-21]]), la ligne se précise autour de l'échéance de 2027. La PaduTeam pousse la gauche de rupture à rompre avec le PS et à se ranger derrière Mélenchon et LFI. Elle lit l'actualité par la classe et par l'impérialisme américain, et oppose l'abondance à la pénurie.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2025-09-01]] (260 Digests)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE|2025-09-02 → 2026-07-13]] (265 Digests)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE|2025-09-02 → 2026-07-21]] (271 Digests)
