@@ -3,18 +3,17 @@ title: "Chronicle"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle
 owner: diplo
 preview: >-
-  Depuis 2019, la PaduTeam ramène discours, affaires et parcours à leurs bases
-  de classe, veut une gauche de rupture réenracinée dans les classes
-  populaires et répète que seule l'organisation dépasse la droite. Elle fait
-  de Mélenchon et de la FI le pivot de 2027, contre le PS.
+  Depuis 2019, la PaduTeam ramène l'actualité à ses bases de classe et pousse
+  une gauche de rupture, derrière Mélenchon pour 2027, à rompre avec le PS :
+  pour elle, seule l'organisation dépasse la droite.
 ---
 # Chronicle
 
-De 2019 à 2025, la PaduTeam ramène discours, affaires et parcours à leurs bases de classe. Elle réclame une gauche de rupture réenracinée dans les classes populaires et répète que seule l'organisation permet de dépasser la droite. Dans cette première longue période, elle mise sur Mélenchon contre le PS en vue de 2027 ([[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2025-09-01]]).
+De 2019 à septembre 2025, la PaduTeam ramène discours, affaires et parcours à leurs bases de classe. Elle veut une gauche de rupture réenracinée dans les classes populaires, mise sur Mélenchon contre le PS pour 2027, et répète que seule l'organisation dépasse la droite. Cette ligne, posée dans [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2025-09-01]], sert de fil à toute la Chronicle.
 
-Le fil se resserre à partir de septembre 2025. Le PS devient l'adversaire, et Mélenchon et la FI le pivot de la gauche de rupture : il faut les faire élire en 2027 puis les déborder. La PaduTeam décrit un néolibéralisme qui gère la pénurie, et c'est contre lui qu'elle pose cette stratégie ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE|2025-09-02 → 2026-06-29]]).
+Dans [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE|2025-09-02 → 2026-07-06]], la même ligne se durcit : la PaduTeam pousse la gauche de rupture, toujours derrière Mélenchon pour 2027, à rompre avec le PS et à assumer le conflit de classe. Elle étend sa lecture en rapports de force à l'impérialisme américain, à la guerre d'Iran, à l'extrême droite et à la crise.
 
 ## Contenu
 
 1. [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-09-12/CLAUDE|2019-09-12 → 2025-09-01]] (260 Digests)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE|2025-09-02 → 2026-06-29]] (253 Digests)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE|2025-09-02 → 2026-07-06]] (259 Digests)

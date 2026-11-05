@@ -1,6 +1,6 @@
 ---
 title: "BARDELLA LE JET-SETER TOTALEMENT HORS SOL !!!!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/5-2026-06-22
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/1-2026-06-22
 owner: diplo
 preview: >-
   La PaduTeam soutient que Bardella, au Grand Prix de Monaco puis face à BFM

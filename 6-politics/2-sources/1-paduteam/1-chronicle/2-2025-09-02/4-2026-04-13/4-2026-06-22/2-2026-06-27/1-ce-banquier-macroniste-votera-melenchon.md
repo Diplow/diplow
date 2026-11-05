@@ -1,6 +1,6 @@
 ---
 title: "CE BANQUIER MACRONISTE VOTERA MÉLENCHON !?"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/5-2026-06-22
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/2-2026-06-27
 owner: diplo
 preview: >-
   Un ex-électeur Sarkozy puis Macron, banquier d'affaires passé par New York,
