@@ -1,0 +1,39 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/4-2025-05-10/4-pourquoi-j-ai-quitte-l-armee.md
+  s_a1df7988695dde::t_b304d5791ae306 1-72
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/4-2025-05-10/CLAUDE.md
+  s_a1df7988695dde::t_13fd59f359184b 2,6-9,11,13,15,22
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/5-2025-05-13/1-palestine-antifascisme-retailleau-veut-enterrer-toute.md
+  s_a1df7988695dde::t_7948717e2e8328 1-104
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/5-2025-05-13/2-fin-du-neoliberalisme-vers-un-nouveau.md
+  s_a1df7988695dde::t_24fc93c126183d 1-91
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/5-2025-05-13/3-netanyahu-trump-macron-comment-les-technofascistes.md
+  s_a1df7988695dde::t_91867aa823159d 1-87
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/5-2025-05-13/4-macron-bayrou-etc-s-essuient-les.md
+  s_a1df7988695dde::t_a89c6b16639f06 1-80
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/5-2025-05-13/CLAUDE.md
+  s_a1df7988695dde::t_4f3b693268ea6c 1-24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/CLAUDE.md
+  s_a1df7988695dde::t_d08df15b173a85 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/CLAUDE.md
+  s_a1df7988695dde::t_0fc156c51daaba 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_a1df7988695dde::t_a620ae7d5afd3c 2,7-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_a1df7988695dde::t_094a471999f4b1 6-8,12,14,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "230e3988de7d39f330eab52d1e40dacd2d3217f9",
+  "prompts": {},
+  "sessions": {
+    "s_a1df7988695dde": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ac675344b56ab731e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
