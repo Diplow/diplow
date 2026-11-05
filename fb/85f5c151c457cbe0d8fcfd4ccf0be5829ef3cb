@@ -1,0 +1,41 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/4-2026-06-17/CLAUDE.md
+  s_c61c9e9d0fe503::t_28938aeddca7ea 6-9,13,15,17
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/5-2026-06-22/1-bardella-le-jet-seter-totalement-hors.md
+  s_c61c9e9d0fe503::t_25371843444832 1-88
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/5-2026-06-22/2-ruffin-vire-a-droite-il-defend.md
+  s_c61c9e9d0fe503::t_deb04ba9ecfef7 1-96
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/5-2026-06-22/3-revolution-permanente-fait-la-lecon-aux.md
+  s_c61c9e9d0fe503::t_d6845f1b18faae 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/5-2026-06-22/4-yann-barthes-catastrophique-sur-la-canicule.md
+  s_c61c9e9d0fe503::t_e460b04b4178fc 1-77
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/5-2026-06-22/5-ce-banquier-macroniste-votera-melenchon.md
+  s_c61c9e9d0fe503::t_3fc1b6046bc0b5 1-80
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/5-2026-06-22/6-canicule-comment-la-droite-a-tue.md
+  s_c61c9e9d0fe503::t_b580c61719027a 1-83
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/5-2026-06-22/CLAUDE.md
+  s_c61c9e9d0fe503::t_1cb93f752015f6 1-26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/3-2026-06-01/CLAUDE.md
+  s_c61c9e9d0fe503::t_2d1f7d1bc113a4 2,6-8,10,12,14,16,24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/CLAUDE.md
+  s_c61c9e9d0fe503::t_5fe6f1294f5105 2,6-8,10,12,14,16,22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_c61c9e9d0fe503::t_d1f30ea114cde6 2,6-8,10,12,14,16,23
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_c61c9e9d0fe503::t_9714e7569714d7 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fb85f5c151c457cbe0d8fcfd4ccf0be5829ef3cb",
+  "prompts": {},
+  "sessions": {
+    "s_c61c9e9d0fe503": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a418c7923adda7249",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
