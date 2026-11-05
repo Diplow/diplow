@@ -1,20 +1,20 @@
 ---
-title: "2024-06-15 → 2025-06-06"
+title: "2024-06-15 → 2025-06-12"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15
 owner: diplo
 preview: >-
   Blast soutient que la dissolution a ouvert la voie du pouvoir à l'extrême
-  droite, que Macron gouverne contre le résultat des urnes avec l'aval du RN,
-  que le PS trahit la gauche et que médias de milliardaires et pouvoir sapent
-  la démocratie, de Barnier à Trump.
+  droite, que Macron gouverne contre les urnes avec l'aval du RN, que le PS
+  trahit la gauche et que médias dominants et classe politique la banalisent.
+  Seul le rapport de force fait reculer.
 ---
-# 2024-06-15 → 2025-06-06
+# 2024-06-15 → 2025-06-12
 
-Pendant ces douze mois, Blast déroule un même fil : la dissolution a ouvert la voie du pouvoir à l'extrême droite, et Macron, battu aux législatives, nie le résultat des urnes. Le Nouveau Front populaire est présenté à l'été 2024 comme la seule alternative sérieuse. Blast voit ensuite Macron garder la main en imposant Barnier avec l'aval du RN, puis un budget Barnier tenu par le RN, et conclut que la crise démocratique ne se referme que par sa démission ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/2-2024-08-14/CLAUDE|2024-08-14 → 2024-10-23]]).
+Sur toute la Period, Blast déroule un même récit : la dissolution a ouvert à l'extrême droite la voie du pouvoir, et Macron lui a déroulé le tapis. Après le vote, il nie le résultat des urnes. Le Nouveau Front populaire reste pour Blast la seule alternative sérieuse. Il impose Barnier avec l'aval du RN, de sorte que l'extrême droite gouverne par procuration, et le budget Barnier est tenu par le RN. Blast en conclut que la crise démocratique née de la dissolution ne se referme que par la démission de Macron. À mesure que les mois passent, la même lecture s'applique au pouvoir qui épargne les plus riches, malmène l'état de droit et protège des intérêts privés.
 
-Autour de ce fil, Blast décrit une extrême droite qui avance sur le terrain laissé par le néolibéralisme et les médias dominants. Il la suit de Trump et Musk à Retailleau et au RN, et voit un fascisme se former autour de Trump. Il dénonce les médias de milliardaires, une droite qui banalise le RN et un PS complice du budget Bayrou, qui trahit la gauche. À gauche, il refuse la primaire.
+Le deuxième fil est celui des médias et du terrain idéologique. Blast dénonce les médias de milliardaires, puis des médias patronaux, défaillants ou acquis à l'extrême droite, qui la banalisent. Il voit l'extrême droite avancer sur le terrain laissé par le néolibéralisme, de Trump et Musk à Retailleau et au RN, et lit autour de Trump un fascisme. À cela s'ajoute une droite qui banalise le RN. Les invités sur Gaza et le Liban, au début de la Period, élargissent le regard au-delà de la France.
 
-Le ton se déplace au fil des mois. L'été est celui du combat électoral. L'hiver 2024-2025 est lu comme un recul démocratique : pouvoir impuni, médias défaillants ou acquis à l'extrême droite ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE|2024-12-18 → 2025-02-17]]). Au printemps, Blast défend la justice contre la droite et l'extrême droite, et dénonce un pouvoir, de Macron à Trump, qui s'en prend à l'état de droit. Il dénonce aussi des milliardaires qui achètent la démocratie et une confusion entre intérêt général et intérêts privés. Il lit le réarmement comme une austérité, défend le collectif et plaide pour un cannabis légalisé. Il reçoit aussi des invités sur Gaza et le Liban.
+Le troisième fil concerne la gauche. Blast accuse le PS de complicité dans le budget Bayrou, puis de trahir la gauche. Il lit le réarmement comme une austérité, défend la justice face à la droite et à l'extrême droite, défend aussi le collectif et un cannabis légalisé. Il refuse la primaire : seul le rapport de force fait reculer.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Le ton se déplace au fil des mois. L'été est celui du combat électoral. L'hi
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/3-2024-10-24/CLAUDE|2024-10-24 → 2024-12-17]] (71 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/4-2024-12-18/CLAUDE|2024-12-18 → 2025-02-17]] (68 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/CLAUDE|2025-02-18 → 2025-04-11]] (64 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/CLAUDE|2025-04-12 → 2025-06-06]] (62 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/CLAUDE|2025-04-12 → 2025-06-12]] (68 Digests)

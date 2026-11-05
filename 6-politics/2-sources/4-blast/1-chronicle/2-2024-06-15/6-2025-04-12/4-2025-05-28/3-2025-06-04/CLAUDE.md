@@ -1,23 +1,22 @@
 ---
-title: "2025-06-04 → 2025-06-06"
+title: "2025-06-04 → 2025-06-07"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/3-2025-06-04
 owner: diplo
 preview: >-
-  Blast soutient que le travail abîme et tue en France sans que les médias en
-  parlent, que Le Monde participe lui aussi au brouillage politique en
-  normalisant l'extrême droite, et que la montée de l'extrême droite roumaine
-  tient au déclassement.
+  Blast décrit des violences systémiques que l'on invisibilise : le travail
+  qui abîme et tue, des médias qui brouillent le débat et banalisent l'extrême
+  droite, le déclassement qui nourrit l'extrême droite roumaine, un
+  masculinisme banalisé. Seul le rapport de force fait reculer.
 ---
-# 2025-06-04 → 2025-06-06
+# 2025-06-04 → 2025-06-07
 
-Sur ces trois jours, Blast revient sur ce qu'elle voit comme des angles morts du débat public. Le travail détruit et tue en France, à raison de deux morts par jour, et les médias l'invisibilisent ; seul le rapport de force, par la grève ou la lutte des sans-papiers, fait reculer le patronat, quand les concertations échouent ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/3-2025-06-04/1-quand-le-travail-detruit-et-tue|QUAND LE TRAVAIL DÉTRUIT ET TUE]]).
+Pendant ces quatre jours, Blast met au jour des mécanismes que le discours dominant rend invisibles. Le travail abîme et tue en France, à raison de deux morts par jour, et les médias n'en parlent guère. Selon la rédaction, les concertations échouent et seul le rapport de force, par la grève ou la lutte des sans-papiers, fait reculer le patronat. Le même regard se tourne vers la presse : Le Monde, qui dénonce propagande et fake news, formate lui aussi l'opinion en amalgamant LFI et RN sous « les extrêmes » et en épargnant Retailleau, ce qui normalise l'extrême droite.
 
-Le même regard critique vise la presse elle-même. Blast soutient que Le Monde, qui dénonce propagande et fake news dans son hors-série sur la fabrique de l'opinion, formate lui aussi l'opinion : il amalgame LFI et RN sous « les extrêmes » et épargne Retailleau, ce qui normalise l'extrême droite.
-
-La Period s'achève sur la Roumanie. Malgré l'ingérence russe avérée de 2024, Blast explique la montée de l'extrême droite par le sentiment de déclassement d'un des pays les plus pauvres de l'UE, et soutient que la menace russe ne doit pas masquer la responsabilité des gouvernements et de l'Union.
+Blast donne ensuite aux montées de l'extrême droite et de la haine des femmes des causes structurelles plutôt que conjoncturelles. En Roumanie, malgré l'ingérence russe avérée de 2024, l'extrême droite progresse sur le sentiment de déclassement d'un des pays les plus pauvres de l'UE, et la menace russe ne doit pas masquer la responsabilité des gouvernements et de l'Union. Le masculinisme est lui aussi systémique : des incels nourris par les algorithmes à l'affaire Cantat, où presse et public ont pris le parti du meurtrier, la haine des femmes est banalisée, même si on commence à ne plus pardonner.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/3-2025-06-04/1-quand-le-travail-detruit-et-tue|QUAND LE TRAVAIL DÉTRUIT ET TUE]] (2025-06-04)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/3-2025-06-04/2-le-monde-contribue-aussi-au-brouillage|LE MONDE CONTRIBUE AUSSI AU BROUILLAGE POLITIQUE]] (2025-06-05)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/3-2025-06-04/3-en-roumanie-l-extreme-droite-se|EN ROUMANIE, L'EXTRÊME DROITE SE FAIT CANCEL]] (2025-06-06)
+4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/3-2025-06-04/4-supremacistes-masculinistes-frustres-quand-les-hommes|SUPRÉMACISTES, MASCULINISTES, FRUSTRÉS : QUAND LES HOMMES TUENT]] (2025-06-07)
