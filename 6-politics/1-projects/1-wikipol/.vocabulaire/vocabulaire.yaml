@@ -173,6 +173,7 @@ kinds:
       banquier: {définition: "Dirige une banque ou exerce dans la banque d'affaires.", statut: proposé, introduit_par: paduteam/Kmj7W1JPRYY.md}
       secrétaire: {définition: "Assiste une personnalité et tape ou met en forme ses textes.", statut: proposé, introduit_par: blast/xSXsQtFy2Dg.md}
       banquier-central: {définition: "Dirige une banque centrale, à la date de la Publication.", statut: proposé, introduit_par: paduteam/D9frhw2Dwhk.md}
+      opposant: {définition: "S'oppose politiquement à un pouvoir en place.", statut: proposé, introduit_par: blast/FsnJRNFB1wg.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -248,6 +249,7 @@ kinds:
       groupe-parlementaire: {définition: "Groupe politique constitué au sein d'un parlement, comme au Parlement européen.", statut: proposé, introduit_par: paduteam/V-HmXl_Jrz4.md}
       fonds-public: {définition: "Dispositif de financement public qui distribue des subventions à des projets ou à des associations.", statut: proposé, introduit_par: boniface/f_R0_C1GahM.md}
       banque-de-développement: {définition: "Banque multilatérale qui finance le développement de ses pays membres.", statut: proposé, introduit_par: boniface/ByjoMZ7Kjlo.md}
+      groupe-de-médiation: {définition: "Groupe d'États chargé de médier dans un conflit sous l'égide d'une organisation internationale.", statut: proposé, introduit_par: boniface/YBLtbkrDB0M.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
