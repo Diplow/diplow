@@ -1,6 +1,6 @@
 ---
 title: "2025-04-28 → 2025-04-30"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/5-2025-04-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/1-2025-04-28
 owner: diplo
 preview: >-
   Blast reçoit trois invités. Monique Pinçon-Charlot décrit une oligarchie
@@ -16,6 +16,6 @@ Le dernier entretien change de registre avec Sam Zirah, interviewer de stars de 
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/5-2025-04-28/1-comment-les-ultras-riches-detruisent-la|COMMENT LES ULTRAS RICHES DÉTRUISENT LA PLANÈTE ET SE PRÉPARENT À L’APOCALYPSE]] (2025-04-28)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/5-2025-04-28/2-pourquoi-notre-desir-de-nouveaute-est|POURQUOI NOTRE DÉSIR DE NOUVEAUTÉ EST UNE FABRICATION DU CAPITALISME]] (2025-04-29)
-3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/5-2025-04-28/3-la-politique-c-est-de-la|"LA POLITIQUE, C'EST DE LA TÉLÉ-RÉALITÉ" : LES CONFESSIONS DE SAM ZIRAH]] (2025-04-30)
+1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/1-2025-04-28/1-comment-les-ultras-riches-detruisent-la|COMMENT LES ULTRAS RICHES DÉTRUISENT LA PLANÈTE ET SE PRÉPARENT À L’APOCALYPSE]] (2025-04-28)
+2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/1-2025-04-28/2-pourquoi-notre-desir-de-nouveaute-est|POURQUOI NOTRE DÉSIR DE NOUVEAUTÉ EST UNE FABRICATION DU CAPITALISME]] (2025-04-29)
+3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/1-2025-04-28/3-la-politique-c-est-de-la|"LA POLITIQUE, C'EST DE LA TÉLÉ-RÉALITÉ" : LES CONFESSIONS DE SAM ZIRAH]] (2025-04-30)

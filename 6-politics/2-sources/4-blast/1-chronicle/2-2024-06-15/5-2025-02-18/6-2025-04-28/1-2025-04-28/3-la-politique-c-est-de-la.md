@@ -1,6 +1,6 @@
 ---
 title: "\"LA POLITIQUE, C'EST DE LA TÉLÉ-RÉALITÉ\" : LES CONFESSIONS DE SAM ZIRAH"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/5-2025-04-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/1-2025-04-28
 owner: diplo
 preview: >-
   Sam Zirah, interviewer de stars de téléréalité, raconte une enfance marquée

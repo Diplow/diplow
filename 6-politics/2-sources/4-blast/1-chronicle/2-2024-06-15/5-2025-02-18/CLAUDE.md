@@ -1,20 +1,19 @@
 ---
-title: "2025-02-18 → 2025-05-07"
+title: "2025-02-18 → 2025-05-11"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18
 owner: diplo
 preview: >-
-  Blast soutient que l'extrême droite avance au mépris de l'État de droit, que
-  la justice doit tenir face à la droite et au RN, et que le pouvoir ment et
-  protège les puissants. Elle suit les révoltes, de la Serbie à la Turquie, et
-  le carnage à Gaza.
+  Blast dénonce une extrême droite qui avance au mépris de l'État de droit, de
+  Trump et Musk au RN, défend la justice dans les affaires Le Pen et Sarkozy,
+  et accuse Bayrou de mentir et de protéger les plus riches.
 ---
-# 2025-02-18 → 2025-05-07
+# 2025-02-18 → 2025-05-11
 
-Pendant ces près de trois mois, Blast soutient que l'extrême droite avance, de Trump et Musk à Retailleau et au RN, au mépris de l'État de droit, et qu'elle progresse avec l'industrie fossile. Elle dénonce un pouvoir qui ment, avec Bayrou sur Bétharram puis sur les retraites, et un budget Bayrou injuste. Elle dénonce aussi une classe politique corrompue, des médias patronaux, un PS qui trahit la gauche et un État qui vire à l'autoritarisme. Elle lit le réarmement comme une austérité imposée aux plus modestes.
+Tout au long de la Period, Blast décrit une extrême droite qui avance, de Trump et Musk à Retailleau et au RN, au mépris de l'État de droit et avec l'appui de l'industrie fossile. Quand la justice condamne Marine Le Pen, Blast y voit de la justice et non un acte politique : le RN est pour elle un rouage du système, pas sa victime. Elle défend la même ligne dans l'affaire Sarkozy. Elle dénonce ensuite un attentat islamophobe que l'État refuse de nommer, ainsi que la montée de l'ultradroite.
 
-La justice est le second fil. Blast soutient que la condamnation de Marine Le Pen est de la justice et non un acte politique, que le RN est un rouage du système et non sa victime, et que la justice doit être défendue contre la droite et l'extrême droite. Elle estime que les rapports de force faussent la justice et que l'impunité des puissants est un scandale d'État, du dossier Nestlé Waters à l'influence de Stérin. Elle dénonce la répression des révoltes et défend une gauche autocritique, attachée au collectif plutôt qu'aux sauveurs.
+Face à ce pouvoir, elle accuse Bayrou de mentir, sur Bétharram comme sur les retraites, et d'imposer un budget qui épargne les plus riches. Elle parle d'un scandale d'État chez Nestlé Waters, protégé par l'Élysée. Elle décrit une classe politique corrompue, des médias patronaux et l'ingérence des ultra-riches, et lit le réarmement comme une austérité imposée aux plus modestes. À gauche, elle juge que le PS trahit et défend une gauche autocritique.
 
-Blast suit les soulèvements en Serbie puis en Turquie, et le carnage à Gaza. Elle lit l'assassinat d'Aboubakar Cissé comme un attentat islamophobe que l'État refuse de nommer. Elle reçoit aussi des invités sur le racisme, la répression, la précarité étudiante, l'IA, l'UNRWA et le voile, dont les thèses restent les leurs.
+Blast dénonce aussi la répression des révoltes et une loi sur l'antisémitisme qui sert à museler la critique d'Israël. Elle suit le soulèvement en Serbie, la révolte en Turquie et le carnage à Gaza. Ses invités abordent le racisme, la précarité étudiante, l'IA, l'UNRWA, le voile, l'oligarchie, le capitalisme, les classes populaires et les constitutions.
 
 ## Contenu
 
@@ -22,4 +21,5 @@ Blast suit les soulèvements en Serbie puis en Turquie, et le carnage à Gaza. E
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/2-2025-03-02/CLAUDE|2025-03-02 → 2025-03-14]] (16 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/3-2025-03-15/CLAUDE|2025-03-15 → 2025-03-28]] (17 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/4-2025-03-29/CLAUDE|2025-03-29 → 2025-04-11]] (17 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/CLAUDE|2025-04-12 → 2025-05-07]] (27 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/CLAUDE|2025-04-12 → 2025-04-27]] (18 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/CLAUDE|2025-04-28 → 2025-05-11]] (15 Digests)

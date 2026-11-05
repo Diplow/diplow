@@ -1,6 +1,6 @@
 ---
 title: "POURQUOI LES CLASSES POPULAIRES SONT SI MAL REPRÉSENTÉES"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/6-2025-05-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/2-2025-05-01
 owner: diplo
 preview: >-
   Selon le sociologue interrogé, la classe ouvrière ne disparaît pas mais se

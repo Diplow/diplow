@@ -1,6 +1,6 @@
 ---
 title: "NESTLÉ, BÉTHARRAM : QUELLE IMPUNITÉ !"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/6-2025-05-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/2-2025-05-01
 owner: diplo
 preview: >-
   Blast soutient que Nestlé et Bétharram montrent une impunité entretenue par

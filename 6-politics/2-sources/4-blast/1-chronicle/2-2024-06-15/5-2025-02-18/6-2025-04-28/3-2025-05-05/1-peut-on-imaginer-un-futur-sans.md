@@ -1,6 +1,6 @@
 ---
 title: "PEUT-ON IMAGINER UN FUTUR SANS CAPITALISME ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/5-2025-04-12/6-2025-05-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/5-2025-02-18/6-2025-04-28/3-2025-05-05
 owner: diplo
 preview: >-
   Une table ronde à Genève soutient qu'un après-capitalisme est pensable : on
