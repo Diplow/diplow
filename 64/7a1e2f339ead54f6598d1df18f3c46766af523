@@ -1,0 +1,45 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/4-2026-08-19/CLAUDE.md
+  s_4d730a61325ccb::t_6f1f31f3e69a90 2,6-9,11,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/5-2026-08-24/1-glucksmann-la-cia-a-enfin-son.md
+  s_4d730a61325ccb::t_7f4685a98bf38d 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/5-2026-08-24/2-manon-aubry-veut-interdire-les-milliardaires.md
+  s_4d730a61325ccb::t_7107022bb5628d 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/5-2026-08-24/3-les-universites-d-ete-des-ecolos.md
+  s_4d730a61325ccb::t_b0f4daae76f9de 1-81
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/5-2026-08-24/4-yomi-denzel-apprend-l-economie-a.md
+  s_4d730a61325ccb::t_98eb9222620570 1-77
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/5-2026-08-24/CLAUDE.md
+  s_4d730a61325ccb::t_47cf8ebf58657b 1-22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/6-2026-08-29/1-alliance-glucksmann-x-jadot-la-pire.md
+  s_4d730a61325ccb::t_5dd7fab7496e92 1-95
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/6-2026-08-29/2-melenchon-veut-augmenter-le-smic-le.md
+  s_4d730a61325ccb::t_fc488d6d1a61f2 1-101
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/6-2026-08-29/3-hollande-detruit-la-primaire-du-ps.md
+  s_4d730a61325ccb::t_cb8b4f920f7891 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/6-2026-08-29/CLAUDE.md
+  s_4d730a61325ccb::t_0b897ccbe9c5ae 1-21
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/6-2026-08-03/CLAUDE.md
+  s_4d730a61325ccb::t_7ac29b2ccfb3a1 2,6-9,11,13,15-17,24-26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/CLAUDE.md
+  s_4d730a61325ccb::t_7332b12a6da1e9 2,6-9,11,13,15,17,26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_4d730a61325ccb::t_7ace8b8a7bfccd 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_4d730a61325ccb::t_5e65f13739336b 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "647a1e2f339ead54f6598d1df18f3c46766af523",
+  "prompts": {},
+  "sessions": {
+    "s_4d730a61325ccb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a344f1645c3207342",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
