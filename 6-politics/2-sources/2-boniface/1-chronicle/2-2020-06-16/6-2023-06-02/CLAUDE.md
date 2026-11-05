@@ -3,22 +3,22 @@ title: "2023-06-02 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02
 owner: diplo
 preview: >-
-  Boniface lit trois ans de géopolitique par la perte du monopole occidental :
-  une guerre d'Ukraine sans issue favorable, la Chine et le Sud global qui
-  montent, un Occident qui tait pour Gaza les valeurs qu'il invoque pour
-  l'Ukraine, une France qui proteste sans peser.
+  Boniface lit ces trois années à l'aune de la perte du monopole occidental :
+  guerre d'Ukraine sans vainqueur, Chine gagnante, deux poids deux mesures
+  entre Ukraine et Gaza, essor du Sud global et des BRICS. Il juge la
+  diplomatie française en panne.
 ---
 # 2023-06-02 → 2026-10-30
 
-Dès l'été 2023, Boniface soutient que le temps ne joue pour personne en Ukraine et que la Chine en tire le plus grand bénéfice. Il craint un OTAN tourné contre elle et juge la diplomatie française en panne, qu'il voit sortir de l'impasse en faisant pont avec le Sud global. Il lit alors les événements à l'aune de la fin du monopole occidental : une Russie fragilisée par la guerre mais moins isolée, des BRICS en essor, des coups d'État africains qu'il tient pour des symptômes de régimes corrompus, un multilatéralisme freiné par la mésentente des grandes puissances.
+Dès l'été 2023, Boniface soutient que le temps ne joue pour personne en Ukraine et que la Chine en tire le plus grand bénéfice. Il craint un OTAN anti-chinois et juge la diplomatie française en panne, qui pourrait se relancer en s'appuyant sur le Sud global. Sa grille d'ensemble est celle d'un monde où l'Occident a perdu son monopole : une Russie fragilisée par la guerre mais moins isolée, des BRICS en essor, un multilatéralisme freiné par la mésentente des grandes puissances. Il voit dans les coups d'État africains les symptômes de régimes corrompus.
 
-À l'automne 2023, la même grille s'applique aux crises successives. Il lit l'Ukraine par la lassitude des alliés et le Haut-Karabakh comme un basculement par le rapport de force. Le 7 octobre est pour lui un cycle de violence sans issue militaire, où l'Occident s'isole en taisant pour Gaza les valeurs qu'il invoque pour l'Ukraine.
+À l'automne 2023, il décrit la lassitude des alliés face à l'Ukraine et lit le Haut-Karabakh comme un basculement par le rapport de force. Il analyse ensuite le 7 octobre comme un cycle de violence sans issue militaire. Il soutient que l'Occident s'isole en taisant pour Gaza les valeurs qu'il invoque pour l'Ukraine ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/3-2023-09-22/CLAUDE|2023-09-22 → 2023-10-23]]).
 
-Sur la suite de la Period, Boniface interroge la place de l'Occident dans un ordre mondial qui bascule, et lit l'OCS comme un signe de multi-alignement. Sur Israël et la Palestine, il juge que la France se contente de protestations. Il reçoit aussi des invités sur l'Afrique, la Chine, les Kurdes, Gaza, Lula et le Japon, dont les analyses restent les leurs.
+La suite de la Chronicle prolonge cette lecture d'une recomposition de l'ordre mondial ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/CLAUDE|2023-10-25 → 2026-10-30]]). Boniface y voit dans l'OCS non pas une OTAN asiatique mais le signe d'un multi-alignement. Il juge aussi qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens. Il y reçoit en outre des invités sur l'Afrique, l'Occident et les Kurdes.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/1-2023-06-02/CLAUDE|2023-06-02 → 2023-07-17]] (19 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/2-2023-07-20/CLAUDE|2023-07-20 → 2023-09-20]] (18 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/3-2023-09-22/CLAUDE|2023-09-22 → 2023-10-23]] (18 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/CLAUDE|2023-10-25 → 2026-10-30]] (11 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/CLAUDE|2023-10-25 → 2026-10-30]] (12 Digests)

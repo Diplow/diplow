@@ -3,19 +3,19 @@ title: "2023-10-25 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25
 owner: diplo
 preview: >-
-  Boniface interroge la place de l'Occident dans un ordre mondial qui bascule
-  et lit l'OCS comme un signe de multi-alignement. Sur Israël et la Palestine,
-  il juge que la France se contente de protestations. Il reçoit des invités
-  sur l'Afrique, la Chine, les Kurdes, Gaza, Lula et le Japon.
+  Boniface lit une recomposition de l'ordre mondial : il soutient que l'OCS
+  n'est pas une OTAN asiatique mais le signe d'un multi-alignement, et qu'un
+  départ de Netanyahou ne changerait presque rien pour les Palestiniens. Il
+  reçoit aussi des invités sur l'Afrique, l'Occident et les Kurdes.
 ---
 # 2023-10-25 → 2026-10-30
 
-Le fil de la Period est un ordre mondial qui bascule. Boniface s'interroge sur la place de l'Occident et reçoit Jean-Yves Ollivier sur l'Afrique et Sylvie Bermann sur la Chine. Il chronique aussi le livre d'Alexander Stubb sur les trois blocs et le Sud global. La même grille se retrouve plus tard dans sa lecture de l'OCS : pour lui, ce n'est pas une OTAN asiatique mais le signe d'un multi-alignement.
+Entre entretiens et chroniques de livres, Boniface fait lire la recomposition de l'ordre mondial. Il laisse ses invités porter leurs thèses : l'Afrique souveraine pour Jean-Yves Ollivier, trois blocs et un Occident affaibli pour Alexander Stubb, une parité sino-américaine pour Sylvie Bermann. Plus récemment, Didier Billion défend l'autonomie comme avenir des Kurdes, et d'autres invités parlent de Gaza, de Lula et du Japon.
 
-Sur le Proche-Orient, Boniface soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens, et que la France se contente de protestations face à l'impunité des colons. Il juge passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins. Les invités apportent leurs propres analyses : Didier Billion défend que l'avenir des Kurdes passe par l'autonomie, et d'autres invités l'éclairent sur Gaza, Lula et le Japon.
+Sur la fin de la Period, Boniface avance ses propres lectures. Il soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement. Sur le Proche-Orient, il estime qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens et que la France se contente de protestations face à l'impunité des colons. Il juge enfin passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins.
 
 ## Contenu
 
-1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/CLAUDE|2023-10-25 → 2026-10-14]] (3 Digests)
+1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/1-2023-10-25/CLAUDE|2023-10-25 → 2026-10-14]] (4 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/2-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/6-2023-06-02/4-2023-10-25/3-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
