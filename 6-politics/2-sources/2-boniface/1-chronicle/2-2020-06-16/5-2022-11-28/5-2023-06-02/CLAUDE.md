@@ -1,26 +1,24 @@
 ---
-title: "2023-06-02 → 2026-10-30"
+title: "2023-06-02 → 2023-07-17"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02
 owner: diplo
 preview: >-
-  Boniface lit l'actualité à travers quelques grilles : une course aux
-  armements qui nourrit l'instabilité, une guerre en Ukraine dont la Chine
-  profite, un Occident qui risque de se couper du reste du monde, un
-  multi-alignement qui s'impose.
+  En juin-juillet 2023, Boniface soutient que le temps ne joue pour personne
+  en Ukraine et que la Chine en tire le plus grand bénéfice. Il craint un OTAN
+  anti-chinois, juge la diplomatie française en panne et la voit sortir de
+  l'impasse en pont avec le Sud global.
 ---
-# 2023-06-02 → 2026-10-30
+# 2023-06-02 → 2023-07-17
 
-À l'été 2023, Boniface applique sa lecture aux grandes crises du moment. Il voit dans la condamnation de Sonko un parfum de procès politique qui menace la démocratie sénégalaise, et dans l'inculpation de Trump une bonne nouvelle pour la justice mais une inquiétude pour le Parti républicain. Il soutient que la course aux armements, devenue générale, nourrit l'instabilité sans rassurer les États. Sur l'Ukraine, il estime que le temps ne joue pour personne et que la Chine est la bénéficiaire à long terme. Pour lui, la mutinerie de Prigojine a durablement affaibli Poutine sans changer à court terme le cours de la guerre, et les sanctions américaines contribuent au recul du dollar.
+Le fil principal de ces six semaines est la guerre en Ukraine et ce qu'elle déplace dans l'équilibre mondial. Pour Boniface, le temps ne joue pour personne et la Chine est la bénéficiaire à long terme. Il juge que la mutinerie de Prigojine a durablement affaibli Poutine, sans changer à court terme le cours de la guerre. Il reçoit Jean de Gliniasty sur la Russie, puis Hubert Védrine sur le monde après l'Ukraine.
 
-Un second fil court sur toute la Period : la place de l'Occident face au reste du monde. Boniface craint qu'une OTAN tournée contre la Chine creuse le fossé avec le Sud. Du livre de Stubb, il retient que l'Occident doit montrer l'exemple. Il reçoit Sylvie Bermann sur la parité sino-américaine, ainsi que Jean de Gliniasty, Denis Mukwege, Étienne de Gail et Hubert Védrine, qui gardent leurs propres analyses.
+De là, il élargit à la recomposition des puissances. La course aux armements, générale, nourrit l'instabilité sans rassurer les États. Les sanctions américaines contribuent au recul du dollar. Il craint que l'OTAN ne devienne une alliance anti-chinoise et rapporte une Chine sûre d'elle. Face à cela, il juge la diplomatie française en panne et la voit sortir de l'impasse en jouant un rôle de pont avec le Sud global.
 
-La Chronicle reprend en octobre 2026, centrée sur le Moyen-Orient et l'Asie. Boniface soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens et que la France se contente de protestations face à l'impunité des colons. Il juge passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins. Il lit l'OCS non comme une OTAN asiatique mais comme le signe d'un multi-alignement. Didier Billion, son invité, tient pour sa part que l'avenir des Kurdes passe par l'autonomie.
+Le reste de la Period tient à l'actualité et aux invités. Boniface lit la condamnation de Sonko comme un procès politique qui menace la démocratie sénégalaise. Il juge l'inculpation de Trump rassurante pour la justice mais inquiétante pour le Parti républicain. Il reçoit Denis Mukwege sur le pillage de la RDC, Étienne de Gail sur l'humiliation en relations internationales, puis deux auteurs, l'un sur l'Inde, l'autre sur Macron et Poutine. Leurs thèses restent les leurs, et Boniface les reçoit sans les endosser.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/1-2023-06-02/CLAUDE|2023-06-02 → 2023-06-12]] (4 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/2-2023-06-14/CLAUDE|2023-06-14 → 2023-06-21]] (4 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/3-2023-06-22/CLAUDE|2023-06-22 → 2023-07-04]] (6 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/4-2023-07-10/CLAUDE|2023-07-10 → 2026-10-14]] (3 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/5-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/6-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/4-2023-07-10/CLAUDE|2023-07-10 → 2023-07-17]] (5 Digests)

@@ -170,6 +170,7 @@ kinds:
       ancien-vice-président: {définition: "A été vice-président d'un État et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/SVcj1A0jL8E.md}
       ancien-enseignant: {définition: "A enseigné dans un établissement scolaire et n'enseigne plus, à la date de la Publication.", statut: proposé, introduit_par: blast/eqrUAnS-0cE.md}
       informaticien: {définition: "Conçoit ou écrit des programmes et des systèmes informatiques.", statut: proposé, introduit_par: boniface/w1ilRGaZOiA.md}
+      banquier: {définition: "Dirige une banque ou exerce dans la banque d'affaires.", statut: proposé, introduit_par: paduteam/Kmj7W1JPRYY.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

@@ -3,18 +3,18 @@ title: "2022-11-28 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28
 owner: diplo
 preview: >-
-  Pascal Boniface lit quatre ans d'actualité à travers un monde qui se
-  diversifie : il demande à l'Occident de clarifier ses buts en Ukraine,
-  dénonce son double standard et défend l'autonomie européenne face à un Sud
-  global qui s'affirme.
+  Boniface lit ces quatre ans par un monde qui se diversifie et échappe aux
+  États-Unis : double standard occidental, Sud global, multi-alignement. Il
+  veut qu'on aide l'Ukraine et qu'on clarifie les buts de guerre, mais on peut
+  condamner Moscou sans être pro-Poutine.
 ---
 # 2022-11-28 → 2026-10-30
 
-Sur toute la Chronicle, la guerre en Ukraine fournit le fil principal. Boniface condamne l'agression russe sans y voir un motif d'être pro-Poutine, juge qu'il faut aider Kiev à reprendre ses territoires sans l'intégrer vite à l'UE, et demande à l'Occident de clarifier ses buts de guerre. Il note que le conflit affaiblit la Russie, renforce Washington et profite à la Chine, et il estime Macron allé trop loin à Bratislava.
+Sur la guerre en Ukraine, Boniface tient une ligne constante. Il faut aider Kiev à reprendre ses territoires sans l'intégrer vite à l'UE, et l'Occident doit clarifier ses buts de guerre. On peut condamner Moscou sans être pro-Poutine. Fin 2022, il voit une Russie affaiblie et un Washington renforcé. En 2023, il soutient que le temps ne joue pour personne et que la Chine en tire le plus grand bénéfice. Il estime aussi Macron allé trop loin à Bratislava.
 
-Autour de ce conflit, une même grille revient : l'Occident n'est plus seul à faire l'ordre mondial. Boniface dénonce le double standard occidental, juge le clivage entre démocraties et dictatures trop manichéen au profit d'un clivage entre l'Occident et le reste du monde, et lit dans la Coupe du monde au Qatar, dans le Golfe qui joue la carte chinoise et dans l'Inde pluri-alignée les signes d'un monde qui se diversifie. L'ordre mondial échappe aux États-Unis, et il défend en réponse l'autonomie stratégique européenne.
+Sa grille de lecture sous l'actualité est celle d'un monde qui se diversifie. Pour lui, le clivage démocraties/dictatures est trop manichéen : le vrai clivage oppose l'Occident au reste du monde. Il y associe le double standard occidental et la place croissante du Sud global. Fin 2022, il cite la Coupe du monde au Qatar comme fracture avec l'Occident et le Golfe qui joue la carte chinoise. Il décrit ensuite l'Inde comme un pluri-alignement opportuniste. Plus tard, il lit l'OCS comme une organisation qui n'est pas une OTAN asiatique, et l'absence de Poutine au sommet des BRICS comme un revers symbolique pour Moscou. Il craint à l'inverse un OTAN anti-chinois.
 
-Sur la durée, l'accent se déplace : après les sociétés civiles chinoise et iranienne qui se font entendre à la fin 2022, ses lectures portent sur une course aux armements qui nourrit l'instabilité, sur un Occident qui risque de se couper du reste du monde et sur un multi-alignement qui s'impose.
+Côté français et européen, Boniface défend l'autonomie stratégique européenne. Il juge la diplomatie française en panne et la voit sortir de l'impasse en jouant le pont avec le Sud global. Sur le Proche-Orient, il soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ Sur la durée, l'accent se déplace : après les sociétés civiles chinoise et 
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/2-2023-01-05/CLAUDE|2023-01-05 → 2023-02-10]] (18 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/3-2023-02-15/CLAUDE|2023-02-15 → 2023-04-14]] (19 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/4-2023-04-17/CLAUDE|2023-04-17 → 2023-06-01]] (22 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/CLAUDE|2023-06-02 → 2026-10-30]] (25 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/5-2023-06-02/CLAUDE|2023-06-02 → 2023-07-17]] (19 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/5-2022-11-28/6-2023-07-20/CLAUDE|2023-07-20 → 2026-10-30]] (12 Digests)
