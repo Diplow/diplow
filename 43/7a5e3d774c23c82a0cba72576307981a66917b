@@ -1,0 +1,41 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/3-2026-07-02/CLAUDE.md
+  s_c61c9e9d0fe503::t_9226e9297a112e 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/4-2026-07-07/1-jean-philippe-tanguy-anti-imperialiste-que.md
+  s_c61c9e9d0fe503::t_a1b3b6767b7714 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/4-2026-07-07/2-marine-le-pen-candidate-pour-2027.md
+  s_c61c9e9d0fe503::t_0fdaade365e244 1-83
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/4-2026-07-07/3-essentiel-3-vote-rn-en-campagne.md
+  s_c61c9e9d0fe503::t_481b52c1223b39 1-104
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/4-2026-07-07/4-branco-2027-un-candidat-de-droite.md
+  s_c61c9e9d0fe503::t_dd1cd0e60dbd11 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/4-2026-07-07/5-essentiels-4-patrons-de-gauche-sociotraitres.md
+  s_c61c9e9d0fe503::t_79334b28bde2a1 1-101
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/4-2026-07-07/6-roussel-2027-taper-sur-lfi-et.md
+  s_c61c9e9d0fe503::t_fc9984016261c2 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/4-2026-07-07/CLAUDE.md
+  s_c61c9e9d0fe503::t_fbdc084c30c992 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/4-2026-06-22/CLAUDE.md
+  s_c61c9e9d0fe503::t_8651f342b7c7bb 2,6-9,11,13,15-17,24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/CLAUDE.md
+  s_c61c9e9d0fe503::t_25d0deba98bb14 2,6-9,11,13,15,22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_c61c9e9d0fe503::t_e23012a6154b2e 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_c61c9e9d0fe503::t_6fdcda2473e4ca 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "437a5e3d774c23c82a0cba72576307981a66917b",
+  "prompts": {},
+  "sessions": {
+    "s_c61c9e9d0fe503": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a418c7923adda7249",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
