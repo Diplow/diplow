@@ -1,0 +1,41 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/3-2026-09-04/5-bardella-finito-marion-marechal-va-le.md
+  s_4d730a61325ccb::t_e5b37569d33757 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/3-2026-09-04/6-tondelier-a-fait-sa-pire-interview.md
+  s_4d730a61325ccb::t_e8a613cc3fdf88 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/3-2026-09-04/CLAUDE.md
+  s_4d730a61325ccb::t_702db34b0850d5 2,6-9,11,13,15,23-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/4-2026-09-14/1-ruffin-attaque-glucksmann-a-la-primaire.md
+  s_4d730a61325ccb::t_833c817f922e96 1-90
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/4-2026-09-14/2-roussel-detruit-par-des-influenceurs-sur.md
+  s_4d730a61325ccb::t_bc710352f79882 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/4-2026-09-14/3-on-detruit-la-plus-grosse-enquete.md
+  s_4d730a61325ccb::t_351f312d6e0242 1-103
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/4-2026-09-14/4-melenchon-depasse-par-le-pen-sur.md
+  s_4d730a61325ccb::t_f4e4c52dc2ef3e 1-84
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/4-2026-09-14/CLAUDE.md
+  s_4d730a61325ccb::t_a97b27bd154cb5 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/CLAUDE.md
+  s_4d730a61325ccb::t_3188ee3d4e80e6 2,6-8,10,12,14,16,22-23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/CLAUDE.md
+  s_4d730a61325ccb::t_b0b0180ee027ea 2,6-8,10,12,14,16,22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_4d730a61325ccb::t_7e0f7ed9f65eae 2,6-9,11,13,15,17,25
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_4d730a61325ccb::t_ff90e39b75752e 6-8,12,14,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9d8756a2d5c1f92b0842fabcb5cd50e51f4346bb",
+  "prompts": {},
+  "sessions": {
+    "s_4d730a61325ccb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a344f1645c3207342",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
