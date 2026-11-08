@@ -1,0 +1,51 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_02cd0f2467e5ef 191
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/5-2025-10-17/CLAUDE.md
+  s_a6c57eccba2483::t_c2ddb206e3960b 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/6-2025-10-19/1-dissolution-censure-les-medias-pavent-la.md
+  s_a6c57eccba2483::t_3dda6fb1c22764 1-99
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/6-2025-10-19/2-nazis-et-fascistes-de-gauche-quand.md
+  s_a6c57eccba2483::t_14b9e392c9b09f 1-92
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/6-2025-10-19/3-madagascar-face-a-la-gen-z.md
+  s_a6c57eccba2483::t_9b2dfc75a57872 1-67
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/6-2025-10-19/4-en-finir-avec-l-ecologie-bourgeoise.md
+  s_a6c57eccba2483::t_70d01b76ea0790 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/6-2025-10-19/5-comment-gagner-la-bataille-culturelle.md
+  s_a6c57eccba2483::t_33da2158e2cf50 1-89
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/6-2025-10-19/6-la-france-ingouvernable-ce-que-le.md
+  s_a6c57eccba2483::t_ca67fe89825d8c 1-91
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/6-2025-10-19/CLAUDE.md
+  s_a6c57eccba2483::t_75eda553dca8f5 1-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/CLAUDE.md
+  s_a6c57eccba2483::t_e16fa3f37e9def 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE.md
+  s_a6c57eccba2483::t_9302b05bc56ebe 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_a6c57eccba2483::t_b1736ce1057c25 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_a6c57eccba2483::t_34d72461a7edee 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f78885af1bda95e5d2ca41ca659ec67694cb581b",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_a6c57eccba2483": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad74229551a8fac51",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
