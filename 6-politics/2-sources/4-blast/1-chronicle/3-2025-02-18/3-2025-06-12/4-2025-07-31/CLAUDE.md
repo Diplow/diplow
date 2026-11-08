@@ -1,21 +1,20 @@
 ---
-title: "2025-07-31 → 2025-09-03"
+title: "2025-07-31 → 2025-09-08"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31
 owner: diplo
 preview: >-
-  Blast accuse le gouvernement Bayrou d'épargner les entreprises et de faire
-  payer les plus pauvres, puis de cacher que le déficit vient des macronistes.
-  Il défend l'accueil des exilés, juge la Cour suprême américaine au service
-  de Trump, et reçoit des invités sur la tech, Israël, le burnout et le 10
-  septembre.
+  Blast dénonce un gouvernement Bayrou qui fait payer les plus pauvres et
+  épargne les entreprises, puis fait de Macron le vrai responsable du chaos et
+  lit la rentrée médiatique comme un terrain préparé au RN. Il reçoit des
+  invités sur la tech, Israël, le burnout et Vencorex.
 ---
-# 2025-07-31 → 2025-09-03
+# 2025-07-31 → 2025-09-08
 
-Le fil principal de la Period est le pouvoir. Blast soutient que le gouvernement Bayrou épargne les entreprises et fait payer les plus pauvres, et il y voit un pouvoir qui s'effondre. À la fin d'août, il lit la chute que Bayrou joue comme une manière de cacher que le déficit est l'œuvre des macronistes. Début septembre, il soutient que des factures prouvent que Rachida Dati a menti sur ses bijoux. Aux États-Unis, il affirme que la Cour suprême sert Trump, et il en tire que la France doit réformer la nomination au Conseil constitutionnel.
+Le fil de la Period est la crise du pouvoir. Blast dénonce d'abord un gouvernement Bayrou qui épargne les entreprises et fait payer les plus pauvres, y voit un pouvoir qui s'effondre, puis soutient que Bayrou, en jouant sa chute, cache que le déficit est l'œuvre des macronistes. À la veille de la rentrée, il fait de Macron le vrai responsable du chaos, Bayrou n'étant qu'un exécutant illégitime ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01/CLAUDE|2025-09-01 → 2025-09-06]]). Il soutient aussi que les médias relaient la rigueur de Bayrou et préparent le terrain au RN.
 
-Blast prend aussi position sur des conflits et des inégalités. Il défend l'accueil des exilés, accuse les États arabes de complicité à Gaza et alerte sur des canicules sous-estimées. Il lit l'alimentation comme un fait de classe, tient les orques pour une espèce menacée par les humains et le cyberespace pour un territoire bien réel. Il soutient enfin que l'État et une multinationale sont complices de l'effondrement en Guadeloupe.
+Autour de ce fil, Blast pose d'autres accusations. Il reproche à Rachida Dati d'avoir caché plus de 600 000 € de bijoux, juge que la Cour suprême américaine sert Trump et que la France doit réformer la nomination au Conseil constitutionnel, et tient l'État et une multinationale pour complices de l'effondrement en Guadeloupe. Il défend l'accueil des exilés, accuse les États arabes de complicité à Gaza, alerte sur des canicules sous-estimées, tient le cyberespace pour un territoire bien réel et soutient que les fake news sapent la démocratie. Il lit aussi l'alimentation comme un fait de classe et les orques comme une espèce menacée par les humains.
 
-Les invités portent leurs propres thèses, que Blast reçoit sans les faire siennes. Certains dénoncent l'alliance de la tech et des États, l'autoritarisme et la colonisation capitaliste. D'autres parlent d'Israël, d'une ex-combattante des FARC, de la fête ou de l'affiche avec Dugudus. Nelly Pons fait du burnout le symptôme d'un système, et une historienne lit le 10 septembre à la lumière de 1789.
+Les invités portent le reste : certains dénoncent l'alliance de la tech et des États, l'autoritarisme ou la colonisation capitaliste. Blast reçoit aussi une ex-combattante des FARC, un écrivain sur la fête, Dugudus sur l'affiche, deux invitées sur Israël, des voix sur le burnout, le 10 septembre et la charge raciale, et les ex-salariés de Vencorex, abandonnés par l'État.
 
 ## Contenu
 
@@ -23,4 +22,5 @@ Les invités portent leurs propres thèses, que Blast reçoit sans les faire sie
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/2-2025-08-06/CLAUDE|2025-08-06 → 2025-08-14]] (5 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/3-2025-08-16/CLAUDE|2025-08-16 → 2025-08-26]] (4 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/4-2025-08-27/CLAUDE|2025-08-27 → 2025-08-31]] (4 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01/CLAUDE|2025-09-01 → 2025-09-03]] (3 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01/CLAUDE|2025-09-01 → 2025-09-06]] (6 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/6-2025-09-07/CLAUDE|2025-09-07 → 2025-09-08]] (3 Digests)
