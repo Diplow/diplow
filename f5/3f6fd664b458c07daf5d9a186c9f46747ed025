@@ -1,0 +1,51 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_210d7adc85b986 388
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/3-2025-07-04/CLAUDE.md
+  s_63098e197dba30::t_35f322e5e4ca4c 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/4-2025-07-08/1-pourquoi-on-ne-voit-jamais-des.md
+  s_63098e197dba30::t_8b036965b7aaba 1-87
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/4-2025-07-08/2-comment-mieux-faire-l-amour.md
+  s_63098e197dba30::t_5e8707e75d8356 1-79
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/4-2025-07-08/3-les-riches-sont-les-premiers-assistes.md
+  s_63098e197dba30::t_789308b9c1bcd3 1-82
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/4-2025-07-08/4-scandale-cumcum-comment-les-macronistes-organisent.md
+  s_63098e197dba30::t_f0179ce49f5d29 1-101
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/4-2025-07-08/5-les-robots-ont-ils-un-c.md
+  s_63098e197dba30::t_304de72a447975 1-89
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/4-2025-07-08/6-journalistes-socialistes-intellectuels-tous-en-guerre.md
+  s_63098e197dba30::t_37fe5711df17e6 1-88
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/4-2025-07-08/CLAUDE.md
+  s_63098e197dba30::t_aff4d23435c0c2 1-24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/CLAUDE.md
+  s_63098e197dba30::t_590e09259cf48e 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/CLAUDE.md
+  s_63098e197dba30::t_11fe3f9e876749 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_63098e197dba30::t_1246b102d36f84 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_63098e197dba30::t_20b0fd1863ac79 6-9,13,15,17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f53f6fd664b458c07daf5d9a186c9f46747ed025",
+  "prompts": {},
+  "sessions": {
+    "s_63098e197dba30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fa8011de-4974-4841-947a-b5703d73f188",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
