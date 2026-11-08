@@ -1,0 +1,55 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/CLAUDE.md
+  s_267492ecb0dffd::t_19d001d06b08ff 2,6-9,11,13,15,17
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/1-2026-10-15/1-natacha-polony-2027-va-t-elle.md
+  s_267492ecb0dffd::t_c5aa4ccffd97de 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/1-2026-10-15/2-louise-espoir-de-la-droite-ou.md
+  s_267492ecb0dffd::t_9040c2639cd59e 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/1-2026-10-15/3-17-10-la-macronie-en-panique.md
+  s_267492ecb0dffd::t_82323a18114bf7 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/1-2026-10-15/4-eric-coquerel-veut-il-rassurer-le.md
+  s_267492ecb0dffd::t_b5aa9958666f17 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/1-2026-10-15/CLAUDE.md
+  s_267492ecb0dffd::t_e6da0d7306751c 2-3,6-9,11,13,15,17,21-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/2-2026-10-21/1-attal-glucksmann-de-villiers-en-roue.md
+  s_267492ecb0dffd::t_a2726240bc1214 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/2-2026-10-21/2-pablo-pillaud-vivien-nous-insulte-chez.md
+  s_267492ecb0dffd::t_521d6a49efb29e 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/2-2026-10-21/3-la-gauche-anti-melenchon-doit-elle.md
+  s_267492ecb0dffd::t_8a5a3a449ddc90 1-98
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/2-2026-10-21/4-bardella-re-elu-president-du-rn.md
+  s_267492ecb0dffd::t_7418210134c934 1-76
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/2-2026-10-21/CLAUDE.md
+  s_267492ecb0dffd::t_237c9398cc6e83 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/3-2026-10-27/1-attal-vs-marechal-qui-sera-le.md
+  s_267492ecb0dffd::t_dc611fda7cb760 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/3-2026-10-27/2-tatiana-debunk-l-att-ntat-de.md
+  s_267492ecb0dffd::t_024032da5ea806 1-83
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/3-2026-10-27/3-victoire-de-lula-un-modele-pour.md
+  s_267492ecb0dffd::t_d9050af82fcb32 1-92
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/3-2026-10-27/CLAUDE.md
+  s_267492ecb0dffd::t_e8d7538bb79765 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/CLAUDE.md
+  s_267492ecb0dffd::t_33f06a80154477 1-23
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/CLAUDE.md
+  s_267492ecb0dffd::t_e7786f45bdf1e3 2,6-8,11,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_267492ecb0dffd::t_5f631baeeeb82c 2,6-9,11,13,15,17,25
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_267492ecb0dffd::t_2548cbf135fec7 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "701c1c31a62c9a381ddcd444777034c561a36b22",
+  "prompts": {},
+  "sessions": {
+    "s_267492ecb0dffd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a00666c3375eb3198",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
