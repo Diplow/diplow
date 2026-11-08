@@ -1,6 +1,6 @@
 ---
 title: "« AUJOURD’HUI, UNE AFFICHE, C’EST UN ACTE DE RÉSISTANCE » - AVEC DUGUDUS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/3-2025-08-16
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/4-2025-08-27
 owner: diplo
 preview: >-
   Le graphiste Dugudus défend l'affiche comme un acte de résistance : la rue
