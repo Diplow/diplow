@@ -1,23 +1,25 @@
 ---
-title: "2024-05-07 → 2026-10-14"
+title: "2024-05-07 → 2024-05-21"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/4-2024-04-22/3-2024-05-07
 owner: diplo
 preview: >-
-  Boniface chronique des textes et des livres sur l'ordre mondial (Karaganov,
-  Duclos, Stubb) autour d'un Sud global que l'Occident doit prendre en compte,
-  et reçoit des invités sur la Géorgie sous pression russe et sur la Chine
-  après le sommet Trump-Xi.
+  Boniface lit la doctrine russe comme un défi lancé aux Occidentaux, qui
+  doivent y répondre, et dénonce le deux poids deux mesures : partis français
+  alignés sur Israël, CPI crédibilisée en visant Netanyahou comme le Hamas.
 ---
-# 2024-05-07 → 2026-10-14
+# 2024-05-07 → 2024-05-21
 
-Le fil de la Period est la lecture d'un ordre mondial où l'Occident n'est plus seul à compter. Boniface lit dans le document de Karaganov la pensée de Poutine mise en théorie, celle d'une Russie défenseur d'une « majorité mondiale » non occidentale. Il en reconnaît un point juste et appelle les Occidentaux à répondre ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/4-2024-04-22/3-2024-05-07/1-le-monde-selon-poutine-la-doctrine|Le monde selon Poutine : la doctrine Karaganov]]). Dans ses chroniques d'ouvrages, Michel Duclos plaide pour que l'Occident accepte un Sud global multialigné et bâtisse avec lui des coalitions d'égal à égal, en divergeant de Boniface sur la dérive russe. Alexander Stubb divise le monde en trois blocs (Occident, Orient, Sud global), et le Sud décidera du nouvel ordre.
+Boniface ouvre la période en lisant, dans le document de Karaganov, la pensée de Poutine mise en théorie : la Russie s'y présente en défenseur d'une « majorité mondiale » non occidentale contre l'hégémonie occidentale. Il en reconnaît un point juste et appelle les Occidentaux à répondre. Il prolonge cette réflexion en recevant Michel Duclos pour [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/4-2024-04-22/3-2024-05-07/2-j-ai-lu-diplomatie-francaise-par|sa lecture de Diplomatie française]]. Pour Duclos, l'Occident doit accepter le Sud global et bâtir avec lui des coalitions d'égal à égal, et la France a perdu sa singularité de puissance moyenne. Boniface et Duclos divergent sur la dérive russe.
 
-Le reste vient d'invités, dont les thèses restent les leurs. Jean de Gliniasty voit le pouvoir géorgien faire adopter la loi sur l'influence étrangère sous la pression de Moscou, quand les Européens hésitent à sanctionner Tbilissi. Sylvie Bermann lit dans le sommet Trump-Xi une parité entre les États-Unis et la Chine, et décrit une Chine patiente sur Taïwan que son excédent commercial rend difficile à vivre pour l'Europe. Les trois premiers Digests datent de mai 2024, les deux derniers d'octobre 2026.
+Deux entretiens donnent ensuite la parole à des invités, qui gardent leurs thèses. Pour Jean de Gliniasty, le pouvoir géorgien fera adopter la loi sur l'influence étrangère sous la pression de Moscou, et les Européens hésitent à sanctionner Tbilissi. Thomas Gassilloud soutient que le réveil stratégique doit devenir industriel et que l'Europe doit se prendre en main quel que soit le résultat américain.
+
+Sur le conflit israélo-palestinien, Boniface applique la même grille du deux poids deux mesures. Il soutient que les partis français sont très majoritairement favorables à Israël malgré une opinion plus sensible à la cause palestinienne, et que l'héritage gaullo-mitterrandiste s'est effacé. Il voit dans la demande d'inculpation de Netanyahou et de Galant par la CPI, en même temps que de dirigeants du Hamas, un moyen de crédibiliser la Cour : elle met fin à l'impunité des alliés de l'Occident.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/4-2024-04-22/3-2024-05-07/1-le-monde-selon-poutine-la-doctrine|Le monde selon Poutine : la doctrine Karaganov]] (2024-05-07)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/4-2024-04-22/3-2024-05-07/2-j-ai-lu-diplomatie-francaise-par|J'ai lu... « Diplomatie française » par Michel Duclos]] (2024-05-13)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/4-2024-04-22/3-2024-05-07/3-la-georgie-sous-controle-russe-les|La Géorgie sous contrôle russe - Les mardis de l'IRIS]] (2024-05-14)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/4-2024-04-22/3-2024-05-07/4-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/4-2024-04-22/3-2024-05-07/5-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/4-2024-04-22/3-2024-05-07/4-quelle-defense-pour-la-france-avec|Quelle défense pour la France ? Avec Thomas Gassilloud - Entretiens géopo]] (2024-05-15)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/4-2024-04-22/3-2024-05-07/5-les-partis-politiques-francais-et-le|Les partis politiques français et le conflit israélo-palestinien]] (2024-05-16)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/4-2024-04-22/3-2024-05-07/6-cpi-israel-hamas-coup-d-eclat|CPI Israël - Hamas : coup d'éclat juridico-stratégique]] (2024-05-21)

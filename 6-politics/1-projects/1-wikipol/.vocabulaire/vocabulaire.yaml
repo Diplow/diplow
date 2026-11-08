@@ -178,6 +178,7 @@ kinds:
       ancien-dirigeant-associatif: {définition: "A présidé ou dirigé une association ou une fédération d'associations et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/3WBBz75Z_NQ.md}
       physicien: {définition: "Étudie la physique et en élabore les théories ou les applications.", statut: proposé, introduit_par: blast/mIdSpmQ6Z7g.md}
       stratège-politique: {définition: "Conçoit la stratégie politique et médiatique d'un camp ou d'un dirigeant.", statut: proposé, introduit_par: blast/XSEEnC-jlkk.md}
+      ancien-policier: {définition: "A servi dans la police et n'y sert plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/L8URmnsnGWs.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
