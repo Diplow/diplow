@@ -1,0 +1,45 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/3-2025-09-10/CLAUDE.md
+  s_b0cc856b6997dc::t_e0fc4d39e99742 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/4-2025-09-14/1-etrangers-violeurs-la-manipulation-immonde-de.md
+  s_b0cc856b6997dc::t_4d00cdeac16ef3 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/4-2025-09-14/2-c-est-pas-des-emeutes-c.md
+  s_b0cc856b6997dc::t_a27532a62994ad 1-74
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/4-2025-09-14/3-chantage-a-la-dette-publique-mensonges.md
+  s_b0cc856b6997dc::t_2730bf78b4dd4a 1-87
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/4-2025-09-14/CLAUDE.md
+  s_b0cc856b6997dc::t_2d1c7c8117ce95 1-21
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/5-2025-09-17/1-10-18-septembre-macron-on-va.md
+  s_b0cc856b6997dc::t_0baa7cd14f6f98 1-72
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/5-2025-09-17/2-nouvelles-emissions-et-nouveaux-projets-c.md
+  s_b0cc856b6997dc::t_ea28941ca66e99 1-94
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/5-2025-09-17/3-de-kirk-a-villiers-indignations-selectives.md
+  s_b0cc856b6997dc::t_179270bfa98e9d 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/5-2025-09-17/4-bloquons-tout-acte-2-la-colere.md
+  s_b0cc856b6997dc::t_ea6ac0a22bf434 1-91
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/5-2025-09-17/CLAUDE.md
+  s_b0cc856b6997dc::t_a1b1d2040b3564 1-21
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/CLAUDE.md
+  s_b0cc856b6997dc::t_028f2192ee7b0b 2,6-8,10,12,14,16,22-24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE.md
+  s_b0cc856b6997dc::t_1fd0deeeb98705 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_b0cc856b6997dc::t_148e1cbe158859 2,6-8,10,12,14,16,22
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_b0cc856b6997dc::t_f9c71ddb9b7df2 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "74c116eed842782be1c73f1195544324fcb4d1d6",
+  "prompts": {},
+  "sessions": {
+    "s_b0cc856b6997dc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a8a2c136ca9192b6a",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
