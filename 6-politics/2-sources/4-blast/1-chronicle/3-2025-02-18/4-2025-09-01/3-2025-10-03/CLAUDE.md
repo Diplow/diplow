@@ -1,20 +1,20 @@
 ---
-title: "2025-10-03 → 2025-10-18"
+title: "2025-10-03 → 2025-10-22"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03
 owner: diplo
 preview: >-
-  Blast lit la séquence comme une complaisance du pouvoir macroniste et du PS
-  envers le RN : vice-présidences, reconduction de Lecornu, budget
-  austéritaire. Elle défend la presse indépendante, démonte des mythes et
-  reçoit des invités sur la trêve fragile à Gaza.
+  Blast soutient que les macronistes ont fait élire le RN aux vice-présidences
+  de l'Assemblée pour affaiblir la gauche, que la justice ménage les puissants
+  et que le PS a sauvé le gouvernement pour ses baronnies. Elle reçoit des
+  invités sur Gaza et l'écologie.
 ---
-# 2025-10-03 → 2025-10-18
+# 2025-10-03 → 2025-10-22
 
-Le fil de la Period est une accusation contre le camp du pouvoir. Blast soutient que les macronistes ont fait élire le RN aux vice-présidences de l'Assemblée pour affaiblir la gauche et normaliser l'extrême droite. Elle accuse Lecornu et Macron de faire du peuple le coupable. Elle lit la reconduction de Lecornu comme un pas vers le RN. Elle reproche enfin au PS d'avoir sauvé le gouvernement pour ses baronnies municipales, au prix d'un budget austéritaire.
+Pendant ces trois semaines, Blast lit la vie politique comme une normalisation de l'extrême droite organisée par le pouvoir. Elle soutient que les macronistes ont fait élire le RN aux vice-présidences de l'Assemblée pour affaiblir la gauche, que la reconduction de Lecornu est un pas vers le RN, et que Lecornu et Macron font du peuple le coupable. Elle dénonce le « tsunami migratoire » comme un mensonge raciste, la complaisance des médias envers le RN et la falsification de l'histoire par l'extrême droite. Le PS, traître ou incompétent, a selon elle sauvé le gouvernement pour ses baronnies.
 
-Blast mène aussi un travail de démystification. Elle dénonce le « tsunami migratoire » comme un mensonge raciste et lit l'apologie du terrorisme comme un outil contre le soutien à la Palestine. Elle voit dans l'entretien d'embauche une humiliation organisée et s'en prend à des mythes qui servent le pouvoir, du négationnisme à la légende de Napoléon. Elle défend la presse libre face aux médias de milliardaires et voit dans la condamnation de Sarkozy une première contre l'impunité des puissants. À l'inverse, elle dénonce une justice bienveillante envers Darmanin dans l'affaire Patterson.
+Un second fil porte sur la justice et la presse. Blast voit dans la condamnation de Sarkozy une première contre l'impunité des puissants, alors que Darmanin aurait bénéficié d'une justice bienveillante. Elle défend les médias indépendants comme contrepouvoir face aux médias de milliardaires, démonte des mythes qui servent le pouvoir, du négationnisme à la légende de Napoléon, et lit l'apologie du terrorisme comme un outil contre le soutien à la Palestine.
 
-Les invités portent le reste. Des militants syndicaux accusent l'intersyndicale de trahison, et une cofondatrice de collectif s'élève contre l'obligation alimentaire. Sur Gaza, Blast reçoit Sepideh Farsi et Rima Hassan, puis Bertrand Badie, qui juge le cessez-le-feu fragile, et deux autres invités sur la trêve.
+Blast reçoit aussi des voix qui portent leurs propres thèses : des militants syndicaux qui accusent l'intersyndicale de trahison, Sepideh Farsi, Rima Hassan, Bertrand Badie, Cypel et Slama sur Gaza et la fragilité de la trêve, puis Éric Aeschimann et Blanche Sabat sur l'écologie et la bataille culturelle. Elle relaie enfin la révolte de la Gen Z malgache.
 
 ## Contenu
 
@@ -23,3 +23,4 @@ Les invités portent le reste. Des militants syndicaux accusent l'intersyndicale
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/3-2025-10-12/CLAUDE|2025-10-12 → 2025-10-13]] (4 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/4-2025-10-14/CLAUDE|2025-10-14 → 2025-10-16]] (4 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/5-2025-10-17/CLAUDE|2025-10-17 → 2025-10-18]] (3 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/6-2025-10-19/CLAUDE|2025-10-19 → 2025-10-22]] (6 Digests)

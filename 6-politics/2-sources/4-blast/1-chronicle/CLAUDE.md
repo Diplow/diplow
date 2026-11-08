@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit deux ans de pouvoir comme une dérive : une macronie au service des
-  puissants, un RN banalisé jusqu'à la dissolution, une extrême droite qui
-  avance, un PS accusé de trahir la gauche. Elle soutient que seul le rapport
-  de force fait reculer.
+  Blast lit deux ans de vie politique comme une dérive : une macronie qui sert
+  les puissants et fait payer les précaires, une extrême droite banalisée
+  jusqu'au pouvoir, un PS qui trahit la gauche. Seul le rapport de force fait
+  reculer.
 ---
 # Chronicle
 
-Blast lit la période comme une dérive continue. Dès [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]], la macronie sert les puissants et fait payer les précaires, tandis que le RN est banalisé et érigé en seul opposant. La loi immigration, alignée sur l'extrême droite, en est pour elle le signe, et la dissolution apparaît comme un calcul de Macron.
+Sur toute la Chronicle, Blast décrit un pouvoir macroniste qui sert les puissants et frappe les plus faibles. De fin 2023 à l'été 2024 ([[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|première Period]]), il voit le RN banalisé et érigé en seul opposant, et la loi immigration alignée sur l'extrême droite. Il lit la dissolution comme un calcul de Macron.
 
-Dans [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]], Blast fait de la dissolution la voie ouverte à l'extrême droite : Macron déroule le tapis au RN et impose Barnier avec son aval. À ses yeux, la crise ne se referme que par sa démission. Elle dénonce aussi les médias de milliardaires et un PS complice du budget Bayrou.
+Ce fil se prolonge à partir de juin 2024 ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|deuxième Period]]). La dissolution y est la voie ouverte à l'extrême droite : Macron déroule le tapis au RN et impose Barnier avec l'aval de ce dernier. Pour Blast, la crise ne se referme que par la démission du président. Il y ajoute deux cibles : les médias de milliardaires et un PS complice du budget Bayrou.
 
-Dans [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2025-10-18]], le regard s'élargit à une extrême droite qui avance, de Trump et Musk au RN, et à un pouvoir qui protège les puissants et réprime les faibles. Blast accuse le PS de trahir la gauche et le macronisme de complaisance envers le RN. Elle en tire une conviction constante : seul le rapport de force fait reculer.
+En 2025 ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|troisième Period]]), la dérive devient autoritaire et internationale. L'extrême droite avance, de Trump et Musk jusqu'au RN, et le PS trahit la gauche. La conclusion de Blast est que seul le rapport de force fait reculer ce mouvement, pas une primaire.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] (276 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2025-10-18]] (256 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2025-10-22]] (262 Digests)
