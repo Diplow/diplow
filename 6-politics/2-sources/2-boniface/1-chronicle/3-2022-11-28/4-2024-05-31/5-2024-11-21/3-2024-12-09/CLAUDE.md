@@ -1,23 +1,22 @@
 ---
-title: "2024-12-09 → 2026-10-14"
+title: "2024-12-09 → 2024-12-16"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/5-2024-11-21/3-2024-12-09
 owner: diplo
 preview: >-
   Boniface lit la chute d'Assad comme l'effet de l'affaiblissement de ses
-  trois soutiens, et la Coupe du monde 2034 comme un cadeau d'Infantino à
-  l'Arabie saoudite, face à laquelle il renvoie aux ONG. Il reçoit Rivoire et
-  Bermann, et chronique le livre de Stubb.
+  trois soutiens, voit dans la Coupe du monde saoudienne un calcul d'Infantino
+  et juge que les taxes promises par Trump aux BRICS risquent de souder le Sud
+  global. Il reçoit Rivoire sur l'investigation.
 ---
-# 2024-12-09 → 2026-10-14
+# 2024-12-09 → 2024-12-16
 
-Pendant cette Period, Boniface applique sa lecture des rapports de force à deux événements de la fin 2024. Pour la Syrie, il soutient que la chute de Bachar el-Assad tient à l'affaiblissement de la Russie, du Hezbollah et de l'Iran, ses trois soutiens. Il en tire un tableau de vainqueurs (les Syriens, la Turquie, Israël) et une réserve : l'avenir dépend du visage, inclusif ou terroriste, du nouveau pouvoir. Pour la Coupe du monde, il soutient qu'Infantino a attribué l'édition 2030 à trois continents surtout pour dégager la place de l'Asie et offrir 2034 à l'Arabie saoudite. Comme la FIFA a renoncé à ses exigences, c'est selon lui aux ONG de peser sur Riyad.
+Boniface lit l'actualité de la semaine à travers les rapports de force entre puissances. La chute de Bachar el-Assad s'explique selon lui par l'affaiblissement de ses trois soutiens, la Russie, le Hezbollah et l'Iran. Les Syriens, la Turquie et Israël en sortent vainqueurs, mais tout dépend du visage, inclusif ou terroriste, que prendra le nouveau pouvoir. Il applique la même grille à Donald Trump : avant même son investiture, celui-ci produit des chocs géopolitiques. Sa menace de taxes de 100 % contre les BRICS, au sujet d'une monnaie commune que ces pays ne visent pas, risque selon Boniface de souder le Sud global contre l'Impérium américain plutôt que de le faire plier.
 
-Les autres Digests laissent la parole à des invités ou à un livre, et Boniface y reçoit ou chronique plus qu'il ne tranche. Jean-Baptiste Rivoire soutient que Bolloré et quelques milliardaires ont mis la presse privée à leur service, et il attend une investigation libre des citoyens qui la financent. Sylvie Bermann, ancienne ambassadrice à Pékin, juge que le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, et que l'excédent commercial chinois met l'Europe en difficulté. Boniface chronique aussi Le Triangle du pouvoir d'Alexander Stubb, qui découpe le monde en trois blocs et demande à l'Occident, affaibli par son deux poids deux mesures, de montrer l'exemple au Sud global.
+Boniface décrypte aussi les coulisses du sport mondial. En attribuant la Coupe du monde 2030 à trois continents, Gianni Infantino a surtout dégagé la place de l'Asie pour offrir 2034 à l'Arabie saoudite. La FIFA ayant renoncé à ses exigences, c'est désormais aux ONG de peser sur Riyad. Dans un entretien, il reçoit Jean-Baptiste Rivoire, qui soutient que Bolloré et une poignée de milliardaires ont mis la presse privée à leur service et que la pression politique tient France Télévisions. Pour Rivoire, l'espoir d'une investigation libre vient des citoyens qui la financent.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/5-2024-11-21/3-2024-12-09/1-syrie-la-chute-de-bachar-et|Syrie : la chute de Bachar et ses conséquences]] (2024-12-09)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/5-2024-11-21/3-2024-12-09/2-menace-sur-l-investigation-avec-jean|Menace sur l'investigation. Avec Jean-Baptiste Rivoire - Entretiens géopo]] (2024-12-11)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/5-2024-11-21/3-2024-12-09/3-coupe-du-monde-en-arabie-saoudite|Coupe du monde en Arabie Saoudite : comment et pourquoi ?]] (2024-12-12)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/5-2024-11-21/3-2024-12-09/4-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/5-2024-11-21/3-2024-12-09/5-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/5-2024-11-21/3-2024-12-09/4-trump-contre-les-brics|Trump contre les BRICS ?]] (2024-12-16)
