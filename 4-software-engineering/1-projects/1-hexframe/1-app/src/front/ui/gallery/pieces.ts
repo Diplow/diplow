@@ -224,6 +224,13 @@ export const pieces = [
     note: m.gallery_note_help_widget,
   },
   {
+    name: 'HexWidget',
+    tier: 'chat',
+    sources: ['features/breadcrumb/HexWidget.tsx'],
+    madeOf: ['Widget', 'Canvas'],
+    note: m.gallery_note_hex_widget,
+  },
+  {
     name: 'SignInWidget',
     tier: 'chat',
     sources: ['ui/chat/widgets/sign-in/SignInWidget.tsx'],

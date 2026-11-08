@@ -27,7 +27,7 @@ import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { useShipped } from '#/front/client/mapping/queries'
 import { typedOf } from '#/front/client/mapping/sharing'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
-import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
+import { BreadcrumbGallery, HexWidgetGallery } from '#/front/features/breadcrumb/gallery'
 import { encoded } from '#/front/features/conversation/composer/mention'
 import { happenedOf } from '#/front/features/conversation/entry/words'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
@@ -316,6 +316,7 @@ function Specimens({ chapter, view, onViewChange, onCenter }: SpecimensProps) {
           <ReadBoundary>
             <HelpGallery />
           </ReadBoundary>
+          <HexWidgetGallery />
           <SignInWidgetGallery />
           <ChatLayoutsGallery />
           <ChatAtomsGallery />
