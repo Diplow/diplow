@@ -1,6 +1,6 @@
 ---
 title: "MACRONIE, RN : UNIS POUR DOMINER"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/4-2025-10-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/5-2025-10-03
 owner: diplo
 preview: >-
   Blast soutient que les macronistes ont fait élire le RN aux vice-présidences

@@ -1,6 +1,6 @@
 ---
 title: "MOUVEMENT SOCIAL : \"L’INTERSYNDICALE FINIT TOUJOURS PAR TRAHIR TOUS LES SALARIÉS\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/4-2025-10-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/5-2025-10-03
 owner: diplo
 preview: >-
   Des militants syndicaux interrogés par Blast accusent l'intersyndicale de
