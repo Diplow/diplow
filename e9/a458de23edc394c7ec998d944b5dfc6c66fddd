@@ -1,0 +1,21 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/hex.test.ts
+  s_63098e197dba30::t_dc1d1debb8de33 24-29,32-33,66-72
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE.md
+  s_63098e197dba30::t_dc1d1debb8de33 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e9a458de23edc394c7ec998d944b5dfc6c66fddd",
+  "prompts": {},
+  "sessions": {
+    "s_63098e197dba30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fa8011de-4974-4841-947a-b5703d73f188",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
