@@ -1,20 +1,20 @@
 ---
-title: "2025-04-12 → 2025-06-30"
+title: "2025-04-12 → 2025-07-07"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12
 owner: diplo
 preview: >-
-  Blast défend la justice face à la droite et à l'extrême droite, dénonce des
-  pouvoirs qui s'en prennent à l'état de droit et protègent les puissants,
-  soutient que seul le rapport de force fait reculer, et appelle à s'organiser
-  contre le fascisme.
+  Blast dénonce des pouvoirs, de Macron à Trump, qui protègent les puissants,
+  frappent les faibles et abîment l'état de droit. Elle défend la justice face
+  à la droite et à l'extrême droite, et soutient que seul le rapport de force
+  fait reculer.
 ---
-# 2025-04-12 → 2025-06-30
+# 2025-04-12 → 2025-07-07
 
-Sur ces deux mois et demi, Blast décrit des pouvoirs qui frappent les plus faibles et épargnent les puissants. Le budget Bayrou ménage les plus riches, l'Élysée protège Nestlé Waters, Nestlé et Bétharram jouissent d'une impunité, et des milliardaires achètent la démocratie. Blast y voit des intérêts privés confondus avec l'intérêt général. Elle accuse Macron comme Trump d'abîmer l'état de droit et de s'en prendre à la contestation, et dénonce l'obscurantisme du second.
+Sur ces trois mois, Blast décrit un même mouvement : des pouvoirs politiques, économiques et médiatiques qui protègent les puissants et frappent les faibles. Elle défend la justice dans les affaires Le Pen et Sarkozy, dénonce un budget Bayrou qui épargne les plus riches, la protection de Nestlé par l'Élysée, l'impunité de Bétharram et des milliardaires qui achètent la démocratie. Elle voit la même logique chez Trump et chez Macron, qui s'attaquent à l'état de droit et à la contestation, et dans un Figaro qui s'extrême-droitise (voir [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/CLAUDE|2025-05-13 → 2025-05-27]]).
 
-Un deuxième fil porte sur la justice et l'extrême droite. Blast défend l'institution judiciaire face à la droite et à l'extrême droite dans les affaires Le Pen et Sarkozy. Elle voit un Figaro qui s'extrême-droitise, une extrême droite banalisée et un double standard des médias envers LFI. Elle reproche aussi à l'État de refuser de nommer un attentat islamophobe, et juge qu'une loi sur l'antisémitisme muselle la critique d'Israël. Gaza traverse la période : le carnage d'avril, puis, en juin, une guerre d'Israël contre l'Iran qui viserait à le faire oublier.
+Le propos change de registre au fil de la Period. D'avril à mai, il dénonce surtout : un attentat islamophobe que l'État refuse de nommer, une loi sur l'antisémitisme qui muselle la critique d'Israël, le carnage à Gaza, le double standard des médias envers LFI. Fin mai et début juin, il passe aux violences systémiques que l'on invisibilise (travail qui abîme, intérêts privés confondus avec l'intérêt général, extrême droite banalisée) et à ce qui permet d'y répondre : seul le rapport de force fait reculer, sans passer par une primaire à gauche.
 
-Le ton évolue de la dénonciation vers la stratégie. À la fin de la période, Blast soutient que seul le rapport de force fait reculer, sans passer par une primaire à gauche, et appelle à s'organiser contre le fascisme. Elle reçoit des invités sur l'oligarchie, le fascisme et la téléréalité, dont Rose Lamy, Sébastien Bourdon, Laurent Larcher et Sophie Bessis. Elle leur laisse leurs propres analyses.
+Mi-juin, l'arrestation de son journaliste Yanis Mhamdi par Israël, qu'elle juge illégale, la touche directement. Elle accuse le gouvernement de complicité et dénonce la réforme Dati. La fin de la Period durcit l'appel : face à des pouvoirs qui verrouillent la démocratie, elle appelle à s'organiser, jusqu'à la grève et au blocage, et défend l'art engagé. Ses invités, reçus sur l'oligarchie, le fascisme, l'écologie ou l'Iran, élargissent ce cadre sans que leurs thèses deviennent les siennes.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ Le ton évolue de la dénonciation vers la stratégie. À la fin de la période,
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/2-2025-04-28/CLAUDE|2025-04-28 → 2025-05-12]] (16 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/CLAUDE|2025-05-13 → 2025-05-27]] (17 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/CLAUDE|2025-05-28 → 2025-06-11]] (15 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/CLAUDE|2025-06-12 → 2025-06-30]] (25 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/CLAUDE|2025-06-12 → 2025-06-25]] (17 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/CLAUDE|2025-06-26 → 2025-07-07]] (14 Digests)

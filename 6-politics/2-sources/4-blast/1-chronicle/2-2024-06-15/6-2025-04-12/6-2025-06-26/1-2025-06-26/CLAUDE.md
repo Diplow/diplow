@@ -1,6 +1,6 @@
 ---
 title: "2025-06-26 → 2025-06-28"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/1-2025-06-26
 owner: diplo
 preview: >-
   Blast soutient que Trump et Macron, par des méthodes différentes, abîment
@@ -18,8 +18,8 @@ Dans ce paysage, Blast montre que les mouvements étudiants pour la Palestine, r
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/1-immigration-repression-le-debut-de-la|IMMIGRATION, RÉPRESSION : LE DÉBUT DE LA FIN DES LIBERTÉS AUX USA]] (2025-06-26)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/2-trump-macron-pas-la-meme-methode|TRUMP / MACRON : PAS LA MÊME MÉTHODE, MAIS LE MÊME RÉSULTAT]] (2025-06-26)
-3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/3-conflit-d-interets-et-favoritisme-une|CONFLIT D'INTÉRÊTS ET FAVORITISME : UNE LANCEUSE D'ALERTE VISE EDOUARD PHILIPPE]] (2025-06-27)
-4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/4-palestine-les-etudiants-bousculent-le-parlement|PALESTINE : LES ÉTUDIANTS BOUSCULENT LE PARLEMENT EUROPÉEN]] (2025-06-27)
-5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/5-conclave-retraites-bayrou-enfonce-le-pays|CONCLAVE RETRAITES : BAYROU ENFONCE LE PAYS DANS LE CHAOS]] (2025-06-28)
+1. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/1-2025-06-26/1-immigration-repression-le-debut-de-la|IMMIGRATION, RÉPRESSION : LE DÉBUT DE LA FIN DES LIBERTÉS AUX USA]] (2025-06-26)
+2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/1-2025-06-26/2-trump-macron-pas-la-meme-methode|TRUMP / MACRON : PAS LA MÊME MÉTHODE, MAIS LE MÊME RÉSULTAT]] (2025-06-26)
+3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/1-2025-06-26/3-conflit-d-interets-et-favoritisme-une|CONFLIT D'INTÉRÊTS ET FAVORITISME : UNE LANCEUSE D'ALERTE VISE EDOUARD PHILIPPE]] (2025-06-27)
+4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/1-2025-06-26/4-palestine-les-etudiants-bousculent-le-parlement|PALESTINE : LES ÉTUDIANTS BOUSCULENT LE PARLEMENT EUROPÉEN]] (2025-06-27)
+5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/1-2025-06-26/5-conclave-retraites-bayrou-enfonce-le-pays|CONCLAVE RETRAITES : BAYROU ENFONCE LE PAYS DANS LE CHAOS]] (2025-06-28)

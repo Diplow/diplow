@@ -1,6 +1,6 @@
 ---
 title: "🦏 GAZA, IRAN, ETC. : POUR LES GRANDS MÉDIAS, ISRAËL A TOUS LES DROITS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/6-2025-06-29
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/2-2025-06-29
 owner: diplo
 preview: >-
   Blast soutient que le 7 octobre sert de blanc-seing à Israël, que sa guerre

@@ -1,20 +1,20 @@
 ---
-title: "2025-06-12 → 2025-06-30"
+title: "2025-06-12 → 2025-06-25"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12
 owner: diplo
 preview: >-
-  Blast dénonce des pouvoirs qui frappent les plus faibles et protègent les
-  puissants, accuse Macron et Trump d'abîmer l'état de droit, soutient que la
-  guerre d'Israël contre l'Iran vise à faire oublier Gaza et appelle à
-  s'organiser contre le fascisme.
+  Blast juge illégale l'arrestation de son journaliste Yanis Mhamdi par
+  Israël, accuse le gouvernement de complicité, dénonce la réforme Dati et des
+  pouvoirs qui frappent les faibles et protègent les puissants. Blast reçoit
+  des invités sur l'extrême droite, l'écologie et l'Iran.
 ---
-# 2025-06-12 → 2025-06-30
+# 2025-06-12 → 2025-06-25
 
-Sur la France, Blast juge illégale l'arrestation de son journaliste Yanis Mhamdi par Israël et accuse Macron et le gouvernement de complicité. Un an après la dissolution, elle voit un Macron qui s'accroche au pouvoir. Elle y ajoute le conclave sur les retraites, qu'elle lit comme un piège de Bayrou, une alerte visant Édouard Philippe, et le départ de Lapix comme la réforme Dati, qu'elle présente comme une menace pour l'indépendance du service public. Elle juge aussi les plateformes régressives et soutient que le vote n'a rien de naturel ni d'éclairé.
+Blast ouvre la Period sur l'arrestation de son journaliste Yanis Mhamdi par Israël, qu'elle juge illégale, et accuse Macron et le gouvernement de complicité. Un an après la dissolution, elle décrit un Macron qui s'accroche au pouvoir. Elle voit aussi dans le départ de Lapix et dans la réforme Dati une menace pour l'indépendance du service public, dénonce le traitement médiatique de la flottille pour Gaza et juge les plateformes régressives.
 
-Sur l'international, Blast décrit des pouvoirs qui frappent les plus faibles et protègent les puissants : raids de l'ICE et embrasement de Los Angeles, répression aux États-Unis, rejet de la taxe Zucman, arraisonnement du Madleen. Elle soutient que Trump et Macron, par des méthodes différentes, abîment l'état de droit et la démocratie. Elle dénonce le traitement médiatique de la flottille pour Gaza, salue les étudiants pour la Palestine, et soutient en fin de période que le 7 octobre sert de blanc-seing à Israël, que les grands médias français relaient sa propagande et que sa guerre contre l'Iran vise à faire oublier Gaza ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/6-2025-06-29/CLAUDE|2025-06-29 → 2025-06-30]]). Face à un fascisme qui n'a jamais disparu, elle appelle à s'organiser et à agir.
+Un fil revient d'une semaine à l'autre : des pouvoirs qui frappent les plus faibles et protègent les puissants. Blast le suit dans les raids de l'ICE et l'embrasement de Los Angeles, dans le rejet de la taxe Zucman et dans l'arraisonnement du Madleen. Elle plaide aussi, avec deux intervenants, pour réduire l'incarcération, et soutient en fin de Period que le vote n'a rien de naturel ni d'éclairé.
 
-Blast laisse aussi la parole à ses invités. Elle reçoit Cole Stangler et Léane Alestra sur l'extrême droite, un anthropologue sur la Nouvelle-Calédonie, et des invités qui opposent à l'écologie punitive une écologie de la libération et lisent l'attaque israélienne contre l'Iran comme une diversion de Gaza. Deux intervenants y plaident pour réduire l'incarcération.
+Les invités élargissent le propos. Cole Stangler et Léane Alestra parlent d'extrême droite, un anthropologue de la Nouvelle-Calédonie. D'autres opposent à l'écologie punitive une écologie de la libération et lisent l'attaque israélienne contre l'Iran comme une diversion de Gaza : ces thèses restent les leurs, que Blast leur donne la parole pour exposer.
 
 ## Contenu
 
@@ -22,5 +22,3 @@ Blast laisse aussi la parole à ses invités. Elle reçoit Cole Stangler et Léa
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/2-2025-06-15/CLAUDE|2025-06-15 → 2025-06-19]] (5 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/3-2025-06-20/CLAUDE|2025-06-20 → 2025-06-22]] (4 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/4-2025-06-23/CLAUDE|2025-06-23 → 2025-06-25]] (3 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/CLAUDE|2025-06-26 → 2025-06-28]] (5 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/6-2025-06-29/CLAUDE|2025-06-29 → 2025-06-30]] (3 Digests)

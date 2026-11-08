@@ -1,6 +1,6 @@
 ---
 title: "IMMIGRATION, RÉPRESSION : LE DÉBUT DE LA FIN DES LIBERTÉS AUX USA"
-parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26
+parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/1-2025-06-26
 owner: diplo
 preview: >-
   Depuis le retour de Trump, la répression des manifestations, les raids d'ICE
