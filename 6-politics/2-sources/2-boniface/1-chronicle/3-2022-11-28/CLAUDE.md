@@ -4,21 +4,18 @@ parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28
 owner: diplo
 preview: >-
   Boniface lit quatre ans d'actualité par le deux-poids-deux-mesures
-  occidental et la montée du Sud global : Ukraine, Gaza, un monde plus clivé.
-  Il plaide pour une France sans suivisme envers Washington, une négociation
-  non taboue en Ukraine et la bataille contre le RN.
+  occidental et un monde qui échappe à l'Occident : Ukraine, Gaza, Sud global,
+  France sans suivisme envers Washington, négociation plutôt qu'escalade.
 ---
 # 2022-11-28 → 2026-10-30
 
-D'un bout à l'autre de la Period, Pascal Boniface applique la même grille : l'Occident a perdu le monopole de la lecture du monde, et son deux-poids-deux-mesures entame sa crédibilité face à un Sud global qui s'affirme. Le clivage entre l'Occident et le reste du monde devient plus net au fil des années, et c'est lui qui donne sens aux événements successifs.
+D'un bout à l'autre de la Chronicle, Boniface applique la même grille : l'Occident perd sa crédibilité en pratiquant un deux-poids-deux-mesures, entre l'Ukraine et Gaza notamment, et le monde se clive entre l'Occident et le reste du monde. Le Sud global monte, le multi-alignement s'impose, et la France et l'Europe doivent défendre leurs intérêts et leur autonomie stratégique plutôt que suivre Washington.
 
-Cette grille traverse les deux grands conflits. En Ukraine, Boniface estime que le temps ne joue pour personne, que la Chine en profite et que la guerre finira par épuisement, d'où son appel à une négociation non taboue. Sur Gaza, il juge que le deux-poids-deux-mesures isole l'Occident, que l'offensive n'a pas d'horizon politique et que la force ne protège pas Israël. Il redoute aussi le risque d'engrenage, que la crise israélo-iranienne illustre. Du côté des puissances non occidentales, il lit l'OCS comme un espace de multi-alignement.
-
-Pour la France et l'Europe, il défend l'autonomie stratégique : la France doit défendre ses intérêts sans suivisme envers Washington. Sur la scène intérieure, la fin de la Period est marquée par la dissolution et par la bataille contre le RN.
+Les terrains changent avec les années. L'hiver et le printemps 2022-2023 tournent autour de la guerre en Ukraine. Fin 2023, Boniface juge que le temps ne joue pour personne et que la Chine en profite, puis il passe à Gaza, où l'offensive n'a pas d'horizon politique et isole l'Occident. Il y ajoute le risque d'engrenage de la crise israélo-iranienne et plaide pour une négociation non taboue en Ukraine. La dernière période radicalise le réalisme de cette lecture : la force n'a jamais apporté la sécurité à Israël, et les guerres finissent par épuisement.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/1-2022-11-28/CLAUDE|2022-11-28 → 2023-06-01]] (76 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/2-2023-06-02/CLAUDE|2023-06-02 → 2023-11-29]] (74 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/CLAUDE|2023-11-30 → 2024-05-30]] (88 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/CLAUDE|2024-05-31 → 2026-10-30]] (72 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/CLAUDE|2024-05-31 → 2026-10-30]] (78 Digests)

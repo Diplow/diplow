@@ -1,6 +1,6 @@
 ---
 title: "L'OCS, une OTAN asiatique ? | Expliquez-moi..."
-parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/4-2024-10-03/4-2026-10-21
+parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/4-2024-10-03/5-2026-10-21
 owner: diplo
 preview: >-
   Boniface soutient que l'OCS n'est pas une OTAN asiatique : sans garantie de

@@ -338,6 +338,7 @@ kinds:
       raid-humanitaire: {définition: "Course automobile étudiante en plusieurs étapes, qui reverse une partie de ses bénéfices à une association humanitaire.", statut: proposé, introduit_par: paduteam/gpsNkg378yI.md}
       catastrophe-industrielle: {définition: "Accident industriel majeur, comme l'effondrement d'une usine, qui fait de nombreuses victimes.", statut: proposé, introduit_par: blast/sTed1yTvqW0.md}
       université-d-été: {définition: "Rencontre annuelle d'été d'un parti, faite de débats, d'ateliers et de discours de ses dirigeants.", statut: proposé, introduit_par: paduteam/325tzF3T7FM.md}
+      séance: {définition: "Séance d'une assemblée qui prend une décision historique.", statut: proposé, introduit_par: blast/MOfb3v9r-CY.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

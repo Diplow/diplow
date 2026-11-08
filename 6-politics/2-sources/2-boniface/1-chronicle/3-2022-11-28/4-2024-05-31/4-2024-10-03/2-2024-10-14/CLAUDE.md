@@ -1,21 +1,26 @@
 ---
-title: "2024-10-14 → 2026-10-14"
+title: "2024-10-14 → 2024-10-22"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/4-2024-10-03/2-2024-10-14
 owner: diplo
 preview: >-
-  Boniface soutient que la guerre en Ukraine finira par épuisement et que
-  l'Occident doit préférer le réalisme à l'émotion. Il chronique Alexander
-  Stubb sur un monde en trois blocs et reçoit Sylvie Bermann sur la parité
-  sino-américaine.
+  Boniface lit l'Ukraine, Gaza et la Corée du Nord par le réalisme : la guerre
+  finira par épuisement, Biden n'obtient de Netanyahou que ce qui touche aux
+  intérêts américains, et il n'y aura pas de troisième guerre mondiale. Il
+  reçoit Raffarin et Lellouche.
 ---
-# 2024-10-14 → 2026-10-14
+# 2024-10-14 → 2024-10-22
 
-Boniface soutient que la guerre en Ukraine se terminera par épuisement, sur les lignes actuelles et sans traité de paix. Selon lui, l'Occident s'est pris au piège d'une approche émotionnelle du conflit et doit lui préférer le réalisme.
+Sur l'Ukraine, Boniface soutient que la guerre se terminera par épuisement, sur les lignes actuelles et sans traité de paix, et que l'Occident, pris au piège de son approche émotionnelle, doit lui préférer le réalisme. Face à l'envoi de soldats nord-coréens, il y voit un cobelligérant qui renforce les capacités russes sans les rendre décisives. Il écarte pourtant une troisième guerre mondiale, car les Occidentaux n'enverront pas de soldats.
 
-Deux ans plus tard, ses vidéos portent sur l'ordre mondial qui se dessine. Il chronique le livre d'Alexander Stubb, président finlandais, pour qui le monde se divise en trois blocs (Occident, Orient, Sud global). Dans ce livre, l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur un Sud qui décidera du nouvel ordre. Boniface reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans que Pékin ait gagné. Elle voit une Chine patiente sur Taïwan, qui n'est pas anti-européenne mais dont l'excédent commercial met l'Europe en difficulté.
+Sur le Proche-Orient, sa grille est celle des intérêts plutôt que des principes : Biden n'obtient de Netanyahou que ce qui touche aux intérêts économiques américains, comme épargner le pétrole et le nucléaire iraniens avant la présidentielle, mais rien pour les civils de Gaza. Dans la polémique autour de Karim Bouamrane, Boniface admet avoir mal choisi ses mots, mais soutient qu'il dénonçait l'autocensure des musulmans sur le Proche-Orient, et que l'affaire sert à empêcher toute critique du gouvernement israélien et tout appel au cessez-le-feu.
+
+La Period fait aussi place à deux voix qu'il reçoit. Pour Jean-Pierre Raffarin, le monde traverse une crise du leadership, entre ONU bloquée, droit qui recule devant la force et Europe sans boussole, et il appelle à un nouveau multilatéralisme et à un front des démocraties. Pour Pierre Lellouche, auteur d'Engrenages, la guerre d'Ukraine était évitable, elle a soudé un axe anti-occidental et révélé une France suiviste et affaiblie.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/4-2024-10-03/2-2024-10-14/1-ukraine-fin-de-partie|Ukraine : fin de partie ?]] (2024-10-14)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/4-2024-10-03/2-2024-10-14/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/4-2024-10-03/2-2024-10-14/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/4-2024-10-03/2-2024-10-14/2-geopolitique-et-leadership-avec-jean-pierre|Géopolitique et leadership. Avec Jean-Pierre Raffarin - Entretiens géopo]] (2024-10-16)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/4-2024-10-03/2-2024-10-14/3-biden-netanyahou-epargner-le-petrole-mais|Biden / Netanyahou : épargner le pétrole mais pas les civils]] (2024-10-17)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/4-2024-10-03/2-2024-10-14/4-j-ai-lu-engrenages-la-guerre|J'ai lu... « Engrenages : La guerre d'Ukraine et le basculement du monde » par Pierre Lellouche]] (2024-10-18)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/4-2024-10-03/2-2024-10-14/5-karim-bouamrane-retour-sur-une-polemique|Karim Bouamrane : retour sur une polémique]] (2024-10-21)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/4-2024-10-03/2-2024-10-14/6-vers-la-troisieme-guerre-mondiale|Vers la Troisième Guerre mondiale ?]] (2024-10-22)
