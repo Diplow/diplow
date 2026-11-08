@@ -3,16 +3,16 @@ title: "2025-07-04 → 2025-07-07"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/3-2025-07-04
 owner: diplo
 preview: >-
-  Blast dénonce des pouvoirs qui verrouillent et reculent, de la dynastie
-  togolaise ménagée par la France à l'offensive de la droite contre
-  l'écologie. Il défend aussi l'art engagé et réhabilite Robespierre contre la
-  légende noire.
+  Blast dénonce des pouvoirs qui se verrouillent ou qui reculent : le régime
+  dynastique togolais, l'offensive de la droite et de l'extrême droite contre
+  l'écologie. Il défend l'art engagé et, avec Pacôme Thiellement, réhabilite
+  Robespierre.
 ---
 # 2025-07-04 → 2025-07-07
 
-Sur ces quatre jours, Blast s'en prend à des pouvoirs qui se protègent par la force ou par la loi. Au Togo, il lit la révolte de juin 2025 comme la réponse à un régime dynastique verrouillé par la réforme constitutionnelle, à une répression brutale et à la vie chère, sous le regard complaisant de la France. En France, il présente les reculs écologiques (ZFE, loi Duplomb, moratoire sur les renouvelables) comme une offensive politique de la droite et de l'extrême droite, aidées du bloc central, qui retourne l'écologie punitive contre la science et l'opinion.
+Sur ces quatre jours, Blast met en cause des pouvoirs qui servent leurs intérêts contre la population. Au Togo, la révolte de juin 2025 naît d'un régime dynastique verrouillé par la réforme constitutionnelle, d'une répression brutale et de la vie chère, sous le regard complaisant de la France. En France, les reculs sur les ZFE, la loi Duplomb et les renouvelables ne sont pas, pour Blast, de simples ajustements : c'est une offensive politique de la droite et de l'extrême droite, aidées du bloc central, qui retourne l'écologie punitive contre la science et l'opinion.
 
-L'autre moitié de la Period porte sur ce que l'art et l'histoire disent du monde. Blast soutient que l'art engagé le saisit plus profondément qu'un slogan politique : Chaplin, Annie Ernaux et Ernest Cole refusent l'évidence et donnent forme aux dérives de leur époque, du capitalisme au racisme. Avec Pacôme Thiellement, il revient sur la Révolution et défait la légende noire de Robespierre. Selon lui, les Girondins et Danton ont mené la guerre et la rapine, et les thermidoriens ont défait la République sociale avant de fabriquer cette légende.
+Deux autres contenus prennent du recul, par la culture et l'histoire. Blast soutient que l'art engagé dit le monde plus profondément qu'un slogan politique, en donnant forme aux dérives du capitalisme et du racisme. Dans l'épisode de la série sur la Révolution, Pacôme Thiellement défait la légende noire de la Terreur : Robespierre n'en aurait pas été l'ordonnateur, et ce sont les thermidoriens qui auraient défait la République sociale.
 
 ## Contenu
 

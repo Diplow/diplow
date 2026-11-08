@@ -385,6 +385,7 @@ kinds:
       engagement-solennel: {définition: "Engagement public pris ensemble par des partis ou des élus, qui fixe un objectif commun.", statut: proposé, introduit_par: blast/MRXfHqwt3jg.md}
       circulaire: {définition: "Document d'un ministre adressé aux préfets ou aux services pour préciser l'application d'une loi.", statut: proposé, introduit_par: blast/3OdTK10ycDg.md}
       capitulaire: {définition: "Acte législatif ou réglementaire d'un souverain carolingien.", statut: proposé, introduit_par: paduteam/Zxpf21fWsNc.md}
+      proposition-de-loi: {définition: "Loi en discussion d'initiative parlementaire, pas encore définitivement adoptée.", statut: proposé, introduit_par: blast/qekuUH1fa0s.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
