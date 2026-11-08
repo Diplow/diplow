@@ -1,25 +1,24 @@
 ---
-title: "2025-02-05 → 2026-10-30"
+title: "2025-02-05 → 2025-03-06"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05
 owner: diplo
 preview: >-
   Boniface lit les initiatives de Trump comme une attaque contre le droit
-  international et la fin de l'OTAN telle qu'on la concevait, et appelle les
-  Européens à l'autonomie stratégique. Il soutient qu'un départ de Netanyahou
-  ne changerait presque rien pour les Palestiniens.
+  international, voit dans le lâchage de l'Ukraine la fin de l'OTAN et du
+  monde d'après 1945, et appelle l'Europe à l'autonomie stratégique et au
+  réarmement sans achats américains.
 ---
-# 2025-02-05 → 2026-10-30
+# 2025-02-05 → 2025-03-06
 
-Le fil de la Period est la lecture que Boniface fait de Trump. De Gaza à la Cour pénale internationale puis à Poutine, il voit dans chacune de ses initiatives une attaque contre le droit international. Le lâchage américain de l'Ukraine lui paraît la « mort cérébrale » de l'OTAN, la fin de l'Alliance telle qu'on la concevait. Il en tire la même conclusion d'un bout à l'autre : les Européens doivent réagir et gagner leur autonomie stratégique.
+Pendant ces quatre semaines, Boniface applique une même grille aux gestes de Trump : de Gaza à la Cour pénale internationale, puis à Poutine, chacun est pour lui une attaque contre le droit international, et les Européens doivent réagir. Le propos se resserre sur l'Ukraine. Le lâchage américain lui apparaît comme la « mort cérébrale » de l'OTAN, puis comme la fin de l'OTAN telle qu'on la concevait, avec Taïwan en écho. L'altercation entre Trump et Zelensky, dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/4-2025-03-03/CLAUDE|2025-03-03 → 2025-03-06]], marque à ses yeux la fin du monde d'après 1945.
 
-Sur le Proche-Orient, Boniface soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens (voir [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/4-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]]). Il reproche à la France de se contenter de protestations face à l'impunité des colons. Côté lectures, il juge biaisé le livre de Bruno Tertrais sur Israël et passionnant un livre sur le lobby pro-israélien. Il chronique aussi un livre sur le Sud global.
+La conclusion qu'il en tire reste la même d'un bout à l'autre : l'Europe doit gagner son autonomie stratégique. Dans les derniers jours, il précise ce que cela implique : se réarmer sans acheter américain et ne pas sacrifier le social.
 
-Il lit en outre l'OCS comme le signe d'un multi-alignement, non comme une OTAN asiatique. La chaîne reçoit des invités, parmi lesquels Rachida El Azzouzi, Élie Barnavi et Didier Billion, pour qui l'avenir des Kurdes passe par l'autonomie. D'autres parlent de la guerre commerciale de Trump et du climat, de la Chine, de Gaza, de Lula et du Japon.
+Boniface reçoit aussi des invités, à qui il laisse leurs thèses : Rachida El Azzouzi et Élie Barnavi au début de la période, deux invitées sur la guerre commerciale de Trump et le climat, Alain Bauer, qui lie migrations et démographie, puis Lumi, pour qui les médias dominants informent mal. Il juge par ailleurs biaisé le livre de Bruno Tertrais sur Israël, dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/2-2025-02-14/CLAUDE|2025-02-14 → 2025-02-19]].
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/1-2025-02-05/CLAUDE|2025-02-05 → 2025-02-13]] (6 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/2-2025-02-14/CLAUDE|2025-02-14 → 2025-02-19]] (5 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/3-2025-02-21/CLAUDE|2025-02-21 → 2026-10-14]] (4 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/4-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/5-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/3-2025-02-21/CLAUDE|2025-02-21 → 2025-02-27]] (4 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/4-2025-03-03/CLAUDE|2025-03-03 → 2025-03-06]] (3 Digests)

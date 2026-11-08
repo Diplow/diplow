@@ -3,19 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Pendant dix ans, Boniface applique les mêmes grilles à l'actualité :
-  multilatéralisme contre unilatéralisme, deux poids deux mesures occidental,
-  monde qui échappe à l'Occident. Il plaide pour l'autonomie stratégique
-  européenne et pour une négociation en Ukraine.
+  Sur dix ans, Boniface applique les mêmes grilles à l'actualité :
+  multilatéralisme, deux-poids-deux-mesures occidental, émergence du Sud
+  global. Il défend le réalisme, la négociation et une Europe autonome face à
+  Washington.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Boniface revient aux mêmes grilles de lecture et les applique à chaque événement : le multilatéralisme contre l'unilatéralisme, le deux poids, deux mesures occidental, un monde qui ne suit plus l'Occident. De Trump à la rivalité sino-américaine, des interventions extérieures qui échouent au Covid-19 qu'il lit comme un révélateur, la cohérence de ces outils d'une vidéo à l'autre fait la continuité de la période. Il presse aussi l'Europe d'acquérir son autonomie stratégique, une position qu'il tient de 2016 jusqu'aux derniers Digests.
+Sur toute la Chronicle, Pascal Boniface revient aux mêmes grilles de lecture, qu'il applique à tour de rôle à Trump, aux crises et aux guerres. Il oppose le multilatéralisme à l'unilatéralisme et dénonce un deux-poids-deux-mesures occidental. De 2016 à juin 2020, il presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur.
 
-Le poids de l'actualité change avec les années. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] est dominée par Trump et la scène internationale, puis par le Covid-19. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]] voit la guerre en Ukraine devenir pour lui une impasse qui appelle une négociation. Dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]], il maintient cette exigence d'une négociation non taboue en Ukraine, et juge que le mot génocide s'impose à propos de Gaza.
+De juin 2020 à novembre 2022, il lit l'actualité par la rivalité sino-américaine et par l'échec des interventions extérieures. Il voit ensuite dans la guerre en Ukraine une impasse qui appelle une négociation, et un Occident que le reste du monde ne suit plus.
+
+Dans la dernière période, jusqu'en octobre 2026, Boniface lit presque quatre ans de guerre en Ukraine, puis de Gaza, par ce même deux-poids-deux-mesures et par l'émergence du Sud global. Il défend le réalisme, la négociation et une Europe autonome face à Washington, et voit Trump attaquer le droit international.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]] (322 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (376 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (382 Digests)
