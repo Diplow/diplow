@@ -182,6 +182,7 @@ kinds:
       photographe: {définition: "Réalise des photographies et en fait son art ou son métier.", statut: proposé, introduit_par: blast/ybD52hYNuCw.md}
       financier: {définition: "Gère l'argent ou l'épargne de clients dans la finance.", statut: proposé, introduit_par: blast/EknEsfu3eiM.md}
       lycéen: {définition: "Élève d'un lycée, à la date de la Publication.", statut: proposé, introduit_par: paduteam/uIUVoct42YQ.md}
+      ancienne-première-dame: {définition: "A été l'épouse du chef de l'État et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/wAPhRvXtsl0.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

@@ -1,20 +1,20 @@
 ---
-title: "2026-10-08 → 2026-10-13"
+title: "2026-10-08 → 2026-10-14"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/4-2026-10-08
 owner: diplo
 preview: >-
-  La PaduTeam voit Glucksmann humilié puis vainqueur d'une primaire PS
-  rabougrie, candidat sans ligne ni espace qui travaille pour Hollande et
-  Mélenchon. Elle mise sur la jeunesse mobilisée et sur un Mélenchon qui
-  élargit sa base.
+  La PaduTeam lit la primaire du PS comme la fabrique d'un Glucksmann sans
+  ligne ni espace, qui sert Mélenchon. Elle salue un Roussel redevenu
+  communiste, voit la jeunesse mobilisée humilier les plateaux et politise
+  Octobre Rose pour réclamer le 100 % Sécu.
 ---
-# 2026-10-08 → 2026-10-13
+# 2026-10-08 → 2026-10-14
 
-La PaduTeam lit la primaire du PS comme une déroute du centre. Royal et Faure humilient Glucksmann au dernier débat, et elle appelle à ne pas voter pour lui. Sa victoire, dans une primaire rabougrie votée par des électeurs post-macronistes, fabrique selon elle un candidat sans ligne ni espace, qui travaille pour Hollande et pour Mélenchon. Un centre éclaté et des masses mobilisées doivent permettre à Mélenchon de gagner le second tour.
+Le fil de la semaine, c'est la primaire du PS et ce qu'elle prépare pour Mélenchon. La PaduTeam décrit un Glucksmann humilié par Royal et Faure au dernier débat, puis sacré vainqueur d'une primaire rabougrie, votée par des électeurs post-macronistes. Ce candidat n'a ni ligne ni espace, et elle le dit utile à Hollande comme à Mélenchon. Elle refuse donc de voter pour lui : avec un centre éclaté et des masses mobilisées, Mélenchon peut l'emporter au second tour.
 
-Du côté de la gauche radicale, elle salue un Roussel redevenu communiste : face à BFM TV et en défendant les parents de lycéens, il se place à la gauche de Mélenchon, ce qui sert LFI comme le PCF. Mélenchon doit élargir la base de gauche plutôt que miser sur le désistement et le candidat unique.
+L'autre fil est celui de la mobilisation lycéenne et de la jeunesse. La PaduTeam et Chris saluent un Roussel redevenu communiste, qui défend les parents de lycéens face à BFM TV et se place à la gauche de Mélenchon, ce qui sert LFI et le PCF. Mélenchon doit selon elles élargir la base de gauche plutôt que miser sur le désistement et le candidat unique. Elle voit aussi la jeunesse casser les codes des plateaux et mettre en déroute Consigny, Aphatie et Attal, mais lui demande de se doter d'une organisation et d'un programme à la hauteur.
 
-La jeunesse mobilisée est l'autre force de la Period. Elle casse les codes des plateaux en refusant de jouer le jeu et met en déroute Consigny, Aphatie et Attal, mais la PaduTeam la juge maintenant tenue de se doter d'une organisation et d'un programme à la hauteur.
+La semaine se clôt sur Mathilde Panot, que la PaduTeam soutient quand elle politise Octobre Rose. Cette campagne d'origine industrielle mobilise sur le comportement individuel et masque les causes de classe du cancer du sein. Il faut s'en servir pour réclamer le 100 % Sécu.
 
 ## Contenu
 
@@ -22,3 +22,4 @@ La jeunesse mobilisée est l'autre force de la Period. Elle casse les codes des 
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/4-2026-10-08/2-roussel-base-que-melenchon-sur-le|ROUSSEL + BASÉ QUE MÉLENCHON SUR LE MOUVEMENT LYCÉEN ?]] (2026-10-09)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/4-2026-10-08/3-apathie-consigny-les-journalistes-se-font|APATHIE, CONSIGNY : LES JOURNALISTES SE FONT HUMILIER PAR LA JEUNESSE]] (2026-10-12)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/4-2026-10-08/4-glucksmann-vainqueur-de-la-primaire-ps|GLUCKSMANN VAINQUEUR de LA PRIMAIRE PS (avec un score géorgien)]] (2026-10-13)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/4-2026-10-08/5-mathilde-panot-complotiste-elle-est-contre|MATHILDE PANOT COMPLOTISTE ?? ELLE EST CONTRE OCTOBRE ROSE !!]] (2026-10-14)
