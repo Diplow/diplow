@@ -1,6 +1,6 @@
 ---
 title: "RÉVÉLATIONS BLAST - 600 000€ DE BIJOUX CACHÉS : LES FACTURES QUI ACCABLENT RACHIDA DATI"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/1-2025-09-01
 owner: diplo
 preview: >-
   Blast soutient que des factures qu'il a obtenues prouvent que Rachida Dati a

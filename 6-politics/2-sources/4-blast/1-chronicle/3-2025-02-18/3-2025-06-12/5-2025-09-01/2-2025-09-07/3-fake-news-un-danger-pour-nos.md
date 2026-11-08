@@ -1,6 +1,6 @@
 ---
 title: "FAKE NEWS : UN DANGER POUR NOS DÉMOCRATIES ? AVEC @mathieuburgalassi"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/6-2025-09-07
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/2-2025-09-07
 owner: diplo
 preview: >-
   Blast soutient que les fake news, mensonges délibérés pour tromper, sapent
