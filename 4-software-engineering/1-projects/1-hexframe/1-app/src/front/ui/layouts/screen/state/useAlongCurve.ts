@@ -18,7 +18,7 @@
 // write between two reads would lay the page out again for each.
 import { useEffect, useLayoutEffect, type RefObject } from 'react'
 
-import { curveAcross, type Box } from '../curve'
+import { curveAcross, cutBeyondCurve, type Box } from '../curve'
 
 /** How far inside the curve what rides it keeps, in px. */
 const inside = 10
@@ -229,33 +229,15 @@ function ride(riding: HTMLElement, cut: Box | undefined) {
   }
 }
 
-/** How many segments the cut beyond the curve follows it by, as the chat's own cut does. */
-const steps = 48
-
 /**
- * Cuts `beyond` along the curve, from the column's top to its foot, down the curve then back up its
- * right edge, or takes the cut off where the chat isn't cut. It keeps as far inside the curve as it
- * keeps below the screen's top, so the margin its place gives it runs along the curve too.
+ * Cuts `beyond` along the curve (`cutBeyondCurve`), or takes the cut off where the chat isn't cut.
  */
 function cutBeyond(beyond: HTMLElement, cut: Box | undefined) {
-  if (cut === undefined)
-    return () => {
-      put(beyond, 'clip-path', undefined)
-    }
-  const own = beyond.getBoundingClientRect()
-  const margin = Math.max(0, own.top - cut.top)
-  const curve = Array.from({ length: steps + 1 }, (_, step) => {
-    const y = cut.top + (cut.height * step) / steps
-    return `${px(curveAcross(cut, y) + margin - own.left)} ${px(y - own.top)}`
-  })
-  const foot = px(cut.top + cut.height - own.top)
-  const top = px(cut.top - own.top)
+  const clip = cut && cutBeyondCurve(cut, beyond.getBoundingClientRect())
   return () => {
-    put(beyond, 'clip-path', `polygon(${curve.join(', ')}, 100% ${foot}, 100% ${top})`)
+    put(beyond, 'clip-path', clip)
   }
 }
-
-const px = (value: number) => `${String(Math.round(value * 100) / 100)}px`
 
 /** Where the curve passes across a height, from `top` to `bottom`, in a column cut along it. */
 type Across = (cut: Box, top: number, bottom: number) => number

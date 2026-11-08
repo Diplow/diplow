@@ -159,7 +159,7 @@ export function surroundingsOf(
   within: Partial<Record<Direction, Expanded>> = {},
 ): CanvasHex[] {
   const hexes = layoutCanvas(above, within)
-  const heart = framed(hexes, above.center.id)
+  const heart = framedIn(hexes, above.center.id)
   if (heart === undefined || center.heart === undefined) return []
   const whole = { center: center.heart.center, radius: center.heart.radius / heartShare }
   const away = (hex: CanvasHex) => distance(hex.hex.center, heart.center) >= heart.radius
@@ -200,11 +200,20 @@ export function surroundingsOf(
 
 const distance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y)
 
-/** Where a Tile is framed: the hex it opens into while a ring shows inside it, else its own. */
-function framed(hexes: readonly CanvasHex[], id: string): Hex | undefined {
+/**
+ * Where a Tile is framed in a drawing, as the camera frames it: the hex it opens into, its ground,
+ * while a ring shows inside it, its Context, its own hex drawn smaller at that ground's heart; else
+ * its own hex, never a Reference's to it; none where it isn't drawn.
+ */
+export function framedIn(hexes: readonly CanvasHex[], id: string): Hex | undefined {
   return (
     hexes.find((hex) => hex.kind === 'ground' && hex.key === `ground:${id}`)?.hex ??
-    hexes.find((hex) => hex.kind === 'tile' && hex.role === 'center')?.hex
+    hexes.find(
+      (hex) =>
+        (hex.kind === 'tile' || hex.kind === 'list') &&
+        hex.tile.id === id &&
+        hex.tile.reference === undefined,
+    )?.hex
   )
 }
 

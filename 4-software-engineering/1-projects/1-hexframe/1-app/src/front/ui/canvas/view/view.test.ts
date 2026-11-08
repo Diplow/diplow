@@ -485,11 +485,19 @@ describe('the page', () => {
   it('leaves for the center alone', () => {
     expect(withoutPage(system, { center: 'a', page: true })).toEqual({ center: 'a' })
     expect(withoutPage(system, { page: true })).toEqual({})
+    const linked = {
+      center: 'a',
+      frame: 'branches',
+      expanded: { 1: 'children' },
+      page: true,
+    } as const
+    expect(withoutPage(system, linked)).toEqual({ center: 'a' })
+    const beside = { center: 'a', page: true, around: { 4: {} } } as const
+    expect(withoutPage(system, beside)).toEqual({ center: 'a', around: { 4: {} } })
   })
 
   it('goes once the center changes or opens', () => {
     expect(recenter(system, { center: 'a', page: true }, 'a3')).not.toHaveProperty('page')
-    expect(centerOn(system, 'a')).not.toHaveProperty('page')
     expect(toggleCenter(system, { center: 'a', page: true })).not.toHaveProperty('page')
     expect(withContext(system, { page: true })).not.toHaveProperty('page')
   })

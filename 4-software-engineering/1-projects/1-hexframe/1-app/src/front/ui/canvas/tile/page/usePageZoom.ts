@@ -5,17 +5,8 @@
 import { useCallback, useLayoutEffect, useRef, useState, type RefObject } from 'react'
 
 import type { Hex } from '../../geometry/geometry'
-import type { CanvasHex } from '../../geometry/shape'
 import { easingOf, movingFor } from '../../../motion'
 import { pageZoomOf } from './zoom'
-
-/**
- * The hex the center is framed by in a drawing, as the camera frames it: the hex it opens into, its
- * ground, while a ring shows inside it, its Context, else its own; none where it isn't drawn.
- */
-export const framedIn = (hexes: readonly CanvasHex[], center: string): Hex | undefined =>
-  hexes.find((hex) => hex.kind === 'ground' && hex.key === `ground:${center}`)?.hex ??
-  hexes.find((hex) => hex.kind === 'tile' && hex.role === 'center')?.hex
 
 /** A hex of the canvas where it stands on the screen, in px from the viewport's top left. */
 function onScreen(svg: SVGSVGElement | null, hex: Hex | undefined): Hex | undefined {
@@ -54,7 +45,7 @@ interface PageZoomInput {
   open: boolean
   /** The canvas's `<svg>`, whose own coordinates `framed` is in. */
   svg: RefObject<SVGSVGElement | null>
-  /** The hex the center is framed by in the drawing now (`framedIn`). */
+  /** The hex the center is framed by in the drawing now (`framedIn`, `geometry/shape.ts`). */
   framed: Hex | undefined
 }
 

@@ -32,7 +32,9 @@ describe('pageZoomOf', () => {
     const { x, y, scale } = placingOf(from.transform)
     // The largest hex the page holds is 600 px tall: a radius of 300 scaled to 60.
     expect(scale).toBeCloseTo(0.2)
-    for (const corner of cornersOf(from.clipPath)) {
+    const corners = cornersOf(from.clipPath)
+    expect(corners).toHaveLength(6)
+    for (const corner of corners) {
       const drawn = { x: x + scale * corner.x, y: y + scale * corner.y }
       expect(Math.hypot(drawn.x - hex.center.x, drawn.y - hex.center.y)).toBeCloseTo(hex.radius)
     }
@@ -57,7 +59,9 @@ describe('pageZoomOf', () => {
   it('cuts a page narrower than its hex by the hex its width holds', () => {
     const [narrow] = pageZoomOf(hex, { width: 390, height: 700 })
     const corners = cornersOf(narrow.clipPath)
-    expect(Math.min(...corners.map(({ x }) => x))).toBeGreaterThanOrEqual(-1e-9)
-    expect(Math.max(...corners.map(({ x }) => x))).toBeLessThanOrEqual(390 + 1e-9)
+    expect(corners).toHaveLength(6)
+    // Its sides touch the page's: a hex of the width's radius.
+    expect(Math.min(...corners.map(({ x }) => x))).toBeCloseTo(0)
+    expect(Math.max(...corners.map(({ x }) => x))).toBeCloseTo(390)
   })
 })

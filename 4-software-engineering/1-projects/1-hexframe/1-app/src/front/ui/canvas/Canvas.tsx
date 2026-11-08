@@ -22,7 +22,7 @@ import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
-import { aloneHex, canvasSize, type EmptySlotTarget } from './geometry/shape'
+import { aloneHex, canvasSize, framedIn, type EmptySlotTarget } from './geometry/shape'
 import { directions, type Direction, type Point } from './geometry/geometry'
 import {
   AroundHexView,
@@ -52,7 +52,7 @@ import { useFinger } from './tile/menu/TileMenu'
 import { unitsIn } from './tile/moving/drag'
 import { Carried, MoveBanner } from './tile/moving/Moving'
 import { Page } from './tile/page/Page'
-import { framedIn, usePageZoom } from './tile/page/usePageZoom'
+import { usePageZoom } from './tile/page/usePageZoom'
 import { Arc } from './tile/marks/Marks'
 import type { ToldPart } from '../motion'
 import { wayTo, type TileMark } from './tile/marks/mark'
@@ -180,8 +180,8 @@ interface CanvasProps {
   sun?: Sun | undefined
   /**
    * The C key cycles the center's views, from anywhere on the page but a field, a menu or a dialog:
-   * alone, opened into its ring, its Context inside too, then alone again, a step showing nothing
-   * skipped (`cycleOf`). Without it, the key does nothing here, as on a page of several canvases.
+   * alone, opened into its ring, its Context inside too, its page, then alone again, a step showing
+   * nothing skipped, never the page (`cycleOf`). Without it, the key does nothing here, as on a page of several canvases.
    */
   cycles?: boolean
   /**
@@ -372,7 +372,8 @@ function Drawing(props: {
 /**
  * The center's page over the drawing, growing out of its hex and back (`tile/page/`), and the C key,
  * which cycles the center's views where the canvas cycles, its page going back into its hex first.
- * The key listens on the canvas's frame, since the drawing is inert while the page stands over it.
+ * The key holds back while the canvas's frame is inert, the frame rather than the drawing, which is
+ * inert while the page stands over it.
  */
 function usePageAndKey(
   { state, actions }: ReturnType<typeof useCanvasState>,

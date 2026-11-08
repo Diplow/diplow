@@ -547,9 +547,12 @@ export function withPage(system: TileNode, view: CanvasView): CanvasView {
   return tidy(system, { center: view.center, around: view.around, page: true })
 }
 
-/** Leaves the center's page for its hex, alone, as the page stood over it. */
+/**
+ * Leaves the center's page for its hex, alone, as the page stood over it, whatever else its link
+ * names. The Tiles around it stay as they are.
+ */
 export function withoutPage(system: TileNode, view: CanvasView): CanvasView {
-  return tidy(system, { ...view, page: undefined })
+  return tidy(system, { center: view.center, around: view.around })
 }
 
 /**

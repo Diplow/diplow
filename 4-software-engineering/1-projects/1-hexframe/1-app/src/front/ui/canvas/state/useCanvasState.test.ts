@@ -264,6 +264,12 @@ describe('the C key', () => {
       { center: 'notes', page: true },
       { gesture: 'show-page', tile: 'notes' },
     )
+    const page = render({ center: 'notes', page: true })
+    page.actions.cycle()
+    expect(page.onViewChange).toHaveBeenLastCalledWith(
+      { center: 'notes' },
+      { gesture: 'hide-page', tile: 'notes' },
+    )
   })
 })
 

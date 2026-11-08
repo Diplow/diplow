@@ -33,7 +33,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 | Forms | TanStack Form |
 | Tables | TanStack Table v9, inside `ui/` only |
 | Shortcuts | TanStack Hotkeys, behind a `hotkeys` seam in `ui/` |
-| Tile content | TanStack Markdown (1.x, in since HEX-141), behind a seam in `ui/` (`ui/seams/Markdown.tsx`): if it disappoints, the seam is the one file that changes |
+| Tile content | TanStack Markdown (1.x), behind the seam in [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/seams/CLAUDE\|seams]]: if it disappoints, the seam is the one file that changes |
 | Building a system by conversation | Claude Code in a Blaxel sandbox (`@blaxel/core`, behind `repositories/agent/sandbox/`, its seam), writing through the MCP server, its model calls relayed by the app's proxy (`repositories/agent/anthropic/`, which only relays): the messages endpoint only, its body decoded by a strict schema that keeps no field the settings don't name (no `mcp_servers`, no server tool, no unnamed beta), for the models the settings name, `max_tokens` capped, and only once Assistant has said the Turn may spend it |
 | Agents working on a System | An MCP server at `/mcp`, on `@modelcontextprotocol/server` (v2); its rules in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE\|api]] |
 | Effects and typed errors | Effect |

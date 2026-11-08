@@ -1,19 +1,13 @@
 // How a tile's page grows out of its hex and goes back into it: drawn small where the hex stands, cut
 // to the hex's shape, then whole over the canvas, its words never stretched, since it only scales
 // evenly. Pure.
-import type { Hex, Point } from '../../geometry/geometry'
+import { hexCorners, type Hex, type Point } from '../../geometry/geometry'
 
 /** How large the page is drawn, in px. */
 export interface Size {
   width: number
   height: number
 }
-
-/** A hex's six corners, pointy-top, from the top round to the top left. */
-const corners = [-90, -30, 30, 90, 150, 210].map((degrees) => {
-  const radians = (degrees * Math.PI) / 180
-  return { x: Math.cos(radians), y: Math.sin(radians) }
-})
 
 const polygonOf = (points: readonly Point[]) =>
   `polygon(${points.map(({ x, y }) => `${String(x)}px ${String(y)}px`).join(', ')})`
@@ -31,10 +25,7 @@ export function pageZoomOf(hex: Hex, size: Size): [Keyframe, Keyframe] {
   const scale = hex.radius / radius
   const x = hex.center.x - scale * middle.x
   const y = hex.center.y - scale * middle.y
-  const cut = corners.map((corner) => ({
-    x: middle.x + corner.x * radius,
-    y: middle.y + corner.y * radius,
-  }))
+  const cut = hexCorners({ center: middle, radius })
   // Each corner goes out to its own place on the page's edge: the top and bottom ones straight up
   // and down, the others to the page's corners.
   const whole = [

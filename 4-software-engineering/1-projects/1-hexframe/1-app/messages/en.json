@@ -579,7 +579,7 @@
   "gallery_note_skeleton": "The shape of what is loading, in its place.",
   "gallery_note_code_block": "A Body that isn't Markdown, shown as it is written; a long line scrolls.",
   "gallery_note_page": "A tile's page: its title, its preview and its body whole, the body read as Markdown, over the whole canvas in place of its hex. The C key reaches it after the center's Context and before it stands alone again: the page grows out of the hex the center was framed by, the drawing fading beneath it, and goes back into the center's hex as it leaves, by C or Escape. A Leaf that isn't Markdown shows its body as written. With reduced motion, it comes and goes at once.",
-  "gallery_note_markdown": "A Body read as Markdown, in the human's serif: headings, lists, quotes, code and links as a page sets them. Its HTML is shown as text and a link that would run code is dropped, since a Body is anyone's words.",
+  "gallery_note_markdown": "A Body read as Markdown, in the human's serif: headings, lists, quotes, code and links as a page sets them. Its HTML is shown as text, a link that would run code is dropped and an image shows as its alt text, fetched from nowhere, since a Body is anyone's words.",
   "gallery_state_page_markdown": "A body in Markdown, read whole",
   "gallery_state_page_file": "A Leaf that isn't Markdown, its body as written",
   "gallery_state_page_empty": "Nothing written yet",

@@ -19,7 +19,7 @@ const prose = [
   '[&_blockquote]:my-4 [&_blockquote]:border-l [&_blockquote]:border-border [&_blockquote]:pl-4 [&_blockquote]:text-muted-foreground',
   '[&_code]:font-mono [&_code]:text-[0.85em] [&_hr]:my-6 [&_hr]:border-border',
   '[&_pre]:my-4 [&_pre]:overflow-auto [&_pre]:rounded-md [&_pre]:bg-muted [&_pre]:p-4 [&_pre]:text-xs',
-  '[&_table]:my-4 [&_td]:py-1 [&_td]:pr-4 [&_th]:py-1 [&_th]:pr-4 [&_th]:text-left [&_th]:font-normal [&_img]:max-w-full',
+  '[&_table]:my-4 [&_td]:py-1 [&_td]:pr-4 [&_th]:py-1 [&_th]:pr-4 [&_th]:text-left [&_th]:font-normal',
 ].join(' ')
 
 interface MarkdownProps {
@@ -29,13 +29,21 @@ interface MarkdownProps {
 }
 
 /**
+ * No image is fetched: its alt text shows in its place, since an image's address, read from anyone's
+ * Body, would tell its host who reads it and when.
+ */
+const withoutImages = (_url: string, kind: 'link' | 'image', safe: string) =>
+  kind === 'image' ? null : safe
+
+/**
  * Markdown rendered as a page reads it. Its HTML is shown as text and a link that would run code is
- * dropped, the renderer's defaults, kept: a Body is anyone's words, someone else's on a System visited.
+ * dropped, the renderer's defaults, kept, and an image shows as its alt text: a Body is anyone's
+ * words, someone else's on a System visited.
  */
 export function Markdown({ text, className }: MarkdownProps) {
   return (
     <div className={cn(prose, className)}>
-      <Rendered>{text}</Rendered>
+      <Rendered urlTransform={withoutImages}>{text}</Rendered>
     </div>
   )
 }

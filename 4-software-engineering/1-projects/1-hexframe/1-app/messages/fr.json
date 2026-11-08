@@ -579,7 +579,7 @@
   "gallery_note_skeleton": "La forme de ce qui se charge, à sa place.",
   "gallery_note_code_block": "Un Corps qui n'est pas du Markdown, montré tel qu'il est écrit ; une longue ligne défile.",
   "gallery_note_page": "La page d’une tuile : son titre, son aperçu et son corps en entier, le corps lu comme du Markdown, sur tout le canevas à la place de son hexagone. La touche C y mène après le Contexte du centre et avant qu’il ne se retrouve seul : la page naît de l’hexagone qui encadrait le centre, le dessin s’effaçant dessous, et rentre dans l’hexagone du centre en partant, par C ou Échap. Une Feuille qui n’est pas du Markdown montre son corps tel qu’il est écrit. Avec les animations réduites, elle vient et part d’un coup.",
-  "gallery_note_markdown": "Un Corps lu comme du Markdown, dans la serif de l’humain : titres, listes, citations, code et liens comme une page les compose. Son HTML est montré comme du texte et un lien qui exécuterait du code est retiré, puisqu’un Corps, ce sont les mots de n’importe qui.",
+  "gallery_note_markdown": "Un Corps lu comme du Markdown, dans le sérif de l’humain : titres, listes, citations, code et liens comme une page les compose. Son HTML est montré comme du texte, un lien qui exécuterait du code est retiré et une image montre son texte de remplacement, chargée de nulle part, puisqu’un Corps, ce sont les mots de n’importe qui.",
   "gallery_state_page_markdown": "Un corps en Markdown, lu en entier",
   "gallery_state_page_file": "Une Feuille qui n’est pas du Markdown, son corps tel qu’il est écrit",
   "gallery_state_page_empty": "Rien d’écrit pour l’instant",

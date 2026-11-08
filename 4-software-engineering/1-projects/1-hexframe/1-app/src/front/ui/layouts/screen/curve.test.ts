@@ -6,6 +6,7 @@ import {
   curveAcross,
   curvePath,
   cutAlongCurve,
+  cutBeyondCurve,
   offsetAt,
   reach,
   scrollTopAt,
@@ -51,6 +52,35 @@ describe('cutAlongCurve', () => {
         'calc(var(--edge) + 36px) 50%, calc(var(--edge) + 27px) 75%, ' +
         'calc(var(--edge) + 0px) 100%, 0 100%)',
     )
+  })
+})
+
+describe('cutBeyondCurve', () => {
+  const column = { left: 0, top: 0, width: 400, height: 800 }
+  const edge = column.width - reach - columnMargin
+
+  /** The px a CSS polygon names, as numbers, corner by corner, `100%` aside. */
+  const cornersOf = (polygon: string) =>
+    [...polygon.matchAll(/(-?[\d.]+)px (-?[\d.]+)px/g)].map(([, x, y]) => ({
+      x: Number(x),
+      y: Number(y),
+    }))
+
+  it('runs down the curve from the column’s top to its foot, then back up its own right edge', () => {
+    const own = { left: 0, top: 0, width: 1000, height: 800 }
+    const cut = cutBeyondCurve(column, own, 4)
+    expect(cornersOf(cut)).toEqual(
+      [0, 0.25, 0.5, 0.75, 1].map((t) => ({ x: edge + offsetAt(t), y: t * 800 })),
+    )
+    expect(cut).toMatch(/, 100% 800px, 100% 0px\)$/)
+  })
+
+  it('stays as far inside the curve as it stays below the column’s top, in its own px', () => {
+    const own = { left: 16, top: 16, width: 968, height: 768 }
+    const corners = cornersOf(cutBeyondCurve(column, own, 4))
+    expect(corners[0]).toEqual({ x: edge, y: -16 })
+    expect(corners[2]).toEqual({ x: edge + reach, y: 384 })
+    expect(corners[4]).toEqual({ x: edge, y: 784 })
   })
 })
 

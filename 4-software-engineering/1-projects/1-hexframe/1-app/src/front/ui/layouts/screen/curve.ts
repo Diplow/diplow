@@ -55,6 +55,24 @@ export function cutAlongCurve(edge: string, steps = 48): string {
 }
 
 /**
+ * What fills the canvas cut along the curve, as a CSS `clip-path` in its own px, `own` its box and
+ * `column` the chat's column cut along the curve: from the column's top to its foot, down the curve,
+ * `steps` segments long, then back up its right edge. It keeps as far inside the curve as it keeps
+ * below the column's top, so the margin its place gives it runs along the curve too.
+ */
+export function cutBeyondCurve(column: Box, own: Box, steps = 48): string {
+  const px = (value: number) => `${String(round(value))}px`
+  const margin = Math.max(0, own.top - column.top)
+  const curve = Array.from({ length: steps + 1 }, (_, step) => {
+    const y = column.top + (column.height * step) / steps
+    return `${px(curveAcross(column, y) + margin - own.left)} ${px(y - own.top)}`
+  })
+  const foot = px(column.top + column.height - own.top)
+  const top = px(column.top - own.top)
+  return `polygon(${curve.join(', ')}, 100% ${foot}, 100% ${top})`
+}
+
+/**
  * The curve as an SVG path, in a box as wide in px as the curve bows and 100 units tall whatever the
  * screen's height, its line half a pixel in so it stays crisp. A quadratic through its control point
  * at mid-height, `bow` out, so it passes `offsetAt` at every height.
