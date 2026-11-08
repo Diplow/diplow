@@ -4,18 +4,20 @@ parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
   Pendant dix ans, Boniface applique les mêmes grilles à l'actualité :
-  multilatéralisme contre unilatéralisme, deux poids deux mesures occidental,
-  montée du Sud global. Il plaide pour une Europe autonome, une France qui
-  défend ses intérêts et une négociation en Ukraine.
+  multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
+  autonomie stratégique de l'Europe. Il y voit un Sud global qui monte et un
+  Occident qui perd son monopole.
 ---
 # Chronicle
 
-Du premier Trump à la fin de la période, Boniface lit l'actualité internationale avec un petit nombre de grilles stables. Il oppose le multilatéralisme à l'unilatéralisme, dénonce le deux poids deux mesures occidental et suit la rivalité sino-américaine. Il presse l'Europe d'acquérir son autonomie stratégique et voit dans le Covid-19 un révélateur. Il juge aussi que les interventions extérieures ont échoué.
+De 2016 à 2020, Boniface lit Trump et la scène internationale par l'opposition entre multilatéralisme et unilatéralisme, et par le deux-poids-deux-mesures occidental. Il presse l'Europe d'acquérir son autonomie stratégique. Le Covid-19 est pour lui un révélateur de ces rapports de force.
 
-Avec la guerre en Ukraine, ces grilles se resserrent. Boniface y voit une impasse qui appelle une négociation, puis une négociation qui ne devrait plus être taboue. Il constate que le reste du monde ne suit plus l'Occident. Dans les dernières années, de l'Ukraine à Gaza, il applique le deux poids deux mesures et décrit la dépendance envers Washington comme une faiblesse. Il lit la montée du Sud global comme un changement durable de l'ordre mondial, et il plaide pour une France qui défend ses propres intérêts.
+À partir de 2020, la rivalité sino-américaine et l'échec des interventions extérieures structurent son regard. La guerre en Ukraine lui apparaît comme une impasse qui appelle une négociation. Il constate un Occident que le reste du monde ne suit plus.
+
+Dans la dernière période, il applique le deux-poids-deux-mesures et la dépendance envers Washington à l'Ukraine, à Gaza, à la Chine et à la France. Sa thèse d'ensemble tient en un Sud global qui monte face à un Occident qui perd son monopole. Les grilles sont les mêmes d'un bout à l'autre de la Chronicle, et ce sont les événements qui changent.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]] (322 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (286 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (292 Digests)
