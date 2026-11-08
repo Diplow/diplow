@@ -1,0 +1,54 @@
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_63098e197dba30::t_ba4f3b14210fc7 586
+  s_63098e197dba30::t_2aa3caa7943b4c 733,832
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_63098e197dba30::t_2aa3caa7943b4c 733,832
+  s_63098e197dba30::t_ba4f3b14210fc7 586
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/gallery.tsx
+  s_63098e197dba30::t_ba4f3b14210fc7 2-5,13,36-43
+  s_63098e197dba30::t_4e7dda7edaf029 44-48
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/HexWidget.tsx
+  s_63098e197dba30::t_cce3005f53f743 1-5,8-19,23-32,34-36,38-53
+  s_63098e197dba30::t_0dc8e0a2b11e76 6-7,20-22,33
+  s_63098e197dba30::t_9cc546ddae6370 37
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE.md
+  s_63098e197dba30::t_7344df222a55c0 22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/hex.test.ts
+  s_63098e197dba30::t_127dc28437f6d0 1-76,78-93,95-98
+  s_63098e197dba30::t_a2d4c763fee68c 77
+  s_63098e197dba30::t_6755cda65da985 94
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/pieces.ts
+  s_63098e197dba30::t_37de24b0ad56b1 227-232
+  s_63098e197dba30::t_40cd31839f0e50 226
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_63098e197dba30::t_8593b3663b3108 434-440,453,471
+  s_63098e197dba30::t_35637b9c11c61e 299-303,305-306,373-379,566,587,622
+  s_63098e197dba30::t_4f9accc2d9c19b 620,649-664
+  s_63098e197dba30::t_0dc8e0a2b11e76 266-268
+  s_63098e197dba30::t_7344df222a55c0 42-44
+  s_63098e197dba30::t_a321a184ff0a61 55,304
+  s_63098e197dba30::t_9cc546ddae6370 352-354
+  s_63098e197dba30::t_46a4a1b514f51a 665-667
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_63098e197dba30::t_7344df222a55c0 46
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_63098e197dba30::t_37de24b0ad56b1 30,319
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/hex.ts
+  s_63098e197dba30::t_cacbbeca63f779 1-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4016827e9d81f65d66df25be2b2faf3e9cd7ae0d",
+  "prompts": {},
+  "sessions": {
+    "s_63098e197dba30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fa8011de-4974-4841-947a-b5703d73f188",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
