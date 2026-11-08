@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01/4-macron-bayrou-la-democratie-ou-le.md
+  s_b0cc856b6997dc::t_85b52d64c09614 1-68
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01/5-bayrou-le-mepris-la-nullite-et.md
+  s_b0cc856b6997dc::t_1bbd9ecbdb2946 1-100
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01/6-du-racisme-ordinaire-aux-violences-policieres.md
+  s_b0cc856b6997dc::t_f1c2c3047fb309 1-85
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01/CLAUDE.md
+  s_b0cc856b6997dc::t_dc7aa17742d479 2,6-9,11,13,15,22-24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/6-2025-09-07/1-vencorex-l-etat-vend-sa-souverainete.md
+  s_b0cc856b6997dc::t_050771600a0fa8 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/6-2025-09-07/2-10-septembre-on-bloque-tout-et.md
+  s_b0cc856b6997dc::t_b6bf8157843952 1-88
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/6-2025-09-07/3-fake-news-un-danger-pour-nos.md
+  s_b0cc856b6997dc::t_59febcab3d80fe 1-67
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/6-2025-09-07/CLAUDE.md
+  s_b0cc856b6997dc::t_d916d4eae13276 1-22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/CLAUDE.md
+  s_b0cc856b6997dc::t_16a64d26dda91d 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE.md
+  s_b0cc856b6997dc::t_745f81c641edaa 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_b0cc856b6997dc::t_6ab6be38fdb4ae 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_b0cc856b6997dc::t_97af7cbe88f571 6-9,13,15-17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e1286ff1ec9b44de12187031b39935965c721ca4",
+  "prompts": {},
+  "sessions": {
+    "s_b0cc856b6997dc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a8a2c136ca9192b6a",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
