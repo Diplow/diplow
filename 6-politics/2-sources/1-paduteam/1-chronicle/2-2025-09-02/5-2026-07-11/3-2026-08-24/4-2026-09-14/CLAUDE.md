@@ -3,18 +3,16 @@ title: "2026-09-14 → 2026-09-17"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/4-2026-09-14
 owner: diplo
 preview: >-
-  La PaduTeam lit la présidentielle comme un rapport de forces : Faure et
-  Hollande manœuvrent au PS, Roussel s'effondre à la télévision, les sondages
-  sous-estiment Mélenchon, et Le Pen vient chercher les classes populaires sur
-  le logement.
+  La PaduTeam lit la présidentielle à travers le rapport de forces à gauche :
+  la primaire du PS sert Hollande, Roussel ruine sa campagne, les sondages
+  sous-estiment Mélenchon, et Le Pen avance sur le logement, terrain que la
+  gauche doit lui disputer.
 ---
 # 2026-09-14 → 2026-09-17
 
-Pendant ces quatre jours, la PaduTeam passe en revue les camps de la gauche à l'approche de la présidentielle. Elle trouve malin le coup d'Olivier Faure, qui ouvre la primaire du PS à Ruffin pour affaiblir Glucksmann, et soutient que Hollande, meilleur adversaire possible de Mélenchon au second tour, en sort grand gagnant. Elle juge à l'inverse Roussel catastrophique face à des citoyens triés sur LCI : il ne défend ni son programme ni le communisme et cède aux arguments réactionnaires et patronaux. Pour elle, sa campagne est ruinée et le PCF doit se refonder.
+Pendant ces quatre jours, la PaduTeam passe la gauche en revue sous l'angle de ses faiblesses. Elle trouve malin le coup d'Olivier Faure, qui ouvre la primaire du PS à Ruffin pour affaiblir Glucksmann, et soutient que Hollande, meilleur adversaire possible de Mélenchon au second tour, en est le grand gagnant. Elle juge Roussel catastrophique face à des citoyens triés sur LCI : il ne défend ni son programme ni le communisme, cède aux arguments réactionnaires et patronaux, ce qui ruine sa campagne et appelle une refondation du PCF.
 
-Elle s'en prend aussi au terrain des chiffres. Selon elle, la grande enquête Ipsos-Sevipof, malgré ses 13 000 interrogés, repose sur une cohorte plus bourgeoise que la moyenne. Elle décale tous les candidats vers le haut à droite et sous-estime Mélenchon, ce que le Graphique permet de montrer.
-
-La Period se clôt sur le logement. La PaduTeam soutient que Marine Le Pen cherche à capter l'électorat populaire en y mêlant la préférence nationale, et que la gauche doit l'affronter sur ce terrain avec le programme de La Brèche : banque publique du logement, notaires en service public, foncier nationalisé.
+Elle conteste aussi le thermomètre. La grande enquête Ipsos-Sevipof, malgré ses 13 000 interrogés, repose selon elle sur une cohorte plus bourgeoise que la moyenne : tous les candidats sont décalés vers le haut à droite et Mélenchon est sous-estimé, ce que le Graphique montre. Enfin, Marine Le Pen cherche à capter l'électorat populaire sur le logement en y mêlant la préférence nationale. La gauche doit l'y affronter avec le programme de La Brèche : banque publique du logement, notaires en service public, foncier nationalisé.
 
 ## Contenu
 

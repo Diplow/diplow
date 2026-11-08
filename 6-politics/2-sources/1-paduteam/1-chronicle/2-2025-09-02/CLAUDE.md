@@ -1,20 +1,19 @@
 ---
-title: "2025-09-02 → 2026-09-17"
+title: "2025-09-02 → 2026-09-25"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02
 owner: diplo
 preview: >-
-  Sur un an, la PaduTeam pousse la gauche de rupture à s'unir derrière
-  Mélenchon et la FI pour 2027, refuse toute union avec le PS, qu'elle tient
-  pour un adversaire, et lit l'actualité, des municipales à l'Iran, en
-  rapports de classe et d'impérialisme.
+  Sur un an, la PaduTeam pousse la gauche de rupture à se radicaliser et à
+  rompre avec le PS, défend Mélenchon et LFI pour 2027, et oppose à l'union de
+  la gauche la sortie du capitalisme et l'abondance.
 ---
-# 2025-09-02 → 2026-09-17
+# 2025-09-02 → 2026-09-25
 
-D'un bout à l'autre de la Period, la PaduTeam défend une même ligne : la gauche de rupture doit l'emporter sur la gauche d'accommodement. Dès l'automne 2025, elle passe du 10 septembre contre Macron au PS comme adversaire principal, pousse la FI à radicaliser son programme, défend le mot communisme et porte le 100 % Sécu. L'hiver confirme cette lecture : le PS se reconstitue et trahit, LFI et Mélenchon sont à défendre, et la recomposition avant 2027 se joue entre ces deux gauches.
+La Chronicle suit un fil qui se resserre. À l'automne 2025, la PaduTeam passe du 10 septembre contre Macron au PS comme adversaire principal, pousse la FI à radicaliser son programme, défend le mot communisme et porte le 100 % Sécu ([[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/1-2025-09-02/CLAUDE|2025-09-02 → 2025-11-28]]). L'hiver est lu comme une recomposition avant 2027 : le PS se reconstitue et trahit, la gauche de rupture doit l'emporter sur celle d'accommodement, LFI et Mélenchon sont à défendre, et l'impérialisme américain s'affiche, de Maduro au Groenland.
 
-Au printemps 2026, elle lit les municipales comme un succès de LFI et voit se former après le scrutin un pôle de gauche anti-Mélenchon visant 2027, dans [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE|2026-02-16 → 2026-04-12]]. Dans le même temps, elle lit la guerre contre l'Iran comme une défense du pétrodollar, prolongement de l'impérialisme américain qu'elle suivait déjà de Maduro au Groenland. Elle tient le PS, Glucksmann et le PCF pour des impasses, et voit dans l'abondance, non dans l'union de la gauche, ce qui fera reculer le RN.
+Au printemps 2026, la PaduTeam lit les municipales comme un succès de LFI et la guerre contre l'Iran comme une défense du pétrodollar. Elle voit se former après le scrutin un pôle de gauche anti-Mélenchon visant 2027. D'avril à juillet, elle mise sur Mélenchon et la rupture. Le PS, Glucksmann et le PCF sont pour elle des impasses, l'actualité se lit en rapports de classe, et c'est l'abondance, non l'union de la gauche, qui fera reculer le RN.
 
-L'été 2026 radicalise ce positionnement : la PaduTeam mène la campagne derrière Mélenchon, refuse l'union avec le PS et le PCF, réclame de la radicalité, vise Glucksmann, Jadot et Hollande comme adversaires, et juge que les sondages sous-estiment Mélenchon. D'une saison à l'autre, l'actualité est lue en rapports de classe, et chaque épisode sert à convaincre que la rupture peut devenir majoritaire.
+D'un bout à l'autre de la période, l'adversaire se précise : Macron, puis le PS, puis des figures nommées. De juillet à septembre, la PaduTeam refuse l'union avec le PS et le PCF, défend Mélenchon et LFI, désigne Glucksmann, Jadot et Hollande comme adversaires à abattre et leur oppose la sortie du capitalisme.
 
 ## Contenu
 
@@ -22,4 +21,4 @@ L'été 2026 radicalise ce positionnement : la PaduTeam mène la campagne derri�
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/2-2025-12-01/CLAUDE|2025-12-01 → 2026-02-15]] (59 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE|2026-02-16 → 2026-04-12]] (64 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/CLAUDE|2026-04-13 → 2026-07-10]] (69 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/CLAUDE|2026-07-11 → 2026-09-17]] (56 Digests)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/CLAUDE|2026-07-11 → 2026-09-25]] (62 Digests)
