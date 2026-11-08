@@ -1,20 +1,20 @@
 ---
-title: "2025-04-12 → 2025-07-13"
+title: "2025-04-12 → 2025-07-20"
 parent: 6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12
 owner: diplo
 preview: >-
-  Blast décrit un pouvoir, de Macron à Trump, qui abîme l'état de droit,
-  protège les puissants et frappe les faibles. Il soutient que seul le rapport
-  de force fait reculer et appelle à s'organiser, jusqu'à la grève et au
-  blocage.
+  Blast dénonce un pouvoir qui s'en prend à l'état de droit et à la
+  contestation, protège les puissants et frappe les faibles. Elle y lit les
+  effets d'un même ordre capitaliste et autoritaire, que seul le rapport de
+  force fait reculer, et appelle à s'organiser.
 ---
-# 2025-04-12 → 2025-07-13
+# 2025-04-12 → 2025-07-20
 
-Pendant ces trois mois, Blast défend la justice et l'état de droit contre la droite et l'extrême droite, notamment dans les affaires Le Pen et Sarkozy. Il dénonce un budget Bayrou qui épargne les plus riches, la protection de Nestlé Waters par l'Élysée, l'impunité de Nestlé et de Bétharram, et l'argent public versé aux riches et aux grandes entreprises. Le même ordre autoritaire et capitaliste se retrouve selon lui de Trump à Macron, et jusqu'à Gaza, au Togo et à la canicule.
+D'avril à juillet 2025, Blast défend la justice et l'état de droit contre un pouvoir qui s'y attaque, de Macron à Trump. Elle défend la justice face à la droite et à l'extrême droite dans les affaires Le Pen et Sarkozy. Elle dénonce un budget Bayrou qui épargne les plus riches, la protection de Nestlé Waters par l'Élysée, l'impunité de Nestlé et de Bétharram, puis la réforme Dati. Le fil est constant : l'État frappe les faibles et protège les puissants, et des milliardaires achètent la démocratie.
 
-Blast s'attache aussi à ce que l'on invisibilise. Il met en avant un attentat islamophobe que l'État refuse de nommer, une loi sur l'antisémitisme qui muselle la critique d'Israël, un travail qui abîme, des intérêts privés confondus avec l'intérêt général. Il décrit une extrême droite banalisée, un Figaro qui s'extrême-droitise et un double standard des médias envers LFI. Mi-juin, l'arrestation de son journaliste Yanis Mhamdi par Israël, qu'il juge illégale, lui permet d'accuser le gouvernement de complicité.
+Elle dénonce aussi la banalisation de l'extrême droite et le traitement qu'en font les médias : un Figaro qui s'extrême-droitise, un double standard envers LFI, un attentat islamophobe que l'État refuse de nommer. Elle voit dans une loi sur l'antisémitisme un moyen de museler la critique d'Israël. Sur Gaza, elle parle de carnage. Elle juge illégale l'arrestation de son journaliste Yanis Mhamdi par Israël et accuse le gouvernement de complicité.
 
-Le ton se précise au fil de la Period. Blast soutient d'abord que seul le rapport de force fait reculer, sans passer par une primaire à gauche. Il finit par appeler à s'organiser, jusqu'à la grève et au blocage. Il reçoit en parallèle des invités sur l'oligarchie, le fascisme, l'extrême droite, l'écologie et l'Iran.
+Au fil des semaines, les dénonciations se rassemblent en une lecture d'ensemble. Blast décrit des violences systémiques que l'on invisibilise, du travail qui abîme à la confusion des intérêts privés avec l'intérêt général. Elle soutient que seul le rapport de force fait reculer, sans passer par une primaire à gauche. L'été fait de Trump, Macron, Gaza, la canicule et la montée du fascisme les effets d'un même ordre capitaliste et autoritaire. Elle y voit un État qui fait payer les plus modestes et épargne le capital, et elle appelle à s'organiser. Tout du long, elle reçoit des invités, notamment sur l'oligarchie, l'écologie, la gauche ou Robespierre.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Le ton se précise au fil de la Period. Blast soutient d'abord que seul le rappo
 3. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/3-2025-05-13/CLAUDE|2025-05-13 → 2025-05-27]] (17 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/4-2025-05-28/CLAUDE|2025-05-28 → 2025-06-11]] (15 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/CLAUDE|2025-06-12 → 2025-06-25]] (17 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/CLAUDE|2025-06-26 → 2025-07-13]] (20 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/6-2025-06-26/CLAUDE|2025-06-26 → 2025-07-20]] (26 Digests)
