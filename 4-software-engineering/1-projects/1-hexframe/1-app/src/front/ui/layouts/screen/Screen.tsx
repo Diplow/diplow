@@ -141,6 +141,8 @@ export function Screen({
     // focus as it rises would scroll a hidden overflow, lifting the whole screen by the composer.
     <div
       ref={screen}
+      // What fills the canvas finds the column cut along the curve from here (`useBeyondCurve`).
+      data-screen=""
       className={cn('@container relative isolate overflow-clip bg-background', className)}
       style={
         {

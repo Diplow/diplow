@@ -12,6 +12,8 @@
 // thinking, a widget's head, body, actions and rows, the composer's rows and its list. What holds rows
 // that run on their own runs as far as the farthest of them, so its box holds them all, and each row
 // in it draws back to keep its own gap.
+// What fills the canvas, a tile's page, is cut along the curve (`useBeyondCurve`), so it stops where
+// the chat's column begins rather than on a straight line beneath it.
 // All of them are measured, then each written, at once: a conversation holds a row per line, and a
 // write between two reads would lay the page out again for each.
 import { useEffect, useLayoutEffect, type RefObject } from 'react'
@@ -65,6 +67,18 @@ export function useToCurve(element: RefObject<HTMLElement | null>) {
 export function useAlongCurve(element: RefObject<HTMLElement | null>) {
   useLayoutEffect(
     () => (element.current === null ? undefined : follow(element.current, ride)),
+    [element],
+  )
+}
+
+/**
+ * Cuts `element`, somewhere on the canvas, along the curve, as a `clip-path` in its own px, as the
+ * screen resizes or it does: what lies left of the curve is gone, under the chat's column. Whole on a
+ * phone, or off the screen.
+ */
+export function useBeyondCurve(element: RefObject<HTMLElement | null>) {
+  useLayoutEffect(
+    () => (element.current === null ? undefined : follow(element.current, cutBeyond)),
     [element],
   )
 }
@@ -167,9 +181,15 @@ function followAll() {
   for (const write of writes) write?.()
 }
 
-/** The box of the column `element` sits in, cut along the curve, read once however many sit there. */
+/**
+ * The box of the column cut along the curve, the one `element` sits in or, on the canvas, its screen's,
+ * read once however many follow it.
+ */
 function cutOf(element: HTMLElement, cuts: Map<Element, Box | undefined>) {
-  const column = element.closest('[data-curve]')
+  const column =
+    element.closest('[data-curve]') ??
+    element.closest('[data-screen]')?.querySelector('[data-curve]') ??
+    null
   if (column === null) return undefined
   if (!cuts.has(column)) {
     const cut = getComputedStyle(column).clipPath !== 'none'
@@ -208,6 +228,34 @@ function ride(riding: HTMLElement, cut: Box | undefined) {
     put(parent, '--along-curve', `${String(reach)}px`)
   }
 }
+
+/** How many segments the cut beyond the curve follows it by, as the chat's own cut does. */
+const steps = 48
+
+/**
+ * Cuts `beyond` along the curve, from the column's top to its foot, down the curve then back up its
+ * right edge, or takes the cut off where the chat isn't cut. It keeps as far inside the curve as it
+ * keeps below the screen's top, so the margin its place gives it runs along the curve too.
+ */
+function cutBeyond(beyond: HTMLElement, cut: Box | undefined) {
+  if (cut === undefined)
+    return () => {
+      put(beyond, 'clip-path', undefined)
+    }
+  const own = beyond.getBoundingClientRect()
+  const margin = Math.max(0, own.top - cut.top)
+  const curve = Array.from({ length: steps + 1 }, (_, step) => {
+    const y = cut.top + (cut.height * step) / steps
+    return `${px(curveAcross(cut, y) + margin - own.left)} ${px(y - own.top)}`
+  })
+  const foot = px(cut.top + cut.height - own.top)
+  const top = px(cut.top - own.top)
+  return () => {
+    put(beyond, 'clip-path', `polygon(${curve.join(', ')}, 100% ${foot}, 100% ${top})`)
+  }
+}
+
+const px = (value: number) => `${String(Math.round(value * 100) / 100)}px`
 
 /** Where the curve passes across a height, from `top` to `bottom`, in a column cut along it. */
 type Across = (cut: Box, top: number, bottom: number) => number
