@@ -39,7 +39,9 @@
 // their System from its star, as the Account may see it, centered on the Tile, the journey taking it
 // there, the corner from their star, a "…" for the Tiles kept from them, and its mark back home;
 // acted on as far as the Account's rights there let it, the agent asked where it holds *@*, its Turn
-// starting there (HEX-134), the gestures told in their own timeline as ever.
+// starting there (HEX-134), the gestures told in their own timeline as ever. Where you are on the
+// canvas, which its corner draws, the chat draws too while the center shows as its page, as the hex
+// widget at the conversation's foot, signed in or out, on whichever System the canvas shows (HEX-142).
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
@@ -49,7 +51,8 @@ import { useFollowLatest } from '#/front/client/assistant/follow'
 import { usePublicSystem, useShipped, useSystem } from '#/front/client/mapping/queries'
 import { accessOf, readAccessSearch, wayBack, withAccess } from '#/front/features/access/search'
 import { SignedOutLines, SignInFoot } from '#/front/features/access/SignedOut'
-import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
+import { Breadcrumb, type Where } from '#/front/features/breadcrumb/Breadcrumb'
+import { HexWidget } from '#/front/features/breadcrumb/HexWidget'
 import { publish } from '#/front/features/bus'
 import { ChatComposer, ChatTimeline } from '#/front/features/conversation/Chat'
 import { ChatInvitation } from '#/front/features/conversation/invitation/Invitation'
@@ -260,8 +263,9 @@ interface ShippedNavigation extends Pick<ShippedCanvasProps, 'told' | 'pointed' 
 }
 
 /**
- * The canvas and its corner while a System hexframe ships has them, read-only, the tutorial by its
- * rules, which the chat follows too; none, the Account's System's then. A System away from home, the
+ * The canvas and where you are on it, which its corner draws and, under a page, the chat's hex widget,
+ * while a System hexframe ships has them, read-only, the tutorial by its rules, which the chat follows
+ * too; none, the Account's System's then. A System away from home, the
  * tutorial, is reached by a journey (`at`), and the corner's mark leads back from it. The URL's view
  * is the canvas's, so meanwhile the System's view is its Root, which a Message is sent from.
  */
@@ -292,15 +296,14 @@ function shippedSide(
         onPoint={onPoint}
       />
     ),
-    corner: (
-      <Breadcrumb
-        system={tree}
-        view={view}
-        onViewChange={onViewChange}
-        onHome={away ? onHome : undefined}
-        sun={shippedSun(shipped)}
-      />
-    ),
+    where: {
+      system: tree,
+      view,
+      onViewChange,
+      onHome: away ? onHome : undefined,
+      sun: shippedSun(shipped),
+      lets: rules?.lets,
+    } satisfies Where,
   }
 }
 
@@ -346,8 +349,9 @@ function useCenterFromChat({ tree, visit, arrive, turning }: Centering) {
 }
 
 /**
- * The canvas and its corner while the URL visits someone else's System: from its star, the journey
- * taking the canvas there, the corner's mark the way home. A Message is sent from the Account's own
+ * The canvas and where you are on it, which its corner draws and, under a page, the chat's hex widget,
+ * while the URL visits someone else's System: from its star, the journey taking the canvas there, the
+ * corner's mark the way home. A Message is sent from the Account's own
  * System meanwhile, where the Turn answering it starts.
  */
 function visitedSide(
@@ -366,15 +370,13 @@ function visitedSide(
         <VisitPage {...page} star={star} light={light} />
       </div>
     ),
-    corner: (
-      <Breadcrumb
-        system={tree}
-        view={viewOf(props.search)}
-        onViewChange={props.onViewChange}
-        onHome={onHome}
-        sun={{ light }}
-      />
-    ),
+    where: {
+      system: tree,
+      view: viewOf(props.search),
+      onViewChange: props.onViewChange,
+      onHome,
+      sun: { light },
+    } satisfies Where,
   }
 }
 
@@ -429,6 +431,13 @@ function SignedOut() {
   const { state: screen, actions: turning } = useScreenState()
   const help = useHelpNavigation(turning)
   const view = helpOnStar(viewOf(search))
+  // Where you are on Help, which the corner draws and, under a page, the chat's hex widget.
+  const where: Where = {
+    system: help.tree,
+    view,
+    onViewChange: help.onViewChange,
+    sun: shippedSun('help'),
+  }
   return (
     <main className="h-dvh">
       <h1 className="sr-only">{m.help_title()}</h1>
@@ -441,14 +450,7 @@ function SignedOut() {
             <ShippedSide shipped="help" view={view} onViewChange={help.onViewChange} />
           </ReadBoundary>
         }
-        corner={
-          <Breadcrumb
-            system={help.tree}
-            view={view}
-            onViewChange={help.onViewChange}
-            sun={shippedSun('help')}
-          />
-        }
+        corner={<Breadcrumb {...where} />}
         messages={
           <div className="grid gap-5">
             <SignedOutLines />
@@ -466,6 +468,7 @@ function SignedOut() {
                 />
               </ReadBoundary>
             )}
+            <HexWidget {...where} />
           </div>
         }
         composer={
@@ -497,8 +500,6 @@ function SignedIn() {
   const { state: screen, actions: turning } = useScreenState()
   // What follows a tile's widget in the chat, and the export a Tile's menu starts.
   const widgets = useTileWidgetsState()
-  // The key widget's step: the receipt outlives the widget.
-  const keys = useKeyWidgetState(search.keys === true)
   const help = useHelpNavigation(turning)
   const tutorial = useTutorialNavigation(search, turning)
   const openKeys = useOpenKeys(turning)
@@ -562,7 +563,7 @@ function SignedIn() {
           onCarry={setCarried}
         />
       ),
-      corner: <Breadcrumb system={path} view={view} onViewChange={onViewChange} />,
+      where: { system: path, view, onViewChange } satisfies Where,
     }
   const onSend =
     tree === undefined
@@ -583,7 +584,7 @@ function SignedIn() {
             <ReadBoundary>{side.canvas}</ReadBoundary>
           </Journey>
         }
-        corner={side.corner}
+        corner={<Breadcrumb {...side.where} />}
         // The tutorial holds the composer back, as the onboarding does, until it introduces it.
         composerAway={welcoming || side.rules?.composer === false}
         messages={
@@ -616,18 +617,9 @@ function SignedIn() {
             {tutorial.body !== undefined && (
               <Told told={tutorial.told} body={[tutorial.body]} six={tutorial.six} />
             )}
-            {(search.keys !== undefined || keys.state.step.kind === 'done') && (
-              <ReadBoundary>
-                <KeyWidgets
-                  open={search.keys !== undefined}
-                  onClose={() => {
-                    void navigate({ search: (current) => ({ ...current, ...withKeys(false) }) })
-                  }}
-                  keys={keys}
-                />
-              </ReadBoundary>
-            )}
+            <KeysFoot open={search.keys !== undefined} />
             <HelpFoot topic={search.help} onTopic={help.onTopic} />
+            <HexWidget {...side.where} />
           </div>
         }
         composer={
@@ -651,6 +643,25 @@ function SignedIn() {
         }
       />
     </main>
+  )
+}
+
+/** The key widget at the conversation's foot while it is open, then its receipt, signed in. */
+function KeysFoot({ open }: { open: boolean }) {
+  const navigate = Route.useNavigate()
+  // The key widget's step: the receipt outlives the widget.
+  const keys = useKeyWidgetState(open)
+  if (!open && keys.state.step.kind !== 'done') return null
+  return (
+    <ReadBoundary>
+      <KeyWidgets
+        open={open}
+        onClose={() => {
+          void navigate({ search: (current) => ({ ...current, ...withKeys(false) }) })
+        }}
+        keys={keys}
+      />
+    </ReadBoundary>
   )
 }
 

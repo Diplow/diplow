@@ -78,6 +78,12 @@ interface ZoneProps {
   tools?: boolean
   /** Folded at first; the user folds and unfolds it after. */
   defaultFolded?: boolean
+  /**
+   * Drawn behind the whole zone, its head and its body over it, from the chat's edge to the curve
+   * and from its top line to its foot: what the widget shows of where the user is, the hex view.
+   * The pointer goes through the words to it; folded, it goes.
+   */
+  backdrop?: ReactNode
 }
 
 interface DoneProps {
@@ -120,6 +126,7 @@ function Zone({
   onDismiss,
   tools = true,
   defaultFolded = false,
+  backdrop,
 }: ZoneProps) {
   const [folded, setFolded] = useState(defaultFolded)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -163,11 +170,14 @@ function Zone({
           'mr-[calc(var(--chat-right,0px)*-1)] ml-[calc(var(--chat-left,0px)*-1)]',
           'pr-[var(--chat-right,1rem)] pl-[var(--chat-left,1rem)] sm:pr-[var(--chat-right,1.5rem)] sm:pl-[var(--chat-left,2.25rem)]',
           voice === 'app' && !failed && 'bg-none',
+          // Its own layer, so a backdrop sits over its fill and under its lines.
+          backdrop !== undefined && 'isolate',
           // Coming in: the line on top draws itself, the surface unfolds from it, its parts rise in turn.
           'motion-safe:animate-unfold motion-safe:before:animate-draw',
         )}
       >
-        <div className="grid grid-cols-[2.25rem_1fr] gap-x-3.5 sm:grid-cols-[3.375rem_1fr] sm:gap-x-[1.125rem]">
+        <Backdrop>{backdrop}</Backdrop>
+        <div className={cn(grid, backdrop !== undefined && 'pointer-events-none')}>
           <Mark state={state} icon={icon} mark={mark} />
           {/*
             Its words beside the hex, centered on it, running on to the curve at their height; a
@@ -268,6 +278,20 @@ function Zone({
   )
 }
 
+/** The hex beside its words, then its body and its actions the zone's whole width. */
+const grid =
+  'grid grid-cols-[2.25rem_1fr] gap-x-3.5 sm:grid-cols-[3.375rem_1fr] sm:gap-x-[1.125rem]'
+
+/** Behind the whole zone, over its fill and under its lines; it fades as the zone folds. */
+function Backdrop({ children }: { children: ReactNode }) {
+  if (children === undefined) return null
+  return (
+    <div className="absolute inset-0 -z-10 transition-opacity duration-300 group-data-[state=closed]/widget:opacity-0">
+      {children}
+    </div>
+  )
+}
+
 /** Its hex and line icon, or the mark drawn in its place; a failure's hex says to try again. */
 function Mark({
   state,
@@ -306,7 +330,7 @@ function Actions({ actions }: { actions: readonly WidgetAction[] }) {
       ref={toCurve}
       className={cn(
         runsToCurve,
-        'mt-[1.125rem] flex flex-wrap items-center gap-x-[1.375rem] gap-y-1',
+        'pointer-events-auto mt-[1.125rem] flex flex-wrap items-center gap-x-[1.375rem] gap-y-1',
         risesInTurn,
       )}
       style={rise(5)}
