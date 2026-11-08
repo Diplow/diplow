@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
-import { pageZoomOf } from './zoom'
+import { flightOf, pageZoomOf } from './zoom'
 
-// The page's zoom on a page of 800 × 600 px: where it stands as it grows out of a hex, and whole.
+// The page's zoom on a page of 800 × 600 px: where it stands as it grows out of a hex, and whole;
+// and a drawing's flight from one hex onto the one it rests on.
 
 const size = { width: 800, height: 600 }
 
@@ -63,5 +64,23 @@ describe('pageZoomOf', () => {
     // Its sides touch the page's: a hex of the width's radius.
     expect(Math.min(...corners.map(({ x }) => x))).toBeCloseTo(0)
     expect(Math.max(...corners.map(({ x }) => x))).toBeCloseTo(390)
+  })
+})
+
+describe('flightOf', () => {
+  // The drawing rests with its hex at (100, 80), radius 20; it flies from a hex three times as large.
+  const at = { center: { x: 100, y: 80 }, radius: 20 }
+  const from = { center: { x: 600, y: 300 }, radius: 60 }
+  const [start, rest] = flightOf(from, at)
+
+  it('starts with the hex it rests on standing on the one it flies from', () => {
+    const { x, y, scale } = placingOf(start.transform)
+    expect(scale).toBeCloseTo(3)
+    expect(x + scale * at.center.x).toBeCloseTo(from.center.x)
+    expect(y + scale * at.center.y).toBeCloseTo(from.center.y)
+  })
+
+  it('rests where it stands', () => {
+    expect(placingOf(rest.transform)).toEqual({ x: 0, y: 0, scale: 1 })
   })
 })

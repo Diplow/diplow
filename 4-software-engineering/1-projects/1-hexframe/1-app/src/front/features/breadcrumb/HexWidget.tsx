@@ -30,18 +30,21 @@ export function HexWidget({ system, view, onViewChange, lets, sun }: Where) {
       kicker={m.widget_hex_kicker()}
       title={center.title}
       backdrop={
-        <Canvas
-          system={system}
-          view={hexViewOf(system, view)}
-          onViewChange={(next, action) => {
-            const gone = pageGoneTo(system, view, next, action)
-            if (gone !== undefined) onViewChange(gone.view, gone.action)
-          }}
-          looking="card"
-          lets={hexLetsOf(system, view, lets)}
-          sun={sun}
-          className="size-full"
-        />
+        // Where the page's flight finds the hex view, flying it in from the canvas and back.
+        <div data-hex-widget="" className="size-full">
+          <Canvas
+            system={system}
+            view={hexViewOf(system, view)}
+            onViewChange={(next, action) => {
+              const gone = pageGoneTo(system, view, next, action)
+              if (gone !== undefined) onViewChange(gone.view, gone.action)
+            }}
+            looking="card"
+            lets={hexLetsOf(system, view, lets)}
+            sun={sun}
+            className="size-full"
+          />
+        </div>
       }
     >
       {/* The room the hex view takes below its head, which it fills behind the head too. */}

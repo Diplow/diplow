@@ -143,6 +143,8 @@ export function Screen({
       ref={screen}
       // What fills the canvas finds the column cut along the curve from here (`useBeyondCurve`).
       data-screen=""
+      // A phone shows one side at a time, so nothing flies from one to the other (`usePageZoom`).
+      data-phone={phone ? '' : undefined}
       className={cn('@container relative isolate overflow-clip bg-background', className)}
       style={
         {

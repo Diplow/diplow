@@ -1,6 +1,7 @@
 // How a tile's page grows out of its hex and goes back into it: drawn small where the hex stands, cut
 // to the hex's shape, then whole over the canvas, its words never stretched, since it only scales
-// evenly. Pure.
+// evenly; and how a drawing flies from one hex to another, as the hex view does into the chat's hex
+// widget. Pure.
 import { hexCorners, type Hex, type Point } from '../../geometry/geometry'
 
 /** How large the page is drawn, in px. */
@@ -43,5 +44,20 @@ export function pageZoomOf(hex: Hex, size: Size): [Keyframe, Keyframe] {
       opacity: 0,
     },
     { transform: 'translate(0px, 0px) scale(1)', clipPath: polygonOf(whole), opacity: 1 },
+  ]
+}
+
+/**
+ * A drawing flying onto the place it rests in, its hex `at`, from `from`, both from the drawing's top
+ * left: at first moved and scaled evenly so its hex stands on `from`, then where it rests. Played
+ * backwards, it flies from its place onto `from`.
+ */
+export function flightOf(from: Hex, at: Hex): [Keyframe, Keyframe] {
+  const scale = from.radius / at.radius
+  const x = from.center.x - scale * at.center.x
+  const y = from.center.y - scale * at.center.y
+  return [
+    { transform: `translate(${String(x)}px, ${String(y)}px) scale(${String(scale)})` },
+    { transform: 'translate(0px, 0px) scale(1)' },
   ]
 }
