@@ -21,10 +21,16 @@ const system = tile('root', {
     4: tile('b', { branches: { 1: tile('b1') } }),
   },
   leaves: { 2: tile('note', { leaf: true }) },
-  context: { 5: tile('pin', { reference: { from: 'Elsewhere' } }) },
+  context: {
+    // A pin: a Reference to a Tile of another System, drawn under that Tile's id.
+    5: tile('elsewhere', { reference: { from: 'Elsewhere' } }),
+    // A Reference to a Tile of this System, drawn under its id too.
+    6: tile('b1', { reference: { from: 'b' } }),
+  },
 })
 
-const drawn = (id: string) => ({ tile: { id } }) as TileHex
+const drawn = (id: string, more: Partial<TileNode> = {}) =>
+  ({ tile: tile(id, more) }) as unknown as TileHex
 
 describe("the hex widget's view", () => {
   it('draws the center at its fullest beneath its page, its ring and its Context', () => {
@@ -57,7 +63,13 @@ describe("what the hex widget's Tiles let through", () => {
   })
 
   it('holds back a Tile of another System, a pin, which only the canvas follows', () => {
-    expect(hexLetsOf(system, view)(drawn('elsewhere'))).toEqual({ click: false, recenter: false })
+    const pin = drawn('elsewhere', { reference: { from: 'Elsewhere' } })
+    expect(hexLetsOf(system, view)(pin)).toEqual({ click: false, recenter: false })
+  })
+
+  it('lets a Reference to a Tile of this System through, which centers that Tile', () => {
+    const reference = drawn('b1', { reference: { from: 'b' } })
+    expect(hexLetsOf(system, view)(reference)).toEqual({ click: true, recenter: true })
   })
 
   it('lets every gesture through on the others', () => {
