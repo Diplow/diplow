@@ -1,0 +1,47 @@
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/4-2025-06-23/CLAUDE.md
+  s_54aa5d4a1ea7d4::t_3a3bb9798e6c13 2,6-8,10,12,14
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/1-immigration-repression-le-debut-de-la.md
+  s_54aa5d4a1ea7d4::t_3e55d80908d1fb 3
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/2-trump-macron-pas-la-meme-methode.md
+  s_54aa5d4a1ea7d4::t_0757e7726159f2 3
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/3-conflit-d-interets-et-favoritisme-une.md
+  s_54aa5d4a1ea7d4::t_148b71cd4ea142 1-71
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/4-palestine-les-etudiants-bousculent-le-parlement.md
+  s_54aa5d4a1ea7d4::t_845048d6b3cfe7 1-77
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/5-conclave-retraites-bayrou-enfonce-le-pays.md
+  s_54aa5d4a1ea7d4::t_c1b0a903739426 1-102
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/5-2025-06-26/CLAUDE.md
+  s_54aa5d4a1ea7d4::t_a2035f02f56314 1-25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/6-2025-06-29/1-gaza-iran-etc-pour-les-grands.md
+  s_54aa5d4a1ea7d4::t_bd97b72e7d2e44 1-84
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/6-2025-06-29/2-fascisme-et-genocide-on-s-organise.md
+  s_54aa5d4a1ea7d4::t_630e0bc560b6f7 1-85
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/6-2025-06-29/3-de-mussolini-a-trump-en-passant.md
+  s_54aa5d4a1ea7d4::t_fdc9371acf0df9 1-84
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/6-2025-06-29/CLAUDE.md
+  s_54aa5d4a1ea7d4::t_90d6d57928e523 1-21
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/5-2025-06-12/CLAUDE.md
+  s_54aa5d4a1ea7d4::t_ae3571922aa7fb 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/6-2025-04-12/CLAUDE.md
+  s_54aa5d4a1ea7d4::t_46331bd8ba5815 2,7-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE.md
+  s_54aa5d4a1ea7d4::t_02dd661f27c160 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_54aa5d4a1ea7d4::t_ce29e556c81f63 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "327f2a2f17dc887ac47d8f9428db31c0cd99af00",
+  "prompts": {},
+  "sessions": {
+    "s_54aa5d4a1ea7d4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a00dfd1b6ea0c09b8",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
