@@ -1,6 +1,6 @@
 ---
 title: "NATACHA POLONY 2027 : VA-T-ELLE DÉTRÔNER MÉLENCHON ??"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/5-2026-10-15
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/1-2026-10-15
 owner: diplo
 preview: >-
   La PaduTeam soutient que la candidature de Natacha Polony, issue du sérail

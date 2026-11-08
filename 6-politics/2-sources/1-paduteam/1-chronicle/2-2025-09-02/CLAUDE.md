@@ -1,19 +1,20 @@
 ---
-title: "2025-09-02 → 2026-10-21"
+title: "2025-09-02 → 2026-10-29"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02
 owner: diplo
 preview: >-
-  La PaduTeam pousse la gauche de rupture à se radicaliser et à rompre avec le
-  PS, défend LFI et Mélenchon comme le pari de 2027, lit l'actualité en
-  rapports de classe et refuse l'union avec le PS et le PCF.
+  La PaduTeam pousse la gauche à rompre avec le PS et à se radicaliser
+  derrière Mélenchon et LFI pour 2027. Elle lit l'actualité en rapports de
+  classe et oppose l'abondance et la sortie du capitalisme au RN et à
+  l'impérialisme américain.
 ---
-# 2025-09-02 → 2026-10-21
+# 2025-09-02 → 2026-10-29
 
-Sur ces quatorze mois, la PaduTeam mène un seul combat : faire de la gauche de rupture la force qui l'emporte en 2027, contre une gauche d'accommodement dont le PS est le cœur. Dès [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/1-2025-09-02/CLAUDE|2025-09-02 → 2025-11-28]], elle passe du 10 septembre contre Macron au PS comme adversaire principal, pousse la FI à radicaliser son programme, défend le mot communisme et porte le 100 % Sécu. L'hiver lit une recomposition avant 2027 : le PS se reconstitue et trahit, LFI et Mélenchon sont à défendre.
+Pendant ces quatorze mois, la PaduTeam fait du PS l'adversaire principal de la gauche. Après le 10 septembre contre Macron, elle le décrit comme un parti qui se reconstitue pour mieux trahir. Glucksmann, le PCF et l'union de la gauche sont pour elle des impasses, et elle refuse toute alliance avec le PCF et le PS. La gauche de rupture doit l'emporter sur celle d'accommodement, et la ligne se durcit à mesure que 2027 approche.
 
-Le printemps garde cette ligne et l'étend. La PaduTeam lit les municipales comme un succès de LFI et voit se former, après le scrutin, un pôle de gauche anti-Mélenchon visant 2027. Elle tient le PS, Glucksmann et le PCF pour des impasses, et voit dans l'abondance, non dans l'union de la gauche, ce qui fera reculer le RN. À l'international, elle lit l'impérialisme américain, de Maduro au Groenland, et la guerre contre l'Iran comme une défense du pétrodollar.
+Le pari porte sur Mélenchon et LFI, qu'elle défend contre Glucksmann, le PS et le centre. Elle pousse la FI à radicaliser son programme. Elle lit les municipales comme un succès de LFI, puis voit se former, après le scrutin, un pôle de gauche anti-Mélenchon visant 2027.
 
-La ligne se durcit sur la fin de la Period. Dans [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/CLAUDE|2026-07-11 → 2026-10-21]], elle refuse l'union avec le PS et le PCF, voit en Mélenchon le vainqueur possible, veut abattre Glucksmann, Jadot et Hollande, et juge le 17 octobre pré-révolutionnaire. Tout se lit en conflit de classe.
+Sur le fond, elle lit l'actualité en rapports de classe. Elle défend le mot communisme, porte le 100 % Sécu et estime que c'est l'abondance, non l'union de la gauche, qui fera reculer le RN. À l'international, elle voit l'impérialisme américain s'afficher, de Maduro au Groenland, et la guerre contre l'Iran comme une défense du pétrodollar. Dans les derniers mois, elle oppose la sortie du capitalisme à ses adversaires et lit le 17 octobre comme une situation pré-révolutionnaire.
 
 ## Contenu
 
@@ -21,4 +22,4 @@ La ligne se durcit sur la fin de la Period. Dans [[6-politics/2-sources/1-padute
 2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/2-2025-12-01/CLAUDE|2025-12-01 → 2026-02-15]] (59 Digests)
 3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/3-2026-02-16/CLAUDE|2026-02-16 → 2026-04-12]] (64 Digests)
 4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/4-2026-04-13/CLAUDE|2026-04-13 → 2026-07-10]] (69 Digests)
-5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/CLAUDE|2026-07-11 → 2026-10-21]] (80 Digests)
+5. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/CLAUDE|2026-07-11 → 2026-10-29]] (86 Digests)

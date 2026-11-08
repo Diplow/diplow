@@ -1,6 +1,6 @@
 ---
 title: "17/10 : LA MACRONIE EN PANIQUE FACE AU PEUPLE EN LUTTE !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/5-2026-10-15
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/5-2026-10-15/1-2026-10-15
 owner: diplo
 preview: >-
   La PaduTeam soutient que le 17 octobre ouvre une situation
