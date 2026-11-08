@@ -3,22 +3,23 @@ title: "2022-11-28 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28
 owner: diplo
 preview: >-
-  Pascal Boniface lit quatre ans d'actualité, de l'Ukraine à Gaza puis à
-  Trump, par le deux poids deux mesures occidental et le rapport de force. Il
-  juge que l'Occident perd son monopole face au Sud global et plaide pour une
-  France qui défend ses intérêts sans suivisme.
+  Boniface lit quatre ans de géopolitique par le deux poids, deux mesures
+  occidental et la fin de l'occidentalo-centrisme : Ukraine, Gaza, Trump,
+  Europe. Il plaide pour une France sans suivisme envers Washington, une
+  négociation non taboue en Ukraine, et reçoit des invités.
 ---
 # 2022-11-28 → 2026-10-30
 
-Sur toute la Chronicle, Pascal Boniface lit l'actualité avec la même grille : le deux poids deux mesures occidental et le rapport de force. Dès l'hiver 2022-2023, la guerre en Ukraine lui sert à montrer un clivage entre l'Occident et le reste du monde, avec un Sud global qui monte et une autonomie stratégique européenne à construire ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/1-2022-11-28/CLAUDE|2022-11-28 → 2023-06-01]]). Il y voit la perte du monopole occidental, qu'il suit ensuite pendant l'été et l'automne 2023 ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/2-2023-06-02/CLAUDE|2023-06-02 → 2023-11-29]]).
+D'un bout à l'autre de la Chronique, Boniface applique la même grille : l'Occident a perdu le monopole de l'ordre mondial, un clivage sépare l'Occident du reste du monde, et le Sud global monte. Le deux poids, deux mesures occidental en est le ressort central. Il isole l'Occident et entame sa crédibilité, d'abord sur l'Ukraine, puis surtout sur Gaza.
 
-Sur l'Ukraine, il estime que le temps ne joue pour personne et que la Chine en profite. Il plaide pour une négociation non taboue. Il demande aussi une France qui défend ses intérêts sans suivisme envers Washington ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/CLAUDE|2023-11-30 → 2024-05-30]]). La même période compte avec le risque d'engrenage et la crédibilité de l'Occident, à propos de Gaza et de la crise israélo-iranienne.
+Sur les conflits, il garde un regard réaliste. En Ukraine, le temps ne joue pour personne et la Chine en profite, d'où son plaidoyer pour une négociation non taboue. À Gaza, il voit une offensive sans horizon politique et un Israël qui s'enlise malgré sa force. Il souligne le risque d'engrenage, notamment dans la crise israélo-iranienne, et juge illégal le plan Trump pour Gaza.
 
-À partir de l'automne 2023, Gaza prend la première place. Pour Boniface, le deux poids deux mesures isole l'Occident et l'offensive israélienne n'a pas d'horizon politique. Le mot génocide finit par lui sembler s'imposer. La dernière Period élargit la grille au Liban, à la Syrie et à Trump ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/CLAUDE|2024-05-31 → 2026-10-30]]). Il y reçoit aussi des invités, dont les thèses restent les leurs.
+Côté français et européen, il plaide pour une France qui défend ses intérêts sans suivisme envers Washington, pour l'autonomie stratégique européenne et pour une Europe qui parle d'une voix. Il commente aussi la dissolution décidée par Macron et la défaite du RN par la mobilisation, et voit entre Trump et Harris surtout une différence de style. Au fil des années, il reçoit de nombreux invités et chronique des livres.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/1-2022-11-28/CLAUDE|2022-11-28 → 2023-06-01]] (76 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/2-2023-06-02/CLAUDE|2023-06-02 → 2023-11-29]] (74 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/CLAUDE|2023-11-30 → 2024-05-30]] (88 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/CLAUDE|2024-05-31 → 2026-10-30]] (120 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/CLAUDE|2024-05-31 → 2024-11-20]] (79 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/CLAUDE|2024-11-21 → 2026-10-30]] (47 Digests)
