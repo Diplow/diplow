@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/5-2025-09-17/5-18-septembre-le-pouvoir-se-barricade.md
+  s_7fdf56a95f88fb::t_7a56cc2f3496a5 1-92
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/5-2025-09-17/6-on-avait-jamais-fait-ca-nous.md
+  s_7fdf56a95f88fb::t_418d40d5afe1ef 1-71
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/5-2025-09-17/CLAUDE.md
+  s_7fdf56a95f88fb::t_9e7a3d93829cc8 2,6-9,11,13,15-17,25-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/6-2025-09-21/1-l-extreme-droite-ne-tue-plus.md
+  s_7fdf56a95f88fb::t_3ad7156b4974c1 1-78
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/6-2025-09-21/2-de-france-2-a-bfmtv-panique.md
+  s_7fdf56a95f88fb::t_4594ea0793f1ff 1-88
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/6-2025-09-21/3-reconnaissance-de-la-palestine-cela-ne.md
+  s_7fdf56a95f88fb::t_ca1b1cd2660778 1-79
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/6-2025-09-21/4-revelations-sur-les-liens-entre-le.md
+  s_7fdf56a95f88fb::t_0049ad37b2c770 1-95
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/6-2025-09-21/CLAUDE.md
+  s_7fdf56a95f88fb::t_8baf5fbbf6bac5 1-22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/CLAUDE.md
+  s_7fdf56a95f88fb::t_0e697cbd9e607a 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE.md
+  s_7fdf56a95f88fb::t_b15041605292b7 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_7fdf56a95f88fb::t_51a3ffe5f3465f 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_7fdf56a95f88fb::t_856f36dadf3d67 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aa931e90251fbf209ddae57622ea439980ca7140",
+  "prompts": {},
+  "sessions": {
+    "s_7fdf56a95f88fb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a9ec4fde44d01a5ba",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
