@@ -1,0 +1,45 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/3-2025-08-16/CLAUDE.md
+  s_b0cc856b6997dc::t_d5b9431218f35c 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/4-2025-08-27/1-aujourd-hui-une-affiche-c-est.md
+  s_b0cc856b6997dc::t_a7de0dc3cb7ce8 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/4-2025-08-27/2-10-septembre-la-macronie-au-bord.md
+  s_b0cc856b6997dc::t_f896e855fb4f36 1-89
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/4-2025-08-27/3-pourquoi-la-france-laisse-israel-pietiner.md
+  s_b0cc856b6997dc::t_a87e5759c4ecc4 1-94
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/4-2025-08-27/4-guadeloupe-la-montagne-s-effondre-l.md
+  s_b0cc856b6997dc::t_da7e1ae5d71898 1-84
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/4-2025-08-27/CLAUDE.md
+  s_b0cc856b6997dc::t_7f53fa49219a43 1-24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01/1-burn-out-generalise-c-est-la.md
+  s_b0cc856b6997dc::t_6bb7f393116ae9 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01/2-revelations-blast-600-000-de-bijoux.md
+  s_b0cc856b6997dc::t_7b1d11aec2c652 1-63
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01/3-10-septembre-la-repression-peut-etre.md
+  s_b0cc856b6997dc::t_2d50d56f5d54b4 1-76
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/5-2025-09-01/CLAUDE.md
+  s_b0cc856b6997dc::t_8e4c16be680362 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/CLAUDE.md
+  s_b0cc856b6997dc::t_a50c9b03a4d2ce 2,6-10,12,14,16,18,24-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE.md
+  s_b0cc856b6997dc::t_88a3a2cdd2d9fc 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_b0cc856b6997dc::t_e217195245b5af 2,6-8,10,12,14,16,22
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_b0cc856b6997dc::t_4f994ad3900e26 6-8,12,14,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9dfb51085213497cf597b05c189dffcaac3cac03",
+  "prompts": {},
+  "sessions": {
+    "s_b0cc856b6997dc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a8a2c136ca9192b6a",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
