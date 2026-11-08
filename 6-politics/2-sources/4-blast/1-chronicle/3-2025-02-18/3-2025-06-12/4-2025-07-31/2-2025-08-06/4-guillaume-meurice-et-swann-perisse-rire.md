@@ -1,6 +1,6 @@
 ---
 title: "GUILLAUME MEURICE ET SWANN PÉRISSÉ : RIRE POUR RÉSISTER"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/6-2025-08-06
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/2-2025-08-06
 owner: diplo
 preview: >-
   Meurice et Périssé soutiennent que l'humour engagé heurte forcément et qu'il

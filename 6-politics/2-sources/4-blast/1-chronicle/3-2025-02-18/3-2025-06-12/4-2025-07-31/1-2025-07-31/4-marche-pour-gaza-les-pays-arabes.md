@@ -1,6 +1,6 @@
 ---
 title: "MARCHE POUR GAZA : LES PAYS ARABES COMPLICES DU GÉNOCIDE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/5-2025-07-31
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/1-2025-07-31
 owner: diplo
 preview: >-
   Blast soutient que la complicité des États arabes, l'Égypte en tête, dans le

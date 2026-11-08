@@ -1,6 +1,6 @@
 ---
 title: "2025-07-31 → 2025-08-04"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/5-2025-07-31
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/1-2025-07-31
 owner: diplo
 preview: >-
   Blast dénonce un gouvernement Bayrou qui épargne les entreprises et fait
@@ -18,8 +18,8 @@ La Period se termine sur le climat. Blast soutient que les canicules, devenues l
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/5-2025-07-31/1-macron-le-robin-des-bois-du|MACRON : LE ROBIN DES BOIS DU MEDEF ?]] (2025-07-31)
-2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/5-2025-07-31/2-guerre-mondiale-et-casse-sociale-dernier|GUERRE MONDIALE ET CASSE SOCIALE : DERNIER ÉTÉ AVANT LA FIN DE LEUR MONDE]] (2025-08-01)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/5-2025-07-31/3-fuir-pour-survivre-et-si-c|FUIR POUR SURVIVRE : ET SI C'ÉTAIT VOUS ?]] (2025-08-02)
-4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/5-2025-07-31/4-marche-pour-gaza-les-pays-arabes|MARCHE POUR GAZA : LES PAYS ARABES COMPLICES DU GÉNOCIDE]] (2025-08-03)
-5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/5-2025-07-31/5-canicules-un-danger-largement-sous-estime|CANICULES : UN DANGER LARGEMENT SOUS ESTIMÉ POUR NOS CORPS ET LA SOCIÉTÉ]] (2025-08-04)
+1. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/1-2025-07-31/1-macron-le-robin-des-bois-du|MACRON : LE ROBIN DES BOIS DU MEDEF ?]] (2025-07-31)
+2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/1-2025-07-31/2-guerre-mondiale-et-casse-sociale-dernier|GUERRE MONDIALE ET CASSE SOCIALE : DERNIER ÉTÉ AVANT LA FIN DE LEUR MONDE]] (2025-08-01)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/1-2025-07-31/3-fuir-pour-survivre-et-si-c|FUIR POUR SURVIVRE : ET SI C'ÉTAIT VOUS ?]] (2025-08-02)
+4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/1-2025-07-31/4-marche-pour-gaza-les-pays-arabes|MARCHE POUR GAZA : LES PAYS ARABES COMPLICES DU GÉNOCIDE]] (2025-08-03)
+5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/1-2025-07-31/5-canicules-un-danger-largement-sous-estime|CANICULES : UN DANGER LARGEMENT SOUS ESTIMÉ POUR NOS CORPS ET LA SOCIÉTÉ]] (2025-08-04)

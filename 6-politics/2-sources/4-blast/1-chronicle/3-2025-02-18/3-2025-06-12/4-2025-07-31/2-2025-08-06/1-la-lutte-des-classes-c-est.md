@@ -1,6 +1,6 @@
 ---
 title: "LA LUTTE DES CLASSES C’EST AUSSI DANS VOTRE ASSIETTE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/6-2025-08-06
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/2-2025-08-06
 owner: diplo
 preview: >-
   Blast (Contraste, saison 1) soutient que l'alimentation est un fait social :

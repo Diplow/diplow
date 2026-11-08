@@ -1,20 +1,20 @@
 ---
-title: "2025-07-12 → 2025-08-12"
+title: "2025-07-12 → 2025-07-30"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12
 owner: diplo
 preview: >-
-  Blast dénonce un pouvoir qui invoque la liberté tout en la piétinant et fait
-  payer les modestes, du plan Bayrou à la complicité française à Gaza. Elle
-  reçoit des invités pour penser la marchandisation, les services publics, la
-  BigTech et l'humour comme résistance.
+  Blast dénonce un pouvoir qui invoque la liberté tout en piétinant les
+  modestes (plan Bayrou, complaisance envers Israël, loi Duplomb, médias
+  alignés en temps de guerre) et reçoit Eribon, Lainé et Lordon pour penser
+  l'abandon des classes populaires.
 ---
-# 2025-07-12 → 2025-08-12
+# 2025-07-12 → 2025-07-30
 
-Le fil principal de la Period est la mise en accusation du pouvoir. Blast dénonce un gouvernement Bayrou dont le plan épargne les entreprises et le capital et fait payer les plus pauvres. Elle y voit un pouvoir qui s'effondre, et reçoit Frédéric Lordon, pour qui ce plan est l'occasion de mettre le macronisme en accusation. Elle reproche aussi à Macron sa complaisance envers Israël, aux médias leur alignement sur la version officielle en temps de guerre, et au socle commun son union derrière la loi Duplomb.
+Le fil de ces deux semaines et demie est une mise en cause du pouvoir et de ses relais. Blast met en cause un pouvoir qui invoque la liberté tout en la piétinant : Macron, complaisant envers Israël, et le plan Bayrou, qui fait payer les modestes et épargne le capital. Elle dénonce aussi des médias alignés sur la version officielle en temps de guerre, et un socle commun uni derrière la loi Duplomb. Dans la même veine, elle s'en prend à la marchandisation des affects et du savoir (robots empathiques, écoles de commerce) et dénonce l'acharnement judiciaire contre Onsi Abichou, enfermé en Tunisie.
 
-Gaza et la solidarité reviennent d'un bout à l'autre des cinq semaines. Blast relaie l'alerte de Médecins du monde, dénonce la complicité française, accuse les États arabes de complicité, et défend l'accueil des exilés. Elle s'indigne de l'acharnement judiciaire contre Onsi Abichou, enfermé en Tunisie, alerte sur des canicules sous-estimées et salue l'espoir Mamdani.
+Les entretiens donnent à ce réquisitoire sa profondeur. Blast reçoit Didier Eribon sur l'abandon des classes populaires par la gauche, et Michaël Lainé sur les algorithmes qui fabriquent la post-vérité. Elle reçoit ensuite Frédéric Lordon, pour qui le plan Bayrou est l'occasion de mettre le macronisme en accusation, puis une sociologue, une journaliste et la présidente d'une association d'avocats, pour penser la dégradation des services publics, l'écologie de l'extrême droite et la complicité française à Gaza.
 
-Les entretiens prolongent ces thèmes. Didier Eribon parle de l'abandon des classes populaires par la gauche, Michaël Lainé des algorithmes qui fabriquent la post-vérité. Une sociologue, une journaliste et la présidente d'une association d'avocats abordent la dégradation des services publics et l'écologie de l'extrême droite. Sébastien Broca analyse l'alliance entre BigTech et États, puis Meurice et Périssé défendent l'humour comme résistance. Blast met aussi en cause la marchandisation des affects et du savoir, fait de l'alimentation un fait social de classe et de genre, et défend les orques ibériques contre un récit médiatique de dangerosité.
+Gaza revient d'un bout à l'autre de la Period, où Blast relaie l'alerte de Médecins du monde. Elle y trouve aussi une note d'espoir avec Mamdani, qu'elle salue en [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/2-2025-07-17/CLAUDE|2025-07-17 → 2025-07-21]].
 
 ## Contenu
 
@@ -22,5 +22,3 @@ Les entretiens prolongent ces thèmes. Didier Eribon parle de l'abandon des clas
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/2-2025-07-17/CLAUDE|2025-07-17 → 2025-07-21]] (5 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/3-2025-07-22/CLAUDE|2025-07-22 → 2025-07-25]] (4 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/4-2025-07-26/CLAUDE|2025-07-26 → 2025-07-30]] (4 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/5-2025-07-31/CLAUDE|2025-07-31 → 2025-08-04]] (5 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/6-2025-08-06/CLAUDE|2025-08-06 → 2025-08-12]] (4 Digests)
