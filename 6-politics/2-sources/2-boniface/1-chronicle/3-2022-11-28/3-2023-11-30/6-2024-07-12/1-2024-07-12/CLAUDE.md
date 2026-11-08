@@ -1,21 +1,26 @@
 ---
-title: "2024-07-12 → 2026-10-14"
+title: "2024-07-12 → 2024-07-22"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/6-2024-07-12/1-2024-07-12
 owner: diplo
 preview: >-
-  Boniface soutient que l'OTAN, en accusant la Chine, devient une alliance
-  antichinoise et répète l'erreur commise avec la Russie. Il chronique Stubb,
-  qui voit un monde en trois blocs où l'Occident doit montrer l'exemple, et
-  reçoit Sylvie Bermann sur la Chine.
+  Boniface lit l'actualité du 12 au 22 juillet 2024 par le
+  deux-poids-deux-mesures et la dépendance envers Washington : l'OTAN devient
+  antichinoise, les JO excluent la Russie mais pas Israël. Il suit aussi la
+  présidentielle américaine, de l'attentat contre Trump au renoncement de
+  Biden.
 ---
-# 2024-07-12 → 2026-10-14
+# 2024-07-12 → 2024-07-22
 
-Le fil de la Period est la place de la Chine dans l'ordre mondial et la position de l'Occident face à elle. En juillet 2024, Boniface soutient que le communiqué du sommet de l'OTAN, qui accuse directement la Chine de soutenir la guerre en Ukraine, fait de l'Alliance une alliance antichinoise. Selon lui, c'est la même erreur que celle commise avec la Russie, et l'Europe n'a pas à suivre aveuglément Washington.
+Boniface applique à deux sujets la même grille : l'alignement de l'Occident sur ses intérêts et sur ses amis. Le communiqué du sommet de l'OTAN accuse directement la Chine de soutenir la guerre en Ukraine et transforme l'Alliance en alliance antichinoise, ce qui répète l'erreur commise avec la Russie. L'Europe n'a pas à suivre aveuglément Washington. Il lit de la même façon les Jeux olympiques : la Russie en est exclue en tant que rivale du monde occidental, alors qu'Israël, son ami, y reste admis. Le CIO habille ce deux-poids-deux-mesures d'arguments juridiques, et il ne changera qu'à la demande des comités nationaux.
 
-Deux ans plus tard, en octobre 2026, il revient sur ce thème par deux détours. Il chronique Le Triangle du pouvoir d'Alexander Stubb, pour qui le monde se divise en trois blocs : Occident, Orient et Sud global. Dans ce livre, l'Occident est affaibli par ses échecs et son deux poids deux mesures, et il doit montrer l'exemple s'il veut peser sur un Sud qui décidera du nouvel ordre. Boniface reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans que Pékin ait gagné. Elle juge que la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais que son excédent commercial met l'Europe en difficulté.
+L'autre moitié de la Period suit la campagne américaine. Pour Boniface, la tentative d'assassinat contre Donald Trump se retourne en sa faveur : il s'en sert pour se poser en victime et en homme plus fort que tout, face à un Biden affaibli. Il juge que l'élection de Trump menacerait encore le système multilatéral.
+
+Il lit ensuite le retrait de Biden : Obama le pousse vers la sortie en ami, et le renoncement était la seule décision sage, puisqu'il lui évite l'humiliation face à Trump. La course est rouverte. Trump reste favori sans avoir de boulevard, Kamala Harris est une candidate fragile qui ne peut pas le battre, et les démocrates n'ont qu'une chance : un nouveau candidat, désigné à la convention de Chicago.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/6-2024-07-12/1-2024-07-12/1-l-otan-une-alliance-antichinoise|L'OTAN : une alliance antichinoise ?]] (2024-07-12)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/6-2024-07-12/1-2024-07-12/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/6-2024-07-12/1-2024-07-12/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/6-2024-07-12/1-2024-07-12/2-super-trump|Super Trump]] (2024-07-15)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/6-2024-07-12/1-2024-07-12/3-jo-russie-exclue-israel-present|JO : Russie exclue, Israël présent]] (2024-07-16)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/6-2024-07-12/1-2024-07-12/4-retrait-de-biden-trop-tard-pour|Retrait de Biden : trop tard pour éviter la victoire de Trump ?]] (2024-07-19)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/3-2023-11-30/6-2024-07-12/1-2024-07-12/5-elections-aux-etats-unis-les-cartes|Élections aux États-Unis : les cartes sont rebattues]] (2024-07-22)
