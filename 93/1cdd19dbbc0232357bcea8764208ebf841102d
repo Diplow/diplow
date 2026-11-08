@@ -1,0 +1,45 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/3-2025-10-12/CLAUDE.md
+  s_a6c57eccba2483::t_8f920b554eb9db 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/4-2025-10-14/1-la-liberte-d-expression-existe-t.md
+  s_a6c57eccba2483::t_8d77e387195968 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/4-2025-10-14/2-l-entretien-d-embauche-une-humiliation.md
+  s_a6c57eccba2483::t_f611402b08cb06 1-91
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/4-2025-10-14/3-plan-trump-pour-gaza-pourquoi-la.md
+  s_a6c57eccba2483::t_2a5dc5d655f70e 1-89
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/4-2025-10-14/4-une-dictature-c-est-un-regime.md
+  s_a6c57eccba2483::t_fb60bc671600f3 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/4-2025-10-14/CLAUDE.md
+  s_a6c57eccba2483::t_a76f6b71c095c2 1-24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/5-2025-10-17/1-darmanin-une-affaire-sous-haute-surveillance.md
+  s_a6c57eccba2483::t_ba1e651de1e640 1-74
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/5-2025-10-17/2-ps-traitres-incompetents-ou-les-deux.md
+  s_a6c57eccba2483::t_aa45f81c176b18 1-96
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/5-2025-10-17/3-ce-qui-se-joue-vraiment-derriere.md
+  s_a6c57eccba2483::t_5ff9d57491bc09 1-79
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/5-2025-10-17/CLAUDE.md
+  s_a6c57eccba2483::t_8c38d218bbce64 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/CLAUDE.md
+  s_a6c57eccba2483::t_509978cfca54d0 2,6-9,11,13,15,17,23-25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE.md
+  s_a6c57eccba2483::t_d31d21c7d2f5ac 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_a6c57eccba2483::t_f8ad3c7bb9c09a 2,6-9,11,13,15-17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_a6c57eccba2483::t_753180b3d77f4e 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "931cdd19dbbc0232357bcea8764208ebf841102d",
+  "prompts": {},
+  "sessions": {
+    "s_a6c57eccba2483": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad74229551a8fac51",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
