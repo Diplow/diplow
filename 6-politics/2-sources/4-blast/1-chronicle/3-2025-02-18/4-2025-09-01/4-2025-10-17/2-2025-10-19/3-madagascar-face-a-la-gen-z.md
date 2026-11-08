@@ -1,6 +1,6 @@
 ---
 title: "MADAGASCAR : FACE À LA GEN Z, LE PRÉSIDENT EXFILTRÉ PAR LA FRANCE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/6-2025-10-19
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/2-2025-10-19
 owner: diplo
 preview: >-
   Blast soutient que la révolte de la Gen Z malgache, née des coupures d'eau

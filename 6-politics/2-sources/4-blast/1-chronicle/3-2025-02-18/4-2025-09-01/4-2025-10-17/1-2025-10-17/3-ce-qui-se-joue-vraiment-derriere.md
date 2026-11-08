@@ -1,6 +1,6 @@
 ---
 title: "CE QUI SE JOUE VRAIMENT DERRIÈRE LE CESSEZ-LE-FEU À GAZA"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/5-2025-10-17
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/1-2025-10-17
 owner: diplo
 preview: >-
   Blast reçoit Sylvain Cypel et Yassine Slama : le cessez-le-feu à Gaza n'est

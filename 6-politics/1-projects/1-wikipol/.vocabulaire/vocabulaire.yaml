@@ -189,6 +189,7 @@ kinds:
       prisonnier-politique: {définition: "Dirigeant détenu pour des raisons politiques, à la date de la Publication.", statut: proposé, introduit_par: blast/nBaNRVIDMLQ.md}
       universitaire: {définition: "Enseigne et mène des recherches à l'université.", statut: proposé, introduit_par: blast/98v7SwEoC8c.md}
       prospectiviste: {définition: "Étudie les évolutions futures et construit des scénarios pour éclairer les décisions.", statut: proposé, introduit_par: boniface/L9DnxMJ5F2c.md}
+      planteur: {définition: "Exploite une plantation, notamment esclavagiste.", statut: proposé, introduit_par: blast/n5DkAIlDT1I.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
