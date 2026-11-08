@@ -1,0 +1,46 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/CLAUDE.md
+  s_63098e197dba30::t_9c0265b05a9d19 25
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Canvas.tsx
+  s_63098e197dba30::t_a59a2533776bdb 294-300,353-355,361-362,372-373,765-766,768,773
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE.md
+  s_63098e197dba30::t_9c0265b05a9d19 22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/Screen.tsx
+  s_63098e197dba30::t_a59a2533776bdb 146-147
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/HexWidget.tsx
+  s_63098e197dba30::t_a59a2533776bdb 33-47
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/page/usePageZoom.ts
+  s_63098e197dba30::t_538bdb05aa79b3 48-51
+  s_63098e197dba30::t_a59a2533776bdb 85-91,104-109,113,186-187
+  s_63098e197dba30::t_d1d09e7dfd3921 3-7,12,28-37,39-40,42-47,52-84,92-103,111-112,114-127,129-130,144-150,157,159,161,165-182,185,188-189,193-194,198,202-207
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/page/zoom.ts
+  s_63098e197dba30::t_702762a797318f 3-4,49-61
+  s_63098e197dba30::t_2a28c91b5da386 62-63
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/page/usePageZoom.test.ts
+  s_63098e197dba30::t_362e8d5ae4268a 6,10,45-49,145-200,206-223,225-235,237-238,240,243-246,248-263
+  s_63098e197dba30::t_fc47d8d3f1c6fb 236,239,241-242
+  s_63098e197dba30::t_64fe0e36d1934a 26,28,38,126,144
+  s_63098e197dba30::t_9ca33f111f1fa9 201-205,224,247
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/CLAUDE.md
+  s_63098e197dba30::t_9c0265b05a9d19 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/page/zoom.test.ts
+  s_63098e197dba30::t_702762a797318f 3,5-6,69-85
+  s_63098e197dba30::t_6f346f5fd68221 86
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_63098e197dba30::t_9c0265b05a9d19 46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "260098928db9338d87b2df1253fdf18e3aa6493f",
+  "prompts": {},
+  "sessions": {
+    "s_63098e197dba30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fa8011de-4974-4841-947a-b5703d73f188",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
