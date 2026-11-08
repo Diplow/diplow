@@ -1,21 +1,21 @@
 ---
-title: "2025-02-18 → 2025-10-10"
+title: "2025-02-18 → 2025-10-14"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18
 owner: diplo
 preview: >-
-  Blast soutient que l'extrême droite avance et que le pouvoir, des médias
-  patronaux à Macron et Bayrou, protège les puissants, s'attaque à l'état de
-  droit et impose l'austérité. Pour elle, le PS trahit la gauche et seul le
-  rapport de force collectif fait reculer.
+  Blast lit 2025 comme l'avancée de l'extrême droite et la dérive autoritaire
+  d'un pouvoir qui protège les puissants et frappe les faibles. Elle soutient
+  que seuls le collectif et le rapport de force font reculer.
 ---
-# 2025-02-18 → 2025-10-10
+# 2025-02-18 → 2025-10-14
 
-Sur ces huit mois, Blast décrit une extrême droite qui progresse sur plusieurs fronts : Trump et Musk, Retailleau, le RN. Elle la dit portée par une classe politique et des médias patronaux qu'elle juge corrompus ou alignés, et par une droite qui s'attaque à la justice et à l'état de droit. Le pouvoir protège les puissants, impose l'austérité aux modestes, qu'elle voie dans le réarmement ou dans les politiques de Macron et Bayrou, et réprime le mouvement social. Blast y ajoute, à la rentrée, une complaisance envers Israël.
+Sur toute la Period, Blast décrit un même mouvement : une extrême droite qui avance, de Trump et Musk à Retailleau et au RN, et un pouvoir qui s'en accommode. Elle dénonce une classe politique et des médias patronaux corrompus, un PS qui trahit la gauche, et des politiques d'austérité, du réarmement au plan Bayrou. Ce fil court des premières semaines ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/1-2025-02-18/CLAUDE|2025-02-18 → 2025-04-11]]) jusqu'à l'automne.
 
-Face à ce tableau, Blast reproche au PS de trahir la gauche. Elle écarte la voie d'une primaire à gauche et soutient que seul le rapport de force fait reculer l'adversaire. Le propos se déplace du constat, au début de la Period, vers l'appel final à s'organiser, qui prolonge sa défense du collectif.
+Le ton se durcit d'une étape à l'autre. Au printemps, Blast défend la justice face à la droite et à l'extrême droite et soutient que seul le rapport de force fait reculer, sans passer par une primaire à gauche. L'été, elle lit dans l'arrestation de Yanis Mhamdi, dans Gaza et dans la loi Duplomb une dérive autoritaire qui frappe les faibles et épargne les puissants, et elle appelle à s'organiser. À la rentrée ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE|2025-09-01 → 2025-10-14]]), elle fait de Macron le responsable du chaos. Elle suit la mobilisation contre l'austérité et sa répression, défend la justice contre l'offensive pro-Sarkozy et juge illégale l'arrestation de la flottille pour Gaza.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/1-2025-02-18/CLAUDE|2025-02-18 → 2025-04-11]] (64 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/2-2025-04-12/CLAUDE|2025-04-12 → 2025-06-11]] (66 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE|2025-06-12 → 2025-10-10]] (114 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE|2025-06-12 → 2025-08-31]] (70 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE|2025-09-01 → 2025-10-14]] (50 Digests)
