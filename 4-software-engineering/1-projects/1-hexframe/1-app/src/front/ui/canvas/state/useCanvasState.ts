@@ -27,6 +27,8 @@ import {
   toggleExpanded,
   withContext,
   withoutEmptyRings,
+  withoutPage,
+  withPage,
   type CanvasView,
   type Fills,
   type Gesture,
@@ -80,8 +82,11 @@ export interface CanvasRules {
 /** Every gesture let through, as on any canvas whose caller holds none back. */
 const everything: TileLets = { click: true, recenter: true }
 
-/** What a gesture on a Tile asks of the view: a click's, or its menu's Show its Context. */
-type TileGesture = TileAction | 'show-context'
+/**
+ * What a gesture on a Tile asks of the view: a click's, its menu's Show its Context, or the C key's
+ * page, shown or left.
+ */
+type TileGesture = TileAction | 'show-context' | 'show-page' | 'hide-page'
 
 /** How a click is decided: by a finger or not, and which Tiles the reader may add to. */
 interface Deciding {
@@ -417,6 +422,12 @@ export function useCanvasState(input: CanvasInput) {
       case 'show-context':
         change(withContext(system, view), action, tile)
         return
+      case 'show-page':
+        change(withPage(system, view), action, tile)
+        return
+      case 'hide-page':
+        change(withoutPage(system, view), action, tile)
+        return
       case 'center':
         change(recenter(system, view, tile), action, tile)
     }
@@ -459,6 +470,8 @@ export function useCanvasState(input: CanvasInput) {
   return {
     state: {
       center: shown.center,
+      /** The center shown as its page, its words whole, over the drawing. */
+      page: shown.page,
       hexes,
       // The Tile the center stands in and those beside it, with what they open into, around the
       // drawing, where a click on a Tile centers it: none where moving the center is held back.
@@ -494,18 +507,25 @@ export function useCanvasState(input: CanvasInput) {
       },
       /**
        * The C key: the center's next view (`cycleOf`), alone, opened into its ring, its Context
-       * inside too, then alone again, folding as a click folds it; none where its click is held,
-       * nor on a Root not there yet, which nothing answers on.
+       * inside too, its page, then alone again; none where its click is held, nor on a Root not there
+       * yet, which nothing answers on.
        */
       cycle: () => {
         const hex = hexes.find(
           (each): each is TileHex => each.kind === 'tile' && each.role === 'center',
         )
         const held = hex === undefined || unborn(hex) || !lets(hex).click
-        const step = held ? undefined : cycleOf(shown, fills)
-        if (hex === undefined || step === undefined || folding !== undefined) return
-        if (step === 'collapse') foldThen(hex, step)
-        else act(hex, step)
+        if (hex === undefined || held || folding !== undefined) return
+        act(hex, cycleOf(shown, fills))
+      },
+      /**
+       * Leaves the center's page for its hex, as Escape or the C key does once the page went back
+       * into the hex; none where the view changed meanwhile, which it answers.
+       */
+      leavePage: () => {
+        if (!shown.page || latest.current.view !== viewNow) return false
+        change(withoutPage(system, view), 'hide-page', shown.center.id)
+        return true
       },
       /** A double-click, or Shift+Enter, on `hex`, a fold under way given up for it. */
       center: (hex: TileHex, from: 'pointer' | 'keyboard') => {

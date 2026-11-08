@@ -53,9 +53,13 @@ describe('canvasTree', () => {
     expect(Object.keys(tree.branches ?? {})).toEqual(['1', '4'])
   })
 
+  it('carries each Tile’s Body, which its page shows whole', () => {
+    expect(canvasTree({ ...system, body: '# Why' }).body).toBe('# Why')
+  })
+
   it('keeps the Leaves by Direction, each marked as a Leaf', () => {
     expect(tree.leaves).toEqual({
-      1: { id: 'notes', title: 'NOTES', preview: 'What notes is', leaf: true },
+      1: { id: 'notes', title: 'NOTES', preview: 'What notes is', body: '', leaf: true },
     })
   })
 
@@ -75,6 +79,7 @@ describe('canvasTree', () => {
       id: 'a3',
       title: 'A3',
       preview: 'A child',
+      body: '',
       reference: { from: 'A' },
     })
   })
@@ -94,6 +99,7 @@ describe('canvasTree', () => {
       id: 'shed',
       title: 'Shed',
       preview: 'Tools',
+      body: '',
       reference: { from: 'Bob' },
     })
   })

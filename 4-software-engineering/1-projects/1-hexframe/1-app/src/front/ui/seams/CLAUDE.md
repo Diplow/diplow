@@ -5,7 +5,7 @@ owner: diplo
 preview: >-
   The seams STACK.md names in ui/, each the one file that changes when a
   library behind it comes or goes. For now the Markdown one, for a Tile's
-  content, holding CodeBlock until the Markdown renderer comes in.
+  content: Markdown, a Body rendered by TanStack Markdown, and CodeBlock.
 ---
 # seams
 
@@ -13,9 +13,9 @@ A seam is one file a library sits behind, so swapping the library changes that f
 
 | Path | Holds |
 |---|---|
-| `Markdown.tsx` | The seam for a Tile's content, holding for now `CodeBlock`, text shown as written, which a Leaf that isn't Markdown shows its Body in: the Markdown renderer, when a Body is rendered, comes in here |
-| `gallery.tsx` | `SeamsGallery`, `CodeBlock` on `/design-system` |
+| `Markdown.tsx` | The seam for a Tile's content: `Markdown`, a Body rendered by TanStack Markdown, set in the human's serif, its HTML shown as text and a link that would run code dropped, the renderer's defaults, kept since a Body is anyone's words, which the canvas's page reads a body with (HEX-141); and `CodeBlock`, text shown as written, which a Leaf that isn't Markdown shows its Body in |
+| `gallery.tsx` | `SeamsGallery`, `Markdown` and `CodeBlock` on `/design-system` |
 
-Until the Markdown renderer comes, one piece of Markdown is read outside this seam: a numbered list in the agent's words, which `blocksOf` (`chat/text/words.tsx`) gathers into a list, so the tutorial's body, told in the chat, shows its six steps as one (HEX-120, `hexframe-app-tutorial/decisions.md#DEC-11`). It reads no library, only the lines that open with a number and a dot; the renderer, once here, replaces it.
+One piece of Markdown is still read outside this seam: a numbered list in the agent's words, which `blocksOf` (`chat/text/words.tsx`) gathers into a list, so the tutorial's body, told in the chat, shows its six steps as one (HEX-120, `hexframe-app-tutorial/decisions.md#DEC-11`). It reads no library, only the lines that open with a number and a dot. The renderer came in with the canvas's page (HEX-141); the chat moving onto it, its tile widget's page among it, is a step of its own.
 
 The hotkeys seam STACK.md names for TanStack Hotkeys comes here too, with the first shortcut.

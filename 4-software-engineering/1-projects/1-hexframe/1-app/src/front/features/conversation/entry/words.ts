@@ -238,6 +238,8 @@ const navigations: Record<Gesture, (inputs: Record<'title', string>) => string> 
   collapse: m.conversation_collapsed,
   'show-context': m.conversation_context_shown,
   'hide-context': m.conversation_context_hidden,
+  'show-page': m.conversation_page_shown,
+  'hide-page': m.conversation_page_hidden,
   'show-leaves': m.conversation_leaves_shown,
   'hide-leaves': m.conversation_leaves_hidden,
   'show-children-around': m.conversation_children_around,

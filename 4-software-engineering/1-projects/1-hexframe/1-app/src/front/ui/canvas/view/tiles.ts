@@ -6,6 +6,8 @@ export interface TileNode {
   id: string
   title: string
   preview: string
+  /** Its Body, Markdown, which its page shows whole: empty where nothing is written, or for a pin. */
+  body?: string
   branches?: Partial<Record<Direction, TileNode>>
   leaves?: Partial<Record<Direction, TileNode>>
   context?: Partial<Record<Direction, TileNode>>
