@@ -15,13 +15,14 @@
 // tutorial's, the center invites the click that would open it, and its six arrive one by one. Where
 // its caller names the System's star, its sun, the star glows in its light, amber or rose, and, once
 // the center is below it, that light waits at the canvas's edge, on the side the star stands. Where
-// it cycles, the C key takes the center from alone to its ring, then its Context, then alone again.
+// it cycles, the C key takes the center from alone to its ring, then its Context, then its page, its
+// words whole over the canvas, grown out of its hex, then alone again (`tile/page/`).
 import { useRef, useState, type ComponentProps, type ReactNode, type RefObject } from 'react'
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
-import { aloneHex, canvasSize, type EmptySlotTarget } from './geometry/shape'
+import { aloneHex, canvasSize, framedIn, type EmptySlotTarget } from './geometry/shape'
 import { directions, type Direction, type Point } from './geometry/geometry'
 import {
   AroundHexView,
@@ -50,6 +51,8 @@ import { useScale } from './state/useScale'
 import { useFinger } from './tile/menu/TileMenu'
 import { unitsIn } from './tile/moving/drag'
 import { Carried, MoveBanner } from './tile/moving/Moving'
+import { Page } from './tile/page/Page'
+import { usePageZoom } from './tile/page/usePageZoom'
 import { Arc } from './tile/marks/Marks'
 import type { ToldPart } from '../motion'
 import { wayTo, type TileMark } from './tile/marks/mark'
@@ -177,8 +180,8 @@ interface CanvasProps {
   sun?: Sun | undefined
   /**
    * The C key cycles the center's views, from anywhere on the page but a field, a menu or a dialog:
-   * alone, opened into its ring, its Context inside too, then alone again, a step showing nothing
-   * skipped (`cycleOf`). Without it, the key does nothing here, as on a page of several canvases.
+   * alone, opened into its ring, its Context inside too, its page, then alone again, a step showing
+   * nothing skipped, never the page (`cycleOf`). Without it, the key does nothing here, as on a page of several canvases.
    */
   cycles?: boolean
   /**
@@ -197,7 +200,8 @@ export function Canvas(props: CanvasProps) {
   const finger = useFinger()
   const { state, actions } = useCanvasState({ system, view, onViewChange, finger, lets, fills })
   const svg = useRef<SVGSVGElement>(null)
-  useCycleKey(svg, props.cycles === true ? actions.cycle : undefined)
+  const { frame, zoom, leavePage } = usePageAndKey({ state, actions }, svg, props.cycles === true)
+  const center = state.center.id
   const scale = useScale(svg, canvasSize)
   const { menu, onMenu } = useMenuOpen()
   const moving = move?.moving
@@ -217,7 +221,6 @@ export function Canvas(props: CanvasProps) {
   const inTheAir = gesture.landing !== undefined && gesture.landing !== 'landed'
   // While a tile moves, nothing stands in a free slot: they offer themselves to it.
   const standing = moving === undefined ? marks?.slot : undefined
-  const center = state.center.id
   const markOf = tileMarksOf(system, state.hexes, { ...marks, slot: standing }, center)
 
   /** A Tile's hex: the tile, by what it is and where it stands, in its menu where it has one. */
@@ -286,15 +289,9 @@ export function Canvas(props: CanvasProps) {
   const dragged = (hex: (typeof state.hexes)[number]) =>
     Number(hex.kind === 'tile' && standsFor(hex, gesture.dragging))
   return (
-    <div className={cn('relative flex min-h-0 flex-col gap-2', props.className)}>
+    <div ref={frame} className={cn('relative flex min-h-0 flex-col gap-2', props.className)}>
       <SunAtEdge system={system} center={center} hexes={state.hexes} sun={sun} />
-      <svg
-        ref={svg}
-        viewBox={viewBoxOf(canvasSize)}
-        role="group"
-        aria-label={m.hex_canvas_label({ title: state.center.title })}
-        className={svgClassOf(props.runsOn)}
-      >
+      <Drawing svg={svg} title={state.center.title} runsOn={props.runsOn} faded={zoom.fades}>
         <Camera
           {...{ system, center, scale, sun, actions }}
           offers={(slot) => emptySlots?.(slot) !== undefined}
@@ -336,13 +333,61 @@ export function Canvas(props: CanvasProps) {
             })}
           <Arcs hexes={state.hexes} arcs={marks?.arcs} />
         </Camera>
-      </svg>
+      </Drawing>
+      {state.page && <Page tile={state.center} page={zoom.page} onLeave={leavePage} />}
       {moving === undefined ? null : <MoveBanner title={moving.title} onStop={gesture.stop} />}
       {gesture.carried && (
         <Carried title={titleIn(state.hexes, gesture.carried.id)} at={gesture.carried.at} />
       )}
     </div>
   )
+}
+
+/**
+ * The `<svg>`, the drawing: beneath the center's page, out of every hand's reach (`faded.under`), and
+ * faded but while the page leaves (`faded.now`).
+ */
+function Drawing(props: {
+  svg: RefObject<SVGSVGElement | null>
+  title: string
+  runsOn: boolean | undefined
+  faded: { under: boolean; now: boolean }
+  children: ReactNode
+}) {
+  return (
+    <div inert={props.faded.under} className="contents">
+      <svg
+        ref={props.svg}
+        viewBox={viewBoxOf(canvasSize)}
+        role="group"
+        aria-label={m.hex_canvas_label({ title: props.title })}
+        className={svgClassOf(props.runsOn, props.faded.now)}
+      >
+        {props.children}
+      </svg>
+    </div>
+  )
+}
+
+/**
+ * The center's page over the drawing, growing out of its hex and back (`tile/page/`), and the C key,
+ * which cycles the center's views where the canvas cycles, its page going back into its hex first.
+ * The key holds back while the canvas's frame is inert, the frame rather than the drawing, which is
+ * inert while the page stands over it.
+ */
+function usePageAndKey(
+  { state, actions }: ReturnType<typeof useCanvasState>,
+  svg: RefObject<SVGSVGElement | null>,
+  cycles: boolean,
+) {
+  const frame = useRef<HTMLDivElement>(null)
+  const framed = framedIn(state.hexes, state.center.id)
+  const zoom = usePageZoom({ open: state.page, svg, framed })
+  const leavePage = () => {
+    zoom.leave(actions.leavePage)
+  }
+  useCycleKey(frame, cycles ? (state.page ? leavePage : actions.cycle) : undefined)
+  return { frame, zoom, leavePage }
 }
 
 /**
@@ -706,9 +751,16 @@ const standingIn = (
   mark: TileMark | undefined,
 ) => <Tile key={hex.key} hex={hex.hex} {...stands.look} scale={scale} mark={mark} />
 
-/** The `<svg>`'s class: the Tiles around the drawing running on past its box where they do. */
-const svgClassOf = (runsOn = false) =>
-  cn('relative min-h-0 w-full flex-1 select-none', runsOn && 'overflow-visible')
+/**
+ * The `<svg>`'s class: the Tiles around the drawing running on past its box where they do, the whole
+ * drawing fading under the center's page as the page grows out of it, and back as it leaves.
+ */
+const svgClassOf = (runsOn = false, underPage = false) =>
+  cn(
+    'relative min-h-0 w-full flex-1 select-none transition-opacity duration-(--duration-camera) ease-camera motion-reduce:transition-none',
+    runsOn && 'overflow-visible',
+    underPage && 'opacity-0',
+  )
 
 /** The `<svg>`'s viewBox: the canvas's own coordinates. */
 const viewBoxOf = ({ width, height }: typeof canvasSize) => `0 0 ${String(width)} ${String(height)}`

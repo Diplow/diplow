@@ -248,7 +248,7 @@ export const pieces = [
     name: 'Canvas',
     tier: 'canvas',
     sources: ['ui/canvas/Canvas.tsx'],
-    madeOf: ['Tile', 'Slot', 'Ground', 'Marks', 'TileMenu', 'Moving'],
+    madeOf: ['Tile', 'Slot', 'Ground', 'Marks', 'TileMenu', 'Moving', 'Page'],
     note: m.gallery_note_canvas,
   },
   {
@@ -292,6 +292,13 @@ export const pieces = [
     sources: ['ui/canvas/tile/moving/Moving.tsx'],
     madeOf: ['Act'],
     note: m.gallery_note_moving,
+  },
+  {
+    name: 'Page',
+    tier: 'canvas',
+    sources: ['ui/canvas/tile/page/Page.tsx'],
+    madeOf: ['Markdown', 'CodeBlock'],
+    note: m.gallery_note_page,
   },
   {
     name: 'Breadcrumb',
@@ -432,6 +439,13 @@ export const pieces = [
     sources: ['ui/atoms/skeleton.tsx'],
     madeOf: [],
     note: m.gallery_note_skeleton,
+  },
+  {
+    name: 'Markdown',
+    tier: 'seams',
+    sources: ['ui/seams/Markdown.tsx'],
+    madeOf: [],
+    note: m.gallery_note_markdown,
   },
   {
     name: 'CodeBlock',

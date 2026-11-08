@@ -1,7 +1,52 @@
 // The seam STACK.md names for a Tile's content: what a Body looks like on a page goes through this one
-// file, so the Markdown renderer, when it comes, is the one thing that changes. For now it shows a
-// Body that isn't Markdown, a file kept verbatim, as a code block, as Markdown shows a fenced one.
+// file, so the Markdown renderer, TanStack Markdown, is the one thing that changes should it go. A Body
+// that is Markdown is rendered (`Markdown`); one that isn't, a file kept verbatim, shows as a code
+// block, as Markdown shows a fenced one (`CodeBlock`).
+import { Markdown as Rendered } from '@tanstack/markdown/react'
 import { cn } from 'cn'
+
+/**
+ * How rendered Markdown reads: the human's words in their serif, light, each block spaced as a page
+ * spaces it, code in the interface's monospace, links underlined, never a colour of their own.
+ */
+const prose = [
+  'font-human text-base leading-[1.6] font-light text-foreground',
+  '[&_h1]:mt-8 [&_h1]:mb-3 [&_h1]:text-2xl [&_h1]:font-normal',
+  '[&_h2]:mt-7 [&_h2]:mb-2 [&_h2]:text-xl [&_h2]:font-normal',
+  '[&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-normal',
+  '[&_p]:my-3 [&_li]:my-1 [&_ol]:my-3 [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:my-3 [&_ul]:list-disc [&_ul]:pl-6',
+  '[&_a]:underline [&_a]:underline-offset-4 [&_strong]:font-normal [&_strong]:text-foreground',
+  '[&_blockquote]:my-4 [&_blockquote]:border-l [&_blockquote]:border-border [&_blockquote]:pl-4 [&_blockquote]:text-muted-foreground',
+  '[&_code]:font-mono [&_code]:text-[0.85em] [&_hr]:my-6 [&_hr]:border-border',
+  '[&_pre]:my-4 [&_pre]:overflow-auto [&_pre]:rounded-md [&_pre]:bg-muted [&_pre]:p-4 [&_pre]:text-xs',
+  '[&_table]:my-4 [&_td]:py-1 [&_td]:pr-4 [&_th]:py-1 [&_th]:pr-4 [&_th]:text-left [&_th]:font-normal',
+].join(' ')
+
+interface MarkdownProps {
+  /** The Markdown, a Body. */
+  text: string
+  className?: string
+}
+
+/**
+ * No image is fetched: its alt text shows in its place, since an image's address, read from anyone's
+ * Body, would tell its host who reads it and when.
+ */
+const withoutImages = (_url: string, kind: 'link' | 'image', safe: string) =>
+  kind === 'image' ? null : safe
+
+/**
+ * Markdown rendered as a page reads it. Its HTML is shown as text and a link that would run code is
+ * dropped, the renderer's defaults, kept, and an image shows as its alt text: a Body is anyone's
+ * words, someone else's on a System visited.
+ */
+export function Markdown({ text, className }: MarkdownProps) {
+  return (
+    <div className={cn(prose, className)}>
+      <Rendered urlTransform={withoutImages}>{text}</Rendered>
+    </div>
+  )
+}
 
 interface CodeBlockProps {
   /** The text, shown as written: no line is wrapped nor any character read as markup. */

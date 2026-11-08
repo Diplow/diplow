@@ -7,6 +7,7 @@ import { hexCorners, neighbor, opposite, type Direction, type Hex } from './geom
 import {
   aloneHex,
   canvasSize,
+  framedIn,
   heartShare,
   layoutCanvas,
   surroundingsOf,
@@ -309,5 +310,26 @@ describe('surroundingsOf', () => {
     // Past six, many shows its Leaves inside it: ml1 is not in the ring around it.
     expect(around({ center: 'ml1' }, 'many').around).toEqual([])
     expect(around({ center: 'm1' }, 'many').around).not.toEqual([])
+  })
+})
+
+describe('framedIn', () => {
+  it('frames a Tile showing its Context by the hex it opens into, any other by its own', () => {
+    const opened = layout({ center: 'mixed', inner: 'context' })
+    expect(framedIn(opened, 'mixed')).toBe(opened.find((hex) => hex.key === 'ground:mixed')?.hex)
+    const ring = layout({ center: 'mixed' })
+    const own = (hexes: CanvasHex[], id: string) =>
+      hexes.find((hex) => hex.kind === 'tile' && hex.tile.id === id && !hex.tile.reference)?.hex
+    expect(framedIn(ring, 'mixed')).toBe(own(ring, 'mixed'))
+    expect(framedIn(ring, 'b2')).toBe(own(ring, 'b2'))
+    expect(framedIn(ring, 'nowhere')).toBeUndefined()
+  })
+
+  it('frames a Tile by its own hex, never a Reference to it drawn beside it', () => {
+    const both = layout({ center: 'mixed', inner: 'context' })
+    const reference = both.find((hex) => hex.kind === 'tile' && hex.tile.reference !== undefined)
+    expect(reference).toMatchObject({ tile: { id: 'b2' } })
+    expect(framedIn(both, 'b2')).not.toBe(reference?.hex)
+    expect(framedIn(both, 'b2')).toBeDefined()
   })
 })

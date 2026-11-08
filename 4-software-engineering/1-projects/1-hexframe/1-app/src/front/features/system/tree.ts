@@ -70,14 +70,15 @@ function nodeOf(tile: SystemTile, root: SystemTile): TileNode {
     if (entry !== undefined)
       context[direction] = contextNode(entry, `${tile.id}:${String(-direction)}`, root)
   }
-  const { id, title, preview } = tile
-  return { id, title: titleOf(title), preview, branches, leaves, context }
+  const { id, title, preview, body } = tile
+  return { id, title: titleOf(title), preview, body, branches, leaves, context }
 }
 
 const leafNode = (leaf: LeafTile): TileNode => ({
   id: leaf.id,
   title: leaf.title,
   preview: leaf.preview,
+  body: leaf.body,
   leaf: true,
   ...(isVerbatim(leaf) && { file: true }),
 })
@@ -95,6 +96,7 @@ function contextNode(entry: ContextEntry, slot: string, root: SystemTile): TileN
         id: entry.tile.id,
         title: titleOf(entry.tile.title),
         preview: entry.tile.preview,
+        body: entry.tile.body,
         reference: { from: titleOf(from) },
       }
     }

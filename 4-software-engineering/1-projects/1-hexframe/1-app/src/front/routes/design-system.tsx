@@ -48,6 +48,7 @@ import { TileGallery } from '#/front/ui/canvas/tile/gallery'
 import { MarksGallery } from '#/front/ui/canvas/tile/marks/gallery'
 import { TileMenuGallery } from '#/front/ui/canvas/tile/menu/gallery'
 import { MovingGallery } from '#/front/ui/canvas/tile/moving/gallery'
+import { PageGallery } from '#/front/ui/canvas/tile/page/gallery'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import {
   centerOn,
@@ -328,6 +329,7 @@ function Specimens({ chapter, view, onViewChange, onCenter }: SpecimensProps) {
           <MarksGallery />
           <TileMenuGallery />
           <MovingGallery />
+          <PageGallery />
           <BreadcrumbGallery view={view} onViewChange={onViewChange} />
           <CanvasLayoutsGallery />
         </GalleryTier>

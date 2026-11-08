@@ -1,7 +1,7 @@
 // The canvas's view state, the shape's: which Tile is centered, whether it stands alone, folded, or
 // opens into a ring around it, the ring inside its hex, which Branches of the ring around it open,
 // each into a Frame kind of its own, two generations deep, and which of the Tiles around it open,
-// with theirs. It lives in the URL, so a link shows what its sender saw. Every function here is pure;
+// with theirs, or the center's page, its words whole and no hex. It lives in the URL, so a link shows what its sender saw. Every function here is pure;
 // each change returns the next view, tidied, for the route to navigate to.
 import { Effect, Schema } from 'effect'
 
@@ -87,6 +87,8 @@ export const CanvasView = Schema.Struct({
   frame: Schema.optionalKey(orDefault(Schema.Literals(outerKinds))),
   /** The ring inside the center's hex; absent, none. */
   inner: Schema.optionalKey(orDefault(Schema.Literals(innerKinds))),
+  /** The center shown as its page, its words whole, in place of its hex; absent, its hex. */
+  page: Schema.optionalKey(orDefault(Schema.Literal(true))),
   /** The Branches of the ring around the center that open, by Direction, each into its Frame kind. */
   expanded: Schema.optionalKey(orDefault(Expansions)),
   /**
@@ -112,8 +114,8 @@ export type CanvasView = typeof CanvasView.Type
 /**
  * The gestures that change the view, as the canvas names them: centering a Tile, opening the center
  * or a Branch of the ring around it, or closing it, showing a ring inside the center or hiding it,
- * and picking the ring around it, which links recorded before the center folded still name. A
- * navigation fact carries one, and the timeline tells it.
+ * showing the center's page or leaving it, and picking the ring around it, which links recorded
+ * before the center folded still name. A navigation fact carries one, and the timeline tells it.
  */
 export const Gesture = Schema.Literals([
   'center',
@@ -121,6 +123,8 @@ export const Gesture = Schema.Literals([
   'collapse',
   'show-context',
   'hide-context',
+  'show-page',
+  'hide-page',
   'show-leaves',
   'hide-leaves',
   'show-children-around',
@@ -141,12 +145,14 @@ export const readCanvasView = readSearch(CanvasView)
 /**
  * The view resolved against a System: the centered Tile itself, the rings it shows, and what opens
  * around it. A folded center, and a centered Leaf, which opens nothing, have no ring, `frame` and
- * `inner` undefined: it fills the view alone.
+ * `inner` undefined: it fills the view alone. Shown as its page, it stands alone beneath it.
  */
 export interface ShownView {
   center: TileNode
   frame: OuterKind | undefined
   inner: InnerKind | undefined
+  /** The center shown as its page, its words whole, in place of its hex. */
+  page: boolean
   expanded: Expanded
   /**
    * The Tile the center stands in, in the ring the canvas draws around it with the Tiles beside it;
@@ -172,9 +178,15 @@ function insideKinds(kinds: readonly FrameKind[], frame: OuterKind | undefined):
  * view that names a ring inside it or a Branch open but no ring around, as links did when the first
  * ring was the default; an inner ring that can't sit beside the outer one falls back to none. Only a
  * Branch of the ring around the center opens, into a kind it offers but its Context, which the center alone shows, else into its first ring.
+ * Shown as its page, the center stands alone beneath it, nothing open in it.
  */
 export function showView(system: TileNode, view: CanvasView): ShownView {
   const center = (view.center === undefined ? undefined : findTile(system, view.center)) ?? system
+  const parent = standingIn(system, center)
+  const around = aroundOf(parent, center, view.around ?? {})
+  if (view.page === true) {
+    return { center, frame: undefined, inner: undefined, page: true, expanded: {}, parent, around }
+  }
   const kinds = kindsOf(center)
   const wanted = view.frame
   const frame =
@@ -188,15 +200,7 @@ export function showView(system: TileNode, view: CanvasView): ShownView {
       ? view.inner
       : undefined
   const expanded = expansionsOf(center, frame, view.expanded ?? {})
-  const parent = standingIn(system, center)
-  return {
-    center,
-    frame,
-    inner,
-    expanded,
-    parent,
-    around: aroundOf(parent, center, view.around ?? {}),
-  }
+  return { center, frame, inner, page: false, expanded, parent, around }
 }
 
 /**
@@ -320,11 +324,12 @@ function expansionsOf(
 
 /** The view in its shortest form: defaults left out, what no one would see dropped. */
 function tidy(system: TileNode, view: CanvasView): CanvasView {
-  const { center, frame, inner, expanded, around } = showView(system, view)
+  const { center, frame, inner, page, expanded, around } = showView(system, view)
   return {
     ...(center === system ? {} : { center: center.id }),
     ...(frame === undefined ? {} : { frame }),
     ...(inner === undefined ? {} : { inner }),
+    ...(page ? { page } : {}),
     ...(Object.keys(expanded).length === 0 ? {} : { expanded }),
     ...(Object.keys(around).length === 0 ? {} : { around }),
   }
@@ -524,36 +529,57 @@ export function toggleExpanded(
   return tidy(system, { ...view, expanded })
 }
 
-/** Shows the center's Context inside its hex, opening the center's first ring were it folded. */
+/**
+ * Shows the center's Context inside its hex, opening the center's first ring were it folded, or shown
+ * as its page.
+ */
 export function withContext(system: TileNode, view: CanvasView): CanvasView {
   const { center, frame } = showView(system, view)
-  return tidy(system, { ...view, frame: frame ?? firstKindOf(center), inner: 'context' })
+  const opened = { frame: frame ?? firstKindOf(center), inner: 'context' } as const
+  return tidy(system, { ...view, ...opened, page: undefined })
+}
+
+/**
+ * Shows the center as its page, its words whole, in place of its hex: alone beneath it, nothing open
+ * in it, so leaving it lands on the center alone. The Tiles around it stay as they are.
+ */
+export function withPage(system: TileNode, view: CanvasView): CanvasView {
+  return tidy(system, { center: view.center, around: view.around, page: true })
+}
+
+/**
+ * Leaves the center's page for its hex, alone, as the page stood over it, whatever else its link
+ * names. The Tiles around it stay as they are.
+ */
+export function withoutPage(system: TileNode, view: CanvasView): CanvasView {
+  return tidy(system, { center: view.center, around: view.around })
 }
 
 /**
  * The gesture to the center's next view, as the C key cycles them: alone, then opened into its ring,
- * then its Context shown inside it too, then alone again, on the view as it shows (`shown`). A step
- * that would show nothing is skipped, a ring that opens onto nothing (`opens`) or a Context that shows
- * none (`showsContext`); none where neither shows anything, the center staying alone.
+ * then its Context shown inside it too, then its page, then alone again, on the view as it shows
+ * (`shown`). A step that would show nothing is skipped, a ring that opens onto nothing (`opens`) or a
+ * Context that shows none (`showsContext`); the page, which every Tile has, never is.
  */
 export function cycleOf(
   shown: ShownView,
   fills: Fills,
-): 'expand' | 'show-context' | 'collapse' | undefined {
+): 'expand' | 'show-context' | 'show-page' | 'hide-page' {
   const context = showsContext(shown.center, fills)
-  if (shown.inner === 'context') return 'collapse'
-  if (shown.frame !== undefined) return context ? 'show-context' : 'collapse'
+  if (shown.page) return 'hide-page'
+  if (shown.inner === 'context') return 'show-page'
+  if (shown.frame !== undefined) return context ? 'show-context' : 'show-page'
   if (opens(shown.center, fills)) return 'expand'
-  return context ? 'show-context' : undefined
+  return context ? 'show-context' : 'show-page'
 }
 
 /** The canvas's part of a page's search params. */
-export function viewIn({ center, frame, inner, expanded, around }: CanvasView): CanvasView {
-  return { center, frame, inner, expanded, around }
+export function viewIn({ center, frame, inner, page, expanded, around }: CanvasView): CanvasView {
+  return { center, frame, inner, page, expanded, around }
 }
 
 /** A page's search params with this view, every field of the canvas's set, the others kept. */
 export function withViewIn<S extends CanvasView>(search: S, view: CanvasView): S {
-  const { center, frame, inner, expanded, around } = view
-  return { ...search, center, frame, inner, expanded, around }
+  const { center, frame, inner, page, expanded, around } = view
+  return { ...search, center, frame, inner, page, expanded, around }
 }

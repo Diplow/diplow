@@ -16,6 +16,8 @@ import {
   withContext,
   withViewIn,
   withoutEmptyRings,
+  withoutPage,
+  withPage,
   type CanvasView,
 } from './view'
 
@@ -78,10 +80,17 @@ describe('readCanvasView', () => {
         center: undefined,
         frame: undefined,
         inner: undefined,
+        page: undefined,
         expanded: undefined,
         around: undefined,
       },
     )
+  })
+
+  it('reads the page shown, and nothing else as it', () => {
+    expect(readCanvasView({ center: 'a', page: true })).toEqual({ center: 'a', page: true })
+    expect(readCanvasView({ page: false })).toEqual({})
+    expect(readCanvasView({ page: 'yes' })).toEqual({})
   })
 })
 
@@ -407,6 +416,7 @@ describe('viewIn and withViewIn', () => {
       center: 'a',
       frame: 'children',
       inner: 'context',
+      page: undefined,
       expanded: undefined,
       around: undefined,
     })
@@ -417,6 +427,7 @@ describe('viewIn and withViewIn', () => {
       center: undefined,
       frame: undefined,
       inner: undefined,
+      page: undefined,
       expanded: { 1: 'children' },
       around: undefined,
       open: 'why',
@@ -429,22 +440,65 @@ describe('cycleOf, the C key', () => {
   const anyone = () => true
   const step = (view: CanvasView, fills = anyone) => cycleOf(showView(system, view), fills)
 
-  it('takes the center from alone to its ring, then its Context, then alone again', () => {
+  it('takes the center from alone to its ring, then its Context, then its page, then alone', () => {
     expect(step({})).toBe('expand')
     expect(step({ frame: 'children' })).toBe('show-context')
-    expect(step({ frame: 'children', inner: 'context' })).toBe('collapse')
+    expect(step({ frame: 'children', inner: 'context' })).toBe('show-page')
+    expect(step({ page: true })).toBe('hide-page')
   })
 
   it('shows the Context in place of the Leaves inside a center of more than six', () => {
     expect(step({ center: 'many', frame: 'branches', inner: 'leaves' })).toBe('show-context')
   })
 
-  it('skips a step that would show nothing, and stays where nothing shows', () => {
-    // a holds no Context, nor may the reader add one: its ring folds back.
-    expect(step({ center: 'a', frame: 'children' }, nobody)).toBe('collapse')
-    // b holds nothing: alone, its Context is all it shows, where the reader may add one.
+  it('skips a step that would show nothing, never the page', () => {
+    // a holds no Context, nor may the reader add one: its page comes after its ring.
+    expect(step({ center: 'a', frame: 'children' }, nobody)).toBe('show-page')
+    // b holds nothing: where the reader may add to it, it opens; where not, its page is all it shows.
     expect(step({ center: 'b' }, anyone)).toBe('expand')
-    expect(step({ center: 'b' }, nobody)).toBeUndefined()
-    expect(step({ center: 'notes' })).toBeUndefined()
+    expect(step({ center: 'b' }, nobody)).toBe('show-page')
+    // A Leaf opens nothing and shows no Context: alone and its page, in turn.
+    expect(step({ center: 'notes' })).toBe('show-page')
+    expect(step({ center: 'notes', page: true })).toBe('hide-page')
+  })
+})
+
+describe('the page', () => {
+  it('stands over the center alone, nothing open in it, the Tiles around it as they were', () => {
+    const view = { center: 'a3', frame: 'children', inner: 'context', around: { 4: {} } } as const
+    const paged = withPage(system, view)
+    expect(paged).toEqual({ center: 'a3', page: true })
+    expect(showView(system, paged)).toMatchObject({
+      page: true,
+      frame: undefined,
+      inner: undefined,
+    })
+    const beside = { center: 'a', frame: 'children', around: { 4: {} } } as const
+    expect(withPage(system, beside)).toEqual({ center: 'a', page: true, around: { 4: {} } })
+  })
+
+  it('shows nothing open beneath it, whatever its link names', () => {
+    const shown = showView(system, { frame: 'branches', expanded: { 1: 'children' }, page: true })
+    expect(shown).toMatchObject({ page: true, frame: undefined, inner: undefined, expanded: {} })
+  })
+
+  it('leaves for the center alone', () => {
+    expect(withoutPage(system, { center: 'a', page: true })).toEqual({ center: 'a' })
+    expect(withoutPage(system, { page: true })).toEqual({})
+    const linked = {
+      center: 'a',
+      frame: 'branches',
+      expanded: { 1: 'children' },
+      page: true,
+    } as const
+    expect(withoutPage(system, linked)).toEqual({ center: 'a' })
+    const beside = { center: 'a', page: true, around: { 4: {} } } as const
+    expect(withoutPage(system, beside)).toEqual({ center: 'a', around: { 4: {} } })
+  })
+
+  it('goes once the center changes or opens', () => {
+    expect(recenter(system, { center: 'a', page: true }, 'a3')).not.toHaveProperty('page')
+    expect(toggleCenter(system, { center: 'a', page: true })).not.toHaveProperty('page')
+    expect(withContext(system, { page: true })).not.toHaveProperty('page')
   })
 })

@@ -225,11 +225,12 @@ describe("a line of a tile's menu that goes somewhere", () => {
 })
 
 describe('the C key', () => {
-  it('cycles the center: alone, opened into its ring, its Context inside too, then alone again', () => {
+  it('cycles the center: alone, opened into its ring, its Context inside too, its page, then alone', () => {
     const steps: [CanvasView, CanvasView, ViewAction['gesture']][] = [
       [{}, open, 'expand'],
       [open, { ...open, inner: 'context' }, 'show-context'],
-      [{ ...open, inner: 'context' }, {}, 'collapse'],
+      [{ ...open, inner: 'context' }, { page: true }, 'show-page'],
+      [{ page: true }, {}, 'hide-page'],
     ]
     for (const [from, to, gesture] of steps) {
       const { actions: act, onViewChange } = render(from)
@@ -247,13 +248,52 @@ describe('the C key', () => {
     )
   })
 
-  it('skips a Context that shows nothing, folding the center back from its ring', () => {
+  it('skips a Context that shows nothing, going from the ring to the page', () => {
     const { actions: act, onViewChange } = render(inA, { fills: () => false })
     act.cycle()
     expect(onViewChange).toHaveBeenLastCalledWith(
-      { center: 'a' },
-      { gesture: 'collapse', tile: 'a' },
+      { center: 'a', page: true },
+      { gesture: 'show-page', tile: 'a' },
     )
+  })
+
+  it('takes a Leaf, which opens nothing, from alone to its page and back', () => {
+    const alone = render({ center: 'notes' })
+    alone.actions.cycle()
+    expect(alone.onViewChange).toHaveBeenLastCalledWith(
+      { center: 'notes', page: true },
+      { gesture: 'show-page', tile: 'notes' },
+    )
+    const page = render({ center: 'notes', page: true })
+    page.actions.cycle()
+    expect(page.onViewChange).toHaveBeenLastCalledWith(
+      { center: 'notes' },
+      { gesture: 'hide-page', tile: 'notes' },
+    )
+  })
+})
+
+describe('the page', () => {
+  it('stands over the center alone', () => {
+    const { state } = render({ center: 'a', frame: 'children', page: true })
+    expect(state.page).toBe(true)
+    expect(state.hexes.find((hex) => hex.key === 'tile:a')).toMatchObject({ role: 'center' })
+    expect(state.hexes.some((hex) => hex.kind === 'tile' && hex.role === 'branch')).toBe(false)
+  })
+
+  it('leaves for the center alone, and says it did', () => {
+    const { actions: act, onViewChange } = render({ center: 'a', page: true })
+    expect(act.leavePage()).toBe(true)
+    expect(onViewChange).toHaveBeenLastCalledWith(
+      { center: 'a' },
+      { gesture: 'hide-page', tile: 'a' },
+    )
+  })
+
+  it('leaves nothing where no page shows', () => {
+    const { actions: act, onViewChange } = render(inA)
+    expect(act.leavePage()).toBe(false)
+    expect(onViewChange).not.toHaveBeenCalled()
   })
 
   it('does nothing where the center holds its click back', () => {
