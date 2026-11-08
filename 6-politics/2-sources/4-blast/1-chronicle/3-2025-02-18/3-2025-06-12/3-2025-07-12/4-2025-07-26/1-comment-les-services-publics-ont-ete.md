@@ -1,6 +1,6 @@
 ---
 title: "COMMENT LES SERVICES PUBLICS ONT ÉTÉ SACRIFIÉS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/3-2025-07-22
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/4-2025-07-26
 owner: diplo
 preview: >-
   Blast reçoit la sociologue Nadège Vezinat. Selon elle, les services publics
