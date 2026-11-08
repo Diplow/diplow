@@ -1,21 +1,26 @@
 ---
-title: "2025-01-13 → 2026-10-14"
+title: "2025-01-13 → 2025-01-22"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/6-2024-12-26/3-2025-01-13
 owner: diplo
 preview: >-
-  Boniface répond à Philippe Val et Frédéric Haziza, qui l'attaquent sans
-  débat, et dénonce comme raciste l'idée que tous les terroristes sont
-  musulmans. Il chronique ensuite Alexander Stubb sur un monde en trois blocs
-  et reçoit Sylvie Bermann sur la parité États-Unis–Chine.
+  Boniface dénonce un néomaccarthysme qui étouffe le débat, de Philippe Val à
+  l'interdiction de sa conférence à Villetaneuse. Il lit le cessez-le-feu à
+  Gaza comme l'effet de la pression de Trump sur Nétanyahou, et voit Trump
+  revenir sans contre-pouvoir intérieur.
 ---
-# 2025-01-13 → 2026-10-14
+# 2025-01-13 → 2025-01-22
 
-La Period s'ouvre sur une polémique personnelle. Boniface soutient que Philippe Val et Frédéric Haziza l'attaquent sans jamais accepter de débat, que Val a fait de la critique de Charlie Hebdo un nouveau blasphème, et que dire que tous les terroristes sont musulmans est raciste, faux et dangereux.
+Boniface consacre une partie de la Period à défendre son droit de parler et de débattre. Il accuse Philippe Val et Frédéric Haziza de l'attaquer sans jamais accepter de débat. Pour lui, Val a fait de la critique de Charlie Hebdo un nouveau blasphème, et dire que tous les terroristes sont musulmans est raciste, faux et dangereux. Il présente l'interdiction de sa conférence sur le conflit israélo-palestinien à Villetaneuse, officiellement pour raison de sécurité, comme un acte de censure et un mensonge, symptôme d'un néomaccarthysme à l'université. Son invité Daniel Schneidermann décrit de son côté le glissement de Charlie Hebdo, du rire libertaire de Cabu à une ligne proche de l'OTAN puis islamophobe sous Philippe Val, et ce qu'il appelle le charlisme.
 
-Elle bascule ensuite vers la géopolitique, à travers deux lectures de l'ordre mondial qu'il relaie sans les endosser en son nom. Chroniquant le livre d'Alexander Stubb, président finlandais, il en retient une division du monde en trois blocs (Occident, Orient, Sud global), où l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud. Reçu en entretien, Sylvie Bermann, ancienne ambassadrice à Pékin, juge pour sa part que le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, sans qu'on puisse dire que Pékin a gagné. Elle voit une Chine patiente sur Taïwan et non anti-européenne, dont l'excédent commercial met pourtant l'Europe en difficulté.
+Sur la scène internationale, Boniface salue le cessez-le-feu à Gaza, fragile mais vital pour la population. Il l'attribue à la pression de Trump sur Nétanyahou plutôt qu'à Biden, et juge qu'il ne suffit pas sans règlement politique ni État palestinien. À propos du retour de Trump à la Maison-Blanche, il estime que le président revient sans contre-pouvoir intérieur, face à une Europe affaiblie. Il attend une politique brutale (tarifs, sanctions) mais sans entrée en guerre, et tout dépendra selon lui de la façon dont le reste du monde s'organise.
+
+La Period accueille aussi un regard plus sombre sur la France. Marie-Françoise Bechtel, invitée de Boniface, juge que l'étoile du pays a considérablement pâli depuis qu'il s'est aligné sur l'Occident sous Sarkozy. Elle réclame un référendum sur les institutions européennes et tient l'adhésion de l'Ukraine à l'UE pour désastreuse.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/6-2024-12-26/3-2025-01-13/1-philippe-val-maccarthyste-faussaire-et-islamophobe|Philippe Val : Maccarthyste, faussaire et islamophobe]] (2025-01-13)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/6-2024-12-26/3-2025-01-13/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/6-2024-12-26/3-2025-01-13/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/6-2024-12-26/3-2025-01-13/2-une-france-en-perte-d-influence|Une France en perte d'influence. Avec Marie-Françoise Bechtel - Entretiens géopo]] (2025-01-15)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/6-2024-12-26/3-2025-01-13/3-cessez-le-feu-a-gaza-espoir|Cessez le feu à Gaza : espoir, regrets et craintes]] (2025-01-16)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/6-2024-12-26/3-2025-01-13/4-trump-a-la-maison-blanche-un|Trump à la Maison-Blanche : un monde nouveau ?]] (2025-01-20)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/6-2024-12-26/3-2025-01-13/5-etre-ou-ne-pas-etre-charlie|Être ou ne pas être… Charlie. Avec Daniel Schneidermann - Entretiens géopo]] (2025-01-22)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/6-2024-12-26/3-2025-01-13/6-ma-conference-interdite-par-la-presidente|Ma conférence interdite par la présidente à l'université Villetaneuse]] (2025-01-22)

@@ -186,6 +186,8 @@ kinds:
       président-du-conseil-constitutionnel: {définition: "Préside le Conseil constitutionnel français, à la date de la Publication.", statut: proposé, introduit_par: blast/K_KPyei2JHk.md}
       ancien-dirigeant-syndical: {définition: "A dirigé une confédération syndicale et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: blast/yYZOdhBTdnM.md}
       ancien-dirigeant-de-média: {définition: "A dirigé un groupe, une chaîne ou une société de médias et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/U4HdNfy70NQ.md}
+      prisonnier-politique: {définition: "Dirigeant détenu pour des raisons politiques, à la date de la Publication.", statut: proposé, introduit_par: blast/nBaNRVIDMLQ.md}
+      universitaire: {définition: "Enseigne et mène des recherches à l'université.", statut: proposé, introduit_par: blast/98v7SwEoC8c.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
