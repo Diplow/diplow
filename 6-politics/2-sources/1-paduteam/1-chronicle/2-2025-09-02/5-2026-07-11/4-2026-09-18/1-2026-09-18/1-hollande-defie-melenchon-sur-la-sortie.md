@@ -1,6 +1,6 @@
 ---
 title: "HOLLANDE DÉFIE MÉLENCHON SUR LA SORTIE DE L'UE !!"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/5-2026-09-18
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/1-2026-09-18
 owner: diplo
 preview: >-
   La PaduTeam soutient que François Hollande, meilleur candidat du centre, est
