@@ -1,0 +1,55 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_af7b4c68aa290e 364
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/4-2025-10-01/CLAUDE.md
+  s_7fdf56a95f88fb::t_99bbdd404f3ea3 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/5-2025-10-03/1-macronie-rn-unis-pour-dominer.md
+  s_7fdf56a95f88fb::t_cd9b852574f4d3 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/5-2025-10-03/2-mouvement-social-l-intersyndicale-finit-toujours.md
+  s_7fdf56a95f88fb::t_f8787e1baad19e 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/5-2025-10-03/3-double-peine-quand-la-loi-oblige.md
+  s_7fdf56a95f88fb::t_2b1e8cea879977 1-76
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/5-2025-10-03/CLAUDE.md
+  s_7fdf56a95f88fb::t_03de8458d0a7ad 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/6-2025-10-05/1-tsunami-migratoire-un-mensonge-raciste-et.md
+  s_7fdf56a95f88fb::t_e1a3170c5e9da0 1-73
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/6-2025-10-05/2-sarkozy-condamne-les-medias-mainstream-attaquent.md
+  s_7fdf56a95f88fb::t_6ced64c30fcc1d 1-82
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/6-2025-10-05/3-fatma-hassona-l-il-de-gaza.md
+  s_7fdf56a95f88fb::t_a7fea092df2aac 1-73
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/6-2025-10-05/4-pour-macron-et-lecornu-le-coupable.md
+  s_7fdf56a95f88fb::t_f78cba04d66a02 1-79
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/6-2025-10-05/CLAUDE.md
+  s_7fdf56a95f88fb::t_b7a8b00205dda0 1-24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/CLAUDE.md
+  s_7fdf56a95f88fb::t_44d664cea7fb4c 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE.md
+  s_7fdf56a95f88fb::t_8e416def1c4365 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_7fdf56a95f88fb::t_45a5a17fef0419 2,6-9,11,13,15,21
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_7fdf56a95f88fb::t_587286bfd62076 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "20e05df6578f8e8c05e431a7a86a112e72dec1a5",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_7fdf56a95f88fb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a9ec4fde44d01a5ba",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
