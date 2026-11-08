@@ -181,6 +181,7 @@ kinds:
       ancien-policier: {définition: "A servi dans la police et n'y sert plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/L8URmnsnGWs.md}
       photographe: {définition: "Réalise des photographies et en fait son art ou son métier.", statut: proposé, introduit_par: blast/ybD52hYNuCw.md}
       financier: {définition: "Gère l'argent ou l'épargne de clients dans la finance.", statut: proposé, introduit_par: blast/EknEsfu3eiM.md}
+      lycéen: {définition: "Élève d'un lycée, à la date de la Publication.", statut: proposé, introduit_par: paduteam/uIUVoct42YQ.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

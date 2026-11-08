@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Pendant dix ans, Boniface applique les mêmes grilles à l'actualité :
-  multilatéralisme contre unilatéralisme, deux poids deux mesures occidental,
-  perte du monopole de l'Occident face au Sud global. Il plaide pour une
-  Europe autonome et une France qui défend ses intérêts.
+  En dix ans, Boniface applique les mêmes grilles à l'actualité :
+  multilatéralisme contre unilatéralisme, deux poids deux mesures de
+  l'Occident, essor du Sud global. Il presse l'Europe d'être autonome et
+  plaide pour une négociation en Ukraine.
 ---
 # Chronicle
 
-De 2016 à 2026, Boniface lit l'actualité internationale avec un petit nombre de grilles qu'il retrouve d'un sujet à l'autre. Il oppose le multilatéralisme à l'unilatéralisme, dénonce un deux poids deux mesures occidental et constate que l'Occident ne fixe plus seul les règles du monde. Cette cohérence tient à la méthode : un événement sert chaque fois à appliquer une grille déjà éprouvée.
+Du premier au dernier Digest, Pascal Boniface lit l'actualité internationale par un petit nombre de grilles qui ne changent pas. Il oppose le multilatéralisme à l'unilatéralisme et dénonce le deux poids deux mesures occidental. Il juge que l'Occident n'est plus suivi par le reste du monde, et il voit le Sud global monter en puissance. Ces grilles sont d'abord appliquées à Trump et à la scène internationale, avec un appel à l'autonomie stratégique de l'Europe, puis le Covid-19 est lu comme un révélateur ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]]).
 
-Les cas changent avec la période. Jusqu'à juin 2020, il analyse Trump et la scène internationale, et lit le Covid-19 comme un révélateur. De 2020 à 2022, il insiste sur la rivalité sino-américaine et sur l'échec des interventions extérieures. Il voit ensuite dans la guerre en Ukraine une impasse qui appelle une négociation, et un Occident que le reste du monde ne suit plus. Depuis fin 2022, il passe de l'Ukraine à Gaza puis à la Chine, en s'appuyant sur le deux poids deux mesures et sur la montée du Sud global.
+À partir de 2020, il ajoute la rivalité sino-américaine et l'échec des interventions extérieures. La guerre en Ukraine devient ensuite le cas où ses grilles s'appliquent le plus : il y voit une impasse qui appelle une négociation, et un Occident que le reste du monde ne suit plus ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]]).
 
-Sa position sur la place de l'Europe et de la France reste stable. Il presse l'Europe d'acquérir son autonomie stratégique et plaide pour une France qui défend ses intérêts, sans suivisme envers Washington.
+Dans la dernière période, les mêmes thèses reviennent sur quatre ans d'actualité : le deux poids deux mesures, la crédibilité de l'Occident, l'essor du Sud global. Boniface continue de plaider pour une négociation en Ukraine. Il y ajoute une France qui défend ses propres intérêts sans suivisme envers Washington ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]]).
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]] (322 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (256 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (262 Digests)
