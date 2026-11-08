@@ -1,0 +1,51 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_955f14ea1606b7 187
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/3-2025-09-27/CLAUDE.md
+  s_7fdf56a95f88fb::t_200970b5eca801 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/4-2025-10-01/1-mort-des-centres-villes-la-faute.md
+  s_7fdf56a95f88fb::t_9acd24421d78d5 1-84
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/4-2025-10-01/2-flottilles-jusqu-ou-ira-israel-pour.md
+  s_7fdf56a95f88fb::t_7cec58d5265fcc 1-78
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/4-2025-10-01/3-israel-contre-la-flottille-pour-gaza.md
+  s_7fdf56a95f88fb::t_74f440567c5a0b 1-66
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/4-2025-10-01/4-attaquer-la-justice-et-la-democratie.md
+  s_7fdf56a95f88fb::t_1e757020a01b37 1-82
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/4-2025-10-01/5-macronie-rn-unis-pour-dominer.md
+  s_7fdf56a95f88fb::t_d2ea685826595b 1-79
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/4-2025-10-01/6-mouvement-social-l-intersyndicale-finit-toujours.md
+  s_7fdf56a95f88fb::t_b2dade097459c0 1-88
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/4-2025-10-01/CLAUDE.md
+  s_7fdf56a95f88fb::t_82446d4099140b 1-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/CLAUDE.md
+  s_7fdf56a95f88fb::t_61f8efdc2827c1 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE.md
+  s_7fdf56a95f88fb::t_d867ff08619755 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_7fdf56a95f88fb::t_d521484f9730db 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_7fdf56a95f88fb::t_f5613890adc2cd 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2e8593380d95b28484845dfb522b12003f4e3d04",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_7fdf56a95f88fb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a9ec4fde44d01a5ba",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
