@@ -1,21 +1,23 @@
 ---
-title: "2025-02-14 → 2026-10-14"
+title: "2025-02-14 → 2025-02-19"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/2-2025-02-14
 owner: diplo
 preview: >-
-  Boniface juge le livre de Bruno Tertrais, présenté comme objectif, trompeur
-  dans sa défense de Netanyahou à Gaza. Il chronique ensuite Alexander Stubb
-  sur un monde en trois blocs, puis reçoit Sylvie Bermann sur la parité entre
-  les États-Unis et la Chine.
+  Boniface voit dans le lâchage américain de l'Ukraine la « mort cérébrale »
+  de l'OTAN et réclame une autonomie stratégique européenne ; il juge biaisé
+  le livre de Bruno Tertrais sur Israël et reçoit deux invitées sur la guerre
+  commerciale de Trump et le climat.
 ---
-# 2025-02-14 → 2026-10-14
+# 2025-02-14 → 2025-02-19
 
-Sur cette Period, Boniface prend d'abord position sur Israël et Gaza. Il soutient que le livre de Bruno Tertrais, présenté comme objectif, défend la politique de Netanyahou avec des arguments qu'il juge faux et volontairement trompeurs. Pour lui, la vraie question est de savoir quel Israël on défend.
+Le fil principal de la Period est l'Europe face au retrait américain. Boniface soutient que le lâchage américain de l'Ukraine confirme la « mort cérébrale » de l'OTAN. Pour lui, l'autonomie stratégique européenne devient une nécessité, et l'Europe doit renoncer à prolonger une guerre qu'elle ne peut pas gagner, en choisissant une approche rationnelle. Ses deux entretiens prolongent cette question. Pour Marie-Pierre Vedrenne, l'UE doit répondre à la guerre commerciale de Trump par l'unité et la fermeté, et appliquer ses règles sur le numérique face à Musk. Pour la prospectiviste Virginie Raisson, la crise écologique redessine la géopolitique, et l'Europe, faute de multilatéralisme, perd l'avance environnementale qui faisait sa force.
 
-Il se tourne ensuite vers l'ordre mondial, par deux voies. Il chronique le livre d'Alexander Stubb, qui divise le monde en trois blocs, Occident, Orient et Sud global. Pour Stubb, l'Occident affaibli doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre. Boniface reçoit aussi Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les deux puissances sans que Pékin ait gagné, la Chine joue la patience sur Taïwan, et son excédent commercial met l'Europe en difficulté.
+Boniface consacre aussi une vidéo critique au livre de Bruno Tertrais. Il le juge présenté comme objectif alors qu'il défend la politique de Netanyahou à Gaza avec des arguments qu'il estime faux et volontairement trompeurs. Pour Boniface, la vraie question est : quel Israël défend-on ? Dans un registre plus pratique, il répond à des lycéens de Parcoursup : il n'existe pas de licence de géopolitique, on se spécialise en master après une formation généraliste, en cultivant dès maintenant une culture large et des sources variées.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/2-2025-02-14/1-bruno-tertrais-plaidoyer-biaise-pour-israel|Bruno Tertrais : plaidoyer biaisé pour Israël]] (2025-02-14)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/2-2025-02-14/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/2-2025-02-14/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/2-2025-02-14/2-parcoursup-quelles-etudes-pour-faire-de|Parcoursup : quelles études pour faire de la géopolitique ?]] (2025-02-17)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/2-2025-02-14/3-ue-faire-face-a-la-guerre|UE : faire face à la guerre commerciale de Trump - Les mardis de l'IRIS]] (2025-02-18)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/2-2025-02-14/4-otan-mort-cerebrale-acte-ii|OTAN : mort cérébrale acte II]] (2025-02-18)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/2-2025-02-14/5-changement-climatique-et-risques-geopolitiques-avec|Changement climatique et risques géopolitiques. Avec Virginie Raisson - Entretiens géopo]] (2025-02-19)
