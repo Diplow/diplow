@@ -1,23 +1,25 @@
 ---
-title: "2024-09-23 → 2026-10-14"
+title: "2024-09-23 → 2024-10-02"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23
 owner: diplo
 preview: >-
-  Boniface lit les crises à travers un Occident affaibli, aligné sur Israël,
-  dont le Sud global profite : au Liban, l'escalade s'impose sans prise des
-  Occidentaux. Il chronique Alexander Stubb sur trois blocs et reçoit Sylvie
-  Bermann sur la Chine.
+  Boniface lit la guerre d'Israël contre le Hezbollah comme une escalade sans
+  stratégie politique : Netanyahou y gagne à court terme, Israël y perd à long
+  terme. Il reçoit Védrine, Bitar et Cypel, qui prolongent ce constat.
 ---
-# 2024-09-23 → 2026-10-14
+# 2024-09-23 → 2024-10-02
 
-Boniface soutient qu'Israël et le Hezbollah jouent l'escalade sans vouloir céder, et que les États-Unis, les Européens et les pays arabes n'ont aucune prise sur elle. Selon lui, la Russie, la Chine et le Sud global en tirent profit face à un Occident aligné sur Israël. Cette lecture, où l'Occident perd du poids et le Sud en gagne, est le fil de la Period.
+Pendant ces dix jours, Boniface soutient qu'Israël et le Hezbollah jouent l'escalade sans vouloir céder, et que les États-Unis, les Européens et les pays arabes n'ont aucune prise sur elle ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23/1-israel-hezbollah-vu-par-le-monde|Israël - Hezbollah vu par le monde]]). Russie, Chine et Sud global en profitent face à un Occident aligné sur Israël. Il affine ensuite sa lecture : Israël empile les victoires militaires sans stratégie politique pour le Liban. Netanyahou en sort renforcé à court terme, mais Israël y perd à long terme, et l'Iran est poussé vers l'arme nucléaire ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23/3-israel-a-t-il-une-strategie|Israël a-t-il une stratégie au Liban ?]]).
 
-Boniface la prolonge en chroniquant le livre d'Alexander Stubb, président finlandais. Pour Stubb, le monde se divise en trois blocs, Occident, Orient et Sud global. L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Trois invités de Boniface prolongent cette grille sans qu'on la leur prête à lui. Pour Hubert Védrine, le monde est instable, personne ne gagne en Ukraine, la paix à Gaza exige un État palestinien et l'Occident n'a plus le monopole de la puissance. Pour Karim Émile Bitar, le tout-militaire est contre-productif au Liban, comme en 1982, 1996 et 2006 : le Hezbollah garde sa base, et l'Iran hésite entre la bombe et un grand marchandage avec Washington. Pour Sylvain Cypel, Israël mène à Gaza et au Liban une politique de la seule force, dans l'impunité, et devient un danger pour les Juifs ; Netanyahou a imposé l'équation antisionisme égale antisémitisme, qui s'érode dans l'opinion et aux États-Unis.
 
-La Period se clôt sur un entretien avec Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, sans qu'on puisse dire que Pékin a gagné. Elle voit une Chine patiente sur Taïwan, qui n'est pas anti-européenne, mais dont l'excédent commercial met l'Europe en difficulté.
+Entre-temps, Boniface confirme que la vidéo de son agression à l'aéroport de Tel-Aviv, remise en circulation, est authentique mais date d'avril 2018 ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23/4-la-video-de-mon-agression-a|La vidéo de mon agression à Tel-Aviv est ressortie]]). Il y voit un deux-poids-deux-mesures dans l'impunité des agresseurs et refuse tout amalgame avec Israël.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23/1-israel-hezbollah-vu-par-le-monde|Israël - Hezbollah vu par le monde]] (2024-09-23)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23/2-un-monde-de-crises-et-conflits|Un monde de crises et conflits. Avec Hubert Védrine - Entretiens géopo]] (2024-09-25)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23/3-israel-a-t-il-une-strategie|Israël a-t-il une stratégie au Liban ?]] (2024-09-30)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23/4-la-video-de-mon-agression-a|La vidéo de mon agression à Tel-Aviv est ressortie]] (2024-10-01)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23/5-quel-avenir-pour-le-liban-les|Quel avenir pour le Liban ? - Les mardis de l'IRIS]] (2024-10-01)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/4-2024-05-31/3-2024-09-04/4-2024-09-23/6-netanyahou-la-force-pour-seul-horizon|Netanyahou : la force pour seul horizon ? Avec Sylvain Cypel - Entretiens géopo]] (2024-10-02)
