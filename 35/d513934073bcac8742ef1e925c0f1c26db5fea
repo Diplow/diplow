@@ -1,0 +1,41 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/4-2026-09-14/CLAUDE.md
+  s_9e45778c11ae57::t_0f6761487da176 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/5-2026-09-18/1-hollande-defie-melenchon-sur-la-sortie.md
+  s_9e45778c11ae57::t_85be773d0ef5d5 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/5-2026-09-18/2-philippe-brun-comment-gerer-les-vss.md
+  s_9e45778c11ae57::t_7a9070c456be0f 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/5-2026-09-18/3-attal-au-bistrot-la-pire-campagne.md
+  s_9e45778c11ae57::t_ce7e4ec8e9eadc 1-97
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/5-2026-09-18/4-tondelier-veut-elle-la-guerre-avec.md
+  s_9e45778c11ae57::t_d0d916917a195f 1-99
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/5-2026-09-18/5-bouamrane-aurait-pu-etre-premier-ministre.md
+  s_9e45778c11ae57::t_ed4c7cffe99919 1-81
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/5-2026-09-18/6-roussel-reeduque-il-redevient-communiste.md
+  s_9e45778c11ae57::t_fd0919b5d30321 1-91
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/5-2026-09-18/CLAUDE.md
+  s_9e45778c11ae57::t_25f1962ce3843e 1-26
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/3-2026-08-24/CLAUDE.md
+  s_9e45778c11ae57::t_fa4573fe384cea 2,6-9,11,13,15,17,25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/CLAUDE.md
+  s_9e45778c11ae57::t_00d6cbb4c27547 2,6-8,10,12,14,16,22
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_9e45778c11ae57::t_ef99d1573aefd8 2,6-8,10,12,14,16,24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_9e45778c11ae57::t_9d40dcf65919a2 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "35d513934073bcac8742ef1e925c0f1c26db5fea",
+  "prompts": {},
+  "sessions": {
+    "s_9e45778c11ae57": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a68b329288d8cd103",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
