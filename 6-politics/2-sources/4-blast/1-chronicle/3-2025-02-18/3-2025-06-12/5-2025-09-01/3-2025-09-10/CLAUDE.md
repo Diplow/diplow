@@ -1,20 +1,20 @@
 ---
-title: "2025-09-10 → 2025-09-14"
+title: "2025-09-10 → 2025-09-13"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/3-2025-09-10
 owner: diplo
 preview: >-
-  Blast fait du 10 septembre un mouvement social inédit, réprimé et stigmatisé
-  par le pouvoir. Il lit le chaos de Macron comme une méthode pour sauver sa
-  politique économique, et dénonce comme fake news d'extrême droite le chiffre
-  sur les viols commis par des étrangers.
+  Blast soutient que le 10 septembre est un mouvement populaire, né de la
+  colère contre l'austérité, que le pouvoir réprime et stigmatise, et que
+  Macron entretient le chaos avec Lecornu pour sauver sa politique économique.
+  Il lit la défaite de la gauche bolivienne comme le prix de ses divisions.
 ---
-# 2025-09-10 → 2025-09-14
+# 2025-09-10 → 2025-09-13
 
-Le fil de la Period est le 10 septembre. Blast y voit un mouvement populaire et pluriel, né de vingt ans de luttes ignorées et d'une colère contre l'austérité, qui a fait trembler le pouvoir jusqu'à la chute de Bayrou. Face à lui, le ministre de l'Intérieur et ses 80 000 policiers réduisent la mobilisation à des débordements d'ultra gauche pour légitimer la répression, tandis que les médias et la droite la stigmatisent ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/3-2025-09-10/1-10-septembre-une-mobilisation-sous-haute|10 SEPTEMBRE : UNE MOBILISATION SOUS HAUTE RÉPRESSION]]).
+Blast consacre le début de la Period au 10 septembre, qu'il présente comme un mouvement populaire et pluriel, des hôpitaux aux cortèges parisiens. Selon lui, le ministre de l'Intérieur et ses 80 000 policiers le réduisent à des débordements d'ultra gauche pour légitimer la répression ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/3-2025-09-10/1-10-septembre-une-mobilisation-sous-haute|10 SEPTEMBRE : UNE MOBILISATION SOUS HAUTE RÉPRESSION]]). Le lendemain, il va plus loin : ce mouvement social inédit naît de vingt ans de luttes ignorées et d'une colère contre l'austérité, et il a fait trembler le pouvoir jusqu'à la chute de Bayrou, malgré la stigmatisation des médias et de la droite.
 
-Blast lit la suite comme la réponse du pouvoir. Macron a nommé Lecornu, un fidèle très à droite, pour négocier le budget avec le RN, et le chaos permanent qu'il organise, entre censures et 49.3, est selon Blast une méthode de gouvernement pour sauver sa politique économique ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/3-2025-09-10/4-macron-lecornu-la-strategie-du-pire|MACRON, LECORNU : LA STRATÉGIE DU PIRE ET DU CHAOS]]).
+Le fil se prolonge côté pouvoir. Pour Blast, Macron a nommé Lecornu, un fidèle très à droite, pour négocier le budget avec le RN. Le chaos permanent qu'il organise, avec ses censures et son 49.3, est une méthode de gouvernement pour sauver sa politique économique ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/3-2025-09-10/4-macron-lecornu-la-strategie-du-pire|MACRON, LECORNU : LA STRATÉGIE DU PIRE ET DU CHAOS]]).
 
-Deux sujets sortent de ce fil. À l'étranger, Blast explique l'élimination de la gauche bolivienne, au pouvoir depuis vingt ans, par ses divisions autour d'Evo Morales et par la crise économique, au profit d'une droite dont la frange libertarienne progresse. En fin de Period, il démonte le chiffre des 77 % de viols commis à Paris par des étrangers, qu'il tient pour une fake news de l'extrême droite : il ne porte que sur une trentaine de cas, et le viol est le plus souvent commis par un proche.
+Blast regarde aussi hors de France. La gauche bolivienne, au pouvoir depuis vingt ans, a été balayée dès le premier tour de 2025, et il y voit le prix de ses divisions autour d'Evo Morales et de la crise économique. Une droite dont la frange libertarienne progresse prend sa place.
 
 ## Contenu
 
@@ -22,4 +22,3 @@ Deux sujets sortent de ce fil. À l'étranger, Blast explique l'élimination de 
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/3-2025-09-10/2-10-septembre-pourquoi-ce-mouvement-fait|10 SEPTEMBRE : POURQUOI CE MOUVEMENT FAIT TREMBLER LE POUVOIR]] (2025-09-11)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/3-2025-09-10/3-en-bolivie-la-gauche-divisee-eliminee|EN BOLIVIE, LA GAUCHE DIVISÉE ÉLIMINÉE DES ÉLECTIONS]] (2025-09-12)
 4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/3-2025-09-10/4-macron-lecornu-la-strategie-du-pire|MACRON, LECORNU : LA STRATÉGIE DU PIRE ET DU CHAOS]] (2025-09-13)
-5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/3-2025-09-10/5-etrangers-violeurs-la-manipulation-immonde-de|ÉTRANGERS VIOLEURS ?! LA MANIPULATION IMMONDE DE L’EXTRÊME DROITE - AVEC @mathieuburgalassi]] (2025-09-14)
