@@ -7,20 +7,31 @@
 // reader's, the tutorial, the mark is the way back to their own Root, which its caller takes. The
 // point you are on takes the light of the System's star, rose on an Organization's.
 import { Rail } from '#/front/ui/canvas/layouts/Rail'
+import type { TileHex, TileLets } from '#/front/ui/canvas/state/useCanvasState'
 import { pathTo, type Sun, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { recenter, showView, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
 
 import { useThingsDone } from './done'
 
-interface BreadcrumbProps {
-  /** None while the System is read, or once reading it failed: no step, the mark alone. */
+/**
+ * Where you are on the System the canvas shows, as each side of home hands it on: the breadcrumb in
+ * the canvas's corner and, under a page, the hex widget in the chat each take it whole and draw what
+ * they need of it.
+ */
+export interface Where {
+  /** None while the System is read, or once reading it failed: no step, the mark alone; no widget. */
   system: TileNode | undefined
   view: CanvasView
   onViewChange: (view: CanvasView, action: ViewAction) => void
   /** The mark chosen, on another System than the reader's: back to their own Root. */
-  onHome?: () => void
+  onHome?: (() => void) | undefined
   /** The System's star, whose light the point you are on takes: a person's, amber, by default. */
-  sun?: Sun
+  sun?: Sun | undefined
+  /** What the canvas's own rules let through, the tutorial's, which the hex widget holds back too. */
+  lets?: ((hex: TileHex) => TileLets) | undefined
+}
+
+interface BreadcrumbProps extends Where {
   className?: string
 }
 

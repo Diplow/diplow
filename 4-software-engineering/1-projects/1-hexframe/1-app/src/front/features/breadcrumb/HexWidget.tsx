@@ -9,27 +9,17 @@ import { Hexagon } from 'lucide-react'
 
 import { m } from '#/paraglide/messages'
 import { Canvas } from '#/front/ui/canvas/Canvas'
-import type { TileHex, TileLets } from '#/front/ui/canvas/state/useCanvasState'
-import { showView, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
-import type { Sun, TileNode } from '#/front/ui/canvas/view/tiles'
+import { showView } from '#/front/ui/canvas/view/view'
 import { Widget } from '#/front/ui/chat/layouts/Widget'
 
+import type { Where } from './Breadcrumb'
 import { hexLetsOf, hexViewOf, pageGoneTo } from './hex'
 
-interface HexWidgetProps {
-  /** None while the System is read, or once reading it failed: no widget. */
-  system: TileNode | undefined
-  /** The view the URL asks for: no widget unless it shows the center as its page. */
-  view: CanvasView
-  /** The page of the Tile clicked, as a `center` gesture on it: the route navigates. */
-  onViewChange: (view: CanvasView, action: ViewAction) => void
-  /** What the canvas's own rules let through, the tutorial's; without them, every gesture. */
-  lets?: ((hex: TileHex) => TileLets) | undefined
-  /** The System's star, as the canvas takes it. */
-  sun?: Sun | undefined
-}
-
-export function HexWidget({ system, view, onViewChange, lets, sun }: HexWidgetProps) {
+/**
+ * Shown while `view` shows the center as its page; a click hands the route that Tile's page, a
+ * `center` gesture on it (`onViewChange`). `onHome` is the corner's alone.
+ */
+export function HexWidget({ system, view, onViewChange, lets, sun }: Where) {
   if (system === undefined || view.page !== true) return null
   const center = showView(system, view).center
   return (

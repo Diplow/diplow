@@ -51,7 +51,7 @@ import { useFollowLatest } from '#/front/client/assistant/follow'
 import { usePublicSystem, useShipped, useSystem } from '#/front/client/mapping/queries'
 import { accessOf, readAccessSearch, wayBack, withAccess } from '#/front/features/access/search'
 import { SignedOutLines, SignInFoot } from '#/front/features/access/SignedOut'
-import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
+import { Breadcrumb, type Where } from '#/front/features/breadcrumb/Breadcrumb'
 import { HexWidget } from '#/front/features/breadcrumb/HexWidget'
 import { publish } from '#/front/features/bus'
 import { ChatComposer, ChatTimeline } from '#/front/features/conversation/Chat'
@@ -303,7 +303,7 @@ function shippedSide(
       onHome: away ? onHome : undefined,
       sun: shippedSun(shipped),
       lets: rules?.lets,
-    },
+    } satisfies Where,
   }
 }
 
@@ -376,7 +376,7 @@ function visitedSide(
       onViewChange: props.onViewChange,
       onHome,
       sun: { light },
-    },
+    } satisfies Where,
   }
 }
 
@@ -432,7 +432,7 @@ function SignedOut() {
   const help = useHelpNavigation(turning)
   const view = helpOnStar(viewOf(search))
   // Where you are on Help, which the corner draws and, under a page, the chat's hex widget.
-  const where = {
+  const where: Where = {
     system: help.tree,
     view,
     onViewChange: help.onViewChange,
@@ -563,7 +563,7 @@ function SignedIn() {
           onCarry={setCarried}
         />
       ),
-      where: { system: path, view, onViewChange },
+      where: { system: path, view, onViewChange } satisfies Where,
     }
   const onSend =
     tree === undefined
