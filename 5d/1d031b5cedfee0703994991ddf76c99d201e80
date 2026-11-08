@@ -1,0 +1,41 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/3-2026-10-01/4-blocus-lyceen-faut-il-condamner-les.md
+  s_70e2b8820e4c39::t_27b46167699532 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/3-2026-10-01/5-la-gen-z-est-elle-vraiment.md
+  s_70e2b8820e4c39::t_8f3ce1863ff72b 1-87
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/3-2026-10-01/CLAUDE.md
+  s_70e2b8820e4c39::t_5d88989f92c442 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/4-2026-10-08/1-primaire-ps-glucksmann-en-pls-on.md
+  s_70e2b8820e4c39::t_dc685a8b27f8cf 1-82
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/4-2026-10-08/2-roussel-base-que-melenchon-sur-le.md
+  s_70e2b8820e4c39::t_72348a81da3755 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/4-2026-10-08/3-apathie-consigny-les-journalistes-se-font.md
+  s_70e2b8820e4c39::t_8556b975d8e500 1-85
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/4-2026-10-08/4-glucksmann-vainqueur-de-la-primaire-ps.md
+  s_70e2b8820e4c39::t_8f29bcef86be35 1-102
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/4-2026-10-08/CLAUDE.md
+  s_70e2b8820e4c39::t_d2a58811cb1296 1-24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/4-2026-09-18/CLAUDE.md
+  s_70e2b8820e4c39::t_bab73c1a9a552a 2,6-8,10,12,14,20-21
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/5-2026-07-11/CLAUDE.md
+  s_70e2b8820e4c39::t_10d0d2bbf53931 2,6-9,11,13,15,17,24
+6-politics/2-sources/1-paduteam/1-chronicle/2-2025-09-02/CLAUDE.md
+  s_70e2b8820e4c39::t_39328867de664a 2,6-8,10,12,14,16,24
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_07521d09485124 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5d1d031b5cedfee0703994991ddf76c99d201e80",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
