@@ -1,23 +1,23 @@
 ---
-title: "2025-09-01 → 2025-10-14"
+title: "2025-09-01 → 2025-10-18"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01
 owner: diplo
 preview: >-
-  Blast fait de Macron le responsable du chaos : il suit la mobilisation
-  contre l'austérité et sa répression, défend la justice contre l'offensive
-  pro-Sarkozy, juge illégale l'arrestation de la flottille pour Gaza et lit
-  l'actualité comme une défense des puissants.
+  Blast fait de Macron le responsable du chaos et lit la mobilisation contre
+  l'austérité comme un mouvement populaire que le pouvoir réprime. À
+  l'automne, elle voit dans le pouvoir macroniste et le PS les complaisants du
+  RN, et défend la justice et la presse indépendante.
 ---
-# 2025-09-01 → 2025-10-14
+# 2025-09-01 → 2025-10-18
 
-Dès le début de septembre, Blast fait d'Emmanuel Macron le vrai responsable du chaos. Il lit le 10 septembre comme un mouvement populaire contre l'austérité, que le pouvoir réprime. Il dénonce les médias qui lâchent la mobilisation, relève les fake news de l'extrême droite et donne la parole à des voix du terrain. La fin de septembre prolonge ce fil : Blast continue de suivre la mobilisation contre l'austérité, parle du discrédit médiatique de Macron et de la répression, et soutient que l'extrême droite tue toujours.
+Blast fait d'Emmanuel Macron le vrai responsable du chaos et lit le 10 septembre comme un mouvement populaire contre l'austérité, que le pouvoir réprime et que les médias lâchent ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/1-2025-09-01/CLAUDE|2025-09-01 → 2025-09-16]]). Elle suit cette mobilisation sur la durée, dénonce le discrédit médiatique qui la frappe et les fake news de l'extrême droite, et donne la parole à des voix du terrain.
 
-Deux autres combats s'ajoutent. Blast défend la justice contre l'offensive pro-Sarkozy, qui s'amplifie avec la condamnation de l'ancien président et les attaques qu'elle déclenche contre les juges. Il juge aussi illégale l'arrestation de la flottille pour Gaza, puis soutient que le soutien à la Palestine est criminalisé.
+La séquence d'octobre déplace le propos : Blast y lit une complaisance du pouvoir macroniste et du PS envers le RN, à travers les vice-présidences, la reconduction de Lecornu et un budget austéritaire ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/CLAUDE|2025-10-03 → 2025-10-18]]).
 
-En octobre, la lecture se resserre autour d'une même idée : l'actualité sert à défendre les puissants. Selon Blast, les macronistes auraient fait élire le RN pour affaiblir la gauche, et l'histoire est falsifiée au profit de l'ordre établi.
+Entre les deux, elle soutient que l'extrême droite tue toujours, défend la justice contre l'offensive pro-Sarkozy et juge illégale l'arrestation de la flottille pour Gaza. Elle défend aussi la presse indépendante, démonte des mythes, et reçoit des invités sur la trêve fragile à Gaza.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/1-2025-09-01/CLAUDE|2025-09-01 → 2025-09-16]] (17 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/2-2025-09-17/CLAUDE|2025-09-17 → 2025-10-02]] (20 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/CLAUDE|2025-10-03 → 2025-10-14]] (13 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/CLAUDE|2025-10-03 → 2025-10-18]] (19 Digests)

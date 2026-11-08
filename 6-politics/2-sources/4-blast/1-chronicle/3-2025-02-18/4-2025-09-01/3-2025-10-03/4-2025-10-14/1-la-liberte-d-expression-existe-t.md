@@ -1,6 +1,6 @@
 ---
 title: "LA LIBERTÉ D'EXPRESSION EXISTE-T-ELLE ENCORE EN FRANCE ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/3-2025-10-12
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/4-2025-10-14
 owner: diplo
 preview: >-
   Blast (Légitime Défense) soutient que l'apologie du terrorisme et la
