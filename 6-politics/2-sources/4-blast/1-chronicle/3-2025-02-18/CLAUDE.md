@@ -1,23 +1,23 @@
 ---
-title: "2025-02-18 → 2025-09-30"
+title: "2025-02-18 → 2025-10-03"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18
 owner: diplo
 preview: >-
-  Blast soutient que l'extrême droite avance, de Trump et Musk au RN, et que
-  le pouvoir protège les puissants tout en faisant payer les modestes. Elle
-  défend la justice et le collectif, refuse le PS, puis suit la mobilisation
-  du 10 septembre contre l'austérité.
+  Blast soutient que l'extrême droite progresse, que le pouvoir protège les
+  puissants et s'en prend aux modestes par l'austérité, et que le PS trahit la
+  gauche. Seuls l'organisation collective et le rapport de force font reculer,
+  comme le 10 septembre.
 ---
-# 2025-02-18 → 2025-09-30
+# 2025-02-18 → 2025-10-03
 
-Sur ces huit mois, Blast décrit une extrême droite qui progresse, de Trump et Musk à Retailleau et au RN, et une classe politique comme des médias patronaux qu'elle juge corrompus. Elle lit le réarmement comme une austérité qui ne dit pas son nom et défend le collectif contre cette pente. Le PS, à ses yeux, trahit la gauche.
+Sur toute la Period, Blast décrit une extrême droite qui avance, de Trump et Musk à Retailleau et au RN, dans un paysage où la classe politique et les médias patronaux sont corrompus. Elle accuse le PS de trahir la gauche. Elle lit le réarmement comme une politique d'austérité et défend le collectif contre cette pente.
 
-Au printemps, le fil devient celui de la justice : Blast dénonce un pouvoir qui protège les puissants et s'attaque à l'état de droit. Elle soutient que seul le rapport de force fait reculer ce pouvoir, sans passer par une primaire à gauche.
+Au printemps, elle se place du côté de la justice face à la droite et à l'extrême droite. Elle dénonce un pouvoir qui protège les puissants et s'attaque à l'état de droit. Pour elle, seul le rapport de force fait reculer ce pouvoir, et il n'a pas à passer par une primaire à gauche.
 
-Pendant l'été, elle y voit la dérive d'un pouvoir, de Macron à Bayrou, qui épargne les puissants et fait payer les modestes. Elle appelle à s'organiser, puis suit la mobilisation du 10 septembre contre l'austérité, que le pouvoir réprime.
+De l'été au début de l'automne, Blast lit l'actualité comme une offensive contre les modestes : austérité de Macron et Bayrou, complaisance envers Israël, écologie attaquée, médias alignés. Elle appelle à s'organiser et voit dans le 10 septembre un mouvement populaire.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/1-2025-02-18/CLAUDE|2025-02-18 → 2025-04-11]] (64 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/2-2025-04-12/CLAUDE|2025-04-12 → 2025-06-11]] (66 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE|2025-06-12 → 2025-09-30]] (103 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE|2025-06-12 → 2025-10-03]] (109 Digests)

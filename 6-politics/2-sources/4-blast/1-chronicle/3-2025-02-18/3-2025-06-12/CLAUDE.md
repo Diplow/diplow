@@ -1,20 +1,20 @@
 ---
-title: "2025-06-12 → 2025-09-30"
+title: "2025-06-12 → 2025-10-03"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12
 owner: diplo
 preview: >-
-  Blast lit l'été 2025 comme la dérive d'un pouvoir qui épargne les puissants
-  et fait payer les modestes, de Macron à Bayrou. Elle appelle à s'organiser,
-  puis suit la mobilisation du 10 septembre contre l'austérité, que le pouvoir
-  réprime.
+  Blast lit l'actualité comme une offensive du pouvoir contre les modestes :
+  austérité de Macron et Bayrou, complaisance envers Israël, écologie
+  attaquée, médias alignés. Elle appelle à s'organiser et voit dans le 10
+  septembre un mouvement populaire.
 ---
-# 2025-06-12 → 2025-09-30
+# 2025-06-12 → 2025-10-03
 
-Pendant ces mois, Blast lit l'actualité comme la dérive autoritaire d'un ordre capitaliste. Le pouvoir invoque la liberté tout en frappant les faibles et en protégeant les puissants. L'arrestation de son journaliste Yanis Mhamdi par Israël, la réforme Dati, Trump, Gaza, la canicule, la loi Duplomb et l'offensive contre l'écologie nourrissent la même grille. Les médias et l'État, selon Blast, épargnent ceux d'en haut et s'alignent en temps de guerre.
+Du début de l'été à octobre, Blast raconte une même histoire : un pouvoir qui frappe les faibles et protège les puissants. Le gouvernement Bayrou épargne les entreprises et fait payer les plus pauvres, alors que le déficit est l'œuvre des macronistes, et Macron est désigné comme le vrai responsable du chaos. La même logique traverse la réforme Dati, la loi Duplomb et l'offensive contre l'écologie, que Blast rattache à la dérive autoritaire d'un ordre capitaliste. Elle lit même l'alimentation comme un fait de classe.
 
-À partir de l'été, la critique se concentre sur le gouvernement Bayrou et sur Macron. Blast soutient que le plan Bayrou épargne les entreprises et fait payer les plus pauvres, et que le déficit est l'œuvre des macronistes. Elle fait de Macron le vrai responsable du chaos et lit l'alimentation comme un fait de classe. À la rentrée, le 10 septembre devient pour elle un mouvement populaire contre l'austérité. Elle dénonce la répression policière, le discrédit jeté sur le mouvement social, les médias qui lâchent la mobilisation, les fake news et la complaisance envers l'extrême droite. Elle défend aussi les juges de Sarkozy.
+Sur Gaza et Israël, Blast juge illégale l'arrestation de son journaliste Yanis Mhamdi et accuse le gouvernement de complicité. Elle reprend le même verdict pour l'arrestation de la flottille pour Gaza, en fin de période. Elle reproche aussi aux médias de s'aligner en temps de guerre, de se montrer complaisants envers l'extrême droite et de lâcher la mobilisation, et elle dénonce les fake news de l'extrême droite. Elle voit enfin la droite, la macronie et le RN s'allier contre la justice.
 
-Blast reçoit tout du long des invités qui prolongent cette lecture : Eribon, Lainé et Lordon pour penser l'abandon des classes populaires, d'autres sur la tech, Gaza et Israël, le patronat et la Palestine, ainsi que des voix du terrain. Elle appelle à s'organiser et défend l'art engagé.
+Le ton passe de la dénonciation à l'appel à s'organiser. En septembre, Blast lit le 10 septembre comme un mouvement populaire contre l'austérité, que le pouvoir réprime ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/CLAUDE|2025-09-01 → 2025-09-16]]), puis elle suit cette mobilisation. Elle défend aussi l'art engagé. Ses invités nourrissent ce fil : Eribon, Lainé et Lordon pour penser l'abandon des classes populaires, puis des voix sur la tech, la Palestine, le patronat et le terrain.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Blast reçoit tout du long des invités qui prolongent cette lecture : Eribon, L
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/3-2025-07-12/CLAUDE|2025-07-12 → 2025-07-30]] (17 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/4-2025-07-31/CLAUDE|2025-07-31 → 2025-08-31]] (18 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/CLAUDE|2025-09-01 → 2025-09-16]] (17 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/CLAUDE|2025-09-17 → 2025-09-30]] (16 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/CLAUDE|2025-09-17 → 2025-10-03]] (22 Digests)
