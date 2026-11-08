@@ -1,6 +1,6 @@
 ---
 title: "NOUVELLES ÉMISSIONS ET NOUVEAUX PROJETS : C'EST LA RENTRÉE SUR BLAST"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/5-2025-09-17
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/1-2025-09-17
 owner: diplo
 preview: >-
   Blast ouvre sa saison 2025-2026 en se posant en contre-pouvoir indépendant,

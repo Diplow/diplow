@@ -1,6 +1,6 @@
 ---
 title: "RECONNAISSANCE DE LA PALESTINE : \"CELA NE SERA DÉTERMINANT QUE SI ON SANCTIONNE ISRAËL\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/5-2025-09-01/6-2025-09-21
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/6-2025-09-17/2-2025-09-21
 owner: diplo
 preview: >-
   Pour Bertrand Badie, reconnaître l'État de Palestine est un acte juridique
