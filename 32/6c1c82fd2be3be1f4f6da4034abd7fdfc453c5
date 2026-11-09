@@ -1,0 +1,55 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/CLAUDE.md
+  s_5d93821d9575eb::t_86d443038244f4 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/1-2025-10-27/1-comment-les-techno-fascistes-ont-pris.md
+  s_5d93821d9575eb::t_7c1f0441f3a062 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/1-2025-10-27/2-le-temps-des-fachos-et-des.md
+  s_5d93821d9575eb::t_5a3bed9133fc67 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/1-2025-10-27/3-c-est-un-monde-qui-s.md
+  s_5d93821d9575eb::t_65e149d83d1f6c 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/1-2025-10-27/4-dereglement-democratique.md
+  s_5d93821d9575eb::t_849f502e7b29c7 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/1-2025-10-27/CLAUDE.md
+  s_5d93821d9575eb::t_e6b3b7111051ae 2-3,6-9,11,13,15,19-22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/2-2025-10-31/1-budget-le-plan-machiavelique-de-macron.md
+  s_5d93821d9575eb::t_a7df65d59e2ed9 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/2-2025-10-31/2-zyed-et-bouna-20-ans-apres.md
+  s_5d93821d9575eb::t_7cb2c26912176d 1-59
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/2-2025-10-31/3-la-france-eternelle-une-france-qui.md
+  s_5d93821d9575eb::t_0ecc50b9ef4c11 1-88
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/2-2025-10-31/CLAUDE.md
+  s_5d93821d9575eb::t_9379d1f29a9bb3 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/3-2025-11-03/1-macronie-pourquoi-nous-ne-sommes-deja.md
+  s_5d93821d9575eb::t_abff332bd88d54 1-99
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/3-2025-11-03/2-dictature-et-esclavage-moderne-le-business.md
+  s_5d93821d9575eb::t_86045552ee5063 1-75
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/3-2025-11-03/3-devenir-fasciste-mode-d-emploi.md
+  s_5d93821d9575eb::t_682e5462ce1330 1-94
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/3-2025-11-03/4-pourquoi-tout-le-monde-s-en.md
+  s_5d93821d9575eb::t_cee30a681c6e98 1-88
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/3-2025-11-03/CLAUDE.md
+  s_5d93821d9575eb::t_be7c44c2748c74 1-22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/CLAUDE.md
+  s_5d93821d9575eb::t_9b0a80e2e4c0aa 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE.md
+  s_5d93821d9575eb::t_5377ae5c2d0ec2 2,6,8-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_5d93821d9575eb::t_d1364acd2879f7 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_5d93821d9575eb::t_6d51c0e30d571c 6-8,12,14,16,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "326c1c82fd2be3be1f4f6da4034abd7fdfc453c5",
+  "prompts": {},
+  "sessions": {
+    "s_5d93821d9575eb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a28475ffc4d98286e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
