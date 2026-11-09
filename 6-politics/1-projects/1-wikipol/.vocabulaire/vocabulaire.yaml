@@ -192,6 +192,7 @@ kinds:
       planteur: {définition: "Exploite une plantation, notamment esclavagiste.", statut: proposé, introduit_par: blast/n5DkAIlDT1I.md}
       dirigeant-culturel: {définition: "Dirige un lieu ou une institution culturelle.", statut: proposé, introduit_par: boniface/2R2oILPTndY.md}
       dictateur: {définition: "Exerce seul un pouvoir autoritaire sur un État, sans contrôle ni alternance.", statut: proposé, introduit_par: blast/bd92aMK4PPg.md}
+      chef-autochtone: {définition: "Dirige un peuple ou une nation autochtone et parle en son nom.", statut: proposé, introduit_par: blast/uIAMr-d1gAw.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

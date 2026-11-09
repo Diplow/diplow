@@ -1,24 +1,24 @@
 ---
-title: "2025-02-18 → 2025-11-05"
+title: "2025-02-18 → 2025-11-11"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18
 owner: diplo
 preview: >-
-  Blast lit 2025 comme l'avancée de l'extrême droite, de Trump à Retailleau et
-  au RN, portée par un pouvoir corrompu qui protège les puissants et réprime
-  les faibles. Elle accuse le PS de trahir la gauche et défend le rapport de
-  force collectif.
+  Blast lit les huit mois de la Period comme une même dérive autoritaire :
+  l'extrême droite avance, un pouvoir corrompu protège les puissants et frappe
+  les faibles, le PS trahit la gauche. Elle défend le collectif et le rapport
+  de force contre l'austérité.
 ---
-# 2025-02-18 → 2025-11-05
+# 2025-02-18 → 2025-11-11
 
-Sur toute la période, Blast décrit une extrême droite qui avance, de Trump et Musk à Retailleau et au RN, avec la complicité d'une classe politique et de médias patronaux qu'elle juge corrompus. Elle lit le réarmement comme une austérité déguisée et dénonce un pouvoir qui protège les puissants, s'attaque à l'état de droit et frappe les faibles. L'été 2025 lui en offre l'illustration : arrestation de Yanis Mhamdi, Gaza, plan Bayrou, loi Duplomb.
+Pendant ces neuf mois, Blast soutient que l'extrême droite progresse, de Trump et Musk à Retailleau et au RN, avec l'aide d'une classe politique et de médias patronaux qu'elle juge corrompus. Elle voit un pouvoir qui protège les puissants, s'attaque à l'état de droit et frappe les faibles, et elle lit le réarmement comme une austérité. À l'été, cette lecture passe par l'arrestation de Yanis Mhamdi, Gaza, le plan Bayrou et la loi Duplomb.
 
-Face à cela, Blast soutient que seul le rapport de force fait reculer, sans passer par une primaire à gauche, et défend le collectif et l'organisation. Elle reproche au PS d'avoir trahi la gauche puis son électorat.
+À mesure que la Period avance, Blast fait de Macron le responsable du chaos. Elle lit le RN comme le bénéficiaire d'un pouvoir qui l'installe, avec l'appui des médias et du PS. Sur la gauche, elle soutient que le PS trahit et que seul le rapport de force fait reculer, sans passer par une primaire.
 
-À l'automne, le propos se resserre sur Macron et les macronistes, présentés comme les artisans du chaos et de la montée du RN. Blast lit la mobilisation contre l'austérité comme un mouvement populaire que le pouvoir réprime, et donne la parole à des voix du terrain.
+Face à cela, Blast défend le collectif, appelle à s'organiser et relaie la mobilisation populaire contre l'austérité. Elle reçoit des invités sur l'extrême droite, la tech, l'abandon des classes populaires, Gaza, la taxe des ultra-riches et le fascisme. Leurs thèses restent les leurs : Blast les accueille sans les faire siennes.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/1-2025-02-18/CLAUDE|2025-02-18 → 2025-04-11]] (64 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/2-2025-04-12/CLAUDE|2025-04-12 → 2025-06-11]] (66 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE|2025-06-12 → 2025-08-31]] (70 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE|2025-09-01 → 2025-11-05]] (79 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE|2025-09-01 → 2025-11-11]] (85 Digests)
