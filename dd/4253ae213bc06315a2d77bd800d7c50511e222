@@ -1,0 +1,57 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/CLAUDE.md
+  s_84e3048906cc23::t_b28082e198da2b 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/1-2025-12-08/1-classes-sociales-oppositions-politiques-comprendre-la.md
+  s_84e3048906cc23::t_b27a03f59607a7 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/1-2025-12-08/2-changer-de-regard-sur-la-solitude.md
+  s_84e3048906cc23::t_7770a80a224b37 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/1-2025-12-08/3-l-arnaque-du-management-bienveillant.md
+  s_84e3048906cc23::t_58c9813d8d78a2 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/1-2025-12-08/4-desinformer-est-un-metier.md
+  s_84e3048906cc23::t_0bab44489a7ca0 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/1-2025-12-08/CLAUDE.md
+  s_84e3048906cc23::t_0dbe1fdf5e0e12 2-3,6-9,11,13,15,17,21-24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/2-2025-12-12/1-melenchon-humilie-l-extreme-droite-le.md
+  s_84e3048906cc23::t_1b6ba299228e5d 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/2-2025-12-12/2-les-milliardaires-a-la-conquete-de.md
+  s_84e3048906cc23::t_bec779065a6636 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/2-2025-12-12/3-parlement-europeen-la-droite-et-l.md
+  s_84e3048906cc23::t_98d07332a8e383 1-81
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/2-2025-12-12/4-portrait-d-un-facho-de-la.md
+  s_84e3048906cc23::t_0d527a12cebec1 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/2-2025-12-12/CLAUDE.md
+  s_84e3048906cc23::t_9c39719043b4e6 1-24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/3-2025-12-15/1-japon-et-chine-une-nouvelle-guerre.md
+  s_84e3048906cc23::t_8ab0072cf47359 1-100
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/3-2025-12-15/2-blast-comme-vous-ne-l-avez.md
+  s_84e3048906cc23::t_c09b4c9eff3024 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/3-2025-12-15/3-souffrance-au-travail-des-substances-pour.md
+  s_84e3048906cc23::t_8f4a2b7bf5ff73 1-95
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/3-2025-12-15/4-sarko-ouin-ouin.md
+  s_84e3048906cc23::t_e28eda4b115036 1-83
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/3-2025-12-15/CLAUDE.md
+  s_84e3048906cc23::t_2965b55d5ad1b8 1-24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/CLAUDE.md
+  s_84e3048906cc23::t_6998ae369807c7 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE.md
+  s_84e3048906cc23::t_681b2cc2a0312b 2,6-8,10,12,14,16,22-23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_84e3048906cc23::t_051f6ebe44cc20 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_84e3048906cc23::t_b3ed0d286fb7fd 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dd4253ae213bc06315a2d77bd800d7c50511e222",
+  "prompts": {},
+  "sessions": {
+    "s_84e3048906cc23": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-acbde239ebdf72449",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
