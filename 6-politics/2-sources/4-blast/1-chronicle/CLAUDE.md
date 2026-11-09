@@ -3,21 +3,20 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit deux ans de vie politique comme une dérive : une macronie qui sert
-  les puissants et fait payer les précaires, un RN banalisé, une dissolution
-  qui ouvre la voie à l'extrême droite, un PS accusé de trahir la gauche, face
-  à quoi elle défend le collectif.
+  Blast lit deux ans de macronie comme une dérive au service des puissants :
+  RN banalisé, dissolution qui ouvre la voie à l'extrême droite, PS complice.
+  Seuls l'organisation collective et le rapport de force font reculer.
 ---
 # Chronicle
 
-Du côté du pouvoir, Blast raconte une même pente. La macronie sert les puissants et fait payer les précaires, et la loi immigration s'aligne sur l'extrême droite. Le RN se banalise et s'impose comme le seul opposant visible. Dans la première Period ([[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]]), la dissolution apparaît comme un calcul de Macron.
+Sur toute la Chronicle, Blast décrit un pouvoir macroniste qui sert les puissants et fait payer les précaires. La loi immigration s'aligne sur l'extrême droite, le RN est banalisé et érigé en seul opposant, et l'austérité s'impose, avec la répression pour la faire tenir. La dissolution y apparaît comme un calcul de Macron, qui déroule le tapis au RN.
 
-Dans la deuxième Period ([[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]]), Blast lit la dissolution comme la voie ouverte à l'extrême droite. Macron déroule le tapis au RN et impose Barnier avec son aval, et la crise ne se referme que par sa démission. Blast dénonce aussi les médias de milliardaires et un PS complice du budget Bayrou.
+La deuxième période prolonge cette lecture : Barnier est imposé avec l'aval du RN, et la crise ne se refermerait que par la démission de Macron. Blast dénonce alors les médias de milliardaires et un PS complice du budget Bayrou. La critique du PS devient une constante : Blast soutient que le PS trahit la gauche.
 
-En 2025 ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2025-12-07]]), Blast décrit l'avancée de l'extrême droite et la dérive autoritaire d'un pouvoir qui protège les puissants et frappe les faibles. Elle accuse le PS de trahir la gauche et défend le rapport de force, la justice et le collectif contre l'austérité.
+Au fil des mois, l'accent se déplace du constat vers la réponse. Dans la dernière période, Blast soutient que seuls l'organisation collective et le rapport de force font reculer l'extrême droite et le pouvoir, jusqu'à l'idée de renverser la Ve République.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] (276 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2025-12-07]] (315 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2025-12-13]] (321 Digests)

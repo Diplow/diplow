@@ -1,23 +1,22 @@
 ---
-title: "2025-10-27 → 2025-12-07"
+title: "2025-10-27 → 2025-12-13"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27
 owner: diplo
 preview: >-
   Blast soutient que le PS a trahi son électorat, que l'extrême droite impose
-  son agenda grâce à l'empire Bolloré, que la Ve République est un régime
-  autoritaire à renverser et que Glucksmann est une imposture. Elle lit la
-  victoire de Mamdani comme une leçon pour la gauche.
+  son agenda grâce à l'empire Bolloré et que la Ve République est un régime
+  autoritaire à renverser. Il lit l'actualité par les rapports de pouvoir.
 ---
-# 2025-10-27 → 2025-12-07
+# 2025-10-27 → 2025-12-13
 
-Les premières semaines (27 octobre au 7 novembre) sont dominées par la dénonciation du PS, qui a trahi son électorat selon Blast. Blast lit le budget 2026 comme une alliance néolibérale entre macronistes et RN. Elle reçoit des auteurs, des salariés et des jeunes du 93 pour parler de l'extrême droite, du pouvoir et de la police ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/1-2025-10-27/CLAUDE|2025-10-27 → 2025-11-07]]).
+Pendant ces sept semaines, Blast lit la politique par les rapports de pouvoir. Il soutient que le PS a trahi son électorat et voit dans le budget 2026 une alliance néolibérale entre macronistes et RN. Il soutient ensuite que le monde change par le bas, par la révolte, et que l'extrême droite impose son agenda grâce à l'empire Bolloré. Il présente la victoire de Mamdani comme une leçon pour la gauche.
 
-Dans la période suivante (8 au 23 novembre), le propos s'élargit. Blast soutient que le monde change par le bas, par la révolte, et que l'extrême droite impose son agenda grâce à l'empire Bolloré. Elle dénonce la Ve République comme un régime autoritaire à renverser et le grand remplacement comme un complot raciste. La victoire de Mamdani est pour elle une leçon pour la gauche ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/2-2025-11-08/CLAUDE|2025-11-08 → 2025-11-23]]).
+Sa critique du régime s'étend. Blast dénonce la Ve République comme un régime autoritaire à renverser et le grand remplacement comme un complot raciste. Dans les dernières semaines, il estime que les médias dominants et la droite accompagnent la radicalisation des élites. Il dénonce Glucksmann et Dati, constate l'effondrement du droit international et juge que les violences policières sont minimisées.
 
-La fin de la période (24 novembre au 7 décembre) vise la presse et les figures politiques. Blast soutient que la presse dominante accompagne la radicalisation de la classe dirigeante, que Glucksmann est une imposture et que voter Rachida Dati, c'est voter pour la corruption. Elle juge aussi que le désarmement exigé au Liban et en Palestine sert l'expansion israélienne ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/CLAUDE|2025-11-24 → 2025-12-07]]).
+Autour de ce fil, Blast reçoit des auteurs, des salariés et des jeunes du 93, qui parlent de l'extrême droite, du pouvoir et de la police. Ses invités éclairent aussi l'enfance, le climat et la dette.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/1-2025-10-27/CLAUDE|2025-10-27 → 2025-11-07]] (14 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/2-2025-11-08/CLAUDE|2025-11-08 → 2025-11-23]] (17 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/CLAUDE|2025-11-24 → 2025-12-07]] (16 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/CLAUDE|2025-11-24 → 2025-12-13]] (22 Digests)
