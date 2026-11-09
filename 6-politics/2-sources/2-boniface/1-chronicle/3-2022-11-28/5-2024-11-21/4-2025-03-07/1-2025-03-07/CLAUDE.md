@@ -1,20 +1,25 @@
 ---
-title: "2025-03-07 → 2026-10-14"
+title: "2025-03-07 → 2025-03-14"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/1-2025-03-07
 owner: diplo
 preview: >-
-  Boniface chronique deux livres et reçoit une ancienne ambassadrice : Gaza vu
-  par Meriem Laribi, un monde en trois blocs selon Alexander Stubb, la parité
-  entre les États-Unis et la Chine selon Sylvie Bermann.
+  Boniface soutient que la Syrie post-Assad risque de retomber dans la guerre
+  civile et présente l'Indonésie comme une puissance émergente incontournable.
+  Il reçoit aussi Meriem Laribi, Niagalé Bagayoko et Edwy Plenel sur Gaza,
+  l'Afrique et le droit international.
 ---
-# 2025-03-07 → 2026-10-14
+# 2025-03-07 → 2025-03-14
 
-Sur cette Period, Boniface laisse surtout la parole à ses interlocuteurs et à des auteurs. Il interroge Meriem Laribi sur *Ci-gît l'humanité* : pour elle, Gaza est un génocide documenté en direct et défendu par l'Occident, et la colonisation de la Palestine, dont le 7 octobre est un épisode, est ignorée par les médias dominants.
+Dans ses propres analyses, Boniface soutient que la Syrie post-Assad risque de retomber dans la guerre civile. Ahmed al-Charaa n'a pas les moyens d'imposer son autorité aux djihadistes, aux Druzes et aux Kurdes, et il reste exposé aux agendas d'Israël, de la Turquie et de la Russie. Il présente aussi l'Indonésie comme une puissance émergente incontournable. Forte de sa démographie et de ses ressources, elle manie un multi-alignement hérité de Bandung et se veut championne du Sud global sans rompre avec l'Occident.
 
-Les deux autres Digests portent sur l'ordre mondial. Boniface chronique *Le Triangle du pouvoir* d'Alexander Stubb, président finlandais : le monde se divise en trois blocs (Occident, Orient, Sud global), et l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre. Il reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné ; la Chine joue la patience sur Taïwan, n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Le reste de la période est fait d'entretiens et de lectures où la parole revient à ses invités. Pour Meriem Laribi, Gaza est un génocide documenté en direct et défendu par l'Occident, et les médias dominants ignorent la colonisation de la Palestine, dont le 7 octobre est un épisode. Niagalé Bagayoko soutient que l'Afrique n'est pas oubliée de la mondialisation : elle multiplie ses partenaires et glisse vers un souverainisme autoritaire et conservateur, où Trump ne rompt pas avec la tradition américaine.
+
+Edwy Plenel, qui présente son livre, tient que la Palestine pose la question de l'égalité des peuples. Selon lui, Trump, Poutine et Netanyahou, unis par la hiérarchie des humanités, signent la fin du droit international.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/1-2025-03-07/1-j-ai-lu-ci-git-l|J'ai lu... « Ci-gît l'humanité» de Meriem Laribi]] (2025-03-07)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/1-2025-03-07/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/1-2025-03-07/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/1-2025-03-07/2-retour-de-la-guerre-civile-en|Retour de la guerre civile en Syrie ?]] (2025-03-10)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/1-2025-03-07/3-l-afrique-face-aux-recompositions-geopolitiques|L'Afrique face aux recompositions géopolitiques. Avec Niagalé Bagayoko - Entretiens géopo]] (2025-03-12)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/1-2025-03-07/4-l-indonesie-dans-la-cour-des|L'Indonésie, dans la cour des grandes puissances - Expliquez-moi...]] (2025-03-13)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/1-2025-03-07/5-j-ai-lu-palestine-notre-blessure|J'ai lu... « Palestine, notre blessure » par Edwy Plenel]] (2025-03-14)

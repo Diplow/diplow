@@ -190,6 +190,7 @@ kinds:
       universitaire: {définition: "Enseigne et mène des recherches à l'université.", statut: proposé, introduit_par: blast/98v7SwEoC8c.md}
       prospectiviste: {définition: "Étudie les évolutions futures et construit des scénarios pour éclairer les décisions.", statut: proposé, introduit_par: boniface/L9DnxMJ5F2c.md}
       planteur: {définition: "Exploite une plantation, notamment esclavagiste.", statut: proposé, introduit_par: blast/n5DkAIlDT1I.md}
+      dirigeant-culturel: {définition: "Dirige un lieu ou une institution culturelle.", statut: proposé, introduit_par: boniface/2R2oILPTndY.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -273,6 +274,7 @@ kinds:
       délégation-olympique: {définition: "Équipe d'athlètes réunie sous le drapeau olympique, hors de toute équipe nationale.", statut: proposé, introduit_par: boniface/y_fonRjkJQ0.md}
       faction-politique: {définition: "Courant politique d'une assemblée, sans statut de parti, comme les Girondins à la Convention.", statut: proposé, introduit_par: blast/H-znJ0cGSRE.md}
       école-militaire: {définition: "École qui forme des militaires, ici latino-américains, à des doctrines de combat.", statut: proposé, introduit_par: blast/P57Ks-w6F6A.md}
+      lieu-culturel: {définition: "Lieu qui accueille et programme des événements culturels ou des débats.", statut: proposé, introduit_par: boniface/2R2oILPTndY.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
