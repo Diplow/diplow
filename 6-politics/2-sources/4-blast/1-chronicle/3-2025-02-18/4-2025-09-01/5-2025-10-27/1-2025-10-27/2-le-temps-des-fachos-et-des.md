@@ -1,6 +1,6 @@
 ---
 title: "LE TEMPS DES FACHOS ET DES SALAUDS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/5-2025-10-27
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/1-2025-10-27
 owner: diplo
 preview: >-
   Hugues Jallon soutient que le fascisme ne s'installe pas seul : après les

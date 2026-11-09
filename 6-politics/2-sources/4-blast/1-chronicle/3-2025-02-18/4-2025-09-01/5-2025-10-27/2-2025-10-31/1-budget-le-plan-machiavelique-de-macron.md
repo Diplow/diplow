@@ -1,6 +1,6 @@
 ---
 title: "BUDGET : LE PLAN MACHIAVÉLIQUE DE MACRON POUR 2027"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/5-2025-10-27
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/2-2025-10-31
 owner: diplo
 preview: >-
   Blast soutient que le budget 2026 scelle une alliance néolibérale entre
