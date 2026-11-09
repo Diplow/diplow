@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/5-2025-11-08/4-cop-30-l-inaction-climatique-responsable.md
+  s_5d93821d9575eb::t_d07cb12868b06b 1-82
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/5-2025-11-08/CLAUDE.md
+  s_5d93821d9575eb::t_fe31eacc6960ec 2,6-9,11,13,15,22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/6-2025-11-13/1-election-de-mamdani-une-instructive-lecon.md
+  s_5d93821d9575eb::t_9270f0fc6cd6f0 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/6-2025-11-13/2-le-plan-de-l-extreme-droite.md
+  s_5d93821d9575eb::t_d3fcd17b24543e 1-89
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/6-2025-11-13/3-comment-les-armes-soniques-vont-aider.md
+  s_5d93821d9575eb::t_e07507fb45b8ba 1-78
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/6-2025-11-13/4-oqtf-meurtriers-en-puissance-le-mensonge.md
+  s_5d93821d9575eb::t_36a78ac13232c9 1-78
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/6-2025-11-13/5-medias-edition-pour-bardella-bollore-paie.md
+  s_5d93821d9575eb::t_5bd55a4ea4a49e 1-108
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/6-2025-11-13/CLAUDE.md
+  s_5d93821d9575eb::t_3cca852f0a3ce1 1-25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/CLAUDE.md
+  s_5d93821d9575eb::t_0a1891e20b234d 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE.md
+  s_5d93821d9575eb::t_50014a861adf61 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_5d93821d9575eb::t_34885fe07a54c8 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_5d93821d9575eb::t_8dc7723fca316f 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "611df1ba60e7fcffc41808abb291f7d59f7b8210",
+  "prompts": {},
+  "sessions": {
+    "s_5d93821d9575eb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a28475ffc4d98286e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
