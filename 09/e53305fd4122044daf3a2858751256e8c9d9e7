@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/4-2025-12-04/CLAUDE.md
+  s_524076baeb4a79::t_541be7b1a8c2fa 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/5-2025-12-08/1-classes-sociales-oppositions-politiques-comprendre-la.md
+  s_524076baeb4a79::t_55887ed8dc9348 1-83
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/5-2025-12-08/2-changer-de-regard-sur-la-solitude.md
+  s_524076baeb4a79::t_ff28535ea3f7a3 1-89
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/5-2025-12-08/3-l-arnaque-du-management-bienveillant.md
+  s_524076baeb4a79::t_35fdba60ba5904 1-76
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/5-2025-12-08/4-desinformer-est-un-metier.md
+  s_524076baeb4a79::t_081e550899e29c 1-97
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/5-2025-12-08/5-melenchon-humilie-l-extreme-droite-le.md
+  s_524076baeb4a79::t_116fa179238407 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/5-2025-12-08/6-les-milliardaires-a-la-conquete-de.md
+  s_524076baeb4a79::t_06a3ec20095b70 1-91
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/5-2025-12-08/CLAUDE.md
+  s_524076baeb4a79::t_230e38ce92a979 1-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/CLAUDE.md
+  s_524076baeb4a79::t_ea2cd8a982fd1d 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE.md
+  s_524076baeb4a79::t_260fd0052e7e26 2,7-8,10,12,14,16,22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_524076baeb4a79::t_68a25382a9904b 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_524076baeb4a79::t_987bf464c6aa03 6-8,12,14,16,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "09e53305fd4122044daf3a2858751256e8c9d9e7",
+  "prompts": {},
+  "sessions": {
+    "s_524076baeb4a79": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a4a400fb0c89780a0",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
