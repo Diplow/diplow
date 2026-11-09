@@ -1,23 +1,24 @@
 ---
-title: "2025-10-27 → 2025-12-19"
+title: "2025-10-27 → 2025-12-25"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27
 owner: diplo
 preview: >-
-  Blast soutient que le PS a trahi son électorat, que la Ve République est un
-  régime autoritaire à renverser et que l'empire Bolloré impose l'agenda de
-  l'extrême droite. Il lit l'actualité par les rapports de pouvoir.
+  Blast lit l'actualité par les rapports de pouvoir : le PS a trahi son
+  électorat, l'extrême droite impose son agenda grâce à l'empire Bolloré, la
+  Ve République est un régime autoritaire à renverser. Elle défend son
+  journalisme indépendant.
 ---
-# 2025-10-27 → 2025-12-19
+# 2025-10-27 → 2025-12-25
 
-Pendant ces deux mois, Blast tient une ligne constante : le PS a trahi son électorat, et le budget 2026 relève d'une alliance néolibérale entre macronistes et RN. Elle dénonce Glucksmann comme une imposture, voter Rachida Dati comme un vote pour la corruption, et le budget de la Sécu comme un budget qui sert Macron. La victoire de Mamdani est lue comme une leçon pour la gauche.
+Sur ces deux mois, Blast soutient que la politique institutionnelle trahit ceux qu'elle prétend représenter. Le PS a trahi son électorat, le budget 2026 est une alliance néolibérale entre macronistes et RN, Glucksmann est une imposture et voter Rachida Dati, c'est voter pour la corruption. La presse dominante, selon elle, accompagne la radicalisation de la classe dirigeante au lieu de la contrarier.
 
-Le deuxième fil est l'extrême droite et les médias qui la portent. Blast soutient que l'empire Bolloré lui permet d'imposer son agenda, puis que ces médias visent LFI. Elle présente le grand remplacement comme un complot raciste et la Ve République comme un régime autoritaire à renverser. Elle soutient aussi que la presse dominante accompagne la radicalisation de la classe dirigeante, et que le monde change par le bas, par la révolte. Dans la première partie de la Period, elle reçoit des auteurs, des salariés et des jeunes du 93 pour parler de l'extrême droite, du pouvoir et de la police.
+Le fil qui revient le plus est celui de l'extrême droite et des puissances qui l'installent. Blast dénonce l'empire Bolloré, qui impose l'agenda de l'extrême droite, puis son offensive contre LFI et l'audiovisuel public. Elle présente le grand remplacement comme un complot raciste et la Ve République comme un régime autoritaire à renverser. Elle dénonce aussi l'effondrement du droit international et la minimisation des violences policières. Sur la fin de la période, le même regard s'applique au budget de la Sécu, aux multinationales et aux pesticides.
 
-Le regard s'élargit ensuite : fin novembre, Blast dénonce l'effondrement du droit international et la minimisation des violences policières. Mi-décembre, elle estime que l'astrocapitalisme prolonge la logique coloniale. La Period se clôt sur la défense d'un journalisme indépendant porté par ses abonnés.
+Face à cela, Blast soutient que le monde change par le bas, par la révolte, et lit la victoire de Mamdani comme une leçon pour la gauche. Elle reçoit des auteurs, des salariés et des jeunes du 93, et défend son journalisme indépendant. Dans les dernières semaines, elle élargit son champ à l'astrocapitalisme, à la voiture et au surréalisme.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/1-2025-10-27/CLAUDE|2025-10-27 → 2025-11-07]] (14 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/2-2025-11-08/CLAUDE|2025-11-08 → 2025-11-23]] (17 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/CLAUDE|2025-11-24 → 2025-12-07]] (16 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/CLAUDE|2025-12-08 → 2025-12-19]] (12 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/CLAUDE|2025-12-08 → 2025-12-25]] (18 Digests)
