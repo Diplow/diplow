@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/5-2025-11-24/CLAUDE.md
+  s_5ba574f2935e80::t_80a2df64bd75fe 6-9,13,15-17
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/6-2025-11-28/1-glucksmann-le-neant-et-l-imposture.md
+  s_5ba574f2935e80::t_3a148731bbeeb7 1-94
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/6-2025-11-28/2-cop-30-une-nouvelle-defaite-pour.md
+  s_5ba574f2935e80::t_fc5e5d6eb28015 1-94
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/6-2025-11-28/3-gael-giraud-il-n-y-a.md
+  s_5ba574f2935e80::t_ebe4ac8d473112 1-98
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/6-2025-11-28/4-rachida-dati-petits-mefaits-entre-amis.md
+  s_5ba574f2935e80::t_9b9f45057bfad5 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/6-2025-11-28/5-antoni-lallican-photographe-tue-en-ukraine.md
+  s_5ba574f2935e80::t_6aa05b62f987f2 1-83
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/6-2025-11-28/6-au-chili-les-heritiers-de-pinochet.md
+  s_5ba574f2935e80::t_523e958a21b848 1-97
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/6-2025-11-28/CLAUDE.md
+  s_5ba574f2935e80::t_6dbfa1b097625b 1-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/CLAUDE.md
+  s_5ba574f2935e80::t_d409c137ff26ec 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE.md
+  s_5ba574f2935e80::t_1ab954bca2c72b 2,6-8,10,12,14,16,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_5ba574f2935e80::t_ca7041d8c10d61 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_5ba574f2935e80::t_722c99135833ef 6-8,12,14,16,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8762870059ab2fc868d50b037972634b238147c7",
+  "prompts": {},
+  "sessions": {
+    "s_5ba574f2935e80": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a7a702afebbf25537",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
