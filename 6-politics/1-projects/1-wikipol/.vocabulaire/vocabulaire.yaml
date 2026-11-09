@@ -373,6 +373,7 @@ kinds:
       fable: {définition: "Court récit en vers qui met en scène des animaux pour en tirer une morale.", statut: proposé, introduit_par: paduteam/-Q-ulX_kTmU.md}
       numéro-spécial: {définition: "Numéro hors série d'un journal ou d'un magazine consacré à un thème unique.", statut: proposé, introduit_par: blast/E9Y11DuoXuY.md}
       pièce-de-théâtre: {définition: "Une pièce écrite pour être jouée sur scène.", statut: proposé, introduit_par: blast/zFHDAvSdKT8.md}
+      album: {définition: "Un album de musique.", statut: proposé, introduit_par: boniface/8SZ9ea-ADeY.md}
     qualifiers:
       cité: {définition: "Lue, montrée ou diffusée dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
