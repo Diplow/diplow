@@ -3,22 +3,23 @@ title: "2025-04-09 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09
 owner: diplo
 preview: >-
-  Boniface lit l'actualité par ses grilles : négociations avec l'Iran
-  bienvenues, France impuissante sur la Palestine tant qu'elle ne presse pas
-  Israël, OCS signe d'un multi-alignement. Il reçoit aussi des invités sur
-  l'ordre mondial en recomposition.
+  Boniface lit Gaza par le deux poids deux mesures et juge la France
+  impuissante face à Israël. Il tient la guerre en Ukraine sans issue
+  militaire, voit dans l'OCS un multi-alignement, et reçoit des invités sur la
+  Russie, la Chine, les Kurdes et le Japon.
 ---
 # 2025-04-09 → 2026-10-30
 
-Sur le Moyen-Orient, Boniface juge bonne nouvelle les négociations américano-iraniennes et voit la France impuissante sur la Palestine tant qu'elle ne presse pas Israël. Il soutient ensuite qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens, et que la France se contente de protestations face à l'impunité des colons ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/3-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]]). Il juge passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins.
+Le fil qui court sur toute la Chronicle est la lecture de Gaza et d'Israël. Boniface soutient que Gaza subit un deux poids deux mesures et que la hasbara rend acceptable une politique israélienne qui ne l'est pas ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/2-2025-04-16/CLAUDE|2025-04-16 → 2025-04-25]]). Il voit la France impuissante tant qu'elle ne presse pas Israël, et la juge réduite à des protestations face à l'impunité des colons. Selon lui, un départ de Netanyahou ne changerait presque rien pour les Palestiniens. Il juge aussi passionnant un livre sur le lobby pro-israélien, dont les arguments marchent de moins en moins.
 
-Sur l'ordre mondial, il dit l'annexion du Groenland contraire au droit international. Il soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/4-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]]). Entre ces deux thèmes, ses dates tournent autour d'un monde en recomposition : il chronique le livre d'Alexander Stubb sur l'Occident, l'Orient et le Sud global ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/2-2025-04-16/CLAUDE|2025-04-16 → 2026-10-14]]).
+Le reste de sa lecture porte sur l'ordre international et les guerres en cours. Il juge bonne nouvelle les négociations américano-iraniennes et dit l'annexion du Groenland contraire au droit international. Pour l'Ukraine, il tient la guerre sans issue militaire et préfère une mauvaise paix, sans lever les sanctions ni reconnaître l'annexion de la Crimée. En fin de période, il soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement.
 
-La Period alterne ses analyses et des invités qu'il reçoit : Dubien, Védrine et Aubert sur la Russie, le monde et le Soudan, Alain Juppé sur l'Europe face à Trump, Sylvie Bermann sur la Chine, ainsi que des invités sur Gaza, Lula et le Japon. Leurs thèses restent les leurs, comme celle de Didier Billion, pour qui l'avenir des Kurdes passe par l'autonomie.
+Boniface reçoit régulièrement des invités et leur laisse leurs thèses. Dubien, Védrine et Aubert l'ont éclairé sur la Russie, le monde et le Soudan, Juppé, Ruffin, Giresse et Barny sur l'actualité française et sportive, Sylvie Bermann sur la parité entre les États-Unis et la Chine, Didier Billion sur les Kurdes. D'autres invités ont parlé de Gaza, de Lula et du Japon. Il chronique aussi Alexander Stubb, dont il restitue la vision d'un monde en trois blocs.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/CLAUDE|2025-04-09 → 2025-04-15]] (6 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/2-2025-04-16/CLAUDE|2025-04-16 → 2026-10-14]] (3 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/3-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/4-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/2-2025-04-16/CLAUDE|2025-04-16 → 2025-04-25]] (6 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/3-2025-04-28/CLAUDE|2025-04-28 → 2026-10-14]] (3 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/4-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/5-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)

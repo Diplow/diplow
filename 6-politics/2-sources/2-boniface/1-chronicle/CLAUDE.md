@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Sur dix ans, Boniface lit le monde par le multilatéralisme contre
-  l'unilatéralisme, le deux poids, deux mesures occidental et la fin du
-  monopole de l'Occident. Il plaide pour l'autonomie stratégique de l'Europe,
-  une France sans suivisme et une négociation non taboue.
+  Boniface lit dix ans d'actualité avec les mêmes grilles : multilatéralisme
+  contre unilatéralisme, deux poids deux mesures occidental, perte du monopole
+  de l'Occident. Il plaide pour la négociation, l'autonomie stratégique de
+  l'Europe et une France sans suivisme envers Washington.
 ---
 # Chronicle
 
-De 2016 à 2020, Boniface applique les mêmes grilles à Trump et à la scène internationale : le multilatéralisme contre l'unilatéralisme, le deux-poids-deux-mesures occidental. Il presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur. Cette cohérence d'outils, répétée d'une vidéo à l'autre, est ce qui structure sa chaîne.
+Sur toute la Chronicle, Boniface applique des grilles de lecture stables à des événements qui changent. Le multilatéralisme s'oppose à l'unilatéralisme, le deux poids deux mesures occidental revient de dossier en dossier, et l'Occident n'a plus le monopole de l'ordre mondial. Dans [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]], ces grilles servent à lire Trump et la scène internationale, et le Covid-19 y apparaît comme un révélateur.
 
-De juin 2020 à novembre 2022, il garde ces grilles et y ajoute la rivalité sino-américaine et l'échec des interventions extérieures. La guerre en Ukraine lui apparaît comme une impasse qui appelle une négociation, et il constate un Occident que le reste du monde ne suit plus. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]]
+Dans [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]], elles s'appliquent à la rivalité sino-américaine et à l'échec des interventions extérieures. La guerre en Ukraine y devient pour lui une impasse qui appelle une négociation, dans un monde où le reste de la planète ne suit plus l'Occident.
 
-Depuis fin 2022, l'Ukraine, Gaza et Trump deviennent les cas où il applique le plus systématiquement le deux poids, deux mesures et la perte du monopole de l'Occident. Il plaide pour une France sans suivisme envers Washington, une Europe à l'autonomie stratégique assumée et une négociation qui ne soit pas taboue. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]]
+Dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]], la période la plus fournie, la même lecture va de l'Ukraine à Gaza. Boniface y garde les mêmes lignes d'une période à l'autre : la négociation plutôt que l'escalade, une Europe qui acquiert son autonomie stratégique, et une France qui cesse de suivre Washington.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]] (322 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (406 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (412 Digests)
