@@ -1,6 +1,6 @@
 ---
 title: "CLASSES SOCIALES, OPPOSITIONS POLITIQUES : COMPRENDRE LA GUERRE AU SOUDAN"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/5-2025-12-08
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/1-2025-12-08
 owner: diplo
 preview: >-
   Blast, avec le chercheur de l'IRD Clément Dé, soutient que la guerre au
