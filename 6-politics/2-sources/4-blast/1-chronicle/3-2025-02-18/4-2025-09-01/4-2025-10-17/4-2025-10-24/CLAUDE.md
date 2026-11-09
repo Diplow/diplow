@@ -3,20 +3,20 @@ title: "2025-10-24 → 2025-10-26"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/4-2025-10-24
 owner: diplo
 preview: >-
-  Blast reçoit Gabriel Zucman, qui défend une taxe plancher sur les
-  ultra-riches, les auteurs d'un livre sur la mainmise des oligarques sur les
-  médias, et un intervenant sur le soulèvement italien pour Gaza.
+  Blast reçoit Zucman, qui défend une taxe plancher de 2 % sur les
+  ultra-riches, et les auteurs d'un livre sur l'emprise des milliardaires sur
+  les médias. Elle juge que la prison de Sarkozy ne mérite pas la fête, la
+  prison étant un outil contre les pauvres.
 ---
 # 2025-10-24 → 2025-10-26
 
-Le 24 octobre, Blast donne la parole à Gabriel Zucman, pour qui une taxe plancher de 2 % sur les patrimoines de plus de 100 millions d'euros est le minimum que réclame l'égalité devant l'impôt. Il écarte les objections de fortune virtuelle et d'exil fiscal et juge que le budget Lecornu protège les ultra-riches ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/4-2025-10-24/1-pourquoi-gabriel-zucman-fait-peur-aux|POURQUOI GABRIEL ZUCMAN FAIT PEUR AUX ULTRA RICHES]]).
+Le fil de ces trois jours est la mainmise des plus riches. Blast reçoit [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/4-2025-10-24/1-pourquoi-gabriel-zucman-fait-peur-aux|Gabriel Zucman]], pour qui la taxe plancher de 2 % sur les patrimoines de plus de 100 millions d'euros est le minimum que réclame l'égalité devant l'impôt, et pour qui le budget Lecornu protège les ultra-riches. Elle donne ensuite la parole aux auteurs de *Sauver l'information de l'emprise des milliardaires*, selon lesquels dix oligarques captent les médias pour mener une guerre idéologique, et qui défendent une maison des médias libres et une régulation plus dure.
 
-Le lendemain, les auteurs de Sauver l'information de l'emprise des milliardaires décrivent dix oligarques qui captent les médias pour mener une guerre idéologique. Ils plaident pour une maison des médias libres et une régulation plus dure ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/4-2025-10-24/2-les-medias-independants-en-premiere-ligne|LES MÉDIAS INDÉPENDANTS EN PREMIÈRE LIGNE CONTRE LES OLIGARQUES]]).
-
-Le 26 octobre, l'intervenant interrogé voit dans le soulèvement italien pour Gaza le prolongement d'une solidarité historique avec la Palestine, déclenché par la flottille. Le mouvement s'est étendu à tout le pays et a ébranlé la stabilité du gouvernement Meloni, expression selon lui d'une révolte éthique d'une jeunesse politisée ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/4-2025-10-24/3-blocchiamo-tutto-retour-sur-un-soulevement|"BLOCCHIAMO TUTTO" : RETOUR SUR UN SOULÈVEMENT POPULAIRE ITALIEN POUR GAZA]]).
+Le même regard sur les rapports de force traverse les deux autres sujets. Un intervenant interrogé sur le soulèvement italien pour Gaza y voit le prolongement d'une solidarité historique avec la Palestine, une révolte éthique d'une jeunesse politisée qui a ébranlé le gouvernement Meloni. Blast soutient enfin que l'incarcération de Sarkozy ne mérite pas la fête : ses soutiens médiatiques accusent les juges pour masquer les faits, et la prison reste un outil du capitalisme colonial contre les pauvres et les racisés.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/4-2025-10-24/1-pourquoi-gabriel-zucman-fait-peur-aux|POURQUOI GABRIEL ZUCMAN FAIT PEUR AUX ULTRA RICHES]] (2025-10-24)
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/4-2025-10-24/2-les-medias-independants-en-premiere-ligne|LES MÉDIAS INDÉPENDANTS EN PREMIÈRE LIGNE CONTRE LES OLIGARQUES]] (2025-10-25)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/4-2025-10-24/3-blocchiamo-tutto-retour-sur-un-soulevement|"BLOCCHIAMO TUTTO" : RETOUR SUR UN SOULÈVEMENT POPULAIRE ITALIEN POUR GAZA]] (2025-10-26)
+4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/4-2025-10-24/4-nicolas-sarkozy-en-prison-faut-il|NICOLAS SARKOZY EN PRISON : FAUT-IL S'EN RÉJOUIR ?]] (2025-10-26)
