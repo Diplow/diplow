@@ -1,20 +1,21 @@
 ---
-title: "2024-11-21 → 2026-10-30"
+title: "2024-11-21 → 2025-04-07"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21
 owner: diplo
 preview: >-
-  Boniface lit Gaza, l'Ukraine et Trump par le deux poids, deux mesures
-  occidental, juge une paix en Ukraine, même injuste, préférable à la guerre,
-  et appelle l'Europe à l'autonomie stratégique face à des États-Unis qui
-  imposent un rapport de force.
+  Boniface lit d'abord l'actualité par le deux poids, deux mesures occidental,
+  puis par Trump, dont les initiatives attaquent selon lui le droit
+  international et signent la fin de l'OTAN. Il juge une paix, même injuste,
+  préférable à la guerre en Ukraine et appelle l'Europe à l'autonomie
+  stratégique.
 ---
-# 2024-11-21 → 2026-10-30
+# 2024-11-21 → 2025-04-07
 
-Sur toute la Period, la grille qui revient est le deux poids, deux mesures occidental. Boniface l'applique d'abord à Gaza et au Liban. Il estime que le mot génocide s'impose à propos de Gaza, juge le plan de Trump pour le territoire être un nettoyage ethnique, dénonce la hasbara et le défaut de pression sur Netanyahou. Il dénonce aussi un néomaccarthysme qui étouffe le débat, et tient l'islamophobie pour une réalité en France.
+À l'automne 2024, Boniface applique à l'actualité la grille du deux poids, deux mesures occidental, de Gaza au Liban. Il estime que le mot génocide s'impose à propos de Gaza, voit Assad tomber faute de soutiens et juge une paix en Ukraine préférable à une guerre sans issue. Cette position sur l'Ukraine, il la maintient jusqu'au printemps 2025 : une paix injuste vaut mieux qu'une guerre sans fin.
 
-Sur l'Ukraine, il juge qu'une paix, même injuste et plus favorable à la Russie, vaut mieux qu'une guerre sans issue. Il voit le dossier réglé par Trump et Poutine. Le lâchage de l'Ukraine signe pour lui la fin de l'OTAN et du monde d'après 1945. Trump apparaît tour à tour comme un rapport de force imposé au monde, une attaque contre le droit international, un protectionnisme qui avance par la peur, puis une série de coups de force sans allié ni résultat. Face à lui, Boniface appelle l'Europe à répondre d'une seule voix, à viser l'autonomie stratégique et à se réarmer sans achats américains.
+À partir de la fin décembre, Trump devient le centre de son analyse. Boniface le décrit d'abord comme un rapport de force imposé au monde, puis comme un protectionnisme qui avance par la peur. Il juge le plan pour Gaza être un nettoyage ethnique et dénonce un néomaccarthysme qui étouffe le débat. Au début de 2025, il lit les initiatives de Trump comme une attaque contre le droit international. Le lâchage de l'Ukraine marque pour lui la fin de l'OTAN et du monde d'après 1945. Au printemps, il décrit les coups de force de Trump comme une série sans allié ni résultat.
 
-D'autres terrains complètent ce fil. Assad chute faute de soutiens, et la Syrie post-Assad lui paraît menacée de guerre civile et livrée aux puissances régionales. Dans la dernière partie, il tient le Sud global pour une notion floue et l'OCS pour un signe de multi-alignement. Ses invités élargissent le propos à l'Iran, à la Chine, au Liban et aux Kurdes.
+Face à ce tournant, Boniface appelle l'Europe à répondre d'une seule voix, puis à l'autonomie stratégique et au réarmement sans achats américains. Dans les dernières semaines de la Period, il regarde aussi la Syrie post-Assad, qu'il lit comme un risque de guerre civile et une affaire de puissances régionales.
 
 ## Contenu
 
@@ -22,5 +23,3 @@ D'autres terrains complètent ce fil. Assad chute faute de soutiens, et la Syrie
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/2-2024-12-26/CLAUDE|2024-12-26 → 2025-01-31]] (19 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/CLAUDE|2025-02-05 → 2025-03-06]] (18 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/CLAUDE|2025-03-07 → 2025-04-07]] (18 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/CLAUDE|2025-04-09 → 2025-05-15]] (23 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/6-2025-05-16/CLAUDE|2025-05-16 → 2026-10-30]] (23 Digests)
