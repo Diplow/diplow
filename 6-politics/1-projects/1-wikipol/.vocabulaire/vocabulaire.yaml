@@ -195,6 +195,7 @@ kinds:
       chef-autochtone: {définition: "Dirige un peuple ou une nation autochtone et parle en son nom.", statut: proposé, introduit_par: blast/uIAMr-d1gAw.md}
       architecte: {définition: "Conçoit des bâtiments et des espaces, ici pour mener des recherches d'analyse spatiale.", statut: proposé, introduit_par: blast/h-e4d9Ervg0.md}
       ancien-chef-religieux: {définition: "A dirigé une religion ou une communauté religieuse et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/AgUWx_jIOFg.md}
+      sémiologue: {définition: "Étudie les signes et les systèmes de signification, notamment dans la culture de masse.", statut: proposé, introduit_par: blast/tR6aujaUh_g.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

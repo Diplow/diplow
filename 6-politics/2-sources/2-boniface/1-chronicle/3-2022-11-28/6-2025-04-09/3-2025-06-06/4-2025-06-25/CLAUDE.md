@@ -1,22 +1,22 @@
 ---
-title: "2025-06-25 → 2026-10-14"
+title: "2025-06-25 → 2025-06-26"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/4-2025-06-25
 owner: diplo
 preview: >-
-  Boniface défend les réseaux sociaux contre l'interdiction de TikTok, au nom
-  de la liberté d'expression. Il reçoit Agnès Callamard et Sylvie Bermann, et
-  lit Alexander Stubb, pour qui l'Occident affaibli doit montrer l'exemple au
-  Sud global, qui décidera du nouvel ordre.
+  Boniface défend la liberté d'expression contre l'interdiction de TikTok
+  voulue par Glucksmann et lit le sommet de l'OTAN comme un triomphe de Trump
+  et un échec des Européens dociles. Il reçoit Agnès Callamard et Jérémie
+  Pelé, qui parlent droit international et coopération.
 ---
-# 2025-06-25 → 2026-10-14
+# 2025-06-25 → 2025-06-26
 
-Sur ces quatre Digests, la seule thèse que Boniface porte en son nom est celle sur les réseaux sociaux. Il soutient que l'interdiction de TikTok, défendue par Raphaël Glucksmann au nom de la démocratie, menace la liberté d'expression. À ses yeux, ces plateformes donnent la parole aux exclus des médias mainstream et corrigent leurs erreurs.
+Pendant ces deux jours, Boniface applique deux fois la même grille : ce qui est présenté comme une protection cache un recul. Pour lui, interdire TikTok au nom de la démocratie, comme le défend Raphaël Glucksmann, menace la liberté d'expression, car les réseaux sociaux donnent la parole aux exclus des médias mainstream et corrigent leurs erreurs. Sur le sommet de l'OTAN, il soutient que la crise n'a été évitée qu'en cachant des divisions profondes : Trump en sort triomphant face à des Européens dociles, et cette soumission volontaire est un échec qui ne fera qu'augmenter la facture.
 
-Le reste de la Period relève de ce qu'il reçoit et de ce qu'il lit. Pour Agnès Callamard, secrétaire générale d'Amnesty International, les violations assumées du droit international sonnent le glas de l'ordre juridique né de 1945, et elle propose la résistance collective. Pour Sylvie Bermann, ancienne ambassadrice à Pékin, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans que Pékin ait gagné, et l'excédent commercial chinois met l'Europe en difficulté. Boniface chronique aussi Le Triangle du pouvoir d'Alexander Stubb, qui divise le monde en trois blocs (Occident, Orient, Sud global) et estime que l'Occident, affaibli par ses échecs, doit montrer l'exemple s'il veut peser sur le Sud.
+Deux invités élargissent le propos. Pour Agnès Callamard, secrétaire générale d'Amnesty International, les violations assumées du droit international, du génocide à Gaza aux dérives en France, sonnent le glas de l'ordre juridique né de 1945, et la réponse est la résistance collective. Boniface reçoit aussi Jérémie Pelé, directeur d'Expertise France, pour un livre blanc coproduit avec l'IRIS : pour lui, dans un monde recomposé, la coopération technique est plus utile que jamais.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/4-2025-06-25/1-resister-pour-les-droits-humains-avec|Résister pour les droits humains. Avec Agnès Callamard - Entretiens géopo]] (2025-06-25)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/4-2025-06-25/2-pourquoi-glucksmann-veut-interdire-tiktok|Pourquoi Glucksmann veut interdire TikTok ?]] (2025-06-25)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/4-2025-06-25/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/4-2025-06-25/4-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/4-2025-06-25/3-j-ai-lu-10-propositions-pour|J'ai lu... 10 propositions pour le futur de la coopération internationale]] (2025-06-26)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/4-2025-06-25/4-otan-trump-le-pari-gagnant-de|OTAN-Trump : le pari gagnant de la brutalité]] (2025-06-26)
