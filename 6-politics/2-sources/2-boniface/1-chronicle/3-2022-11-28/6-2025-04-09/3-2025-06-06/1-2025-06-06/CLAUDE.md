@@ -1,24 +1,22 @@
 ---
-title: "2025-06-06 → 2026-10-14"
+title: "2025-06-06 → 2025-06-10"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/1-2025-06-06
 owner: diplo
 preview: >-
-  Boniface reproche à la France de laisser à Netanyahou un droit de veto sur
-  la reconnaissance de la Palestine. Il chronique le livre d'Alexander Stubb
-  sur un monde en trois blocs et reçoit Sébastien Abis et Sylvie Bermann, sur
-  l'agriculture et la Chine face à Trump.
+  Boniface juge que la France, en voulant reconnaître la Palestine sans fâcher
+  Israël, donne un droit de veto à Netanyahou, et que l'impuissance de
+  l'Occident sur Gaza aura un coût moral. Il reçoit Sébastien Abis sur
+  l'agriculture chez Trump et Jean de Gliniasty sur l'Ukraine.
 ---
-# 2025-06-06 → 2026-10-14
+# 2025-06-06 → 2025-06-10
 
-La thèse que Boniface porte en son nom sur ces dates concerne la Palestine. En voulant reconnaître la Palestine sans fâcher Israël, la France donne de fait un droit de veto à Netanyahou. Elle accepte les insultes, perd le prestige d'une position longtemps lucide et courageuse, et ne tirera rien de ce gouvernement israélien.
+Sur le Proche-Orient, Boniface soutient qu'en voulant reconnaître la Palestine sans fâcher Israël, la France donne de fait un droit de veto à Netanyahou. Elle accepte les insultes, perd le prestige d'une position longtemps lucide et courageuse, et ne tirera rien de ce gouvernement israélien. Le même fil court dans sa lecture du Madleen : l'interception, illégale en eaux internationales, était une opération de communication réussie, mais l'essentiel reste le sort de Gaza. L'impuissance volontaire de la France et de l'Occident y aura un coût moral.
 
-Le reste passe par des voix qu'il reçoit ou qu'il lit, et leurs thèses leur restent. Pour Sébastien Abis, son invité, Trump montre que l'agriculture et l'alimentation sont centrales dans les rapports de force : face à la Chine, dans les droits de douane qui visent l'Europe, et avec les coupes d'aide qui fragilisent le PAM. Boniface chronique aussi Le Triangle du pouvoir d'Alexander Stubb, qui divise le monde en trois blocs (Occident, Orient, Sud global) et juge que l'Occident, affaibli, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
-
-Il reçoit enfin Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Elle estime que la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais que son excédent commercial met l'Europe en difficulté.
+Boniface reçoit aussi deux invités, dont les thèses restent les leurs. Pour Sébastien Abis, Trump montre que l'agriculture et l'alimentation sont centrales dans les rapports de force : face à la Chine, dans les droits de douane qui visent l'Europe, et avec les coupes d'aide qui fragilisent le PAM. Pour Jean de Gliniasty, la paix en Ukraine est plus lointaine qu'en 2022. Trump ne fait pas pression sur Poutine, qui durcit ses buts de guerre et ses menaces, et les Européens, bientôt seuls, devront négocier pour la survie de l'Ukraine.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/1-2025-06-06/1-trump-make-agriculture-great-again|Trump : Make Agriculture Great Again]] (2025-06-06)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/1-2025-06-06/2-reconnaissance-de-la-palestine-un-veto|Reconnaissance de la Palestine : un veto israélien ?]] (2025-06-06)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/1-2025-06-06/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/1-2025-06-06/4-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/1-2025-06-06/3-madleen-la-croisiere-ne-s-amuse|Madleen : La croisière ne s'amuse pas]] (2025-06-10)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/1-2025-06-06/4-russie-ukraine-ou-en-est-on|Russie – Ukraine, où en est-on ? - Les mardis de l'IRIS]] (2025-06-10)
