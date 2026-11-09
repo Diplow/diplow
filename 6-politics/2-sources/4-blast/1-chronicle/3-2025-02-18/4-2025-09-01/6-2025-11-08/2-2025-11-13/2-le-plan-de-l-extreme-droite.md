@@ -1,6 +1,6 @@
 ---
 title: "LE PLAN DE L’EXTRÊME DROITE POUR ÉLIMINER LFI"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/6-2025-11-13
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/2-2025-11-13
 owner: diplo
 preview: >-
   Blast soutient que la commission d'enquête de l'Assemblée sur l'islamisme,

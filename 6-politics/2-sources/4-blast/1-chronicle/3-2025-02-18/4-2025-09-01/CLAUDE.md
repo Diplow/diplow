@@ -1,20 +1,20 @@
 ---
-title: "2025-09-01 → 2025-11-16"
+title: "2025-09-01 → 2025-11-22"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01
 owner: diplo
 preview: >-
-  Blast fait de Macron et des macronistes les artisans de la montée du RN, lit
-  le mouvement contre l'austérité comme une mobilisation populaire que le
-  pouvoir réprime, et accuse le PS d'avoir sauvé le gouvernement. Elle reçoit
-  des voix du terrain sur Gaza et la taxe des ultra-riches.
+  Blast fait de Macron et des macronistes les responsables du chaos, de
+  l'austérité et de la montée du RN, reproche au PS d'avoir trahi son
+  électorat et tient la Ve République pour un régime autoritaire. Il suit la
+  mobilisation contre l'austérité et reçoit des voix du terrain.
 ---
-# 2025-09-01 → 2025-11-16
+# 2025-09-01 → 2025-11-22
 
-Pendant ces deux mois et demi, Blast tient un même fil : Macron est le vrai responsable du chaos, et son camp déroule le tapis au RN, des vice-présidences de l'Assemblée à la reconduction de Lecornu. Blast lit le 10 septembre et la mobilisation contre l'austérité comme un mouvement populaire que le pouvoir réprime. Elle dénonce des médias qui lâchent cette mobilisation, ou qui appartiennent à des milliardaires, et les fake news de l'extrême droite.
+Sur ces trois mois, Blast tient Macron pour le vrai responsable du chaos. Il suit la mobilisation du 10 septembre contre l'austérité et la lit comme un mouvement populaire que le pouvoir réprime. Il dénonce les médias qui lâchent cette mobilisation, puis les médias de milliardaires, et les fake news de l'extrême droite. Il soutient aussi que l'extrême droite tue toujours, défend la justice contre l'offensive pro-Sarkozy et juge illégale l'arrestation de la flottille pour Gaza.
 
-Le propos se déplace au fil de la Period. Dans la première moitié, Blast s'attarde sur la répression, sur la justice qu'elle défend face à l'offensive pro-Sarkozy et sur l'arrestation de la flottille pour Gaza, qu'elle juge illégale. Elle soutient ensuite que Darmanin a bénéficié d'une justice bienveillante, et que le PS a sauvé le gouvernement pour ses baronnies. Dans les dernières semaines, elle y voit une offensive de l'extrême droite, portée par les milliardaires et un néolibéralisme qui s'allie au RN, face à un PS qui a trahi et affaiblit la gauche.
+À l'automne, le fil se resserre autour du RN et du budget. Blast soutient que les macronistes lui ouvrent la voie, des vice-présidences de l'Assemblée à la reconduction de Lecornu, et que Macron et les médias lui déroulent le tapis. Il lit le budget 2026 comme une alliance néolibérale entre macronistes et RN. Il accuse le PS d'avoir sauvé le gouvernement pour ses baronnies, puis d'avoir trahi son électorat. Il soutient aussi que Darmanin a bénéficié d'une justice bienveillante.
 
-Blast reçoit aussi des voix du terrain et des invités, parmi lesquels Zucman, Abdallah et Hamouri, sur Gaza, le syndicalisme, la taxe des ultra-riches et la guerre. Elle soutient que le monde change par le bas.
+Les dernières semaines élargissent le propos : pour Blast, le monde change par le bas, l'extrême droite impose son agenda avec l'appui de l'empire Bolloré et la Ve République est un régime autoritaire à renverser. Tout au long de la Period, la Source reçoit des invités sur Gaza, le syndicalisme, la taxe des ultra-riches, la police et l'extrême droite. Francesca Albanese, qui tient Gaza pour un génocide colonial, est de ceux-là.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ Blast reçoit aussi des voix du terrain et des invités, parmi lesquels Zucman, 
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/2-2025-09-17/CLAUDE|2025-09-17 → 2025-10-02]] (20 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/3-2025-10-03/CLAUDE|2025-10-03 → 2025-10-16]] (16 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/4-2025-10-17/CLAUDE|2025-10-17 → 2025-10-26]] (15 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/CLAUDE|2025-10-27 → 2025-11-16]] (23 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/CLAUDE|2025-10-27 → 2025-11-07]] (14 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/CLAUDE|2025-11-08 → 2025-11-22]] (15 Digests)

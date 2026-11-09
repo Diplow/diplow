@@ -1,6 +1,6 @@
 ---
 title: "COLONIALISME, FASCISME, ÉCOCIDE : LA RÉVOLTE COMME DERNIER ESPOIR"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/5-2025-11-08
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/6-2025-11-08/1-2025-11-08
 owner: diplo
 preview: >-
   Blast soutient que le pouvoir compte sur la résignation, mais que les

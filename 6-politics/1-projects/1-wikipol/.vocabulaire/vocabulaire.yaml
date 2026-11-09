@@ -193,6 +193,7 @@ kinds:
       dirigeant-culturel: {définition: "Dirige un lieu ou une institution culturelle.", statut: proposé, introduit_par: boniface/2R2oILPTndY.md}
       dictateur: {définition: "Exerce seul un pouvoir autoritaire sur un État, sans contrôle ni alternance.", statut: proposé, introduit_par: blast/bd92aMK4PPg.md}
       chef-autochtone: {définition: "Dirige un peuple ou une nation autochtone et parle en son nom.", statut: proposé, introduit_par: blast/uIAMr-d1gAw.md}
+      architecte: {définition: "Conçoit des bâtiments et des espaces, ici pour mener des recherches d'analyse spatiale.", statut: proposé, introduit_par: blast/h-e4d9Ervg0.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
