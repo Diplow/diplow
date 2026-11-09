@@ -1,23 +1,24 @@
 ---
-title: "2025-04-09 → 2026-10-14"
+title: "2025-04-09 → 2025-04-15"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09
 owner: diplo
 preview: >-
-  Boniface reçoit Arnaud Dubien, pour qui Poutine vise une pax russica en
-  Ukraine, et Sylvie Bermann, pour qui le sommet Trump-Xi consacre la parité
-  sino-américaine ; il chronique aussi le livre d'Alexander Stubb sur un monde
-  en trois blocs.
+  Boniface juge bonne nouvelle les négociations américano-iraniennes, voit la
+  France impuissante sur la Palestine tant qu'elle ne presse pas Israël, et
+  dit l'annexion du Groenland contraire au droit international. Il reçoit
+  Dubien, Védrine et Aubert sur la Russie, le monde et le Soudan.
 ---
-# 2025-04-09 → 2026-10-14
+# 2025-04-09 → 2025-04-15
 
-Sur cette Period, Pascal Boniface regarde l'ordre mondial à travers les rapports entre grandes puissances : la Russie face à Trump, la Chine face aux États-Unis, et l'Occident face au Sud global. Deux de ses trois vidéos sont des entretiens où il laisse la parole à des spécialistes, la troisième est une chronique d'ouvrage.
+Cette semaine, Boniface applique sa lecture à trois dossiers liés à Trump et au Proche-Orient. Il juge l'ouverture de négociations américano-iraniennes bonne nouvelle, parce qu'elles pourraient éviter à la fois un Iran nucléaire et une guerre pour l'en empêcher. Il note que Trump veut un accord à son nom, que les Européens sont écartés, et que la prudence reste de mise. Sur la Palestine, il juge la reconnaissance envisagée par Macron symbolique mais importante. Il salue le retour de la France au Proche-Orient, mais la voit impuissante tant qu'elle ne fait pas pression sur Israël, et estime qu'elle doit reconnaître sans attendre. Sur le Groenland, il explique ce qui attire les grandes puissances : la position arctique, les routes maritimes ouvertes par le réchauffement, les minerais critiques. Pour lui, l'annexion voulue par Trump violerait le droit international, et les Groenlandais n'en veulent pas.
 
-Avec [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/1-face-a-trump-que-veut-poutine|Arnaud Dubien]], installé à Moscou, il examine ce que veut Poutine. Pour son invité, le président russe ne cherche pas un simple cessez-le-feu mais un accord d'ensemble, une pax russica en Ukraine. Dubien le dit en position de force sur le terrain, la Russie ayant les moyens financiers de tenir. Avec [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/3-la-chine-a-t-elle-plie|Sylvie Bermann]], ancienne ambassadrice à Pékin, il se tourne vers la Chine. Pour elle, le sommet Trump-Xi consacre la parité entre les deux puissances sans que Pékin ait gagné, et la Chine joue la patience sur Taïwan. Elle ne la juge pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
-
-Dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/2-j-ai-lu-le-triangle-du|sa chronique]] du livre du président finlandais Alexander Stubb, Boniface restitue la thèse d'un monde divisé en trois blocs : Occident, Orient et Sud global. L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Le reste de la Period donne la parole à des invités, dont les thèses leur restent. Depuis Moscou, Arnaud Dubien juge que Poutine ne veut pas d'un simple cessez-le-feu mais d'un accord d'ensemble, une pax russica en Ukraine, qu'il se croit en position de force et que la Russie a les moyens financiers de tenir. Boniface reçoit aussi Hubert Védrine pour son Dictionnaire amoureux de la géopolitique : selon l'auteur, l'Occident n'existe plus, Trump durera au-delà de Trump, et seul le réalisme, pas le droit international, éclaire ce monde. Enfin, Bruno Aubert décrit la guerre au Soudan comme une lutte pour le pouvoir entre deux héritiers du régime Béchir, entretenue par des soutiens régionaux, l'or des Émirats en tête, face à une ONU sans moyens.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/1-face-a-trump-que-veut-poutine|Face à Trump, que veut Poutine ? Avec Arnaud Dubien - Entretiens géopo]] (2025-04-09)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/2-reconnaissance-de-la-palestine-les-hesitations|Reconnaissance de la Palestine, les hésitations de Macron]] (2025-04-10)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/3-j-ai-lu-dictionnaire-amoureux-de|J'ai lu... Dictionnaire amoureux de la géopolitique par Hubert Védrine]] (2025-04-11)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/4-accord-nucleaire-trump-iran|Accord nucléaire Trump - Iran ?]] (2025-04-14)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/5-soudan-une-guerre-sans-fin-les|Soudan : une guerre sans fin ? - Les mardis de l'IRIS]] (2025-04-15)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/1-2025-04-09/6-le-groenland-nouvel-eldorado-expliquez-moi|Le Groenland : nouvel Eldorado ? - Expliquez-moi...]] (2025-04-15)
