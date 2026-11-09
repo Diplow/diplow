@@ -3,18 +3,18 @@ title: "2024-11-21 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21
 owner: diplo
 preview: >-
-  Boniface lit l'actualité par le deux poids deux mesures occidental, voit
-  dans les coups de force de Trump une attaque contre le droit international,
-  juge une paix en Ukraine préférable à une guerre sans issue et appelle
-  l'Europe à l'autonomie stratégique.
+  Boniface lit l'actualité par le deux poids, deux mesures occidental, juge
+  une paix en Ukraine, même injuste, préférable à une guerre sans fin, décrit
+  les coups de force de Trump comme une attaque contre le droit international
+  et appelle l'Europe à l'autonomie stratégique.
 ---
 # 2024-11-21 → 2026-10-30
 
-Sur ces deux années, Boniface applique à l'actualité une même grille : le deux poids deux mesures occidental, de Gaza au Liban. Il estime que le mot génocide s'impose à propos de Gaza, juge le plan américain pour le territoire être un nettoyage ethnique, et tient la France pour impuissante face à Israël. Il dénonce aussi un néomaccarthysme qui étouffe le débat.
+Sur l'ensemble de la Chronicle, Boniface applique les mêmes grilles à l'actualité. La principale est le deux poids, deux mesures occidental, qu'il oppose d'abord à Gaza et au Liban, où il estime que le mot génocide s'impose. Il voit ensuite dans le plan pour Gaza un nettoyage ethnique, et la grille revient dans les derniers mois. Il lit aussi la chute d'Assad, puis la Syrie post-Assad, comme une affaire de soutiens perdus, de risque de guerre civile et de puissances régionales.
 
-Le retour de Trump devient le deuxième fil. Boniface le lit d'abord comme un rapport de force imposé au monde, puis comme un protectionnisme qui avance par la peur. Il y voit ensuite une attaque contre le droit international, et dans le lâchage de l'Ukraine la fin de l'OTAN et du monde d'après 1945. Il décrit ces coups de force comme une série sans allié ni résultat. Il en tire un appel constant à l'Europe : répondre d'une seule voix, viser l'autonomie stratégique et se réarmer sans achats américains.
+Sur l'Ukraine, sa position tient dès la fin 2024. Une paix, même injuste, vaut mieux qu'une guerre sans issue, et il finit par la lire comme une paix aux conditions de la Russie. Avec le retour de Trump, il décrit une série de coups de force sans allié ni résultat : un rapport de force imposé au monde, un protectionnisme qui avance par la peur, une attaque contre le droit international. Le lâchage de l'Ukraine marque pour lui la fin de l'OTAN et du monde d'après 1945. Il appelle donc l'Europe à répondre d'une seule voix, à l'autonomie stratégique et au réarmement sans achats américains. Il dénonce aussi un néomaccarthysme qui étouffe le débat.
 
-Sur l'Ukraine, il juge une paix, même injuste, préférable à une guerre sans fin, et tient la guerre pour sans issue militaire. Il voit Assad tomber faute de soutiens, puis lit la Syrie post-Assad comme un risque de guerre civile et une affaire de puissances régionales. Il lit l'OCS comme un multi-alignement. Dans la dernière période, il reçoit des invités sur la Russie, la Chine, les Kurdes et le Japon.
+Au fil des mois, la chaîne s'élargit. Aux réactions à l'actualité s'ajoutent un multi-alignement des puissances comme grille de lecture, de nombreux invités et des chroniques de livres, surtout dans la dernière période.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Sur l'Ukraine, il juge une paix, même injuste, préférable à une guerre sans 
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/2-2024-12-26/CLAUDE|2024-12-26 → 2025-01-31]] (19 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/3-2025-02-05/CLAUDE|2025-02-05 → 2025-03-06]] (18 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/CLAUDE|2025-03-07 → 2025-04-07]] (18 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/CLAUDE|2025-04-09 → 2026-10-30]] (23 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/5-2025-04-09/CLAUDE|2025-04-09 → 2026-10-30]] (29 Digests)
