@@ -1,6 +1,6 @@
 ---
 title: "2026-10-15 → 2026-10-19"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/6-2025-05-16/2-2026-10-15
+parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/6-2025-05-16/3-2026-10-15
 owner: diplo
 preview: >-
   Boniface soutient qu'un départ de Netanyahou ne changerait presque rien pour
@@ -16,6 +16,6 @@ Entre les deux, Boniface consacre un « J'ai lu » à la question kurde en recev
 
 ## Contenu
 
-1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/6-2025-05-16/2-2026-10-15/1-j-ai-lu-comprendre-la-question|J'ai lu... « Comprendre la question kurde » de Didier Billion]] (2026-10-15)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/6-2025-05-16/2-2026-10-15/2-elections-israel-rien-a-signaler-pour|Élections Israël : rien à signaler pour les Palestiniens]] (2026-10-16)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/6-2025-05-16/2-2026-10-15/3-un-maire-francais-agresse-en-palestine|Un maire français agressé en Palestine]] (2026-10-19)
+1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/6-2025-05-16/3-2026-10-15/1-j-ai-lu-comprendre-la-question|J'ai lu... « Comprendre la question kurde » de Didier Billion]] (2026-10-15)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/6-2025-05-16/3-2026-10-15/2-elections-israel-rien-a-signaler-pour|Élections Israël : rien à signaler pour les Palestiniens]] (2026-10-16)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/6-2025-05-16/3-2026-10-15/3-un-maire-francais-agresse-en-palestine|Un maire français agressé en Palestine]] (2026-10-19)
