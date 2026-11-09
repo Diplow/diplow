@@ -1,0 +1,43 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_997431eb76be87 283
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/4-2025-12-22/CLAUDE.md
+  s_70e2b8820e4c39::t_7aa370ad2a2dcd 6-9,13,15-17
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/5-2025-12-26/1-portrait-d-un-facho-pendant-la.md
+  s_70e2b8820e4c39::t_bebfa888f22b1f 1-81
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/5-2025-12-26/2-les-mauvais-jours-finiront.md
+  s_70e2b8820e4c39::t_824618fd6c8ad7 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/5-2025-12-26/3-mouvements-sociaux-comment-les-medias-cassent.md
+  s_70e2b8820e4c39::t_73479d1d5acde3 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/5-2025-12-26/4-comment-mieux-proteger-les-enfants.md
+  s_70e2b8820e4c39::t_0d227af5821a0d 1-79
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/5-2025-12-26/5-l-etat-contre-les-associations-un.md
+  s_70e2b8820e4c39::t_7e9a5ad303a292 1-98
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/5-2025-12-26/6-budget-militaire-en-hausse-le-capitalisme.md
+  s_70e2b8820e4c39::t_6e4ba8d1d53e63 1-75
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/5-2025-12-26/CLAUDE.md
+  s_70e2b8820e4c39::t_bfba3aca3798c1 1-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/CLAUDE.md
+  s_70e2b8820e4c39::t_8b4c13f5cc5bc1 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE.md
+  s_70e2b8820e4c39::t_cd426fffb61124 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_70e2b8820e4c39::t_e63af77df565b2 2,7-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_858a306e79c76d 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "53d6b971585317b184a96fe8bd074b0bb2bd52ce",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
