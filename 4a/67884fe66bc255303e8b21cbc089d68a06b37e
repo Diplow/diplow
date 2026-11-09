@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/3-2025-12-15/5-pesticides-les-lobbies-obtiennent-votre-empoisonnement.md
+  s_dfbc5f7563db10::t_7b94edc2070adf 1-81
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/3-2025-12-15/6-contre-l-audiovisuel-public-bollore-lache.md
+  s_dfbc5f7563db10::t_df8f2699d3a568 1-106
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/3-2025-12-15/CLAUDE.md
+  s_dfbc5f7563db10::t_71ca6daba89f65 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/4-2025-12-22/1-comment-la-france-est-devenue-un.md
+  s_dfbc5f7563db10::t_e4f98150b4a418 1-85
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/4-2025-12-22/2-pedocriminalite-a-l-ecole-le-silence.md
+  s_dfbc5f7563db10::t_5a1b70252dd087 1-72
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/4-2025-12-22/3-avoir-une-voiture-est-ce-forcement.md
+  s_dfbc5f7563db10::t_0eabe6d41306e5 1-83
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/4-2025-12-22/4-surrealisme-la-revolution-totale-qui-a.md
+  s_dfbc5f7563db10::t_7a3228db6afd4e 1-92
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/4-2025-12-22/CLAUDE.md
+  s_dfbc5f7563db10::t_fb28a92bbf6f73 1-22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/CLAUDE.md
+  s_dfbc5f7563db10::t_c87b948d78ca2c 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE.md
+  s_dfbc5f7563db10::t_b5c2e890dc3e82 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_dfbc5f7563db10::t_bb3fa45093a477 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_dfbc5f7563db10::t_38e7fc456ada64 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4a67884fe66bc255303e8b21cbc089d68a06b37e",
+  "prompts": {},
+  "sessions": {
+    "s_dfbc5f7563db10": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a30c07d129b5879f1",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
