@@ -1,0 +1,55 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_653a1f32397fe8 195
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/3-2025-11-03/CLAUDE.md
+  s_5d93821d9575eb::t_a9d9fc4c749272 2,6-9,11,13,15-17
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/4-2025-11-05/1-pourquoi-tout-le-monde-s-en.md
+  s_5d93821d9575eb::t_65daeccb622de4 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/4-2025-11-05/2-algerie-de-l-oas-a-lecornu.md
+  s_5d93821d9575eb::t_ac66de06130101 1-88
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/4-2025-11-05/3-mafia-albanie-le-narco-etat-prefere.md
+  s_5d93821d9575eb::t_15d47aec238813 1-84
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/4-2025-11-05/4-macronie-et-rn-ces-ogres-qui.md
+  s_5d93821d9575eb::t_5792eb99c159cc 1-92
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/4-2025-11-05/CLAUDE.md
+  s_5d93821d9575eb::t_495f7e222b312e 1-22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/5-2025-11-08/1-colonialisme-fascisme-ecocide-la-revolte-comme.md
+  s_5d93821d9575eb::t_1e9d7f9ec69c6b 1-89
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/5-2025-11-08/2-grand-remplacement-histoire-d-une-theorie.md
+  s_5d93821d9575eb::t_229a64dfce1cbc 1-81
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/5-2025-11-08/3-arthur-nesnidal-les-confessions-d-un.md
+  s_5d93821d9575eb::t_e34279937b3723 1-74
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/5-2025-11-08/CLAUDE.md
+  s_5d93821d9575eb::t_0b417b6133a33a 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/5-2025-10-27/CLAUDE.md
+  s_5d93821d9575eb::t_ac62b61bd69da5 2,6,8-10,12,14,16,18,24-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE.md
+  s_5d93821d9575eb::t_d7be6f25893f8f 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_5d93821d9575eb::t_bf1d62ec5393b6 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_5d93821d9575eb::t_42b78faad686e6 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "19648d1946de4e488da489f1c4f7cc6fa5bacf01",
+  "prompts": {},
+  "sessions": {
+    "s_5d93821d9575eb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a28475ffc4d98286e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
