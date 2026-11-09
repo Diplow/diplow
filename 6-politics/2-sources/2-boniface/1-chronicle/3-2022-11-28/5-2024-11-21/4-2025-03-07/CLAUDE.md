@@ -1,25 +1,25 @@
 ---
-title: "2025-03-07 → 2026-10-30"
+title: "2025-03-07 → 2025-04-07"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07
 owner: diplo
 preview: >-
-  Boniface lit l'actualité comme un affaiblissement des puissances établies,
-  plaide pour une paix en Ukraine et l'autonomie stratégique de l'Europe, voit
-  dans l'OCS un multi-alignement et juge qu'un départ de Netanyahou ne
-  changerait presque rien pour les Palestiniens.
+  Boniface lit la Syrie post-Assad comme un risque de guerre civile et une
+  affaire de puissances régionales, juge une paix injuste en Ukraine
+  préférable à une guerre sans fin, appelle l'Europe à l'autonomie stratégique
+  et décrit les coups de force de Trump comme une série sans allié ni
+  résultat.
 ---
-# 2025-03-07 → 2026-10-30
+# 2025-03-07 → 2025-04-07
 
-Sur toute la Period, Pascal Boniface applique une même grille aux événements : les puissances établies s'affaiblissent et le monde se multipolarise. Pour lui, la chute d'Assad laisse la Russie et l'Iran affaiblis, tandis que la Syrie post-Assad risque de retomber dans la guerre civile. Les coups de force de Trump n'apportent ni allié ni résultat. À l'inverse, il présente l'Indonésie comme une puissance émergente incontournable et l'Arabie saoudite comme un acteur global. Il estime enfin que l'OCS n'est pas une OTAN asiatique, mais le signe d'un multi-alignement.
+Pendant ces quatre semaines, Boniface applique sa grille à l'actualité internationale. En Ukraine, il juge qu'une paix injuste vaut mieux qu'une guerre sans fin, et il en tire un appel à l'autonomie stratégique de l'Europe. Sur la Syrie, il craint d'abord que le pays d'après Assad retombe dans la guerre civile, puis y voit la montée des puissances régionales. Il présente aussi l'Indonésie comme une puissance émergente incontournable et voit dans l'Arabie saoudite un acteur global.
 
-Sur l'Ukraine, il juge qu'une paix injuste vaut mieux qu'une guerre sans fin, et il appelle l'Europe à l'autonomie stratégique. Sur le conflit israélo-palestinien, il soutient qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens. Il reproche aussi à la France de se contenter de protestations face à l'impunité des colons.
+Donald Trump revient d'un bout à l'autre de la Period. Boniface lit ses coups de force comme une série sans allié ni résultat. Il soutient que ses droits de douane se heurtent à une révolte intérieure et internationale. Il estime que Netanyahou, adossé à Trump et à Orbán, se croit à l'abri de toute sanction.
 
-À côté de ses analyses, Boniface reçoit de nombreux invités, dont Meriem Laribi, Niagalé Bagayoko, Edwy Plenel, Thierry de Montbrial, Sylvie Bermann et Didier Billion. Ils traitent de Gaza, de l'Afrique, du droit international, de la parité États-Unis–Chine ou des Kurdes. Leurs thèses restent les leurs. Il chronique aussi le livre de Stubb et juge passionnant un livre sur le lobby pro-israélien.
+Boniface reçoit plusieurs invités, qui gardent leurs propres thèses : Meriem Laribi, Niagalé Bagayoko et Edwy Plenel sur Gaza, l'Afrique et le droit international, puis Montbrial et Chieng. Marie-Cécile Naves parle de la démocratie américaine menacée, Olivier Routeau du démantèlement de l'USAID. Boniface présente Sophie Bessis, dénonce l'éviction de l'Arabie saoudite à Nantes et chronique le livre de Rial sur le climat.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/1-2025-03-07/CLAUDE|2025-03-07 → 2025-03-14]] (5 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/2-2025-03-17/CLAUDE|2025-03-17 → 2025-03-26]] (6 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/3-2025-03-27/CLAUDE|2025-03-27 → 2026-10-14]] (4 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/4-2026-10-15/CLAUDE|2026-10-15 → 2026-10-19]] (3 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/5-2026-10-21/CLAUDE|2026-10-21 → 2026-10-30]] (5 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/3-2025-03-27/CLAUDE|2025-03-27 → 2025-04-02]] (4 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/5-2024-11-21/4-2025-03-07/4-2025-04-03/CLAUDE|2025-04-03 → 2025-04-07]] (3 Digests)
