@@ -1,22 +1,24 @@
 ---
-title: "2025-07-25 → 2026-10-14"
+title: "2025-07-25 → 2025-08-04"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/3-2025-07-25
 owner: diplo
 preview: >-
-  Boniface juge la reconnaissance de la Palestine par Macron tardive mais
-  utile et lit l'accord commercial UE-États-Unis comme une soumission de
-  l'Europe à Trump. Il chronique Stubb sur les trois blocs et reçoit Sylvie
-  Bermann sur la parité États-Unis-Chine.
+  Boniface lit la reconnaissance de la Palestine comme un tournant tardif, qui
+  ne vaudra que si la France agit : seule la menace de sanctions fera bouger
+  Netanyahou. Il voit dans l'accord UE-États-Unis une soumission à Trump et,
+  en Afrique francophone, une crispation autoritaire passagère.
 ---
-# 2025-07-25 → 2026-10-14
+# 2025-07-25 → 2025-08-04
 
-Fin juillet 2025, Boniface applique la même question à deux décisions de dirigeants occidentaux : qui cède, et qui agit ? Il soutient que la reconnaissance de la Palestine annoncée par Macron est tardive et limitée mais non vaine, qu'elle répond à un tournant de l'opinion face à la famine à Gaza, et qu'elle ne vaudra que si la France agit pour qu'un État palestinien puisse encore exister. Sur le commerce, il lit l'accord UE-États-Unis comme une soumission plutôt que comme l'évitement d'une guerre commerciale : von der Leyen est allée chez Trump, et les Européens acceptent une taxation unilatérale et des achats massifs, alors que la Chine et le Brésil ont montré qu'on pouvait résister.
+Le fil de la Period est Gaza et la reconnaissance de la Palestine. Boniface soutient que le revirement de Macron, tardif et limité mais non vain, répond à un tournant de l'opinion face à la famine à Gaza. La vague de reconnaissances (France, Canada, Royaume-Uni…) fait bouger les lignes et met fin au droit de veto d'Israël sur les diplomaties occidentales. Mais elle arrive tard face à la réalité du terrain, et elle ne changera rien sans suite. Boniface en tire la même conclusion de vidéo en vidéo : Netanyahou ne cédera qu'à la menace de sanctions concrètes, et la France peut en prendre l'initiative comme elle l'a fait pour la reconnaissance ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/3-2025-07-25/6-seule-la-menace-de-sanctions-peut|Seule la menace de sanctions peut faire bouger Netanyahou]]). Le message de Zaho de Sagazan, d'une clarté rare dans le showbiz, lui sert à montrer une opinion bouleversée alors que politiques et médias bougent à peine, et un Macron qui doit passer des mots aux actes.
 
-Les deux Digests d'octobre 2026 déplacent le regard vers l'ordre mondial. Boniface y chronique Le Triangle du pouvoir d'Alexander Stubb, pour qui le monde se divise en trois blocs (Occident, Orient, Sud global). Selon Stubb, l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre. Avec Sylvie Bermann, ancienne ambassadrice à Pékin, l'angle est celui de la Chine. Pour elle, le sommet Trump-Xi consacre la parité entre les deux puissances sans que Pékin ait gagné ; la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Deux autres sujets s'écartent de ce fil. Sur le commerce, Boniface juge que l'accord UE-États-Unis n'évite pas la guerre commerciale mais acte une soumission : von der Leyen est allée chez Trump, les Européens acceptent une taxation unilatérale et des achats massifs, alors que la Chine et le Brésil ont montré qu'on pouvait résister ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/3-2025-07-25/2-commerce-l-europe-se-soumet-a|Commerce : L’Europe se soumet à Trump]]). Sur l'Afrique francophone, il décrit un recul démocratique fait de présidents âgés qui s'accrochent, de successions héréditaires et de régimes militaires. Il y voit une phase de crispation : la jeunesse aspire à la démocratie, et le Sénégal fait exception.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/3-2025-07-25/1-macron-pourquoi-ce-revirement-sur-la|Macron : pourquoi ce revirement sur la Palestine ?]] (2025-07-25)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/3-2025-07-25/2-commerce-l-europe-se-soumet-a|Commerce : L’Europe se soumet à Trump]] (2025-07-28)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/3-2025-07-25/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/3-2025-07-25/4-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/3-2025-07-25/3-zaho-de-sagazan-interpelle-vigoureusement-macron|Zaho de Sagazan interpelle vigoureusement Macron]] (2025-07-29)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/3-2025-07-25/4-crise-de-la-democratie-en-afrique|Crise de la démocratie en Afrique francophone]] (2025-07-31)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/3-2025-07-25/5-reconnaissance-de-la-palestine-les-lignes|Reconnaissance de la Palestine : les lignes bougent]] (2025-08-01)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/3-2025-07-25/6-seule-la-menace-de-sanctions-peut|Seule la menace de sanctions peut faire bouger Netanyahou]] (2025-08-04)
