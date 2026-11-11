@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit ces trois ans comme une dérive : une macronie qui sert les
-  puissants et fait payer les précaires, un RN banalisé jusqu'à la
-  dissolution, puis l'extrême droite érigée en menace centrale, face à un PS
-  accusé de trahir la gauche.
+  Blast lit trois années comme une dérive : une macronie au service des
+  puissants, un RN banalisé, une dissolution qui ouvre la voie à l'extrême
+  droite, un PS qu'elle accuse de trahison, l'empire Bolloré. Elle défend la
+  justice, le collectif et le rapport de force.
 ---
 # Chronicle
 
-Pour Blast, le pouvoir macroniste gouverne pour les puissants et fait payer les précaires. Dans cette lecture, le RN est banalisé et érigé en seul opposant, et la loi immigration aligne la majorité sur l'extrême droite. La dissolution vient clore cette première phase : Blast la lit comme un calcul de Macron.
+Sur toute la Chronicle, Blast soutient que le pouvoir macroniste sert les puissants et fait payer les précaires. Dans [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]], elle voit un RN banalisé et érigé en seul opposant, une loi immigration alignée sur l'extrême droite, puis une dissolution qu'elle lit comme un calcul de Macron.
 
-La deuxième phase fait de la dissolution la voie ouverte à l'extrême droite. Macron déroule le tapis au RN et impose Barnier avec l'aval du parti d'extrême droite. Blast dénonce aussi les médias aux mains de milliardaires et un PS complice du budget Bayrou.
+Le deuxième temps, [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]], fait de la dissolution la voie ouverte à l'extrême droite : Macron déroule le tapis au RN et impose Barnier avec son aval. Blast y dénonce aussi les médias de milliardaires et un PS complice du budget Bayrou.
 
-Dans la dernière phase, l'extrême droite devient la menace centrale, de Trump et Musk au RN et à l'empire Bolloré. Blast décrit un pouvoir qui protège les puissants et réprime, accuse le PS de trahir la gauche et défend le collectif et le rapport de force comme réponse.
+Dans [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2026-01-27]], le constat se durcit : avancée de l'extrême droite, dérive autoritaire d'un pouvoir qui protège les puissants et impose l'austérité. Blast y dénonce la trahison du PS et l'empire Bolloré, et défend la justice, le collectif et le rapport de force.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] (276 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2026-01-21]] (357 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2026-01-27]] (363 Digests)

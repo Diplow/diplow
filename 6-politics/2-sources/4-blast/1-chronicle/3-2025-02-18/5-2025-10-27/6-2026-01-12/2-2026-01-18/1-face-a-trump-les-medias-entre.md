@@ -1,6 +1,6 @@
 ---
 title: "🦏 FACE À TRUMP : LES MÉDIAS ENTRE ADMIRATION, SIDÉRATION ET EMBARRAS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/6-2026-01-18
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/2-2026-01-18
 owner: diplo
 preview: >-
   Blast soutient que les médias français ont adopté le récit de Trump sur la

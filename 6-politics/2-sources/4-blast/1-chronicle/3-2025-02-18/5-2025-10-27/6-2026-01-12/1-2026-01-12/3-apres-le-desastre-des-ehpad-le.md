@@ -1,6 +1,6 @@
 ---
 title: "APRÈS LE DÉSASTRE DES EHPAD, LE GROUPE ORPEA REBONDIT EN PSYCHIATRIE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/5-2026-01-12
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/1-2026-01-12
 owner: diplo
 preview: >-
   Selon l'enquête de Laurence Deur pour Blast, la psychiatrie publique est
