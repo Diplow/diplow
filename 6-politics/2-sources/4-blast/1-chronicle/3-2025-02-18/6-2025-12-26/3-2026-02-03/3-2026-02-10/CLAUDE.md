@@ -3,16 +3,16 @@ title: "2026-02-10 → 2026-02-13"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/3-2026-02-10
 owner: diplo
 preview: >-
-  Blast soutient que la gauche est divisée au profit de l'extrême droite, par
-  le classement de LFI à l'extrême gauche comme par la primaire unitaire, et
-  que la mondialisation nivelle par le bas ; une intervenante lit l'affaire
-  Epstein comme une domination masculine.
+  Blast soutient que Nuñez divise la gauche en classant LFI à l'extrême
+  gauche, que la primaire unitaire n'unit personne et que la mondialisation
+  tire les travailleurs vers le bas ; une intervenante lit l'affaire Epstein
+  comme une violence de domination masculine.
 ---
 # 2026-02-10 → 2026-02-13
 
-Le fil principal de la Period est la désunion de la gauche, que Blast lit comme un piège qui profite à l'extrême droite. En classant LFI à l'extrême gauche, Laurent Nuñez divise la gauche pour favoriser l'extrême droite, par une décision arbitraire que la presse et plusieurs responsables de gauche relaient, au profit de Bardella. Le lendemain, Blast soutient que la primaire unitaire, vendue comme remède à la désunion, n'unit personne : des partis s'en détournent, les programmes restent flous et le PS joue double jeu. Elle prolonge le piège présidentiel qui fait perdre la gauche.
+Le fil de la Period est la désunion de la gauche, que Blast attribue à des décisions et à des dispositifs qui la servent mal. En classant LFI à l'extrême gauche, Laurent Nuñez divise la gauche pour favoriser l'extrême droite, au profit de Bardella : [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/3-2026-02-10/3-diviser-la-gauche-pour-favoriser-l|DIVISER LA GAUCHE POUR FAVORISER L'EXTRÊME DROITE]]. Deux jours plus tard, Blast juge que la primaire unitaire, vendue comme remède, n'unit personne, entre partis qui s'en détournent, programmes flous et PS qui joue double jeu. Elle prolonge selon lui le piège présidentiel qui fait perdre la gauche.
 
-Deux autres sujets s'écartent de ce fil. Sur le ton de la satire, Blast soutient que la réussite des multinationales vient de la mondialisation et non du génie de leurs fondateurs : les États aidant, elle met en concurrence des travailleurs vulnérables, et il faut briser ce nivellement par le bas. Blast donne aussi la parole à une intervenante qui lit l'affaire Epstein comme une violence sexuelle organisée, un acte de domination masculine commis par des hommes de pouvoir contre des victimes démunies et méprisées. Pour elle, c'est un fait social à penser, pas un complot mondial.
+Le reste de la Period élargit le regard aux rapports de pouvoir. Sur le ton de la satire, Blast soutient que la réussite des multinationales vient de la mondialisation plus que du génie de leurs fondateurs : les États aidant, elle met en concurrence des travailleurs vulnérables, et il faut briser ce nivellement par le bas. Blast reçoit aussi une intervenante qui, dans [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/3-2026-02-10/1-affaire-epstein-l-abominable-rencontre-entre|AFFAIRE EPSTEIN : L'ABOMINABLE RENCONTRE ENTRE CAPITALISME ET PATRIARCAT]], lit l'affaire comme une violence sexuelle organisée, un acte de domination masculine commis par des hommes de pouvoir contre des victimes démunies, et non comme un complot mondial.
 
 ## Contenu
 
