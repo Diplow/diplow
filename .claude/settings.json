@@ -1,7 +1,32 @@
 {
+  "env": {
+    "SCW_PROFILE": "wikipol"
+  },
   "enabledMcpjsonServers": [
-    "hodor"
+    "hodor",
+    "wikipol"
   ],
+  "disableClaudeAiConnectors": true,
+  "deniedMcpServers": [
+    {
+      "serverName": "Neon"
+    },
+    {
+      "serverName": "hexframe"
+    },
+    {
+      "serverName": "computer-use"
+    },
+    {
+      "serverName": "Claude_Browser"
+    }
+  ],
+  "disableBundledSkills": true,
+  "permissions": {
+    "deny": [
+      "Skill"
+    ]
+  },
   "skillOverrides": {
     "anthropic-skills:built-in-browser": "off",
     "anthropic-skills:chrome-browser": "off",
@@ -31,6 +56,7 @@
     "grill-with-docs": "off",
     "grilling": "off",
     "handoff": "off",
+    "impeccable": "off",
     "implement": "off",
     "improve-codebase-architecture": "off",
     "loop-me": "off",
@@ -39,6 +65,7 @@
     "research": "off",
     "resolving-merge-conflicts": "off",
     "scaffold-exercises": "off",
+    "security-audit": "off",
     "setup-pre-commit": "off",
     "setup-ts-deep-modules": "off",
     "tdd": "off",
