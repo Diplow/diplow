@@ -1,6 +1,6 @@
 ---
 title: "PORTRAIT D'UN FACHO : PENDANT LA GUERRE D'INDOCHINE - ÉPISODE 2"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/5-2025-12-26
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/1-2025-12-26
 owner: diplo
 preview: >-
   Blast soutient que la guerre d'Indochine, perdue par l'orgueil de

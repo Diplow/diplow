@@ -1,6 +1,6 @@
 ---
 title: "BUDGET MILITAIRE EN HAUSSE : LE CAPITALISME S’EN SORT PAR LA GUERRE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/5-2025-12-26
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/2-2025-12-30
 owner: diplo
 preview: >-
   Un économiste interrogé par Blast soutient que le doublement du budget

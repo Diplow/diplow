@@ -1,24 +1,25 @@
 ---
-title: "2025-10-27 → 2025-12-31"
+title: "2025-10-27 → 2026-01-07"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27
 owner: diplo
 preview: >-
-  Blast lit l'actualité par les rapports de pouvoir : le PS aurait trahi son
-  électorat, le budget 2026 unirait macronistes et RN, l'empire Bolloré
-  imposerait l'agenda de l'extrême droite, et un pouvoir sourd aux urnes
-  s'appuierait sur la police.
+  Blast lit la période comme une offensive des pouvoirs : PS accusé d'avoir
+  trahi son électorat, budget 2026 vu comme une alliance néolibérale, empire
+  Bolloré qui impose l'agenda de l'extrême droite, répression policière, puis
+  enlèvement de Maduro lu comme une opération impériale.
 ---
-# 2025-10-27 → 2025-12-31
+# 2025-10-27 → 2026-01-07
 
-Pendant ces deux mois, Blast déroule une grille constante : la politique se joue dans des rapports de pouvoir, et ceux qui dominent s'organisent entre eux. Il soutient que le PS a trahi son électorat, que le budget 2026 relève d'une alliance néolibérale entre macronistes et RN, et que le budget de la Sécu sert Macron. Il présente Glucksmann comme une imposture, voter Rachida Dati comme un vote pour la corruption, et la Ve République comme un régime autoritaire à renverser.
+Dès la fin octobre, Blast soutient que le PS a trahi son électorat et lit le budget 2026 comme une alliance néolibérale entre macronistes et RN. Il reçoit des auteurs, des salariés et des jeunes du 93 pour parler d'extrême droite, de pouvoir et de police. Mi-novembre, le propos s'élargit : le monde change par le bas, par la révolte, tandis que l'extrême droite impose son agenda grâce à l'empire Bolloré. Blast dénonce la Ve République comme un régime autoritaire à renverser et le grand remplacement comme un complot raciste, et lit la victoire de Mamdani comme une leçon pour la gauche.
 
-Il décrit une extrême droite qui impose son agenda grâce à l'empire Bolloré, que ce soit contre LFI ou contre l'audiovisuel public. Il y voit une presse dominante qui accompagne la radicalisation de la classe dirigeante, et il dénonce le grand remplacement comme un complot raciste. Il juge 2025 semblable à 2024, avec un pouvoir sourd aux urnes. À Bruxelles, les multinationales seraient servies.
+Fin novembre et en décembre, la critique vise les relais du pouvoir. Pour Blast, la presse dominante accompagne la radicalisation de la classe dirigeante, Glucksmann est une imposture et voter Rachida Dati, c'est voter pour la corruption. Blast dénonce l'effondrement du droit international et la minimisation des violences policières, puis l'offensive de Bolloré contre l'audiovisuel public et la campagne contre LFI. Il voit dans le budget de la Sécu un service rendu à Macron et lit la répression policière comme un héritage de 2005.
 
-Blast lit aussi la force du côté d'en bas et de la rue. Il soutient que le monde change par la révolte, tire de la victoire de Mamdani une leçon pour la gauche, et dénonce la minimisation des violences policières comme l'héritage de 2005. Il reçoit des auteurs, des salariés et des jeunes du 93 sur l'extrême droite, le pouvoir et la police. Sur la scène internationale, il dénonce l'effondrement du droit international.
+La fin de la Period tourne la même grille vers l'international et vers 2026. Blast lit l'enlèvement de Maduro comme une opération impériale, juge 2026 money time de la République, avec des médias captés, une extrême droite blanchie et un vote bafoué, et voit dans l'Indochine la matrice de la guerre subversive. Du début à la fin, il lit l'actualité par les rapports de pouvoir.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/1-2025-10-27/CLAUDE|2025-10-27 → 2025-11-07]] (14 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/2-2025-11-08/CLAUDE|2025-11-08 → 2025-11-23]] (17 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/CLAUDE|2025-11-24 → 2025-12-07]] (16 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/CLAUDE|2025-12-08 → 2025-12-31]] (24 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/CLAUDE|2025-12-08 → 2025-12-25]] (18 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/CLAUDE|2025-12-26 → 2026-01-07]] (12 Digests)

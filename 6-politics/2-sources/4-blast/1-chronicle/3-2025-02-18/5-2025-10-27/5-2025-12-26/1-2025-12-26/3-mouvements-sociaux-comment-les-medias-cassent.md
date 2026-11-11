@@ -1,6 +1,6 @@
 ---
 title: "MOUVEMENTS SOCIAUX : COMMENT LES MÉDIAS CASSENT LES GRÈVES"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/5-2025-12-26
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/1-2025-12-26
 owner: diplo
 preview: >-
   Blast et Acrimed soutiennent que les grands médias, relais du pouvoir et des
