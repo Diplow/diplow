@@ -1,6 +1,6 @@
 ---
 title: "9 CRS JUGÉS POUR VIOLENCES : RETOUR SUR L’AFFAIRE DU BURGER KING."
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/6-2026-02-20
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/2-2026-02-20
 owner: diplo
 preview: >-
   Blast revient sur le procès des neuf CRS jugés pour les violences du Burger

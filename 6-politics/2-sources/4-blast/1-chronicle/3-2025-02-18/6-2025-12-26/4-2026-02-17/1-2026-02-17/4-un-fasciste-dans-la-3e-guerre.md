@@ -1,6 +1,6 @@
 ---
 title: "UN FASCISTE DANS LA 3E GUERRE MONDIALE - ÉPISODE 5"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/5-2026-02-17
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/1-2026-02-17
 owner: diplo
 preview: >-
   Blast soutient qu'après 1974, Yves Guillou et les réseaux anticommunistes

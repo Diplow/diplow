@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit trois ans de politique française comme une dérive : une macronie
-  qui sert les puissants et fait payer les précaires, un RN banalisé jusqu'à
-  la dissolution, puis l'avancée de l'extrême droite et d'un pouvoir
-  autoritaire, à laquelle la résistance s'organise.
+  Blast lit trois ans de macronie comme une dérive au service des puissants :
+  un RN banalisé, une dissolution qui ouvre la voie à l'extrême droite, un PS
+  complice. Elle appelle à s'organiser et à résister, y compris hors des
+  institutions.
 ---
 # Chronicle
 
-D'octobre 2023 à février 2026, Blast raconte une même pente. Elle soutient que la macronie sert les puissants et fait payer les précaires, que le RN est banalisé et érigé en seul opposant, et que la loi immigration s'aligne sur l'extrême droite. La dissolution est lue comme un calcul de Macron.
+De fin 2023 à juin 2024, Blast lit l'année comme une dérive. La macronie sert les puissants et fait payer les précaires, le RN est banalisé et érigé en seul opposant, et la loi immigration s'aligne sur l'extrême droite. La dissolution est lue comme un calcul de Macron.
 
-Après la dissolution, Blast y voit la voie ouverte à l'extrême droite : Macron déroule le tapis au RN et impose Barnier avec son aval. Elle dénonce les médias de milliardaires et un PS complice du budget Bayrou. La crise ne se referme, selon elle, que par la démission de Macron.
+De l'été 2024 à février 2025, Blast voit dans la dissolution la voie ouverte à l'extrême droite : Macron déroule le tapis au RN et impose Barnier avec son aval, et la crise ne se referme que par sa démission. Blast dénonce aussi les médias de milliardaires et un PS complice du budget Bayrou.
 
-Sur la dernière année, Blast décrit l'avancée de l'extrême droite et la dérive autoritaire d'un pouvoir qui protège les puissants. Elle accuse macronistes, PS et médias captés d'y contribuer. Face à cela, elle défend la justice, le collectif et le rapport de force, et soutient que la résistance s'organise.
+Jusqu'en février 2026, le constat se durcit. L'extrême droite avance avec la complicité d'un pouvoir autoritaire, de médias patronaux et d'un PS qui trahit la gauche. Blast lit austérité et réarmement comme un même projet, et appelle à s'organiser et à résister, y compris hors des institutions.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] (276 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2026-02-22]] (392 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2026-02-26]] (398 Digests)
