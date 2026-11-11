@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Pendant dix ans, Boniface applique les mêmes grilles à l'actualité :
-  multilatéralisme contre unilatéralisme, deux poids deux mesures occidental,
-  rapports de force. Il voit un Occident affaibli face à un Sud global qui
-  monte, et plaide pour une Europe autonome et une France sans suivisme.
+  Pendant dix ans, Pascal Boniface lit l'actualité par le multilatéralisme, le
+  deux poids deux mesures occidental et l'érosion du monopole de l'Occident
+  face au Sud global. Il défend le réalisme : négocier en Ukraine, bâtir une
+  Europe autonome.
 ---
 # Chronicle
 
-De 2016 à 2026, Boniface garde les mêmes outils d'analyse. Il oppose le multilatéralisme à l'unilatéralisme, dénonce un deux poids deux mesures occidental et lit les événements par les rapports de force. Il les applique d'abord à Trump et à la scène internationale, puis à la rivalité sino-américaine, à l'échec des interventions extérieures, et au Covid-19, qu'il tient pour un révélateur.
+D'un bout à l'autre de la Chronicle, Pascal Boniface applique les mêmes grilles de lecture à l'actualité : le multilatéralisme contre l'unilatéralisme, le deux poids deux mesures occidental, et un Occident qui n'est plus suivi par le reste du monde. Ce fil constant donne à ses analyses leur cohérence. Les événements changent, la grille reste.
 
-Sa lecture de la guerre en Ukraine fait le lien entre la deuxième moitié de la Chronicle et la suite. Il y voit une impasse qui appelle une négociation, et un Occident que le reste du monde ne suit plus. Cette idée devient ensuite le fil de ses analyses sur Gaza puis sur le retour de Trump : un Occident affaibli, un Sud global qui monte.
+Sur [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]], elle s'applique à Trump et à la scène internationale. Boniface presse l'Europe d'acquérir son autonomie stratégique et lit le Covid-19 comme un révélateur. Sur [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]], la rivalité sino-américaine et l'échec des interventions extérieures passent au premier plan. La guerre en Ukraine lui apparaît comme une impasse qui appelle une négociation.
 
-La conclusion qu'il en tire reste stable. Il presse l'Europe d'acquérir son autonomie stratégique et plaide pour une France qui ne se contente pas de suivre ses alliés.
+Sur [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]], la période la plus fournie, ces thèses se durcissent en un programme réaliste. Il s'agit de négocier en Ukraine, de sanctionner Israël, de résister à Trump et de bâtir une Europe autonome. Boniface voit dans le Sud global la preuve que le monopole de l'Occident s'érode.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]] (322 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (501 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (507 Digests)

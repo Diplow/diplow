@@ -199,6 +199,7 @@ kinds:
       émissaire: {définition: "Envoyé spécial d'un chef d'État, chargé de mener des négociations en son nom.", statut: proposé, introduit_par: boniface/7WE9vd_1-jA.md}
       guide-suprême: {définition: "Plus haute autorité politique et religieuse de la République islamique d'Iran, à la date de la Publication.", statut: proposé, introduit_par: blast/Z2WqoAOlvK0.md}
       ancien-guide-suprême: {définition: "A été guide suprême de la République islamique d'Iran et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: blast/Z2WqoAOlvK0.md}
+      haut-commissaire: {définition: "Dirige un haut-commissariat rattaché au gouvernement, à la date de la Publication.", statut: proposé, introduit_par: blast/1pnnFn_3njE.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
