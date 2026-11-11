@@ -1,0 +1,49 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_eb688ed3b40ec2 288
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/3-2026-01-27/4-rn-gauche-pour-qui-votent-vraiment.md
+  s_ae6806b64a7aa1::t_c4f6a255db1e39 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/3-2026-01-27/CLAUDE.md
+  s_ae6806b64a7aa1::t_c696c014fd5952 2,7-9,11,13,15-17,24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/4-2026-01-29/1-violence-et-mensonge-l-extreme-droite.md
+  s_ae6806b64a7aa1::t_a535a7869cf260 1-92
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/4-2026-01-29/2-il-a-ete-etrangle-et-battu.md
+  s_ae6806b64a7aa1::t_08b806ded90329 1-61
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/4-2026-01-29/3-a-b-c-les-derniers-jours.md
+  s_ae6806b64a7aa1::t_40243ff89217cf 1-85
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/4-2026-01-29/4-grok-fake-news-algo-biaise-faut.md
+  s_ae6806b64a7aa1::t_40bed9531f6508 1-93
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/4-2026-01-29/CLAUDE.md
+  s_ae6806b64a7aa1::t_3b8c0ebb7e1be5 1-24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/CLAUDE.md
+  s_ae6806b64a7aa1::t_2194309a1ef5ec 2,6-10,12,14,16,18,24-25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE.md
+  s_ae6806b64a7aa1::t_9f5587377e8687 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_ae6806b64a7aa1::t_4df21f8cd1506c 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_ae6806b64a7aa1::t_5b7ecdba82bb25 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fb633896c05e24a6dea0d84d6947f6d43b235c58",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_ae6806b64a7aa1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a42d183f7080fab5e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
