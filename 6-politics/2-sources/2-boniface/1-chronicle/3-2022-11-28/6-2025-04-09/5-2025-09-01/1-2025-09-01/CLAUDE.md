@@ -1,23 +1,26 @@
 ---
-title: "2025-09-01 → 2026-10-14"
+title: "2025-09-01 → 2025-09-10"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01
 owner: diplo
 preview: >-
-  Boniface lit la recomposition du monde autour de la Chine et d'un Occident
-  affaibli par Trump. Il chronique Alexander Stubb, pour qui le Sud global
-  décidera du nouvel ordre, et reçoit Sylvie Bermann, pour qui Washington et
-  Pékin sont désormais à parité.
+  Boniface lit dans le sommet de Tianjin et dans la brutalité de Trump un
+  Occident affaibli, une Inde poussée vers Pékin et des Européens réduits à
+  demander. Il fait de Gaza l'aboutissement de trente ans d'impunité, et
+  reçoit André Chieng et Rony Brauman.
 ---
-# 2025-09-01 → 2026-10-14
+# 2025-09-01 → 2025-09-10
 
-Sur cette Period, Pascal Boniface lit l'ordre mondial comme un déplacement du centre de gravité hors de l'Occident. Dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01/1-sommet-de-tianjin-tectonique-des-plaques|Sommet de Tianjin : tectonique des plaques géopolitiques]], il soutient que le sommet de l'OCS et le défilé de Pékin montrent un monde non occidental qui coopère autour de la Chine. Dans le même temps, la brutalité de Trump affaiblit l'Occident, jette l'Inde dans les bras de Pékin et piège les Européens.
+Boniface soutient que l'ordre occidental se défait. Le sommet de l'OCS et le défilé de Pékin montrent à ses yeux un monde non occidental qui coopère autour de la Chine, pendant que la brutalité de Trump affaiblit l'Occident. Elle jette l'Inde dans les bras de Pékin et piège les Européens : Trump traite avec Poutine par-dessus l'Ukraine, et les Européens n'agissent qu'en demandeurs. Son invité André Chieng prolonge cette lecture à sa manière. Pour lui, Trump a ouvert une brèche dans l'encerclement de la Chine en humiliant l'Inde, et le monde de demain serait chinois et indien.
 
-Les deux Digests suivants, datés d'octobre 2026, prolongent cette grille par des voix qui ne sont pas la sienne. Dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]], il chronique le livre du président finlandais. Pour Stubb, le monde se divise en trois blocs : Occident, Orient et Sud global. L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Sur Gaza, Boniface soutient que la guerre est l'aboutissement de trente ans d'impunité. Oslo a été sabordé par les extrémistes des deux camps, puis l'absence de toute sanction occidentale a permis à Israël d'étendre colonisation et répression sans en payer le prix. Gaza, comme la régulation du numérique, met aussi l'Europe à l'épreuve. Invité de Boniface, Rony Brauman voit dans cette guerre une rupture : une famine organisée, environ 90 % de civils parmi les morts, une humiliation coloniale qui sème la haine. Il juge qu'Israël en sort paria et que les sanctions montent par la société.
 
-Dans [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]], il reçoit l'ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Elle voit une Chine patiente sur Taïwan et non anti-européenne, dont l'excédent commercial met toutefois l'Europe en difficulté.
+Dans un registre plus institutionnel, Boniface soutient que les think tanks géopolitiques français sont sous-financés face à leurs confrères étrangers. Leur indépendance tient selon lui à leur travail dans la durée et à des règles de déontologie, non à l'origine de leurs fonds.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01/1-sommet-de-tianjin-tectonique-des-plaques|Sommet de Tianjin : tectonique des plaques géopolitiques]] (2025-09-01)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01/2-la-geopolitique-selon-xi-jinping-avec|La géopolitique selon Xi Jinping. Avec André Chieng - Entretiens géopo]] (2025-09-03)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01/3-la-difficile-equation-des-think-tanks|La difficile équation des think tanks géopolitiques français]] (2025-09-04)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01/4-remise-en-question-de-l-ordre|🌐 Remise en question de l'ordre mondial, de Washington à Pékin🎙️ avec Sur le Toit du Monde]] (2025-09-05)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01/5-d-oslo-a-gaza-what-went|D'Oslo à Gaza : What Went Wrong?]] (2025-09-08)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/1-2025-09-01/6-gaza-l-horreur-jusqu-ou-avec|Gaza : l'horreur jusqu'où ? Avec Rony Brauman - Entretiens géopo]] (2025-09-10)

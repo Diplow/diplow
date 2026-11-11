@@ -3,18 +3,17 @@ title: "2025-04-09 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09
 owner: diplo
 preview: >-
-  Boniface lit Gaza, l'Ukraine et l'Iran à travers le deux poids deux mesures
-  et la loi du plus fort, presse la France d'agir contre Netanyahou, voit en
-  Trump une révolution stratégique face à laquelle l'Europe doit résister, et
-  un monde qui se recompose autour de la Chine.
+  Boniface lit Gaza, l'Ukraine et l'ordre mondial par le deux poids deux
+  mesures et le déclin de l'hégémonie occidentale : Israël jouit d'une
+  impunité, Trump bouscule alliés et Européens, le Sud global se diversifie.
 ---
 # 2025-04-09 → 2026-10-30
 
-Le fil principal est Gaza, que Boniface lit comme un deux poids deux mesures. Il dénonce la hasbara et le défaut de pression sur Netanyahou. Il juge que l'impunité d'Israël rend le terme de génocide difficile à écarter. Il reproche à la France un droit de veto laissé à Netanyahou, puis de se contenter de protestations face à l'impunité des colons. Il presse Macron de passer aux actes. Il tient aussi l'islamophobie pour une réalité en France, et défend la liberté d'expression face à l'interdiction de TikTok.
+Le fil qui traverse la Period est la dénonciation d'un deux poids deux mesures. À Gaza, Boniface dénonce la hasbara et le défaut de pression sur Netanyahou. Il juge que l'impunité d'Israël rend le terme de génocide difficile à écarter, voit dans la loi du plus fort la logique de la séquence Gaza, Iran, OTAN, et presse Macron de passer aux actes. Il étend ce constat à la Cisjordanie. Il tient aussi l'islamophobie pour une réalité en France et défend la liberté d'expression face à l'interdiction de TikTok.
 
-Sur l'Ukraine et l'ordre international, il lit Trump et Poutine comme des dirigeants qui règlent le dossier au-dessus des Européens. Il juge la paix de Trump plus favorable à la Russie, mais préférable à la guerre, et défend l'aide à l'Ukraine. La séquence Gaza, Iran, OTAN lui apparaît comme le règne de la loi du plus fort, où des frappes contraires au droit international rencontrent une Europe docile ou spectatrice. Il voit dans Trump une révolution stratégique qui pousse alliés et Sud global à se diversifier, et face à laquelle l'Europe, qui a cédé, doit résister.
+Sur l'Ukraine, il juge la paix de Trump plus favorable à la Russie mais préférable à la guerre. Il y voit un dossier réglé par Trump et Poutine au-dessus des Européens, tout en défendant l'aide à l'Ukraine. Trump devient à ses yeux une révolution stratégique : l'Europe a cédé et doit résister, alors que les alliés et le Sud global se diversifient.
 
-Sur la dernière partie de la Period, l'accent se déplace vers un monde qui se recompose autour de la Chine, face à un Occident affaibli par Trump. Boniface voit dans l'OCS le signe d'un multi-alignement, pas d'une OTAN asiatique. Ses invités éclairent par ailleurs Londres, l'Iran, la Chine, l'Indonésie et le PS.
+Cette lecture se durcit en une analyse d'ensemble. L'ordre mondial quitte l'hégémonie occidentale : un Occident affaibli, un multi-alignement qui s'installe, des Européens réduits à demander. Au fil des mois, ses invités éclairent Londres, l'Iran, la Chine, l'Indonésie et le PS, et des livres viennent nourrir cette grille.
 
 ## Contenu
 
@@ -22,4 +21,4 @@ Sur la dernière partie de la Period, l'accent se déplace vers un monde qui se 
 2. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/2-2025-05-16/CLAUDE|2025-05-16 → 2025-06-04]] (17 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/CLAUDE|2025-06-06 → 2025-07-01]] (19 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/CLAUDE|2025-07-02 → 2025-08-28]] (24 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/CLAUDE|2025-09-01 → 2026-10-30]] (11 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/CLAUDE|2025-09-01 → 2026-10-30]] (17 Digests)
