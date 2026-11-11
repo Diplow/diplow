@@ -3,18 +3,18 @@ title: "2025-04-09 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09
 owner: diplo
 preview: >-
-  Boniface lit le monde par le deux poids deux mesures à Gaza, la loi du plus
-  fort et l'affaiblissement de l'Occident : il presse la France d'agir contre
-  Netanyahou, voit en Trump une rupture stratégique et dans l'Ukraine un
-  dossier réglé au-dessus des Européens.
+  Boniface lit Gaza comme un deux poids deux mesures et plaide pour des
+  sanctions contre Israël. Il voit chez Trump une révolution stratégique à la
+  puissance plus apparente que réelle, lit l'Ukraine en réaliste et décrit un
+  Occident et un multilatéralisme affaiblis.
 ---
 # 2025-04-09 → 2026-10-30
 
-Gaza est le fil le plus constant de la Period. Boniface y applique sa grille du deux poids deux mesures, dénonce la hasbara et le défaut de pression sur Netanyahou, et estime que l'impunité d'Israël rend le terme de génocide difficile à écarter. Il presse Macron de passer aux actes, plaide pour des sanctions contre Israël, puis voit dans le cessez-le-feu une trêve et non la paix, faute de perspective politique pour les Palestiniens. Vers la fin, il constate une France qui se contente de protester sur la Palestine.
+Gaza est le fil le plus constant de la Period. Boniface y applique sa grille du deux poids deux mesures, dénonce la hasbara et le défaut de pression sur Netanyahou, et juge que l'impunité d'Israël rend le terme de génocide difficile à écarter. Il presse la France et Macron de passer aux actes, plaide pour des sanctions contre Israël, et voit dans le cessez-le-feu une trêve plutôt que la paix, faute de perspective politique pour les Palestiniens. Vers la fin, il juge qu'un départ de Netanyahou ne changerait presque rien pour eux (voir [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/6-2025-10-15/CLAUDE|2025-10-15 → 2026-10-30]]).
 
-Autour de ce dossier, il décrit un ordre international où prévaut la loi du plus fort : frappes contraires au droit international, Europe docile ou spectatrice, affaiblissement de l'Occident et du multilatéralisme. Trump y figure comme une révolution stratégique qui pousse alliés et Sud global à se diversifier, et face à laquelle l'Europe, qui a cédé, doit résister. Sur l'Ukraine, il juge d'abord que Trump et Poutine règlent le dossier au-dessus des Européens, et que la paix voulue par Trump est plus favorable à la Russie mais préférable à la guerre ; il défend l'aide à l'Ukraine. Sa lecture devient ensuite plus réaliste : une puissance américaine qui repose sur le seul hard power, une Ukraine qui ne reconquerra pas ses territoires, une Chine qui sort gagnante face à Trump, un multi-alignement qui s'installe.
+Le second axe est Trump et ce qu'il fait au système international. Boniface lit d'abord sa présidence comme une révolution stratégique qui pousse alliés et Sud global à se diversifier, et face à laquelle l'Europe, qui a cédé, doit résister. Il en vient ensuite à soutenir que cette puissance est plus apparente que réelle. Sur l'Ukraine, il juge la paix voulue par Trump plus favorable à la Russie mais préférable à la guerre. Il décrit un dossier que Trump et Poutine règlent au-dessus des Européens, tout en défendant l'aide à l'Ukraine, et finit par une lecture en réaliste de la guerre.
 
-La Period compte aussi des prises de position sur la France : l'islamophobie y est une réalité, et la liberté d'expression doit être défendue face à l'interdiction de TikTok. Ses invités éclairent tour à tour Londres, l'Iran, la Chine, l'Indonésie et le PS.
+Ces deux axes s'inscrivent dans un même constat : la loi du plus fort s'impose, l'Occident et le multilatéralisme s'affaiblissent, et la France et l'Europe se montrent dociles ou spectatrices. Boniface y ajoute la Chine, qu'il voit devenir une superpuissance d'énergie propre. Il défend aussi la liberté d'expression face à l'interdiction de TikTok et tient l'islamophobie pour une réalité en France. Ses invités éclairent d'autres terrains, de Londres à l'Iran et à l'Indonésie.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ La Period compte aussi des prises de position sur la France : l'islamophobie y e
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/3-2025-06-06/CLAUDE|2025-06-06 → 2025-07-01]] (19 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/4-2025-07-02/CLAUDE|2025-07-02 → 2025-08-28]] (24 Digests)
 5. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/5-2025-09-01/CLAUDE|2025-09-01 → 2025-10-14]] (23 Digests)
-6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/6-2025-10-15/CLAUDE|2025-10-15 → 2026-10-30]] (18 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/6-2025-04-09/6-2025-10-15/CLAUDE|2025-10-15 → 2026-10-30]] (24 Digests)

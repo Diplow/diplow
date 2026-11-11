@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Sur dix ans, Boniface applique les mêmes grilles à l'actualité mondiale :
-  multilatéralisme contre unilatéralisme, deux poids deux mesures occidental,
-  affaiblissement de l'Occident. Il plaide pour une Europe autonome, une
-  France sans suivisme et une négociation sur l'Ukraine.
+  Boniface lit dix ans d'actualité par le multilatéralisme, le
+  deux-poids-deux-mesures occidental et le réalisme : l'Occident perd son
+  monopole, le Sud global monte, et l'Europe doit conquérir son autonomie
+  stratégique.
 ---
 # Chronicle
 
-De 2016 à 2026, Boniface lit le monde avec des grilles qui ne changent guère : le multilatéralisme contre l'unilatéralisme, le deux poids deux mesures occidental, l'affaiblissement d'un Occident que le reste du monde suit de moins en moins. Ce sont les mêmes outils d'une vidéo à l'autre. Seuls les terrains changent.
+De 2016 à 2026, Boniface applique aux événements une même grille de lecture. Le multilatéralisme s'oppose à l'unilatéralisme de Trump, et le deux-poids-deux-mesures occidental explique que le reste du monde ne suive pas les Occidentaux. Il presse l'Europe d'acquérir son autonomie stratégique, et lit le Covid-19 comme un révélateur des rapports de force.
 
-Les terrains se succèdent en trois temps. Jusqu'en 2020, ces grilles servent à lire Trump et la scène internationale, puis le Covid-19, qu'il tient pour un révélateur. De 2020 à 2022, il y ajoute la rivalité sino-américaine et l'échec des interventions extérieures. La guerre en Ukraine lui apparaît alors comme une impasse qui appelle une négociation. Depuis fin 2022, le deux poids deux mesures occidental organise sa lecture de l'Ukraine, puis de Gaza, et de nouveau de Trump.
+Dans les années 2020 à 2022, la rivalité sino-américaine et l'échec des interventions extérieures structurent son analyse. La guerre en Ukraine lui apparaît comme une impasse qui appelle une négociation, dans un Occident que le reste du monde ne suit plus.
 
-Ces analyses débouchent sur des positions stables. Il demande à l'Europe d'acquérir son autonomie stratégique et à la France de défendre ses intérêts sans suivisme. Sur l'Ukraine, il en reste à la négociation.
+Sur la dernière période, le réalisme domine : l'Occident perd son monopole, le Sud global monte, Gaza isole les Occidentaux et Trump bouscule l'ordre établi. D'un bout à l'autre, ce sont les mêmes outils appliqués à des cas qui changent.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]] (322 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (513 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (519 Digests)
