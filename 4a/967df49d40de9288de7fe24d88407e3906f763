@@ -1,0 +1,49 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/3-2026-01-04/CLAUDE.md
+  s_ae6806b64a7aa1::t_948e6893159b2d 6-8,12,14
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/4-2026-01-09/1-usa-asservissement-mediatique-a-la-francaise.md
+  s_ae6806b64a7aa1::t_c403deb7180c5d 1-64
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/4-2026-01-09/2-climat-pourquoi-les-assureurs-sont-responsables.md
+  s_ae6806b64a7aa1::t_206a9c2dd522fb 1-81
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/4-2026-01-09/3-macron-venezuela-la-honte-internationale.md
+  s_ae6806b64a7aa1::t_c09c211cd8d579 1-78
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/4-2026-01-09/4-tout-comprendre-a-l-intervention-de.md
+  s_ae6806b64a7aa1::t_c873629ef8eff1 1-99
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/4-2026-01-09/5-iran-comprendre-les-raisons-d-une.md
+  s_ae6806b64a7aa1::t_ed65321b14eb98 1-83
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/4-2026-01-09/6-apres-le-desastre-des-ehpad-le.md
+  s_ae6806b64a7aa1::t_191a2cb32d37cb 1-100
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/4-2026-01-09/CLAUDE.md
+  s_ae6806b64a7aa1::t_279c32e61281af 1-24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/CLAUDE.md
+  s_ae6806b64a7aa1::t_9137f1785e86f6 2,6-8,10,12,14,16,23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE.md
+  s_ae6806b64a7aa1::t_6fd0529c4cd00c 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_ae6806b64a7aa1::t_8f795401eb8ce7 2,6-9,11,13,15-17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_5225d34c31bc39::t_6d12906be6e1ba 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4a967df49d40de9288de7fe24d88407e3906f763",
+  "prompts": {},
+  "sessions": {
+    "s_5225d34c31bc39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a35d4e15b6ab55f18",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_ae6806b64a7aa1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a42d183f7080fab5e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
