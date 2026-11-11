@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit trois ans de pouvoir comme une dérive : une macronie qui sert les
-  puissants et fait payer les précaires, une extrême droite banalisée qui
-  avance, un PS qui trahit la gauche. Elle défend le collectif, le rapport de
-  force et l'organisation, y compris hors des institutions.
+  Blast lit trois ans de politique française comme une dérive : une macronie
+  qui sert les puissants et fait payer les précaires, un RN banalisé jusqu'à
+  la dissolution, puis l'avancée de l'extrême droite et d'un pouvoir
+  autoritaire, à laquelle la résistance s'organise.
 ---
 # Chronicle
 
-Pour Blast, le fil de ces trois années est celui d'un pouvoir qui gouverne pour les puissants et fait payer les précaires. La macronie banalise le RN, le pose en seul opposant et aligne la loi immigration sur l'extrême droite. Les médias de milliardaires et un PS complice des budgets viennent compléter ce paysage.
+D'octobre 2023 à février 2026, Blast raconte une même pente. Elle soutient que la macronie sert les puissants et fait payer les précaires, que le RN est banalisé et érigé en seul opposant, et que la loi immigration s'aligne sur l'extrême droite. La dissolution est lue comme un calcul de Macron.
 
-Le ton se durcit d'une Period à l'autre. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] décrit une dérive qui mène à la dissolution, lue comme un calcul de Macron. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] y voit la voie ouverte à l'extrême droite, à qui Macron déroule le tapis, et dénonce un PS complice du budget Bayrou. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2026-02-18]] décrit une extrême droite qui avance face à un pouvoir corrompu et autoritaire, qui protège les puissants et réprime, tandis que le PS trahit la gauche.
+Après la dissolution, Blast y voit la voie ouverte à l'extrême droite : Macron déroule le tapis au RN et impose Barnier avec son aval. Elle dénonce les médias de milliardaires et un PS complice du budget Bayrou. La crise ne se referme, selon elle, que par la démission de Macron.
 
-Face à ce constat, Blast défend le collectif, le rapport de force et l'organisation, y compris hors des institutions.
+Sur la dernière année, Blast décrit l'avancée de l'extrême droite et la dérive autoritaire d'un pouvoir qui protège les puissants. Elle accuse macronistes, PS et médias captés d'y contribuer. Face à cela, elle défend la justice, le collectif et le rapport de force, et soutient que la résistance s'organise.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] (276 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2026-02-18]] (386 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2026-02-22]] (392 Digests)
