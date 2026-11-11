@@ -3,21 +3,21 @@ title: "2024-11-21 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21
 owner: diplo
 preview: >-
-  Boniface lit ces deux ans par le deux poids, deux mesures occidental et la
-  loi du plus fort, puis par Trump, qui attaque le droit international et
-  n'est plus le protecteur des Européens. Il appelle l'Europe à résister et à
-  l'autonomie stratégique, et juge qu'à Gaza une trêve n'est pas la paix.
+  Boniface lit l'actualité par le deux poids deux mesures occidental, puis par
+  Trump, dont il juge que les initiatives attaquent le droit international et
+  qu'il n'est plus le protecteur des Européens. Il presse l'Europe d'accéder à
+  l'autonomie stratégique, de résister et de sanctionner Israël.
 ---
 # 2024-11-21 → 2026-10-30
 
-Pascal Boniface lit d'abord l'actualité par le deux poids, deux mesures occidental, appliqué à Gaza et à l'Ukraine, et par la loi du plus fort. Cette grille traverse toute la Period, de [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/1-2024-11-21/CLAUDE|2024-11-21 → 2025-04-07]] à [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/2-2025-04-09/CLAUDE|2025-04-09 → 2025-08-28]]. Il y presse Macron de passer aux actes contre Netanyahou.
+D'un bout à l'autre de la Period, Boniface applique la même grille : le deux poids deux mesures occidental. Il l'applique d'abord à l'actualité en général, puis à Gaza et à l'Ukraine, où il voit à l'œuvre la loi du plus fort. La [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/CLAUDE|2025-09-01 → 2026-10-30]] la prolonge en un constat plus large : l'affaiblissement de l'Occident et du multilatéralisme.
 
-Trump devient le second fil. Boniface voit dans ses initiatives une attaque contre le droit international et la fin de l'OTAN, puis une révolution stratégique. Il finit par constater que Trump n'est plus le protecteur des Européens. Sur l'Ukraine, il juge une paix, même injuste, préférable à la guerre. Il appelle l'Europe, qui a cédé, à résister et à conquérir son autonomie stratégique.
+Trump devient la seconde clé de lecture. Selon Boniface, ses initiatives attaquent le droit international et signent la fin de l'OTAN ([[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/1-2024-11-21/CLAUDE|2024-11-21 → 2025-04-07]]). Il y voit une révolution stratégique, puis juge que sa puissance repose sur le seul hard power. Les Européens doivent donc admettre qu'il n'est plus leur protecteur.
 
-Dans [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/CLAUDE|2025-09-01 → 2026-10-30]], ces lectures se fondent en un constat d'ensemble : l'affaiblissement de l'Occident et du multilatéralisme. Israël y méprise le droit international. À Gaza, Boniface ne voit qu'une trêve, pas la paix, faute de perspective politique pour les Palestiniens.
+Ces lectures débouchent sur des appels. Boniface plaide pour l'autonomie stratégique de l'Europe et juge qu'une paix, même injuste, vaut mieux que la guerre en Ukraine. Il estime que l'Europe a cédé et doit résister ([[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/2-2025-04-09/CLAUDE|2025-04-09 → 2025-08-28]]). Face à Israël, il presse Macron de passer aux actes contre Netanyahou, puis plaide pour des sanctions.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/1-2024-11-21/CLAUDE|2024-11-21 → 2025-04-07]] (72 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/2-2025-04-09/CLAUDE|2025-04-09 → 2025-08-28]] (83 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/CLAUDE|2025-09-01 → 2026-10-30]] (65 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/CLAUDE|2025-09-01 → 2026-10-30]] (71 Digests)

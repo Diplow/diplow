@@ -1,22 +1,22 @@
 ---
-title: "2025-12-09 → 2026-10-14"
+title: "2025-12-09 → 2025-12-12"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/3-2025-11-20/3-2025-12-09
 owner: diplo
 preview: >-
-  Boniface reçoit Jean-François Corty sur Gaza, chronique le livre d'Alexander
-  Stubb sur un monde en trois blocs dont le Sud global décidera, puis reçoit
-  Sylvie Bermann sur la parité sino-américaine et l'Europe.
+  Boniface reçoit : pour Jean-François Corty, le cessez-le-feu à Gaza n'en a
+  que le nom ; pour Féris Barkat, les plus précaires subissent d'abord le
+  climat. Il commente un quiz de l'IRIS, où il retient la fin de l'histoire
+  démentie, puis reçoit Tony Estanguet sur Paris 2024.
 ---
-# 2025-12-09 → 2026-10-14
+# 2025-12-09 → 2025-12-12
 
-Cette Period tient en trois vidéos, dont deux entretiens, où Boniface donne la parole à des voix extérieures sur l'état du monde. Le premier entretien porte sur Gaza. Pour Jean-François Corty, invité de Boniface, le cessez-le-feu de Trump n'en a que le nom : les morts continuent, l'aide reste bloquée, la colonisation et l'autodétermination sont ignorées, et la guerre quitte l'attention des médias.
+Cette semaine, Pascal Boniface donne surtout la parole à ses invités. Pour Jean-François Corty, le cessez-le-feu voulu par Trump à Gaza n'en a que le nom : les morts continuent, l'aide reste bloquée, la colonisation et l'autodétermination sont ignorées, et la guerre quitte l'attention des médias. Pour Féris Barkat, cofondateur de Banlieues Climat, l'écologie est accaparée par ceux qui vivent le moins les violences environnementales, alors que les plus précaires les subissent d'abord. Il faut donc les former pour qu'ils s'organisent et se fassent entendre.
 
-Boniface chronique ensuite Le Triangle du pouvoir d'Alexander Stubb, président finlandais. Selon l'ouvrage, le monde se divise en trois blocs : l'Occident, l'Orient et le Sud global. Toujours selon Stubb, l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
-
-Le dernier entretien, avec Sylvie Bermann, ancienne ambassadrice à Pékin, déplace le regard vers la Chine. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné. Elle estime que la Chine joue la patience sur Taïwan et qu'elle n'est pas anti-européenne, mais que son excédent commercial met l'Europe en difficulté.
+Boniface parle ensuite en son nom. En commentant la finale d'un quiz géopolitique de l'IRIS, il retient trois idées : la thèse de Fukuyama sur la fin de l'histoire est démentie, la peur du nucléaire a lié Washington et Moscou depuis Cuba, et la Corée du Nord garde la bombe comme assurance vie. Il termine par une chronique d'ouvrage avec Tony Estanguet, qui raconte dans son livre comment Paris 2024 s'est gagné en trois étapes. Boniface y voit une madeleine pour tous ceux qui ont aimé ces Jeux, olympiques comme paralympiques.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/3-2025-11-20/3-2025-12-09/1-gaza-malgre-le-cessez-le-feu|Gaza malgré le « cessez-le-feu » : désastre humanitaire - Les mardis de l'IRIS]] (2025-12-09)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/3-2025-11-20/3-2025-12-09/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/3-2025-11-20/3-2025-12-09/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/3-2025-11-20/3-2025-12-09/2-inegalites-sociales-et-enjeux-climatiques-avec|Inégalités sociales et enjeux climatiques. Avec Féris Barkat - Entretiens géopo]] (2025-12-10)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/3-2025-11-20/3-2025-12-09/3-champions-pour-des-questions-geopolitiques-episode|Champions pour des questions géopolitiques - Épisode 2/3]] (2025-12-11)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/3-2025-11-20/3-2025-12-09/4-j-ai-lu-par-amour-du|J'ai lu... « Par amour du sport » de Tony Estanguet]] (2025-12-12)

@@ -205,6 +205,7 @@ kinds:
       ancien-agent-de-renseignement: {définition: "A servi dans un service de renseignement et n'y sert plus, à la date de la Publication.", statut: proposé, introduit_par: blast/vvdVALULLDo.md}
       éthologue: {définition: "Étudie le comportement des animaux.", statut: proposé, introduit_par: blast/Y-GuT4K2gAw.md}
       rapporteur-spécial-de-l-onu: {définition: "Expert mandaté par les Nations Unies pour rendre compte d'un dossier de droits de l'homme, à la date de la Publication.", statut: proposé, introduit_par: blast/5gAEYQ8Tf6A.md}
+      consultant-police-justice: {définition: "Commente à l'antenne les affaires de police et de justice pour une chaîne d'information.", statut: proposé, introduit_par: blast/-EKqiH9ceoc.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
