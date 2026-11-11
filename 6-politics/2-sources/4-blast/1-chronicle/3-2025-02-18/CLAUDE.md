@@ -1,20 +1,20 @@
 ---
-title: "2025-02-18 → 2026-03-02"
+title: "2025-02-18 → 2026-03-06"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18
 owner: diplo
 preview: >-
-  Blast soutient qu'une extrême droite en progression, portée par un pouvoir
-  macroniste autoritaire et des médias patronaux, ne recule que devant le
-  rapport de force collectif. Elle accuse le PS de trahir la gauche et appelle
-  à s'organiser.
+  Blast décrit treize mois de dérive autoritaire où l'extrême droite avance,
+  de Trump au RN, portée par Macron et les médias patronaux, pendant que le PS
+  trahit la gauche. Elle défend la justice, le collectif et le rapport de
+  force contre l'austérité, et juge la résistance possible.
 ---
-# 2025-02-18 → 2026-03-02
+# 2025-02-18 → 2026-03-06
 
-Sur ces treize mois, Blast déroule une même thèse : l'extrême droite avance, de Trump et Musk à Retailleau et au RN, dans une classe politique et des médias patronaux qu'elle juge corrompus ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/1-2025-02-18/CLAUDE|2025-02-18 → 2025-04-11]]). Elle fait de Macron et des macronistes les responsables du chaos et de la montée du RN ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE|2025-09-01 → 2025-10-26]]). Elle lit le budget 2026 comme une alliance néolibérale entre macronistes et RN, et dénonce l'empire Bolloré, la Ve République et la trahison du PS.
+Le fil qui traverse toute la Period est l'avancée de l'extrême droite et la dérive d'un pouvoir qui protège les puissants et frappe les faibles. Dès [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/1-2025-02-18/CLAUDE|2025-02-18 → 2025-04-11]], Blast la voit de Trump et Musk à Retailleau et au RN, avec une classe politique et des médias patronaux qu'elle juge corrompus. Elle fait ensuite de Macron et des macronistes les responsables du chaos et de la montée du RN, et lit le budget 2026 comme une alliance néolibérale entre macronistes et RN. Elle dénonce aussi l'empire Bolloré et la Ve République.
 
-Elle décrit un pouvoir qui protège les puissants, frappe les faibles et s'attaque à l'état de droit, d'où sa défense de la justice face à la droite et à l'extrême droite. L'été 2025 en donne les marqueurs : l'arrestation de Yanis Mhamdi, Gaza, le plan Bayrou, la loi Duplomb. Blast lit ensuite la mobilisation du 10 septembre comme un soulèvement contre l'austérité que le pouvoir réprime, et la répression policière comme un héritage de 2005. Dans les derniers mois, elle y voit un ordre capitaliste, colonial et autoritaire, dont l'enlèvement de Maduro par les États-Unis et l'impunité de la police seraient des signes ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE|2025-12-26 → 2026-03-02]]).
+Face à ce pouvoir, Blast soutient que seul le rapport de force fait reculer. Elle défend la justice face aux offensives de la droite et de l'extrême droite et lit la mobilisation du 10 septembre comme un soulèvement contre l'austérité, que le pouvoir réprime. Elle voit aussi une austérité dans le réarmement. Elle accuse le PS de trahir la gauche, refuse de passer par une primaire à gauche et tire de la victoire de Mamdani une leçon pour la gauche. Elle appelle à s'organiser et reçoit des invités sur l'extrême droite, la tech et l'abandon des classes populaires.
 
-Face à cela, Blast soutient que seul le rapport de force fait reculer, sans passer par une primaire à gauche, et qu'il faut s'organiser et défendre le collectif. Elle tire une leçon de la victoire de Mamdani pour la gauche. Elle regrette la division de la gauche par Nuñez et la mort de Quentin instrumentalisée contre LFI. Elle soutient que la résistance s'organise malgré tout.
+La dernière étape, [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE|2025-12-26 → 2026-03-06]], élargit le regard. Blast juge 2026 décisif pour la République et lit l'enlèvement de Maduro et l'impunité policière comme des effets d'un ordre capitaliste, colonial et autoritaire. Elle y soutient que la montée des extrêmes droites n'est pas inéluctable et que la résistance s'organise.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Face à cela, Blast soutient que seul le rapport de force fait reculer, sans pas
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE|2025-06-12 → 2025-08-31]] (70 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE|2025-09-01 → 2025-10-26]] (68 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE|2025-10-27 → 2025-12-25]] (65 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE|2025-12-26 → 2026-03-02]] (71 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE|2025-12-26 → 2026-03-06]] (77 Digests)
