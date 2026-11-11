@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Sur dix ans, Boniface applique les mêmes grilles à l'actualité :
-  multilatéralisme contre unilatéralisme, deux poids deux mesures occidental.
-  Il défend une Europe autonome face aux États-Unis, une négociation en
-  Ukraine et la montée du Sud global.
+  Sur dix ans, Boniface lit le monde par les mêmes grilles : multilatéralisme
+  contre unilatéralisme, deux poids deux mesures occidental, fin du monopole
+  de l'Occident face au Sud global. Il plaide pour une négociation en Ukraine
+  et pour une France et une Europe autonomes.
 ---
 # Chronicle
 
-D'un bout à l'autre de la Chronicle, Boniface lit l'actualité internationale avec un petit nombre de grilles qui reviennent. La première oppose le multilatéralisme à l'unilatéralisme. La seconde est le deux poids deux mesures occidental. À elles s'ajoute l'idée d'un Occident que le reste du monde ne suit plus. Ces redites tiennent à la cohérence de son analyse, qu'il applique à des événements différents.
+D'un bout à l'autre de la Chronicle, Boniface applique à l'actualité un petit nombre de grilles stables. Il oppose le multilatéralisme à l'unilatéralisme et dénonce le deux poids deux mesures occidental. Il constate que l'Occident perd son monopole face à un Sud global qui ne le suit plus. À cela s'ajoutent l'autonomie stratégique qu'il demande à l'Europe, puis à la France et à l'Europe ensemble, et le regard qu'il porte sur Trump, dont l'action bouleverse l'ordre établi.
 
-Entre 2016 et 2022, il lit Trump et la scène internationale par ces grilles. Il presse l'Europe d'acquérir son autonomie stratégique et voit dans le Covid-19 un révélateur. À partir de juin 2020, la rivalité sino-américaine et l'échec des interventions extérieures prennent plus de place. La guerre en Ukraine lui apparaît ensuite comme une impasse qui appelle une négociation.
+La Period se déploie en trois temps. De 2016 à juin 2020 ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]]), ces grilles servent à lire Trump et la scène internationale, et le Covid-19 est pour lui un révélateur. De juin 2020 à novembre 2022 ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]]), il s'appuie aussi sur la rivalité sino-américaine et l'échec des interventions extérieures. La guerre en Ukraine lui apparaît alors comme une impasse qui appelle une négociation.
 
-Sur la dernière période, de fin 2022 à octobre 2026 ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]]), le deux poids deux mesures devient la clé de lecture de l'Ukraine et de Gaza. Il y voit aussi Trump faire basculer l'ordre occidental. Boniface y défend une négociation en Ukraine, une Europe autonome face aux États-Unis et la montée du Sud global.
+Depuis fin 2022 ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]]), le deux poids deux mesures devient le fil de sa lecture : Gaza isole l'Occident, le Sud global gagne en poids, et Boniface maintient sa demande d'une négociation en Ukraine.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]] (322 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (477 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2026-10-30]] (483 Digests)
