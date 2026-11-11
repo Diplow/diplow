@@ -316,6 +316,7 @@ kinds:
       continent: {définition: "Très vaste ensemble de terres et de pays, comme l'Afrique ou l'Europe.", statut: proposé, introduit_par: boniface/o43DHoCZys4.md}
       fleuve: {définition: "Cours d'eau important qui se jette dans une mer ou un océan.", statut: proposé, introduit_par: boniface/c3M_-nwPYLU.md}
       détroit: {définition: "Passage maritime étroit entre deux terres, comme le détroit de Bab el-Mandeb.", statut: proposé, introduit_par: boniface/AsvCCWqBywU.md}
+      île: {définition: "Terre entourée d'eau de tous côtés, comme Jura, en Écosse.", statut: proposé, introduit_par: blast/b_gbjN6O70w.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
