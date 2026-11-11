@@ -204,6 +204,7 @@ kinds:
       arbitre: {définition: "Dirige et arbitre des rencontres sportives.", statut: proposé, introduit_par: blast/PUUGrk912k4.md}
       ancien-agent-de-renseignement: {définition: "A servi dans un service de renseignement et n'y sert plus, à la date de la Publication.", statut: proposé, introduit_par: blast/vvdVALULLDo.md}
       éthologue: {définition: "Étudie le comportement des animaux.", statut: proposé, introduit_par: blast/Y-GuT4K2gAw.md}
+      rapporteur-spécial-de-l-onu: {définition: "Expert mandaté par les Nations Unies pour rendre compte d'un dossier de droits de l'homme, à la date de la Publication.", statut: proposé, introduit_par: blast/5gAEYQ8Tf6A.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -365,6 +366,7 @@ kinds:
       catastrophe-industrielle: {définition: "Accident industriel majeur, comme l'effondrement d'une usine, qui fait de nombreuses victimes.", statut: proposé, introduit_par: blast/sTed1yTvqW0.md}
       université-d-été: {définition: "Rencontre annuelle d'été d'un parti, faite de débats, d'ateliers et de discours de ses dirigeants.", statut: proposé, introduit_par: paduteam/325tzF3T7FM.md}
       séance: {définition: "Séance d'une assemblée qui prend une décision historique.", statut: proposé, introduit_par: blast/MOfb3v9r-CY.md}
+      concours: {définition: "Compétition artistique entre participants, comme l'Eurovision de la chanson.", statut: proposé, introduit_par: boniface/r2ynmfVCcyE.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -420,6 +422,7 @@ kinds:
       circulaire: {définition: "Document d'un ministre adressé aux préfets ou aux services pour préciser l'application d'une loi.", statut: proposé, introduit_par: blast/3OdTK10ycDg.md}
       capitulaire: {définition: "Acte législatif ou réglementaire d'un souverain carolingien.", statut: proposé, introduit_par: paduteam/Zxpf21fWsNc.md}
       proposition-de-loi: {définition: "Loi en discussion d'initiative parlementaire, pas encore définitivement adoptée.", statut: proposé, introduit_par: blast/qekuUH1fa0s.md}
+      doctrine: {définition: "Texte qui fixe l'orientation stratégique ou de sécurité d'un État.", statut: proposé, introduit_par: boniface/ZFwecl5wW7Q.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}

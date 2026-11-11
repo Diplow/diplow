@@ -1,6 +1,6 @@
 ---
 title: "Le Japon face au défi Trump. Avec Robert Dujarric | Entretiens géopo"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/3-2025-11-20/4-2026-10-21
+parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/3-2025-11-20/5-2026-10-21
 owner: diplo
 preview: >-
   Entretien avec Robert Dujarric : face à une garantie américaine devenue
