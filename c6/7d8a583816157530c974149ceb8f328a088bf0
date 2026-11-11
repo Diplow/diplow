@@ -1,0 +1,52 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_cfde017487d45d 206
+  s_70e2b8820e4c39::t_6bc90249a65b8f 205
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/3-2026-02-10/CLAUDE.md
+  s_eab814476c298e::t_12b074b187071c 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/4-2026-02-14/1-goebbels-mussolini-etc-50-nuances-de.md
+  s_eab814476c298e::t_20286ab6e399d6 1-101
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/4-2026-02-14/2-ou-est-passee-l-extreme-gauche.md
+  s_eab814476c298e::t_ff19d1a66ac92c 1-97
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/4-2026-02-14/3-epstein-un-reseau-au-service-d.md
+  s_eab814476c298e::t_da9acc2bb05f36 1-88
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/4-2026-02-14/4-sante-mentale-une-realite-dramatique-derriere.md
+  s_eab814476c298e::t_88c6f8115d5ff5 1-77
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/4-2026-02-14/5-une-histoire-de-la-violence.md
+  s_eab814476c298e::t_d05b7488828c89 1-99
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/4-2026-02-14/6-europe-comment-les-lobbies-americains-infiltrent.md
+  s_eab814476c298e::t_9c1b60da30d02b 1-107
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/4-2026-02-14/CLAUDE.md
+  s_eab814476c298e::t_0050f76710a079 1-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/3-2026-02-03/CLAUDE.md
+  s_eab814476c298e::t_3d03f27b189bae 2,6-9,11,13,15-17,24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE.md
+  s_eab814476c298e::t_84a1f6be1520b3 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_eab814476c298e::t_64a04af0305f3e 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_eab814476c298e::t_430d779bbf3e09 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c67d8a583816157530c974149ceb8f328a088bf0",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_eab814476c298e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a3ce3c7f74c41b520",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
