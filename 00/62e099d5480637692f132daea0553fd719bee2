@@ -1,0 +1,51 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_783c9ff1969290 290-291
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/4-2026-01-29/CLAUDE.md
+  s_eab814476c298e::t_87e8d1622cde71 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/5-2026-02-03/1-comment-echapper-a-la-marche-forcee.md
+  s_eab814476c298e::t_82df376cfdb087 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/5-2026-02-03/2-pourquoi-tant-de-haine-contre-les.md
+  s_eab814476c298e::t_6818f245bb7a30 1-104
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/5-2026-02-03/3-iran-syrie-israel-usa-comprendre-ce.md
+  s_eab814476c298e::t_06678cd1c635b0 1-88
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/5-2026-02-03/4-portrait-de-facho-un-terroriste-dans.md
+  s_eab814476c298e::t_3b9941527bf6fa 1-96
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/5-2026-02-03/5-journalisme-contrepouvoir-ou-2e-peau-du.md
+  s_eab814476c298e::t_5811c21fd162c8 1-88
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/5-2026-02-03/6-trump-macron-etc-l-horloge-de.md
+  s_eab814476c298e::t_c58d1f484ad4d9 1-84
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/5-2026-02-03/CLAUDE.md
+  s_eab814476c298e::t_3cc765b1654445 1-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/CLAUDE.md
+  s_eab814476c298e::t_d8317af7efa1e0 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE.md
+  s_eab814476c298e::t_dc5b75e3ec06d9 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_eab814476c298e::t_38b421404e2978 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_eab814476c298e::t_56ea1409566789 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0062e099d5480637692f132daea0553fd719bee2",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_eab814476c298e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a3ce3c7f74c41b520",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
