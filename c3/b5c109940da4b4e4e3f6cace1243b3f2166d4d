@@ -1,0 +1,49 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/4-2026-01-09/CLAUDE.md
+  s_ae6806b64a7aa1::t_3dc8cc2055b263 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/5-2026-01-12/1-tout-comprendre-a-l-intervention-de.md
+  s_ae6806b64a7aa1::t_8024b74736bc29 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/5-2026-01-12/2-iran-comprendre-les-raisons-d-une.md
+  s_ae6806b64a7aa1::t_956babfac24ff2 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/5-2026-01-12/3-apres-le-desastre-des-ehpad-le.md
+  s_ae6806b64a7aa1::t_01ebdab739bcd7 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/5-2026-01-12/4-ue-mercosur-l-agriculture-francaise-sacrifiee.md
+  s_ae6806b64a7aa1::t_81d09f2135a556 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/5-2026-01-12/5-2026-et-surtout-la-sante.md
+  s_ae6806b64a7aa1::t_6c69153f991f33 1-89
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/5-2026-01-12/6-sommes-nous-a-l-aube-d.md
+  s_ae6806b64a7aa1::t_3f435bcda2bf45 1-78
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/5-2026-01-12/CLAUDE.md
+  s_ae6806b64a7aa1::t_8b8da21cf1beab 1-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/6-2026-01-18/1-face-a-trump-les-medias-entre.md
+  s_ae6806b64a7aa1::t_cd05e8a5cfee86 1-91
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/6-2026-01-18/2-cyberattaques-pourquoi-nos-donnees-privees-sont.md
+  s_ae6806b64a7aa1::t_7824993305f8ea 1-79
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/6-2026-01-18/3-delocaliser-ici-exploiter-la-bas-tout.md
+  s_ae6806b64a7aa1::t_4b1ad05b5a3203 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/6-2026-01-18/CLAUDE.md
+  s_ae6806b64a7aa1::t_d57436f9af2a1c 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/CLAUDE.md
+  s_ae6806b64a7aa1::t_b6c6c560d1fbab 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE.md
+  s_ae6806b64a7aa1::t_261b23e9899fa5 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_ae6806b64a7aa1::t_8dc55f207060a5 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_ae6806b64a7aa1::t_d1915c80f371ec 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c3b5c109940da4b4e4e3f6cace1243b3f2166d4d",
+  "prompts": {},
+  "sessions": {
+    "s_ae6806b64a7aa1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a42d183f7080fab5e",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
