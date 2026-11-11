@@ -1,0 +1,47 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/3-2026-02-24/CLAUDE.md
+  s_1e53299f821e30::t_98958c759be344 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/4-2026-02-26/1-siamo-tutti-antifascisti.md
+  s_1e53299f821e30::t_dd0b1edbd40c09 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/4-2026-02-26/2-la-constitution-est-elle-un-danger.md
+  s_1e53299f821e30::t_46b3f3746318e0 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/4-2026-02-26/3-abattre-melenchon-et-lfi-promouvoir-le.md
+  s_1e53299f821e30::t_9d8087c18c4b5e 1-70
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/4-2026-02-26/4-enquetes-journalistiques-la-terreur-de-l.md
+  s_1e53299f821e30::t_f75d966b0be9c8 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/4-2026-02-26/5-comment-les-irresponsables-ont-mis-les.md
+  s_1e53299f821e30::t_a649f7ddba4a8d 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/4-2026-02-26/CLAUDE.md
+  s_1e53299f821e30::t_6da659a299a40b 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/5-2026-03-01/1-neo-fascisme-a-lyon-l-iceberg.md
+  s_1e53299f821e30::t_200c0dc1bc6afb 1-93
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/5-2026-03-01/2-police-sommes-nous-deja-en-pleine.md
+  s_1e53299f821e30::t_813c43b05d76f9 1-94
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/5-2026-03-01/3-produits-chimiques-l-ue-aux-mains.md
+  s_1e53299f821e30::t_684ee49f2e4a8c 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/5-2026-03-01/CLAUDE.md
+  s_1e53299f821e30::t_939a8a405d9894 1-23
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/CLAUDE.md
+  s_1e53299f821e30::t_84be9c92d3338e 2,6-9,11,13,15-17,23-25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE.md
+  s_1e53299f821e30::t_751327e9968f5e 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_1e53299f821e30::t_07ebc8138a6bd4 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_1e53299f821e30::t_57d80575c9b587 6-9,13,15,21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4f8dfe2e4f6f8270e440c02fe2a65a503d63818b",
+  "prompts": {},
+  "sessions": {
+    "s_1e53299f821e30": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad54cb3c15931d301",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
