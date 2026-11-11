@@ -285,6 +285,7 @@ kinds:
       lieu-culturel: {définition: "Lieu qui accueille et programme des événements culturels ou des débats.", statut: proposé, introduit_par: boniface/2R2oILPTndY.md}
       organisation-humanitaire: {définition: "Organisation qui distribue une aide humanitaire, notamment alimentaire, à une population.", statut: proposé, introduit_par: boniface/ibUUK-Xt7hQ.md}
       coalition-d-états: {définition: "Groupe d'États qui agissent ensemble sur un dossier, hors d'un cadre institutionnel.", statut: proposé, introduit_par: boniface/gBJxSwjovD0.md}
+      réseau-social: {définition: "Plateforme en ligne où des utilisateurs publient, échangent et s'informent.", statut: proposé, introduit_par: blast/LnScMT0PzLI.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
