@@ -3,9 +3,7 @@
     "SCW_PROFILE": "wikipol"
   },
   "enabledMcpjsonServers": [
-    "hodor"
-  ],
-  "disabledMcpjsonServers": [
+    "hodor",
     "wikipol"
   ],
   "disableClaudeAiConnectors": true,
