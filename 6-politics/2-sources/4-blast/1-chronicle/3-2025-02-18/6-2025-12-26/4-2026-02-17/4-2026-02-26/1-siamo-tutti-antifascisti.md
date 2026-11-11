@@ -1,6 +1,6 @@
 ---
 title: "SIAMO TUTTI ANTIFASCISTI"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/3-2026-02-24
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/4-2026-02-26
 owner: diplo
 preview: >-
   Blast soutient que le pouvoir macroniste et une partie de la droite
