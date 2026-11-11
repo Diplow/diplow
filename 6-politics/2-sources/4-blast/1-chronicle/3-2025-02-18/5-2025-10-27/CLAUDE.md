@@ -1,20 +1,20 @@
 ---
-title: "2025-10-27 → 2026-02-01"
+title: "2025-10-27 → 2026-02-08"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27
 owner: diplo
 preview: >-
-  Blast lit ces trois mois comme une bascule : un PS accusé de trahir son
-  électorat, une extrême droite qui impose son agenda avec l'empire Bolloré,
-  une police minimisée et un droit international qui s'effondre, de
-  l'enlèvement de Maduro au Mercosur.
+  Blast lit l'actualité par les rapports de pouvoir : il dénonce un PS qui
+  aurait trahi son électorat, l'empire Bolloré qui impose l'agenda de
+  l'extrême droite, la police et l'effondrement du droit international. Il
+  soutient que la montée de l'extrême droite n'est pas inéluctable.
 ---
-# 2025-10-27 → 2026-02-01
+# 2025-10-27 → 2026-02-08
 
-Sur la politique française, Blast tient un même fil de la fin octobre à la fin janvier : le PS a trahi son électorat, Glucksmann est une imposture, et le budget 2026 scelle une alliance néolibérale entre macronistes et RN. Le budget de la Sécu est lu comme un service rendu à Macron, voter Rachida Dati comme voter pour la corruption, et la Ve République comme un régime autoritaire à renverser. Face à cela, Blast lit la victoire de Mamdani comme une leçon pour la gauche, soutient que le monde change par le bas, par la révolte, et que la montée des extrêmes droites n'est pas inéluctable.
+D'octobre 2025 à février 2026, Blast construit son propos autour de l'extrême droite et des moyens qui la portent. Il dénonce l'empire Bolloré, qui impose son agenda et mène l'offensive contre l'audiovisuel public. Il juge la presse dominante complice de la radicalisation de la classe dirigeante, et le grand remplacement, un complot raciste. La Ve République est pour lui un régime autoritaire à renverser. Il y voit un ordre capitaliste, colonial et autoritaire, et une extrême droite qui gouverne par la violence et le mensonge. Pour lui, 2026 est le money time de la République : médias captés, extrême droite blanchie, vote bafoué.
 
-Le deuxième axe est celui des médias et de l'extrême droite. Blast dénonce l'empire Bolloré, son offensive contre l'audiovisuel public et la campagne contre LFI, ainsi qu'une presse dominante qui accompagne la radicalisation de la classe dirigeante. Il présente le grand remplacement comme un complot raciste et lit 2026 comme le money time de la République : médias captés, extrême droite blanchie, vote bafoué. La répression policière est lue comme un héritage de 2005 et sa minimisation est dénoncée. Sur ces sujets, Blast reçoit des auteurs, des salariés et des jeunes du 93.
+Côté gauche et pouvoir, Blast soutient que le PS a trahi son électorat. Il lit le budget 2026 comme une alliance néolibérale entre macronistes et RN, et le budget de la Sécu comme un service rendu à Macron. Il tient Glucksmann pour une imposture, voter Rachida Dati pour voter pour la corruption, et la campagne contre LFI pour une manœuvre. La victoire de Mamdani est à ses yeux une leçon pour la gauche : le monde change par le bas, par la révolte.
 
-Le troisième axe est international et gagne en poids au fil de la Period. Blast dénonce l'effondrement du droit international et l'hypocrisie des dirigeants français, lit l'enlèvement de Maduro comme une opération impériale américaine, et range le Mercosur, les ultrariches et des médias alignés sur Trump parmi les effets d'un même ordre capitaliste, colonial et impérial. Il décrit une extrême droite qui gouverne par la violence et le mensonge.
+Sur la police et l'international, Blast dénonce la minimisation des violences policières et lit la répression comme un héritage de 2005. Il dénonce l'effondrement du droit international. Il lit l'enlèvement de Maduro comme une opération impériale américaine et dénonce l'hypocrisie des dirigeants français. Au fil de la Period, il reçoit des auteurs, des salariés et des jeunes du 93, et finit sur la conviction que la résistance s'organise.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Le troisième axe est international et gagne en poids au fil de la Period. Blast
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/3-2025-11-24/CLAUDE|2025-11-24 → 2025-12-07]] (16 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/4-2025-12-08/CLAUDE|2025-12-08 → 2025-12-25]] (18 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/CLAUDE|2025-12-26 → 2026-01-11]] (15 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/CLAUDE|2026-01-12 → 2026-02-01]] (20 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/6-2026-01-12/CLAUDE|2026-01-12 → 2026-02-08]] (26 Digests)

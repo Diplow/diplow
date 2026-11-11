@@ -287,6 +287,8 @@ kinds:
       organisation-humanitaire: {définition: "Organisation qui distribue une aide humanitaire, notamment alimentaire, à une population.", statut: proposé, introduit_par: boniface/ibUUK-Xt7hQ.md}
       coalition-d-états: {définition: "Groupe d'États qui agissent ensemble sur un dossier, hors d'un cadre institutionnel.", statut: proposé, introduit_par: boniface/gBJxSwjovD0.md}
       réseau-social: {définition: "Plateforme en ligne où des utilisateurs publient, échangent et s'informent.", statut: proposé, introduit_par: blast/LnScMT0PzLI.md}
+      agence-de-façade: {définition: "Structure en apparence civile, comme une agence de presse, qui couvre des activités de renseignement et de subversion.", statut: proposé, introduit_par: blast/9LbmbBDfY-U.md}
+      réseau-paramilitaire-clandestin: {définition: "Réseau paramilitaire secret, adossé à des services de renseignement ou à l'OTAN.", statut: proposé, introduit_par: blast/9LbmbBDfY-U.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
