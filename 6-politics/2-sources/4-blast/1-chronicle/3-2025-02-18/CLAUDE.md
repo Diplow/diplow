@@ -1,20 +1,20 @@
 ---
-title: "2025-02-18 → 2026-01-13"
+title: "2025-02-18 → 2026-01-21"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18
 owner: diplo
 preview: >-
-  Blast soutient que l'extrême droite progresse, de Trump et Musk au RN puis à
-  l'empire Bolloré, que le pouvoir macroniste protège les puissants et
-  réprime, que le PS a trahi la gauche, et que seul le rapport de force par le
-  bas fait reculer.
+  Blast fait de l'extrême droite, de Trump et Musk au RN et à l'empire
+  Bolloré, la menace centrale, dénonce un pouvoir qui protège les puissants et
+  réprime, accuse le PS de trahir la gauche et défend le collectif et le
+  rapport de force.
 ---
-# 2025-02-18 → 2026-01-13
+# 2025-02-18 → 2026-01-21
 
-D'un bout à l'autre de la Period, Blast lit l'actualité comme une avancée de l'extrême droite que favorisent le pouvoir en place et les médias patronaux. Elle part de Trump et Musk, de Retailleau et du RN, et en vient à faire de Macron et des macronistes les responsables du chaos et de la montée du RN. L'empire Bolloré y impose l'agenda de l'extrême droite. Le pouvoir frappe les faibles et épargne les puissants : Blast le voit dans l'arrestation de Yanis Mhamdi, dans la loi Duplomb, dans le plan Bayrou, et dans les atteintes à l'état de droit dont elle défend la justice. Elle lit aussi le réarmement comme une austérité.
+Sur toute la période, Blast décrit une extrême droite qui avance : de Trump et Musk à Retailleau et au RN, puis avec l'empire Bolloré, qui impose son agenda. Elle tient la classe politique et les médias patronaux pour corrompus. Elle fait de Macron et des macronistes les responsables du chaos et de la montée du RN.
 
-Face à cela, Blast reproche au PS d'avoir trahi la gauche et son électorat, et refuse de passer par une primaire à gauche. Elle soutient que seul le rapport de force fait reculer le pouvoir et appelle à s'organiser. Elle lit la mobilisation du 10 septembre comme un soulèvement contre l'austérité que le pouvoir réprime ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE|2025-09-01 → 2025-10-26]]). Elle reçoit au fil de l'été des invités sur l'extrême droite, la tech et l'abandon des classes populaires.
+Blast lit les mois qui passent comme la dérive d'un pouvoir qui frappe les faibles et épargne les puissants. Elle y range l'arrestation de Yanis Mhamdi, Gaza, la répression de la mobilisation du 10 septembre, une police sans contrôle et le droit international enterré avec l'enlèvement de Maduro. Elle lit le réarmement, le plan Bayrou et la loi Duplomb comme de l'austérité. Elle défend la justice face aux offensives de la droite et de l'extrême droite, et dénonce un pouvoir qui s'attaque à l'état de droit.
 
-Le ton se durcit sur la fin ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE|2025-10-27 → 2026-01-13]]). Blast y lit tout par les rapports de pouvoir : la police réprime, le droit international s'effondre, et le monde change par le bas, par la révolte.
+À gauche, Blast accuse le PS d'avoir trahi son électorat et soutient que seul le rapport de force fait reculer le pouvoir, sans passer par une primaire. Elle appelle à s'organiser, défend le collectif et reçoit des invités sur l'extrême droite, la tech et l'abandon des classes populaires.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Le ton se durcit sur la fin ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-0
 2. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/2-2025-04-12/CLAUDE|2025-04-12 → 2025-06-11]] (66 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE|2025-06-12 → 2025-08-31]] (70 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE|2025-09-01 → 2025-10-26]] (68 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE|2025-10-27 → 2026-01-13]] (83 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE|2025-10-27 → 2026-01-21]] (89 Digests)

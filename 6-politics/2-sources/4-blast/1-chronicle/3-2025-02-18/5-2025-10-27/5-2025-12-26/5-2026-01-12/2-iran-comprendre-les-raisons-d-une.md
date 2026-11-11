@@ -1,6 +1,6 @@
 ---
 title: "IRAN : COMPRENDRE LES RAISONS D'UNE RÉVOLUTION"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/4-2026-01-09
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/5-2025-12-26/5-2026-01-12
 owner: diplo
 preview: >-
   Pour l'anthropologue Chowra Makaremi, la révolte iranienne née du bazar vise
