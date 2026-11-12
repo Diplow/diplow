@@ -221,6 +221,7 @@ kinds:
       agent-de-mannequins: {définition: "Dirige une agence de mannequins et place des mannequins auprès de clients et de marques.", statut: proposé, introduit_par: blast/P0YnvoRW9BI.md}
       inspecteur-du-travail: {définition: "Contrôle le respect du droit du travail dans les entreprises.", statut: proposé, introduit_par: blast/TkkZOqKt1Zg.md}
       naturaliste: {définition: "Observe et filme la vie animale dans son milieu naturel.", statut: proposé, introduit_par: blast/eueMRr9VvT4.md}
+      enquêteur: {définition: "Mène des enquêtes de terrain sur un secteur d'activité pour une ONG ou un média.", statut: proposé, introduit_par: blast/uMTkMrlMZuU.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

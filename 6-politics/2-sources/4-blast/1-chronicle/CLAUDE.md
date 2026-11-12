@@ -3,22 +3,22 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit trois ans comme une dérive : un pouvoir qui sert les puissants et
-  réprime les dominés, un RN banalisé, des médias de milliardaires, un PS qui
-  trahit la gauche. Elle soutient que la montée des extrêmes droites n'est pas
-  inéluctable et que le collectif fait reculer.
+  Blast lit trois ans de vie politique comme une dérive autoritaire : un
+  pouvoir qui protège les puissants et fait payer les dominés, un RN banalisé,
+  un PS qui trahit, des médias de milliardaires. Elle soutient que seuls le
+  collectif et le rapport de force font reculer l'extrême droite.
 ---
 # Chronicle
 
-D'octobre 2023 à septembre 2026, Blast déroule une même grille : un pouvoir macroniste qui sert les puissants et fait payer les précaires. Elle y voit une extrême droite banalisée et érigée en seul opposant, dont la loi immigration aligne déjà les positions. La dissolution est lue comme un calcul de Macron, qui déroule le tapis au RN. Il impose ensuite Barnier avec l'aval du RN, et la crise ne se referme que par sa démission.
+Du début de la Chronicle à la dissolution, Blast décrit une macronie qui sert les puissants et fait payer les précaires. Le RN est banalisé et érigé en seul opposant, et la loi immigration s'aligne sur l'extrême droite. La dissolution est lue comme un calcul de Macron. Elle ouvre ensuite la voie à l'extrême droite : Macron déroule le tapis au RN et impose Barnier avec son aval. Pour Blast, la crise ne se referme que par sa démission.
 
-Au fil des années, le tableau s'élargit. En 2025, Blast décrit une dérive autoritaire : un pouvoir qui s'en prend à la justice, une classe politique et des médias patronaux jugés corrompus. Elle dénonce les médias de milliardaires, puis l'empire Bolloré, et pointe l'impunité policière. Dans la dernière période, la guerre contre l'Iran s'ajoute à cette liste.
+Le fil se durcit en une dérive autoritaire. Le pouvoir protège les puissants et s'en prend à la justice, tandis que la classe politique et les médias de milliardaires sont tenus pour corrompus. Le PS est le grand traître de cette période : complice du budget Bayrou, il trahit la gauche. Face à cela, Blast soutient que seuls le collectif et le rapport de force font reculer le pouvoir.
 
-Le PS est le point de bascule constant de cette lecture : complice du budget Bayrou, puis jugé traître à la gauche. Face à cela, Blast soutient que le collectif et le rapport de force sont les seuls à faire reculer le pouvoir. Elle affirme que la montée des extrêmes droites n'est pas inéluctable et que la résistance s'organise.
+Sur la dernière année, la même grille s'étend à l'empire Bolloré, à l'impunité policière, aux guerres et aux budgets d'un ordre capitaliste et autoritaire, avec la trahison du PS en toile de fond. Blast maintient que la montée des extrêmes droites n'est pas inéluctable.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] (276 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2025-10-26]] (268 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE|2025-10-27 → 2026-09-28]] (337 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE|2025-10-27 → 2026-10-02]] (343 Digests)

@@ -1,20 +1,20 @@
 ---
-title: "2025-10-27 → 2026-09-28"
+title: "2025-10-27 → 2026-10-02"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27
 owner: diplo
 preview: >-
-  Blast lit l'époque comme un ordre où le pouvoir protège les puissants et
-  réprime les dominés : trahison du PS, empire Bolloré, impunité policière,
-  guerre contre l'Iran. Elle soutient que la montée des extrêmes droites n'est
-  pas inéluctable et que la résistance s'organise.
+  Sur un an, Blast dénonce un pouvoir qui protège les puissants et réprime les
+  dominés : trahison du PS, empire Bolloré, impunité policière, guerres et
+  budgets d'un ordre capitaliste et autoritaire. Elle soutient que la montée
+  des extrêmes droites n'est pas inéluctable.
 ---
-# 2025-10-27 → 2026-09-28
+# 2025-10-27 → 2026-10-02
 
-D'octobre 2025 à septembre 2026, Blast ramène des événements très divers à un même ordre capitaliste, colonial et autoritaire. Le pouvoir protège les puissants et réprime les dominés. La répression policière prolonge l'héritage de 2005, l'impunité des forces de l'ordre se généralise, la psychiatrie est asphyxiée. La loi du 7 juillet 2026, un « permis de tuer », s'inscrit dans une criminalisation de la contestation. Blast tient aussi Macron pour responsable des méga-feux.
+Le fil qui traverse la Period est celui d'un pouvoir qui protège les puissants et réprime les dominés. Blast lit la répression policière comme un héritage de 2005 et dénonce une impunité qui s'installe. Elle voit dans le budget 2026 une alliance néolibérale entre macronistes et RN, défend la taxation des ultra-riches et tient Macron pour responsable des méga-feux, président des riches qui verrouille l'après-2027.
 
-Elle suit de près la progression de l'extrême droite et ceux qui la rendent possible. Elle met en cause l'empire Bolloré, CNews, Bardella et les milliardaires des médias. Elle lit le budget 2026 comme une alliance néolibérale entre macronistes et RN, et dénonce la trahison du PS comme les limites de la Ve République. Elle voit dans la diabolisation de Mélenchon et l'offensive contre LFI une manière de verrouiller le débat, et dans la course à 2027 une fabrique de capital politique.
+Le deuxième axe est la fabrique de l'extrême droite. Blast met en cause l'empire Bolloré, CNews et les milliardaires des médias, et soutient que Macron, les éditocrates et les droites banalisent l'extrême droite, du RN à l'AfD. Elle y associe une offensive contre LFI et la diabolisation de Mélenchon. Elle affirme pourtant que cette montée n'est pas inéluctable et que la résistance s'organise.
 
-À l'international, Blast dénonce une guerre contre l'Iran sans justification nucléaire, l'enlèvement de Maduro, l'enrichissement de Trump et l'enrôlement de soldats africains. Face à cela, elle défend la taxation des ultra-riches et tire de la victoire de Mamdani une leçon pour la gauche. Elle soutient que la montée des extrêmes droites n'a rien d'inéluctable.
+Le regard s'élargit au fil des mois. L'automne 2025 est tourné vers la trahison du PS, la Ve République et la victoire de Mamdani, présentée comme une leçon pour la gauche. L'hiver et le printemps 2026 lisent l'enlèvement de Maduro, l'enrôlement de soldats africains et une guerre contre l'Iran sans justification nucléaire comme les effets d'un ordre capitaliste, colonial et autoritaire. La Period se referme sur la course à 2027, que Blast lit comme une fabrique de capital politique.
 
 ## Contenu
 
@@ -22,4 +22,4 @@ Elle suit de près la progression de l'extrême droite et ceux qui la rendent po
 2. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/2-2025-12-26/CLAUDE|2025-12-26 → 2026-02-28]] (68 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE|2026-03-01 → 2026-04-27]] (69 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/CLAUDE|2026-04-28 → 2026-07-09]] (70 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/CLAUDE|2026-07-10 → 2026-09-28]] (65 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/CLAUDE|2026-07-10 → 2026-10-02]] (71 Digests)
