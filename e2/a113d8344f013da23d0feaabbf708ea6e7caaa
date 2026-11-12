@@ -1,0 +1,43 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/3-2026-10-09/CLAUDE.md
+  s_87922071433f7f::t_17a443f473908d 6-10,14,16
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/4-2026-10-13/1-repression-contre-les-lyceens-les-preuves.md
+  s_87922071433f7f::t_5e686383820ad6 1-83
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/4-2026-10-13/2-13-octobre-les-luttes-convergent-rendez.md
+  s_87922071433f7f::t_9b1ddc064a0159 1-60
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/4-2026-10-13/3-comment-diviser-pour-mieux-regner.md
+  s_87922071433f7f::t_b7753cb6712f18 1-77
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/4-2026-10-13/CLAUDE.md
+  s_87922071433f7f::t_93a131538b00bf 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/5-2026-10-15/1-vous-condamnez-les-violences.md
+  s_87922071433f7f::t_336fda2edd8b3a 1-93
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/5-2026-10-15/2-la-jeunesse-peut-faire-basculer-la.md
+  s_87922071433f7f::t_d96f84ee8f9189 1-82
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/5-2026-10-15/3-17-octobre-manifestations-historiques-retour-des.md
+  s_87922071433f7f::t_4547c728322996 1-78
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/5-2026-10-15/CLAUDE.md
+  s_87922071433f7f::t_36cff8c702f9d2 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/CLAUDE.md
+  s_87922071433f7f::t_e8c3741aee3f21 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/CLAUDE.md
+  s_87922071433f7f::t_662bc2de1c2aee 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_87922071433f7f::t_661f109ba227a9 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_87922071433f7f::t_8a2eb87f35affc 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e2a113d8344f013da23d0feaabbf708ea6e7caaa",
+  "prompts": {},
+  "sessions": {
+    "s_87922071433f7f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ac7d5261787b61974",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
