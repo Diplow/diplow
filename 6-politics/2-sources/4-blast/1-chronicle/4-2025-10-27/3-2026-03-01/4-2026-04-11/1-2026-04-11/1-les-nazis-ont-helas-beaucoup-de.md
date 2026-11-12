@@ -1,6 +1,6 @@
 ---
 title: "\"LES NAZIS ONT HÉLAS, BEAUCOUP DE CHOSES À NOUS DIRE SUR NOUS\" - V-W-X-Y-Z"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/5-2026-04-11
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/1-2026-04-11
 owner: diplo
 preview: >-
   Pour l'historien invité, les nazis ne sont pas une exception : ils révèlent

@@ -1,6 +1,6 @@
 ---
 title: "QUI VEUT LA PEAU DE LA SÉCURITÉ SOCIALE ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/6-2026-04-15
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/2-2026-04-15
 owner: diplo
 preview: >-
   Blast soutient que la Sécu, longtemps gérée par les salariés, a été reprise

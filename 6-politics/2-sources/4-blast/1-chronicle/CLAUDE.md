@@ -3,22 +3,22 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit la période comme une dérive : une macronie qui sert les puissants,
-  une extrême droite banalisée, des médias de milliardaires, un PS qui trahit
-  la gauche. Elle soutient que seuls le collectif et le rapport de force font
-  reculer ce pouvoir.
+  Blast lit trois ans d'actualité comme une dérive : une macronie au service
+  des puissants, une extrême droite banalisée, un PS qui trahit la gauche, des
+  médias de milliardaires. Seul le collectif et le rapport de force font
+  reculer.
 ---
 # Chronicle
 
-De fin 2023 à avril 2026, Blast raconte la même pente. La macronie sert les puissants et fait payer les précaires. Le RN est banalisé et érigé en seul opposant, et la loi immigration aligne le pouvoir sur l'extrême droite. La dissolution est lue comme un calcul de Macron : il déroule le tapis au RN, impose Barnier avec l'aval de l'extrême droite, et la crise ne se referme que par sa démission.
+Sur toute la Chronicle, Blast soutient que le pouvoir sert les puissants et fait payer les précaires. Cette lecture ouvre la période, avec une macronie et une loi immigration alignée sur l'extrême droite, et revient ensuite dans les budgets et dans l'attaque contre la justice. La dissolution est lue d'abord comme un calcul de Macron, puis comme la voie ouverte à l'extrême droite : le RN est banalisé et érigé en seul opposant, et Macron lui déroule le tapis. Barnier est imposé avec l'aval du RN, et la crise ne se referme que par une démission.
 
-Au fil de la période, Blast élargit le diagnostic aux contre-pouvoirs. Les médias de milliardaires, et l'empire Bolloré en particulier, sont dénoncés. En 2025, elle voit le pouvoir protéger les puissants et s'en prendre à la justice, et juge la classe politique corrompue. Le PS est accusé de complicité dans le budget Bayrou, puis de trahison envers la gauche.
+Un second fil met en cause les contre-pouvoirs censés tenir ce pouvoir. Blast dénonce les médias de milliardaires et l'empire Bolloré, ainsi qu'une classe politique et des médias patronaux corrompus. Il reproche au PS d'être complice du budget Bayrou, puis de trahir la gauche. La dérive est ainsi décrite comme celle de pouvoirs soustraits au contrôle démocratique.
 
-Dans les derniers mois, le budget, la répression, l'enlèvement de Maduro et la guerre contre l'Iran sont lus comme les effets d'un même ordre capitaliste et autoritaire, où les pouvoirs s'affranchissent des règles au profit du capital. Face à lui, Blast soutient que seul le collectif fait reculer le pouvoir et que la résistance s'organise.
+Le registre s'élargit vers la fin, avec un ordre capitaliste et colonial et la guerre contre l'Iran, mais la conclusion reste la même d'un bout à l'autre. La montée des extrêmes droites n'est pas inéluctable, la résistance s'organise, et seuls le collectif et le rapport de force font reculer.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] (276 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2025-10-26]] (268 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE|2025-10-27 → 2026-04-21]] (195 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE|2025-10-27 → 2026-04-26]] (201 Digests)
