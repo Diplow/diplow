@@ -3,21 +3,22 @@ title: "2024-11-21 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21
 owner: diplo
 preview: >-
-  Boniface lit l'actualité par le deux poids deux mesures et la loi du plus
-  fort : Trump attaque le droit international et l'OTAN, Israël bafoue le
-  droit sans conséquence. Il appelle l'Europe à sortir de sa soumission et à
-  l'autonomie stratégique.
+  Boniface lit près de deux ans d'actualité par le deux poids, deux mesures
+  occidental, la loi du plus fort et Trump, qui affaiblit le droit
+  international, l'OTAN et le multilatéralisme. Il presse l'Europe de sortir
+  de sa soumission et de gagner son autonomie stratégique.
 ---
 # 2024-11-21 → 2026-10-30
 
-Sur ces deux années, Pascal Boniface lit l'actualité par une même grille : le deux poids, deux mesures occidental, puis, de plus en plus nettement, le rapport de force. Gaza et l'Ukraine en sont les terrains d'application. Il juge qu'Israël bafoue le droit sans conséquence, et il presse Macron de passer aux actes contre Netanyahou. Sur l'Ukraine, il estime une paix, même injuste, préférable à la poursuite de la guerre.
+Du 21 novembre 2024 à fin octobre 2026, Pascal Boniface applique à l'actualité une même grille : le deux poids, deux mesures occidental, surtout entre l'Ukraine et Gaza, puis la loi du plus fort. Trump en est la figure centrale. Boniface voit dans ses initiatives une attaque contre le droit international et la fin de l'OTAN, puis une révolution stratégique. Il y lit l'affaiblissement de l'Occident et du multilatéralisme, que la rivalité des puissances fragilise encore en 2026.
 
-Trump devient le point d'appui de cette lecture. Ses initiatives attaquent selon Boniface le droit international et signent la fin de l'OTAN. Il y voit d'abord une révolution stratégique, puis une liquidation du droit international et de l'Occident. La guerre contre l'Iran vient, dans la dernière partie de la Period, confirmer un monde où la force prime sur le droit.
+Sur l'Ukraine, il juge une paix, même injuste, préférable à la guerre. Il estime que les Européens ont cédé, qu'ils doivent sortir du déni et de leur soumission, et il appelle à l'autonomie stratégique de l'Europe. La Period s'achève sur un constat : les Européens sont perdants en Ukraine.
 
-Face à cela, Boniface demande à l'Europe de cesser de subir. Il constate qu'elle a cédé et que les Européens doivent sortir de leur soumission, résister, et conquérir leur autonomie stratégique. Le propos se durcit d'une année à l'autre, mais le fil reste le même : un monde où la loi du plus fort remplace le multilatéralisme, et une Europe qui doit en tirer les conséquences.
+Sur le Proche-Orient, il presse Macron de passer aux actes contre Netanyahou, plaide pour des sanctions contre Israël et ne croit plus à la solution à deux États. En 2026, il juge que la guerre contre l'Iran est un échec politique et un moment d'hubris, dans une Realpolitik trumpienne détaillée dans [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/CLAUDE|2026-01-30 → 2026-10-30]].
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/1-2024-11-21/CLAUDE|2024-11-21 → 2025-04-07]] (72 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/2-2025-04-09/CLAUDE|2025-04-09 → 2025-08-28]] (83 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/CLAUDE|2025-09-01 → 2026-10-30]] (131 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/CLAUDE|2025-09-01 → 2026-01-29]] (84 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/CLAUDE|2026-01-30 → 2026-10-30]] (53 Digests)
