@@ -1,0 +1,51 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_17f003462b6c2a 214
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/4-2026-04-25/4-police-et-ia-la-surveillance-de.md
+  s_0825b512447af0::t_7cab3b94b94de1 1-89
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/4-2026-04-25/CLAUDE.md
+  s_0825b512447af0::t_3eee1261e344c7 2,6-9,11,13,15-17,24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/5-2026-04-28/1-climat-la-non-violence-a-l.md
+  s_0825b512447af0::t_330beb212fad84 1-93
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/5-2026-04-28/2-mines-antipersonnel-une-menace-grandissante-pour.md
+  s_0825b512447af0::t_edd4ca45bd14ef 1-80
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/5-2026-04-28/3-1er-mai-pas-la-fete-du.md
+  s_0825b512447af0::t_fdf1218e75cc51 1-83
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/5-2026-04-28/4-trump-un-mandat-au-service-de.md
+  s_0825b512447af0::t_90379d14ea26f1 1-94
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/5-2026-04-28/5-services-de-renseignements-prives-axis-a.md
+  s_0825b512447af0::t_8b58345736d0f2 1-94
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/5-2026-04-28/CLAUDE.md
+  s_0825b512447af0::t_a040eb8d385b7f 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/CLAUDE.md
+  s_0825b512447af0::t_376fee90b6ed49 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE.md
+  s_0825b512447af0::t_5060536cefd829 2,6-9,11,13,15-17,24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_0825b512447af0::t_2e0d6e76c3cf41 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_0825b512447af0::t_deb8e25777dd42 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2d7dde1367c861f6455f7f256680c68c7cadcc4f",
+  "prompts": {},
+  "sessions": {
+    "s_0825b512447af0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a662ce1abb62fa73f",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
