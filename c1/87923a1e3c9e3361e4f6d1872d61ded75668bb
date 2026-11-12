@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/4-2026-10-23/CLAUDE.md
+  s_87922071433f7f::t_1c3823a47066d5 6-9,13,15-17
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/5-2026-10-25/1-17-octobre-les-medias-et-l.md
+  s_87922071433f7f::t_d96eea5ad29b8c 1-90
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/5-2026-10-25/2-pillages-on-s-agenouille-devant-des.md
+  s_87922071433f7f::t_f7665280355aec 1-80
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/5-2026-10-25/3-24-octobre-police-et-neo-fascistes.md
+  s_87922071433f7f::t_592825adce3b37 1-76
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/5-2026-10-25/4-faire-entendre-toutes-les-voix-reinventer.md
+  s_87922071433f7f::t_294a28b2d19181 1-71
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/5-2026-10-25/5-gaz-lacrymogene-une-arme-chimique-qui.md
+  s_87922071433f7f::t_45ac7fcfcc8d4d 1-81
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/5-2026-10-25/6-la-police-sera-t-elle-toujours.md
+  s_87922071433f7f::t_c7e7ccc8a21df1 1-103
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/5-2026-10-25/CLAUDE.md
+  s_87922071433f7f::t_908eabdfa3462c 1-26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/CLAUDE.md
+  s_87922071433f7f::t_409a5e1ad75922 2,6-9,11,13,15-17,25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/CLAUDE.md
+  s_87922071433f7f::t_372510d8b1dce3 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_87922071433f7f::t_0b836376fda4d6 2,6-8,10,12,14,16,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_87922071433f7f::t_5b8b815ccdb492 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c187923a1e3c9e3361e4f6d1872d61ded75668bb",
+  "prompts": {},
+  "sessions": {
+    "s_87922071433f7f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ac7d5261787b61974",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
