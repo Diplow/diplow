@@ -1,6 +1,6 @@
 ---
 title: "LES POMPIERS ENTRENT EN GUERRE CONTRE LE GOUVERNEMENT"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/6-2026-09-18
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/4-2026-09-14/2-2026-09-18
 owner: diplo
 preview: >-
   Épuisés par des étés de feux et de canicules, les pompiers disent n'avoir

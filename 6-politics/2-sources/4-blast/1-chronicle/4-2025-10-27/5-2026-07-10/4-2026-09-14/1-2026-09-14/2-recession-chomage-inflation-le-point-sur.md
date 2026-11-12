@@ -1,6 +1,6 @@
 ---
 title: "RÉCESSION, CHÔMAGE, INFLATION : LE POINT SUR L'ÉCONOMIE ET L'EMPLOI"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/5-2026-09-14
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/4-2026-09-14/1-2026-09-14
 owner: diplo
 preview: >-
   Selon l'économiste Éric Heyer (OFCE), la France frôle la récession et le

@@ -1,23 +1,24 @@
 ---
-title: "2026-07-10 → 2026-09-23"
+title: "2026-07-10 → 2026-09-28"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10
 owner: diplo
 preview: >-
-  Blast dénonce une impunité qui s'installe à tous les étages et une extrême
-  droite qui avance grâce à ses complices. Elle tient Macron pour responsable
-  des méga-feux, y voit l'effet du capitalisme productiviste, et soutient que
-  la répression criminalise la contestation.
+  Blast dénonce une impunité généralisée et une extrême droite qui avance
+  grâce à ses complices. Elle tient Macron pour responsable des méga-feux,
+  voit dans la loi du 7 juillet 2026 un « permis de tuer » et lit la
+  répression comme une criminalisation de la contestation.
 ---
-# 2026-07-10 → 2026-09-23
+# 2026-07-10 → 2026-09-28
 
-Pendant ces deux mois et demi, Blast déroule un même fil : une impunité qui s'installe à tous les étages, et une extrême droite qui progresse moins par sa propre force que grâce à ses complices. Elle désigne la droite, le patronat et Macron, qui banalisent l'extrême droite, divisent les travailleurs et, selon elle, verrouillent l'après-2027. Les licenciements y sont présentés comme des choix politiques, pas comme des fatalités économiques.
+Pendant ces onze semaines, Blast décrit une impunité qui s'installe à tous les étages et une extrême droite qui progresse grâce à ses complices. Macron, les médias et les droites sont accusés de banaliser l'AfD et le RN. Blast tient aussi le président pour responsable de l'impuissance face aux méga-feux et l'accuse de verrouiller l'après-2027. Elle soutient que la loi du 7 juillet 2026 fait entrer dans le droit un « permis de tuer » et que la répression criminalise la contestation.
 
-Les incendies forment l'autre axe de la Period. Blast tient Macron pour responsable d'une France sans moyens face aux méga-feux, puis, vers la fin, élargit la cause au capitalisme productiviste. Sur le terrain répressif, elle soutient que la loi du 7 juillet 2026 fait entrer dans le droit un « permis de tuer » et que la répression criminalise la contestation, thèse développée dans [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/2-2026-07-30/CLAUDE|2026-07-30 → 2026-08-18]].
+Sur le terrain économique, Blast présente les licenciements comme des choix politiques. Elle dénonce le débat du MEDEF comme de la propagande néolibérale, rattache les incendies au capitalisme productiviste, tient la dette pour un faux procès et accuse le patronat de stigmatiser les chômeurs.
 
-Le ton se déplace au fil des semaines, de la dénonciation vers la réponse à opposer. Pour Blast, le fascisme se combat par la lutte d'en bas, et la dernière partie de la Period reçoit magistrats, économistes et militants pour nourrir cette perspective.
+À gauche, Blast voit Hollande masquer une candidature de droite et la primaire du PS neutraliser les désaccords. Elle dénonce l'acharnement subi par Rima Hassan. Au fil de la Period, elle reçoit des magistrats, Survie, Adèle Haenel, puis des économistes, des militants, des chercheurs et des pompiers.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/1-2026-07-10/CLAUDE|2026-07-10 → 2026-07-29]] (16 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/2-2026-07-30/CLAUDE|2026-07-30 → 2026-08-18]] (16 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/CLAUDE|2026-08-19 → 2026-09-23]] (27 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/CLAUDE|2026-08-19 → 2026-09-13]] (18 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/4-2026-09-14/CLAUDE|2026-09-14 → 2026-09-28]] (15 Digests)
