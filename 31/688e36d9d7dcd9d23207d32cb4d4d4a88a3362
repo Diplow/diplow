@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/3-2026-05-27/4-face-a-l-oppression-seule-la.md
+  s_2725a7ffaf7932::t_55ea17f2d5b30b 1-75
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/3-2026-05-27/5-gabriel-b-tue-par-un-gendarme.md
+  s_2725a7ffaf7932::t_d651fff91b1a4e 1-61
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/3-2026-05-27/CLAUDE.md
+  s_2725a7ffaf7932::t_d5b799fa18fe53 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/4-2026-06-01/1-immigration-la-suisse-pourrait-plafonner-sa.md
+  s_2725a7ffaf7932::t_16f7f25fa7f7c6 1-87
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/4-2026-06-01/2-journalisme-cinema-edition-bollore-veut-tous.md
+  s_2725a7ffaf7932::t_f67d5f5c886cbc 1-105
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/4-2026-06-01/3-ils-organisent-notre-ignorance-pour-continuer.md
+  s_2725a7ffaf7932::t_247405602b0407 1-94
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/4-2026-06-01/4-le-psg-vainqueur-les-racistes-en.md
+  s_2725a7ffaf7932::t_69759000a50b68 1-64
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/4-2026-06-01/CLAUDE.md
+  s_2725a7ffaf7932::t_7ca58973974313 1-22
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/CLAUDE.md
+  s_2725a7ffaf7932::t_13f396cbe90180 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE.md
+  s_2725a7ffaf7932::t_9f53ea3961b1c5 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_2725a7ffaf7932::t_93a51daec0a69e 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_2725a7ffaf7932::t_496d29e92bab7f 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "31688e36d9d7dcd9d23207d32cb4d4d4a88a3362",
+  "prompts": {},
+  "sessions": {
+    "s_2725a7ffaf7932": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a1b4346175291087f",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
