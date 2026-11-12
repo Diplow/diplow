@@ -384,6 +384,9 @@ kinds:
       séance: {définition: "Séance d'une assemblée qui prend une décision historique.", statut: proposé, introduit_par: blast/MOfb3v9r-CY.md}
       concours: {définition: "Compétition artistique entre participants, comme l'Eurovision de la chanson.", statut: proposé, introduit_par: boniface/r2ynmfVCcyE.md}
       épizootie: {définition: "Maladie contagieuse qui touche des animaux d'élevage et appelle des mesures sanitaires, comme l'abattage.", statut: proposé, introduit_par: blast/CYeCZnmhDkI.md}
+      épidémie: {définition: "Flambée d'une maladie infectieuse qui touche rapidement de nombreuses personnes dans une région.", statut: proposé, introduit_par: blast/N4582S7sn1w.md}
+      événement-artistique: {définition: "Événement public d'installations et de performances artistiques dans plusieurs lieux d'une ville.", statut: proposé, introduit_par: blast/eG2eVvOqcX4.md}
+      émeute: {définition: "Flambée de violences collectives dans la rue, avec incendies et affrontements, souvent dirigée contre un groupe ciblé.", statut: proposé, introduit_par: blast/-n5PKZJRfvo.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

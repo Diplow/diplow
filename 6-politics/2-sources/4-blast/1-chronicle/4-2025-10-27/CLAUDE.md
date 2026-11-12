@@ -1,23 +1,23 @@
 ---
-title: "2025-10-27 → 2026-06-09"
+title: "2025-10-27 → 2026-06-15"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27
 owner: diplo
 preview: >-
-  Blast lit la période comme une offensive de l'extrême droite, des
-  milliardaires des médias et de la droite, sur fond de trahison du PS et
-  d'ordre capitaliste, colonial et autoritaire. Elle défend la taxation des
-  ultra-riches et voit l'espoir dans la lutte commune des opprimés.
+  Blast lit ces huit mois comme l'offensive d'un ordre capitaliste,
+  autoritaire et d'extrême droite, porté par des pouvoirs sans contrôle
+  démocratique. Elle soutient que cette montée n'est pas inéluctable, que la
+  gauche peut résister, et défend la taxation des ultra-riches.
 ---
-# 2025-10-27 → 2026-06-09
+# 2025-10-27 → 2026-06-15
 
-Dans les premiers mois, Blast ([[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/1-2025-10-27/CLAUDE|2025-10-27 → 2025-12-25]]) dénonce la trahison du PS, l'empire Bolloré et la Ve République. Elle lit le budget 2026 comme une alliance néolibérale entre macronistes et RN, et la répression policière comme un héritage de 2005. La victoire de Mamdani devient pour elle une leçon pour la gauche.
+Pendant ces huit mois, Blast dénonce des pouvoirs qui échappent à tout contrôle démocratique : l'empire Bolloré et les milliardaires des médias, la Ve République, la trahison du PS. Elle lit le budget 2026 comme une alliance néolibérale entre macronistes et RN. Dans les derniers mois, elle voit une offensive coordonnée de l'extrême droite, des milliardaires des médias et de la droite contre LFI et la gauche.
 
-Au cœur de l'hiver ([[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/2-2025-12-26/CLAUDE|2025-12-26 → 2026-02-28]]), le regard s'élargit. L'enlèvement de Maduro, l'impunité policière, la psychiatrie asphyxiée et l'enrôlement de soldats africains sont présentés comme les effets d'un même ordre capitaliste, colonial et autoritaire. Blast soutient que la montée des extrêmes droites n'est pas inéluctable et que la résistance s'organise.
+Elle rattache la violence d'État à un même ordre. La répression policière est pour elle un héritage de 2005, et elle dénonce l'impunité policière. La psychiatrie asphyxiée, l'enlèvement de Maduro et l'enrôlement de soldats africains sont, dans sa lecture, les effets d'un ordre capitaliste, colonial et autoritaire. La répression d'État reste un fil jusqu'à la fin de la Period.
 
-Le dernier temps ([[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE|2026-03-01 → 2026-06-09]]) est le plus offensif. Blast y voit l'extrême droite, les milliardaires des médias et la droite se liguer contre LFI et la gauche, et dénonce des pouvoirs qui échappent au contrôle démocratique. Elle défend la taxation des ultra-riches et place son espoir dans la lutte commune des opprimés.
+Blast refuse pourtant la fatalité : elle soutient que la montée des extrêmes droites n'est pas inéluctable et que la résistance s'organise. Elle tire de la victoire de Mamdani une leçon pour la gauche, et défend la taxation des ultra-riches comme réponse à ces pouvoirs sans contrôle.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/1-2025-10-27/CLAUDE|2025-10-27 → 2025-12-25]] (65 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/2-2025-12-26/CLAUDE|2025-12-26 → 2026-02-28]] (68 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE|2026-03-01 → 2026-06-09]] (110 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE|2026-03-01 → 2026-06-15]] (116 Digests)

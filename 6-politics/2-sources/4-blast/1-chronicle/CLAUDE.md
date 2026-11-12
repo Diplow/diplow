@@ -3,22 +3,22 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit trois ans de vie politique comme une dérive : une macronie au
-  service des puissants, une extrême droite banalisée, des médias de
-  milliardaires, un PS qui trahit la gauche. Seuls le collectif et le rapport
-  de force font reculer le pouvoir.
+  Blast lit trois ans de vie politique comme une dérive : une macronie qui
+  sert les puissants, une extrême droite banalisée, un PS qui trahit la
+  gauche, des médias de milliardaires. Elle soutient que cette montée n'est
+  pas inéluctable et que le collectif peut la faire reculer.
 ---
 # Chronicle
 
-Blast lit la période comme une dérive continue. Dès fin 2023, la macronie sert les puissants et fait payer les précaires, tandis que le RN est banalisé et érigé en seul opposant. La loi immigration est pour Blast un alignement sur l'extrême droite, et la dissolution un calcul de Macron.
+Du 31 octobre 2023 à juin 2026, Blast raconte une même histoire : celle d'un pouvoir qui sert les puissants et fait payer les précaires. La première année met en place ce cadre : une macronie qui s'en prend aux plus fragiles, un RN banalisé et érigé en seul opposant, une loi immigration alignée sur l'extrême droite. Elle s'achève sur la dissolution, que Blast lit comme un calcul de Macron.
 
-Après la dissolution, Blast voit Macron dérouler le tapis au RN et imposer Barnier avec son aval, la crise ne se refermant que par sa démission. Il dénonce les médias de milliardaires et un PS complice du budget Bayrou. En 2025, la dérive devient autoritaire : l'extrême droite avance, le pouvoir protège les puissants et s'en prend à la justice, la classe politique et les médias patronaux sont corrompus, et le PS trahit la gauche.
+La suite approfondit cette lecture. Blast voit dans la dissolution la voie ouverte à l'extrême droite : Macron déroule le tapis au RN et impose Barnier avec son aval, et la crise ne se referme que par sa démission. Elle dénonce les médias de milliardaires, un PS complice du budget Bayrou, puis en 2025 une dérive autoritaire où le pouvoir protège les puissants, s'en prend à la justice, et où la classe politique comme les médias patronaux sont corrompus.
 
-Dans la dernière période, Blast décrit une offensive de l'extrême droite, des milliardaires des médias et de la droite, sur fond d'ordre capitaliste, colonial et autoritaire. Il défend la taxation des ultra-riches et place l'espoir dans la lutte commune des opprimés, le collectif et le rapport de force étant ce qui fait reculer le pouvoir.
+Le ton se déplace sur la fin de la Chronicle. Blast y décrit l'offensive d'un ordre capitaliste, autoritaire et d'extrême droite, porté par des pouvoirs sans contrôle démocratique. Elle y oppose que cette montée n'a rien d'inéluctable : seuls le collectif et le rapport de force font reculer, la gauche peut résister, et la taxation des ultra-riches est défendue.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] (276 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2025-10-26]] (268 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE|2025-10-27 → 2026-06-09]] (243 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE|2025-10-27 → 2026-06-15]] (249 Digests)
