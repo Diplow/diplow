@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/4-2026-06-18/CLAUDE.md
+  s_895285baf350f7::t_27ae43cbad3cc7 6-8,12,14
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/5-2026-06-21/1-fete-interdite-pour-les-islamogauchistes.md
+  s_895285baf350f7::t_84a6ff100d451c 1-68
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/5-2026-06-21/2-elon-musk-genie-ou-nazi-les.md
+  s_895285baf350f7::t_bce9bc1748d45b 1-93
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/5-2026-06-21/3-eborgne-par-un-tir-de-lbd.md
+  s_895285baf350f7::t_b82af0fa9fb848 1-63
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/5-2026-06-21/4-la-pedocriminalite-est-un-crime-de.md
+  s_895285baf350f7::t_c756826d250beb 1-87
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/5-2026-06-21/5-revelations-blast-une-nouvelle-victime-d.md
+  s_895285baf350f7::t_550ad8d59d4915 1-76
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/5-2026-06-21/6-lfi-ps-qui-a-le-meilleur.md
+  s_895285baf350f7::t_1e015fe082bc06 1-89
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/5-2026-06-21/CLAUDE.md
+  s_895285baf350f7::t_5f6cff47ee3fea 1-26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/CLAUDE.md
+  s_895285baf350f7::t_a9db2959c1179c 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/CLAUDE.md
+  s_895285baf350f7::t_0049d35cd8b725 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_895285baf350f7::t_e3000ec825e391 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_895285baf350f7::t_2c2df03ad3bfc8 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "90cbfa3e6015629e3f8f2629d7ce563cb4d290dc",
+  "prompts": {},
+  "sessions": {
+    "s_895285baf350f7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a9ed8141ff4948f33",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
