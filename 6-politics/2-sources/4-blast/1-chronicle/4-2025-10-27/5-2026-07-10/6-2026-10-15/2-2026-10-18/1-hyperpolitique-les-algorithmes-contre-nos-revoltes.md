@@ -1,6 +1,6 @@
 ---
 title: "HYPERPOLITIQUE : LES ALGORITHMES CONTRE NOS RÉVOLTES"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/6-2026-10-18
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/2-2026-10-18
 owner: diplo
 preview: >-
   L'historien Anton Jäger soutient qu'on est passé de la post-politique des
