@@ -1,6 +1,6 @@
 ---
 title: "\"ÉBORGNÉ PAR UN TIR DE LBD\" : RAFAËL 18 ANS, DE LA FÊTE AU CAUCHEMAR"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/5-2026-06-21
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/1-2026-06-21
 owner: diplo
 preview: >-
   Blast donne la parole à Raphaël, 18 ans, qui dit avoir perdu l'œil droit

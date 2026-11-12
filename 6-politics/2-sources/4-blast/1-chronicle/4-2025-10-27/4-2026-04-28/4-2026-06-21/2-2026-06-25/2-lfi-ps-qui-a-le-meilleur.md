@@ -1,6 +1,6 @@
 ---
 title: "LFI, PS : QUI A LE MEILLEUR PROGRAMME ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/5-2026-06-21
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/2-2026-06-25
 owner: diplo
 preview: >-
   Blast soutient que le programme du PS n'est qu'une copie édulcorée de celui

@@ -1,6 +1,6 @@
 ---
 title: "\"LA PÉDOCRIMINALITÉ EST UN CRIME DE MASSE\""
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/5-2026-06-21
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/1-2026-06-21
 owner: diplo
 preview: >-
   Les violences sexuelles faites aux enfants sont un crime de masse, enraciné
