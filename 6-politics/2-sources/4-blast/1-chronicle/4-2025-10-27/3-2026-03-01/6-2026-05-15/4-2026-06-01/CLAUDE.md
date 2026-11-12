@@ -1,18 +1,20 @@
 ---
-title: "2026-06-01 → 2026-06-04"
+title: "2026-06-01 → 2026-06-05"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/4-2026-06-01
 owner: diplo
 preview: >-
-  Blast décrit une extrême droite qui verrouille médias et culture, Bolloré en
-  tête, et des élites qui organisent l'ignorance. Il lit l'initiative suisse
-  sur la population comme un texte anti-immigration, et les réactions à la
-  victoire du PSG comme une pente raciste puis répressive.
+  Blast lit la semaine comme une offensive de l'extrême droite et des pouvoirs
+  économiques : initiative suisse anti-immigration, empire Bolloré, victoire
+  du PSG dévoyée en panique raciste, accusation d'antisémitisme « de gauche »
+  retournée, grande distribution prédatrice.
 ---
-# 2026-06-01 → 2026-06-04
+# 2026-06-01 → 2026-06-05
 
-Le fil de la semaine, pour Blast, est la concentration du pouvoir par ceux qui contrôlent l'information. Bolloré s'en sert pour imposer un projet d'extrême droite dans le cinéma, l'édition et la presse : rachat d'UGC, censure et autocensure, clauses de silence, avec la complicité de l'État. Une réalisatrice, une productrice et un journaliste, reçus à ce sujet, appellent à une riposte collective. Blast élargit le propos à des politiques et des médias oisifs, sans expérience du travail, qui organisent l'ignorance pour préserver leur pouvoir : Macron verrouille l'État, la vraie gauche est marginalisée, Trump incarne la corruption.
+Le fil de la semaine, pour Blast, est celui d'un racisme et d'un contrôle de l'information qui s'installent par le haut. L'initiative suisse « Pas de Suisse à 10 millions » serait un texte anti-immigration de l'UDC habillé d'écologie, qui ne toucherait jamais au capitalisme. Après la victoire du PSG, les réactions politiques et médiatiques tirent les violences vers l'immigration, une « jeunesse arabo-musulmane » et le Qatar, puis vers la surenchère répressive. Blast soutient aussi que l'accusation d'un antisémitisme de gauche inverse la réalité : elle sert à discréditer LFI et l'antiracisme, pendant que le RN multiplie les références pétainistes.
 
-L'autre axe est la façon dont l'immigration et le racisme servent de grille de lecture. Blast soutient que l'initiative « Pas de Suisse à 10 millions », présentée comme écologique, est un texte anti-immigration de l'UDC, qui isolerait le pays de l'UE sans jamais toucher au capitalisme. Il monte ensuite en séquence les réactions politiques et médiatiques à la victoire du PSG, qui tirent les violences vers l'immigration, une « jeunesse arabo-musulmane » et le Qatar, puis vers la surenchère répressive. Un interpellé, Hugues, y raconte les insultes racistes qu'il a subies.
+Le second axe est la concentration du pouvoir médiatique et économique. Blast montre Bolloré se servant du cinéma et des médias pour imposer un projet d'extrême droite, par le rachat d'UGC, la censure, l'autocensure et les clauses de silence, avec la complicité de l'État. Une réalisatrice, une productrice et une journaliste y appellent à une riposte collective. Blast soutient plus largement que des politiques et des médias oisifs organisent l'ignorance pour préserver leur pouvoir : Macron verrouille l'État, la vraie gauche est marginalisée, Trump incarne la corruption.
+
+La semaine se clôt sur l'économie : reprenant le rapport sénatorial sur les marges, Blast décrit une grande distribution hyperconcentrée qui capte la valeur de la chaîne agroalimentaire par des pratiques prédatrices, aux dépens des agriculteurs et des industriels.
 
 ## Contenu
 
@@ -20,3 +22,5 @@ L'autre axe est la façon dont l'immigration et le racisme servent de grille de 
 2. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/4-2026-06-01/2-journalisme-cinema-edition-bollore-veut-tous|JOURNALISME, CINÉMA, ÉDITION : BOLLORÉ VEUT TOUS LES FAIRE TAIRE]] (2026-06-02)
 3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/4-2026-06-01/3-ils-organisent-notre-ignorance-pour-continuer|"ILS ORGANISENT NOTRE IGNORANCE POUR CONTINUER LEUR CORRUPTION"]] (2026-06-03)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/4-2026-06-01/4-le-psg-vainqueur-les-racistes-en|LE PSG VAINQUEUR, LES RACISTES EN SUEUR]] (2026-06-04)
+5. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/4-2026-06-01/5-antisemitisme-de-gauche-l-indecente-inversion|ANTISÉMITISME “DE GAUCHE“ : L’INDÉCENTE INVERSION DE LA RÉALITÉ]] (2026-06-04)
+6. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/4-2026-06-01/6-grande-distribution-ces-predateurs-qui-saignent|GRANDE DISTRIBUTION : CES PRÉDATEURS QUI SAIGNENT TOUT LE MONDE]] (2026-06-05)

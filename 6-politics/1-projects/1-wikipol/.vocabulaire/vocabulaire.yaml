@@ -215,6 +215,7 @@ kinds:
       infirmier: {définition: "Soigne les patients à l'hôpital sous l'autorité d'un médecin.", statut: proposé, introduit_par: blast/J1Ys7rkCM4Q.md}
       stratège: {définition: "Pense et théorise la stratégie, militaire ou autre.", statut: proposé, introduit_par: boniface/3YYrGBP7N2s.md}
       père-fondateur: {définition: "Figure qui a participé à la fondation des États-Unis et à l'écriture de leur Constitution.", statut: proposé, introduit_par: boniface/i80kxcvBdxc.md}
+      climatologue: {définition: "Étudie le climat et son évolution.", statut: proposé, introduit_par: blast/M-zNobiaxcY.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -306,6 +307,7 @@ kinds:
       réseau-paramilitaire-clandestin: {définition: "Réseau paramilitaire secret, adossé à des services de renseignement ou à l'OTAN.", statut: proposé, introduit_par: blast/9LbmbBDfY-U.md}
       mouvement-d-opposition: {définition: "Organisation qui s'oppose à un régime, en exil ou dans le pays.", statut: proposé, introduit_par: boniface/IJJrlG1qRxA.md}
       instance-de-gouvernance: {définition: "Organe de gouvernance internationale créé à l'initiative d'un État, hors du cadre de l'ONU.", statut: proposé, introduit_par: boniface/dAfVUHHl-48.md}
+      centrale-d-achat: {définition: "Alliance de distributeurs qui négocie ensemble ses achats auprès des fournisseurs.", statut: proposé, introduit_par: blast/OVUdQZ_0W-A.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -438,6 +440,7 @@ kinds:
       proposition-de-loi: {définition: "Loi en discussion d'initiative parlementaire, pas encore définitivement adoptée.", statut: proposé, introduit_par: blast/qekuUH1fa0s.md}
       doctrine: {définition: "Texte qui fixe l'orientation stratégique ou de sécurité d'un État.", statut: proposé, introduit_par: boniface/ZFwecl5wW7Q.md}
       mesure-fiscale: {définition: "Impôt ou contribution instauré par une loi de finances.", statut: proposé, introduit_par: blast/TBRDLR98AW0.md}
+      édit-royal: {définition: "Acte législatif pris par un roi de France, comme le Code noir.", statut: proposé, introduit_par: blast/OVUdQZ_0W-A.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}

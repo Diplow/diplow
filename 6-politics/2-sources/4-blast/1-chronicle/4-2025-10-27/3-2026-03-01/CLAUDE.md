@@ -1,20 +1,21 @@
 ---
-title: "2026-03-01 → 2026-06-04"
+title: "2026-03-01 → 2026-06-09"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01
 owner: diplo
 preview: >-
-  Blast lit la période comme l'offensive d'un ordre médiatique, patronal et
-  politique : guerre contre l'Iran, extrême droite portée par Bolloré et
-  Arnault, acharnement contre LFI et Mélenchon, répression d'État. Elle défend
-  la taxation des ultra-riches et les luttes des opprimés.
+  Blast lit la période comme une offensive de l'extrême droite, des
+  milliardaires des médias et de la droite contre LFI et la gauche. Elle
+  dénonce des pouvoirs qui échappent au contrôle démocratique, défend la
+  taxation des ultra-riches et voit un espoir dans la lutte commune des
+  opprimés.
 ---
-# 2026-03-01 → 2026-06-04
+# 2026-03-01 → 2026-06-09
 
-De mars à début juin, Blast soutient que la guerre contre l'Iran n'a aucune justification nucléaire et sert Israël, et reproche à Macron d'épargner les États-Unis et Israël. Elle lit ensuite les municipales comme le terrain d'une extrême droite préparée par les milliardaires des médias, freinée localement, pendant que LFI perce dans les communes populaires. Elle défend alors le tirage au sort et l'antifascisme.
+Au début du printemps, Blast juge la guerre contre l'Iran sans justification nucléaire et menée au service d'Israël. Elle reproche à Macron d'épargner les États-Unis et Israël, et à la droite de ménager le RN ([[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/1-2026-03-01/CLAUDE|2026-03-01 → 2026-03-13]]). Les municipales deviennent le terrain d'une extrême droite préparée par les milliardaires des médias, freinée localement, tandis que LFI perce dans les communes populaires. Blast y défend le tirage au sort et l'antifascisme.
 
-Le fil qui revient est celui de pouvoirs qui échappent au contrôle démocratique, de l'industrie au patronat et aux médias. Blast dénonce une offensive médiatique et politique contre LFI et la gauche, avec ses boucs émissaires et sa campagne raciste, puis une droite, des médias Bolloré et des milliardaires qui préparent 2027. Elle réclame la fermeture de CNews et voit en Bardella le pion d'Arnault et de Bolloré. En fin de période, elle soutient que la presse et les sondages font de Mélenchon un repoussoir qui sert le RN, et qu'une extrême droite verrouille médias et culture.
+D'avril à la mi-mai, le fil est celui des pouvoirs sans contrôle. Blast dénonce une offensive médiatique et politique contre LFI et la gauche, avec ses boucs émissaires et sa campagne raciste, puis une droite, des médias Bolloré et des milliardaires qui préparent 2027. Elle étend le constat à l'industrie, au patronat et aux médias, soutient que le même ordre se rejoue partout, jusqu'à un ICE français, réclame la fermeture de CNews et voit en Bardella le pion d'Arnault et de Bolloré. Elle ajoute que Trump gouverne pour s'enrichir, que la presse ménage Macron, que les violences policières restent impunies et que l'hôpital public traque des soignantes racisées ([[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/CLAUDE|2026-04-28 → 2026-05-14]]).
 
-Le même ordre se rejoue selon elle partout : Trump gouverne pour s'enrichir, la presse ménage Macron, les violences policières restent impunies, l'hôpital public traque des soignantes racisées, et l'État durcit répression et surveillance, jusqu'à un ICE français. Blast enquête sur Axis et reçoit syndicalistes, militants et auteurs d'enquêtes. Face à cela, elle défend la taxation des ultra-riches et voit dans les luttes des opprimés un espoir commun.
+Depuis la mi-mai, Blast défend la taxation des ultra-riches. Elle juge que presse et sondages font de Mélenchon un repoussoir qui sert le RN, et dénonce la répression d'État comme l'offensive de l'extrême droite et des pouvoirs économiques. Contre cela, elle voit dans la lutte des opprimés un espoir commun ([[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/CLAUDE|2026-05-15 → 2026-06-09]]).
 
 ## Contenu
 
@@ -23,4 +24,4 @@ Le même ordre se rejoue selon elle partout : Trump gouverne pour s'enrichir, la
 3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/CLAUDE|2026-03-26 → 2026-04-10]] (20 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/CLAUDE|2026-04-11 → 2026-04-27]] (17 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/CLAUDE|2026-04-28 → 2026-05-14]] (16 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/CLAUDE|2026-05-15 → 2026-06-04]] (19 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/CLAUDE|2026-05-15 → 2026-06-09]] (25 Digests)
