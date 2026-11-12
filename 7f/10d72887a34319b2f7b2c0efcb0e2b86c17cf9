@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/3-2026-05-07/4-israel-a-l-eurovision-l-heure.md
+  s_29cdeadf0f80a8::t_99ba80d39a34d2 1-93
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/3-2026-05-07/CLAUDE.md
+  s_29cdeadf0f80a8::t_9fe387858afce4 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/4-2026-05-11/1-islamophobie-d-etat-comment-l-hopital.md
+  s_29cdeadf0f80a8::t_64a6c373ef408e 1-89
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/4-2026-05-11/2-revelez-votre-potentiel-enquete-sur-les.md
+  s_29cdeadf0f80a8::t_a822840b65e2ea 1-84
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/4-2026-05-11/3-la-realite-cachee-et-abjecte-du.md
+  s_29cdeadf0f80a8::t_6677acb1dc336b 1-86
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/4-2026-05-11/4-viols-dans-les-beaux-quartiers-parisiens.md
+  s_29cdeadf0f80a8::t_641f79de7bf009 1-91
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/4-2026-05-11/5-terreur-chez-les-ultra-riches-le.md
+  s_29cdeadf0f80a8::t_8e11ef23a99691 1-89
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/4-2026-05-11/CLAUDE.md
+  s_29cdeadf0f80a8::t_98aefd9089d626 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/CLAUDE.md
+  s_29cdeadf0f80a8::t_ec157924f13dae 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE.md
+  s_29cdeadf0f80a8::t_14637751130701 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_29cdeadf0f80a8::t_6acf8f5bfc970b 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_29cdeadf0f80a8::t_8311847b901d95 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7f10d72887a34319b2f7b2c0efcb0e2b86c17cf9",
+  "prompts": {},
+  "sessions": {
+    "s_29cdeadf0f80a8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-abf605cf6d84fc4c9",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
