@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/5-2026-04-11/CLAUDE.md
+  s_39fcabc634bb0e::t_f39b44d692e33b 2,7-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/6-2026-04-15/1-du-mozambique-a-dunkerque-le-scandale.md
+  s_39fcabc634bb0e::t_58e67059245084 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/6-2026-04-15/2-kiss-my-ass-bienvenue-dans-le.md
+  s_39fcabc634bb0e::t_9b4d4f27b29bb6 1-86
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/6-2026-04-15/3-sondages-la-machine-a-manipuler-est.md
+  s_39fcabc634bb0e::t_01713530923ff5 1-94
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/6-2026-04-15/4-qui-veut-la-peau-de-la.md
+  s_39fcabc634bb0e::t_87791cac3e40d7 1-93
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/6-2026-04-15/5-guerres-au-moyen-orient-deshumaniser-pour.md
+  s_39fcabc634bb0e::t_fc838b0d8dece2 1-83
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/6-2026-04-15/6-bientot-un-ice-francais-comment-resister.md
+  s_39fcabc634bb0e::t_f08143ad22e144 1-103
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/6-2026-04-15/CLAUDE.md
+  s_39fcabc634bb0e::t_9060d816e50fa0 1-26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/CLAUDE.md
+  s_39fcabc634bb0e::t_33ad19ce2f3fb0 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE.md
+  s_39fcabc634bb0e::t_a8df3b18629955 2,7-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_39fcabc634bb0e::t_9da28d03f626b6 2,6-10,12,14,16,18,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_39fcabc634bb0e::t_991fd6809ef098 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "94df0394ee861fff7745a2dbfb3a8cbbe37bb880",
+  "prompts": {},
+  "sessions": {
+    "s_39fcabc634bb0e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ab5233d1119db0a4d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
