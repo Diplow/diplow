@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/3-2026-07-19/CLAUDE.md
+  s_a8292337e395a1::t_7931559d7aa2f2 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/1-zinedine-zidane-l-histoire-d-un.md
+  s_a8292337e395a1::t_f56aa2eb6811be 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/2-en-pleine-guerre-des-drones-les.md
+  s_a8292337e395a1::t_1e744c27c37fbd 1-80
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/3-enfants-sous-silence-en-finir-avec.md
+  s_a8292337e395a1::t_d8b36822e8e7e5 1-86
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/4-licenciements-la-veritable-violence.md
+  s_a8292337e395a1::t_f103235e6208cc 1-95
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/5-macron-l-incendiaire.md
+  s_a8292337e395a1::t_880fa07239f198 1-86
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/6-2027-les-pieges-de-macron-a.md
+  s_a8292337e395a1::t_da55c1cf33d7a8 1-81
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/CLAUDE.md
+  s_a8292337e395a1::t_c431b1cba17aa3 1-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/CLAUDE.md
+  s_a8292337e395a1::t_e2dc9432e89969 2,6-9,11,13,15-17,23-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/CLAUDE.md
+  s_a8292337e395a1::t_c0ce15cf9ead54 2,6-8,10,12,14,16,24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_a8292337e395a1::t_98bb26a31f2ac3 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_a8292337e395a1::t_5a05d2b84e7f9a 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cacacccc4a68abc8c3d81808715dfb0c8c54ed11",
+  "prompts": {},
+  "sessions": {
+    "s_a8292337e395a1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aa767ce790dc85336",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
