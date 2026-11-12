@@ -1,23 +1,26 @@
 ---
-title: "2026-06-02 → 2026-10-14"
+title: "2026-06-02 → 2026-06-08"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/5-2026-05-26/2-2026-06-02
 owner: diplo
 preview: >-
-  Boniface reçoit un invité sur la brouille Faye/Sonko au Sénégal, chronique
-  Le Triangle du pouvoir d'Alexander Stubb (trois blocs, un Sud global qui
-  décidera) et reçoit Sylvie Bermann, pour qui le sommet Trump-Xi consacre la
-  parité sino-américaine.
+  Boniface soutient que Trump s'enlise dans ses guerres et que sa Coupe du
+  monde ne lui rendra pas sa popularité, que l'émotion et les sanctions
+  occidentales sont à géométrie variable, et juge partial le livre de
+  Tertrais. Ses invités traitent du Sénégal et des matières premières.
 ---
-# 2026-06-02 → 2026-10-14
+# 2026-06-02 → 2026-06-08
 
-Sur ces trois Digests, Boniface travaille surtout en passeur : il laisse deux invités développer leur lecture et chronique un livre dont il retient la thèse. Les sujets vont de l'Afrique de l'Ouest à l'ordre mondial, en passant par la Chine.
+Le fil de la semaine est Trump, que Boniface décrit en difficulté sur tous les terrains. Il soutient que Trump veut sortir de la guerre d'Iran, où Netanyahou l'a fourvoyé, alors que le Premier ministre israélien veut la poursuivre au Liban : leurs intérêts divergent, mais Israël a bien plus besoin des États-Unis que l'inverse ([[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/5-2026-05-26/2-2026-06-02/6-tensions-entre-trump-et-netanyahou|Tensions entre Trump et Netanyahou]]). Il voit Poutine et Trump pris au piège de leurs guerres. La Coupe du monde est celle de Trump par son attribution, obtenue sous la menace, mais elle ne lui rendra pas sa popularité : chère, hostile aux supporters et à l'Iran, elle expose la servilité de la FIFA.
 
-En juin, son invité lit la rupture entre Diomaye Faye et Sonko comme une querelle intime que le public ne perce pas, sur fond de divergences de méthode. Pour lui, Sonko, faiseur de roi à l'Assemblée, tient la force populaire, et un président sans majorité peut déboucher sur une crise.
+Boniface applique la même grille à l'actualité : l'émotion et les sanctions occidentales sont à géométrie variable, comme le montrent les cas de Ben-Gvir et d'Ebola. Il l'applique aussi à la lecture du livre de Bruno Tertrais, censé combattre les idées reçues. Il le juge partial : sur l'Ukraine, la Libye et surtout Israël-Palestine, le livre omet des vérités et reprend les thèses de l'OTAN et la propagande israélienne ([[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/5-2026-05-26/2-2026-06-02/5-j-ai-lu-geopolitique-de-comptoir|J’ai lu… « Géopolitique de comptoir » de Bruno Tertrais]]).
 
-En octobre, la Period se tourne vers l'équilibre des puissances. Boniface chronique le livre du président finlandais Alexander Stubb, pour qui le monde se divise en trois blocs (Occident, Orient, Sud global) : l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur un Sud qui décidera du nouvel ordre. Le lendemain, Sylvie Bermann, ancienne ambassadrice à Pékin, juge que le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, sans que Pékin ait gagné. Elle voit une Chine patiente sur Taïwan, qui n'est pas anti-européenne mais dont l'excédent commercial met l'Europe en difficulté.
+Deux entretiens ouvrent la semaine sur d'autres terrains, avec des thèses qui restent à ses invités. Au Sénégal, son invité lit la rupture entre Diomaye Faye et Sonko comme une querelle intime sur fond de divergences de méthode, et craint qu'un président sans majorité débouche sur une crise. Pour Philippe Chalmin, les matières premières révèlent les tensions géopolitiques : elles sont une malédiction pour les pays producteurs et un enjeu de dépendance à l'égard de la Chine, surtout pour les métaux.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/5-2026-05-26/2-2026-06-02/1-rupture-diomaye-faye-sonko-quel-impact|Rupture Diomaye Faye/Sonko : quel impact ? - Les mardis de l'IRIS]] (2026-06-02)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/5-2026-05-26/2-2026-06-02/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/5-2026-05-26/2-2026-06-02/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/5-2026-05-26/2-2026-06-02/2-geopolitique-des-matieres-premieres-avec-philippe|Géopolitique des matières premières. Avec Philippe Chalmin - Entretiens géopo]] (2026-06-03)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/5-2026-05-26/2-2026-06-02/3-g7-ukraine-ebola-l-epreuve-des|🌐 G7, Ukraine, Ebola : l’épreuve des désordres mondiaux 🎙️ avec Sur le Toit du Monde]] (2026-06-04)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/5-2026-05-26/2-2026-06-02/4-la-coupe-du-monde-de-trump|La Coupe du monde de Trump ?]] (2026-06-05)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/5-2026-05-26/2-2026-06-02/5-j-ai-lu-geopolitique-de-comptoir|J’ai lu… « Géopolitique de comptoir » de Bruno Tertrais]] (2026-06-06)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/5-2026-05-26/2-2026-06-02/6-tensions-entre-trump-et-netanyahou|Tensions entre Trump et Netanyahou]] (2026-06-08)
