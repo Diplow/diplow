@@ -1,0 +1,39 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/5-2026-09-14/CLAUDE.md
+  s_235ca0b0592b7c::t_c222ba28771d6b 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/6-2026-09-18/1-contre-le-permis-de-tuer-un.md
+  s_235ca0b0592b7c::t_8ced8bcdb9588c 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/6-2026-09-18/2-joe-sacco-on-veut-nous-faire.md
+  s_235ca0b0592b7c::t_4e18b48a2ca70f 1-88
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/6-2026-09-18/3-les-pompiers-entrent-en-guerre-contre.md
+  s_235ca0b0592b7c::t_b2ec0e601083c2 1-75
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/6-2026-09-18/4-allemagne-les-nazis-sont-ils-de.md
+  s_235ca0b0592b7c::t_c831201707c0df 1-99
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/6-2026-09-18/5-ia-le-grand-enfumage.md
+  s_235ca0b0592b7c::t_3b5cfb5c2258eb 1-107
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/6-2026-09-18/CLAUDE.md
+  s_235ca0b0592b7c::t_af870bbcdc1692 1-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/CLAUDE.md
+  s_235ca0b0592b7c::t_c793f06a42f821 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/CLAUDE.md
+  s_235ca0b0592b7c::t_544efc7ca1f110 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_235ca0b0592b7c::t_ed9c48c677db93 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_235ca0b0592b7c::t_389ac750075e17 7,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "83e909898782402253f4684404c1250089a964f4",
+  "prompts": {},
+  "sessions": {
+    "s_235ca0b0592b7c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ace201143be5cd32d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
