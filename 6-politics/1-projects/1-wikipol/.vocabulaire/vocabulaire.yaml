@@ -219,6 +219,7 @@ kinds:
       régisseur: {définition: "Gère les terres et collecte les loyers pour le compte d'un grand propriétaire.", statut: proposé, introduit_par: blast/vihypxAvoYA.md}
       ancien-dirigeant-de-think-tank: {définition: "A présidé ou dirigé un think tank ou une fondation de réflexion et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Z4GVz00Ptjg.md}
       agent-de-mannequins: {définition: "Dirige une agence de mannequins et place des mannequins auprès de clients et de marques.", statut: proposé, introduit_par: blast/P0YnvoRW9BI.md}
+      inspecteur-du-travail: {définition: "Contrôle le respect du droit du travail dans les entreprises.", statut: proposé, introduit_par: blast/TkkZOqKt1Zg.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -311,6 +312,7 @@ kinds:
       mouvement-d-opposition: {définition: "Organisation qui s'oppose à un régime, en exil ou dans le pays.", statut: proposé, introduit_par: boniface/IJJrlG1qRxA.md}
       instance-de-gouvernance: {définition: "Organe de gouvernance internationale créé à l'initiative d'un État, hors du cadre de l'ONU.", statut: proposé, introduit_par: boniface/dAfVUHHl-48.md}
       centrale-d-achat: {définition: "Alliance de distributeurs qui négocie ensemble ses achats auprès des fournisseurs.", statut: proposé, introduit_par: blast/OVUdQZ_0W-A.md}
+      cabinet-d-expertise: {définition: "Cabinet indépendant mandaté pour mener une expertise et en rendre les conclusions.", statut: proposé, introduit_par: blast/TkkZOqKt1Zg.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

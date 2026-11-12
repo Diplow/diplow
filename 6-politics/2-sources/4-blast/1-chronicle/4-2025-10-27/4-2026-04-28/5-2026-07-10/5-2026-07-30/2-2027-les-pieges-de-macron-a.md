@@ -1,6 +1,6 @@
 ---
 title: "2027 : LES PIÈGES DE MACRON À ÉVITER POUR GOUVERNER"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/5-2026-07-30
 owner: diplo
 preview: >-
   Blast imagine une gauche de rupture au pouvoir en 2027 : pour sauver la taxe

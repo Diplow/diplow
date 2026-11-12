@@ -1,18 +1,18 @@
 ---
-title: "2026-07-26 → 2026-07-31"
+title: "2026-07-26 → 2026-07-29"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26
 owner: diplo
 preview: >-
-  Blast accuse Macron de laisser la France sans moyens face aux méga-feux et
-  soutient que les licenciements sont des choix politiques. Il imagine une
-  gauche de rupture qui prépare 2027. Il reçoit aussi Stéphane Beaud et Emma
-  Étienne.
+  Blast soutient que la mobilisation ukrainienne pour Fedorov montre une
+  démocratie vivante et que les licenciements sont des choix politiques, pas
+  des fatalités. Elle reçoit Stéphane Beaud sur Zidane et Emma Étienne sur les
+  violences faites aux enfants.
 ---
-# 2026-07-26 → 2026-07-31
+# 2026-07-26 → 2026-07-29
 
-Le fil de la Period est une charge contre ceux qui gouvernent et ceux qui possèdent. Blast accuse Macron d'avoir laissé la France sans moyens face aux méga-feux (Canadair, ONF, pompiers) tout en arrosant le patronat, ce qui creuse les inégalités et ouvre la voie à l'extrême droite, dédiabolisée par les médias et la justice ([[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/5-macron-l-incendiaire|MACRON L'INCENDIAIRE]]). Il soutient la même logique pour les licenciements collectifs. Patronat et gouvernement les présentent comme inéluctables alors que ce sont des choix politiques, et seules la lutte et la solidarité de classe repolitisent cette violence. Le dernier Digest tourne ce constat vers l'avenir : Blast imagine une gauche de rupture au pouvoir en 2027, qui doit tout anticiper dès la campagne pour sauver la taxe Zucman face au Conseil constitutionnel et à Bercy.
+Deux fois sur quatre, Blast porte elle-même la thèse. En Ukraine, elle lit les manifestations contre le limogeage de Fedorov comme le signe que sa doctrine des drones a changé la guerre, et que la crise, entre corruption et remaniements, montre une démocratie encore vivante malgré le conflit. Côté social, elle défend que les licenciements collectifs sont des choix politiques que patronat et gouvernement présentent comme inéluctables. Ils broient des vies, le management les maquille, et la répression frappe les travailleurs qui réagissent. Pour Blast, seules la lutte et la solidarité de classe repolitisent cette violence.
 
-Les autres Digests donnent la parole à des invités ou regardent ailleurs. Le sociologue Stéphane Beaud explique le parcours de Zidane par un père ouvrier immigré, la Castellane et la formation de Cannes. Il juge le modèle d'intégration être une fausse question. Emma Étienne, fondatrice de SPC, décrit les violences faites aux enfants comme un continuum massif, entretenu par le déni collectif et une protection de l'enfance sans moyens. Blast soutient enfin que les Ukrainiens qui manifestent contre le limogeage de Fedorov défendent une doctrine des drones qui a changé la guerre, et que cette crise montre une démocratie encore vivante.
+Les deux autres Digests donnent la parole à des invités, dont les thèses restent les leurs. Le sociologue Stéphane Beaud explique le parcours de Zidane par un père ouvrier immigré, la Castellane et la formation de Cannes. Pour lui, le modèle d'intégration est une fausse question et le silence politique de Zidane vient du mot d'ordre paternel. Emma Étienne, fondatrice de SPC, décrit les violences faites aux enfants comme un continuum massif, entretenu par un déni collectif et par une protection de l'enfance sans moyens. Elle juge urgent de croire les enfants et de former à l'écoute.
 
 ## Contenu
 
@@ -20,5 +20,3 @@ Les autres Digests donnent la parole à des invités ou regardent ailleurs. Le s
 2. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/2-en-pleine-guerre-des-drones-les|EN PLEINE GUERRE DES DRONES, LES UKRAINIENS SE MOBILISENT]] (2026-07-27)
 3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/3-enfants-sous-silence-en-finir-avec|ENFANTS SOUS SILENCE : EN FINIR AVEC LES VIOLENCES]] (2026-07-28)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/4-licenciements-la-veritable-violence|LICENCIEMENTS : LA VÉRITABLE VIOLENCE]] (2026-07-29)
-5. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/5-macron-l-incendiaire|MACRON L'INCENDIAIRE]] (2026-07-30)
-6. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/4-2026-07-26/6-2027-les-pieges-de-macron-a|2027 : LES PIÈGES DE MACRON À ÉVITER POUR GOUVERNER]] (2026-07-31)
