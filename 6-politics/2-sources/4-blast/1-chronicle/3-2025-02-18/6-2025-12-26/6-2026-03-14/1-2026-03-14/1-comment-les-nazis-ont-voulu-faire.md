@@ -1,6 +1,6 @@
 ---
 title: "COMMENT LES NAZIS ONT VOULU FAIRE DISPARAÎTRE LES PREUVES DE LA SHOAH - M-N-O-P-Q"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/5-2026-03-14
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/1-2026-03-14
 owner: diplo
 preview: >-
   L'invité de Blast soutient que le nazisme a poussé à l'extrême des tendances

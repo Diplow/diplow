@@ -1,6 +1,6 @@
 ---
 title: "MUNICIPALES : UNE ÉPREUVE DE VÉRITÉ POUR DES GAUCHES DÉCHIRÉES"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/6-2026-03-17
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/2-2026-03-17
 owner: diplo
 preview: >-
   Blast soutient que le premier tour des municipales montre une extrême droite

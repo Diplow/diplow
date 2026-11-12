@@ -1,6 +1,6 @@
 ---
 title: "MÉDIAS, ÉDITIONS : RÉSISTER À BOLLORÉ ET AUX FALSIFICATEURS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/5-2026-03-14
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/1-2026-03-14
 owner: diplo
 preview: >-
   Blast soutient que Bolloré rejoue Hugenberg : en rachetant l'édition et les

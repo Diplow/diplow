@@ -1,6 +1,6 @@
 ---
 title: "POURQUOI LES GENS SONT-ILS DE PLUS EN PLUS ÉGOÏSTES ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/6-2026-03-17
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/3-2026-03-21
 owner: diplo
 preview: >-
   Le sociologue Camille Peugny soutient que les classes moyennes supérieures
