@@ -297,6 +297,7 @@ kinds:
       agence-de-façade: {définition: "Structure en apparence civile, comme une agence de presse, qui couvre des activités de renseignement et de subversion.", statut: proposé, introduit_par: blast/9LbmbBDfY-U.md}
       réseau-paramilitaire-clandestin: {définition: "Réseau paramilitaire secret, adossé à des services de renseignement ou à l'OTAN.", statut: proposé, introduit_par: blast/9LbmbBDfY-U.md}
       mouvement-d-opposition: {définition: "Organisation qui s'oppose à un régime, en exil ou dans le pays.", statut: proposé, introduit_par: boniface/IJJrlG1qRxA.md}
+      instance-de-gouvernance: {définition: "Organe de gouvernance internationale créé à l'initiative d'un État, hors du cadre de l'ONU.", statut: proposé, introduit_par: boniface/dAfVUHHl-48.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}

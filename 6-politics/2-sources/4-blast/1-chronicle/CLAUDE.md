@@ -3,21 +3,21 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit trois ans de politique comme une dérive : une macronie qui sert
-  les puissants et fait payer les précaires, une extrême droite banalisée qui
-  avance, un PS qui trahit la gauche, des médias aux mains de milliardaires.
-  Seuls le collectif et le rapport de force font reculer.
+  Blast lit trois ans de vie politique comme une dérive : une macronie qui
+  sert les puissants et frappe les précaires, ouvre la voie au RN, et un PS
+  complice ou traître. Il défend la justice et le collectif, et soutient que
+  seul le rapport de force fait reculer.
 ---
 # Chronicle
 
-De fin 2023 à début 2026, Blast déroule un même fil : le pouvoir macroniste sert les puissants et fait payer les précaires. La loi immigration, pour elle, aligne le camp présidentiel sur l'extrême droite, et le RN est banalisé jusqu'à être érigé en seul opposant. La dissolution n'y apparaît pas comme un accident, mais comme un calcul de Macron.
+Du 31 octobre 2023 à mars 2026, Blast déroule un même fil : un pouvoir macroniste qui sert les puissants et fait payer les précaires. La première année installe cette lecture, avec un RN banalisé et érigé en seul opposant, et une loi immigration alignée sur l'extrême droite. Elle s'achève sur la dissolution, que Blast lit comme un calcul de Macron.
 
-Après la dissolution, Blast soutient que Macron déroule le tapis au RN et impose Barnier avec l'aval de l'extrême droite. À ses yeux, la crise ne se referme que par sa démission. Le PS devient alors un acteur central de sa lecture : complice du budget Bayrou, puis traître à la gauche dans la dernière partie de la Chronicle.
+La deuxième période prolonge cette lecture : la dissolution ouvre la voie à l'extrême droite, Macron déroule le tapis au RN et impose Barnier avec son aval, et la crise ne se referme que par sa démission. Blast y dénonce aussi les médias de milliardaires et un PS complice du budget Bayrou.
 
-Le dernier volet de la période fait de l'avancée de l'extrême droite un constat et de la concentration des médias une cause. Blast dénonce des médias de milliardaires, et Bolloré avec quelques autres tient pour elle le paysage médiatique. Face à un pouvoir qui protège les puissants et frappe les faibles, elle ne voit d'issue que dans le collectif et le rapport de force.
+La dernière période, la plus fournie, durcit le constat en dérive autoritaire d'un pouvoir qui protège les puissants et frappe les faibles. Les macronistes y préparent encore le terrain au RN, et le PS y trahit la gauche. Face à cela, Blast défend la justice et le collectif, et soutient que seul le rapport de force fait reculer.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] (276 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2026-03-16]] (422 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2026-03-22]] (428 Digests)

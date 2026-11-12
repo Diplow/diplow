@@ -3,16 +3,16 @@ title: "2026-03-14 → 2026-03-16"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/5-2026-03-14
 owner: diplo
 preview: >-
-  Blast dénonce une couverture indigente des municipales et la mainmise de
-  Bolloré et de quelques milliardaires sur les médias et l'édition, d'où le
-  lancement de Blitz. Ses invités éclairent la montée de l'extrême droite, du
-  nazisme aux États-Unis.
+  Blast soutient que les municipales sont mal couvertes et que les
+  milliardaires des médias et de l'édition, Bolloré en tête, préparent le
+  terrain de l'extrême droite ; il lance Blitz pour y résister. Il reçoit
+  aussi un invité sur la Shoah et Éric Fassin sur l'extrême droite.
 ---
 # 2026-03-14 → 2026-03-16
 
-Pendant ces trois jours, Blast tourne sa critique vers le paysage médiatique. Il soutient que les municipales sont mal couvertes : des journalistes parisiens et des chaînes privées, BFM TV de Rodolphe Saadé en tête, imposent la sécurité et la chasse aux insoumis, banalisent l'extrême droite et ignorent les agressions contre la gauche, alors que le service public régional fait mieux ([[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/5-2026-03-14/2-municipales-debats-pourris-et-angles-morts|🦏 MUNICIPALES : DÉBATS POURRIS ET ANGLES MORTS]]). Il prolonge ce constat par une alerte sur la concentration : Bolloré rejoue Hugenberg, et en rachetant l'édition et les médias, une poignée de milliardaires prépare le terrain de l'extrême droite. Blast répond en lançant Blitz, une maison d'édition indépendante.
+Le fil de la Period est la critique du paysage médiatique. Blast soutient que les municipales sont mal couvertes : des journalistes parisiens et des chaînes privées, BFM TV de Rodolphe Saadé en tête, imposent la sécurité et la chasse aux insoumis, banalisent l'extrême droite et ignorent les agressions contre la gauche, alors que le service public régional fait mieux. Il étend le constat à l'édition et aux médias : Bolloré rejoue Hugenberg, et une poignée de milliardaires prépare le terrain de l'extrême droite. Blast répond en lançant Blitz, une maison d'édition indépendante.
 
-Ces thèses sont encadrées par deux entretiens sur l'extrême droite, d'hier et d'aujourd'hui. L'invité du premier soutient que le nazisme a poussé à l'extrême des tendances de la modernité (management, performance, dopage) et que les nazis ont eux-mêmes programmé le négationnisme en effaçant les traces de leurs crimes. Dans le second, Éric Fassin soutient que la guerre en Iran et l'affaire Epstein fracturent l'extrême droite MAGA, où l'antisémitisme redevient fréquentable. Il soutient aussi qu'en France, la dédiabolisation du RN validée par les macronistes sert à instrumentaliser la lutte contre l'antisémitisme.
+Deux entretiens prolongent ce fil sur l'extrême droite et son histoire. Pour son invité sur la Shoah, le nazisme a poussé à l'extrême des tendances de la modernité (management, performance, dopage), et les nazis ont eux-mêmes programmé le négationnisme en effaçant les traces de leurs crimes. Pour Éric Fassin, la guerre en Iran et l'affaire Epstein fracturent l'extrême droite MAGA, où l'antisémitisme redevient fréquentable ; en France, la dédiabolisation du RN, validée par les macronistes, sert selon lui à instrumentaliser la lutte contre l'antisémitisme.
 
 ## Contenu
 
