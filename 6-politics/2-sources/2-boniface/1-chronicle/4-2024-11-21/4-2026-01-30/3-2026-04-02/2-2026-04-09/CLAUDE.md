@@ -1,23 +1,22 @@
 ---
-title: "2026-04-09 → 2026-10-14"
+title: "2026-04-09 → 2026-04-14"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/2-2026-04-09
 owner: diplo
 preview: >-
-  Boniface passe par les livres et les invités : il salue le travail très
-  documenté de Laurent Dauré sur Conspiracy Watch, chronique la lecture
-  d'Alexander Stubb d'un monde en trois blocs, et reçoit Sylvie Bermann sur la
-  parité sino-américaine.
+  Boniface lit les frappes sur le Liban comme un sentiment d'impunité d'Israël
+  et la guerre contre l'Iran comme une faillite où le droit international
+  recule. Il plaide pour que la France se rapproche de Sonko et salue le livre
+  de Laurent Dauré sur Conspiracy Watch.
 ---
-# 2026-04-09 → 2026-10-14
+# 2026-04-09 → 2026-04-14
 
-Sur cette Period, Pascal Boniface s'appuie surtout sur la parole d'autres : deux chroniques « J'ai lu » et un entretien. En avril, il reçoit Laurent Dauré, auteur de L'Anticomplotisme officiel. Pour Dauré, Conspiracy Watch applique une grille libérale-atlantiste : il ignore les complots des élites, légitime l'impérialisme états-unien et la politique israélienne, et amalgame ses critiques. Boniface, lui, salue un travail très documenté.
+Sur l'actualité du Moyen-Orient, Boniface soutient que c'est tout l'ordre international qui est en cause. Les frappes israéliennes sur le Liban, qui tuent surtout des civils, traduisent selon lui un sentiment d'impunité d'Israël, nourri par une communauté internationale et une France passives. Il juge la guerre contre l'Iran être une faillite pour presque tous : Trump, suiviste de Netanyahou, a échoué et bloque Ormuz contre son propre intérêt. Seul le régime iranien en sort renforcé, et le droit international recule.
 
-En octobre, il chronique Le Triangle du pouvoir d'Alexander Stubb, président finlandais. Le livre découpe le monde en trois blocs, l'Occident, l'Orient et le Sud global. Selon lui, l'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
-
-Le lendemain, Boniface reçoit Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine, sans qu'on puisse dire que Pékin a gagné. La Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Le reste de la Period regarde ailleurs. Boniface reçoit Laurent Dauré pour son livre L'Anticomplotisme officiel. C'est Dauré qui soutient que Conspiracy Watch applique une grille libérale-atlantiste, et Boniface salue un travail très documenté. Il revient aussi sur son débat avec Ousmane Sonko, dans lequel il voit l'espoir d'une jeunesse africaine et une souveraineté qui n'est pas antifrançaise. La France a intérêt à se rapprocher de ce partenaire exigeant, à condition qu'il tienne ses promesses de gestion.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/2-2026-04-09/1-j-ai-lu-l-anticomplotisme-officiel|J’ai lu... « L'Anticomplotisme officiel » de Laurent Dauré]] (2026-04-09)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/2-2026-04-09/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/2-2026-04-09/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/2-2026-04-09/2-netanyahou-total-sentiment-d-impunite|Netanyahou : total sentiment d’impunité]] (2026-04-10)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/2-2026-04-09/3-iran-trump-perd-la-boussole|Iran : Trump perd la boussole]] (2026-04-13)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/2-2026-04-09/4-retour-sur-mon-debat-avec-ousmane|Retour sur mon débat avec Ousmane Sonko]] (2026-04-14)
