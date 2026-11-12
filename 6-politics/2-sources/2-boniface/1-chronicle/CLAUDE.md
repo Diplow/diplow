@@ -3,22 +3,22 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Pascal Boniface applique pendant dix ans les mêmes grilles à l'actualité :
-  deux-poids-deux-mesures occidental, multilatéralisme contre unilatéralisme,
-  fin du monopole de l'Occident. Il plaide pour la négociation en Ukraine et
-  pour l'autonomie stratégique de l'Europe.
+  Pendant dix ans, Boniface applique les mêmes grilles à l'actualité :
+  multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
+  fin du monopole de l'Occident. Il presse les Européens d'acquérir leur
+  autonomie et de sortir de leur soumission, et plaide pour la négociation.
 ---
 # Chronicle
 
-Sur toute la Chronicle, Pascal Boniface lit l'actualité avec quelques grilles stables. Le multilatéralisme s'oppose à l'unilatéralisme. Le deux-poids-deux-mesures occidental revient d'une période à l'autre, et avec lui l'idée que l'Occident a perdu son monopole sur l'ordre du monde. De 2016 à 2020, il applique ces grilles à Trump et à la scène internationale, et il lit le Covid-19 comme un révélateur ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]]). Il y ajoute la rivalité sino-américaine et l'échec des interventions extérieures.
+Sur toute la Chronicle, Pascal Boniface revient aux mêmes grilles de lecture : le multilatéralisme contre l'unilatéralisme, le deux-poids-deux-mesures occidental, la fin du monopole de l'Occident. Il les applique à chaque événement, et leur constance fait la cohérence de l'ensemble. À ses yeux, l'Europe doit en tirer la conséquence et gagner en autonomie stratégique.
 
-Avec la guerre en Ukraine, il y voit une impasse qui n'a pas d'issue militaire et qui appelle une négociation, dans un monde où le reste de la planète ne suit plus l'Occident ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]]). De 2022 à 2024, la montée du Sud global et Gaza, qui isole l'Occident, nourrissent la même lecture, et son réalisme plaide pour la négociation ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2024-11-20]]).
+De 2016 à 2022, il lit Trump et la scène internationale par le multilatéralisme, puis le Covid-19 comme un révélateur ([[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]]). Il ajoute la rivalité sino-américaine et l'échec des interventions extérieures, et voit dans la guerre en Ukraine une impasse qui appelle une négociation ([[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]]). De 2022 à 2024, la guerre en Ukraine n'a pour lui plus d'issue militaire. Le Sud global monte, Gaza isole l'Occident, et Boniface plaide pour un réalisme qui passe par la négociation ([[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2024-11-20]]).
 
-Dans les deux dernières années, il met au centre la loi du plus fort et Trump, qui affaiblit le droit international, l'OTAN et le multilatéralisme ([[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/CLAUDE|2024-11-21 → 2026-10-30]]). Il en tire une même conclusion sur toute la période : l'Europe doit sortir de sa soumission et gagner son autonomie stratégique.
+Dans les deux dernières années, il lit l'actualité par le deux poids deux mesures occidental, puis par Trump et le rapport de force. La force prime sur le droit, l'Occident et le multilatéralisme s'affaiblissent, et les Européens doivent sortir du déni et de leur soumission ([[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/CLAUDE|2024-11-21 → 2026-10-30]]).
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]] (322 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2024-11-20]] (317 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/CLAUDE|2024-11-21 → 2026-10-30]] (292 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/CLAUDE|2024-11-21 → 2026-10-30]] (298 Digests)

@@ -1,6 +1,6 @@
 ---
 title: "Gaza : dialogue entre un humanitaire et une rabbine. Avec Jean-François Corty & Nava Hefetz"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/3-2026-10-21
+parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/4-2026-10-21
 owner: diplo
 preview: >-
   Boniface reçoit Jean-François Corty (Médecins du Monde) et la rabbine Nava
