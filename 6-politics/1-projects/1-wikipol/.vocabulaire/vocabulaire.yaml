@@ -217,6 +217,7 @@ kinds:
       père-fondateur: {définition: "Figure qui a participé à la fondation des États-Unis et à l'écriture de leur Constitution.", statut: proposé, introduit_par: boniface/i80kxcvBdxc.md}
       climatologue: {définition: "Étudie le climat et son évolution.", statut: proposé, introduit_par: blast/M-zNobiaxcY.md}
       régisseur: {définition: "Gère les terres et collecte les loyers pour le compte d'un grand propriétaire.", statut: proposé, introduit_par: blast/vihypxAvoYA.md}
+      ancien-dirigeant-de-think-tank: {définition: "A présidé ou dirigé un think tank ou une fondation de réflexion et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Z4GVz00Ptjg.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
