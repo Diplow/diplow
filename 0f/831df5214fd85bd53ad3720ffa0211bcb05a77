@@ -1,0 +1,55 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/CLAUDE.md
+  s_29cdeadf0f80a8::t_8fa3e8778df918 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/1-2026-04-28/1-climat-la-non-violence-a-l.md
+  s_29cdeadf0f80a8::t_f50e3ef2361fc0 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/1-2026-04-28/2-mines-antipersonnel-une-menace-grandissante-pour.md
+  s_29cdeadf0f80a8::t_9b5f4edf27deaa 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/1-2026-04-28/3-1er-mai-pas-la-fete-du.md
+  s_29cdeadf0f80a8::t_d8b1e078ddd2eb 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/1-2026-04-28/4-trump-un-mandat-au-service-de.md
+  s_29cdeadf0f80a8::t_f9688edd932281 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/1-2026-04-28/CLAUDE.md
+  s_29cdeadf0f80a8::t_d25c60a0792e3a 2-3,6-9,11,13,15,19-22
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/2-2026-05-03/1-services-de-renseignements-prives-axis-a.md
+  s_29cdeadf0f80a8::t_d3bb3a1176b30e 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/2-2026-05-03/2-somaliland-le-pays-que-seul-israel.md
+  s_29cdeadf0f80a8::t_b1acc2b254a526 1-83
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/2-2026-05-03/3-les-assoiffeurs-l-enquete-choc-sur.md
+  s_29cdeadf0f80a8::t_7a72261e606638 1-90
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/2-2026-05-03/4-revelations-sur-le-marche-de-la.md
+  s_29cdeadf0f80a8::t_423a62f8a01b96 1-76
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/2-2026-05-03/CLAUDE.md
+  s_29cdeadf0f80a8::t_119803a5e77283 1-22
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/3-2026-05-07/1-macronisme-betise-et-mechancete.md
+  s_29cdeadf0f80a8::t_f965f321d38061 1-83
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/3-2026-05-07/2-rapport-alloncle-comment-l-audiovisuel-public.md
+  s_29cdeadf0f80a8::t_55b480be381410 1-80
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/3-2026-05-07/3-flics-violents-blancs-racistes-l-impunite.md
+  s_29cdeadf0f80a8::t_74c59604cacc5c 1-70
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/3-2026-05-07/CLAUDE.md
+  s_29cdeadf0f80a8::t_f297be1119b470 1-22
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/CLAUDE.md
+  s_29cdeadf0f80a8::t_ce88da5652e5b4 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE.md
+  s_29cdeadf0f80a8::t_6ad6a8b72a9b3d 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_29cdeadf0f80a8::t_06d22571b9fcb5 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_29cdeadf0f80a8::t_22ac30f1081da9 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0f831df5214fd85bd53ad3720ffa0211bcb05a77",
+  "prompts": {},
+  "sessions": {
+    "s_29cdeadf0f80a8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-abf605cf6d84fc4c9",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
