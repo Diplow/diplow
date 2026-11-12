@@ -431,6 +431,7 @@ kinds:
       capitulaire: {définition: "Acte législatif ou réglementaire d'un souverain carolingien.", statut: proposé, introduit_par: paduteam/Zxpf21fWsNc.md}
       proposition-de-loi: {définition: "Loi en discussion d'initiative parlementaire, pas encore définitivement adoptée.", statut: proposé, introduit_par: blast/qekuUH1fa0s.md}
       doctrine: {définition: "Texte qui fixe l'orientation stratégique ou de sécurité d'un État.", statut: proposé, introduit_par: boniface/ZFwecl5wW7Q.md}
+      mesure-fiscale: {définition: "Impôt ou contribution instauré par une loi de finances.", statut: proposé, introduit_par: blast/TBRDLR98AW0.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
