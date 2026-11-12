@@ -1,18 +1,19 @@
 ---
-title: "2026-04-02 → 2026-04-05"
+title: "2026-04-02 → 2026-04-06"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/3-2026-04-02
 owner: diplo
 preview: >-
-  Blast reçoit un juriste sur l'impunité des violations du droit à Gaza,
-  soutient que la guerre contre l'Iran et le Liban est aussi une guerre contre
-  l'environnement, défend un projet de sécession pour la gauche et retrace un
-  parcours fasciste.
+  Blast décrit une guerre au Moyen-Orient qui détruit le droit et
+  l'environnement, alerte sur la reconnaissance faciale policière, juge
+  incertaine la chute d'Orbán et défend une gauche de la sécession.
 ---
-# 2026-04-02 → 2026-04-05
+# 2026-04-02 → 2026-04-06
 
-Le début de la Period est dominé par la guerre au Moyen-Orient. Blast donne la parole au juriste Benjamin Fiorini, pour qui le droit international est violé à Gaza sans jamais être sanctionné, ce qui ouvre la porte à d'autres violations, au Liban, en Iran ou au Venezuela, tandis que gouvernants et médias banalisent cette destruction du droit. Blast prolonge ensuite le constat sur le terrain environnemental : la guerre menée contre l'Iran et le Liban est aussi une guerre contre l'environnement, avec des frappes sur le pétrole, l'eau et les sols et un risque nucléaire. Ces destructions sont pour Blast une arme à part entière, dont le coût reste largement sous-estimé.
+Le fil de la Period est la guerre au Moyen-Orient et ce qu'elle abîme. Blast donne la parole au juriste Benjamin Fiorini, pour qui le droit international est violé à Gaza sans jamais être sanctionné, ce qui ouvre la porte à d'autres violations, du Liban à l'Iran et au Venezuela. Blast soutient de son côté que la guerre contre l'Iran et le Liban est aussi une guerre contre l'environnement : frappes sur le pétrole, l'eau et les sols, risque nucléaire. Ces destructions y sont une arme à part entière, et leur coût reste largement sous-estimé.
 
-La fin de la Period change de registre. Blast défend un projet pour la gauche : la démocratie, en forçant à cohabiter sous une même loi des gens qui ne partagent ni valeurs ni projets, fabrique un « gouvernement des autres », et il faut penser un monde de droits pluriels, de sécession et de libre migration. Blast termine par l'épisode 6 de son enquête sur Yves Guillou, terroriste français mort en 2022 sans avoir changé de regard. Son parcours dans un millefeuille de réseaux néo-templiers, sectaires et proches des services est pour Blast le symptôme d'un milieu réactionnaire toujours actif.
+Deux Digests portent sur le pouvoir et ses dérives. Blast soutient que la reconnaissance faciale policière, avec l'outil Néo révélé par Disclose, est massive et incontrôlée, que l'impunité des policiers rend tout contrôle illusoire, et qu'il faut s'en inquiéter avant que l'extrême droite en hérite. Il décrit Viktor Orbán, pionnier de l'illibéralisme, comme le bâtisseur d'un système de corruption, de propagande et de répression proche de Moscou. Sa chute le 12 avril reste pourtant incertaine : Magyar est conservateur et le scrutin est taillé pour le Fidesz.
+
+Les deux autres Digests s'écartent de l'actualité immédiate. Le premier est un texte pour la gauche, qui voit dans la démocratie un « gouvernement des autres » et appelle à penser un monde de droits pluriels, de sécession et de libre migration. Le second, un épisode de la série sur Yves Guillou, terroriste français mort en 2022, montre un milieu réactionnaire de réseaux néo-templiers, sectaires et proches des services, toujours actif.
 
 ## Contenu
 
@@ -20,3 +21,5 @@ La fin de la Period change de registre. Blast défend un projet pour la gauche :
 2. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/3-2026-04-02/2-guerre-au-moyen-orient-les-consequences|GUERRE AU MOYEN-ORIENT : LES CONSÉQUENCES DRAMATIQUES D'UNE BOMBE CLIMATIQUE]] (2026-04-03)
 3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/3-2026-04-02/3-faire-sedition-un-projet-pour-la|FAIRE SÉDITION : UN PROJET POUR LA GAUCHE]] (2026-04-04)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/3-2026-04-02/4-un-fasciste-entre-guerre-froide-sectes|UN FASCISTE ENTRE GUERRE FROIDE, SECTES ET TEMPLIERS - ÉPISODE 6]] (2026-04-05)
+5. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/3-2026-04-02/5-surveillance-generalisee-big-macron-is-watching|SURVEILLANCE GÉNÉRALISÉE : BIG MACRON IS WATCHING YOU]] (2026-04-05)
+6. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/3-2026-04-02/6-viktor-orban-la-fin-de-15|VIKTOR ORBÁN : LA FIN DE 15 ANS DE RÈGNE ?]] (2026-04-06)
