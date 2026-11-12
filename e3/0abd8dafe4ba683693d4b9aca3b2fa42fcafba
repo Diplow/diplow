@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/3-2026-06-29/5-un-permis-de-tuer-en-toute.md
+  s_c2a55b0d40fd7c::t_aa256d8d35052d 1-81
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/3-2026-06-29/CLAUDE.md
+  s_c2a55b0d40fd7c::t_60ee57226c96dc 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/4-2026-07-04/1-les-medias-contre-melenchon-15-ans.md
+  s_c2a55b0d40fd7c::t_09adff821aca2d 1-92
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/4-2026-07-04/2-epstein-et-la-france-ce-que.md
+  s_c2a55b0d40fd7c::t_ed2e8380f67376 1-92
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/4-2026-07-04/3-jean-luc-melenchon-champion-de-la.md
+  s_c2a55b0d40fd7c::t_b03bd514fa159a 1-92
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/4-2026-07-04/4-bernard-arnault-l-univers-impitoyable-d.md
+  s_c2a55b0d40fd7c::t_b1c52395252110 1-99
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/4-2026-07-04/5-censure-permis-de-tuer-le-macro.md
+  s_c2a55b0d40fd7c::t_88c154421c726c 1-86
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/4-2026-07-04/CLAUDE.md
+  s_c2a55b0d40fd7c::t_81fdfeac9701c7 1-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/CLAUDE.md
+  s_c2a55b0d40fd7c::t_85576f55ce24a2 2,7-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/CLAUDE.md
+  s_c2a55b0d40fd7c::t_4d8f366309db02 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_c2a55b0d40fd7c::t_847a125f6e43ea 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_c2a55b0d40fd7c::t_a81800e38a38a0 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e30abd8dafe4ba683693d4b9aca3b2fa42fcafba",
+  "prompts": {},
+  "sessions": {
+    "s_c2a55b0d40fd7c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad99919cbcec9ff1d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
