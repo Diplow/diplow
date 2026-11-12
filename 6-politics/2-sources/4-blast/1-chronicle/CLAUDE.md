@@ -3,22 +3,22 @@ title: "Chronicle"
 parent: 6-politics/2-sources/4-blast/1-chronicle
 owner: diplo
 preview: >-
-  Blast lit trois ans de vie politique comme une dérive autoritaire : un
-  pouvoir qui sert les puissants, une extrême droite banalisée et portée par
-  les milliardaires, un PS qui trahit la gauche. Seuls le collectif et le
-  rapport de force font reculer.
+  Blast lit trois ans de vie politique comme la dérive d'un ordre qui sert les
+  puissants : macronie, extrême droite banalisée, PS qui trahit, empire
+  Bolloré, répression d'État. Il soutient que cette montée n'est pas
+  inéluctable : le collectif et le rapport de force la font reculer.
 ---
 # Chronicle
 
-D'octobre 2023 à mai 2026, Blast décrit une macronie qui sert les puissants et fait payer les précaires. Il en voit la logique dans la loi immigration alignée sur l'extrême droite, puis dans la dissolution, qu'il lit comme un calcul de Macron. Selon lui, ce choix déroule le tapis au RN, impose Barnier avec l'aval du RN, et la crise ne se referme que par la démission de Macron.
+Sur toute la Chronicle, Blast décrit une dérive continue. La macronie sert les puissants et fait payer les précaires. Le RN est banalisé et érigé en seul opposant, et la loi immigration s'aligne sur l'extrême droite. La dissolution est lue d'abord comme un calcul de Macron, puis comme la voie ouverte à l'extrême droite : Macron déroule le tapis au RN, et la crise ne se referme que par sa démission.
 
-Le fil qui relie la période est celui d'une extrême droite qui avance, banalisée et érigée en seul opposant. Blast y voit aussi un pouvoir qui s'en prend à la justice, une classe politique et des médias patronaux corrompus, et un empire Bolloré adossé aux milliardaires. Il dénonce les médias de milliardaires comme un rouage de cette dérive.
+D'une année à l'autre, la critique s'élargit des gouvernants à tout l'appareil qui les entoure. Blast dénonce les médias de milliardaires et un PS complice du budget Bayrou, puis un pouvoir qui protège les puissants et s'en prend à la justice. Il voit une classe politique et des médias patronaux corrompus, et un PS qui trahit la gauche. La lecture se durcit en dérive autoritaire.
 
-À gauche, le reproche vise le PS, jugé complice du budget Bayrou puis coupable de trahir la gauche. Vers la fin, Blast élargit son regard à un ordre du monde qu'il lit comme capitaliste, colonial et autoritaire. Il défend la taxation des ultra-riches et le modèle espagnol de Sánchez, et ne voit de recul possible que par le collectif et le rapport de force.
+Dans la dernière période, tout cela forme à ses yeux l'offensive d'un ordre capitaliste, médiatique et autoritaire, avec la trahison du PS, l'empire Bolloré, l'extrême droite et la répression d'État. Blast soutient pourtant que rien n'est inéluctable. Seul le collectif et le rapport de force font reculer ce mouvement. Il défend la taxation des ultra-riches et les luttes des opprimés.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] (276 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2025-10-26]] (268 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE|2025-10-27 → 2026-05-29]] (231 Digests)
+4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE|2025-10-27 → 2026-06-04]] (237 Digests)
