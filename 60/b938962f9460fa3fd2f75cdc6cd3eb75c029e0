@@ -1,0 +1,67 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_750fc7c9a008c1 391
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/CLAUDE.md
+  s_895285baf350f7::t_d64ce15959af7f 2,6-9,11,13,15,17
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/1-2026-06-21/1-fete-interdite-pour-les-islamogauchistes.md
+  s_895285baf350f7::t_a1a42441969415 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/1-2026-06-21/2-elon-musk-genie-ou-nazi-les.md
+  s_895285baf350f7::t_dcba56b6d0f212 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/1-2026-06-21/3-eborgne-par-un-tir-de-lbd.md
+  s_895285baf350f7::t_78bd183cc5b07a 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/1-2026-06-21/4-la-pedocriminalite-est-un-crime-de.md
+  s_895285baf350f7::t_5b59c081e105d0 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/1-2026-06-21/CLAUDE.md
+  s_895285baf350f7::t_89697544a55de2 2-3,6-9,11,13,15,17,21-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/2-2026-06-25/1-revelations-blast-une-nouvelle-victime-d.md
+  s_895285baf350f7::t_41aeab0d2e5d4b 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/2-2026-06-25/2-lfi-ps-qui-a-le-meilleur.md
+  s_895285baf350f7::t_aa358054971949 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/2-2026-06-25/3-canicule-des-mensonges-et-des-politiques.md
+  s_895285baf350f7::t_7b41cda79d536a 1-87
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/2-2026-06-25/4-hara-kiri-contre-charlie-hebdo-notre.md
+  s_895285baf350f7::t_d6544bc1498268 1-92
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/2-2026-06-25/CLAUDE.md
+  s_895285baf350f7::t_f77b6a8c8072a1 1-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/3-2026-06-29/1-colombie-l-extreme-droite-gagne-encore.md
+  s_895285baf350f7::t_fdc07ed7c73d2e 1-76
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/3-2026-06-29/2-traquer-enfermer-deporter-la-nouvelle-doctrine.md
+  s_895285baf350f7::t_c431635840ee0d 1-67
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/3-2026-06-29/3-patrons-tous-pourris.md
+  s_895285baf350f7::t_c6a2542f4475f1 1-92
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/3-2026-06-29/4-inventer-de-faux-antisemites-legitimer-de.md
+  s_895285baf350f7::t_8e2d81585b4c70 1-109
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/3-2026-06-29/CLAUDE.md
+  s_895285baf350f7::t_7db88c7368e375 1-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/CLAUDE.md
+  s_895285baf350f7::t_c209bc2f553a15 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/CLAUDE.md
+  s_895285baf350f7::t_fa3df4033342b1 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_895285baf350f7::t_3d7f369d8bd172 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_895285baf350f7::t_eb207451c40a95 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "60b938962f9460fa3fd2f75cdc6cd3eb75c029e0",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_895285baf350f7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a9ed8141ff4948f33",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
