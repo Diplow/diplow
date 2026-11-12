@@ -212,6 +212,8 @@ kinds:
       chargé-de-plaidoyer: {définition: "Porte auprès des pouvoirs publics et de l'opinion les positions d'une ONG sur un dossier.", statut: proposé, introduit_par: blast/6sqTB2BnM9g.md}
       administrateur: {définition: "Siège au conseil d'une instance de gestion d'un régime de protection sociale ou la préside.", statut: proposé, introduit_par: blast/Fs36KBBJrBo.md}
       communicant: {définition: "Dirige ou conduit la communication d'une entreprise ou conseille un dirigeant en communication.", statut: proposé, introduit_par: blast/rGh7e_JI4Ac.md}
+      infirmier: {définition: "Soigne les patients à l'hôpital sous l'autorité d'un médecin.", statut: proposé, introduit_par: blast/J1Ys7rkCM4Q.md}
+      stratège: {définition: "Pense et théorise la stratégie, militaire ou autre.", statut: proposé, introduit_par: boniface/3YYrGBP7N2s.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

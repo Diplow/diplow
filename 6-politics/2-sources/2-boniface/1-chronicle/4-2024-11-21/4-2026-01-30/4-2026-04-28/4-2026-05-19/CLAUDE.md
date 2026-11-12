@@ -1,22 +1,27 @@
 ---
-title: "2026-05-19 → 2026-10-14"
+title: "2026-05-19 → 2026-05-25"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/4-2026-04-28/4-2026-05-19
 owner: diplo
 preview: >-
-  De mai à octobre 2026, Boniface reçoit Anne Sénéquier sur le retour des
-  épidémies et Sylvie Bermann sur la Chine après le sommet Trump-Xi, et
-  chronique le livre d'Alexander Stubb sur un monde en trois blocs.
+  Boniface soutient que Ben-Gvir est le visage d'Israël et que, sans
+  sanctions, les protestations européennes ruinent la crédibilité des
+  gouvernements ; il présente le Sénégal en pays pivot. Ses invités parlent
+  d'épidémies, de presse et d'humour ; il chronique le livre de Vincent
+  Desportes.
 ---
-# 2026-05-19 → 2026-10-14
+# 2026-05-19 → 2026-05-25
 
-Sur cette période, Boniface ouvre son micro à deux invitées et chronique un livre. Anne Sénéquier juge que l'hantavirus et Ebola sont des épidémies récurrentes plutôt que des pandémies, mais qu'elles sont un signal d'alerte. Elle dénonce le démantèlement américain de la coordination sanitaire et le blocage de l'accord pandémique de l'OMS. Sylvie Bermann, ancienne ambassadrice à Pékin, voit dans le sommet Trump-Xi la consécration d'une parité entre les États-Unis et la Chine, sans qu'on puisse dire que Pékin a gagné. Pour elle, la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Le fil le plus net de la semaine est celui des analyses que Boniface porte en son nom. Il soutient que Ben-Gvir est bien le visage d'Israël et non un marginal, et que l'indignation européenne ne naît que parce que les victimes sont des Européens : sans sanctions, les protestations verbales ruinent la crédibilité des gouvernements européens ([[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/4-2026-04-28/4-2026-05-19/4-ben-gvir-est-il-ou-non|Ben-Gvir est-il ou non le visage d'Israël ?]]). Il présente aussi le Sénégal comme un pays pivot, exception démocratique en Afrique de l'Ouest, dont la rupture souverainiste du Pastef se heurte à la dette cachée, aux tensions entre Faye et Sonko et à la colère de la jeunesse.
 
-Entre ces deux entretiens, Boniface chronique Le Triangle du pouvoir d'Alexander Stubb, président finlandais. Selon le livre, le monde se divise en trois blocs : l'Occident, l'Orient et le Sud global. L'Occident, affaibli par ses échecs et son deux poids deux mesures, devrait montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Trois entretiens donnent la parole à des invités, dont les thèses restent les leurs. Pour Anne Sénéquier, l'hantavirus et Ebola sont des épidémies récurrentes plutôt que des pandémies, mais un signal d'alerte : elle dénonce le démantèlement américain de la coordination sanitaire. Avec Anne Bocandé (RSF), Boniface constate que la liberté de la presse est au plus bas depuis 25 ans, y compris dans les démocraties, et son invitée y voit un appel à l'action politique. L'humoriste Akim Omiri soutient pour sa part qu'on peut parler librement de Gaza malgré l'accusation d'antisémitisme et que le public passe désormais par les réseaux plutôt que par la télé.
 
-Les trois Digests ont en commun une même toile de fond : un ordre mondial qui se recompose, où les États-Unis perdent de leur emprise, où la Chine s'installe à parité avec eux et où l'Europe et l'Occident cherchent leur place.
+La semaine se clôt sur une chronique d'ouvrage : Boniface lit la « Stratégie, les essentiels » du général Vincent Desportes, pour qui la stratégie transforme la force en puissance et suppose de comprendre l'adversaire et de porter un collectif, et il y voit un vade-mecum pour tout responsable.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/4-2026-04-28/4-2026-05-19/1-hantavirus-ebola-le-retour-des-pandemies|Hantavirus, Ebola : le retour des pandémies ? - Les mardis de l'IRIS]] (2026-05-19)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/4-2026-04-28/4-2026-05-19/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/4-2026-04-28/4-2026-05-19/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/4-2026-04-28/4-2026-05-19/2-j-ai-lu-le-rapport-2026|J’ai Lu… « Le rapport 2026 de RSF sur la liberté de la presse dans le monde » avec Anne Bocandé]] (2026-05-19)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/4-2026-04-28/4-2026-05-19/3-l-humour-peut-il-tout-permettre|L’humour peut-il tout permettre ? Avec Akim Omiri - Entretiens géopo]] (2026-05-20)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/4-2026-04-28/4-2026-05-19/4-ben-gvir-est-il-ou-non|Ben-Gvir est-il ou non le visage d'Israël ?]] (2026-05-21)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/4-2026-04-28/4-2026-05-19/5-le-senegal-pays-pivot-en-afrique|Le Sénégal, pays pivot en Afrique de l’Ouest - Expliquez-moi…]] (2026-05-22)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/4-2026-04-28/4-2026-05-19/6-j-ai-lu-strategie-les-essentiels|J’ai lu… « Stratégie. Les essentiels » avec Vincent Desportes]] (2026-05-25)
