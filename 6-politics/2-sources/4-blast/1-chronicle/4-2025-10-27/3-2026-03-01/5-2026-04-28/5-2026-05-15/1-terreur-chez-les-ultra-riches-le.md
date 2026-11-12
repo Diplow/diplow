@@ -1,6 +1,6 @@
 ---
 title: "TERREUR CHEZ LES ULTRA-RICHES : LE RETOUR DE LA TAXE ZUCMAN"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/4-2026-05-11
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/5-2026-05-15
 owner: diplo
 preview: >-
   Blast soutient que les ultra-riches paient proportionnellement moins d'impôt
