@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/5-2026-10-15/4-17-octobre-explosion.md
+  s_87922071433f7f::t_e0f3895ebb7351 1-61
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/5-2026-10-15/CLAUDE.md
+  s_87922071433f7f::t_e440c15c53252f 6-9,13,15,22
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/6-2026-10-18/1-hyperpolitique-les-algorithmes-contre-nos-revoltes.md
+  s_87922071433f7f::t_24498d901c5660 1-93
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/6-2026-10-18/2-cher-raphael-enthoven-prof-de-philo.md
+  s_87922071433f7f::t_7744a36d87ebd9 1-80
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/6-2026-10-18/3-bresil-la-gauche-en-train-de.md
+  s_87922071433f7f::t_295c892ecdd4e0 1-94
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/6-2026-10-18/4-17-octobre-l-etat-deborde-par.md
+  s_87922071433f7f::t_3dc66bc7062d64 1-76
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/6-2026-10-18/5-autoentreprise-illusion-de-liberte-reelle-exploitation.md
+  s_87922071433f7f::t_86ca203368ae71 1-89
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/6-2026-10-18/CLAUDE.md
+  s_87922071433f7f::t_c901dd03975289 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/CLAUDE.md
+  s_87922071433f7f::t_6ef23c3d3134c1 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/CLAUDE.md
+  s_87922071433f7f::t_6755cfd708c3ab 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_87922071433f7f::t_a8d24e61305517 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_87922071433f7f::t_ea0611499fd12d 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7e3807805ca849463226dbcebc691af03197d89b",
+  "prompts": {},
+  "sessions": {
+    "s_87922071433f7f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ac7d5261787b61974",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
