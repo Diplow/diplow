@@ -1,6 +1,6 @@
 ---
 title: "CLIMAT, LA NON-VIOLENCE À L’ÉPREUVE DE L’URGENCE - AVEC @FIFDH_Geneve"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/4-2026-04-11/5-2026-04-28
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/5-2026-04-28/1-2026-04-28
 owner: diplo
 preview: >-
   Après la projection de The System au FIFDH, des militants et un sociologue
