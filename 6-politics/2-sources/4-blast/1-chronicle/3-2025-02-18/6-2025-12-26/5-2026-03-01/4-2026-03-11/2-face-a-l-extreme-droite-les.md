@@ -1,6 +1,6 @@
 ---
 title: "FACE À L'EXTRÊME DROITE, LES IRRESPONSABLES SONT DE RETOUR"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/3-2026-03-07
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/4-2026-03-11
 owner: diplo
 preview: >-
   Blast soutient que la droite et les médias renversent la réalité : LFI est
