@@ -1,0 +1,45 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/4-2026-07-04/CLAUDE.md
+  s_c2a55b0d40fd7c::t_382b96b24e72bf 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/5-2026-07-10/1-censure-permis-de-tuer-le-macro.md
+  s_c2a55b0d40fd7c::t_a9e3dc155c5fd6 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/5-2026-07-10/2-et-si-hitler-avait-gagne-l.md
+  s_c2a55b0d40fd7c::t_935a93e851635a 1-97
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/5-2026-07-10/3-melenchon-le-nouveau-le-pen-le.md
+  s_c2a55b0d40fd7c::t_59a54013cb93ce 1-97
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/5-2026-07-10/4-en-albanie-la-famille-trump-provoque.md
+  s_c2a55b0d40fd7c::t_b869d87ab25204 1-83
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/5-2026-07-10/CLAUDE.md
+  s_c2a55b0d40fd7c::t_693e1c04bc6f60 1-22
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/6-2026-07-14/1-vss-faut-il-mettre-tous-les.md
+  s_c2a55b0d40fd7c::t_df32973d018130 1-90
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/6-2026-07-14/2-macron-police-medias-tapis-rouge-pour.md
+  s_c2a55b0d40fd7c::t_4398c426b815e1 1-82
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/6-2026-07-14/3-menaces-tag-a-l-acide-un.md
+  s_c2a55b0d40fd7c::t_00224ca98c86e2 1-68
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/6-2026-07-14/CLAUDE.md
+  s_c2a55b0d40fd7c::t_2ed5f64e39abce 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/CLAUDE.md
+  s_c2a55b0d40fd7c::t_83b3f01ee024f7 2,7-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/CLAUDE.md
+  s_c2a55b0d40fd7c::t_11e9079edfc25f 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_c2a55b0d40fd7c::t_1c94263ff1f0c3 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_c2a55b0d40fd7c::t_5264dbe40c951b 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fb16bec9a488021c6162a47e6fb8fb513f0c81a6",
+  "prompts": {},
+  "sessions": {
+    "s_c2a55b0d40fd7c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad99919cbcec9ff1d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
