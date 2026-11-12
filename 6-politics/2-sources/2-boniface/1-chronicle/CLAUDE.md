@@ -3,22 +3,20 @@ title: "Chronicle"
 parent: 6-politics/2-sources/2-boniface/1-chronicle
 owner: diplo
 preview: >-
-  Sur dix ans, Boniface applique les mêmes grilles à l'actualité :
-  multilatéralisme contre unilatéralisme, deux poids deux mesures occidental,
-  fin du monopole de l'Occident. Il presse l'Europe de gagner son autonomie et
-  plaide pour la négociation et le droit.
+  Pendant dix ans, Boniface applique les mêmes grilles à l'actualité :
+  multilatéralisme contre unilatéralisme, deux-poids-deux-mesures occidental,
+  fin du monopole de l'Occident. Il plaide pour la négociation en Ukraine et
+  pour l'autonomie stratégique de l'Europe.
 ---
 # Chronicle
 
-De 2016 à 2026, Boniface lit le monde à travers un petit nombre de grilles qu'il ne quitte jamais. Il oppose le multilatéralisme à l'unilatéralisme et dénonce le deux poids deux mesures occidental. Il décrit un Occident qui a perdu le monopole de l'ordre international, face à un Sud global qui monte et à une rivalité sino-américaine qui structure la période. Trump est l'un des fils les plus constants de cette lecture, du premier mandat au retour de sa présidence.
+Sur toute la Chronicle, de 2016 à 2026, Boniface lit l'actualité avec un petit nombre de grilles stables. La première est le multilatéralisme contre l'unilatéralisme. La deuxième est le deux-poids-deux-mesures occidental. La troisième est la fin du monopole de l'Occident, avec la montée du Sud global. Il les applique tour à tour à Trump, à la rivalité sino-américaine, à l'Ukraine et à Gaza. Il en tire une même conclusion pour les Européens : ils doivent acquérir leur autonomie stratégique et sortir de leur soumission.
 
-Les événements changent, la grille reste. Le Covid-19 est lu comme un révélateur. Les interventions extérieures sont jugées en échec. Puis vient la guerre en Ukraine, qu'il voit dans une impasse militaire appelant une négociation, avec un reste du monde qui ne suit plus l'Occident. Gaza isole ensuite l'Occident, et son réalisme plaide pour la négociation plutôt que pour l'escalade.
-
-Sur les dernières années, Boniface lit l'actualité par la loi du plus fort, qui affaiblit le droit international, le multilatéralisme et l'Occident lui-même. Son message à l'Europe et à la France est constant, de l'autonomie stratégique des premières années à l'appel final à sortir de leur soumission et à défendre le droit.
+Les objets changent d'une période à l'autre. De 2016 à 2020, Trump et l'unilatéralisme dominent, et il lit le Covid-19 comme un révélateur. De 2020 à 2022, il s'attache à la rivalité sino-américaine et à l'échec des interventions extérieures. Il voit ensuite dans la guerre en Ukraine une impasse qui appelle une négociation, et un Occident que le reste du monde ne suit plus. Entre 2022 et 2024, l'Ukraine reste sans issue militaire, le Sud global monte et Gaza isole l'Occident. Sa position devient alors un réalisme qui plaide pour la négociation. Depuis fin 2024, il soutient que Trump affaiblit le droit international et l'Occident, et qu'Israël jouit de l'impunité.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]] (322 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2024-11-20]] (317 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/CLAUDE|2024-11-21 → 2026-10-30]] (315 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/CLAUDE|2024-11-21 → 2026-10-30]] (321 Digests)
