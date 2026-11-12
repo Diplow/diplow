@@ -1,20 +1,20 @@
 ---
-title: "2026-03-26 → 2026-04-15"
+title: "2026-03-26 → 2026-04-21"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26
 owner: diplo
 preview: >-
-  Blast dénonce un climat médiatique et politique qui prépare 2027 :
-  acharnement contre LFI et Bally Bagayoko, médias Bolloré, boucs émissaires.
-  Elle décrit aussi une guerre qui détruit le droit et l'environnement, et un
-  capitalisme prédateur.
+  Blast dénonce une offensive des médias Bolloré, des milliardaires et de la
+  droite contre la gauche et LFI en vue de 2027, et des pouvoirs qui
+  s'affranchissent des règles, de la guerre au Moyen-Orient à la Sécu, au
+  profit du capital.
 ---
-# 2026-03-26 → 2026-04-15
+# 2026-03-26 → 2026-04-21
 
-Le fil principal de la Period est la bataille médiatique et politique qui précède 2027. Blast soutient que la campagne de calomnie contre LFI a échoué aux municipales, et dénonce un traitement médiatique hostile à LFI et à la « Nouvelle France ». Elle voit dans les médias Bolloré, les milliardaires et la droite les artisans de cette préparation : campagne raciste contre Bally Bagayoko, mise en scène de Bardella, fait divers érigé en arme politique, loi anti-fraude qui frappe les précaires. Elle réclame la fermeture de CNews et défend Bally Bagayoko face à ce traitement. Raphaël Arnault y voit pour sa part une volonté d'éteindre la gauche. Le [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/4-2026-04-07/CLAUDE|2026-04-07 → 2026-04-10]] concentre ce propos.
+D'un bout à l'autre de la Period, Blast décrit une offensive politique et médiatique contre la gauche. La campagne de calomnie contre LFI a échoué aux municipales, mais le traitement hostile de LFI et de la « Nouvelle France » continue. Blast y rattache la campagne raciste contre Bally Bagayoko et la mise en scène de Bardella, et elle réclame la fermeture de CNews. Médias Bolloré, milliardaires et droite préparent ainsi 2027, un fait divers servant d'arme politique. Raphaël Arnault y voit une volonté d'éteindre la gauche, et Blast défend en réponse une gauche de la sécession.
 
-Le second fil est une critique du capitalisme et de ceux qu'il sert. Blast dénonce des boucs émissaires désignés pour détourner du partage des richesses, une taxe sur les hauts revenus contournée et des paysans sacrifiés au marché. Elle fait de l'ultra fast fashion le produit d'une logique capitaliste ancienne et reproche à ArcelorMittal son charbon venu d'une mine toxique du Mozambique. Ses invités décrivent l'arbitrage d'investissement comme une justice privée du capital et le nazisme comme nourri du modèle américain, tandis que Blast soutient que la science-fiction reflète le racisme.
+Le second fil est celui du capital et des rapports de force économiques. Blast dénonce des boucs émissaires désignés pour détourner du partage des richesses, des paysans sacrifiés au marché, une taxe sur les hauts revenus contournée, une loi anti-fraude qui frappe les précaires. Elle voit dans l'ultra fast fashion une logique capitaliste ancienne. Vers la fin de la Period, le propos se généralise : ArcelorMittal, Trump et Netanyahu, les sondages, l'État qui reprend la main sur la Sécu, le droit des étrangers, autant de pouvoirs qui s'affranchissent des règles et parlent à la place des citoyens.
 
-Au début d'avril, le regard s'élargit : Blast décrit une guerre au Moyen-Orient qui détruit le droit et l'environnement, alerte sur la reconnaissance faciale policière, juge incertaine la chute d'Orbán et défend une gauche de la sécession.
+Blast décrit aussi une guerre au Moyen-Orient qui détruit le droit et l'environnement, alerte sur la reconnaissance faciale policière et juge incertaine la chute d'Orbán. Elle reçoit des invités qui décrivent l'arbitrage d'investissement comme une justice privée du capital et le nazisme comme nourri du modèle américain. Un historien y voit dans les nazis un révélateur de l'Occident d'aujourd'hui, et un chercheur traite des guerres aériennes. Blast soutient enfin que la science-fiction reflète le racisme.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ Au début d'avril, le regard s'élargit : Blast décrit une guerre au Moyen-Orie
 2. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/2-2026-03-29/CLAUDE|2026-03-29 → 2026-04-01]] (5 Digests)
 3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/3-2026-04-02/CLAUDE|2026-04-02 → 2026-04-06]] (6 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/4-2026-04-07/CLAUDE|2026-04-07 → 2026-04-10]] (5 Digests)
-5. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/5-2026-04-11/CLAUDE|2026-04-11 → 2026-04-15]] (5 Digests)
+5. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/5-2026-04-11/CLAUDE|2026-04-11 → 2026-04-14]] (4 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/6-2026-04-15/CLAUDE|2026-04-15 → 2026-04-21]] (6 Digests)

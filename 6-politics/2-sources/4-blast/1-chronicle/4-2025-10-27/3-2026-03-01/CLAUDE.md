@@ -1,23 +1,23 @@
 ---
-title: "2026-03-01 → 2026-04-15"
+title: "2026-03-01 → 2026-04-21"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01
 owner: diplo
 preview: >-
   Blast lit la guerre contre l'Iran comme une entreprise au service d'Israël,
-  puis les municipales comme le terrain d'une extrême droite portée par les
-  milliardaires des médias. Elle y voit la préparation de 2027, par
-  l'acharnement contre LFI et la désignation de boucs émissaires.
+  puis les municipales et l'offensive des médias Bolloré et des milliardaires
+  contre la gauche et LFI en vue de 2027. Elle dénonce des pouvoirs qui
+  s'affranchissent des règles au profit du capital.
 ---
-# 2026-03-01 → 2026-04-15
+# 2026-03-01 → 2026-04-21
 
-Début mars, Blast juge que la guerre contre l'Iran ne repose sur aucune justification nucléaire et qu'elle sert Israël. Elle reproche à Macron d'épargner les États-Unis et Israël, et accuse la droite de ménager le RN. Face à cela, elle plaide pour contraindre la politique par la vérité et la science ([[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/1-2026-03-01/CLAUDE|2026-03-01 → 2026-03-13]]).
+Début mars, Blast lit la guerre contre l'Iran comme une entreprise sans justification nucléaire, menée au service d'Israël, et reproche à Macron d'épargner les États-Unis et Israël. Elle accuse la droite de ménager le RN et plaide pour contraindre la politique par la vérité et la science.
 
-Les municipales deviennent ensuite le terrain où Blast voit à l'œuvre une extrême droite préparée par les milliardaires des médias. Elle la dit freinée localement, et note une percée de LFI dans les communes populaires. Blast défend dans le même temps le tirage au sort et l'antifascisme ([[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/2-2026-03-14/CLAUDE|2026-03-14 → 2026-03-25]]).
+Avec les municipales, Blast déplace le regard vers une extrême droite préparée par les milliardaires des médias, mais freinée localement, et vers une percée de LFI dans les communes populaires. Elle y défend le tirage au sort et l'antifascisme.
 
-À partir de fin mars, Blast dénonce un climat médiatique et politique qui prépare 2027. Elle y range l'acharnement contre LFI et Bally Bagayoko, le rôle des médias Bolloré et la fabrication de boucs émissaires. Elle décrit aussi une guerre qui détruit le droit et l'environnement, et un capitalisme prédateur ([[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/CLAUDE|2026-03-26 → 2026-04-15]]).
+De la fin mars à la fin avril, ces fils se resserrent autour de 2027. Blast dénonce une offensive des médias Bolloré, des milliardaires et de la droite contre la gauche et LFI, et des pouvoirs qui s'affranchissent des règles, de la guerre au Moyen-Orient à la Sécu, au profit du capital.
 
 ## Contenu
 
 1. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/1-2026-03-01/CLAUDE|2026-03-01 → 2026-03-13]] (17 Digests)
 2. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/2-2026-03-14/CLAUDE|2026-03-14 → 2026-03-25]] (15 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/CLAUDE|2026-03-26 → 2026-04-15]] (25 Digests)
+3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/CLAUDE|2026-03-26 → 2026-04-21]] (30 Digests)
