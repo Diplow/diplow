@@ -1,6 +1,6 @@
 ---
 title: "VSS : FAUT-IL METTRE TOUS LES HOMMES EN PRISON ? CONTRE LE FÉMINISME PUNITIF"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/6-2026-07-14
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/2-2026-07-14
 owner: diplo
 preview: >-
   Blast soutient que les violences sexistes et sexuelles sont structurelles,
