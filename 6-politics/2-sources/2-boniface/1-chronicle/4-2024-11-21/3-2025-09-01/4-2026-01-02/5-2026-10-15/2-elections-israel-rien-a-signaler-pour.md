@@ -1,6 +1,6 @@
 ---
 title: "Élections Israël : rien à signaler pour les Palestiniens"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/3-2026-10-15
+parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/5-2026-10-15
 owner: diplo
 preview: >-
   Boniface soutient qu'un départ de Netanyahou renforcerait la démocratie
