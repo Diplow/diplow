@@ -1,6 +1,6 @@
 ---
 title: "6 OCTOBRE : RÉCIT D'UNE MOBILISATION HISTORIQUE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/4-2026-09-14/6-2026-10-05
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/2-2026-10-05
 owner: diplo
 preview: >-
   Blast suit la mobilisation lycéenne et étudiante : des jeunes réclament

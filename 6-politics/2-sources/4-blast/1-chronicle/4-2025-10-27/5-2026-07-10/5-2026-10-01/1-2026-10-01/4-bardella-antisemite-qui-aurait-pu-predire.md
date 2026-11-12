@@ -1,6 +1,6 @@
 ---
 title: "BARDELLA ANTISÉMITE : QUI AURAIT PU PRÉDIRE ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/4-2026-09-14/5-2026-10-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/1-2026-10-01
 owner: diplo
 preview: >-
   Blast monte bout à bout les réactions aux révélations de Mediapart sur les
