@@ -3,21 +3,22 @@ title: "2026-01-30 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30
 owner: diplo
 preview: >-
-  Boniface lit 2026 par le rapport de force : Trump et la guerre d'Iran comme
-  échec et hubris, un droit international en recul, l'impunité d'Israël au
-  Liban et en Palestine, les Européens perdants en Ukraine, et une OCS qui
-  relève du multi-alignement.
+  Boniface lit 2026 par le rapport de force : Trump mène une Realpolitik sans
+  souci de démocratie, la guerre contre l'Iran est un échec et un moment
+  d'hubris, Israël frappe en toute impunité. Il demande à la France et à
+  l'Europe de défendre le droit international.
 ---
 # 2026-01-30 → 2026-10-30
 
-Pendant ces mois, Boniface lit l'actualité internationale par le rapport de force. Il décrit d'abord une Realpolitik de Trump qui ne se soucie pas de démocratie, estime que la France a rompu avec sa position traditionnelle sur Israël-Palestine, et range les Européens parmi les grands perdants de la guerre en Ukraine.
+Dès la fin janvier, Boniface lit l'actualité par le rapport de force. Trump mène une Realpolitik sans souci de démocratie, les Européens sont les grands perdants de la guerre en Ukraine, et la France a rompu avec sa position traditionnelle sur Israël-Palestine.
 
-La guerre contre l'Iran devient ensuite le centre de son analyse. Il y voit un échec politique et un moment d'hubris : la supériorité militaire américano-israélienne ne vaut que par un succès que rien n'annonce. Dans un monde où la force prime sur le droit, d'autres en paient le prix. Il y revient comme à un échec de Trump et à un recul du droit international.
+La guerre contre l'Iran devient ensuite le fil central de la Period. Boniface y voit un échec politique et un moment d'hubris : la supériorité militaire américano-israélienne ne vaut que par un succès que rien n'annonce, et Trump apparaît enivré de sa puissance. Dans un monde où la force prime sur le droit, d'autres en paient le prix, et il lit les frappes sur le Liban comme l'impunité d'Israël. Il demande à la France et à l'Europe de défendre le droit international, et reçoit des invités sur la Palestine, le Liban et Gaza.
 
-La même grille lui sert pour Israël, dont il dénonce l'impunité au Liban et en Palestine. Du côté de l'Asie, il lit l'OCS comme un multi-alignement plutôt que comme une OTAN asiatique.
+À partir de fin avril, son analyse se déplace vers l'issue. Un accord entre Washington et Téhéran exige un pas de chaque camp. Un départ de Netanyahou ne changerait presque rien pour les Palestiniens. L'OCS signale un multi-alignement. Il chronique aussi des livres et reçoit d'autres invités.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/1-2026-01-30/CLAUDE|2026-01-30 → 2026-02-24]] (18 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/2-2026-02-25/CLAUDE|2026-02-25 → 2026-04-01]] (24 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/CLAUDE|2026-04-02 → 2026-10-30]] (22 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/CLAUDE|2026-04-02 → 2026-04-27]] (17 Digests)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/4-2026-04-28/CLAUDE|2026-04-28 → 2026-10-30]] (11 Digests)

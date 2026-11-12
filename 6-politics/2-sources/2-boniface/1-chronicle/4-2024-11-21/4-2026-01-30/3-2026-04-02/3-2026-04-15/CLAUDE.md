@@ -1,22 +1,22 @@
 ---
-title: "2026-04-15 → 2026-10-14"
+title: "2026-04-15 → 2026-04-20"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/3-2026-04-15
 owner: diplo
 preview: >-
-  De avril à octobre, Pascal Boniface reçoit Yasmina Khadra, Didier Billion et
-  Sylvie Bermann et chronique Alexander Stubb : le roman pour dire la
-  Palestine, des mondes arabes recomposés, un Occident affaibli, une Chine à
-  parité avec les États-Unis.
+  Boniface soutient que la France est écartée des négociations
+  israélo-libanaises et que la guerre en Iran masque le sort de Gaza et de la
+  Cisjordanie. Il reçoit Yasmina Khadra sur la Palestine et Didier Billion sur
+  les mondes arabes.
 ---
-# 2026-04-15 → 2026-10-14
+# 2026-04-15 → 2026-04-20
 
-Sur cette Period, Pascal Boniface donne la parole à des invités et à des livres plutôt qu'il ne commente l'actualité à chaud. En avril, il reçoit Yasmina Khadra, pour qui le roman dit la Palestine mieux qu'un essai, et qui dénonce une France où parler de la souffrance palestinienne vaut l'exclusion et la peur. Il reçoit ensuite Didier Billion à propos de la 3e édition de sa Géopolitique des mondes arabes : pour Billion, il n'y a pas un monde arabe mais des mondes, peu unis, que la guerre d'Iran et la désoccidentalisation recomposent, avec des États-Unis moins dominants.
+Pendant ces six jours, Boniface applique une même grille à l'actualité du Proche-Orient : Israël avance quand l'attention est ailleurs, et la France en paie le prix. Pour lui, l'exclusion de la France des négociations israélo-libanaises illustre une relation à sens unique. Paris cède toujours à Israël, qui ne tient jamais compte de ses demandes, et la France y perd son image dans le Sud global. Il dénonce ensuite l'invisibilisation de Gaza et de la Cisjordanie : la guerre en Iran et au Liban capte l'attention, et Israël en profite pour étouffer les Palestiniens à bas bruit, au bénéfice de Netanyahou.
 
-En octobre, la Period se resserre sur la hiérarchie des puissances. Boniface chronique Le Triangle du pouvoir d'Alexander Stubb, président finlandais, qui divise le monde en trois blocs (Occident, Orient, Sud global) : affaibli par ses échecs et son deux poids deux mesures, l'Occident doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre. Il reçoit enfin Sylvie Bermann, ancienne ambassadrice à Pékin, pour qui le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans qu'on puisse dire que Pékin a gagné ; la Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Deux entretiens complètent ces réactions, et leurs thèses restent à leurs invités. Pour Yasmina Khadra, le roman dit la Palestine mieux qu'un essai. À propos de son *Prieur de Bethléem*, il dénonce une France où parler de la souffrance palestinienne vaut l'exclusion et la peur. Pour Didier Billion, dont Boniface chronique la 3e édition de *Géopolitique des mondes arabes*, il n'y a pas un monde arabe mais des mondes, peu unis. La guerre d'Iran et la désoccidentalisation les recomposent, avec des États-Unis moins dominants.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/3-2026-04-15/1-comprendre-le-monde-par-le-roman|Comprendre le monde par le roman. Avec Yasmina Khadra  Entretiens géopo]] (2026-04-15)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/3-2026-04-15/2-j-ai-lu-geopolitique-des-mondes|J'ai lu... « Géopolitique des mondes arabes » de Didier Billion]] (2026-04-16)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/3-2026-04-15/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/3-2026-04-15/4-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/3-2026-04-15/3-liban-nouvel-affront-israelien-a-la|Liban  nouvel affront israélien à la France]] (2026-04-17)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/3-2026-04-02/3-2026-04-15/4-gaza-invisibilisee|Gaza invisibilisée]] (2026-04-20)
