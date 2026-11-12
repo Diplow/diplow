@@ -3,17 +3,18 @@ title: "2024-11-21 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21
 owner: diplo
 preview: >-
-  Pascal Boniface lit presque deux ans d'actualité par le deux poids, deux
-  mesures occidental et l'effacement de l'Occident sous Trump, presse l'Europe
-  de résister et de s'émanciper, et juge qu'Israël agit en toute impunité.
+  Boniface lit l'actualité par le deux poids, deux mesures occidental et
+  l'érosion de l'Occident sous Trump. Il défend le droit international, presse
+  les Européens de résister et de sanctionner Israël, et voit un monde qui se
+  multipolarise autour du Sud global.
 ---
 # 2024-11-21 → 2026-10-30
 
-Sur toute la Chronicle, Boniface applique une même grille : le deux poids, deux mesures occidental, visible dans la différence de traitement entre l'Ukraine et Gaza, puis, de plus en plus, la loi du plus fort. Trump y tient la place centrale. Ses initiatives attaquent le droit international, signent la fin de l'OTAN telle qu'elle était et font de lui une révolution stratégique. Sa guerre contre l'Iran apparaît à Boniface comme un signe d'hubris qui affaiblit Washington et profite à la Chine, et les guerres gagnées militairement peuvent être perdues stratégiquement.
+Du début à la fin de la Period, Boniface applique la même grille : le deux poids, deux mesures occidental et la loi du plus fort. Il l'applique à Gaza et à l'Ukraine, puis à l'émotion et aux sanctions qui varient selon les cas. Sur Israël, son jugement se durcit. Il presse Macron de passer aux actes contre Netanyahou, voit un Israël qui agit en toute impunité et étouffe Gaza, plaide pour des sanctions, et ne croit plus à la solution à deux États.
 
-Face à cela, Boniface dresse le même constat sur l'Europe : elle a cédé, vit dans le déni et la soumission, et figure parmi les grands perdants. Il l'appelle à l'autonomie stratégique, à dire stop à Trump, à résister et à défendre le droit international. Sur l'Ukraine, il juge qu'une paix, même injuste, vaut mieux que la guerre.
+Trump traverse l'ensemble. Boniface voit d'abord dans ses initiatives une attaque contre le droit international et la fin de l'OTAN, puis une révolution stratégique. Il lit ensuite la guerre contre l'Iran comme un signe d'hubris qui affaiblit Washington et profite à la Chine. Pour lui, ce sont des guerres gagnées militairement mais perdues stratégiquement, et un Trump affaibli qui entraîne l'érosion de l'Occident et du multilatéralisme.
 
-Sur le Proche-Orient, son propos se durcit avec le temps : il presse Macron de passer aux actes contre Netanyahou, voit Israël agir en toute impunité, plaide pour des sanctions et ne croit plus à la solution à deux États. Dans les derniers mois, il décrit un affaiblissement du multilatéralisme et de l'Occident, des émotions et des sanctions à géométrie variable, et un multi-alignement plutôt qu'un bloc asiatique.
+Les Européens sont à ses yeux les grands perdants. Il leur reproche d'avoir cédé, de rester dans le déni et la soumission, et leur demande de dire stop à Trump, de défendre le droit international et de viser l'autonomie stratégique. Sur l'Ukraine, il juge une paix, même injuste, préférable à la guerre. Face à un Occident qui décline, il décrit un monde qui se multipolarise autour du Sud global.
 
 ## Contenu
 
@@ -21,4 +22,4 @@ Sur le Proche-Orient, son propos se durcit avec le temps : il presse Macron de p
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/2-2025-04-09/CLAUDE|2025-04-09 → 2025-08-28]] (83 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/CLAUDE|2025-09-01 → 2026-01-29]] (84 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/CLAUDE|2026-01-30 → 2026-05-25]] (77 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/5-2026-05-26/CLAUDE|2026-05-26 → 2026-10-30]] (59 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/5-2026-05-26/CLAUDE|2026-05-26 → 2026-10-30]] (65 Digests)
