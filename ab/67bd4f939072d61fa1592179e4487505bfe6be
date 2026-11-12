@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/3-2026-08-30/4-bruler-la-dette-pourquoi-ils-vous.md
+  s_235ca0b0592b7c::t_c806e3638a0e76 1-88
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/3-2026-08-30/5-comment-juger-dans-une-institution-devastee.md
+  s_235ca0b0592b7c::t_0e990069940bb1 1-68
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/3-2026-08-30/6-des-resistants-aux-antifas-combattre-le.md
+  s_235ca0b0592b7c::t_cf868d29fded8b 1-119
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/3-2026-08-30/CLAUDE.md
+  s_235ca0b0592b7c::t_94eaed99a80812 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/4-2026-09-08/1-adele-haenel-se-battre-pour-ce.md
+  s_235ca0b0592b7c::t_3548a8d9470597 1-80
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/4-2026-09-08/2-hollande-2027-le-culot.md
+  s_235ca0b0592b7c::t_6b65898c1f39cd 1-89
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/4-2026-09-08/3-ia-et-autoritarisme-un-avenir-inquietant.md
+  s_235ca0b0592b7c::t_5b0ae800aaa650 1-76
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/4-2026-09-08/CLAUDE.md
+  s_235ca0b0592b7c::t_a535c86192d6f0 1-22
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/CLAUDE.md
+  s_235ca0b0592b7c::t_0c9ef3b4ffccd7 2,6-9,11,13,15,17,23-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/CLAUDE.md
+  s_235ca0b0592b7c::t_b041179e5cbd46 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_235ca0b0592b7c::t_72f7cd9267a9cd 2,6-10,12,14,16,18,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_235ca0b0592b7c::t_7499fe252b9054 6-8,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ab67bd4f939072d61fa1592179e4487505bfe6be",
+  "prompts": {},
+  "sessions": {
+    "s_235ca0b0592b7c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ace201143be5cd32d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
