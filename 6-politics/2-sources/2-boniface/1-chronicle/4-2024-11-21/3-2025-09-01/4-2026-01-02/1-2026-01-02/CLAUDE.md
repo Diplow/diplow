@@ -1,22 +1,24 @@
 ---
-title: "2026-01-02 → 2026-10-14"
+title: "2026-01-02 → 2026-01-09"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/1-2026-01-02
 owner: diplo
 preview: >-
-  Boniface soutient que la méthode Trump, qui piétine le droit international
-  et le multilatéralisme, ramène au XIXe siècle et ne pacifiera pas le monde.
-  Il chronique Alexander Stubb sur les trois blocs et reçoit Sylvie Bermann
-  sur la Chine.
+  Boniface lit la capture de Maduro par les États-Unis comme l'illustration
+  d'un Trump qui détruit le droit international et enterre le monde occidental
+  d'après 1945 ; il appelle les Européens à sortir du silence.
 ---
-# 2026-01-02 → 2026-10-14
+# 2026-01-02 → 2026-01-09
 
-Le fil de la Period est la critique de la loi de la force. Pour Boniface, la méthode de Trump détruit le droit international et le multilatéralisme, ne mise que sur les rapports de force et ne pacifiera pas le monde. La capture de Maduro par les États-Unis en est le cas d'école : elle est illégale au regard du droit international, même si Maduro n'était pas légitime. La démocratie n'est pas le vrai but de Trump, et cette loi de la force ramène au XIXe siècle. Écarté des médias français, Boniface promet de continuer à décrypter l'actualité et de défendre un débat libre.
+Pendant cette semaine, Pascal Boniface applique une même grille à l'actualité : la méthode de Trump, fondée sur les seuls rapports de force, détruit le droit international et le multilatéralisme, et ne pacifiera pas le monde. Il l'énonce dès [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/1-2026-01-02/1-bonne-annee-2026|Bonne année 2026]], où il promet de continuer à décrypter l'actualité malgré son éloignement des médias français. Il l'applique ensuite au Venezuela : la capture de Maduro est illégale au regard du droit international, même si Maduro n'était pas légitime, et la démocratie n'est pas le vrai but de Trump. Cette loi de la force ramène, dit-il, au XIXe siècle.
 
-La suite de la Period prolonge cette lecture vers le nouvel ordre mondial, en passant par les livres et les invités. Dans sa chronique du livre d'Alexander Stubb, président finlandais, Boniface retient la division du monde en trois blocs (Occident, Orient, Sud global). L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre. Boniface reçoit ensuite Sylvie Bermann, ancienne ambassadrice à Pékin. Pour elle, le sommet Trump-Xi consacre la parité entre les États-Unis et la Chine sans que Pékin ait gagné. La Chine joue la patience sur Taïwan et n'est pas anti-européenne, mais son excédent commercial met l'Europe en difficulté.
+Son entretien avec Christophe Ventura prolonge ce cas. C'est l'invité qui y décrit la capture comme le dénouement d'une longue préparation, un « madurisme sans Maduro » que Washington veut plier à sa feuille de route, et une Amérique latine qui garde la Chine. Boniface reçoit cette lecture, il ne la prend pas à son compte.
+
+La semaine se referme sur la position de l'Europe. Boniface juge le discours de Macron aux ambassadeurs volontariste mais trop optimiste : pour ménager Washington au nom de l'Ukraine, la France s'interdit de critiquer les États-Unis, ce qui entame sa crédibilité hors du monde occidental. Il en tire la conclusion la plus nette dans [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/1-2026-01-02/5-trump-et-la-mise-a-mort|Trump et la mise à mort du monde occidental]] : l'allié protecteur est devenu prédateur, le monde occidental né après 1945 est enterré, et les Européens, paralysés par l'Ukraine, doivent sortir du silence et se faire respecter.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/1-2026-01-02/1-bonne-annee-2026|Bonne année 2026]] (2026-01-02)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/1-2026-01-02/2-venezuela-trump-la-force-pour-loi|Venezuela-Trump : la force pour loi]] (2026-01-05)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/1-2026-01-02/3-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/1-2026-01-02/4-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/1-2026-01-02/3-venezuela-scenario-d-avenir-avec-christophe|Venezuela : scénario d’avenir. Avec Christophe Ventura - Entretiens géopo]] (2026-01-07)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/1-2026-01-02/4-macron-et-les-ambassadeurs-volontarisme-realites|Macron et les ambassadeurs : volontarisme / réalités]] (2026-01-08)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/1-2026-01-02/5-trump-et-la-mise-a-mort|Trump et la mise à mort du monde occidental]] (2026-01-09)
