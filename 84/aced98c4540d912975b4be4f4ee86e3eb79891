@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/3-2026-04-02/5-surveillance-generalisee-big-macron-is-watching.md
+  s_39fcabc634bb0e::t_6b1e2665a4ae5b 1-80
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/3-2026-04-02/6-viktor-orban-la-fin-de-15.md
+  s_39fcabc634bb0e::t_3fa26a7d5c6bd2 1-84
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/3-2026-04-02/CLAUDE.md
+  s_39fcabc634bb0e::t_c191df18622f9b 2,6-8,10,12,14-16,24-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/4-2026-04-07/1-israel-vote-la-peine-de-mort.md
+  s_39fcabc634bb0e::t_1c40a4b2aa732b 1-77
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/4-2026-04-07/2-pourquoi-tout-le-monde-et-surtout.md
+  s_39fcabc634bb0e::t_69a9a995120fd3 1-97
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/4-2026-04-07/3-nouvelle-france-vieux-racismes.md
+  s_39fcabc634bb0e::t_c9aea6b801a5ac 1-88
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/4-2026-04-07/4-bardella-la-princesse-le-pen-et.md
+  s_39fcabc634bb0e::t_62da4587006e61 1-78
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/4-2026-04-07/CLAUDE.md
+  s_39fcabc634bb0e::t_a01a0b26666b56 1-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/CLAUDE.md
+  s_39fcabc634bb0e::t_3f0d82a841e25a 2,6-8,10,12,14,20-21
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE.md
+  s_39fcabc634bb0e::t_398fc0374fcd9d 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_39fcabc634bb0e::t_f17cb5e4db7c68 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_39fcabc634bb0e::t_14dbddb66357e6 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "84aced98c4540d912975b4be4f4ee86e3eb79891",
+  "prompts": {},
+  "sessions": {
+    "s_39fcabc634bb0e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ab5233d1119db0a4d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
