@@ -1,6 +1,6 @@
 ---
 title: "2026-07-30 → 2026-08-02"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/5-2026-07-30
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/1-2026-07-30
 owner: diplo
 preview: >-
   Blast accuse Macron d'avoir laissé la France sans moyens face aux méga-feux
@@ -16,7 +16,7 @@ Les deux derniers Digests donnent la parole à des invités sur la progression d
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/5-2026-07-30/1-macron-l-incendiaire|MACRON L'INCENDIAIRE]] (2026-07-30)
-2. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/5-2026-07-30/2-2027-les-pieges-de-macron-a|2027 : LES PIÈGES DE MACRON À ÉVITER POUR GOUVERNER]] (2026-07-31)
-3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/5-2026-07-30/3-race-blanche-et-nation-francaise-ce|"RACE BLANCHE ET NATION FRANÇAISE” : CE QUE RÉVÈLE LA DÉCISION DE CRÉPOL]] (2026-08-01)
-4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/5-2026-07-30/4-detruire-le-grand-satan-marxiste-plongee|DÉTRUIRE LE "GRAND SATAN MARXISTE" : PLONGÉE DANS UNE SECTE D'EXTRÊME DROITE]] (2026-08-02)
+1. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/1-2026-07-30/1-macron-l-incendiaire|MACRON L'INCENDIAIRE]] (2026-07-30)
+2. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/1-2026-07-30/2-2027-les-pieges-de-macron-a|2027 : LES PIÈGES DE MACRON À ÉVITER POUR GOUVERNER]] (2026-07-31)
+3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/1-2026-07-30/3-race-blanche-et-nation-francaise-ce|"RACE BLANCHE ET NATION FRANÇAISE” : CE QUE RÉVÈLE LA DÉCISION DE CRÉPOL]] (2026-08-01)
+4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/1-2026-07-30/4-detruire-le-grand-satan-marxiste-plongee|DÉTRUIRE LE "GRAND SATAN MARXISTE" : PLONGÉE DANS UNE SECTE D'EXTRÊME DROITE]] (2026-08-02)

@@ -1,6 +1,6 @@
 ---
 title: "LE MINISTÈRE DU TRAVAIL FAIT LA GUERRE AUX INSPECTEURS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/6-2026-08-03
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/2-2026-08-03
 owner: diplo
 preview: >-
   Blast relaie les inspecteurs du travail de l'Isère : deux d'entre eux,

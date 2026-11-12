@@ -1,6 +1,6 @@
 ---
 title: "« LES OLIGARQUES NOUS FONT CROIRE À UNE PSEUDO DÉMOCRATIE »"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/6-2026-08-03
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/2-2026-08-03
 owner: diplo
 preview: >-
   Félix Marquardt, ex-davosien devenu critique radical, soutient que les

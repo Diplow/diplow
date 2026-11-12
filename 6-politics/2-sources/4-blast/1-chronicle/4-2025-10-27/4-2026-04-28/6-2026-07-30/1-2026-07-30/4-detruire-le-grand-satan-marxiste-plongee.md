@@ -1,6 +1,6 @@
 ---
 title: "DÉTRUIRE LE \"GRAND SATAN MARXISTE\" : PLONGÉE DANS UNE SECTE D'EXTRÊME DROITE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/5-2026-07-30
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/1-2026-07-30
 owner: diplo
 preview: >-
   Un ancien enfant d'une secte auvergnate fondée vers 1984 raconte l'alchimie,
