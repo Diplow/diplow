@@ -1,23 +1,25 @@
 ---
-title: "2026-03-04 → 2026-10-14"
+title: "2026-03-04 → 2026-03-12"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/2-2026-03-04
 owner: diplo
 preview: >-
-  Boniface reçoit le général Richoux sur la guerre en Iran et Sylvie Bermann
-  sur la Chine, et chronique le livre d'Alexander Stubb sur un monde en trois
-  blocs où l'Occident, affaibli par son deux poids deux mesures, doit montrer
-  l'exemple.
+  Sur la guerre contre l'Iran, Boniface soutient que la supériorité militaire
+  américano-israélienne ne vaut que par un succès politique que rien
+  n'annonce, et que le temps joue pour Téhéran. Il reçoit deux invités, un
+  général et un ancien ambassadeur.
 ---
-# 2026-03-04 → 2026-10-14
+# 2026-03-04 → 2026-03-12
 
-Pendant cette Period, Boniface lit les rapports de force mondiaux à travers trois rendez-vous : la guerre contre l'Iran, un livre sur le nouvel ordre mondial et la place de la Chine face aux États-Unis. Deux de ces trois vidéos sont des entretiens, où la parole revient à ses invités.
+Pour Boniface, la guerre contre l'Iran vise à abattre un rival géopolitique et non à instaurer la démocratie. La supériorité militaire américano-israélienne ne vaut que si elle débouche sur un succès politique, et rien ne l'annonce. Il lit dans cette guerre une violation du droit international qui ouvre un monde où la puissance permet tout. Selon lui, Israël et Washington peuvent diverger. Le Golfe et l'Europe en sortent perdants, l'Europe y perdant sa crédibilité, tandis que la Russie et la Chine tirent leur épingle du jeu.
 
-Sur l'Iran, [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/2-2026-03-04/1-guerre-en-iran-scenarios-militaires-avec|son entretien avec Nicolas Richoux]] laisse la thèse au général : la guerre manque d'un objectif américain clair et de troupes au sol pour renverser le régime, et le temps joue pour Téhéran. Dans [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/2-2026-03-04/2-j-ai-lu-le-triangle-du|sa chronique du livre d'Alexander Stubb]], Boniface retient l'idée d'un monde divisé en trois blocs, Occident, Orient et Sud global. L'Occident, affaibli par ses échecs et son deux poids deux mesures, doit montrer l'exemple s'il veut peser sur le Sud, qui décidera du nouvel ordre.
+Au fil de la période, sa lecture se resserre sur la question du temps. Il soutient que le temps joue pour l'Iran, dont le régime joue sa survie et dont la capacité de nuisance pèse plus que la puissance américaine. Trump, pressé par le Golfe, l'économie mondiale et le prix de l'essence, a selon lui intérêt à limiter ses pertes.
 
-La Period se clôt sur la Chine. Avec [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/2-2026-03-04/3-la-chine-a-t-elle-plie|Sylvie Bermann]], ancienne ambassadrice à Pékin, c'est elle qui juge que le sommet Trump-Xi consacre la parité entre les deux puissances sans que Pékin ait gagné. Elle ajoute que la Chine joue la patience sur Taïwan et n'est pas anti-européenne, même si son excédent commercial met l'Europe en difficulté.
+Deux entretiens prolongent cette analyse avec des voix extérieures, dont les thèses restent à leurs auteurs. Le général Nicolas Richoux juge que les États-Unis n'ont ni objectif clair ni troupes au sol pour renverser le régime, et que Téhéran peut compter sur sa résilience. L'ancien ambassadeur à Kiev Hugues Pernet considère que la guerre profite indirectement à Moscou, sans que la Russie en ait les moyens militaires. Il estime aussi que l'Europe s'est privée de la capacité de négocier en choisissant la morale et la communication.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/2-2026-03-04/1-guerre-en-iran-scenarios-militaires-avec|Guerre en Iran : scénarios militaires. Avec Nicolas Richoux - Entretiens géopo]] (2026-03-04)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/2-2026-03-04/2-j-ai-lu-le-triangle-du|J'ai lu... « Le triangle du pouvoir » de Alexander Stubb]] (2026-10-13)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/2-2026-03-04/3-la-chine-a-t-elle-plie|La Chine a-t-elle plié le match ? Avec Sylvie Bermann - Entretiens géopo]] (2026-10-14)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/2-2026-03-04/2-frappes-sur-l-iran-un-premier|Frappes sur l'Iran : un premier bilan géopolitique]] (2026-03-06)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/2-2026-03-04/3-iran-10-jours-de-guerre-ou|Iran : 10 jours de guerre, où en est-on ?]] (2026-03-09)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/2-2026-03-04/4-la-guerre-en-iran-vue-de|La guerre en Iran vue de Russie et d'Ukraine. Avec Hugues Pernet - Entretiens géopo]] (2026-03-11)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/2-2026-03-04/5-guerre-en-iran-pour-qui-le|Guerre en Iran : pour qui le temps joue ?]] (2026-03-12)
