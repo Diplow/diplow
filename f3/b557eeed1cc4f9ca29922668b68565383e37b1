@@ -1,0 +1,53 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_17f69446a6d1c9 389
+  s_70e2b8820e4c39::t_3bcc536e710b49 388
+  s_70e2b8820e4c39::t_a378a0ec5d2c8a 387
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/5-2026-06-06/5-boycott-arme-fatale-ou-petard-mouille.md
+  s_895285baf350f7::t_5c1b87f33e25d2 1-84
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/5-2026-06-06/CLAUDE.md
+  s_895285baf350f7::t_2e82c1d4b63e2b 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/6-2026-06-11/1-flambee-d-ebola-la-rdc-victime.md
+  s_895285baf350f7::t_d763eb603e187b 1-80
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/6-2026-06-11/2-2027-deluge-de-candidats-la-guerre.md
+  s_895285baf350f7::t_6ffc77c43384d5 1-93
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/6-2026-06-11/3-civitas-qui-sont-les-fanatiques-religieux.md
+  s_895285baf350f7::t_8d9c14ccc0eab0 1-70
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/6-2026-06-11/4-gaza-enquete-sur-la-complicite-et.md
+  s_895285baf350f7::t_fb52626b340b77 1-79
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/6-2026-06-11/5-retour-sur-les-emeutes-racistes-en.md
+  s_895285baf350f7::t_51da8091a94950 1-74
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/6-2026-06-11/CLAUDE.md
+  s_895285baf350f7::t_3da83cc3faf499 1-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/6-2026-05-15/CLAUDE.md
+  s_895285baf350f7::t_2ee320d2402e77 2,6-9,11,13,15,17,25-26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE.md
+  s_895285baf350f7::t_e744f0113eeab9 2,6,8-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_895285baf350f7::t_631d5da5767157 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_895285baf350f7::t_b9573ab80078b9 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f3b557eeed1cc4f9ca29922668b68565383e37b1",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_895285baf350f7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a9ed8141ff4948f33",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
