@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/4-2026-04-07/5-comment-la-droite-organise-discretement-un.md
+  s_39fcabc634bb0e::t_3de9506e87f788 1-82
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/4-2026-04-07/CLAUDE.md
+  s_39fcabc634bb0e::t_cd5caccfcd01ad 6-8,12,14,16,24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/5-2026-04-11/1-les-nazis-ont-helas-beaucoup-de.md
+  s_39fcabc634bb0e::t_785495f3be500d 1-96
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/5-2026-04-11/2-pourquoi-il-faut-en-finir-avec.md
+  s_39fcabc634bb0e::t_c51c9bbe0c2b45 1-85
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/5-2026-04-11/3-bally-bagayoko-peut-on-etre-un.md
+  s_39fcabc634bb0e::t_6900d2e2dfcea2 1-86
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/5-2026-04-11/4-ultra-fast-fashion-comment-on-nous.md
+  s_39fcabc634bb0e::t_0f29c8052831aa 1-82
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/5-2026-04-11/5-du-mozambique-a-dunkerque-le-scandale.md
+  s_39fcabc634bb0e::t_353fec95c7d83f 1-87
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/5-2026-04-11/CLAUDE.md
+  s_39fcabc634bb0e::t_ced2a6b0566d83 1-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/3-2026-03-26/CLAUDE.md
+  s_39fcabc634bb0e::t_628bcdd5160fd0 2,6-9,11,13,15-17,24-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/3-2026-03-01/CLAUDE.md
+  s_39fcabc634bb0e::t_c08d289335104f 2,7-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_39fcabc634bb0e::t_fb8183f4505af1 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_39fcabc634bb0e::t_1b9329d014c0c7 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b67261a58d8171dd90240c96cedb6dd87447bf33",
+  "prompts": {},
+  "sessions": {
+    "s_39fcabc634bb0e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ab5233d1119db0a4d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
