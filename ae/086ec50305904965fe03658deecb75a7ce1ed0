@@ -1,0 +1,51 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_7a79414115ed83 300
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/5-2026-03-14/CLAUDE.md
+  s_aecf67331a1e3c::t_66c008e27e02a1 6-9,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/6-2026-03-17/1-municipales-une-epreuve-de-verite-pour.md
+  s_aecf67331a1e3c::t_ce8a566e6b26e4 1-94
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/6-2026-03-17/2-remunerations-et-avantages-combien-coutent-vraiment.md
+  s_aecf67331a1e3c::t_d2819d01579673 1-100
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/6-2026-03-17/3-enquete-aux-municipales-les-brebis-galeuses.md
+  s_aecf67331a1e3c::t_3c7fb2de602871 1-80
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/6-2026-03-17/4-panafricanisme-des-noirs-americains-aux-revolutions.md
+  s_aecf67331a1e3c::t_daeb8cb2d2807e 1-88
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/6-2026-03-17/5-pourquoi-les-principes-d-opinion-et.md
+  s_aecf67331a1e3c::t_1ac17ece748e21 1-85
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/6-2026-03-17/6-pourquoi-les-gens-sont-ils-de.md
+  s_aecf67331a1e3c::t_25fa239f33949c 1-80
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/6-2026-03-17/CLAUDE.md
+  s_aecf67331a1e3c::t_745dceed017a08 1-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/CLAUDE.md
+  s_aecf67331a1e3c::t_91d2e162573f80 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE.md
+  s_aecf67331a1e3c::t_c54bccd3b1b3e1 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_aecf67331a1e3c::t_9be119419141c9 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_aecf67331a1e3c::t_e28a441cc0175c 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ae086ec50305904965fe03658deecb75a7ce1ed0",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_aecf67331a1e3c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a8cc3b63ba8e78bd8",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
