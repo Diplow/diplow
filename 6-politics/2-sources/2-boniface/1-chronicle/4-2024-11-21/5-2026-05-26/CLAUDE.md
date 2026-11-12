@@ -4,18 +4,17 @@ parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/5-2026-05-26
 owner: diplo
 preview: >-
   Boniface lit ces cinq mois comme l'enlisement de Trump, en Iran puis en
-  Ukraine, et l'érosion d'un Occident à géométrie variable. Il presse les
-  Européens de s'émanciper et de défendre le droit international, juge que
-  rien ne changera pour les Palestiniens et voit dans l'OCS un
-  multi-alignement.
+  Ukraine, et l'érosion de l'Occident. Il presse les Européens de cesser de
+  compter sur lui, juge qu'Israël étouffe Gaza pour enterrer l'État
+  palestinien et voit la France discréditée auprès du Sud global.
 ---
 # 2026-05-26 → 2026-10-30
 
-Le fil principal de la Period est Trump, que Boniface lit comme une puissance qui s'affaiblit. La guerre d'Iran, puis l'accord sur Ormuz et l'accord américano-iranien présenté en succès, lui montrent des guerres gagnées militairement mais perdues stratégiquement. À l'été, il décrit un Trump empêtré en Iran et en Ukraine, que la Chine et le Canada tiennent en échec. À l'automne, c'est une puissance qui s'enlise et finit par lâcher l'Ukraine.
+Le fil de la Period est un Trump que Boniface voit s'affaiblir. En juin, la guerre d'Iran puis l'accord sur Ormuz sont pour lui des échecs du président américain. En juillet, il parle de guerres gagnées militairement mais perdues stratégiquement, d'un accord américano-iranien présenté en succès et d'un sommet de l'OTAN en trompe-l'œil. Durant l'été, il décrit un Trump empêtré en Iran et en Ukraine, que la Chine et le Canada tiennent en échec. À l'automne, il le dit enlisé et prêt à lâcher l'Ukraine, dont il juge la situation sans issue.
 
-De là découle son diagnostic sur l'Occident, dont l'émotion et les sanctions sont à géométrie variable. Il y voit un sommet de l'OTAN en trompe-l'œil, une France discréditée auprès du Sud global et une Europe à émanciper. Sa conclusion se fait de plus en plus pressante : les Européens doivent cesser de compter sur Trump et défendre le droit international.
+Il en tire une leçon pour l'Europe : elle doit s'émanciper de Washington, et les Européens doivent cesser de compter sur lui. Boniface y lit l'érosion de l'Occident sous Trump.
 
-Sur le Proche-Orient, il tient la lutte contre l'antisémitisme pour instrumentalisée contre la critique d'Israël. Il juge qu'Israël étouffe Gaza pour enterrer l'État palestinien, et que rien ne changera pour les Palestiniens. En contrepoint de cet Occident en recul, il voit dans l'OCS un multi-alignement.
+Sur le Proche-Orient et le Sud global, il applique la même grille de la géométrie variable. L'émotion et les sanctions occidentales varient selon les cas, et la lutte contre l'antisémitisme est selon lui instrumentalisée contre la critique d'Israël. Il juge qu'Israël étouffe Gaza pour enterrer l'État palestinien et que les élections israéliennes ne changeront rien pour les Palestiniens. Il voit aussi une France discréditée auprès du Sud global. À l'automne, il reçoit de nombreux invités.
 
 ## Contenu
 

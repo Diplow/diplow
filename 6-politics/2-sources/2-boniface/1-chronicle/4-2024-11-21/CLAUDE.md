@@ -3,17 +3,16 @@ title: "2024-11-21 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21
 owner: diplo
 preview: >-
-  Boniface lit presque deux ans d'actualité par le deux poids, deux mesures
-  occidental et le rapport de force : Trump affaiblit l'Occident et le droit
-  international, l'Europe doit s'émanciper, Israël agit en toute impunité.
+  Boniface lit près de deux ans d'actualité par le deux poids deux mesures et
+  le rapport de force : Trump affaiblit l'Occident et le droit international,
+  Israël agit en toute impunité, et il presse les Européens de sortir de leur
+  soumission pour défendre leur autonomie.
 ---
 # 2024-11-21 → 2026-10-30
 
-Pour Boniface, la grille qui revient d'un bout à l'autre est le deux poids, deux mesures occidental, appliqué à Gaza comme à l'Ukraine, et la loi du plus fort qui en découle. Trump y occupe une place centrale. Ses initiatives attaquent selon lui le droit international et signent la fin de l'OTAN, puis une révolution stratégique. Elles affaiblissent l'Occident et le multilatéralisme. En 2026, la guerre contre l'Iran lui apparaît comme un signe d'hubris qui affaiblit Washington et profite à la Chine. Il y voit ensuite l'enlisement de Trump, en Iran puis en Ukraine, et l'érosion d'un Occident à géométrie variable.
+Pendant ces deux ans, Boniface applique la même grille à l'actualité : le deux poids, deux mesures occidental et la loi du plus fort, d'abord sur Gaza et l'Ukraine. Trump en est le centre. Ses initiatives attaquent le droit international et signent la fin de l'OTAN, puis, selon Boniface, elles affaiblissent l'Occident et le multilatéralisme. La guerre contre l'Iran est pour lui un signe d'hubris qui affaiblit Washington et profite à la Chine. Dans la dernière période, il décrit l'enlisement de Trump, en Iran puis en Ukraine ([[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/5-2026-05-26/CLAUDE|2026-05-26 → 2026-10-30]]).
 
-Sur l'Ukraine, il juge au départ qu'une paix, même injuste, vaut mieux que la guerre. Face à Trump, son message aux Européens se durcit avec le temps. Il leur demande d'abord l'autonomie stratégique, constate qu'ils ont cédé, les presse de sortir du déni et de leur soumission, puis de dire stop à Trump. Il leur demande de s'émanciper et de défendre le droit international, car ils sont à ses yeux les grands perdants.
-
-Sur le Proche-Orient, il presse Macron de passer aux actes contre Netanyahou, plaide pour des sanctions contre Israël et ne croit plus à la solution à deux États. Il estime qu'Israël agit en toute impunité et que rien ne changera pour les Palestiniens. Il voit enfin dans l'OCS un multi-alignement, signe d'un monde qui ne s'organise plus autour de l'Occident.
+Sa ligne sur l'Europe est constante : elle doit viser l'autonomie stratégique. Elle a cédé à Trump, elle doit résister, sortir du déni et dire stop. Boniface presse les Européens de cesser de compter sur Washington. Sur l'Ukraine, il juge au départ qu'une paix, même injuste, vaut mieux que la guerre. Sur Israël, il presse Macron de passer aux actes contre Netanyahou et plaide pour des sanctions. Il ne croit plus à la solution à deux États et estime qu'Israël étouffe Gaza pour enterrer l'État palestinien. Il voit enfin la France discréditée auprès du Sud global.
 
 ## Contenu
 

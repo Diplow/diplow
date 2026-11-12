@@ -5,16 +5,16 @@ owner: diplo
 preview: >-
   Pendant dix ans, Boniface applique les mêmes grilles à l'actualité :
   multilatéralisme contre unilatéralisme, deux poids deux mesures occidental,
-  fin du monopole de l'Occident. Il presse l'Europe de s'émanciper et plaide
-  pour la négociation plutôt que la voie militaire.
+  fin du monopole de l'Occident. Il plaide pour la négociation en Ukraine et
+  presse l'Europe d'acquérir son autonomie stratégique.
 ---
 # Chronicle
 
-De 2016 à 2026, Boniface lit le monde avec des outils qui changent peu. Le multilatéralisme s'oppose à l'unilatéralisme, d'abord à propos de Trump et de la scène internationale, puis de la rivalité sino-américaine. Le deux poids, deux mesures occidental est la grille qu'il applique à l'Ukraine, à Gaza et à Israël. Cette constance fait la cohérence de la Chronicle : chaque événement est un nouveau cas pour les mêmes thèses.
+D'un bout à l'autre de la Chronicle, Pascal Boniface lit l'actualité avec peu de grilles, qu'il reprend d'année en année : le multilatéralisme contre l'unilatéralisme, le deux-poids-deux-mesures occidental, et un monde où l'Occident ne détient plus le monopole. Les premières années, ces grilles s'appliquent à Trump et à la scène internationale, puis à la rivalité sino-américaine et à l'échec des interventions extérieures. Le Covid-19 y apparaît comme un révélateur.
 
-Son analyse suit le recul de la place de l'Occident. Il juge d'abord que les interventions extérieures ont échoué et lit le Covid-19 comme un révélateur. Il voit ensuite un Occident que le reste du monde ne suit plus, tandis que le Sud global monte et que Gaza isole l'Occident. Il presse l'Europe d'acquérir son autonomie stratégique, puis de s'émanciper.
+La guerre en Ukraine devient ensuite le cas central. Boniface y voit une impasse qui n'a pas d'issue militaire et qui appelle une négociation, dans un monde où le Sud global monte et ne suit plus l'Occident. Gaza prolonge cette lecture : le deux-poids-deux-mesures isole l'Occident, et Israël agit en toute impunité.
 
-La guerre en Ukraine occupe le centre de la période. Boniface y voit une impasse, sans issue militaire, qui appelle une négociation, et son réalisme prolonge cette position jusqu'à la fin de la Chronicle. Dans les derniers mois couverts, il estime que Trump affaiblit l'Occident et le droit international, et qu'Israël agit en toute impunité.
+Sur la période la plus récente, la grille se resserre autour du rapport de force. Boniface voit dans Trump un facteur d'affaiblissement de l'Occident et du droit international. Il en tire une consigne constante, qui traverse toute la Chronicle : les Européens doivent sortir de leur soumission et défendre leur autonomie.
 
 ## Contenu
 

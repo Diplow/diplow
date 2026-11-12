@@ -3,61 +3,59 @@ title: "J'ai lu...« Israel's Lobby: America in the Grip of a Foreign Power » d
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/5-2026-05-26/4-2026-09-21/5-2026-10-21
 owner: diplo
 preview: >-
-  Boniface lit *Israel's Lobby* d'Eli Clifton et Ian Lustick : selon les
-  auteurs, le lobby pro-israélien, AIPAC en tête, oriente la politique
-  américaine au profit d'Israël et parfois contre les intérêts des États-Unis.
-  Il juge l'ouvrage passionnant et relève que ces arguments marchent de moins
-  en moins.
+  Dans sa chronique du livre d'Eli Clifton et Ian Lustick, Boniface retient
+  que le lobby pro-israélien, AIPAC en tête, obtient une aide massive à
+  Israël, souvent contre les intérêts américains, mais que son emprise
+  commence à reculer.
 source: boniface
 url: https://www.youtube.com/watch?v=bePwcZFvP28
 youtube_id: "bePwcZFvP28"
 published: 2026-10-30
 duration: 436
 raw: boniface/bePwcZFvP28.md
-ingested: 2026-10-31
-digest_version: 1
+ingested: 2026-11-12
+digest_version: 3
 model: claude-sonnet-5-5
+mentions:
+  - {name: Pascal Boniface, kind: personne, labels: [chercheur], qualifiers: [animateur, intervenant]}
+  - {name: Eli Clifton, kind: personne, labels: [journaliste], qualifiers: [sujet], heard_as: Eddie Clifton}
+  - {name: Ian Lustick, kind: personne, labels: [chercheur], qualifiers: [sujet], heard_as: Yann Lustick}
+  - {name: 'Israel''s Lobby: America in the Grip of a Foreign Power', kind: œuvre, labels: [livre], qualifiers: [sujet]}
+  - {name: AIPAC, kind: organisation, labels: [lobby], qualifiers: [sujet]}
+  - {name: Sheldon Adelson, kind: personne, labels: [chef-d-entreprise], qualifiers: [mentionné]}
+  - {name: Benjamin Netanyahu, kind: personne, labels: [chef-de-gouvernement], qualifiers: [mentionné], heard_as: Netanyahou}
+  - {name: Joe Biden, kind: personne, labels: [ancien-chef-d-état], qualifiers: [mentionné], heard_as: Biden}
+  - {name: Kamala Harris, kind: personne, labels: [ancien-vice-président], qualifiers: [mentionné]}
+relations:
+  - {from: Eli Clifton, relation: auteur, to: 'Israel''s Lobby: America in the Grip of a Foreign Power'}
+  - {from: Ian Lustick, relation: auteur, to: 'Israel''s Lobby: America in the Grip of a Foreign Power'}
 ---
 # J'ai lu...« Israel's Lobby: America in the Grip of a Foreign Power » d'Eli Clifton et Ian Lustick
 
-## 1. Selon Boniface, le livre montre que le lobby pro-israélien agit moins par les Juifs américains que par quelques milliardaires, au profit d'Israël et parfois au détriment des États-Unis.
+## 1. Selon les auteurs, une aide massive à Israël, arrachée par le lobby plus que par les Juifs américains, dessert les intérêts des États-Unis.
 
-Les auteurs notent que le soutien à Israël arrive en neuvième position des préoccupations des Juifs américains. Le lobby réunit aussi des chrétiens et d'autres militants.
+Boniface retient que le moteur n'est pas la communauté juive américaine, mais quelques milliardaires très investis pour Israël. Pour les auteurs, cette aide rend Israël imprudent et agressif, et elle coûte à Washington à long terme.
 
-> [0:32](https://www.youtube.com/watch?v=bePwcZFvP28&t=32s) « Ce qui compte c'est en fait quelques milliardaires comme Sheldon Adelson qui eux sont très investis pour Israël et qui font pencher la politique extérieure américaine parfois au détriment des intérêts nationaux américains en faveur d'Israël. »
+> [0:32](https://www.youtube.com/watch?v=bePwcZFvP28&t=32s) « Ce qui compte c'est en fait quelques milliardaires comme Sheldon Adelson qui eux sont très investis pour Israël »
 
-> [1:34](https://www.youtube.com/watch?v=bePwcZFvP28&t=94s) « Ce n'est pas un accord en fait commun entre Israël et les États-Unis c'est au profit d'Israël et parfois au détriment des États-Unis. »
+> [1:03](https://www.youtube.com/watch?v=bePwcZFvP28&t=63s) « corrigée de l'inflation ça représente 300 milliards de dollars depuis 1948 »
 
-## 2. L'aide américaine massive à Israël n'est plus justifiée et nourrit une politique israélienne imprudente et agressive.
+## 2. Pour les auteurs, le poids de l'AIPAC pousse les présidents américains à plier leur politique au Proche-Orient.
 
-Les auteurs écartent l'argument de l'allié de la Guerre froide : il ne tient pas, puisque l'aide a continué après la fin de celle-ci.
+Boniface relève aussi que le lobby a parfois été battu, par exemple sur l'accord nucléaire iranien signé par Obama. Mais selon les auteurs, il l'a emporté chaque fois que Washington voulait agir contre la conception qu'Israël a de ses intérêts.
 
-> [1:03](https://www.youtube.com/watch?v=bePwcZFvP28&t=63s) « Cette aide représente le quart de l'aide totale donnée aux pays étrangers par les États-Unis et corrigée de l'inflation ça représente 300 milliards de dollars depuis 1948 »
+> [3:07](https://www.youtube.com/watch?v=bePwcZFvP28&t=187s) « se vantait de pouvoir réunir la signature de 70 sénateurs en faveur d'Israël sur une nappe en papier dans un restaurant »
 
-> [1:34](https://www.youtube.com/watch?v=bePwcZFvP28&t=94s) « si cet argument était vrai disent les auteurs, l'aide aurait dû s'arrêter avec la fin de la Guerre Froide ce qui n'a pas été le cas. »
+> [3:38](https://www.youtube.com/watch?v=bePwcZFvP28&t=218s) « les présidents ont souvent été obligés de prendre des positions contraires aux suggestions de leurs conseillers diplomatiques »
 
-## 3. Les présidents américains anticipent le poids de l'AIPAC, et le lobby l'emporte presque toujours quand Washington contrarie la conception qu'Israël a de ses intérêts.
-
-Selon Boniface, les auteurs y voient une contradiction entre la politique intérieure américaine et les priorités et valeurs de sa politique étrangère. Le lobby a connu des défaites, comme l'accord sur le nucléaire iranien signé par Obama, mais elles restent des exceptions.
-
-> [3:07](https://www.youtube.com/watch?v=bePwcZFvP28&t=187s) « se vantait de pouvoir réunir la signature de 70 sénateurs en faveur d'Israël sur une nappe en papier dans un restaurant à n'importe quel moment »
-
-> [3:38](https://www.youtube.com/watch?v=bePwcZFvP28&t=218s) « Si, disent-ils, les leaders américains, les présidents américains avaient pu opérer sans le soutien de l'AIPAC ou la crainte de son opposition, la politique au Moyen-Orient aurait été vraiment différente »
-
-> [4:40](https://www.youtube.com/watch?v=bePwcZFvP28&t=280s) « Mais sinon en fait à chaque fois qu'il y a eu la une volonté du gouvernement américain de faire quelque chose qui soit contraire à la façon dont Israël concevait ses intérêts, le lobby l'a emporté. »
-
-## 4. L'AIPAC a glissé vers l'extrême droite et, surtout depuis le 7 octobre, fait régner un climat maccarthyste qui étouffe toute critique d'Israël.
-
-Les auteurs relèvent l'abandon de la solution à deux États au profit d'une politique purement sécuritaire. Ils notent aussi que les accusations d'antisémitisme servent à décourager l'usage de termes comme apartheid.
+## 3. Selon les auteurs, l'AIPAC a viré à l'extrême droite et fait régner un climat maccarthyste sur toute critique d'Israël.
 
 > [4:40](https://www.youtube.com/watch?v=bePwcZFvP28&t=280s) « L'AIPAC a glissé à droite voire à l'extrême droite, empêche tout examen critique de la relation entre les États-Unis et Israël »
 
-> [5:10](https://www.youtube.com/watch?v=bePwcZFvP28&t=310s) « qui remet en cause toute critique d'Israël ou tout soutien à cause palestinienne dans les journaux, dans les universités »
+> [5:10](https://www.youtube.com/watch?v=bePwcZFvP28&t=310s) « climat maccarthyste qui remet en cause toute critique d'Israël ou tout soutien à cause palestinienne dans les journaux, dans les universités »
 
-## 5. Ces arguments marchent de moins en moins : le soutien inconditionnel à Israël pèse sur l'électorat américain et le lobby s'en inquiète.
+## 4. Pour les auteurs, cette emprise s'érode : le réflexe « Israël d'abord » perd de son poids dans les deux camps politiques américains.
 
-Boniface retient que la politique américaine devra de moins en moins être liée à une politique israélienne de plus en plus suprémaciste et d'extrême droite.
-
-> [6:14](https://www.youtube.com/watch?v=bePwcZFvP28&t=374s) « 13 % de ceux qui ont voté Biden en 2020 n'ont pas voté Kamala Harris en 2024 du fait du soutien aveugle et inconditionnel de Biden et de Kamala Harris à Israël après le 7 octobre »
+> [6:14](https://www.youtube.com/watch?v=bePwcZFvP28&t=374s) « Selon les auteurs, 13 % de ceux qui ont voté Biden en 2020 n'ont pas voté Kamala Harris en 2024 »
 
 > [6:44](https://www.youtube.com/watch?v=bePwcZFvP28&t=404s) « parce que le catéchisme Israël d'abord devient de moins en moins important dans les deux bords du spectre politique. »
