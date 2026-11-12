@@ -1,20 +1,20 @@
 ---
-title: "2026-07-10 → 2026-10-24"
+title: "2026-07-10 → 2026-10-28"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10
 owner: diplo
 preview: >-
-  Blast dénonce une impunité et une extrême droite banalisée avec l'aide de
-  Macron et des médias. Elle lit mégafeux, licenciements et dette comme des
-  choix politiques, puis fait de la mobilisation lycéenne et de sa répression
-  le centre de l'automne.
+  Blast soutient que l'impunité s'installe, que Macron, les médias et les
+  éditocrates banalisent l'extrême droite et que la répression criminalise la
+  contestation, des méga-feux au mouvement lycéen d'octobre, et il appelle à
+  rejoindre la révolte.
 ---
-# 2026-07-10 → 2026-10-24
+# 2026-07-10 → 2026-10-28
 
-Pendant tout l'été, Blast soutient que l'impunité s'installe à tous les étages et que l'extrême droite avance grâce à ses complices. Macron est tenu pour responsable des mégafeux, faute de moyens, et accusé de verrouiller l'après-2027. Les licenciements, les incendies rattachés au capitalisme productiviste et la dette, qu'elle tient pour un faux procès, sont présentés comme des choix politiques et non des fatalités. Le débat du MEDEF est dénoncé comme de la propagande néolibérale, et Hollande est vu masquant une candidature de droite.
+Pendant ces quatre mois, Blast décrit un pouvoir qui laisse s'installer l'impunité et qui ouvre la voie à l'extrême droite. Il tient Macron pour responsable des méga-feux de l'été, faute de moyens, et l'accuse de verrouiller l'après-2027. Pour Blast, la loi du 7 juillet 2026 fait entrer dans le droit un « permis de tuer », la répression criminalise la contestation et les licenciements sont des choix politiques.
 
-Le fil se prolonge à la rentrée sur la banalisation de l'extrême droite, de l'AfD au RN, que Blast impute à Macron, aux médias et au gouvernement. Elle soutient aussi que la droite et le patronat stigmatisent les chômeurs, que la primaire du PS neutralise les désaccords, et que la loi du 7 juillet 2026 fait entrer dans le droit un « permis de tuer » tandis que la répression criminalise la contestation. Pendant ces semaines, elle reçoit des magistrats, Survie, Adèle Haenel, puis un économiste, des militants, des chercheurs et un philosophe.
+À la fin de l'été et en septembre, Blast élargit le propos à l'ordre économique et médiatique. Il dénonce le débat du MEDEF comme une propagande néolibérale, rattache les incendies au capitalisme productiviste et tient la dette pour un faux procès. Il soutient que la droite et le patronat stigmatisent les chômeurs, que Hollande masque une candidature de droite et que la primaire du PS neutralise les désaccords. Macron, les médias et le gouvernement banalisent l'extrême droite, de l'AfD au RN. Blast reçoit dans ces semaines des magistrats, Survie, Adèle Haenel, un économiste, des militants, des chercheurs et un philosophe.
 
-À partir d'octobre, la mobilisation lycéenne occupe la Chronicle : [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/CLAUDE|2026-10-01 → 2026-10-14]] la montre réprimée de façon systémique, avec un plaidoyer pour l'unité face au patronat, et [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/CLAUDE|2026-10-15 → 2026-10-24]] fait du soulèvement du 17 octobre un vrai soulèvement populaire que le pouvoir macroniste criminalise. Blast le suit jusqu'à la foule du 24 octobre, malgré les menaces du gouvernement.
+Octobre est dominé par la mobilisation lycéenne. Blast juge systémique la répression qui la frappe. Il soutient que médias et police ont imposé le récit des casseurs et laissé faire l'extrême droite, qui banalise le nazisme avec l'aide de Macron et des éditocrates. Face au patronat, il plaide pour l'unité, et il termine la Period en appelant à rejoindre la révolte née le 17 octobre.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Le fil se prolonge à la rentrée sur la banalisation de l'extrême droite, de l
 3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/CLAUDE|2026-08-19 → 2026-09-13]] (18 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/4-2026-09-14/CLAUDE|2026-09-14 → 2026-09-30]] (18 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/CLAUDE|2026-10-01 → 2026-10-14]] (17 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/CLAUDE|2026-10-15 → 2026-10-24]] (15 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/6-2026-10-15/CLAUDE|2026-10-15 → 2026-10-28]] (21 Digests)
