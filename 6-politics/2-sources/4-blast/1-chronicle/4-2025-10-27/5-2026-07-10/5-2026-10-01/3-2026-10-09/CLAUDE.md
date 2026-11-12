@@ -3,16 +3,17 @@ title: "2026-10-09 → 2026-10-12"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/5-2026-10-01/3-2026-10-09
 owner: diplo
 preview: >-
-  Blast soutient que le fascisme est de retour et que les grands médias
-  accompagnent la répression des lycéens. Fatima Ouassak défend un projet
-  antiraciste ancré dans les quartiers, Johann Chapoutot soutient que les
-  élites ont donné le pouvoir aux nazis.
+  Blast soutient que le fascisme est de retour et que les grands médias ont
+  accompagné la répression du mouvement lycéen. Blast reçoit Fatima Ouassak,
+  pour qui seul un projet antiraciste ancré dans les quartiers peut battre
+  l'extrême droite, et Johann Chapoutot, sur le choix des élites en faveur du
+  nazisme.
 ---
 # 2026-10-09 → 2026-10-12
 
-Blast soutient que le fascisme est de retour sous des formes renouvelées : les extrêmes droites actuelles prolongent le fascisme historique, qui n'a pas disparu en 1945, et prospèrent sur la crise d'un capitalisme prédateur. Johann Chapoutot, reçu sur le sujet, soutient que les nazis n'ont pas pris le pouvoir mais l'ont reçu : des élites conservatrices, patronales et médiatiques ont nommé Hitler en croyant le contrôler, et les garde-fous ont cédé en quelques semaines. Il ne craint pas pour autant une répétition à l'identique aujourd'hui.
+Blast soutient que le fascisme est de retour sous des formes renouvelées : les extrêmes droites actuelles prolongent le fascisme historique, qui n'a jamais disparu en 1945, et prospèrent sur la crise d'un capitalisme prédateur. L'historien Johann Chapoutot, reçu pour éclairer ce retour, soutient que les nazis n'ont pas pris le pouvoir : on le leur a donné. Des élites conservatrices, patronales et médiatiques ont nommé Hitler en croyant le contrôler, puis les garde-fous ont cédé en quelques semaines. Il ne craint pas pour autant une répétition aujourd'hui.
 
-Le mouvement lycéen fournit l'autre fil de la Period. Blast soutient que les grands médias ont accompagné sa répression en réduisant le débat aux feux de poubelle et à un complot de LFI, pendant que la police brutalise des mineurs, une violence de classe. Fatima Ouassak, elle, soutient que ce mouvement né dans les quartiers populaires dit la révolte d'une jeunesse contre l'école de tri et le racisme d'État, et que seul un projet antiraciste, ancré localement, peut battre l'extrême droite et le macronisme en 2027.
+L'autre fil de la Period est le mouvement lycéen. Blast soutient que les grands médias ont accompagné la répression en réduisant le débat aux feux de poubelle et à un complot de LFI, pendant que la police brutalise des mineurs : une violence de classe. Fatima Ouassak, invitée, y voit la révolte d'une jeunesse des quartiers populaires contre l'école de tri et le racisme d'État, et soutient que seul un projet antiraciste, ancré localement, peut battre l'extrême droite et le macronisme en 2027.
 
 ## Contenu
 
