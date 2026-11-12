@@ -208,6 +208,7 @@ kinds:
       consultant-police-justice: {définition: "Commente à l'antenne les affaires de police et de justice pour une chaîne d'information.", statut: proposé, introduit_par: blast/-EKqiH9ceoc.md}
       exégète: {définition: "Interprète en profondeur des œuvres, des textes ou des récits pour en dégager le sens.", statut: proposé, introduit_par: blast/ZPvrUlF46YY.md}
       chef-de-cartel: {définition: "Dirige un cartel de la drogue.", statut: proposé, introduit_par: boniface/Rn6XIHyxmt0.md}
+      responsable-de-la-sécurité-nationale: {définition: "Dirige ou secrétaire le conseil chargé de la sécurité nationale d'un État, à la date de la Publication.", statut: proposé, introduit_par: boniface/u-D3bfctFBQ.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -373,6 +374,7 @@ kinds:
       université-d-été: {définition: "Rencontre annuelle d'été d'un parti, faite de débats, d'ateliers et de discours de ses dirigeants.", statut: proposé, introduit_par: paduteam/325tzF3T7FM.md}
       séance: {définition: "Séance d'une assemblée qui prend une décision historique.", statut: proposé, introduit_par: blast/MOfb3v9r-CY.md}
       concours: {définition: "Compétition artistique entre participants, comme l'Eurovision de la chanson.", statut: proposé, introduit_par: boniface/r2ynmfVCcyE.md}
+      épizootie: {définition: "Maladie contagieuse qui touche des animaux d'élevage et appelle des mesures sanitaires, comme l'abattage.", statut: proposé, introduit_par: blast/CYeCZnmhDkI.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

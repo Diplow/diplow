@@ -1,20 +1,20 @@
 ---
-title: "2025-02-18 → 2026-03-26"
+title: "2025-02-18 → 2026-03-30"
 parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18
 owner: diplo
 preview: >-
-  Blast lit la période comme l'avancée d'une extrême droite portée par un
-  pouvoir corrompu et autoritaire, tandis que le PS trahit la gauche. Elle
-  défend la justice, le collectif et le rapport de force, et fait de
-  l'antifascisme un devoir.
+  Blast soutient que l'extrême droite avance avec la complicité de Macron, du
+  PS et des médias de milliardaires, que le pouvoir frappe les faibles et
+  protège les puissants, et que seuls le collectif et le rapport de force font
+  reculer.
 ---
-# 2025-02-18 → 2026-03-26
+# 2025-02-18 → 2026-03-30
 
-Blast soutient que l'extrême droite avance, de Trump et Musk à Retailleau et au RN, avec la complicité d'une classe politique et de médias patronaux corrompus. Elle décrit un pouvoir qui protège les puissants, frappe les faibles et s'attaque à l'état de droit. Elle fait de Macron et des macronistes les responsables du chaos et de la montée du RN. Elle dénonce aussi l'empire Bolloré et la Ve République, lit le réarmement comme une austérité et le budget 2026 comme une alliance néolibérale entre macronistes et RN.
+Sur ces treize mois, Blast décrit une extrême droite qui gagne du terrain, de Trump et Musk à Retailleau et au RN, puis autour de l'empire Bolloré et des milliardaires des médias qui, selon elle, préparent son arrivée. Elle fait des macronistes les responsables du chaos et de la montée du RN, lit le budget 2026 comme une alliance néolibérale entre macronistes et RN, et juge la classe politique et les médias patronaux corrompus. Le PS, dans cette lecture, trahit la gauche.
 
-À gauche, Blast accuse le PS de trahir et refuse de passer par une primaire. Pour elle, seul le rapport de force fait reculer le pouvoir. Elle voit dans la mobilisation du 10 septembre un soulèvement contre l'austérité que le pouvoir réprime, lit la répression policière comme un héritage de 2005 et tire de la victoire de Mamdani une leçon pour la gauche. Elle défend le collectif, la justice face aux offensives de la droite et appelle à s'organiser.
+Le pouvoir, pour Blast, dérive vers l'autoritarisme. Il protège les puissants et frappe les faibles, s'en prend à la justice et à l'état de droit, réprime la mobilisation du 10 septembre et couvre l'impunité policière, que Blast rattache à l'héritage de 2005. Elle lit l'austérité, du réarmement au plan Bayrou et à la loi Duplomb, comme un choix de classe. Au fil de la Period, son regard s'élargit à un ordre capitaliste, colonial et autoritaire, de Gaza à Maduro et à la guerre contre l'Iran.
 
-Dans les derniers mois, couverts par [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE|2025-12-26 → 2026-03-26]], Blast voit un ordre impérial, capitaliste et autoritaire : Maduro enlevé, guerre contre l'Iran, médias captés, extrême droite normalisée. Elle soutient que rien n'est inéluctable, que la résistance s'organise, et fait de l'antifascisme un devoir.
+Face à cela, Blast défend le collectif et soutient que seul le rapport de force fait reculer le pouvoir, sans passer par une primaire à gauche. Elle appelle à s'organiser, défend LFI, tire de la victoire de Mamdani une leçon pour la gauche et affirme que la résistance s'organise. Elle reçoit aussi des invités sur l'extrême droite, la tech et l'abandon des classes populaires.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Dans les derniers mois, couverts par [[6-politics/2-sources/4-blast/1-chronicle/
 3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/3-2025-06-12/CLAUDE|2025-06-12 → 2025-08-31]] (70 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/4-2025-09-01/CLAUDE|2025-09-01 → 2025-10-26]] (68 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/5-2025-10-27/CLAUDE|2025-10-27 → 2025-12-25]] (65 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE|2025-12-26 → 2026-03-26]] (101 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE|2025-12-26 → 2026-03-30]] (107 Digests)
