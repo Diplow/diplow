@@ -207,6 +207,7 @@ kinds:
       rapporteur-spécial-de-l-onu: {définition: "Expert mandaté par les Nations Unies pour rendre compte d'un dossier de droits de l'homme, à la date de la Publication.", statut: proposé, introduit_par: blast/5gAEYQ8Tf6A.md}
       consultant-police-justice: {définition: "Commente à l'antenne les affaires de police et de justice pour une chaîne d'information.", statut: proposé, introduit_par: blast/-EKqiH9ceoc.md}
       exégète: {définition: "Interprète en profondeur des œuvres, des textes ou des récits pour en dégager le sens.", statut: proposé, introduit_par: blast/ZPvrUlF46YY.md}
+      chef-de-cartel: {définition: "Dirige un cartel de la drogue.", statut: proposé, introduit_par: boniface/Rn6XIHyxmt0.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}

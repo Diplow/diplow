@@ -3,18 +3,18 @@ title: "2025-09-01 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01
 owner: diplo
 preview: >-
-  Boniface lit la période à travers Trump et l'affaiblissement de l'Occident,
-  du multilatéralisme et du droit international. Il presse les Européens de
-  sortir de leur soumission, dénonce le deux poids deux mesures et voit à Gaza
-  une trêve sans perspective politique.
+  De septembre 2025 à octobre 2026, Boniface lit un Occident et un
+  multilatéralisme affaiblis par Trump, presse les Européens de sortir de leur
+  soumission, dénonce le deux poids deux mesures sur Israël et voit dans l'OCS
+  un signe de multi-alignement.
 ---
 # 2025-09-01 → 2026-10-30
 
-Le fil principal de ces quatorze mois est Trump et ce qu'il fait à l'ordre international. Boniface lit l'actualité de la rentrée comme l'affaiblissement de l'Occident et du multilatéralisme. Il décrit ensuite un retour de Trump qui liquide le droit international, une puissance qui repose sur le seul hard power, puis une Realpolitik sans souci de démocratie. Les épisodes de janvier, de la capture de Maduro au Groenland, illustrent cette lecture. Il en tire une injonction aux Européens : sortir du déni et de la soumission, et protéger la CPI. Sur l'Ukraine, il appelle à un regard réaliste. Il estime que la négociation discrète sert mieux que la fermeté affichée.
+Le fil principal de la Period est Trump et ce qu'il fait à l'ordre international. Boniface y voit d'abord l'affaiblissement de l'Occident et du multilatéralisme, puis une révolution qui liquide le droit international. Il soutient que la puissance de Trump repose sur le seul hard power et décrit une Realpolitik sans souci de démocratie, de la capture de Maduro au Groenland. Les Européens sont l'autre pôle de son analyse : il les presse de sortir du déni et de leur soumission, de protéger la CPI, et les range parmi les grands perdants de la guerre en Ukraine. Sur ce dossier, il appelle à un regard réaliste et estime que la négociation discrète sert mieux que la fermeté affichée.
 
-Le second fil est Israël et la Palestine. Boniface plaide pour des sanctions contre Israël. Il voit dans le cessez-le-feu à Gaza une trêve et non la paix, faute de perspective politique pour les Palestiniens. Il dénonce le deux poids deux mesures et le mépris israélien du droit. En janvier, il ne croit plus à la solution à deux États et dénonce l'instrumentalisation de l'antisémitisme contre les critiques d'Israël ([[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/CLAUDE|2026-01-02 → 2026-01-29]]).
+Le second fil est Israël et la Palestine. Boniface plaide pour des sanctions contre Israël et lit le cessez-le-feu à Gaza comme une trêve, pas la paix, faute de perspective politique pour les Palestiniens. Il dénonce le deux poids deux mesures et le mépris israélien du droit, ainsi que l'instrumentalisation de l'antisémitisme contre les critiques d'Israël. Il ne croit plus à la solution à deux États et constate que la France a rompu avec sa position traditionnelle. Il juge qu'un départ de Netanyahou ne changerait presque rien pour les Palestiniens.
 
-Dans la dernière partie, il constate que la France a rompu avec sa position traditionnelle. Il juge que même un départ de Netanyahou changerait peu pour les Palestiniens. Il voit aussi dans l'OCS un signe de multi-alignement ([[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/5-2026-01-30/CLAUDE|2026-01-30 → 2026-10-30]]).
+D'un bout à l'autre, la lecture passe de l'actualité de la rentrée à celle d'un ordre mondial qui se recompose. En 2026, Boniface soutient que l'OCS n'est pas une OTAN asiatique mais le signe d'un multi-alignement.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ Dans la dernière partie, il constate que la France a rompu avec sa position tra
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/2-2025-10-15/CLAUDE|2025-10-15 → 2025-11-19]] (19 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/3-2025-11-20/CLAUDE|2025-11-20 → 2025-12-23]] (23 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/4-2026-01-02/CLAUDE|2026-01-02 → 2026-01-29]] (19 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/5-2026-01-30/CLAUDE|2026-01-30 → 2026-10-30]] (23 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/5-2026-01-30/CLAUDE|2026-01-30 → 2026-02-24]] (18 Digests)
+6. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/6-2026-02-25/CLAUDE|2026-02-25 → 2026-10-30]] (11 Digests)
