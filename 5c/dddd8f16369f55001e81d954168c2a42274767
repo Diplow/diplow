@@ -1,0 +1,58 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_d1e6e33d174ef0 455
+  s_70e2b8820e4c39::t_fb62fdfed2cf7b 223,419
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/3-2026-08-10/CLAUDE.md
+  s_bfcf04e0311c6a::t_1c5ea5cc22d410 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/4-2026-08-15/1-myriam-bregman-la-candidate-qui-resiste.md
+  s_bfcf04e0311c6a::t_d01f4c1349bb80 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/4-2026-08-15/2-etre-juge-les-convictions-a-l.md
+  s_bfcf04e0311c6a::t_666ebc365bf92c 3
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/4-2026-08-15/3-meme-danser-est-devenu-un-delit.md
+  s_bfcf04e0311c6a::t_6b5cbd7ce50050 1-63
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/4-2026-08-15/4-gel-des-avoirs-une-arme-utilisee.md
+  s_bfcf04e0311c6a::t_49151933b7940e 1-85
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/4-2026-08-15/CLAUDE.md
+  s_bfcf04e0311c6a::t_4b8f315f437aa6 1-22
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/5-2026-08-19/1-canicule-en-prison-de-la-torture.md
+  s_bfcf04e0311c6a::t_af6d44875e644d 1-67
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/5-2026-08-19/2-de-de-gaulle-a-macron-une.md
+  s_bfcf04e0311c6a::t_c283cc2e331739 1-84
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/5-2026-08-19/3-juges-garantir-l-egalite-devant-la.md
+  s_bfcf04e0311c6a::t_ad3b5920d4af33 1-71
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/5-2026-08-19/4-interdits-oublies-caches-maudits-les-aventuriers.md
+  s_bfcf04e0311c6a::t_91145d6522a3fb 1-94
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/5-2026-08-19/CLAUDE.md
+  s_bfcf04e0311c6a::t_af7051f5c17ff9 1-24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/CLAUDE.md
+  s_bfcf04e0311c6a::t_4454d404882ae5 2,6-10,12,14,16,18,24-26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/CLAUDE.md
+  s_bfcf04e0311c6a::t_ba8f203de176d9 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_bfcf04e0311c6a::t_9ed4ebdd8b7161 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_bfcf04e0311c6a::t_1129e2e25fa8e7 6-10,14,16,18,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5cdddd8f16369f55001e81d954168c2a42274767",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_bfcf04e0311c6a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a6b8cae7a90f9643c",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
