@@ -1,6 +1,6 @@
 ---
 title: "ÊTRE JUGE : LES CONVICTIONS À L'ÉPREUVE DE LA PRATIQUE - ÉPISODE 2/6"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/3-2026-08-10
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/4-2026-08-15
 owner: diplo
 preview: >-
   Dix magistrats du Syndicat de la Magistrature disent que juger est un métier

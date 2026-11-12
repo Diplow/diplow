@@ -1,6 +1,6 @@
 ---
 title: "MYRIAM BREGMAN, LA CANDIDATE QUI RÉSISTE À JAVIER MILEI"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/3-2026-08-10
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/4-2026-08-15
 owner: diplo
 preview: >-
   Myriam Bregman, avocate et députée du PTS, soutient que Milei ne se bat pas

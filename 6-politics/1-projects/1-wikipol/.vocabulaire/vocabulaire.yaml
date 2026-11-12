@@ -220,6 +220,7 @@ kinds:
       ancien-dirigeant-de-think-tank: {définition: "A présidé ou dirigé un think tank ou une fondation de réflexion et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Z4GVz00Ptjg.md}
       agent-de-mannequins: {définition: "Dirige une agence de mannequins et place des mannequins auprès de clients et de marques.", statut: proposé, introduit_par: blast/P0YnvoRW9BI.md}
       inspecteur-du-travail: {définition: "Contrôle le respect du droit du travail dans les entreprises.", statut: proposé, introduit_par: blast/TkkZOqKt1Zg.md}
+      naturaliste: {définition: "Observe et filme la vie animale dans son milieu naturel.", statut: proposé, introduit_par: blast/eueMRr9VvT4.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -415,6 +416,7 @@ kinds:
       pièce-de-théâtre: {définition: "Une pièce écrite pour être jouée sur scène.", statut: proposé, introduit_par: blast/zFHDAvSdKT8.md}
       album: {définition: "Un album de musique.", statut: proposé, introduit_par: boniface/8SZ9ea-ADeY.md}
       revue: {définition: "Publication périodique qui rassemble des témoignages, des récits et des analyses.", statut: proposé, introduit_par: blast/bikUdy-G_Po.md}
+      poème: {définition: "Un texte poétique, en vers ou en prose.", statut: proposé, introduit_par: blast/eueMRr9VvT4.md}
     qualifiers:
       cité: {définition: "Lue, montrée ou diffusée dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -450,6 +452,7 @@ kinds:
       doctrine: {définition: "Texte qui fixe l'orientation stratégique ou de sécurité d'un État.", statut: proposé, introduit_par: boniface/ZFwecl5wW7Q.md}
       mesure-fiscale: {définition: "Impôt ou contribution instauré par une loi de finances.", statut: proposé, introduit_par: blast/TBRDLR98AW0.md}
       édit-royal: {définition: "Acte législatif pris par un roi de France, comme le Code noir.", statut: proposé, introduit_par: blast/OVUdQZ_0W-A.md}
+      ordonnance: {définition: "Acte pris par le gouvernement dans le domaine de la loi, comme celle de 1945 sur l'enfance délinquante.", statut: proposé, introduit_par: blast/8ZGNxoQrzTc.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
