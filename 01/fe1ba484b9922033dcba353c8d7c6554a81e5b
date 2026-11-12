@@ -1,0 +1,47 @@
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/3-2026-03-07/CLAUDE.md
+  s_70e2b8820e4c39::t_d2d30e37f955b1 2,6-9,11,13,15
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/4-2026-03-11/1-guerre-au-moyen-orient-quels-sont.md
+  s_70e2b8820e4c39::t_514b9e8fad779c 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/4-2026-03-11/2-face-a-l-extreme-droite-les.md
+  s_70e2b8820e4c39::t_ebbad60709c364 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/4-2026-03-11/3-alstom-l-affaire-qui-pourrait-couler.md
+  s_70e2b8820e4c39::t_7f817583b1c90d 1-89
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/4-2026-03-11/4-une-guerre-barbare-et-suicidaire-trump.md
+  s_70e2b8820e4c39::t_037c10e5cec6bd 1-93
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/4-2026-03-11/CLAUDE.md
+  s_70e2b8820e4c39::t_20a4a747088710 1-22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/5-2026-03-14/1-comment-les-nazis-ont-voulu-faire.md
+  s_70e2b8820e4c39::t_66df84bd541e75 1-92
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/5-2026-03-14/2-municipales-debats-pourris-et-angles-morts.md
+  s_70e2b8820e4c39::t_a689965715b779 1-87
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/5-2026-03-14/3-medias-editions-resister-a-bollore-et.md
+  s_70e2b8820e4c39::t_bb91dff8752c4d 1-78
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/5-2026-03-14/4-etats-unis-les-neonazis-sont-devenus.md
+  s_70e2b8820e4c39::t_15b5018ed80b54 1-90
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/5-2026-03-14/CLAUDE.md
+  s_70e2b8820e4c39::t_99c6738023d48c 1-22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/CLAUDE.md
+  s_70e2b8820e4c39::t_0f3de4ee87023a 2,6-9,11,13,15-17,23-25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE.md
+  s_70e2b8820e4c39::t_0ccb05d979902c 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_70e2b8820e4c39::t_9e0caf2a3b4dd0 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_1090f0a0cdd5fc 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "01fe1ba484b9922033dcba353c8d7c6554a81e5b",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
