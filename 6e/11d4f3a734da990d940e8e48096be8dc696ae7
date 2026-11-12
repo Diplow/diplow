@@ -1,0 +1,41 @@
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/4-2026-09-08/4-france-inter-une-rentree-qui-sent.md
+  s_235ca0b0592b7c::t_ff029387c57f25 1-89
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/4-2026-09-08/CLAUDE.md
+  s_235ca0b0592b7c::t_ab41098057e622 2,6-9,11,13,15,17,24
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/5-2026-09-14/1-mon-pere-macron-et-moi.md
+  s_235ca0b0592b7c::t_f19e51aea72566 1-97
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/5-2026-09-14/2-recession-chomage-inflation-le-point-sur.md
+  s_235ca0b0592b7c::t_4b95916968ef59 1-96
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/5-2026-09-14/3-chomeurs-la-chair-a-canon-des.md
+  s_235ca0b0592b7c::t_d5865feff5a805 1-102
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/5-2026-09-14/4-sous-le-pluralisme-la-banalisation-de.md
+  s_235ca0b0592b7c::t_5de566af47bb5a 1-83
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/5-2026-09-14/5-contre-le-permis-de-tuer-un.md
+  s_235ca0b0592b7c::t_113e4a6eb4bf08 1-95
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/5-2026-09-14/CLAUDE.md
+  s_235ca0b0592b7c::t_d90a148391207d 1-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/3-2026-08-19/CLAUDE.md
+  s_235ca0b0592b7c::t_6fdfce660a1e2c 2,6-9,11,13,15,17,24-25
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/5-2026-07-10/CLAUDE.md
+  s_235ca0b0592b7c::t_d0fd68677f8e97 2,6-9,11,13,15,17,23
+6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE.md
+  s_235ca0b0592b7c::t_5a74b244786e80 2,6-9,11,13,15,17,25
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_235ca0b0592b7c::t_2d8b5bcacb4bdb 8-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6e11d4f3a734da990d940e8e48096be8dc696ae7",
+  "prompts": {},
+  "sessions": {
+    "s_235ca0b0592b7c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ace201143be5cd32d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
