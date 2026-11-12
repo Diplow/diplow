@@ -1,0 +1,56 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_1649febc504510 211
+  s_70e2b8820e4c39::t_5f17cbf13a3abd 377
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/4-2026-03-23/CLAUDE.md
+  s_aecf67331a1e3c::t_1ef2f6de90377b 2,6-8,10,12,14
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/5-2026-03-26/1-invasions-extraterrestres-se-defaire-d-un.md
+  s_aecf67331a1e3c::t_b02be6c8bdcec9 3
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/5-2026-03-26/2-municipales-stupeur-et-fureur-apres-la.md
+  s_aecf67331a1e3c::t_d1b2a6a1a5d451 1-91
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/5-2026-03-26/3-tribunaux-d-arbitrage-une-justice-privee.md
+  s_aecf67331a1e3c::t_43910bb3a1d046 1-86
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/5-2026-03-26/4-les-etats-unis-etaient-un-modele.md
+  s_aecf67331a1e3c::t_f5a044042b8722 1-95
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/5-2026-03-26/CLAUDE.md
+  s_aecf67331a1e3c::t_6a7b6fa0a15596 1-22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/6-2026-03-29/1-de-l-affaire-dreyfus-a-la.md
+  s_aecf67331a1e3c::t_e80988982e07e3 1-111
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/6-2026-03-29/2-nouvelle-france-la-peur-bleue-des.md
+  s_aecf67331a1e3c::t_e7062a3b31eb58 1-82
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/6-2026-03-29/3-agriculture-les-paysan-ne-s-sacrifie.md
+  s_aecf67331a1e3c::t_077f5f717adc02 1-73
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/6-2026-03-29/CLAUDE.md
+  s_aecf67331a1e3c::t_906401cbd78b87 1-22
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/6-2026-03-14/CLAUDE.md
+  s_aecf67331a1e3c::t_f2c2b9a20b5c73 2,6-9,11,13,15,17,24-26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/CLAUDE.md
+  s_aecf67331a1e3c::t_107ecfb6654722 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE.md
+  s_aecf67331a1e3c::t_609cd4c6c5b077 2,6-9,11,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_aecf67331a1e3c::t_330c8fc9fda285 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8c2396e100af566815044a10d8f9d824d2c332bf",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_aecf67331a1e3c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a8cc3b63ba8e78bd8",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
