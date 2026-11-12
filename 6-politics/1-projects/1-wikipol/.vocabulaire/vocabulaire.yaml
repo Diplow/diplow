@@ -218,6 +218,7 @@ kinds:
       climatologue: {définition: "Étudie le climat et son évolution.", statut: proposé, introduit_par: blast/M-zNobiaxcY.md}
       régisseur: {définition: "Gère les terres et collecte les loyers pour le compte d'un grand propriétaire.", statut: proposé, introduit_par: blast/vihypxAvoYA.md}
       ancien-dirigeant-de-think-tank: {définition: "A présidé ou dirigé un think tank ou une fondation de réflexion et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Z4GVz00Ptjg.md}
+      agent-de-mannequins: {définition: "Dirige une agence de mannequins et place des mannequins auprès de clients et de marques.", statut: proposé, introduit_par: blast/P0YnvoRW9BI.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
