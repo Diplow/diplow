@@ -1,6 +1,6 @@
 ---
 title: "COMMENT ORWELL A INVENTÉ NOTRE MONDE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/5-2026-03-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/1-2026-03-01
 owner: diplo
 preview: >-
   Blast reçoit Jean-Pierre Perrin, auteur de La Chambre d'Orwell : Orwell a

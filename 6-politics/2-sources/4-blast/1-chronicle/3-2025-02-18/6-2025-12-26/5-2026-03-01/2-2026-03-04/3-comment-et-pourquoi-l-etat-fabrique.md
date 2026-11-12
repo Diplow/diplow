@@ -1,6 +1,6 @@
 ---
 title: "COMMENT ET POURQUOI L'ÉTAT FABRIQUE LES SANS-PAPIERS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/6-2026-03-04
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/2-2026-03-04
 owner: diplo
 preview: >-
   Selon Amnesty International, l'État fabrique l'irrégularité et

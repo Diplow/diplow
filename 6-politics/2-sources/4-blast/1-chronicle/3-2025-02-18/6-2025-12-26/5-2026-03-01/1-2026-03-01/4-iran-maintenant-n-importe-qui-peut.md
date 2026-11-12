@@ -1,6 +1,6 @@
 ---
 title: "IRAN : « MAINTENANT N’IMPORTE QUI PEUT ATTAQUER N’IMPORTE QUI »"
-parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/4-2026-02-17/5-2026-03-01
+parent: 6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/6-2025-12-26/5-2026-03-01/1-2026-03-01
 owner: diplo
 preview: >-
   Selon Thierry Coville, chercheur à l'IRIS, la guerre contre l'Iran repose
