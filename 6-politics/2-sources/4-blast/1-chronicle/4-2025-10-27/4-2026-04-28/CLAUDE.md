@@ -1,20 +1,20 @@
 ---
-title: "2026-04-28 → 2026-08-24"
+title: "2026-04-28 → 2026-08-25"
 parent: 6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28
 owner: diplo
 preview: >-
-  Blast dénonce d'avril à août l'impunité policière, la diabolisation
-  médiatique de Mélenchon et de LFI, la progression de l'extrême droite et les
-  choix politiques de Macron. Elle défend la taxation des ultra-riches et voit
-  dans la course à 2027 une fabrique de capital politique.
+  Blast dénonce l'impunité policière, la diabolisation de Mélenchon et de LFI,
+  l'avancée de l'extrême droite et l'abandon de la France face aux méga-feux.
+  Elle défend la taxation des ultra-riches et voit dans la lutte des opprimés
+  un espoir commun.
 ---
-# 2026-04-28 → 2026-08-24
+# 2026-04-28 → 2026-08-25
 
-Le fil le plus constant de la Period est celui de la répression et de l'impunité. Blast dénonce des violences policières qui restent sans suite, puis une impunité qui s'installe « à tous les étages », et enfin, [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/CLAUDE|en fin de période]], une loi du 7 juillet 2026 qui ferait entrer un « permis de tuer » d'extrême droite dans le droit et une répression qui criminalise la contestation. Le racisme et l'impunité y sont présentés comme des questions de structures. Elle les illustre par l'hôpital public qui traque des soignantes racisées et par les prisons et la justice, sujets de nombreux invités.
+Sur le terrain économique et social, Blast soutient que les puissants gouvernent pour eux-mêmes : Trump pour s'enrichir, tandis que le culte d'Elon Musk et le mythe du bon patron masquent des rapports de force. Elle défend la taxation des ultra-riches et tient les licenciements pour des choix politiques. Elle enquête aussi sur Axis, accuse la presse de ménager Macron et, par la méthode Bolloré, dénonce la concentration des pouvoirs économiques et médiatiques.
 
-Sur le terrain politique, Blast soutient que Mélenchon est érigé en repoussoir au profit du RN, et que la diabolisation médiatique de LFI sert d'écran. Pour elle, le clivant n'est pas Mélenchon mais Glucksmann, le PS, la droite et les médias. Elle juge le PS calqué sur le programme de LFI et lit la course à 2027 comme une fabrique de capital politique. Elle accuse Macron de verrouiller l'après-2027 et de laisser la France sans moyens face aux méga-feux. La presse, selon elle, le ménage.
+Un second fil court sur toute la Period : la répression et l'impunité. Blast décrit des violences policières qui restent impunies, un État qui durcit la répression, puis une impunité qui s'installe à tous les étages. Elle voit l'extrême droite avancer grâce à ses complices, et l'été la conduit à accuser l'État d'inscrire dans le droit un « permis de tuer » d'extrême droite et de criminaliser la contestation, de la free party à la solidarité avec la Palestine. Racisme et impunité tiennent pour elle à des structures.
 
-Blast défend aussi la taxation des ultra-riches et refuse de voir dans les licenciements autre chose que des choix politiques. Elle s'en prend au culte d'Elon Musk, au mythe du bon patron, à la méthode Bolloré et à une extrême droite qui avance grâce à ses complices. Elle enquête sur Axis et reçoit syndicalistes, militants, journalistes, une historienne et la Cimade. Elle voit dans la lutte des opprimés un espoir commun.
+Sur la gauche, Blast lit la course à 2027 comme une fabrique de capital politique. Elle dénonce un Mélenchon érigé en repoussoir au profit du RN et la diabolisation médiatique de LFI. Pour elle, le clivant n'est pas Mélenchon mais Glucksmann, le PS, la droite et les médias, et le PS recopie le programme de LFI. Elle accuse Macron de verrouiller l'après-2027 et de porter la responsabilité des méga-feux. Tout au long, elle donne la parole à des syndicalistes, des militants, des auteurs d'enquêtes, des journalistes, une historienne et la Cimade.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Blast défend aussi la taxation des ultra-riches et refuse de voir dans les lice
 3. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/3-2026-06-06/CLAUDE|2026-06-06 → 2026-06-20]] (16 Digests)
 4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/4-2026-06-21/CLAUDE|2026-06-21 → 2026-07-09]] (17 Digests)
 5. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/5-2026-07-10/CLAUDE|2026-07-10 → 2026-07-29]] (16 Digests)
-6. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/CLAUDE|2026-07-30 → 2026-08-24]] (20 Digests)
+6. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/4-2026-04-28/6-2026-07-30/CLAUDE|2026-07-30 → 2026-08-25]] (21 Digests)
