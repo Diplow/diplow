@@ -3,42 +3,50 @@ title: "Un maire français agressé en Palestine"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/5-2026-05-26/4-2026-09-21/4-2026-10-15
 owner: diplo
 preview: >-
-  Pascal Boniface soutient que l'agression d'un maire français en Cisjordanie
-  vise à décourager les Palestiniens comme la présence internationale, que les
-  colons agissent en toute impunité, et que la France s'en tient à des
-  protestations sans conséquence.
+  Boniface soutient que l'agression d'un maire français en Cisjordanie vise à
+  décourager à la fois les Palestiniens et toute présence internationale, que
+  les colons agissent en toute impunité, et que Paris s'en tient à des
+  protestations sans conséquence concrète.
 source: boniface
 url: https://www.youtube.com/watch?v=sTZe7KgYZzA
 youtube_id: "sTZe7KgYZzA"
 published: 2026-10-19
 duration: 240
 raw: boniface/sTZe7KgYZzA.md
-ingested: 2026-10-31
-digest_version: 1
+ingested: 2026-11-12
+digest_version: 3
 model: claude-sonnet-5-5
+mentions:
+  - {name: Pascal Boniface, kind: personne, labels: [chercheur], qualifiers: [animateur, intervenant]}
+  - {name: Benyamin Netanyahou, kind: personne, labels: [chef-de-gouvernement], qualifiers: [sujet], heard_as: Benyamin Netanyahu}
+  - {name: Itamar Ben-Gvir, kind: personne, labels: [ministre], qualifiers: [sujet]}
+  - {name: Jean-Noël Barrot, kind: personne, labels: [ministre], qualifiers: [mentionné], heard_as: Jean-Noël Barreau}
+  - {name: Cisjordanie, kind: lieu, labels: [territoire], qualifiers: [sujet]}
 ---
 # Un maire français agressé en Palestine
 
-## 1. L'agression d'un maire français s'inscrit dans une stratégie : écœurer les Palestiniens et empêcher toute présence internationale de témoigner en Cisjordanie.
+## 1. Boniface soutient que l'agression du maire vise à décourager les Palestiniens comme la présence internationale en Cisjordanie.
 
-Pour Boniface, les colons s'en prennent à la cueillette des olives, moyen de subsistance des Palestiniens, pour les pousser à partir. Frapper ceux qui viennent les soutenir, ici un maire de 78 ans à la tête d'une délégation diplomatique, vise à dissuader les observateurs étrangers.
+La cueillette des olives est un moyen de subsistance pour les Palestiniens, et les colons cherchent à les en priver. Boniface y voit un nettoyage ethnique rampant. Frapper ceux qui viennent à leur secours doit aussi dissuader les témoins étrangers.
 
 > [0:05](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=5s) « Les olives, c'est un moyen de subsistance pour les Palestiniens et en fait les colons essaient d'empêcher les Palestiniens de pouvoir en vivre »
 
-> [1:38](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=98s) « c'est une sorte de nettoyage ethnique rampant jour après jour et c'est aussi empêcher la présence internationale, empêcher que l'on puisse témoigner de ce qui se passe en Cisjordanie »
+> [1:38](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=98s) « c'est une sorte de nettoyage ethnique rampant jour après jour et c'est aussi empêcher la présence internationale »
 
-## 2. Les agresseurs bénéficient de l'impunité, et Netanyahu accuse la victime plutôt que les colons.
+> [2:09](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=129s) « l'idée c'est à la fois de décourager les Palestiniens et de décourager la présence internationale en Cisjordanie »
 
-Boniface rappelle que la journaliste américaine du Washington Post, blessée la veille, a elle aussi été agressée par des colons repartis sans être inquiétés. Il doute que les auteurs soient jamais jugés, car ils sont protégés au sommet du pouvoir israélien.
+## 2. Selon Boniface, les colons agissent en toute impunité, protégés par Ben-Gvir et jusqu'au sommet de l'État israélien.
 
-> [1:06](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=66s) « plutôt porté l'accusation sur le maire en disant qu'il voulait salir l'image d'Israël »
+Netanyahou a retourné l'accusation contre la victime. Boniface doute que les agresseurs soient retrouvés ou jugés.
 
-> [1:06](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=66s) « On peut en douter dans la mesure où ils sont protégés par Ben-Gvir, Itamar Ben-Gvir »
+> [0:35](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=35s) « le Premier ministre israélien Benyamin Netanyahu a lui au contraire accusé le Français »
 
-## 3. La France répond par des protestations vigoureuses mais sans aucune traduction concrète, ce qui nourrit le sentiment d'impunité.
+> [1:06](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=66s) « ils sont protégés par Ben-Gvir, Itamar Ben-Gvir et donc y compris par le Premier ministre israélien »
 
-Boniface note que le ministre français des Affaires étrangères n'a même pas convoqué l'ambassadeur israélien. Il y voit une longue série d'atteintes et de mépris envers la France, restées sans suite, alors que la France doit normalement protéger ses élus.
+## 3. Pour Boniface, les protestations vigoureuses de Paris restent sans traduction concrète face au mépris affiché envers la France.
 
-> [2:09](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=129s) « a protesté vigoureusement contre cela, mais il n'a pas convoqué l'ambassadeur israélien à Paris »
+Il rappelle que le ministre français n'a pas convoqué l'ambassadeur israélien. L'interdiction d'importer les produits des colonies lui paraît insuffisante.
 
-> [3:11](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=191s) « Quai d'Orsay, mais pour l'instant, ils n'ont jamais eu de traduction concrète, d'actions concrètes »
+> [2:09](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=129s) « il n'a pas convoqué l'ambassadeur israélien à Paris »
+
+> [3:11](https://www.youtube.com/watch?v=sTZe7KgYZzA&t=191s) « pour l'instant, ils n'ont jamais eu de traduction concrète, d'actions concrètes »

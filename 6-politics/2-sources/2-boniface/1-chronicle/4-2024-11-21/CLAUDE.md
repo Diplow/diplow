@@ -3,18 +3,17 @@ title: "2024-11-21 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21
 owner: diplo
 preview: >-
-  Boniface lit près de deux ans d'actualité par le deux poids, deux mesures et
-  le rapport de force : Trump affaiblit l'Occident et le droit international,
-  Israël agit en toute impunité, et l'Europe, qui a cédé, doit s'émanciper et
-  résister.
+  Boniface lit presque deux ans d'actualité par le deux poids, deux mesures
+  occidental et le rapport de force : Trump affaiblit l'Occident et le droit
+  international, l'Europe doit s'émanciper, Israël agit en toute impunité.
 ---
 # 2024-11-21 → 2026-10-30
 
-Pascal Boniface applique d'un bout à l'autre de ces deux ans la même grille : le deux poids, deux mesures occidental, qui devient la loi du plus fort. Il voit en Trump une révolution stratégique, dont les initiatives attaquent le droit international et signent la fin de l'OTAN. Cette lecture s'élargit ensuite à l'affaiblissement de l'Occident et du multilatéralisme. En 2026, la guerre de Trump contre l'Iran lui paraît un signe d'hubris : elle affaiblit Washington et profite à la Chine. Il décrit une Amérique usée, enlisée en Iran comme en Ukraine, tandis que la Chine et le Sud global comptent de plus en plus.
+Pour Boniface, la grille qui revient d'un bout à l'autre est le deux poids, deux mesures occidental, appliqué à Gaza comme à l'Ukraine, et la loi du plus fort qui en découle. Trump y occupe une place centrale. Ses initiatives attaquent selon lui le droit international et signent la fin de l'OTAN, puis une révolution stratégique. Elles affaiblissent l'Occident et le multilatéralisme. En 2026, la guerre contre l'Iran lui apparaît comme un signe d'hubris qui affaiblit Washington et profite à la Chine. Il y voit ensuite l'enlisement de Trump, en Iran puis en Ukraine, et l'érosion d'un Occident à géométrie variable.
 
-Sur l'Ukraine, il juge d'abord qu'une paix, même injuste, vaut mieux que la guerre. Il en fait un cas de plus de l'Europe qui a cédé, grande perdante de la période. Son appel revient sous plusieurs formes : autonomie stratégique, sortie du déni et de la soumission, puis émancipation. Il demande enfin aux Européens de dire stop à Trump et de défendre le droit international.
+Sur l'Ukraine, il juge au départ qu'une paix, même injuste, vaut mieux que la guerre. Face à Trump, son message aux Européens se durcit avec le temps. Il leur demande d'abord l'autonomie stratégique, constate qu'ils ont cédé, les presse de sortir du déni et de leur soumission, puis de dire stop à Trump. Il leur demande de s'émanciper et de défendre le droit international, car ils sont à ses yeux les grands perdants.
 
-L'autre fil est Israël et Gaza. Boniface presse Macron de passer aux actes contre Netanyahou, plaide pour des sanctions contre Israël et ne croit plus à la solution à deux États. Il décrit un Israël qui agit en toute impunité et étouffe Gaza.
+Sur le Proche-Orient, il presse Macron de passer aux actes contre Netanyahou, plaide pour des sanctions contre Israël et ne croit plus à la solution à deux États. Il estime qu'Israël agit en toute impunité et que rien ne changera pour les Palestiniens. Il voit enfin dans l'OCS un multi-alignement, signe d'un monde qui ne s'organise plus autour de l'Occident.
 
 ## Contenu
 
@@ -22,4 +21,4 @@ L'autre fil est Israël et Gaza. Boniface presse Macron de passer aux actes cont
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/2-2025-04-09/CLAUDE|2025-04-09 → 2025-08-28]] (83 Digests)
 3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/CLAUDE|2025-09-01 → 2026-01-29]] (84 Digests)
 4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/4-2026-01-30/CLAUDE|2026-01-30 → 2026-05-25]] (77 Digests)
-5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/5-2026-05-26/CLAUDE|2026-05-26 → 2026-10-30]] (89 Digests)
+5. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/5-2026-05-26/CLAUDE|2026-05-26 → 2026-10-30]] (90 Digests)
