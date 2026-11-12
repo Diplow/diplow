@@ -3,21 +3,21 @@ title: "2024-11-21 → 2026-10-30"
 parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21
 owner: diplo
 preview: >-
-  Boniface lit l'actualité par le deux poids, deux mesures et le rapport de
-  force : Trump attaque le droit international, l'Occident s'affaiblit,
-  l'Europe doit sortir du déni et gagner son autonomie. Sur Israël-Palestine,
-  il plaide pour des sanctions.
+  Boniface lit l'actualité par le deux poids deux mesures et la loi du plus
+  fort : Trump attaque le droit international et l'OTAN, Israël bafoue le
+  droit sans conséquence. Il appelle l'Europe à sortir de sa soumission et à
+  l'autonomie stratégique.
 ---
 # 2024-11-21 → 2026-10-30
 
-Pascal Boniface applique d'un bout à l'autre de la Period la même grille : le deux poids, deux mesures occidental, que Gaza et l'Ukraine illustrent, et la loi du plus fort qui prévaut quand le droit international recule. Les événements changent, mais il y cherche toujours le rapport de force qui les explique.
+Sur ces deux années, Pascal Boniface lit l'actualité par une même grille : le deux poids, deux mesures occidental, puis, de plus en plus nettement, le rapport de force. Gaza et l'Ukraine en sont les terrains d'application. Il juge qu'Israël bafoue le droit sans conséquence, et il presse Macron de passer aux actes contre Netanyahou. Sur l'Ukraine, il estime une paix, même injuste, préférable à la poursuite de la guerre.
 
-Trump en est la figure centrale. Boniface juge d'abord que ses initiatives attaquent le droit international et signent la fin de l'OTAN. Il y voit ensuite une révolution stratégique, puis lit l'époque à travers son hard power et l'affaiblissement de l'Occident. Face à lui, il demande à l'Europe l'autonomie stratégique. Il lui reproche d'avoir cédé, estime qu'elle doit résister et la presse de sortir du déni. Sur l'Ukraine, il juge au début de la Period une paix, même injuste, préférable à la guerre.
+Trump devient le point d'appui de cette lecture. Ses initiatives attaquent selon Boniface le droit international et signent la fin de l'OTAN. Il y voit d'abord une révolution stratégique, puis une liquidation du droit international et de l'Occident. La guerre contre l'Iran vient, dans la dernière partie de la Period, confirmer un monde où la force prime sur le droit.
 
-Sa position sur Israël et la Palestine se durcit. Il presse Macron de passer aux actes contre Netanyahou, puis plaide pour des sanctions et ne croit plus à la solution à deux États.
+Face à cela, Boniface demande à l'Europe de cesser de subir. Il constate qu'elle a cédé et que les Européens doivent sortir de leur soumission, résister, et conquérir leur autonomie stratégique. Le propos se durcit d'une année à l'autre, mais le fil reste le même : un monde où la loi du plus fort remplace le multilatéralisme, et une Europe qui doit en tirer les conséquences.
 
 ## Contenu
 
 1. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/1-2024-11-21/CLAUDE|2024-11-21 → 2025-04-07]] (72 Digests)
 2. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/2-2025-04-09/CLAUDE|2025-04-09 → 2025-08-28]] (83 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/CLAUDE|2025-09-01 → 2026-10-30]] (125 Digests)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/3-2025-09-01/CLAUDE|2025-09-01 → 2026-10-30]] (131 Digests)

@@ -209,6 +209,7 @@ kinds:
       exégète: {définition: "Interprète en profondeur des œuvres, des textes ou des récits pour en dégager le sens.", statut: proposé, introduit_par: blast/ZPvrUlF46YY.md}
       chef-de-cartel: {définition: "Dirige un cartel de la drogue.", statut: proposé, introduit_par: boniface/Rn6XIHyxmt0.md}
       responsable-de-la-sécurité-nationale: {définition: "Dirige ou secrétaire le conseil chargé de la sécurité nationale d'un État, à la date de la Publication.", statut: proposé, introduit_par: boniface/u-D3bfctFBQ.md}
+      chargé-de-plaidoyer: {définition: "Porte auprès des pouvoirs publics et de l'opinion les positions d'une ONG sur un dossier.", statut: proposé, introduit_par: blast/6sqTB2BnM9g.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
