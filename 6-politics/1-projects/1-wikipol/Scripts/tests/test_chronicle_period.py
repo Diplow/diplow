@@ -70,9 +70,9 @@ def test_the_writer_gets_the_skill_the_pinned_model_and_every_child_s_preview(so
     assert (skill, model) == ("Skill.", MODEL)
     assert "attribution : la Démo" in prompt
     assert "Restituer, pas neutraliser." in prompt
-    assert "Tu résumes : la Period 2026-01-01 → 2026-01-03" in prompt
+    assert "Tu résumes : la Period 1 → 3 janv. 2026" in prompt
     assert "Elle couvre 2 Digests, du 2026-01-01 au 2026-01-03" in prompt
-    link = "c/1-2026-01-01/1-2026-01-01/1-les-campagnes-et-nous"
+    link = "c/1-2026-01-01/1-1-3-janv-2026/1-les-campagnes-et-nous"
     assert f"## 1. [[{link}|LES CAMPAGNES - ET (NOUS)]] (2026-01-01)\n\nLe RN y recule." in prompt
 
 
@@ -86,7 +86,7 @@ def test_the_chronicle_is_summarized_whole_from_its_periods_previews(source, tmp
     assert "Tu résumes : la Chronicle entière de Demo, 2026-01-01 → 2026-02-01" in prompt
     assert "Ses enfants sont des Periods plus courtes" in prompt
     assert (
-        "## 1. [[c/1-2026-01-01/1-2026-01-01/CLAUDE|2026-01-01 → 2026-01-03]] (2 Digests)"
+        "## 1. [[c/1-2026-01-01/1-1-3-janv-2026/CLAUDE|1 → 3 janv. 2026]] (2 Digests)"
         "\n\nLa Démo mise sur les campagnes." in prompt
     )
 
@@ -140,7 +140,7 @@ def test_what_a_summary_is_refused_for(preview, body, problem):
 
 def test_a_summary_may_link_its_children_and_quote_their_previews():
     inner = period_of_two().children[0]
-    link = "c/1-2026-01-01/1-2026-01-01/2-la-gauche"
+    link = "c/1-2026-01-01/1-1-3-janv-2026/2-la-gauche"
     body = f"La Démo veut « aller chercher » les gens, voir [[{link}|la gauche]]."
 
     assert check_summary("Un Preview.", body, inner) == []
@@ -152,14 +152,14 @@ def test_a_period_file_reads_back_its_title_and_summary():
     text = render_period(inner)
 
     assert read_period(text) == (
-        "2026-01-01 → 2026-01-03",
+        "1 → 3 janv. 2026",
         Summary("La Démo mise sur les campagnes.", "Corps."),
     )
     assert text.endswith(
         "## Contenu\n\n"
-        "1. [[c/1-2026-01-01/1-2026-01-01/1-les-campagnes-et-nous|LES CAMPAGNES - ET (NOUS)]]"
+        "1. [[c/1-2026-01-01/1-1-3-janv-2026/1-les-campagnes-et-nous|LES CAMPAGNES - ET (NOUS)]]"
         " (2026-01-01)\n"
-        "2. [[c/1-2026-01-01/1-2026-01-01/2-la-gauche|LA GAUCHE]] (2026-01-03)\n"
+        "2. [[c/1-2026-01-01/1-1-3-janv-2026/2-la-gauche|LA GAUCHE]] (2026-01-03)\n"
     )
 
 

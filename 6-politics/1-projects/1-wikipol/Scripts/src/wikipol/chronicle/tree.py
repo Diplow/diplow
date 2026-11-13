@@ -9,9 +9,10 @@ children go down into two new Periods under it. So every Digest sits at the same
 Period's dates never overlap its siblings'.
 
 Children are numbered 1 to 6 in date order, which gives every Digest and Period its path: a
-Digest is `N-<slug of its title>.md`, a Period the folder `N-<its first date>`. Its title is
-its date range. Filing marks `touched` every Period whose children changed: those get their
-Preview and Body rewritten by `write-period`, the deeper ones first.
+Digest is `N-<slug of its title>.md`, a Period the folder `N-<slug of its title>`. Its title is
+the span of calendar its dates cover (`span.py`), `Q4 2024 → Q1 2025`. Filing marks `touched`
+every Period whose children changed: those get their Preview and Body rewritten by
+`write-period`, the deeper ones first.
 """
 
 from __future__ import annotations
@@ -20,6 +21,8 @@ import unicodedata
 from bisect import insort
 from dataclasses import dataclass, field
 from datetime import date
+
+from wikipol.chronicle.span import span_label
 
 MAX_CHILDREN = 6
 SLUG_WORDS = 6
@@ -61,7 +64,7 @@ class Period:
     summary: Summary | None = None
     touched: bool = False
     fixed_title: str | None = None
-    """The Chronicle's own title; a Period's title is its date range."""
+    """The Chronicle's own title; a Period's title is the span its dates cover."""
     path: str | None = None
 
     @property
@@ -87,7 +90,7 @@ class Period:
     def title(self) -> str:
         if self.fixed_title is not None:
             return self.fixed_title
-        return date_range(self.start, self.end)
+        return span_label(self.start, self.end)
 
     def leaves(self) -> list[Leaf]:
         """Its Digests, in date order."""
@@ -219,7 +222,7 @@ def assign_paths(root: Period, root_path: str) -> None:
         if isinstance(child, Leaf):
             child.path = f"{root_path}/{number}-{slugify(child.title, child.youtube_id)}"
         else:
-            assign_paths(child, f"{root_path}/{number}-{child.start.isoformat()}")
+            assign_paths(child, f"{root_path}/{number}-{'-'.join(ascii_words(child.title))}")
 
 
 def moves(root: Period) -> dict[str, str]:

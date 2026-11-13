@@ -356,11 +356,11 @@ def test_a_source_built_with_an_alias_writes_no_digest(source, store):
 MENTIONS_DRAFT = GOOD_DRAFT.replace(
     "---\n## 1.",
     """mentions:
-  - {name: Jean Hôte, kind: personne, labels: [humoriste], qualifiers: [animateur]}
+  - {name: Jean Hôte, kind: personne, labels: [humoriste-de-démo], qualifiers: [animateur]}
   - {name: Rassemblement national, kind: organisation, labels: [parti], qualifiers: [sujet],
      heard_as: Rassemblement national}
 new_terms:
-  - {label: humoriste, kind: personne, definition: "Fait rire, sur scène ou en ligne."}
+  - {label: humoriste-de-démo, kind: personne, definition: "Fait rire, sur scène ou en ligne."}
 ---
 ## 1.""",
     1,
@@ -407,12 +407,12 @@ def test_the_mentions_are_written_and_a_proposed_term_joins_the_vocabulary(
     assert frontmatter["mentions"][0] == {
         "name": "Jean Hôte",
         "kind": "personne",
-        "labels": ["humoriste"],
+        "labels": ["humoriste-de-démo"],
         "qualifiers": ["animateur"],
     }
     assert "new_terms" not in frontmatter
-    assert "\n  - {name: Jean Hôte, kind: personne, labels: [humoriste]," in result.text
-    term = load_vocabulary(vocabulary_path).kinds["personne"].labels["humoriste"]
+    assert "\n  - {name: Jean Hôte, kind: personne, labels: [humoriste-de-démo]," in result.text
+    term = load_vocabulary(vocabulary_path).kinds["personne"].labels["humoriste-de-démo"]
     assert (term.status, term.introduced_by) == ("proposé", f"demo/{VIDEO}.md")
     prompt = writer.calls[0][1]
     assert "# Les animateurs de la Source\n\n- Jean Hôte\n" in prompt
