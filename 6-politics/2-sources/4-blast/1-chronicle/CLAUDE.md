@@ -18,7 +18,7 @@ Face à cela, Blast soutient que rien n'est inéluctable. La montée des extrêm
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/1-2023-10-31/CLAUDE|2023-10-31 → 2024-06-14]] (272 Digests)
-2. [[6-politics/2-sources/4-blast/1-chronicle/2-2024-06-15/CLAUDE|2024-06-15 → 2025-02-17]] (276 Digests)
-3. [[6-politics/2-sources/4-blast/1-chronicle/3-2025-02-18/CLAUDE|2025-02-18 → 2025-10-26]] (268 Digests)
-4. [[6-politics/2-sources/4-blast/1-chronicle/4-2025-10-27/CLAUDE|2025-10-27 → 2026-11-01]] (383 Digests)
+1. [[6-politics/2-sources/4-blast/1-chronicle/1-q4-2023-q2-2024/CLAUDE|Q4 2023 → Q2 2024]] (272 Digests, 2023-10-31 → 2024-06-14)
+2. [[6-politics/2-sources/4-blast/1-chronicle/2-s1-2024-s1-2025/CLAUDE|S1 2024 → S1 2025]] (276 Digests, 2024-06-15 → 2025-02-17)
+3. [[6-politics/2-sources/4-blast/1-chronicle/3-s1-s2-2025/CLAUDE|S1 → S2 2025]] (268 Digests, 2025-02-18 → 2025-10-26)
+4. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/CLAUDE|S2 2025 → S2 2026]] (383 Digests, 2025-10-27 → 2026-11-01)

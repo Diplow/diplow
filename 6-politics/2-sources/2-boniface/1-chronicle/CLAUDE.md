@@ -18,7 +18,7 @@ Sur la période la plus récente, la grille se resserre autour du rapport de for
 
 ## Contenu
 
-1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-10-03/CLAUDE|2016-10-03 → 2020-06-11]] (324 Digests)
-2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-06-16/CLAUDE|2020-06-16 → 2022-11-23]] (322 Digests)
-3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-11-28/CLAUDE|2022-11-28 → 2024-11-20]] (317 Digests)
-4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-11-21/CLAUDE|2024-11-21 → 2026-10-30]] (406 Digests)
+1. [[6-politics/2-sources/2-boniface/1-chronicle/1-2016-2020/CLAUDE|2016 → 2020]] (324 Digests, 2016-10-03 → 2020-06-11)
+2. [[6-politics/2-sources/2-boniface/1-chronicle/2-2020-2022/CLAUDE|2020 → 2022]] (322 Digests, 2020-06-16 → 2022-11-23)
+3. [[6-politics/2-sources/2-boniface/1-chronicle/3-2022-2024/CLAUDE|2022 → 2024]] (317 Digests, 2022-11-28 → 2024-11-20)
+4. [[6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/CLAUDE|2024 → 2026]] (406 Digests, 2024-11-21 → 2026-10-30)
