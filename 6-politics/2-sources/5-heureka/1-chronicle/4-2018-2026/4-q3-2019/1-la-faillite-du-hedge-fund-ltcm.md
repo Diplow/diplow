@@ -1,6 +1,6 @@
 ---
 title: "La faillite du Hedge Fund LTCM (4/5) Prix Nobel - Wall Street Stories #4"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/3-mai-juil-2019
+parent: 6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/4-q3-2019
 owner: diplo
 preview: >-
   Gilles Mitteau explique que LTCM démultiplie de petits gains d'arbitrage par
