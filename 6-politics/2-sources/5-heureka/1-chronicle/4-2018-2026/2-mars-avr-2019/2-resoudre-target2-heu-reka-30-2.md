@@ -1,6 +1,6 @@
 ---
 title: "Résoudre TARGET2 - Heu?reka #30-2"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/2-q1-q3-2019
+parent: 6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/2-mars-avr-2019
 owner: diplo
 preview: >-
   Gilles Mitteau soutient que si un pays comme l'Italie quittait l'euro, les

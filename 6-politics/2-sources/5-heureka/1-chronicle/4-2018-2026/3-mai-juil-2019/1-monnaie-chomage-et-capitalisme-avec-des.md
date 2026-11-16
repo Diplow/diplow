@@ -1,6 +1,6 @@
 ---
 title: "Monnaie, chômage et capitalisme   avec Des économistes et des Hommes Heureka #31"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/2-q1-q3-2019
+parent: 6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/3-mai-juil-2019
 owner: diplo
 preview: >-
   Mitteau et son invité Édouard construisent deux fois le même modèle de ferme

@@ -1,6 +1,6 @@
 ---
 title: "La faillite du Hedge Fund LTCM (1/5) Arbitrage - Wall Street Stories #4"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/2-q1-q3-2019
+parent: 6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/3-mai-juil-2019
 owner: diplo
 preview: >-
   Gilles Mitteau explique que l'arbitrage rapporte peu et ne devient rentable
