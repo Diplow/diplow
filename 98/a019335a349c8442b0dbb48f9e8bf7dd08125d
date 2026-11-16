@@ -1,0 +1,43 @@
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-q2-q3-2022/1-comprendre-les-sanctions-economiques-contre-la.md
+  s_efa4b8a9b800fd::t_8a9d85a9b3591c 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-q2-q3-2022/2-un-anthropologue-chez-les-traders-part.md
+  s_efa4b8a9b800fd::t_9bc479470978d6 1-83
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-q2-q3-2022/3-un-anthropologue-chez-les-traders-part.md
+  s_efa4b8a9b800fd::t_aef2045d4c7547 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-q2-q3-2022/4-mort-par-inflation-la-faute-des.md
+  s_efa4b8a9b800fd::t_36bbf366b25db6 1-87
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-q2-q3-2022/5-comprendre-le-marche-de-l-electricite.md
+  s_efa4b8a9b800fd::t_cae2d67aa76cb8 1-81
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-q2-q3-2022/6-comprendre-la-bourse-de-l-electricite.md
+  s_efa4b8a9b800fd::t_abae97a682c0bc 1-68
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-q2-q3-2022/CLAUDE.md
+  s_efa4b8a9b800fd::t_a45cc25ee0ae2c 1-26
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-2022-2026/1-immobilier-inflation-l-inflation-est-elle.md
+  s_efa4b8a9b800fd::t_95b455c89e0c6a 1-71
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-2022-2026/2-immobilier-inflation-c-est-pas-ce.md
+  s_efa4b8a9b800fd::t_33a776ae67aa6c 1-63
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-2022-2026/3-10-ans-de-macron-l-heure.md
+  s_efa4b8a9b800fd::t_c2c92bda9805a7 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-2022-2026/CLAUDE.md
+  s_efa4b8a9b800fd::t_c204a7e400cc06 3,6-9,13,15,19-21
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE.md
+  s_efa4b8a9b800fd::t_89d544c313250e 6-10,14,16,18,25-26
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_efa4b8a9b800fd::t_da0fb51827b521 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "98a019335a349c8442b0dbb48f9e8bf7dd08125d",
+  "prompts": {},
+  "sessions": {
+    "s_efa4b8a9b800fd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fabfb501-e282-4ab8-b408-19fed3f3f13f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
