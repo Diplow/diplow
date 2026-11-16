@@ -1,0 +1,53 @@
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/3-mai-juil-2019/CLAUDE.md
+  s_67a1239b8e0f32::t_5a9852124119eb 6-9,13,15,17
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/4-q3-2019/1-la-faillite-du-hedge-fund-ltcm.md
+  s_67a1239b8e0f32::t_13a829f31df1ab 3
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/4-q3-2019/2-la-faillite-du-hedge-fund-ltcm.md
+  s_67a1239b8e0f32::t_af188089317a08 1-67
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/4-q3-2019/3-partenariat-la-caisse-des-depots-pour.md
+  s_67a1239b8e0f32::t_d1414806b3fdb7 1-52
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/4-q3-2019/CLAUDE.md
+  s_67a1239b8e0f32::t_d6be95133791ff 1-23
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/5-q4-2019-q1-2020/1-le-chomage-pour-les-nuls-comprendre.md
+  s_67a1239b8e0f32::t_cfd0cd5840e87a 3
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/5-q4-2019-q1-2020/2-le-chomage-pour-les-nuls-faut.md
+  s_67a1239b8e0f32::t_d182152a7982de 1-54
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/5-q4-2019-q1-2020/3-le-chomage-pour-les-nuls-le.md
+  s_67a1239b8e0f32::t_7cfa03b72e4b7c 1-64
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/5-q4-2019-q1-2020/4-d-ou-vient-la-monnaie.md
+  s_67a1239b8e0f32::t_67dbf54c84398c 1-81
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/5-q4-2019-q1-2020/5-comprendre-l-economie-a-partir-d.md
+  s_67a1239b8e0f32::t_953a3aa4de72d9 1-66
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/5-q4-2019-q1-2020/CLAUDE.md
+  s_67a1239b8e0f32::t_6f7a2a6dcdaa35 1-23
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/6-2020-2026/1-partenariat-epargner-utile-comment-s-y.md
+  s_67a1239b8e0f32::t_96bc190e7e9638 1-62
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/6-2020-2026/2-part-1-c-est-quoi-la.md
+  s_67a1239b8e0f32::t_1da947998a134b 1-78
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/6-2020-2026/3-un-anthropologue-chez-les-traders-part.md
+  s_67a1239b8e0f32::t_67a239150b33d2 3
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/6-2020-2026/4-10-ans-de-macron-l-heure.md
+  s_67a1239b8e0f32::t_254530fb41c9ee 3
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/6-2020-2026/CLAUDE.md
+  s_67a1239b8e0f32::t_80bb5a5a8057ec 2-3,6-9,11,13,15,19-22
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/CLAUDE.md
+  s_67a1239b8e0f32::t_7978826ea636ad 6-9,13,15,17,23-26
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_67a1239b8e0f32::t_bc1789ca5a9a27 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "64ded7584f84a2242cf03ba04240ca032e42492c",
+  "prompts": {},
+  "sessions": {
+    "s_67a1239b8e0f32": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a09a9a898fddabdfc",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
