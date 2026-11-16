@@ -1,6 +1,6 @@
 ---
 title: "TRAPPES : APRÈS L’HORREUR, LA MOBILISATION"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/4-w45-w46-2026/3-11-13-nov-2026
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/4-w45-w46-2026/3-w46-2026
 owner: diplo
 preview: >-
   Blast présente l'attentat raciste de Trappes comme le produit des discours
