@@ -1,0 +1,53 @@
+6-politics/2-sources/5-heureka/1-chronicle/2-dec-2015-janv-2016/1-marches-financiers-et-economie-reelle-heu.md
+  s_d77ffa5b99f3af::t_9ddcc95d3c6569 3
+6-politics/2-sources/5-heureka/1-chronicle/2-dec-2015-janv-2016/2-qui-cree-l-argent-et-comment.md
+  s_d77ffa5b99f3af::t_17cfe63d47ee0a 3
+6-politics/2-sources/5-heureka/1-chronicle/2-dec-2015-janv-2016/3-the-big-short-le-film-clefs.md
+  s_d77ffa5b99f3af::t_5c78099d4ce6ea 3
+6-politics/2-sources/5-heureka/1-chronicle/2-dec-2015-janv-2016/4-le-double-visage-de-l-argent.md
+  s_d77ffa5b99f3af::t_39b0103fce5b82 1-56
+6-politics/2-sources/5-heureka/1-chronicle/2-dec-2015-janv-2016/CLAUDE.md
+  s_d77ffa5b99f3af::t_ccea5d68f8ffbc 1-21
+6-politics/2-sources/5-heureka/1-chronicle/3-janv-fevr-2016/1-le-loup-de-wall-street-heu.md
+  s_d77ffa5b99f3af::t_03ede17b8c1bd7 1-60
+6-politics/2-sources/5-heureka/1-chronicle/3-janv-fevr-2016/2-traders-a-la-vitesse-de-la.md
+  s_d77ffa5b99f3af::t_e4fdc42ee9a41b 1-66
+6-politics/2-sources/5-heureka/1-chronicle/3-janv-fevr-2016/3-quantitative-easing-heu-reka-10.md
+  s_d77ffa5b99f3af::t_f51527bfd8cb40 1-50
+6-politics/2-sources/5-heureka/1-chronicle/3-janv-fevr-2016/CLAUDE.md
+  s_d77ffa5b99f3af::t_5461e775937428 1-21
+6-politics/2-sources/5-heureka/1-chronicle/4-2016-2017/1-et-si-on-utilisait-tous-la.md
+  s_d77ffa5b99f3af::t_b2df3038fe46be 1-56
+6-politics/2-sources/5-heureka/1-chronicle/4-2016-2017/2-les-traders-reeeemiiiiix-heu-reka-1.md
+  s_d77ffa5b99f3af::t_1e4995c022e75e 1-50
+6-politics/2-sources/5-heureka/1-chronicle/4-2016-2017/3-la-faillite-de-lehman-brothers-2.md
+  s_d77ffa5b99f3af::t_88932083bff09d 3
+6-politics/2-sources/5-heureka/1-chronicle/4-2016-2017/CLAUDE.md
+  s_d77ffa5b99f3af::t_64115c4a6bcea1 2-3,6-9,11,13,15,19-21
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/1-le-chomage-pour-les-nuls-comprendre.md
+  s_d77ffa5b99f3af::t_95fa2129b3d21a 3
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/2-un-anthropologue-chez-les-traders-part.md
+  s_d77ffa5b99f3af::t_9667b80eecd8ee 3
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/3-10-ans-de-macron-l-heure.md
+  s_d77ffa5b99f3af::t_4ef49de4b4bdb7 3
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/CLAUDE.md
+  s_d77ffa5b99f3af::t_48cd481e7f86c3 3,21-23
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_d77ffa5b99f3af::t_166c660056b3f0 6-9,13,15-17,22-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f2cad1cf62478a92c27b7a4a5907fa9ead2e024a",
+  "prompts": {},
+  "sessions": {
+    "s_d77ffa5b99f3af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a35513b8064fc25c9",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
