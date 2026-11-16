@@ -1,0 +1,45 @@
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/2-mars-mai-2018/CLAUDE.md
+  s_a49b312461ea8c::t_578a69f53b741c 6-8,13,15,17
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q4-2018/1-monnaie-pleine-reformer-la-creation-monetaire.md
+  s_a49b312461ea8c::t_2e165884019ac2 1-61
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q4-2018/2-la-crise-de-l-part-08.md
+  s_a49b312461ea8c::t_828bcdedb5fd7d 1-70
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q4-2018/3-milton-friedman-en-pls-heu-reka.md
+  s_a49b312461ea8c::t_4a565dee5e14e0 1-55
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q4-2018/4-la-crise-de-l-part-09.md
+  s_a49b312461ea8c::t_d3e1bfb7994114 1-86
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q4-2018/5-actionnaires-vs-dirigeants-ce-que-veulent.md
+  s_a49b312461ea8c::t_b3404d17921d99 1-86
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q4-2018/6-partenariat-crypto-investissements-eviter-les-pieges.md
+  s_a49b312461ea8c::t_3c861ec89fb998 1-70
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q4-2018/CLAUDE.md
+  s_a49b312461ea8c::t_1e7e2f43023edc 1-26
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-2019-2026/1-le-chomage-pour-les-nuls-comprendre.md
+  s_a49b312461ea8c::t_4e073a77f2a744 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-2019-2026/2-un-anthropologue-chez-les-traders-part.md
+  s_a49b312461ea8c::t_a49063304ca52d 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-2019-2026/3-10-ans-de-macron-l-heure.md
+  s_a49b312461ea8c::t_15f227081968a7 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-2019-2026/CLAUDE.md
+  s_a49b312461ea8c::t_c458f3a81a65e2 3,21-23
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/CLAUDE.md
+  s_a49b312461ea8c::t_4fd0c83531eb39 6-9,13,15,17,23-24
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_a49b312461ea8c::t_b77805df95d50d 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3fe831d7e7a9e09ab3301779cb2742781d10f1f3",
+  "prompts": {},
+  "sessions": {
+    "s_a49b312461ea8c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-abd966c780100509d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
