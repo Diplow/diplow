@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/5-heureka/1-chronicle
 owner: diplo
 preview: >-
-  Gilles Mitteau explique la finance et l'économie : d'abord les rouages des
-  marchés et la monnaie créée par les banques, puis, de 2019 à 2026, des
-  blocages qu'il juge juridiques et politiques et un capitalisme que le profit
-  pousse au-delà des frontières écologiques.
+  Gilles Mitteau explique la finance par ses mécanismes, de la monnaie créée
+  par les banques à la dette et aux marchés, critique la théorie économique
+  standard et en conclut que les blocages de l'économie sont politiques, non
+  financiers.
 ---
 # Chronicle
 
-De 2015 à 2019 ([[6-politics/2-sources/5-heureka/1-chronicle/1-2015-2019/CLAUDE|2015 → 2019]]), Gilles Mitteau explique la finance et ses rouages, des marchés à la titrisation. Son fil devient peu à peu la monnaie créée par les banques et la crise de l'euro. Il démonte ensuite l'ordolibéralisme et la théorie standard, et lit LTCM comme la preuve des dangers du levier.
+Sur toute la Chronicle, Gilles Mitteau explique la finance et l'économie à partir de leurs mécanismes. Dans [[6-politics/2-sources/5-heureka/1-chronicle/1-2015-2019/CLAUDE|2015 → 2019]], il part des rouages des marchés et de la titrisation, puis fait de la monnaie créée par les banques et de la crise de l'euro son fil conducteur. Il s'attaque ensuite à l'ordolibéralisme et à la théorie standard, et lit LTCM comme la preuve des dangers du levier.
 
-De 2019 à 2026 ([[6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/CLAUDE|2019 → 2026]]), il continue d'expliquer les mécanismes de la finance et de l'économie : création monétaire, dette, marchés. Il y soutient que les blocages sont juridiques et politiques, que le profit pousse le capitalisme au-delà des frontières écologiques et que la création monétaire peut servir le climat. Le descriptif des débuts cède ainsi la place à une critique plus appuyée de l'ordre économique.
+Dans [[6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/CLAUDE|2019 → 2026]], il continue d'expliquer le crédit, la dette, les marchés et la création monétaire, et le propos prend une portée plus politique. Gilles Mitteau en conclut que les blocages sont politiques, non financiers : la création monétaire peut relancer la demande et orienter le climat, et les règles du capitalisme servent ceux qui les écrivent.
 
 ## Contenu
 
 1. [[6-politics/2-sources/5-heureka/1-chronicle/1-2015-2019/CLAUDE|2015 → 2019]] (68 Digests, 2015-10-21 → 2019-09-19)
-2. [[6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/CLAUDE|2019 → 2026]] (69 Digests, 2019-10-03 → 2026-10-13)
+2. [[6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/CLAUDE|2019 → 2026]] (70 Digests, 2019-10-03 → 2026-10-13)
