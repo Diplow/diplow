@@ -1,0 +1,25 @@
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-2022-2026/3-les-super-profits-des-fournisseurs-alternatifs.md
+  s_e2478f33ebbf4e::t_0e9bf98ce204c6 1-77
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-2022-2026/CLAUDE.md
+  s_e2478f33ebbf4e::t_698f2b64741265 6-9,13,15-17,23-24
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE.md
+  s_e2478f33ebbf4e::t_a14a62000584bb 6-9,13,15,17,25
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_e2478f33ebbf4e::t_1b0ce2eea85390 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a163aa574ad37cb78c41928fe0a5bae6427b623d",
+  "prompts": {},
+  "sessions": {
+    "s_e2478f33ebbf4e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a7b5312ebd62e295b",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
