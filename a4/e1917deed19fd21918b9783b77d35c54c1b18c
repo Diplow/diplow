@@ -1,0 +1,49 @@
+6-politics/2-sources/5-heureka/1-chronicle/4-mars-mai-2016/1-et-si-on-utilisait-tous-la.md
+  s_d77ffa5b99f3af::t_77e37b614ad048 3
+6-politics/2-sources/5-heureka/1-chronicle/4-mars-mai-2016/2-les-traders-reeeemiiiiix-heu-reka-1.md
+  s_d77ffa5b99f3af::t_a204c82f19f71b 3
+6-politics/2-sources/5-heureka/1-chronicle/4-mars-mai-2016/3-trader-a-la-vitesse-de-la.md
+  s_d77ffa5b99f3af::t_36acc975380e5d 1-57
+6-politics/2-sources/5-heureka/1-chronicle/4-mars-mai-2016/4-bitcoin-heu-reka-13.md
+  s_d77ffa5b99f3af::t_498316f6bf4933 1-53
+6-politics/2-sources/5-heureka/1-chronicle/4-mars-mai-2016/5-la-france-pour-les-nuls-heu.md
+  s_d77ffa5b99f3af::t_4e758df7da961d 1-53
+6-politics/2-sources/5-heureka/1-chronicle/4-mars-mai-2016/CLAUDE.md
+  s_d77ffa5b99f3af::t_7a77c2bbf06244 1-23
+6-politics/2-sources/5-heureka/1-chronicle/5-2016-2017/1-le-lbo-geant-de-rjr-nabisco.md
+  s_d77ffa5b99f3af::t_4fdbf4f9a9fd3c 1-79
+6-politics/2-sources/5-heureka/1-chronicle/5-2016-2017/2-le-lbo-geant-de-rjr-nabisco.md
+  s_d77ffa5b99f3af::t_2e51376548ffe0 1-51
+6-politics/2-sources/5-heureka/1-chronicle/5-2016-2017/3-l-euro-pourquoi-heu-reka-15.md
+  s_d77ffa5b99f3af::t_84a70f52b5cf93 1-61
+6-politics/2-sources/5-heureka/1-chronicle/5-2016-2017/4-la-faillite-de-lehman-brothers-2.md
+  s_d77ffa5b99f3af::t_b3e12c27ebea29 3
+6-politics/2-sources/5-heureka/1-chronicle/5-2016-2017/CLAUDE.md
+  s_d77ffa5b99f3af::t_2de6ffa3250e56 3,6-9,13,15,19-22
+6-politics/2-sources/5-heureka/1-chronicle/6-2019-2026/1-le-chomage-pour-les-nuls-comprendre.md
+  s_d77ffa5b99f3af::t_3197daac067ac5 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2019-2026/2-un-anthropologue-chez-les-traders-part.md
+  s_d77ffa5b99f3af::t_bb18354f9ab87a 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2019-2026/3-10-ans-de-macron-l-heure.md
+  s_d77ffa5b99f3af::t_259f6126bbb167 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2019-2026/CLAUDE.md
+  s_d77ffa5b99f3af::t_3fcb7bc315fb6c 3,21-23
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_d77ffa5b99f3af::t_12a5a2badc68a2 6-9,13,15,17,24-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a4e1917deed19fd21918b9783b77d35c54c1b18c",
+  "prompts": {},
+  "sessions": {
+    "s_d77ffa5b99f3af": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a35513b8064fc25c9",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
