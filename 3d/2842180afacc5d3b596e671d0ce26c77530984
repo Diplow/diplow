@@ -1,0 +1,53 @@
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/1-2023-2025/CLAUDE.md
+  s_ea3c64365d1a84::t_035cde5f1864fc 6-9,13,15
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/2-q1-q2-2025/1-retirer-le-co2-de-l-atmosphere.md
+  s_ea3c64365d1a84::t_a0d57125c4ca31 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/2-q1-q2-2025/2-resume-entropie-la-transition-condamnee-ft.md
+  s_ea3c64365d1a84::t_5ab0597832d33b 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/2-q1-q2-2025/3-tres-peu-de-co2-dans-l.md
+  s_ea3c64365d1a84::t_35e3a603fd06a1 1-58
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/2-q1-q2-2025/CLAUDE.md
+  s_ea3c64365d1a84::t_8f70ec1172df82 1-21
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/3-q2-q4-2025/1-co2-rechauffement-climatique-la-meilleure-approche.md
+  s_ea3c64365d1a84::t_fdb79726ebbdfc 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/3-q2-q4-2025/2-faut-il-vraiment-culpabiliser-en-regardant.md
+  s_ea3c64365d1a84::t_85b607965e8e65 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/3-q2-q4-2025/3-des-machines-qui-retirent-directement-le.md
+  s_ea3c64365d1a84::t_a8de7f2edfd2ed 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/3-q2-q4-2025/4-pompe-a-chaleur-se-chauffer-sans.md
+  s_ea3c64365d1a84::t_76004a299f1657 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/3-q2-q4-2025/CLAUDE.md
+  s_ea3c64365d1a84::t_909fe0323f6842 3,15,19-22
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/4-s1-s2-2026/1-garder-sa-voiture-thermique-bon-pour.md
+  s_ea3c64365d1a84::t_227135d7c3a374 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/4-s1-s2-2026/2-climat-l-immense-defi-du-fret.md
+  s_ea3c64365d1a84::t_b2b2844ae7e71d 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/4-s1-s2-2026/3-bois-son-veritable-impact-climatique.md
+  s_ea3c64365d1a84::t_f996382b28bc3c 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/4-s1-s2-2026/4-le-chauffage-au-bois-est-il.md
+  s_ea3c64365d1a84::t_6ccee4b35a0b19 3,31,49
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/4-s1-s2-2026/5-climatisation-un-desastre-ecologique.md
+  s_ea3c64365d1a84::t_064aadc6d6094c 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/4-s1-s2-2026/CLAUDE.md
+  s_ea3c64365d1a84::t_37414f006a17cf 3,13,15,17,21-25
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/CLAUDE.md
+  s_ea3c64365d1a84::t_c306bfa956633a 6-9,13,15,17,21-24
+6-politics/2-sources/6-lereveilleur/1-chronicle/CLAUDE.md
+  s_ea3c64365d1a84::t_61d9c292d8a065 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3d2842180afacc5d3b596e671d0ce26c77530984",
+  "prompts": {},
+  "sessions": {
+    "s_ea3c64365d1a84": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ae691c1ff8484b739",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
