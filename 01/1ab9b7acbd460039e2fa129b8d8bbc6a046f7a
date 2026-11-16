@@ -1,0 +1,53 @@
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/4-2-3-nov-2026/1-du-marxisme-au-neoliberalisme-pourquoi-l.md
+  s_3ba0388aea548e::t_b68775b6a4f91b 3
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/4-2-3-nov-2026/2-incendies-changement-climatique-nos-forets-vont.md
+  s_3ba0388aea548e::t_1ea356f1787abc 3
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/4-2-3-nov-2026/3-la-france-et-l-europe-au.md
+  s_3ba0388aea548e::t_3914424e0116a1 3
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/4-2-3-nov-2026/4-la-guerre-au-yemen-reprend-et.md
+  s_3ba0388aea548e::t_ee7c8d67b0a560 3
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/4-2-3-nov-2026/CLAUDE.md
+  s_3ba0388aea548e::t_6e1c5f10d4655a 2-3,6-8,10,12,14,18-21
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/5-4-6-nov-2026/1-le-peuple-a-le-droit-a.md
+  s_3ba0388aea548e::t_adc3f87c3cd476 3
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/5-4-6-nov-2026/2-5-novembre-et-maintenant-la-greve.md
+  s_3ba0388aea548e::t_663fd99f1b59b7 1-62
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/5-4-6-nov-2026/3-l-etat-degaine-l-arsenal-antiterroriste.md
+  s_3ba0388aea548e::t_b20c62e9398152 1-68
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/5-4-6-nov-2026/4-attal-loser.md
+  s_3ba0388aea548e::t_001b6349e0c66d 1-75
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/5-4-6-nov-2026/CLAUDE.md
+  s_3ba0388aea548e::t_43c3fa16927cfa 1-24
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/6-7-8-nov-2026/1-budget-comprendre-ce-qui-nous-attend.md
+  s_3ba0388aea548e::t_2881c41306c2e6 1-99
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/6-7-8-nov-2026/2-pourquoi-devrait-on-payer-une-dette.md
+  s_3ba0388aea548e::t_2fa01e0f25ac73 1-97
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/6-7-8-nov-2026/3-face-aux-chaines-d-info-racistes.md
+  s_3ba0388aea548e::t_f24b058e9b27e0 1-89
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/6-7-8-nov-2026/CLAUDE.md
+  s_3ba0388aea548e::t_b498d895cb29db 1-23
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/CLAUDE.md
+  s_3ba0388aea548e::t_f551aec2d45ba5 6-10,14,16,18,25-27
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/CLAUDE.md
+  s_3ba0388aea548e::t_faa65968fb10a7 6-9,13,15-17,23
+6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/CLAUDE.md
+  s_3ba0388aea548e::t_146a8994d4af6a 6-9,13,15,17,26
+6-politics/2-sources/4-blast/1-chronicle/CLAUDE.md
+  s_3ba0388aea548e::t_bb8e26b8074fd7 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "011ab9b7acbd460039e2fa129b8d8bbc6a046f7a",
+  "prompts": {},
+  "sessions": {
+    "s_3ba0388aea548e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a9d67646fd825abca",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
