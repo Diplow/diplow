@@ -336,6 +336,7 @@ kinds:
       courtier: {définition: "Intermédiaire qui transmet aux marchés les ordres d'achat et de vente de ses clients.", statut: proposé, introduit_par: heureka/EGs5kYYw6d8.md}
       site-de-vulgarisation: {définition: "Site animé par une équipe qui explique et documente l'état des connaissances scientifiques au grand public.", statut: proposé, introduit_par: lereveilleur/80jbj7jwEhY.md}
       réseau-de-banques-centrales: {définition: "Réseau qui réunit des banques centrales pour réfléchir ensemble à un sujet, comme le verdissement du système financier.", statut: proposé, introduit_par: heureka/8ysjQYvgyCc.md}
+      messagerie-interbancaire: {définition: "Exploite un réseau de messagerie sécurisée qui facilite les paiements entre les banques.", statut: proposé, introduit_par: heureka/Ga-p11MVYzs.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
