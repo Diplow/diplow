@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/5-heureka/1-chronicle
 owner: diplo
 preview: >-
-  Gilles Mitteau explique la finance et la monnaie par leurs mécanismes, puis
-  en tire une critique : l'euro est un choix politique, les banques créent la
-  monnaie en prêtant, la dette sert trop à spéculer, et le capitalisme pousse
-  au-delà des frontières écologiques.
+  Gilles Mitteau explique la finance et l'économie par leurs mécanismes, de la
+  création monétaire par le crédit à la crise de l'euro et au levier, et
+  soutient que la recherche du profit pousse le capitalisme au-delà des
+  frontières écologiques.
 ---
 # Chronicle
 
-Gilles Mitteau commence en 2015 par les bases de la finance, présentées par des cas concrets. Il passe ensuite à ses rouages : marchés primaire et secondaire, titrisation, trading haute fréquence, quantitative easing, puis LBO, produits dérivés et la chute de Lehman. Il soutient dès cette période que plusieurs monnaies valent mieux qu'une seule, que les banques créent la monnaie en prêtant et que la dette sert trop à spéculer.
+Gilles Mitteau commence par poser les bases de la finance par des cas concrets : marchés, création de monnaie par les banques, titrisation, trading haute fréquence, quantitative easing ([[6-politics/2-sources/5-heureka/1-chronicle/1-q4-2015-q2-2016/CLAUDE|Q4 2015 → Q2 2016]]). Il passe ensuite aux produits plus complexes, du LBO aux produits dérivés et à Lehman. Le fil qui traverse toute la Chronicle est que les banques créent la monnaie en prêtant, et que la dette sert trop à spéculer.
 
-Il consacre ensuite plusieurs années à la zone euro. Il y voit un choix politique, lit la crise comme celle d'une dette surtout privée au sud, juge la Grèce achevée par l'austérité et le risque bancaire reporté sur les États. Il démonte l'ordolibéralisme et les règles européennes, soutient que les balances TARGET2 ne sont pas une dette et oppose à la théorie standard une économie monétaire. Il relaie aussi Roger Martin contre le pari sur le prix des actions, et lit la faillite de LTCM comme la preuve des dangers du levier.
+À partir de 2017, la crise de l'euro devient son terrain principal. Il soutient que l'euro est un choix politique, que la dette du sud est surtout privée, que l'austérité a achevé la Grèce et que le risque bancaire est passé aux États ([[6-politics/2-sources/5-heureka/1-chronicle/3-s2-2017-s2-2018/CLAUDE|S2 2017 → S2 2018]]). Il démonte ensuite l'ordolibéralisme et les règles de la zone euro, affirme que les balances TARGET2 ne sont pas une dette et oppose à la théorie standard une économie monétaire. La faillite de LTCM lui sert de preuve des dangers du levier ([[6-politics/2-sources/5-heureka/1-chronicle/4-s2-2018-s2-2019/CLAUDE|S2 2018 → S2 2019]]). Il relaie aussi Roger Martin contre le pari sur le prix des actions.
 
-À partir de la fin 2019, il applique la même grille à l'actualité : chômage, retraites, krach et coronavirus, où les blocages sont selon lui juridiques et politiques, pas financiers, d'où la monnaie hélicoptère pour relancer la demande. Les dernières années reviennent aux mécanismes (surendettement, levier, main invisible, sanctions) et prennent un tour plus ouvertement politique : il soutient que la recherche du profit pousse le capitalisme au-delà des frontières écologiques, puis juge avec son co-présentateur dix ans de Macron.
+La même grille sert ensuite à lire le chômage, les retraites, le krach et le coronavirus : pour lui, les blocages sont juridiques et politiques, pas financiers, d'où sa défense de la monnaie hélicoptère pour relancer la demande ([[6-politics/2-sources/5-heureka/1-chronicle/5-q4-2019-q2-2020/CLAUDE|Q4 2019 → Q2 2020]]). Les dernières années élargissent le propos à l'inflation et à l'écologie : la recherche du profit pousse le capitalisme au-delà des frontières écologiques. Avec son co-présentateur, il présente aussi dix ans de Macron comme du néolibéralisme assumé ([[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE|2020 → 2026]]). Le ton passe ainsi de l'explication des rouages à une critique de plus en plus politique.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Il consacre ensuite plusieurs années à la zone euro. Il y voit un choix politi
 3. [[6-politics/2-sources/5-heureka/1-chronicle/3-s2-2017-s2-2018/CLAUDE|S2 2017 → S2 2018]] (16 Digests, 2017-11-03 → 2018-11-15)
 4. [[6-politics/2-sources/5-heureka/1-chronicle/4-s2-2018-s2-2019/CLAUDE|S2 2018 → S2 2019]] (16 Digests, 2018-12-11 → 2019-09-19)
 5. [[6-politics/2-sources/5-heureka/1-chronicle/5-q4-2019-q2-2020/CLAUDE|Q4 2019 → Q2 2020]] (19 Digests, 2019-10-03 → 2020-06-07)
-6. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE|2020 → 2026]] (18 Digests, 2020-07-10 → 2026-10-13)
+6. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE|2020 → 2026]] (24 Digests, 2020-07-10 → 2026-10-13)

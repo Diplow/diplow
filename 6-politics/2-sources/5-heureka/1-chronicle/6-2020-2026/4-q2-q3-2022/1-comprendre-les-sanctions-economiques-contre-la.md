@@ -1,6 +1,6 @@
 ---
 title: "Comprendre les sanctions économiques contre la Russie"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-2022-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-q2-q3-2022
 owner: diplo
 preview: >-
   Gilles Mitteau soutient que les sanctions doivent viser les importations
