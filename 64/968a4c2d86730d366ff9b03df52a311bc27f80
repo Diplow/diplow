@@ -1,0 +1,55 @@
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-q3-2016-q1-2017/1-comprendre-les-actions-et-les-dividendes.md
+  s_2ce3407f535ba1::t_fef8f710654223 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-q3-2016-q1-2017/2-complement-comprendre-les-actions-et-les.md
+  s_2ce3407f535ba1::t_1b28c9f1e45aad 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-q3-2016-q1-2017/3-comprendre-les-obligations-heu-reka-17.md
+  s_2ce3407f535ba1::t_8b82fba2125b98 3,36
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-q3-2016-q1-2017/4-le-revenu-de-base-heu-reka.md
+  s_2ce3407f535ba1::t_ed00b3969d4bcb 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-q3-2016-q1-2017/5-comprendre-les-produits-derives-heu-reka.md
+  s_2ce3407f535ba1::t_a178595894b299 1-75
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-q3-2016-q1-2017/6-croissance-pib-pour-les-nuls-avec.md
+  s_2ce3407f535ba1::t_85618ab14292ee 1-72
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-q3-2016-q1-2017/CLAUDE.md
+  s_2ce3407f535ba1::t_841a801a01ab67 2-3,6-8,10,12,14,18-23
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/3-q1-q3-2017/1-l-affaire-kerviel-1-2-wall.md
+  s_2ce3407f535ba1::t_2c21378545bbb2 1-53
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/3-q1-q3-2017/2-l-affaire-kerviel-2-2-wall.md
+  s_2ce3407f535ba1::t_281c632ace4cdc 1-77
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/3-q1-q3-2017/3-une-vue-d-ensemble-de-la.md
+  s_2ce3407f535ba1::t_31a7d549c95149 1-62
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/3-q1-q3-2017/4-la-crise-des-subprimes-d-apres.md
+  s_2ce3407f535ba1::t_626c0c92289f73 1-62
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/3-q1-q3-2017/5-la-faillite-de-lehman-brothers-2.md
+  s_2ce3407f535ba1::t_3547c693886699 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/3-q1-q3-2017/CLAUDE.md
+  s_2ce3407f535ba1::t_a2ca67a46211c2 1-25
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/4-2019-2026/1-le-chomage-pour-les-nuls-comprendre.md
+  s_2ce3407f535ba1::t_0dd63a9c11d114 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/4-2019-2026/2-un-anthropologue-chez-les-traders-part.md
+  s_2ce3407f535ba1::t_6b587f2f6ead06 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/4-2019-2026/3-10-ans-de-macron-l-heure.md
+  s_2ce3407f535ba1::t_df49c473a01d45 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/4-2019-2026/CLAUDE.md
+  s_2ce3407f535ba1::t_6f41eac786d885 3,21-23
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/CLAUDE.md
+  s_2ce3407f535ba1::t_f03580abd6126c 6-9,13,15,20-22
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_2ce3407f535ba1::t_88dd1f28002dbb 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "64968a4c2d86730d366ff9b03df52a311bc27f80",
+  "prompts": {},
+  "sessions": {
+    "s_2ce3407f535ba1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a4c46e8f25fdbce48",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
