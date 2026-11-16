@@ -1,0 +1,43 @@
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/3-s1-2021-s1-2022/1-les-banques-face-au-defi-climatique.md
+  s_efa4b8a9b800fd::t_448123fe41534d 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/3-s1-2021-s1-2022/2-la-bce-face-au-defi-climatique.md
+  s_efa4b8a9b800fd::t_b4c18ce58c500f 1-91
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/3-s1-2021-s1-2022/3-y-a-t-il-une-main.md
+  s_efa4b8a9b800fd::t_18dd56ca9cb704 1-82
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/3-s1-2021-s1-2022/4-pourquoi-les-entreprises-rachetent-elles-leurs.md
+  s_efa4b8a9b800fd::t_a24c631e59f9aa 1-73
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/3-s1-2021-s1-2022/5-les-marches-financiers-vous-cachent-beaucoup.md
+  s_efa4b8a9b800fd::t_72c99b5befd699 1-80
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/3-s1-2021-s1-2022/6-les-marches-financiers-sont-ils-un.md
+  s_efa4b8a9b800fd::t_ffa238879e0be8 1-57
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/3-s1-2021-s1-2022/CLAUDE.md
+  s_efa4b8a9b800fd::t_11de84d306e286 1-26
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-2022-2026/1-comprendre-les-sanctions-economiques-contre-la.md
+  s_efa4b8a9b800fd::t_70b97893831fed 1-93
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-2022-2026/2-un-anthropologue-chez-les-traders-part.md
+  s_efa4b8a9b800fd::t_c04e8bf35b0963 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-2022-2026/3-10-ans-de-macron-l-heure.md
+  s_efa4b8a9b800fd::t_331bcafeccc697 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-2022-2026/CLAUDE.md
+  s_efa4b8a9b800fd::t_d9de85ef50682b 2-3,6-8,10,12,14,16,20-22
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE.md
+  s_efa4b8a9b800fd::t_562477669a3116 6-9,13,15-17,23-24
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_efa4b8a9b800fd::t_75994db3659d0f 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "369709e386fc79ae74dea20d8e945000a8c43903",
+  "prompts": {},
+  "sessions": {
+    "s_efa4b8a9b800fd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fabfb501-e282-4ab8-b408-19fed3f3f13f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
