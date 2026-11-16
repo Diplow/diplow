@@ -1,0 +1,49 @@
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/1-presentation-de-la-chaine.md
+  s_44efbdd675fada::t_bec810680eec65 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/2-le-pic-petrolier-map-28.md
+  s_44efbdd675fada::t_75d7442df93d4f 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/3-resume-hiroshima-tchernobyl-fukushima-les-morts.md
+  s_44efbdd675fada::t_84aeb19f2ccaa0 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-voiture-electrique-un-probleme-de-batterie.md
+  s_44efbdd675fada::t_0d0ed2a254de5d 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/CLAUDE.md
+  s_44efbdd675fada::t_3d7b00a76f929b 1-24
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-q2-q4-2025/1-co2-rechauffement-climatique-la-meilleure-approche.md
+  s_44efbdd675fada::t_92ca6efa1e28ca 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-q2-q4-2025/2-faut-il-vraiment-culpabiliser-en-regardant.md
+  s_44efbdd675fada::t_3c37b6d02a8426 1-93
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-q2-q4-2025/3-des-machines-qui-retirent-directement-le.md
+  s_44efbdd675fada::t_46629df0b9c0d9 1-72
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-q2-q4-2025/4-pompe-a-chaleur-se-chauffer-sans.md
+  s_44efbdd675fada::t_d0b734bf517f02 1-85
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-q2-q4-2025/CLAUDE.md
+  s_44efbdd675fada::t_fce383d44751ff 1-22
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-s1-s2-2026/1-garder-sa-voiture-thermique-bon-pour.md
+  s_44efbdd675fada::t_e9fd8e23b5d21a 1-65
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-s1-s2-2026/2-climat-l-immense-defi-du-fret.md
+  s_44efbdd675fada::t_332317cc331bd3 1-73
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-s1-s2-2026/3-bois-son-veritable-impact-climatique.md
+  s_44efbdd675fada::t_fc476c97fcf2b4 1-79
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-s1-s2-2026/4-climatisation-un-desastre-ecologique.md
+  s_44efbdd675fada::t_d2daa2329a62db 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-s1-s2-2026/CLAUDE.md
+  s_44efbdd675fada::t_e66eb46740caca 1-22
+6-politics/2-sources/6-lereveilleur/1-chronicle/CLAUDE.md
+  s_44efbdd675fada::t_f1db3f3d657b65 6-9,13,15,19-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "32fad0c9cf9d259483e7fd30334df510bf9251bb",
+  "prompts": {},
+  "sessions": {
+    "s_44efbdd675fada": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a4002ba430aa45e98",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
