@@ -1,6 +1,6 @@
 ---
 title: "INCENDIES, CHANGEMENT CLIMATIQUE : NOS FORÊTS VONT ELLES DISPARAÎTRE ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/4-2-4-nov-2026
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/4-2-3-nov-2026
 owner: diplo
 preview: >-
   Sylvain Angerand (Canopée) soutient que la forêt française s'étend mais

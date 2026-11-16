@@ -1,6 +1,6 @@
 ---
 title: "LA FRANCE ET L'EUROPE AU BORD DE L'INSURRECTION ?"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/4-2-4-nov-2026
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/4-2-3-nov-2026
 owner: diplo
 preview: >-
   Des jeunes militants et une sociologue, venus d'Italie, d'Espagne et de
