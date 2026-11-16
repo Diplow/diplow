@@ -1,6 +1,6 @@
 ---
 title: "Les traders - Heu?reka #1"
-parent: 6-politics/2-sources/5-heureka/1-chronicle
+parent: 6-politics/2-sources/5-heureka/1-chronicle/1-q4-2015
 owner: diplo
 preview: >-
   Gilles Mitteau explique qu'un trader de banque est un grossiste de produits
