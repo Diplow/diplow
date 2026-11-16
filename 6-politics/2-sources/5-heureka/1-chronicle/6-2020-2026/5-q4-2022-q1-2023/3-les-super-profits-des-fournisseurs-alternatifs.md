@@ -1,6 +1,6 @@
 ---
 title: "⚡ Les super-profits des fournisseurs alternatifs & Erratum épisode 1"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-2022-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-q4-2022-q1-2023
 owner: diplo
 preview: >-
   Gilles Mitteau corrige sa vidéo sur l'électricité : les prix à terme

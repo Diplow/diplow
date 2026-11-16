@@ -421,6 +421,8 @@ kinds:
       crise-de-la-dette: {définition: "Crise où des États perdent l'accès aux marchés pour refinancer leur dette publique.", statut: proposé, introduit_par: heureka/5uBXviM1PcQ.md}
       événement-climatique: {définition: "Épisode majeur de changement climatique du passé de la Terre, comme une glaciation ou un réchauffement brutal.", statut: proposé, introduit_par: lereveilleur/NRdaPrMNrkI.md}
       épisode-de-pollution: {définition: "Pic de pollution de l'air qui frappe une ville ou une région et fait de nombreuses victimes.", statut: proposé, introduit_par: lereveilleur/PoEf2u3BLWg.md}
+      crise-économique: {définition: "Effondrement durable de la production et de l'emploi qui touche une ou plusieurs économies.", statut: proposé, introduit_par: heureka/R_8sjao6tGI.md}
+      krach: {définition: "Effondrement brutal et durable des cours d'une bourse.", statut: proposé, introduit_par: heureka/R_8sjao6tGI.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

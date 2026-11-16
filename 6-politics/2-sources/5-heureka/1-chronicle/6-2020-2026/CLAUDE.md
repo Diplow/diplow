@@ -3,18 +3,18 @@ title: "2020 → 2026"
 parent: 6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026
 owner: diplo
 preview: >-
-  Gilles Mitteau explique les mécanismes de la finance et de l'économie :
-  surendettement, dette, création monétaire, inflation, électricité. Dans
-  Argent magique, lui et son co-présentateur tiennent les dix ans de Macron
-  pour du néolibéralisme assumé.
+  Gilles Mitteau explique les mécanismes de la finance et de l'économie, de la
+  dette à l'électricité, et soutient que la finance, les crises et les
+  déficits tiennent à des règles et à des choix politiques, non à des
+  fatalités.
 ---
 # 2020 → 2026
 
-De 2020 à 2022, Gilles Mitteau décortique des mécanismes plus qu'il ne commente l'actualité : le surendettement, les trois sens de l'efficience des marchés, la fortune de Musk, le raid sur GameStop qui ne défait pas Wall Street, le levier qui fragilise les entreprises, les écarts de salaires qui tiennent à des normes de genre. Il soutient que la recherche du profit pousse le capitalisme au-delà des frontières écologiques, tout en ne tranchant pas entre World3 et DICE. Il montre aussi que la dette détenue par les banques centrales peut être annulée et que banques et BCE peuvent orienter la création monétaire vers le climat.
+De 2020 à 2026, Gilles Mitteau décortique des mécanismes concrets : le surendettement, les trois sens de l'efficience des marchés, le raid sur GameStop, le levier qui fragilise les entreprises, la création monétaire que banques et BCE peuvent orienter vers le climat. Il revient aussi sur des notions que la théorie dominante tient pour acquises, comme la main invisible, le rachat d'actions et la finance vue comme un jeu à somme nulle. Il montre que la finance se joue sur des règles, et que la dette détenue par les banques centrales peut être annulée.
 
-Il démonte ensuite plusieurs idées reçues : la main invisible, le rachat d'actions, le « shadow banking », la finance vue comme un jeu à somme nulle. En 2022, il se tourne vers l'actualité (sanctions contre la Russie, inflation, prix de l'électricité aligné sur le gaz) et rend compte du livre de Joris Luyendijk, pour qui la structure de la finance, plus que l'avidité, engendre les crises ([[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-q2-q3-2022/CLAUDE|Q2 → Q3 2022]]).
+Dès 2022, il applique ces outils à l'actualité : sanctions contre la Russie, inflation, prix de l'électricité aligné sur le gaz. Il rend aussi compte du livre de Joris Luyendijk, pour qui la structure de la finance, plus que l'avidité, engendre les crises ([[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-q2-q3-2022/CLAUDE|Q2 → Q3 2022]]). Il démonte ensuite des idées reçues : l'inflation ne serait pas sous-évaluée à cause de l'immobilier, le marché de l'électricité ne tiendrait que sur le papier, et les retraites n'auraient pas de vrai déficit, seulement des choix politiques.
 
-La fin de la Period garde la même veine, avec un geste de correction : Mitteau soutient que l'inflation ne mesure pas le malaise du logement et corrige ses analyses de l'électricité. En 2026, dans Argent magique, lui et son co-présentateur tiennent les dix ans de Macron pour du néolibéralisme assumé ([[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-2022-2026/CLAUDE|2022 → 2026]]).
+À partir de 2023, la critique de la théorie dominante s'élargit : règles budgétaires européennes, faillite de SVB, limites de l'égoïsme, crise de 1929. La Period s'achève sur dix ans de Macron, lus comme un néolibéralisme assumé. Sur les sujets les plus incertains, comme l'opposition entre World3 et DICE sur les limites écologiques, Mitteau expose les deux modèles sans trancher.
 
 ## Contenu
 
@@ -22,4 +22,5 @@ La fin de la Period garde la même veine, avec un geste de correction : Mitteau 
 2. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/2-fevr-avr-2021/CLAUDE|févr. → avr. 2021]] (4 Digests, 2021-02-02 → 2021-04-19)
 3. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/3-s1-2021-s1-2022/CLAUDE|S1 2021 → S1 2022]] (6 Digests, 2021-05-24 → 2022-03-23)
 4. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/4-q2-q3-2022/CLAUDE|Q2 → Q3 2022]] (6 Digests, 2022-04-14 → 2022-09-26)
-5. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-2022-2026/CLAUDE|2022 → 2026]] (4 Digests, 2022-10-17 → 2026-10-13)
+5. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-q4-2022-q1-2023/CLAUDE|Q4 2022 → Q1 2023]] (5 Digests, 2022-10-17 → 2023-01-31)
+6. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/6-2023-2026/CLAUDE|2023 → 2026]] (6 Digests, 2023-03-03 → 2026-10-13)

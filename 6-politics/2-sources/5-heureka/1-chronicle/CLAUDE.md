@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/5-heureka/1-chronicle
 owner: diplo
 preview: >-
-  Gilles Mitteau explique la finance et l'économie par leurs mécanismes et
-  soutient que les banques créent la monnaie en prêtant, que l'euro est un
-  choix politique et que les blocages sont juridiques et politiques, pas
-  financiers. Dans Argent magique, il vise le néolibéralisme de Macron.
+  Gilles Mitteau explique la finance et l'économie, de la monnaie créée par
+  les banques à la crise de l'euro, et soutient que la finance, les crises et
+  les déficits tiennent à des règles et à des choix politiques, non à des
+  fatalités.
 ---
 # Chronicle
 
-Gilles Mitteau commence par les bases de la finance, présentées par des cas concrets : marchés, création de monnaie par les banques, titrisation, LBO, produits dérivés, trading haute fréquence, quantitative easing, Lehman. De ces rouages, il tire une thèse qui revient d'une Period à l'autre : les banques créent la monnaie en prêtant, et la dette sert trop à spéculer. Il lit aussi la faillite de LTCM comme la preuve des dangers du levier.
+Gilles Mitteau commence par les bases de la finance, qu'il pose par des cas concrets : marchés primaire et secondaire, création de monnaie par les banques, titrisation, trading haute fréquence, quantitative easing, puis LBO, produits dérivés et Lehman ([[6-politics/2-sources/5-heureka/1-chronicle/1-q4-2015-q2-2016/CLAUDE|Q4 2015 → Q2 2016]], [[6-politics/2-sources/5-heureka/1-chronicle/2-2016-2017/CLAUDE|2016 → 2017]]). Dès ces années, il avance les thèses qui reviendront : les banques créent la monnaie en prêtant, la dette sert trop à spéculer, l'euro est un choix politique, et plusieurs monnaies valent mieux qu'une seule.
 
-Cette grille sert ensuite à lire la crise de l'euro, qui occupe plusieurs Periods, de [[6-politics/2-sources/5-heureka/1-chronicle/2-2016-2017/CLAUDE|2016 → 2017]] à [[6-politics/2-sources/5-heureka/1-chronicle/4-s2-2018-s2-2019/CLAUDE|S2 2018 → S2 2019]]. Pour Mitteau, l'euro est un choix politique, la dette du sud est surtout privée, et l'austérité a achevé la Grèce. Il démonte l'ordolibéralisme, soutient que les balances TARGET2 ne sont pas une dette et oppose à la théorie standard une économie monétaire. Dans [[6-politics/2-sources/5-heureka/1-chronicle/5-q4-2019-q2-2020/CLAUDE|Q4 2019 → Q2 2020]], il applique la même lecture aux retraites, au krach et au coronavirus : les blocages sont juridiques et politiques, pas financiers, d'où la monnaie hélicoptère pour relancer la demande.
+Les années suivantes tournent autour de la zone euro. Il y lit une dette surtout privée au sud, une Grèce achevée par l'austérité et un risque bancaire passé aux États. Il démonte l'ordolibéralisme et les règles de la zone, soutient que les balances TARGET2 ne sont pas une dette et oppose à la théorie standard une économie monétaire. Il relaie aussi Roger Martin contre le pari sur le prix des actions, et lit la faillite de LTCM comme la preuve des dangers du levier ([[6-politics/2-sources/5-heureka/1-chronicle/3-s2-2017-s2-2018/CLAUDE|S2 2017 → S2 2018]], [[6-politics/2-sources/5-heureka/1-chronicle/4-s2-2018-s2-2019/CLAUDE|S2 2018 → S2 2019]]).
 
-Le ton évolue au fil de la Chronicle, du pédagogique des débuts à la critique de la théorie dominante. Sur la dernière période, [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE|2020 → 2026]], Mitteau explique surendettement, inflation et électricité. Dans Argent magique, lui et son co-présentateur tiennent les dix ans de Macron pour du néolibéralisme assumé.
+À partir de fin 2019, Mitteau applique la même grille au chômage, aux retraites, au krach et au coronavirus : les blocages sont juridiques et politiques, pas financiers, d'où la monnaie hélicoptère pour relancer la demande. Jusqu'en 2026, il étend cette lecture de la dette à l'électricité. D'un bout à l'autre, le fil est le même : des mécanismes financiers expliqués pour montrer que ce qu'on présente comme une contrainte tient à des règles et à des choix.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ Le ton évolue au fil de la Chronicle, du pédagogique des débuts à la critiqu
 3. [[6-politics/2-sources/5-heureka/1-chronicle/3-s2-2017-s2-2018/CLAUDE|S2 2017 → S2 2018]] (16 Digests, 2017-11-03 → 2018-11-15)
 4. [[6-politics/2-sources/5-heureka/1-chronicle/4-s2-2018-s2-2019/CLAUDE|S2 2018 → S2 2019]] (16 Digests, 2018-12-11 → 2019-09-19)
 5. [[6-politics/2-sources/5-heureka/1-chronicle/5-q4-2019-q2-2020/CLAUDE|Q4 2019 → Q2 2020]] (19 Digests, 2019-10-03 → 2020-06-07)
-6. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE|2020 → 2026]] (25 Digests, 2020-07-10 → 2026-10-13)
+6. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE|2020 → 2026]] (32 Digests, 2020-07-10 → 2026-10-13)
