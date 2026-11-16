@@ -1,6 +1,6 @@
 ---
 title: "Coronavirus : Chaque JOUR compte"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/3-2020-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/3-mars-avr-2020
 owner: diplo
 preview: >-
   Mitteau, avec d'autres médiateurs scientifiques, appelle à agir dès
