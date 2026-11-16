@@ -1,6 +1,6 @@
 ---
 title: "10 ANS DE MACRON : L’HEURE DU BILAN [ARGENT MAGIQUE]"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/3-2019-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026
 owner: diplo
 preview: >-
   Dans Argent magique, Mitteau et son co-présentateur soutiennent que les dix

@@ -1,6 +1,6 @@
 ---
 title: "Qui crée l'argent? Et comment? - Heu?reka #6"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2015-2017
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-dec-2015-janv-2016
 owner: diplo
 preview: >-
   Gilles Mitteau soutient que l'argent ne vaut que par la confiance qu'on lui

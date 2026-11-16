@@ -1,6 +1,6 @@
 ---
 title: "The big short (le film): Clefs de lecture - Heu?reka HS#1"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2015-2017
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-dec-2015-janv-2016
 owner: diplo
 preview: >-
   Gilles Mitteau donne trois clés pour suivre The Big Short : la titrisation,

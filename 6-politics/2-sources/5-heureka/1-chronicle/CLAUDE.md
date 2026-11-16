@@ -3,19 +3,23 @@ title: "Chronicle"
 parent: 6-politics/2-sources/5-heureka/1-chronicle
 owner: diplo
 preview: >-
-  Gilles Mitteau explique d'abord les rouages de la finance, des marchés à la
-  faillite de Lehman Brothers, puis démonte à partir de 2019 la théorie
-  économique dominante sur le chômage et juge dix ans de Macron dans Argent
-  magique.
+  Gilles Mitteau explique la finance par des cas concrets (le trader, le
+  corner, la pyramide de Ponzi, la titrisation, la faillite de Lehman
+  Brothers), puis démonte la théorie économique dominante sur le chômage et
+  juge, avec son co-présentateur, dix ans de Macron.
 ---
 # Chronicle
 
-Dans ses premières années, Gilles Mitteau pose les bases de la finance à travers des cas concrets. [[6-politics/2-sources/5-heureka/1-chronicle/1-q4-2015/CLAUDE|Q4 2015]] présente le trader comme grossiste de produits financiers, le corner des frères Hunt, la pyramide de Ponzi de Madoff, puis la différence entre marché primaire, qui finance les entreprises, et marché secondaire. [[6-politics/2-sources/5-heureka/1-chronicle/2-2015-2017/CLAUDE|2015 → 2017]] approfondit ces rouages : création monétaire par le crédit bancaire, titrisation et CDS, puis la faillite de Lehman Brothers, victime de sa dette à très court terme.
+De fin 2015 à 2017, Gilles Mitteau pose les bases de la finance en partant de cas concrets. Le trader est présenté comme un grossiste de produits financiers, et le corner des frères Hunt et la pyramide de Ponzi de Madoff montrent comment les marchés se détraquent. Il distingue le marché primaire, qui finance les entreprises, du marché secondaire, qui finit par l'éclipser. Il explique aussi que les banques créent la monnaie en prêtant, que la titrisation et le CDS font comprendre The Big Short, et que le broker est payé à la commission, ce qui rend possible la fraude du pump and dump.
 
-Le ton change avec [[6-politics/2-sources/5-heureka/1-chronicle/3-2019-2026/CLAUDE|2019 → 2026]]. Mitteau y démonte la théorie économique dominante sur le chômage et rend compte d'une enquête sur la finance de la City. Dans Argent magique, avec son co-présentateur, il juge dix ans de Macron : un néolibéralisme assumé, au bilan maigre. La Chronicle va ainsi de l'explication des mécanismes à la critique de la théorie et à un positionnement politique ouvert.
+La Chronicle s'étend ensuite au fonctionnement actuel des marchés : des Bourses devenues entrepôts de serveurs où des algorithmes se disputent la vitesse, le quantitative easing de la BCE, le market maker qui n'est pas un investisseur. Mitteau juge plus avantageux de garder plusieurs monnaies, et il raconte la faillite de Lehman Brothers, dépendante de la confiance.
+
+Les épisodes de 2019 à 2026 changent de registre. Mitteau démonte la théorie économique dominante sur le chômage et rend compte d'une enquête sur la finance de la City. Dans Argent magique, avec son co-présentateur, il juge dix ans de Macron : un néolibéralisme assumé, au bilan maigre. On passe ainsi de la description des mécanismes à la critique de la théorie dominante, puis à une prise de position politique, relue plus en détail dans [[6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/CLAUDE|2019 → 2026]].
 
 ## Contenu
 
 1. [[6-politics/2-sources/5-heureka/1-chronicle/1-q4-2015/CLAUDE|Q4 2015]] (4 Digests, 2015-10-21 → 2015-12-04)
-2. [[6-politics/2-sources/5-heureka/1-chronicle/2-2015-2017/CLAUDE|2015 → 2017]] (4 Digests, 2015-12-13 → 2017-08-17)
-3. [[6-politics/2-sources/5-heureka/1-chronicle/3-2019-2026/CLAUDE|2019 → 2026]] (3 Digests, 2019-10-03 → 2026-10-13)
+2. [[6-politics/2-sources/5-heureka/1-chronicle/2-dec-2015-janv-2016/CLAUDE|déc. 2015 → janv. 2016]] (4 Digests, 2015-12-13 → 2016-01-16)
+3. [[6-politics/2-sources/5-heureka/1-chronicle/3-janv-fevr-2016/CLAUDE|janv. → févr. 2016]] (3 Digests, 2016-01-27 → 2016-02-28)
+4. [[6-politics/2-sources/5-heureka/1-chronicle/4-2016-2017/CLAUDE|2016 → 2017]] (3 Digests, 2016-03-15 → 2017-08-17)
+5. [[6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/CLAUDE|2019 → 2026]] (3 Digests, 2019-10-03 → 2026-10-13)
