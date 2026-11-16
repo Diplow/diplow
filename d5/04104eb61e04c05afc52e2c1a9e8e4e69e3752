@@ -1,0 +1,21 @@
+.skills/6-politics/1-wikipol/ingest-source/scripts/file.sh
+  s_70e2b8820e4c39::t_16474d3f4301c9 43
+.skills/6-politics/1-wikipol/ingest-source/scripts/preflight.sh
+  s_70e2b8820e4c39::t_16474d3f4301c9 23-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d504104eb61e04c05afc52e2c1a9e8e4e69e3752",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
