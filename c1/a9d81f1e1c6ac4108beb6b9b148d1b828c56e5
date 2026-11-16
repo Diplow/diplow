@@ -1,0 +1,59 @@
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q3-2018/1-monnaie-pleine-reformer-la-creation-monetaire.md
+  s_959f8a76c6cbb9::t_14b6f277a8b972 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q3-2018/2-la-crise-de-l-part-08.md
+  s_959f8a76c6cbb9::t_c86781007d54a6 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q3-2018/3-milton-friedman-en-pls-heu-reka.md
+  s_959f8a76c6cbb9::t_fefda2160b53de 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q3-2018/4-la-crise-de-l-part-09.md
+  s_959f8a76c6cbb9::t_de178000e116d1 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q3-2018/CLAUDE.md
+  s_959f8a76c6cbb9::t_ac54a6a84742cc 2-3,6-9,11,13,15,19-22
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-q3-q4-2018/1-actionnaires-vs-dirigeants-ce-que-veulent.md
+  s_959f8a76c6cbb9::t_69ac75cc08829d 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-q3-q4-2018/2-partenariat-crypto-investissements-eviter-les-pieges.md
+  s_959f8a76c6cbb9::t_87541ab7d17023 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-q3-q4-2018/3-partenariat-qu-est-ce-que-l.md
+  s_959f8a76c6cbb9::t_cb768a124d795e 1-52
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-q3-q4-2018/4-croissance-energie-l-erreur-des-economistes.md
+  s_959f8a76c6cbb9::t_9761c289fd652f 1-70
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-q3-q4-2018/CLAUDE.md
+  s_959f8a76c6cbb9::t_0ff3f23a10c0a8 1-24
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/5-dec-2018-fevr-2019/1-prix-du-petrole-comment-les-marches.md
+  s_959f8a76c6cbb9::t_ef0a762fa96f8f 1-56
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/5-dec-2018-fevr-2019/2-prix-du-petrole-la-complexite-de.md
+  s_959f8a76c6cbb9::t_59dccd2d0c7078 1-60
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/5-dec-2018-fevr-2019/3-ordoliberalisme-allemand-crise-de-l-part.md
+  s_959f8a76c6cbb9::t_7e9332cda44759 1-81
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/5-dec-2018-fevr-2019/4-l-ideologie-derriere-la-construction-europeenne.md
+  s_959f8a76c6cbb9::t_98b11f86ff755f 1-61
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/5-dec-2018-fevr-2019/CLAUDE.md
+  s_959f8a76c6cbb9::t_876afdc92780da 1-22
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/6-2019-2026/1-le-chomage-pour-les-nuls-comprendre.md
+  s_959f8a76c6cbb9::t_28f556934d6379 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/6-2019-2026/2-un-anthropologue-chez-les-traders-part.md
+  s_959f8a76c6cbb9::t_0acd4c41a0a633 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/6-2019-2026/3-10-ans-de-macron-l-heure.md
+  s_959f8a76c6cbb9::t_68521fe641d3c2 3
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/6-2019-2026/CLAUDE.md
+  s_959f8a76c6cbb9::t_0f7ca3b0d6383a 3,21-23
+6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/CLAUDE.md
+  s_959f8a76c6cbb9::t_caa4dfcd560a83 6-9,13,15,17,23-26
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_959f8a76c6cbb9::t_27beaf07557fc9 6-9,13,15,17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c1a9d81f1e1c6ac4108beb6b9b148d1b828c56e5",
+  "prompts": {},
+  "sessions": {
+    "s_959f8a76c6cbb9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a371c1754b584ec07",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
