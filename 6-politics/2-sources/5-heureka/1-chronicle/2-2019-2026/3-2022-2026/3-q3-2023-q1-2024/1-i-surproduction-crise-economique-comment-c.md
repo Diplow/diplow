@@ -1,6 +1,6 @@
 ---
 title: "I - Surproduction = crise économique !? Comment c'est possible ?"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/3-2023-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/3-q3-2023-q1-2024
 owner: diplo
 preview: >-
   Gilles Mitteau ouvre une série sur la crise de 1929 : la Grande Dépression

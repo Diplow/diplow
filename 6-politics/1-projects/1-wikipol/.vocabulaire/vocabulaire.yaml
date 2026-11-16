@@ -229,6 +229,7 @@ kinds:
       investisseur: {définition: "Place des capitaux sur les marchés ou dans des fonds, pour son compte ou celui d'autrui.", statut: proposé, introduit_par: heureka/n7jn-l2SbVk.md}
       surintendant-des-finances: {définition: "Dirige les finances du royaume de France sous l'Ancien Régime.", statut: proposé, introduit_par: blast/SWUNkxUz1Uc.md}
       expert-énergie: {définition: "Analyse et expertise les politiques énergétiques et nucléaires.", statut: proposé, introduit_par: lereveilleur/E3YLYzs_1Es.md}
+      comptable: {définition: "Conçoit ou tient la comptabilité des entreprises.", statut: proposé, introduit_par: heureka/7yC1OtofY28.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
