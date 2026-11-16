@@ -1,0 +1,25 @@
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/3-mai-juil-2019/5-la-faillite-du-hedge-fund-ltcm.md
+  s_051777760a385b::t_d6031134b23d0f 1-79
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/3-mai-juil-2019/CLAUDE.md
+  s_051777760a385b::t_63973b190cf332 6-9,13,15-17,25
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/CLAUDE.md
+  s_051777760a385b::t_58f14af3d9e7d5 6-9,13,15,17,23
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_051777760a385b::t_1bc627ad9dcb09 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8489c8f9dae6925ab881c820473545b42626fdb3",
+  "prompts": {},
+  "sessions": {
+    "s_051777760a385b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-abfd57e821f09f1a4",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
