@@ -1,0 +1,27 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_d048bba8d1284a::t_2293ae81f6aae0 339
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/5-s1-2016/5-le-changement-climatique-dans-le-monde.md
+  s_d048bba8d1284a::t_144ca0b54f8a0e 1-50
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/5-s1-2016/CLAUDE.md
+  s_d048bba8d1284a::t_380762e2ce5d1f 6-9,13,15,17,25-26
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/CLAUDE.md
+  s_d048bba8d1284a::t_b21dc7a357d0fe 6-8,12,14,16,24
+6-politics/2-sources/6-lereveilleur/1-chronicle/CLAUDE.md
+  s_d048bba8d1284a::t_b829028fae9ff8 6-9,13,15,17,21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bf1550ac4ff6d19e93b2c1a78851a2ff00370a96",
+  "prompts": {},
+  "sessions": {
+    "s_d048bba8d1284a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a3c13738-914e-41a3-a5d4-d91b93a68919",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
