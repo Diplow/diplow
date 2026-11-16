@@ -37,7 +37,7 @@ relations:
 
 ## 1. Rodolphe Meyer soutient qu'aucun argument de sûreté ne justifiait de fermer Fessenheim : l'âge de la centrale n'est pas un critère pertinent et l'ASN la jugeait sûre.
 
-Pour lui, la durée de quarante ans était un minimum d'exploitation, pas une date de péremption, et c'est la cuve du réacteur, suivie de près, qui fixe la durée ultime. Le fonctionnement des centrales est détaillé dans [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/3-q3-q4-2019/1-fonctionnement-des-centrales-nucleaires-canicule-tritium|Fonctionnement des centrales nucléaires]].
+Pour lui, la durée de quarante ans était un minimum d'exploitation, pas une date de péremption, et c'est la cuve du réacteur, suivie de près, qui fixe la durée ultime. Le fonctionnement des centrales est détaillé dans [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/4-q3-q4-2019/1-fonctionnement-des-centrales-nucleaires-canicule-tritium|Fonctionnement des centrales nucléaires]].
 
 > [3:11](https://www.youtube.com/watch?v=Bcg9yDp4Azs&t=191s) « elle a jugé que la sûreté de la centrale nucléaire de Fessenheim était très satisfaisante »
 

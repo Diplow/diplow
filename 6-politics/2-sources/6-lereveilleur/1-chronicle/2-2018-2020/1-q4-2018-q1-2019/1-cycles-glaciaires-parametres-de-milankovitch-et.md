@@ -33,7 +33,7 @@ relations:
 
 ## 1. Les paramètres de Milankovitch seuls ne peuvent pas expliquer la différence de température entre périodes glaciaires et interglaciaires : l'excentricité change trop peu la puissance reçue.
 
-Contre l'explication que Courtillot en tire (reprise dans [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2018/4-q3-q4-2018/2-le-climat-des-derniers-milliers-d|la Part. 2]] pour le cadre), Meyer chiffre l'écart : la variation de puissance liée à l'orbite est de l'ordre d'un millième de la puissance reçue, bien en deçà de ce qu'il faudrait.
+Contre l'explication que Courtillot en tire (reprise dans [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2018/5-q3-q4-2018/2-le-climat-des-derniers-milliers-d|la Part. 2]] pour le cadre), Meyer chiffre l'écart : la variation de puissance liée à l'orbite est de l'ordre d'un millième de la puissance reçue, bien en deçà de ce qu'il faudrait.
 
 > [9:47](https://www.youtube.com/watch?v=n-NJ-B_IIFw&t=587s) « la variation de la puissance reçue par la terre est minuscule si on regarde les ordonner on voit que ça correspond à une évolution de moins d'un watt par mètre carré en cent mille ans »
 
