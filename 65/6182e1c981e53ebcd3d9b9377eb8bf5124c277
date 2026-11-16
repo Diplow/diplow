@@ -1,0 +1,33 @@
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/3-q3-q4-2015/1-comment-avoir-une-societe-plus-juste.md
+  s_09ea6281ad614c::t_94ad88ba2b8bd7 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/3-q3-q4-2015/2-qu-est-ce-que-l-economie.md
+  s_09ea6281ad614c::t_e131a129e9d3c6 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/3-q3-q4-2015/3-le-changement-climatique-un-constat-map.md
+  s_09ea6281ad614c::t_bc6129a7dda634 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/3-q3-q4-2015/4-la-part-de-la-nature-dans.md
+  s_09ea6281ad614c::t_f3b1b4af79b01a 1-43
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/3-q3-q4-2015/5-la-part-de-l-homme-dans.md
+  s_09ea6281ad614c::t_b61d31ceef30d2 1-58
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/3-q3-q4-2015/CLAUDE.md
+  s_09ea6281ad614c::t_201872d65d7817 2-3,6-9,11,13,15,19-23
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/CLAUDE.md
+  s_09ea6281ad614c::t_61c421671753fb 6-9,13,15,17,23
+6-politics/2-sources/6-lereveilleur/1-chronicle/CLAUDE.md
+  s_09ea6281ad614c::t_a635a15aef5d2a 6-9,13,15,17,21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "656182e1c981e53ebcd3d9b9377eb8bf5124c277",
+  "prompts": {},
+  "sessions": {
+    "s_09ea6281ad614c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a13d4e71cb7f4aa12",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
