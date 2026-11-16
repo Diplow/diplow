@@ -434,6 +434,7 @@ kinds:
       album: {définition: "Un album de musique.", statut: proposé, introduit_par: boniface/8SZ9ea-ADeY.md}
       revue: {définition: "Publication périodique qui rassemble des témoignages, des récits et des analyses.", statut: proposé, introduit_par: blast/bikUdy-G_Po.md}
       poème: {définition: "Un texte poétique, en vers ou en prose.", statut: proposé, introduit_par: blast/eueMRr9VvT4.md}
+      base-de-données: {définition: "Ensemble de données statistiques rassemblées et consultables en ligne.", statut: proposé, introduit_par: heureka/WYLXFeCL3HQ.md}
     qualifiers:
       cité: {définition: "Lue, montrée ou diffusée dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
