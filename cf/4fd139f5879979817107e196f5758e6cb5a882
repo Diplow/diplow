@@ -1,0 +1,45 @@
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-q1-q2-2020/1-eolien-photovoltaique-et-reseau-electrique-partie.md
+  s_959f8a76c6cbb9::t_cace20e99bae52 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-q1-q2-2020/2-resume-eolien-photovoltaique-et-reseau-electrique.md
+  s_959f8a76c6cbb9::t_f13558134f9e75 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-q1-q2-2020/3-eolien-photovoltaique-et-reseau-electrique-partie.md
+  s_959f8a76c6cbb9::t_fd1b84aec74ce9 1-83
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-q1-q2-2020/4-analyse-impact-sanitaire-de-fukushima-une.md
+  s_959f8a76c6cbb9::t_01bca5fb55a754 1-91
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-q1-q2-2020/5-resume-analyse-impact-sanitaire-de-fukushima.md
+  s_959f8a76c6cbb9::t_2dc06968c9834d 1-62
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-q1-q2-2020/6-le-cycle-du-carbone.md
+  s_959f8a76c6cbb9::t_f6be836f31c291 1-75
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-q1-q2-2020/CLAUDE.md
+  s_959f8a76c6cbb9::t_988f493e9b71ce 1-26
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-s1-2020-s1-2021/1-cycle-du-carbone-oceanique-et-devenir.md
+  s_959f8a76c6cbb9::t_30ab4766fa62a6 1-76
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-s1-2020-s1-2021/2-resume-qu-advient-il-de-nos.md
+  s_959f8a76c6cbb9::t_5beeca72ef4b70 1-48
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-s1-2020-s1-2021/3-hydrogene-un-enjeu-industriel.md
+  s_959f8a76c6cbb9::t_2c449775dd82b3 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-s1-2020-s1-2021/CLAUDE.md
+  s_959f8a76c6cbb9::t_ea8b412c43d2ad 3,6-9,13,15,19-21
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/CLAUDE.md
+  s_959f8a76c6cbb9::t_241092eeda7990 6-9,13,15,17,24-25
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2021-2023/3-s2-2022-s1-2023/3-voiture-a-hydrogene-l-impasse.md
+  s_959f8a76c6cbb9::t_20894aa0115476 58
+6-politics/2-sources/6-lereveilleur/1-chronicle/CLAUDE.md
+  s_959f8a76c6cbb9::t_630f9a313f5696 6-9,13,15,17,21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cf4fd139f5879979817107e196f5758e6cb5a882",
+  "prompts": {},
+  "sessions": {
+    "s_959f8a76c6cbb9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a371c1754b584ec07",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
