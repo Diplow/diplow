@@ -333,6 +333,7 @@ kinds:
       instance-d-aide-financière: {définition: "Réunit plusieurs institutions pour prêter à des États en difficulté et les conseiller, comme la troïka.", statut: proposé, introduit_par: heureka/5uBXviM1PcQ.md}
       société-de-gestion: {définition: "Gère des fonds d'investissement et y place l'argent de ses clients.", statut: proposé, introduit_par: heureka/FCa5ISgMQjg.md}
       agence-de-notation-extra-financière: {définition: "Note les entreprises sur des critères environnementaux, sociaux et de gouvernance et vend ses grilles aux sociétés de gestion.", statut: proposé, introduit_par: heureka/FCa5ISgMQjg.md}
+      courtier: {définition: "Intermédiaire qui transmet aux marchés les ordres d'achat et de vente de ses clients.", statut: proposé, introduit_par: heureka/EGs5kYYw6d8.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
