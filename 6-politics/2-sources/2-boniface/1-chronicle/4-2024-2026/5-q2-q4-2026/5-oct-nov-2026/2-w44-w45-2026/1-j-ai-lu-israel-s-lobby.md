@@ -1,6 +1,6 @@
 ---
 title: "J'ai lu...« Israel's Lobby: America in the Grip of a Foreign Power » d'Eli Clifton et Ian Lustick"
-parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/4-sept-oct-2026/5-w43-w44-2026
+parent: 6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/2-w44-w45-2026
 owner: diplo
 preview: >-
   Dans sa chronique du livre d'Eli Clifton et Ian Lustick, Boniface retient
