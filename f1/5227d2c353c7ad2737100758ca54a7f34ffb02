@@ -1,0 +1,31 @@
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/4-q1-q2-2026/3-avr-2026/4-w17-w18-2026/4-liban-une-situation-tres-volatile.md
+  s_70464cecc704a8::t_1ab0d24f041094 1-61
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/4-q1-q2-2026/3-avr-2026/CLAUDE.md
+  s_70464cecc704a8::t_1ab0d24f041094 6-9,13,15,17,24
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/4-q1-q2-2026/CLAUDE.md
+  s_70464cecc704a8::t_1ab0d24f041094 6-9,13,15,17,23
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/CLAUDE.md
+  s_70464cecc704a8::t_1ab0d24f041094 7-9,13,15,17,24
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/4-q1-q2-2026/3-avr-2026/4-w17-w18-2026/CLAUDE.md
+  s_70464cecc704a8::t_1ab0d24f041094 6-9,13,15,21-22
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_70464cecc704a8::t_1ab0d24f041094 6-9,13,15,17,24
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/4-q1-q2-2026/3-avr-2026/4-w17-w18-2026/3-trump-mad-man-ou-maitre-du.md
+  s_70464cecc704a8::t_1ab0d24f041094 1-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f15227d2c353c7ad2737100758ca54a7f34ffb02",
+  "prompts": {},
+  "sessions": {
+    "s_70464cecc704a8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "58febe73-3099-4c4d-b1a2-eec7581b37f8",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
