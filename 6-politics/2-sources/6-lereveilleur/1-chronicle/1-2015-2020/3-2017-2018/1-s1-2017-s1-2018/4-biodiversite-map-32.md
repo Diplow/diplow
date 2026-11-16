@@ -60,7 +60,7 @@ Meyer s'appuie d'abord sur le rapport du WWF, dont il rappelle que des scientifi
 
 ## 5. La première cause de perte de biodiversité est la destruction des milieux naturels, le changement climatique n'étant pas le principal responsable, et presque toutes nos activités pèsent sur elle.
 
-Meyer lit une figure de synthèse : destruction des milieux, surexploitation (voir [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/2-s1-2016-s1-2017/3-q4-2016-q2-2017/3-poissons-et-surpeche-map-30|Poissons et surpêche MaP#30]]), pollutions, espèces invasives. Il précise que cette figure n'est pas exhaustive.
+Meyer lit une figure de synthèse : destruction des milieux, surexploitation (voir [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/2-s1-2016-s1-2017/4-q4-2016-q2-2017/4-poissons-et-surpeche-map-30|Poissons et surpêche MaP#30]]), pollutions, espèces invasives. Il précise que cette figure n'est pas exhaustive.
 
 > [19:47](https://www.youtube.com/watch?v=QYixeo0Nb6U&t=1187s) « la première cause de destruction de la biodiversité est la destruction des milieux naturels sous l’effet de l’agriculture, de l’urbanisation, de l’extraction minière ou de l’exploitation forestière. »
 

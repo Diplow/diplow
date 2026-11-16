@@ -60,7 +60,7 @@ La co-production avec l'or, le cuivre et surtout les phosphates fournit 6% de la
 
 ## 4. Le vrai risque n'est pas le stock dans le sol mais le flux : un déploiement du nucléaire mal anticipé créerait un décalage entre offre et demande.
 
-Ouvrir de nouvelles mines et mettre en place des filières surgénératrices prend du temps. On retrouve le problème de flux déjà vu dans la vidéo sur le [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/2-s1-2016-s1-2017/3-q4-2016-q2-2017/1-le-pic-petrolier-map-28|Le Pic Pétrolier MaP#28]].
+Ouvrir de nouvelles mines et mettre en place des filières surgénératrices prend du temps. On retrouve le problème de flux déjà vu dans la vidéo sur le [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/2-s1-2016-s1-2017/4-q4-2016-q2-2017/1-le-pic-petrolier-map-28|Le Pic Pétrolier MaP#28]].
 
 > [37:54](https://www.youtube.com/watch?v=uIXEnRB7TXc&t=2274s) « Un déploiement massif du nucléaire doit donc être correctement planifié au niveau de la production d’uranium naturel pour être possible. »
 

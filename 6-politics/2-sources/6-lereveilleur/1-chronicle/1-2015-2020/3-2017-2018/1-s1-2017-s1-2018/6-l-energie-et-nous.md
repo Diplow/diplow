@@ -52,7 +52,7 @@ Meyer illustre ces ordres de grandeur par la consommation moyenne mondiale d'én
 
 ## 4. Notre usage de l'énergie pose deux problèmes majeurs : l'épuisement des sources fossiles qui fournissent 81 % de l'énergie primaire, et les impacts environnementaux.
 
-Ces chiffres datent de 2017 et s'y ajoutent 5 % de nucléaire, qui n'est pas renouvelable non plus. Sans énergie, on manque de tout le reste. Meyer renvoie pour l'épuisement du pétrole à sa vidéo [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/2-s1-2016-s1-2017/3-q4-2016-q2-2017/1-le-pic-petrolier-map-28|Le Pic Pétrolier MaP#28]].
+Ces chiffres datent de 2017 et s'y ajoutent 5 % de nucléaire, qui n'est pas renouvelable non plus. Sans énergie, on manque de tout le reste. Meyer renvoie pour l'épuisement du pétrole à sa vidéo [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/2-s1-2016-s1-2017/4-q4-2016-q2-2017/1-le-pic-petrolier-map-28|Le Pic Pétrolier MaP#28]].
 
 > [14:02](https://www.youtube.com/watch?v=eruVCRrIkCY&t=842s) « du coup 81% de l’énergie primaire consommée provient encore des énergies fossiles »
 
