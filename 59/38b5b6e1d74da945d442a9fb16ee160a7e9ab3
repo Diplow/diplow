@@ -1,0 +1,55 @@
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/1-2015-2019/3-les-metaux-map-29.md
+  s_78c758d997519e::t_1257d0c28a0541 1-77
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/1-2015-2019/4-poissons-et-surpeche-map-30.md
+  s_78c758d997519e::t_6919854a6f7c16 1-77
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/1-2015-2019/5-mon-passage-a-mt180-prix-du.md
+  s_78c758d997519e::t_78e7883fc362cf 1-54
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/1-2015-2019/CLAUDE.md
+  s_78c758d997519e::t_9782b1aaa05487 6-9,13,15,17,23-26
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-q1-q2-2020/4-analyse-impact-sanitaire-de-fukushima-une.md
+  s_78c758d997519e::t_471a6e499fe491 41
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-juin-aout-2020/1-cycle-du-carbone-oceanique-et-devenir.md
+  s_78c758d997519e::t_84389911fd6e09 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-juin-aout-2020/2-resume-qu-advient-il-de-nos.md
+  s_78c758d997519e::t_9eb51b338be9cf 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-juin-aout-2020/3-fermeture-de-fessenheim-une-victoire-pour.md
+  s_78c758d997519e::t_dbe633969503f9 1-88
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-juin-aout-2020/4-les-climats-du-passe-ft-sebastien.md
+  s_78c758d997519e::t_66319442d647f2 1-87
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-juin-aout-2020/CLAUDE.md
+  s_78c758d997519e::t_9df99275fdb0c7 1-24
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/6-q3-2020-q1-2021/1-la-capture-et-sequestration-de-carbone.md
+  s_78c758d997519e::t_c42c1bde183a1e 1-87
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/6-q3-2020-q1-2021/2-les-dessous-de-l-electricite-verte.md
+  s_78c758d997519e::t_2ec1063150e76e 1-87
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/6-q3-2020-q1-2021/3-la-convention-citoyenne-pour-le-climat.md
+  s_78c758d997519e::t_e619f985c0d4e8 1-89
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/6-q3-2020-q1-2021/4-hydrogene-comment-le-produire.md
+  s_78c758d997519e::t_6aca492a203bda 1-83
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/6-q3-2020-q1-2021/5-hydrogene-un-enjeu-industriel.md
+  s_78c758d997519e::t_b82c5fd1ea2e62 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/6-q3-2020-q1-2021/CLAUDE.md
+  s_78c758d997519e::t_5c50db14b6a82f 2-3,6-9,11,13,15-17,21-25
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/CLAUDE.md
+  s_78c758d997519e::t_2423d383058d0a 6-9,13,15,17,21,25-26
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2021-2023/3-s2-2022-s1-2023/3-voiture-a-hydrogene-l-impasse.md
+  s_78c758d997519e::t_44ba159b70dae1 58
+6-politics/2-sources/6-lereveilleur/1-chronicle/CLAUDE.md
+  s_78c758d997519e::t_1853374df276ea 6-9,13,15,17,21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5938b5b6e1d74da945d442a9fb16ee160a7e9ab3",
+  "prompts": {},
+  "sessions": {
+    "s_78c758d997519e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ad5a2a6ba4838f220",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
