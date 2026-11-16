@@ -1,0 +1,29 @@
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/6-s1-s2-2026/4-faut-il-taxer-les-riches-spoiler.md
+  s_3c9e4513291cd7::t_fca01253aad28f 1-99
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/6-s1-s2-2026/5-peut-on-avoir-confiance-dans-nos.md
+  s_3c9e4513291cd7::t_e8b7eeae633a44 1-94
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/6-s1-s2-2026/CLAUDE.md
+  s_3c9e4513291cd7::t_9b981cbeb28230 6-9,13,15,17,24-26
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/CLAUDE.md
+  s_3c9e4513291cd7::t_e839e5318d805b 6-9,13,15,17,26
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/CLAUDE.md
+  s_3c9e4513291cd7::t_12c8f42a4a44c6 6-9,13,15,17,23
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_3c9e4513291cd7::t_9fcaeca99c2b2a 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "86cdeeefc0d15a367574f9517be26fa5b4e31b15",
+  "prompts": {},
+  "sessions": {
+    "s_3c9e4513291cd7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a4013c6db76f20858",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
