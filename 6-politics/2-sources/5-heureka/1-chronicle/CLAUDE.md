@@ -3,18 +3,18 @@ title: "Chronicle"
 parent: 6-politics/2-sources/5-heureka/1-chronicle
 owner: diplo
 preview: >-
-  Gilles Mitteau explique la finance et l'économie par leurs mécanismes, de la
-  création monétaire par le crédit à la crise de l'euro et au levier, et
-  soutient que la recherche du profit pousse le capitalisme au-delà des
-  frontières écologiques.
+  Gilles Mitteau explique la finance et l'économie par leurs mécanismes et
+  soutient que les banques créent la monnaie en prêtant, que l'euro est un
+  choix politique et que les blocages sont juridiques et politiques, pas
+  financiers. Dans Argent magique, il vise le néolibéralisme de Macron.
 ---
 # Chronicle
 
-Gilles Mitteau commence par poser les bases de la finance par des cas concrets : marchés, création de monnaie par les banques, titrisation, trading haute fréquence, quantitative easing ([[6-politics/2-sources/5-heureka/1-chronicle/1-q4-2015-q2-2016/CLAUDE|Q4 2015 → Q2 2016]]). Il passe ensuite aux produits plus complexes, du LBO aux produits dérivés et à Lehman. Le fil qui traverse toute la Chronicle est que les banques créent la monnaie en prêtant, et que la dette sert trop à spéculer.
+Gilles Mitteau commence par les bases de la finance, présentées par des cas concrets : marchés, création de monnaie par les banques, titrisation, LBO, produits dérivés, trading haute fréquence, quantitative easing, Lehman. De ces rouages, il tire une thèse qui revient d'une Period à l'autre : les banques créent la monnaie en prêtant, et la dette sert trop à spéculer. Il lit aussi la faillite de LTCM comme la preuve des dangers du levier.
 
-À partir de 2017, la crise de l'euro devient son terrain principal. Il soutient que l'euro est un choix politique, que la dette du sud est surtout privée, que l'austérité a achevé la Grèce et que le risque bancaire est passé aux États ([[6-politics/2-sources/5-heureka/1-chronicle/3-s2-2017-s2-2018/CLAUDE|S2 2017 → S2 2018]]). Il démonte ensuite l'ordolibéralisme et les règles de la zone euro, affirme que les balances TARGET2 ne sont pas une dette et oppose à la théorie standard une économie monétaire. La faillite de LTCM lui sert de preuve des dangers du levier ([[6-politics/2-sources/5-heureka/1-chronicle/4-s2-2018-s2-2019/CLAUDE|S2 2018 → S2 2019]]). Il relaie aussi Roger Martin contre le pari sur le prix des actions.
+Cette grille sert ensuite à lire la crise de l'euro, qui occupe plusieurs Periods, de [[6-politics/2-sources/5-heureka/1-chronicle/2-2016-2017/CLAUDE|2016 → 2017]] à [[6-politics/2-sources/5-heureka/1-chronicle/4-s2-2018-s2-2019/CLAUDE|S2 2018 → S2 2019]]. Pour Mitteau, l'euro est un choix politique, la dette du sud est surtout privée, et l'austérité a achevé la Grèce. Il démonte l'ordolibéralisme, soutient que les balances TARGET2 ne sont pas une dette et oppose à la théorie standard une économie monétaire. Dans [[6-politics/2-sources/5-heureka/1-chronicle/5-q4-2019-q2-2020/CLAUDE|Q4 2019 → Q2 2020]], il applique la même lecture aux retraites, au krach et au coronavirus : les blocages sont juridiques et politiques, pas financiers, d'où la monnaie hélicoptère pour relancer la demande.
 
-La même grille sert ensuite à lire le chômage, les retraites, le krach et le coronavirus : pour lui, les blocages sont juridiques et politiques, pas financiers, d'où sa défense de la monnaie hélicoptère pour relancer la demande ([[6-politics/2-sources/5-heureka/1-chronicle/5-q4-2019-q2-2020/CLAUDE|Q4 2019 → Q2 2020]]). Les dernières années élargissent le propos à l'inflation et à l'écologie : la recherche du profit pousse le capitalisme au-delà des frontières écologiques. Avec son co-présentateur, il présente aussi dix ans de Macron comme du néolibéralisme assumé ([[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE|2020 → 2026]]). Le ton passe ainsi de l'explication des rouages à une critique de plus en plus politique.
+Le ton évolue au fil de la Chronicle, du pédagogique des débuts à la critique de la théorie dominante. Sur la dernière période, [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE|2020 → 2026]], Mitteau explique surendettement, inflation et électricité. Dans Argent magique, lui et son co-présentateur tiennent les dix ans de Macron pour du néolibéralisme assumé.
 
 ## Contenu
 
@@ -23,4 +23,4 @@ La même grille sert ensuite à lire le chômage, les retraites, le krach et le 
 3. [[6-politics/2-sources/5-heureka/1-chronicle/3-s2-2017-s2-2018/CLAUDE|S2 2017 → S2 2018]] (16 Digests, 2017-11-03 → 2018-11-15)
 4. [[6-politics/2-sources/5-heureka/1-chronicle/4-s2-2018-s2-2019/CLAUDE|S2 2018 → S2 2019]] (16 Digests, 2018-12-11 → 2019-09-19)
 5. [[6-politics/2-sources/5-heureka/1-chronicle/5-q4-2019-q2-2020/CLAUDE|Q4 2019 → Q2 2020]] (19 Digests, 2019-10-03 → 2020-06-07)
-6. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE|2020 → 2026]] (24 Digests, 2020-07-10 → 2026-10-13)
+6. [[6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE|2020 → 2026]] (25 Digests, 2020-07-10 → 2026-10-13)
