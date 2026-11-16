@@ -1,6 +1,6 @@
 ---
 title: "[Résumé] Les déchets radioactifs."
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/5-nov-2019-janv-2020
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/6-nov-2019-janv-2020
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que les déchets radioactifs les plus dangereux ne
@@ -37,7 +37,7 @@ Meyer distingue le danger du risque. Il distingue aussi l'irradiation, qui décr
 
 ## 2. Pour la gestion à long terme, Meyer présente le stockage géologique profond comme la seule solution sérieuse, avec une exposition future infime, au prix d'une grosse inertie temporelle.
 
-Le projet français, Cigéo, près de Bure, n'en est qu'au stade de projet. Meyer cite une dose de l'ordre du millième de la radioactivité naturelle dans le pire scénario, un pompage d'eau contaminée. Le défaut qu'il juge indiscutable : les colis doivent refroidir de 60 à 80 ans en surface avant le stockage. Voir aussi [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/5-nov-2019-janv-2020/2-stockage-geologique-profond-des-dechets-radioactifs|Stockage géologique profond]].
+Le projet français, Cigéo, près de Bure, n'en est qu'au stade de projet. Meyer cite une dose de l'ordre du millième de la radioactivité naturelle dans le pire scénario, un pompage d'eau contaminée. Le défaut qu'il juge indiscutable : les colis doivent refroidir de 60 à 80 ans en surface avant le stockage. Voir aussi [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/6-nov-2019-janv-2020/2-stockage-geologique-profond-des-dechets-radioactifs|Stockage géologique profond]].
 
 > [10:16](https://www.youtube.com/watch?v=yZ4FmDB_MXE&t=616s) « la seule solution qui est considérée sérieusement par les instances compétentes de nombreux pays est le stockage géologique profond. »
 
@@ -47,7 +47,7 @@ Le projet français, Cigéo, près de Bure, n'en est qu'au stade de projet. Meye
 
 ## 3. Contre l'idée que la transmutation réglerait la question, Meyer montre que ce n'est pas une solution miracle et qu'il est improbable qu'elle en devienne une à court terme.
 
-Les procédés de séparation et de transmutation ne sont pas maîtrisés à l'échelle industrielle, et ils ajouteraient complexité, coûts et risques. Meyer s'appuie sur la conclusion de l'IRSN pour les actinides mineurs. Voir [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/4-q3-q4-2019/4-peut-on-faire-disparaitre-les-dechets|Peut-on faire disparaître les déchets radioactifs ?]].
+Les procédés de séparation et de transmutation ne sont pas maîtrisés à l'échelle industrielle, et ils ajouteraient complexité, coûts et risques. Meyer s'appuie sur la conclusion de l'IRSN pour les actinides mineurs. Voir [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/5-q3-q4-2019/4-peut-on-faire-disparaitre-les-dechets|Peut-on faire disparaître les déchets radioactifs ?]].
 
 > [16:13](https://www.youtube.com/watch?v=yZ4FmDB_MXE&t=973s) « Mais, la transmutation est loin d’être une solution miracle. »
 
@@ -55,7 +55,7 @@ Les procédés de séparation et de transmutation ne sont pas maîtrisés à l'�
 
 ## 4. Meyer soutient que la France fabrique des déchets « administrativement » radioactifs faute de seuil de libération, et qu'un seuil comme ailleurs faciliterait leur gestion.
 
-Pour ces déchets de très faible activité, le périmètre est la France. Elle classe en radioactif, par zonage, des matériaux sans radionucléide artificiel. Cela impose des surcoûts et empêche de recycler des pièces d'acier. Voir [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/5-nov-2019-janv-2020/1-gestion-des-dechets-nucleaires-et-demantelement|Gestion des déchets nucléaires et démantèlement]].
+Pour ces déchets de très faible activité, le périmètre est la France. Elle classe en radioactif, par zonage, des matériaux sans radionucléide artificiel. Cela impose des surcoûts et empêche de recycler des pièces d'acier. Voir [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/6-nov-2019-janv-2020/1-gestion-des-dechets-nucleaires-et-demantelement|Gestion des déchets nucléaires et démantèlement]].
 
 > [18:52](https://www.youtube.com/watch?v=yZ4FmDB_MXE&t=1132s) « Dans tous les autres pays, si l’activité du matériau est en dessous d’un certain seuil, on considère que ce n’est pas un déchet radioactif. »
 

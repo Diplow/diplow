@@ -1,6 +1,6 @@
 ---
 title: "⚡☢️🗑️ De la centrale aux déchets radioactifs."
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/4-q3-q4-2019
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/5-q3-q4-2019
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que les déchets nucléaires de haute activité,

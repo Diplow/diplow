@@ -1,6 +1,6 @@
 ---
 title: "[Analyse] du discours d'un climato-sceptique: V. Courtillot. Part. 1"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/3-s1-2018-s1-2019
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/3-mai-juil-2018
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que, sur le premier tiers de la conférence de 2011

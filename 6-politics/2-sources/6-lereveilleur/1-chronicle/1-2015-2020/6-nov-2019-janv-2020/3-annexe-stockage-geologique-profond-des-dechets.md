@@ -1,6 +1,6 @@
 ---
 title: "[ANNEXE] ⚡☢️🗑️ Stockage géologique profond des déchets radioactifs."
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/5-nov-2019-janv-2020
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/6-nov-2019-janv-2020
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que la dilution en mer ne convient qu'à de faibles
@@ -48,7 +48,7 @@ Ce qui a été immergé était faiblement radioactif, et les rejets de tritium e
 
 ## 3. Le stockage en forage est une alternative plus sérieuse, surtout pour les petits volumes de pays sans électronucléaire, mais la fusion de roche autour des colis n'est qu'un concept à l'étude.
 
-On a beaucoup moins d'éléments sur ces techniques que sur le stockage géologique profond, traité dans la vidéo principale ([[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/5-nov-2019-janv-2020/2-stockage-geologique-profond-des-dechets-radioactifs|Stockage géologique profond des déchets radioactifs - DÉCHETS RADIOACTIFS #4]]).
+On a beaucoup moins d'éléments sur ces techniques que sur le stockage géologique profond, traité dans la vidéo principale ([[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/6-nov-2019-janv-2020/2-stockage-geologique-profond-des-dechets-radioactifs|Stockage géologique profond des déchets radioactifs - DÉCHETS RADIOACTIFS #4]]).
 
 > [7:31](https://www.youtube.com/watch?v=_GvOOfDA-E0&t=451s) « C’est très sérieusement envisagé dans les pays comme le Ghana, la Malaisie ou le Brésil qui n’ont pas d’électro-nucléaire mais ont des déchets radioactifs à cause des usages médicaux et industriels de la radioactivité. »
 
