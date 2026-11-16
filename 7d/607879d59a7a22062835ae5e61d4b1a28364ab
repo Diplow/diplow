@@ -1,0 +1,25 @@
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-2026/5-q3-q4-2026/6-pourquoi-l-energie-solaire-conquiert-le.md
+  s_5af19ec5cbb1fb::t_26f4776ed5a077 1-87
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-2026/5-q3-q4-2026/CLAUDE.md
+  s_5af19ec5cbb1fb::t_cb0058035e93d8 6-9,13,15,17,26
+6-politics/2-sources/3-osonscauser/1-chronicle/2-2024-2026/CLAUDE.md
+  s_5af19ec5cbb1fb::t_7ba8129fa0a6fe 6-8,12,14,16,24
+6-politics/2-sources/3-osonscauser/1-chronicle/CLAUDE.md
+  s_5af19ec5cbb1fb::t_074f728e83f2fd 6-9,13,15-17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7d607879d59a7a22062835ae5e61d4b1a28364ab",
+  "prompts": {},
+  "sessions": {
+    "s_5af19ec5cbb1fb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aa79766b5b3b5277b",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
