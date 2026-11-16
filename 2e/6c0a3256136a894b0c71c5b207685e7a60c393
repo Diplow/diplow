@@ -1,0 +1,81 @@
+.skills/6-politics/1-wikipol/ingest-source/scripts/next.sh
+  s_70e2b8820e4c39::t_78e8cdb836bff4 1-16,19,23-31
+  s_70e2b8820e4c39::t_c8a57abb3117ba 17-18,20-22
+.skills/6-politics/1-wikipol/ingest-source/SKILL.md
+  s_70e2b8820e4c39::t_0dd219df421e6e 1-63,65-144
+  s_70e2b8820e4c39::t_f2659ce6a56a9c 64
+.skills/6-politics/1-wikipol/new-source/references/editorial.md
+  s_70e2b8820e4c39::t_f2659ce6a56a9c 1-62
+.skills/6-politics/1-wikipol/ingest-source/scripts/push.sh
+  s_70e2b8820e4c39::t_78e8cdb836bff4 1-15
+.skills/6-politics/1-wikipol/ingest-source/scripts/file.sh
+  s_70e2b8820e4c39::t_78e8cdb836bff4 1-54
+.skills/6-politics/1-wikipol/ingest-source/references/batch.md
+  s_70e2b8820e4c39::t_e9321cd5cf1b51 1-26,28-35
+  s_70e2b8820e4c39::t_0dd219df421e6e 27
+6-politics/1-projects/1-wikipol/README.md
+  s_70e2b8820e4c39::t_b98183c02f0d31 11,13-15,18
+6-politics/1-projects/CLAUDE.md
+  s_70e2b8820e4c39::t_8f82600522f9c5 25
+.skills/6-politics/1-wikipol/new-source/scripts/look.sh
+  s_70e2b8820e4c39::t_40c4ae1aaa2395 1-10
+.skills/6-politics/1-wikipol/ingest-source/references/raw.md
+  s_70e2b8820e4c39::t_e9321cd5cf1b51 1-30
+.skills/6-politics/CLAUDE.md
+  s_70e2b8820e4c39::t_e9321cd5cf1b51 1-16
+.skills/6-politics/1-wikipol/CLAUDE.md
+  s_70e2b8820e4c39::t_e9321cd5cf1b51 1-22
+.skills/6-politics/1-wikipol/new-source/scripts/look.py
+  s_70e2b8820e4c39::t_40c4ae1aaa2395 1-80
+.skills/6-politics/1-wikipol/ingest-source/scripts/queue.sh
+  s_70e2b8820e4c39::t_c8a57abb3117ba 37
+  s_70e2b8820e4c39::t_78e8cdb836bff4 1-36,38-39
+.skills/6-politics/1-wikipol/ingest-source/scripts/fetch.sh
+  s_70e2b8820e4c39::t_78e8cdb836bff4 1-23
+.skills/6-politics/1-wikipol/ingest-source/scripts/preflight.sh
+  s_70e2b8820e4c39::t_78e8cdb836bff4 1-54
+.skills/6-politics/1-wikipol/ingest-source/scripts/status.sh
+  s_70e2b8820e4c39::t_78e8cdb836bff4 1-20,22-29
+  s_70e2b8820e4c39::t_01669ffd2b13d7 21
+.skills/6-politics/1-wikipol/ingest-source/scripts/digest.sh
+  s_70e2b8820e4c39::t_78e8cdb836bff4 1-15
+6-politics/1-projects/1-wikipol/CLAUDE.md
+  s_70e2b8820e4c39::t_8f82600522f9c5 54,150,173-180,183-185,188
+.skills/6-politics/1-wikipol/ingest-source/scripts/result.sh
+  s_70e2b8820e4c39::t_78e8cdb836bff4 1-16
+.skills/6-politics/1-wikipol/ingest-source/scripts/index.sh
+  s_70e2b8820e4c39::t_40c4ae1aaa2395 1-10
+.skills/6-politics/1-wikipol/new-source/scripts/sample.sh
+  s_70e2b8820e4c39::t_40c4ae1aaa2395 1-29
+.skills/6-politics/1-wikipol/new-source/SKILL.md
+  s_70e2b8820e4c39::t_f2659ce6a56a9c 1-106
+.skills/6-politics/1-wikipol/ingest-source/scripts/lib.sh
+  s_70e2b8820e4c39::t_78e8cdb836bff4 1-51
+.skills/CLAUDE.md
+  s_70e2b8820e4c39::t_8f82600522f9c5 28
+6-politics/2-sources/CLAUDE.md
+  s_70e2b8820e4c39::t_8f82600522f9c5 27,36
+  s_70e2b8820e4c39::t_bed450b3d7459f 37
+.skills/6-politics/1-wikipol/ingest-source/scripts/lost.sh
+  s_70e2b8820e4c39::t_0dd219df421e6e 1-12
+.claude/skills/politics:wikipol:ingest-source
+  s_70e2b8820e4c39::t_05e1a415e39bdf 1
+.claude/skills/politics:wikipol:new-source
+  s_70e2b8820e4c39::t_41699ac8903cc3 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2e6c0a3256136a894b0c71c5b207685e7a60c393",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
