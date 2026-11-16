@@ -1,6 +1,6 @@
 ---
 title: "Les banques face au défi climatique"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/3-2021-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/3-s1-2021-s1-2022
 owner: diplo
 preview: >-
   Gilles Mitteau examine comment orienter la création monétaire des banques
