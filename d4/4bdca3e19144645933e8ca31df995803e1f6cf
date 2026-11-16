@@ -1,0 +1,31 @@
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-presentation-de-la-chaine.md
+  s_70464cecc704a8::t_12b398339917d9 1-37
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-le-pic-petrolier-map-28.md
+  s_70464cecc704a8::t_0d9e2b2adde45f 1-69
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-resume-hiroshima-tchernobyl-fukushima-les-morts.md
+  s_70464cecc704a8::t_1de74f942c9edc 1-55
+6-politics/2-sources/6-lereveilleur/1-chronicle/4-voiture-electrique-un-probleme-de-batterie.md
+  s_70464cecc704a8::t_45245d4b703892 1-86
+6-politics/2-sources/6-lereveilleur/1-chronicle/5-co2-rechauffement-climatique-la-meilleure-approche.md
+  s_70464cecc704a8::t_4d935a314dd588 1-74
+6-politics/2-sources/6-lereveilleur/1-chronicle/6-climatisation-un-desastre-ecologique.md
+  s_70464cecc704a8::t_da4fbc2af9a5d8 1-77
+6-politics/2-sources/6-lereveilleur/1-chronicle/CLAUDE.md
+  s_70464cecc704a8::t_9d410e4e390d66 2,6-9,13,15-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d44bdca3e19144645933e8ca31df995803e1f6cf",
+  "prompts": {},
+  "sessions": {
+    "s_70464cecc704a8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "58febe73-3099-4c4d-b1a2-eec7581b37f8",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
