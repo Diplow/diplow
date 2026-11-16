@@ -1,6 +1,6 @@
 ---
 title: "Un anthropologue chez les traders - Part 1"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/4-2019-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/5-2019-2026
 owner: diplo
 preview: >-
   Gilles Mitteau résume Swimming with Sharks de Joris Luyendijk, enquête de

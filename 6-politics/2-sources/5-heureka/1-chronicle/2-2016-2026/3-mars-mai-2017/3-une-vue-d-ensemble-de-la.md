@@ -1,6 +1,6 @@
 ---
 title: "Une vue d'ensemble de la crise des subprimes"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/3-q1-q3-2017
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/3-mars-mai-2017
 owner: diplo
 preview: >-
   Gilles Mitteau soutient que la crise des subprimes tient à une bulle

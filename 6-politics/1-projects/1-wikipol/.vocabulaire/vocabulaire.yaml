@@ -329,6 +329,7 @@ kinds:
       gestionnaire-de-réseau: {définition: "Exploite et développe un réseau d'énergie, comme le transport d'électricité.", statut: proposé, introduit_par: lereveilleur/cfqrxAUJ5bI.md}
       agence-de-notation: {définition: "Note le risque de crédit des entreprises et des États à l'intention des investisseurs.", statut: proposé, introduit_par: heureka/ZbFQ4knxFhE.md}
       unité-de-forces-spéciales: {définition: "Unité de commandos ou de forces spéciales chargée d'opérations clandestines, de sabotage et de contre-guérilla.", statut: proposé, introduit_par: blast/mvSuxcBgt_M.md}
+      instance-d-aide-financière: {définition: "Réunit plusieurs institutions pour prêter à des États en difficulté et les conseiller, comme la troïka.", statut: proposé, introduit_par: heureka/5uBXviM1PcQ.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -410,6 +411,7 @@ kinds:
       concert: {définition: "Spectacle musical public donné devant un public, parfois à visée militante.", statut: proposé, introduit_par: blast/cUW7Zu2VSX0.md}
       accident-nucléaire: {définition: "Accident dans une installation nucléaire qui libère de la radioactivité dans l'environnement.", statut: proposé, introduit_par: lereveilleur/smGve9f6kpQ.md}
       krach-éclair: {définition: "Chute brutale d'un marché, d'une durée de quelques minutes, souvent imputée à des algorithmes de trading.", statut: proposé, introduit_par: heureka/BuEyrskPUws.md}
+      crise-de-la-dette: {définition: "Crise où des États perdent l'accès aux marchés pour refinancer leur dette publique.", statut: proposé, introduit_par: heureka/5uBXviM1PcQ.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

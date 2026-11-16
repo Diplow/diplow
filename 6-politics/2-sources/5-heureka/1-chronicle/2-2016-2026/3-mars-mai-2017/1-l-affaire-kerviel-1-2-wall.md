@@ -1,6 +1,6 @@
 ---
 title: "L'affaire Kerviel (1/2) - Wall Street Stories #2 - Heu?reka"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/3-q1-q3-2017
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/3-mars-mai-2017
 owner: diplo
 preview: >-
   Gilles Mitteau soutient que Jérôme Kerviel, market maker sur les turbo

@@ -1,6 +1,6 @@
 ---
 title: "Le chômage pour les nuls : comprendre la théorie dominante - Heu?reka #32-1"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/4-2019-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/5-2019-2026
 owner: diplo
 preview: >-
   Gilles Mitteau expose le modèle néoclassique : sur le marché du travail,
