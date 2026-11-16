@@ -1,6 +1,6 @@
 ---
 title: "2019 → 2026"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-2019-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-2019-2026
 owner: diplo
 preview: >-
   Gilles Mitteau démonte la théorie économique dominante sur le chômage, rend
@@ -18,6 +18,6 @@ En 2026, le ton devient ouvertement politique. Dans Argent magique, Mitteau et s
 
 ## Contenu
 
-1. [[6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-2019-2026/1-le-chomage-pour-les-nuls-comprendre|Le chômage pour les nuls : comprendre la théorie dominante - Heu?reka #32-1]] (2019-10-03)
-2. [[6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-2019-2026/2-un-anthropologue-chez-les-traders-part|Un anthropologue chez les traders - Part 1]] (2022-07-06)
-3. [[6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-2019-2026/3-10-ans-de-macron-l-heure|10 ANS DE MACRON : L’HEURE DU BILAN (ARGENT MAGIQUE)]] (2026-10-13)
+1. [[6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-2019-2026/1-le-chomage-pour-les-nuls-comprendre|Le chômage pour les nuls : comprendre la théorie dominante - Heu?reka #32-1]] (2019-10-03)
+2. [[6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-2019-2026/2-un-anthropologue-chez-les-traders-part|Un anthropologue chez les traders - Part 1]] (2022-07-06)
+3. [[6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-2019-2026/3-10-ans-de-macron-l-heure|10 ANS DE MACRON : L’HEURE DU BILAN (ARGENT MAGIQUE)]] (2026-10-13)
