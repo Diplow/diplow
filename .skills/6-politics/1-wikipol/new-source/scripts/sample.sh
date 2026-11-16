@@ -1,29 +1,12 @@
 #!/usr/bin/env bash
-# sample.sh SLUG [N]: copies N of the Source's Raws (3 by default: the newest, the oldest and one
-# between, of those the bucket dates) into a new temporary folder, one file each, and prints
-# `path<TAB>published<TAB>duration<TAB>title` per Raw. For reading before the editorial context
-# is written.
+# sample.sh SLUG [N]: stores N Raws of the Source (5 by default) spread evenly over its channel's
+# listing, from the newest video to the oldest, and copies them into a new temporary folder, one
+# file each. Prints `path<TAB>published<TAB>duration<TAB>title` per Raw. A channel's newest videos
+# are often one series: the editorial context is read from its whole history. Takes the machine's
+# fetch lock, and pauses between two videos as `wikipol fetch` does. Exit 2 when it stored none.
 . "$(dirname "$0")/../../ingest-source/scripts/lib.sh"
 need_slug "${1:-}"
 out="$(mktemp -d "${TMPDIR:-/tmp}/wikipol-sample-$1.XXXXXX")"
-uv --directory "$SCRIPTS" run --quiet python - "$1" "${2:-3}" "$out" <<'PY'
-import sys
-from pathlib import Path
-
-from wikipol.config import load_settings
-from wikipol.raw_store import S3RawStore
-
-slug, wanted, out = sys.argv[1], int(sys.argv[2]), Path(sys.argv[3])
-store = S3RawStore.from_settings(load_settings())
-raws = [store.get(slug, youtube_id) for youtube_id in store.list(slug)[:60]]
-raws.sort(key=lambda raw: (raw.meta.published is None, raw.meta.published))
-if not raws:
-    sys.exit(f"the bucket holds no Raw of {slug}: fetch some first")
-step = max(1, (len(raws) - 1) // max(1, wanted - 1))
-picked = list(dict.fromkeys([*raws[::step][: wanted - 1], raws[-1]]))[:wanted]
-for raw in picked:
-    path = out / f"{raw.youtube_id}.md"
-    path.write_bytes(raw.body)
-    minutes = f"{round(raw.meta.duration / 60)} min" if raw.meta.duration else "-"
-    print(f"{path}\t{raw.meta.published or '-'}\t{minutes}\t{raw.meta.title}")
-PY
+take_lock "$CACHE/fetch.lock" "wikipol fetch --source"
+trap 'rm -rf "$CACHE/fetch.lock"' EXIT
+uv --directory "$SCRIPTS" run --quiet python "$here/../../new-source/scripts/sample.py" "$1" "${2:-5}" "$out"

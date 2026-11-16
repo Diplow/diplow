@@ -55,7 +55,7 @@ One bullet per rule, each a bold name, a period, then what to write and what to 
 
 A draft is proven on one Digest, not by rereading it. After `digest.sh` writes the Digest of a sampled Raw, check three things in it against the Raw's title and the sweep:
 
-1. Every claim names its speaker the way the Attribution rule says.
+1. A claim that is someone else's (a guest's, a book's, a theory the Source lays out to criticize) says whose it is, and a sentence that names the Source uses the name the Attribution rule gives. A claim's heading may state the Source's own thesis without naming it: a Digest's claims are the Source's by default.
 2. No claim or Extract comes from a voice the file excludes.
 3. The Preview states what the video argues, not its subject.
 

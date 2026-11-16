@@ -1,13 +1,13 @@
 ---
 name: new-source
-description: "Add a YouTube channel to wikipol as a Source. Given a channel URL or @handle, it looks at the channel, settles the name, slug, hosts and where the Chronicle starts, scaffolds the node under 6-politics/2-sources with wikipol's new_source.py, stores the five newest Raws, drafts the editorial CLAUDE.md that write-digest reads from the channel's page and those Raws, proves the draft on one Digest, lists the Source in the Sources node, then commits and pushes on the working branch. Use when someone says \"add this channel to wikipol\", \"new source\", \"I want to follow this YouTube channel\" or \"/politics:wikipol:new-source <channel URL>\". It files nothing in the Chronicle: fetching the channel's history and digesting it is ingest-source."
+description: "Add a YouTube channel to wikipol as a Source. Given a channel URL or @handle, it looks at the channel, settles the name, slug, hosts and where the Chronicle starts, scaffolds the node under 6-politics/2-sources with wikipol's new_source.py, stores five Raws spread over the channel's history, drafts the editorial CLAUDE.md that write-digest reads from the channel's page and those Raws, proves the draft on one Digest, lists the Source in the Sources node, then commits and pushes on the working branch. Use when someone says \"add this channel to wikipol\", \"new source\", \"I want to follow this YouTube channel\" or \"/politics:wikipol:new-source <channel URL>\". It files nothing in the Chronicle: fetching the channel's history and digesting it is ingest-source."
 argument-hint: "<channel URL or @handle> [display name] [--since YYYY-MM-DD]"
 title: new-source
 parent: .skills/6-politics/1-wikipol/new-source
 owner: diplo
 preview: >-
   Turns a YouTube channel into a wikipol Source: looks at the channel, picks its
-  name, slug, hosts and starting date, scaffolds the node, fetches five Raws,
+  name, slug, hosts and starting date, scaffolds the node, stores five Raws,
   drafts the editorial context write-digest reads and proves it on one Digest.
   Commits and pushes. ingest-source then takes the channel's history.
 ---
@@ -54,16 +54,17 @@ python3 Scripts/new_source.py --name "<name>" --slug "<slug>" \
 
 It creates `6-politics/2-sources/<n>-<slug>/` at the first free number and refuses a slug already taken.
 
-## 4. Store five Raws and read three
+## 4. Store five Raws and have them read
 
 ```bash
-ingest-source/scripts/fetch.sh <slug> --limit 5   # the five newest videos, about two minutes
-scripts/sample.sh <slug>                          # three of them as files, with date, length and title
+scripts/sample.sh <slug>     # about two minutes
 ```
 
-`fetch.sh` waits its turn behind any other fetch on the machine. If it stores none (exit 1, YouTube refusing; or five videos without French captions), stop here and report: without a Raw there is nothing to ground the editorial context on, and a node with a template for context is what this skill exists to prevent. The node stays, uncommitted, for the next try.
+It stores five Raws spread evenly over the channel's listing, from its newest video to its oldest, and copies them to a temporary folder, printing each one's path, date, length and title. Spread, because a channel's five newest videos are often one series: Heu?reka's were four episodes of a show it co-hosts, and none of the scripted dialogues that make up most of the channel. It waits its turn behind any other fetch on the machine, and takes the next video over when one has no French captions.
 
-Then delegate the reading to one **work-tier** subagent (the session's model: what it reports decides how every Digest of the Source is written, and three Raws are up to 40,000 words that have no place in this session). Give it the output of `look.sh`, the three paths `sample.sh` printed, and the six questions of `references/editorial.md`, "What the sweep returns". It answers in 40 lines.
+Exit 2 means it stored none: YouTube is refusing the machine, or the channel has no French captions. Stop there and report. Without a Raw there is nothing to ground the editorial context on, and a Source digested on the bare template is what this skill exists to prevent. The node stays, uncommitted, for the next try.
+
+Then delegate the reading to one **work-tier** subagent (the session's model: what it reports decides how every Digest of the Source is written, and five Raws are up to 40,000 words that have no place in this session). Give it the output of `look.sh`, the five lines `sample.sh` printed, and the six questions of `references/editorial.md`, "What the sweep returns". It answers in 40 lines.
 
 Print its recap for the user, then go on.
 
@@ -76,6 +77,8 @@ Write `6-politics/2-sources/<n>-<slug>/CLAUDE.md` as `references/editorial.md` l
 ```bash
 ingest-source/scripts/digest.sh <slug> <youtube_id of a sampled Raw>   # 600000 ms timeout
 ```
+
+Pick the sampled Raw of the format the channel makes most. When the sweep found a format where the voices change (a co-hosted show, an interview), prove a Raw of that format too: two Digests at most, and they can be written at the same time.
 
 Read the staged Digest against the three checks of `references/editorial.md`, "The proof", and follow its rule for a miss: fix the file, delete the staged Digest, write it again, two rounds at most. A Digest that passes stays staged for `ingest-source` to file.
 
