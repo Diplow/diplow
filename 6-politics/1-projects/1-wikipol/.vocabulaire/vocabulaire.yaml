@@ -474,6 +474,7 @@ kinds:
       mesure-fiscale: {définition: "Impôt ou contribution instauré par une loi de finances.", statut: proposé, introduit_par: blast/TBRDLR98AW0.md}
       édit-royal: {définition: "Acte législatif pris par un roi de France, comme le Code noir.", statut: proposé, introduit_par: blast/OVUdQZ_0W-A.md}
       ordonnance: {définition: "Acte pris par le gouvernement dans le domaine de la loi, comme celle de 1945 sur l'enfance délinquante.", statut: proposé, introduit_par: blast/8ZGNxoQrzTc.md}
+      initiative-populaire: {définition: "Proposition de modification de la constitution soumise au vote du peuple, en Suisse.", statut: proposé, introduit_par: heureka/nHnH-a9ySgY.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}

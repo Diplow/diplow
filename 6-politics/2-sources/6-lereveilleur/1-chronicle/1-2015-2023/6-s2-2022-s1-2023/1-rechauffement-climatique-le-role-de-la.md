@@ -1,6 +1,6 @@
 ---
 title: "Réchauffement climatique: le rôle de la vapeur d'eau"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/4-s2-2022-s1-2023
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/6-s2-2022-s1-2023
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que la vapeur d’eau, principal gaz à effet de serre,

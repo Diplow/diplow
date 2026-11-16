@@ -1,6 +1,6 @@
 ---
 title: "Voiture électrique: un problème de batterie ?"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/2-q2-q4-2021
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/4-q2-q4-2021
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que les limites géologiques ne condamnent pas la

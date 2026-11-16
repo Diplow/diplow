@@ -1,6 +1,6 @@
 ---
 title: "Pourquoi la vie galère dans l'océan ?"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/3-q4-2021-q2-2022
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/5-q4-2021-q2-2022
 owner: diplo
 preview: >-
   Rodolphe Meyer explique que loin des côtes l'océan produit peu faute de

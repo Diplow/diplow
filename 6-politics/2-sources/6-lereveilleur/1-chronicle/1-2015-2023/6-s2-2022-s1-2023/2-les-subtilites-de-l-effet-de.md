@@ -1,6 +1,6 @@
 ---
 title: "Les subtilités de l'effet de serre"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/4-s2-2022-s1-2023
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/6-s2-2022-s1-2023
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que la température moyenne de la Terre se comprend
@@ -46,7 +46,7 @@ Ce chiffre correspond au rayonnement sortant de la Terre, mais sans effet de ser
 
 ## 4. Le bilan énergétique de la Terre explique sa température moyenne : le rayonnement solaire est réfléchi à 29 %, le reste réchauffe l'atmosphère et la surface.
 
-Meyer s'appuie sur les valeurs moyennes du dernier rapport du [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/2-q2-q4-2021/3-comprendre-le-giec-et-ses-rapports|GIEC]]. La surface perd de l'énergie par conduction, convection, évapotranspiration et rayonnement.
+Meyer s'appuie sur les valeurs moyennes du dernier rapport du [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/4-q2-q4-2021/3-comprendre-le-giec-et-ses-rapports|GIEC]]. La surface perd de l'énergie par conduction, convection, évapotranspiration et rayonnement.
 
 > [31:03](https://www.youtube.com/watch?v=rXlEcth5Gxc&t=1863s) « On a vu que notre planète reçoit du rayonnement solaire qui est réfléchi à 29% vers l’espace. »
 

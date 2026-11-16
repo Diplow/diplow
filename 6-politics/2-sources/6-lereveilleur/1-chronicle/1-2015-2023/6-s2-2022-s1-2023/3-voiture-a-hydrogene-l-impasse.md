@@ -1,6 +1,6 @@
 ---
 title: "Voiture à hydrogène: l'impasse ?"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/4-s2-2022-s1-2023
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/6-s2-2022-s1-2023
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que la voiture à hydrogène perd face à la voiture à
@@ -55,7 +55,7 @@ L'hydrogène est difficile à stocker, à transporter et à distribuer, et ce su
 
 ## 4. La voiture à hydrogène a perdu la bataille de la mobilité légère : il ne lui reste que des flottes captives, et la question des transports lourds reste ouverte.
 
-Le seul avantage de la voiture à hydrogène, le plein rapide, ne compte que sur les longs trajets, et son prix rebutera presque tout le monde. Pour les transports lourds, Meyer renvoie à d'autres vidéos et rappelle que l'hydrogène reste indispensable à certains usages industriels ([[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/1-2015-2021/4-hydrogene-un-enjeu-industriel|Hydrogène: un enjeu industriel !]]).
+Le seul avantage de la voiture à hydrogène, le plein rapide, ne compte que sur les longs trajets, et son prix rebutera presque tout le monde. Pour les transports lourds, Meyer renvoie à d'autres vidéos et rappelle que l'hydrogène reste indispensable à certains usages industriels ([[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2023/3-2019-2021/3-hydrogene-un-enjeu-industriel|Hydrogène: un enjeu industriel !]]).
 
 > [29:26](https://www.youtube.com/watch?v=hNMRSUFuHPg&t=1766s) « La voiture à hydrogène a clairement la physique contre elle dans son match contre la voiture à batterie, mais elle a également perdu la dynamique. »
 
