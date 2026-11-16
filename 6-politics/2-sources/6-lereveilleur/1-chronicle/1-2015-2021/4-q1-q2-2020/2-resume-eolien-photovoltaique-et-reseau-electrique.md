@@ -1,6 +1,6 @@
 ---
 title: "[Résumé] Éolien, photovoltaïque et réseau électrique."
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-s1-2020-s1-2021
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-q1-q2-2020
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que l'intégration de l'éolien et du photovoltaïque
