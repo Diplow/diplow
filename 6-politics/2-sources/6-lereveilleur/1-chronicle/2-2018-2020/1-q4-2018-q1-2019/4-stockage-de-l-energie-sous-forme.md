@@ -1,6 +1,6 @@
 ---
 title: "Stockage de l'énergie sous forme mécanique: STEP, volant d'inertie et air comprimé."
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/1-q4-2018-q2-2019
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/1-q4-2018-q1-2019
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient qu'il n'y a pas de stockage mécanique unique : les

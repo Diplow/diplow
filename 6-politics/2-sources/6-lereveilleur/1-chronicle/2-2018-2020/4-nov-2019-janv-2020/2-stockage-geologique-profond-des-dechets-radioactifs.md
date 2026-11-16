@@ -1,6 +1,6 @@
 ---
 title: "⚡☢️🗑️ Stockage géologique profond des déchets radioactifs - DÉCHETS RADIOACTIFS #4"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/3-nov-2019-janv-2020
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/4-nov-2019-janv-2020
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que le stockage géologique profond, dont le projet

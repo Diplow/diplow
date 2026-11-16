@@ -1,6 +1,6 @@
 ---
 title: "Cycles glaciaires, paramètres de Milankovitch et CO2 [Analyse] V. Courtillot Part. 3"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/1-q4-2018-q2-2019
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/1-q4-2018-q1-2019
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que l'argument de Courtillot, un CO2 qui suivrait la

@@ -1,6 +1,6 @@
 ---
 title: "Q3 → Q4 2019"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/2-q3-q4-2019
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/3-q3-q4-2019
 owner: diplo
 preview: >-
   Rodolphe Meyer défend le nucléaire français sur le fonctionnement des
@@ -17,7 +17,7 @@ Cette Period s'ouvre, fin juillet 2019, sur le fonctionnement des centrales, tra
 
 ## Contenu
 
-1. [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/2-q3-q4-2019/1-fonctionnement-des-centrales-nucleaires-canicule-tritium|Fonctionnement des centrales nucléaires (canicule, tritium, durée de vie...).]] (2019-07-26)
-2. [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/2-q3-q4-2019/2-resume-fonctionnement-des-centrales-nucleaires-canicule|(Résumé) Fonctionnement des centrales nucléaires (canicule, tritium, durée de vie...).]] (2019-07-26)
-3. [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/2-q3-q4-2019/3-de-la-centrale-aux-dechets-radioactifs|⚡☢️🗑️ De la centrale aux déchets radioactifs.]] (2019-09-19)
-4. [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/2-q3-q4-2019/4-peut-on-faire-disparaitre-les-dechets|⚡☢️🗑️ Peut-on faire disparaître les déchets radioactifs ?]] (2019-10-10)
+1. [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/3-q3-q4-2019/1-fonctionnement-des-centrales-nucleaires-canicule-tritium|Fonctionnement des centrales nucléaires (canicule, tritium, durée de vie...).]] (2019-07-26)
+2. [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/3-q3-q4-2019/2-resume-fonctionnement-des-centrales-nucleaires-canicule|(Résumé) Fonctionnement des centrales nucléaires (canicule, tritium, durée de vie...).]] (2019-07-26)
+3. [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/3-q3-q4-2019/3-de-la-centrale-aux-dechets-radioactifs|⚡☢️🗑️ De la centrale aux déchets radioactifs.]] (2019-09-19)
+4. [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/3-q3-q4-2019/4-peut-on-faire-disparaitre-les-dechets|⚡☢️🗑️ Peut-on faire disparaître les déchets radioactifs ?]] (2019-10-10)
