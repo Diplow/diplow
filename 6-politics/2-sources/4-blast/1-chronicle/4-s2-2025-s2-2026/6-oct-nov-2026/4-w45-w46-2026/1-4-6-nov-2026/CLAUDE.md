@@ -1,6 +1,6 @@
 ---
 title: "4 → 6 nov. 2026"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/5-4-6-nov-2026
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/4-w45-w46-2026/1-4-6-nov-2026
 owner: diplo
 preview: >-
   Blast défend le droit de la jeunesse à la révolte, veut transformer la
@@ -18,7 +18,7 @@ Du côté électoral, Blast soutient que la candidature de Gabriel Attal n'est q
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/5-4-6-nov-2026/1-le-peuple-a-le-droit-a|"LE PEUPLE A LE DROIT À LA RÉVOLTE ET À L'ÉMEUTE"]] (2026-11-04)
-2. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/5-4-6-nov-2026/2-5-novembre-et-maintenant-la-greve|5 NOVEMBRE : ET MAINTENANT, LA GRÈVE GÉNÉRALE !]] (2026-11-05)
-3. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/5-4-6-nov-2026/3-l-etat-degaine-l-arsenal-antiterroriste|L’ÉTAT DÉGAINE L’ARSENAL ANTITERRORISTE POUR EMPÊCHER DE MANIFESTER]] (2026-11-05)
-4. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/5-4-6-nov-2026/4-attal-loser|ATTAL : LOSER]] (2026-11-06)
+1. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/4-w45-w46-2026/1-4-6-nov-2026/1-le-peuple-a-le-droit-a|"LE PEUPLE A LE DROIT À LA RÉVOLTE ET À L'ÉMEUTE"]] (2026-11-04)
+2. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/4-w45-w46-2026/1-4-6-nov-2026/2-5-novembre-et-maintenant-la-greve|5 NOVEMBRE : ET MAINTENANT, LA GRÈVE GÉNÉRALE !]] (2026-11-05)
+3. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/4-w45-w46-2026/1-4-6-nov-2026/3-l-etat-degaine-l-arsenal-antiterroriste|L’ÉTAT DÉGAINE L’ARSENAL ANTITERRORISTE POUR EMPÊCHER DE MANIFESTER]] (2026-11-05)
+4. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/4-w45-w46-2026/1-4-6-nov-2026/4-attal-loser|ATTAL : LOSER]] (2026-11-06)
