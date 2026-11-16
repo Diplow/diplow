@@ -1,6 +1,6 @@
 ---
 title: "Bois : son véritable impact climatique"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/3-s1-s2-2026
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/4-s1-s2-2026
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que le bois n'est pas neutre en carbone : brûlé, il

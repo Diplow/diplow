@@ -1,6 +1,6 @@
 ---
 title: "Retirer le CO2 de l’atmosphère pour sauver le climat ?"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/1-2023-2025
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/2-q1-q2-2025
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que l'élimination du CO2 est inévitable pour

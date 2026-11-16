@@ -1,6 +1,6 @@
 ---
 title: "Le chauffage au bois est-il écologique ?"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/3-s1-s2-2026
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/4-s1-s2-2026
 owner: diplo
 preview: >-
   Rodolphe Meyer répond que le chauffage au bois n'est défendable qu'à défaut
@@ -28,7 +28,7 @@ mentions:
 
 ## 1. Rodolphe Meyer ne conseille pas le chauffage au bois, sauf quand aucune alternative non fossile n'est possible.
 
-Il estime, à titre personnel, que les pompes à chaleur valent mieux pour le climat et pour l'air, tout en jugeant le bois préférable aux ressources fossiles et en comprenant ceux qui le choisissent, notamment en zone reculée exposée aux coupures d'électricité. Il avait consacré une vidéo aux pompes à chaleur : [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/2-q2-q4-2025/4-pompe-a-chaleur-se-chauffer-sans|Pompe à chaleur : se chauffer sans détruire le climat !]].
+Il estime, à titre personnel, que les pompes à chaleur valent mieux pour le climat et pour l'air, tout en jugeant le bois préférable aux ressources fossiles et en comprenant ceux qui le choisissent, notamment en zone reculée exposée aux coupures d'électricité. Il avait consacré une vidéo aux pompes à chaleur : [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/3-q2-q4-2025/4-pompe-a-chaleur-se-chauffer-sans|Pompe à chaleur : se chauffer sans détruire le climat !]].
 
 > [51:10](https://www.youtube.com/watch?v=ynqv0JSl0dI&t=3070s) « je ne peux pas le conseiller sauf dans une situation où aucune alternative non fossile est possible. Je suis convaincu que des alternatives, comme les pompes à chaleur, sont meilleures pour le climat et la pollution de l’air »
 
@@ -46,7 +46,7 @@ Pour le logement moyen (environ 10 000 kWh par an), il faut environ 9 000 m² de
 
 ## 3. Le bois est plus pertinent en matériau qu'en énergie directe, mais la politique actuelle ne le fait pas en pratique.
 
-Meyer rappelle la conclusion de sa vidéo précédente ([[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/3-s1-s2-2026/3-bois-son-veritable-impact-climatique|Bois : son véritable impact climatique]]) : stocker du carbone dans des objets durables est plus intéressant que brûler. Pourtant, la majorité du bois récolté est brûlée, et la hiérarchie entre usages reste théorique.
+Meyer rappelle la conclusion de sa vidéo précédente ([[6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/4-s1-s2-2026/3-bois-son-veritable-impact-climatique|Bois : son véritable impact climatique]]) : stocker du carbone dans des objets durables est plus intéressant que brûler. Pourtant, la majorité du bois récolté est brûlée, et la hiérarchie entre usages reste théorique.
 
 > [4:43](https://www.youtube.com/watch?v=ynqv0JSl0dI&t=283s) « l’utilisation de bois en tant que matériau était bien plus intéressante, sur le plan climatique qu’une seule utilisation directe sous forme d’énergie. »
 

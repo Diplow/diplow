@@ -1,6 +1,6 @@
 ---
 title: "Climatisation : un désastre écologique ?"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/3-s1-s2-2026
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-2023-2026/4-s1-s2-2026
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que la climatisation n'est pas la solution à tout,
