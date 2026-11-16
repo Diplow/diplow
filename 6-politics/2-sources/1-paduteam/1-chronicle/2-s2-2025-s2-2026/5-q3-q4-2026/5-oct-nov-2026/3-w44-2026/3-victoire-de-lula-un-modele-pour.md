@@ -1,6 +1,6 @@
 ---
 title: "VICTOIRE DE LULA : UN MODÈLE POUR MELENCHON 2027 ?"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-w42-w44-2026/3-w44-2026
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/3-w44-2026
 owner: diplo
 preview: >-
   La PaduTeam soutient que la victoire de Lula enseigne à Mélenchon de ne pas

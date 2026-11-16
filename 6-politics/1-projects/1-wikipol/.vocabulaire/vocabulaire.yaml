@@ -324,6 +324,7 @@ kinds:
       bourse: {définition: "Société privée qui organise un marché financier et prélève une commission sur chaque transaction.", statut: proposé, introduit_par: heureka/N0OlW7G0Yqk.md}
       banque-centrale: {définition: "Institution qui émet la monnaie centrale et conduit la politique monétaire d'un État ou d'une zone monétaire.", statut: proposé, introduit_par: heureka/KSQpp3CNeZQ.md}
       groupe-d-experts: {définition: "Réunit des experts pour évaluer l'état des connaissances scientifiques sur un sujet, comme le GIEC.", statut: proposé, introduit_par: lereveilleur/jiIm5FPcGgE.md}
+      gestionnaire-de-réseau: {définition: "Exploite et développe un réseau d'énergie, comme le transport d'électricité.", statut: proposé, introduit_par: lereveilleur/cfqrxAUJ5bI.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -404,6 +405,7 @@ kinds:
       émeute: {définition: "Flambée de violences collectives dans la rue, avec incendies et affrontements, souvent dirigée contre un groupe ciblé.", statut: proposé, introduit_par: blast/-n5PKZJRfvo.md}
       concert: {définition: "Spectacle musical public donné devant un public, parfois à visée militante.", statut: proposé, introduit_par: blast/cUW7Zu2VSX0.md}
       accident-nucléaire: {définition: "Accident dans une installation nucléaire qui libère de la radioactivité dans l'environnement.", statut: proposé, introduit_par: lereveilleur/smGve9f6kpQ.md}
+      krach-éclair: {définition: "Chute brutale d'un marché, d'une durée de quelques minutes, souvent imputée à des algorithmes de trading.", statut: proposé, introduit_par: heureka/BuEyrskPUws.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}

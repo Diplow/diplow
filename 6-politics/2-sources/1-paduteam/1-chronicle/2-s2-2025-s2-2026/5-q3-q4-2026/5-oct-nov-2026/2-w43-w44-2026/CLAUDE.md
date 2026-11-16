@@ -1,6 +1,6 @@
 ---
 title: "W43 → W44 2026"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-w42-w44-2026/2-w43-w44-2026
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/2-w43-w44-2026
 owner: diplo
 preview: >-
   La PaduTeam lit la crise du 17 octobre comme la formation d'un « parti de
@@ -18,7 +18,7 @@ La Period se clôt sur l'extrême droite. À propos de la réélection de Bardel
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-w42-w44-2026/2-w43-w44-2026/1-attal-glucksmann-de-villiers-en-roue|ATTAL, GLUCKSMANN, DE VILLIERS : EN ROUE LIBRE SUR LE 17/10 !]] (2026-10-21)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-w42-w44-2026/2-w43-w44-2026/2-pablo-pillaud-vivien-nous-insulte-chez|PABLO PILLAUD-VIVIEN NOUS INSULTE CHEZ SAM ZIRAH !!]] (2026-10-22)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-w42-w44-2026/2-w43-w44-2026/3-la-gauche-anti-melenchon-doit-elle|LA GAUCHE ANTI-MÉLENCHON DOIT-ELLE FERMER SA GVEULE ?]] (2026-10-23)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-w42-w44-2026/2-w43-w44-2026/4-bardella-re-elu-president-du-rn|BARDELLA RÉ ÉLU PRÉSIDENT DU RN : ON DECRYPTE CE JET SETTEUR D’EXTRÊME DROITE]] (2026-10-26)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/2-w43-w44-2026/1-attal-glucksmann-de-villiers-en-roue|ATTAL, GLUCKSMANN, DE VILLIERS : EN ROUE LIBRE SUR LE 17/10 !]] (2026-10-21)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/2-w43-w44-2026/2-pablo-pillaud-vivien-nous-insulte-chez|PABLO PILLAUD-VIVIEN NOUS INSULTE CHEZ SAM ZIRAH !!]] (2026-10-22)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/2-w43-w44-2026/3-la-gauche-anti-melenchon-doit-elle|LA GAUCHE ANTI-MÉLENCHON DOIT-ELLE FERMER SA GVEULE ?]] (2026-10-23)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/2-w43-w44-2026/4-bardella-re-elu-president-du-rn|BARDELLA RÉ ÉLU PRÉSIDENT DU RN : ON DECRYPTE CE JET SETTEUR D’EXTRÊME DROITE]] (2026-10-26)

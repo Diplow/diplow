@@ -3,18 +3,19 @@ title: "Chronicle"
 parent: 6-politics/2-sources/1-paduteam/1-chronicle
 owner: diplo
 preview: >-
-  De 2019 à 2026, la PaduTeam ramène l'actualité à ses bases de classe, veut
-  une gauche de rupture réenracinée dans les classes populaires, refuse
-  l'union avec le PS, se range derrière Mélenchon et LFI pour 2027 et répète
-  que seule l'organisation dépasse la droite.
+  De 2019 à 2026, la PaduTeam défend une gauche de rupture réenracinée dans
+  les classes populaires, derrière Mélenchon et contre le PS et l'extrême
+  droite, et lit toute l'actualité en rapports de classe.
 ---
 # Chronicle
 
-Pendant toute la Chronicle, la PaduTeam lit discours, affaires et parcours en rapports de classe. Elle défend une gauche de rupture qui se réenracine dans les classes populaires, et elle oppose à cette gauche le PS, qu'elle refuse comme partenaire. Pour 2027, elle mise sur Mélenchon et sur LFI. Elle répète aussi que seule l'organisation permet de dépasser la droite.
+Sur toute sa Chronicle, la PaduTeam ramène acteurs, affaires et événements à leurs bases de classe. Son fil constant est une gauche de rupture qui doit se réenraciner dans les classes populaires, s'organiser collectivement et miser sur Mélenchon, face à un PS qu'elle veut voir rompre avec la gauche et à une extrême droite qu'elle combat.
 
-Le fil se précise avec le temps. Dans la première période, [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-2025/CLAUDE|2019-09-12 → 2025-09-01]], la PaduTeam pose ces bases : l'analyse de classe, le pari sur Mélenchon contre le PS, l'organisation. À partir de septembre 2025, [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/CLAUDE|2025-09-02 → 2026-10-30]] la montre plus offensive. Elle pousse la gauche de rupture à se radicaliser, refuse l'union avec le PS et fait de l'abondance sa réponse au RN.
+Les premières années, de [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-2025/CLAUDE|2019 → 2025]], posent ce cadre : lecture de classe des acteurs, importance de l'organisation, pari sur Mélenchon contre le PS et l'extrême droite. La dernière année, de [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/CLAUDE|S2 2025 → S2 2026]], garde la même ligne mais la durcit : elle pousse la gauche de rupture à se radicaliser derrière Mélenchon et à rompre avec le PS.
+
+Dans cette dernière période, la même grille s'applique à des sujets plus larges, des municipales à l'impérialisme américain. La présidentielle 2027 y est présentée comme une manœuvre du centre et du PS.
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-2025/CLAUDE|2019 → 2025]] (260 Digests, 2019-09-12 → 2025-09-01)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/CLAUDE|S2 2025 → S2 2026]] (350 Digests, 2025-09-02 → 2026-10-30)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/1-2019-2025/CLAUDE|2019 → 2025]] (261 Digests, 2019-09-12 → 2025-09-01)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/CLAUDE|S2 2025 → S2 2026]] (355 Digests, 2025-09-02 → 2026-11-06)

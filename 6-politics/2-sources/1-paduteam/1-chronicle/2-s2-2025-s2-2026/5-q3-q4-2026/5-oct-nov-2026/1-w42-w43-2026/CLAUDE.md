@@ -1,6 +1,6 @@
 ---
 title: "W42 → W43 2026"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-w42-w44-2026/1-w42-w43-2026
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/1-w42-w43-2026
 owner: diplo
 preview: >-
   La PaduTeam lit le 17 octobre comme une situation pré-révolutionnaire, juge
@@ -18,7 +18,7 @@ Côté adversaires, elle estime que la candidature de Natacha Polony, issue du s
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-w42-w44-2026/1-w42-w43-2026/1-natacha-polony-2027-va-t-elle|NATACHA POLONY 2027 : VA-T-ELLE DÉTRÔNER MÉLENCHON ??]] (2026-10-15)
-2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-w42-w44-2026/1-w42-w43-2026/2-louise-espoir-de-la-droite-ou|LOUISE : ESPOIR DE LA DROITE ou MYTHOMANE COMPULSIVE ?]] (2026-10-16)
-3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-w42-w44-2026/1-w42-w43-2026/3-17-10-la-macronie-en-panique|17/10 : LA MACRONIE EN PANIQUE FACE AU PEUPLE EN LUTTE !!]] (2026-10-19)
-4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-w42-w44-2026/1-w42-w43-2026/4-eric-coquerel-veut-il-rassurer-le|ERIC COQUEREL VEUT-IL RASSURER LE PATRONAT ?]] (2026-10-20)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/1-w42-w43-2026/1-natacha-polony-2027-va-t-elle|NATACHA POLONY 2027 : VA-T-ELLE DÉTRÔNER MÉLENCHON ??]] (2026-10-15)
+2. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/1-w42-w43-2026/2-louise-espoir-de-la-droite-ou|LOUISE : ESPOIR DE LA DROITE ou MYTHOMANE COMPULSIVE ?]] (2026-10-16)
+3. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/1-w42-w43-2026/3-17-10-la-macronie-en-panique|17/10 : LA MACRONIE EN PANIQUE FACE AU PEUPLE EN LUTTE !!]] (2026-10-19)
+4. [[6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/1-w42-w43-2026/4-eric-coquerel-veut-il-rassurer-le|ERIC COQUEREL VEUT-IL RASSURER LE PATRONAT ?]] (2026-10-20)
