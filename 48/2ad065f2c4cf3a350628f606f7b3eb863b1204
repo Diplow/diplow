@@ -1,0 +1,55 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_d048bba8d1284a::t_df40a297d1c51d 233
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-s1-s2-2025/1-comment-reparer-le-capitalisme-la-comptabilite.md
+  s_70464cecc704a8::t_6588258d3e96a8 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-s1-s2-2025/2-stratege-economique-ou-pas.md
+  s_70464cecc704a8::t_83c4eba18de05c 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-s1-s2-2025/3-un-chaos-necessaire-a-cause-du.md
+  s_70464cecc704a8::t_8de158edf37267 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-s1-s2-2025/4-argent-magique-pas-de-saison-2.md
+  s_70464cecc704a8::t_b46cf026eeee94 1-56
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-s1-s2-2025/5-budget-2026-en-finir-avec-la.md
+  s_70464cecc704a8::t_5d8ed877d6ff9b 1-83
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-s1-s2-2025/CLAUDE.md
+  s_70464cecc704a8::t_5e04b536c630ae 2-3,6-9,11,13,15,17,21-25
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/6-s1-s2-2026/1-electricite-la-vraie-methode-pour-payer.md
+  s_70464cecc704a8::t_0ac7be84e8889f 1-89
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/6-s1-s2-2026/2-quand-l-etat-controlait-les-financiers.md
+  s_70464cecc704a8::t_45d54c4a883384 1-98
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/6-s1-s2-2026/3-devenir-riche-grace-a-l-education.md
+  s_70464cecc704a8::t_82ed76457e54d7 1-89
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/6-s1-s2-2026/4-10-ans-de-macron-l-heure.md
+  s_70464cecc704a8::t_f48e1f8052ba74 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/6-s1-s2-2026/CLAUDE.md
+  s_70464cecc704a8::t_fb1dd23b90c66a 1-24
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/CLAUDE.md
+  s_70464cecc704a8::t_3d33ae2e1f1223 6-9,13,15,17,25-26
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/CLAUDE.md
+  s_70464cecc704a8::t_528ff7c70a1821 6-9,13,15,17,23
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_70464cecc704a8::t_59646aebe14b7d 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "482ad065f2c4cf3a350628f606f7b3eb863b1204",
+  "prompts": {},
+  "sessions": {
+    "s_70464cecc704a8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "58febe73-3099-4c4d-b1a2-eec7581b37f8",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_d048bba8d1284a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a3c13738-914e-41a3-a5d4-d91b93a68919",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
