@@ -1,0 +1,45 @@
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/2-q2-q3-2025/1-avr-mai-2025/3-w18-w19-2025/2-inde-pakistan-peut-on-arreter-l.md
+  s_ec452865830606::t_5df3c82d8802ed 1-58
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/2-q2-q3-2025/1-avr-mai-2025/3-w18-w19-2025/CLAUDE.md
+  s_ec452865830606::t_c2e5cdc24d38ff 6-9,13,15-17,22-26
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/2-q2-q3-2025/1-avr-mai-2025/CLAUDE.md
+  s_ec452865830606::t_e407c443ce1acb 6-9,13,15,17,23
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/2-q2-q3-2025/CLAUDE.md
+  s_ec452865830606::t_fc79626149fc08 6-9,13,15,17,21
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/3-w45-w46-2026/5-recompositions-geopolitique-et-politique-aux-etats.md
+  s_ec452865830606::t_d0ad288f89792f 1-73
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/3-w45-w46-2026/CLAUDE.md
+  s_ec452865830606::t_1e823942ff3401 7-10,14,16,18,26
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/4-11-13-nov-2026/1-le-laboratoire-infernal-de-gaza-avec.md
+  s_ec452865830606::t_cdd892345bf2c6 1-94
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/4-11-13-nov-2026/2-la-geopolitique-vue-par-melenchon.md
+  s_ec452865830606::t_11c14682e52e03 1-63
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/4-11-13-nov-2026/3-j-ai-lu-geofeminisme-si-tu.md
+  s_ec452865830606::t_17833e97790069 1-65
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/4-11-13-nov-2026/CLAUDE.md
+  s_ec452865830606::t_aab41b9b3d5dc1 1-22
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/CLAUDE.md
+  s_ec452865830606::t_b4755cf4eb8cd8 6,8-9,13,15-17,23-24
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/CLAUDE.md
+  s_ec452865830606::t_37821e7ea761d4 6-9,13,15,17,25
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/CLAUDE.md
+  s_ec452865830606::t_084b10961e1d03 6-9,13,15,17,22,25
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_ec452865830606::t_da0e5729402026 6-10,14,16,18,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f33490cbd40cf10f2b054d92727eebb446405ed9",
+  "prompts": {},
+  "sessions": {
+    "s_ec452865830606": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a11ca986f9156e26f",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
