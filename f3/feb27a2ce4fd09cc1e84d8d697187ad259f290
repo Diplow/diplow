@@ -1,0 +1,27 @@
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/4-s2-2018-s1-2019/4-le-solaire-thermique-a-concentration.md
+  s_09ea6281ad614c::t_c77f219f8de5ed 1-85
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/4-s2-2018-s1-2019/CLAUDE.md
+  s_09ea6281ad614c::t_d84fa2a373364c 6-9,13,15,17,24-25
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2020/CLAUDE.md
+  s_09ea6281ad614c::t_440a066b73a97c 6-9,13,15,17,24
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2020-s1-2021/1-q1-q2-2020/4-analyse-impact-sanitaire-de-fukushima-une.md
+  s_09ea6281ad614c::t_0067ed917e3d6f 41
+6-politics/2-sources/6-lereveilleur/1-chronicle/CLAUDE.md
+  s_09ea6281ad614c::t_ceafc966a227af 6-9,13,15,17,21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f3feb27a2ce4fd09cc1e84d8d697187ad259f290",
+  "prompts": {},
+  "sessions": {
+    "s_09ea6281ad614c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a13d4e71cb7f4aa12",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
