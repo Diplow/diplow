@@ -1,6 +1,6 @@
 ---
 title: "25 → 27 oct. 2026"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w44-2026/1-25-27-oct-2026
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/1-25-27-oct-2026
 owner: diplo
 preview: >-
   Blast montre un pouvoir et des médias qui imposent le récit de casseurs
@@ -17,7 +17,7 @@ Blast prolonge ce constat avec deux invités, dont elle reçoit les thèses sans
 
 ## Contenu
 
-1. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w44-2026/1-25-27-oct-2026/1-17-octobre-les-medias-et-l|🦏 17 OCTOBRE : LES MÉDIAS ET L'ÉTAT SORTENT L’ARTILLERIE LOURDE]] (2026-10-25)
-2. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w44-2026/1-25-27-oct-2026/2-pillages-on-s-agenouille-devant-des|PILLAGES : “ON S’AGENOUILLE DEVANT DES OBJETS ALORS QUE DES CRÂNES SONT FRACASSÉS”]] (2026-10-26)
-3. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w44-2026/1-25-27-oct-2026/3-24-octobre-police-et-neo-fascistes|24 OCTOBRE : POLICE ET NEO-FASCISTES, LES LIAISONS DANGEREUSES]] (2026-10-27)
-4. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w44-2026/1-25-27-oct-2026/4-faire-entendre-toutes-les-voix-reinventer|FAIRE ENTENDRE TOUTES LES VOIX : RÉINVENTER LA DÉMOCRATIE]] (2026-10-27)
+1. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/1-25-27-oct-2026/1-17-octobre-les-medias-et-l|🦏 17 OCTOBRE : LES MÉDIAS ET L'ÉTAT SORTENT L’ARTILLERIE LOURDE]] (2026-10-25)
+2. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/1-25-27-oct-2026/2-pillages-on-s-agenouille-devant-des|PILLAGES : “ON S’AGENOUILLE DEVANT DES OBJETS ALORS QUE DES CRÂNES SONT FRACASSÉS”]] (2026-10-26)
+3. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/1-25-27-oct-2026/3-24-octobre-police-et-neo-fascistes|24 OCTOBRE : POLICE ET NEO-FASCISTES, LES LIAISONS DANGEREUSES]] (2026-10-27)
+4. [[6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/1-25-27-oct-2026/4-faire-entendre-toutes-les-voix-reinventer|FAIRE ENTENDRE TOUTES LES VOIX : RÉINVENTER LA DÉMOCRATIE]] (2026-10-27)

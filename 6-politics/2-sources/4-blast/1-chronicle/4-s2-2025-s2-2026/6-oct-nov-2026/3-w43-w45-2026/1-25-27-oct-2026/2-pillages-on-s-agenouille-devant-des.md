@@ -1,6 +1,6 @@
 ---
 title: "PILLAGES : “ON S’AGENOUILLE DEVANT DES OBJETS ALORS QUE DES CRÂNES SONT FRACASSÉS”"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w44-2026/1-25-27-oct-2026
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/6-oct-nov-2026/3-w43-w45-2026/1-25-27-oct-2026
 owner: diplo
 preview: >-
   Pour le philosophe Norman Ajari, les pillages d'octobre sont une attaque
