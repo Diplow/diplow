@@ -1,6 +1,6 @@
 ---
 title: "Actionnaires VS Dirigeants : ce que veulent les entreprises - Heu?reka #27"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q4-2018
+parent: 6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/4-q3-q4-2018
 owner: diplo
 preview: >-
   Gilles Mitteau, d'après Roger Martin, soutient que les marchés financiers ne

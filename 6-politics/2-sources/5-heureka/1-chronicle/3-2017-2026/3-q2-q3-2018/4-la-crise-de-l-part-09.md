@@ -1,6 +1,6 @@
 ---
 title: "La crise de l'€ part 09 : EVERYOOONE!!! - Heu?reka #24-9"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q4-2018
+parent: 6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q3-2018
 owner: diplo
 preview: >-
   Gilles Mitteau soutient que la crise de l'euro en Espagne, au Portugal et en

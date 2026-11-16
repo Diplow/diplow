@@ -1,6 +1,6 @@
 ---
 title: "Milton Friedman en PLS - Heu?reka #26"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q4-2018
+parent: 6-politics/2-sources/5-heureka/1-chronicle/3-2017-2026/3-q2-q3-2018
 owner: diplo
 preview: >-
   Gilles Mitteau soutient que l'équation de Friedman est juste, mais qu'on
