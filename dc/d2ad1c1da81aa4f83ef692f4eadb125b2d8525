@@ -1,0 +1,25 @@
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-s1-s2-2026/5-climatisation-un-desastre-ecologique.md
+  s_70464cecc704a8::t_4a65a29dd9eb1d 1-77
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-s1-s2-2026/CLAUDE.md
+  s_70464cecc704a8::t_4a65a29dd9eb1d 6-9,13,15-17,24-25
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-s1-s2-2026/4-le-chauffage-au-bois-est-il.md
+  s_70464cecc704a8::t_4a65a29dd9eb1d 1-85
+6-politics/2-sources/6-lereveilleur/1-chronicle/CLAUDE.md
+  s_70464cecc704a8::t_4a65a29dd9eb1d 6-9,13,15-17,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dcd2ad1c1da81aa4f83ef692f4eadb125b2d8525",
+  "prompts": {},
+  "sessions": {
+    "s_70464cecc704a8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "58febe73-3099-4c4d-b1a2-eec7581b37f8",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
