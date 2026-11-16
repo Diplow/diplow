@@ -8,16 +8,14 @@ Les vaults Obsidian d'avant (PaduTeam, Boniface) sont figés dans `Legacy/` depu
 
 ## Quickstart
 
-```bash
-# 1. Créer le nœud d'une nouvelle source (6-politics/2-sources/<n>-machaine/)
-python Scripts/new_source.py --name "MaChaine" --slug "machaine" \
-    --youtube-url "https://www.youtube.com/@MaChaine/videos"
+Dans une session Claude Code ouverte sur le dépôt :
 
-# 2. Remplir le contexte éditorial (ton, pièges de lecture, principes)
-$EDITOR ../../2-sources/<n>-machaine/CLAUDE.md
+```
+/politics:wikipol:new-source https://www.youtube.com/@MaChaine     # le nœud, sa config, son contexte éditorial
+/politics:wikipol:ingest-source machaine                          # ses Raws, ses Digests, sa Chronicle
 ```
 
-La suite (récupérer les Raws, écrire les Digests) est le pipeline du projet « Sources from YouTube », en construction.
+La première crée `6-politics/2-sources/<n>-machaine/` et rédige son contexte éditorial ; la seconde récupère les sous-titres de la chaîne, écrit un Digest par vidéo et les range par date. Relancée plus tard, elle n'apporte que les vidéos publiées depuis. Les commandes qu'elles enchaînent (`wikipol fetch`, `digest`, `file`, `index`) sont décrites dans `CLAUDE.md`.
 
 ## Architecture
 

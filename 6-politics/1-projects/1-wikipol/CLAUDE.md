@@ -51,7 +51,7 @@ uv run wikipol fetch --source paduteam --dry-run   # les vidéos de la chaîne s
 uv run wikipol fetch --source paduteam --limit 3   # récupère les Raws des 3 plus récentes qui en manquent
 ```
 
-`wikipol fetch` liste la chaîne de la Source (`youtube.channel_url` de son `source.yaml`), garde les vidéos dont le bucket n'a pas le Raw, et les récupère des plus récentes aux plus anciennes : un frontmatter avec `youtube_id`, puis les sous-titres français par blocs de 30 s (`m:ss`, `h:mm:ss` au-delà d'une heure), comme les Raws venus de Drive. Il attend 8 s entre deux vidéos et s'arrête après 3 échecs de suite ; une vidéo sans sous-titres français sur YouTube n'en est pas un, elle est seulement remise au passage suivant, car YouTube peut les générer des heures après la mise en ligne ; `--limit N` borne les vidéos essayées, échecs compris. `--since AAAA-MM-JJ` ne garde que le passé récent d'une chaîne : la liste de la chaîne ne donne pas les dates, si bien qu'une vidéo publiée avant est récupérée sans être rangée dans le bucket, et trois de suite terminent la commande (une seule peut n'être que mal classée). Le Fetcher par défaut est yt-dlp, lancé depuis le Mac, car YouTube bloque les IP de datacenter ; `--fetcher transcript-api` (ou `WIKIPOL_FETCHER=transcript-api`) passe par l'API de Supadata, qui demande `WIKIPOL_TRANSCRIPT_API_KEY`.
+`wikipol fetch` liste la chaîne de la Source (`youtube.channel_url` de son `source.yaml`), garde les vidéos dont le bucket n'a pas le Raw, et les récupère des plus récentes aux plus anciennes : un frontmatter avec `youtube_id`, puis les sous-titres français par blocs de 30 s (`m:ss`, `h:mm:ss` au-delà d'une heure), comme les Raws venus de Drive. Il attend 8 s entre deux vidéos et s'arrête après 3 échecs de suite ; une vidéo sans sous-titres français sur YouTube n'en est pas un, elle est seulement remise au passage suivant, car YouTube peut les générer des heures après la mise en ligne ; `--limit N` borne les vidéos essayées, échecs compris. `--since AAAA-MM-JJ` ne garde que le passé récent d'une chaîne : la liste de la chaîne ne donne pas les dates, si bien qu'une vidéo publiée avant est récupérée sans être rangée dans le bucket, et trois de suite terminent la commande (une seule peut n'être que mal classée). Sans `--since`, la commande prend la date de la Source, `youtube.since` de son `source.yaml` : là où commence sa Chronicle (le 31 octobre 2023 pour Blast et Osons Causer, le 26 janvier 2024 pour PaduTeam, toute la chaîne pour Boniface, qui n'en a pas). Le run quotidien passe par là, si bien qu'il ne redescend jamais dans l'historique qu'une Source a laissé de côté. Le Fetcher par défaut est yt-dlp, lancé depuis le Mac, car YouTube bloque les IP de datacenter ; `--fetcher transcript-api` (ou `WIKIPOL_FETCHER=transcript-api`) passe par l'API de Supadata, qui demande `WIKIPOL_TRANSCRIPT_API_KEY`.
 
 Jusqu'à WIK-2, les transcripts vivaient sur Google Drive, sous `diplow:WikiPol/Sources/<NomSource>/Sources/Transcripts/` (remote rclone `diplow`). `wikipol copy-from-drive` les a copiés dans le bucket le 2026-10-31 : 609 sur 621. Les 12 autres (11 sans `youtube_id` retrouvable, un doublon) sont listés dans la pull request de WIK-2. La commande prend l'identifiant dans le frontmatter du transcript, sinon dans les fiches `Videos/` et l'inventaire du vault figé ; relancée, elle ne copie que ce qui manque, et signale sans le remplacer un Raw du bucket qui diffère de Drive. Drive n'est plus qu'une archive : on n'y pousse plus rien.
 
@@ -147,7 +147,7 @@ Le runner est un clone dédié, `~/wikipol-runner`, jamais le dossier Obsidian :
 | WikiPol | `Scripts/` | Le paquet uv `wikipol` du pipeline (`src/`, `tests/`), l'agent launchd du run quotidien et ses scripts d'installation (`launchd/`), et les scripts Python legacy (ingestion, bootstrap), qui lisent `source.yaml` |
 | WikiPol | `Legacy/` | Les vaults d'avant, figés : taxonomie locale (`BUILD.md`), fiches (`Videos/`, `Individus/`, `Concepts/`…), tracker |
 | Source | `CLAUDE.md` | Contexte éditorial spécifique : qui produit, ton, pièges |
-| Source | `source.yaml` | Paramètres techniques, `content_types` activés (whitelist stricte), `legacy.vault`, ses animateurs (`source.hosts`) |
+| Source | `source.yaml` | Paramètres techniques, `content_types` activés (whitelist stricte), `legacy.vault`, ses animateurs (`source.hosts`), la date où commence sa Chronicle (`youtube.since`) |
 | Source | `1-chronicle/` | La Chronicle : les Digests rangés par date, en Periods |
 | Source | `.skills/` (optionnel) | Skills propres à la source qui surchargent les skills génériques par même nom, regroupées par six |
 
@@ -170,14 +170,22 @@ Chaque source déclare ses `content_types` activés dans son `source.yaml` (whit
 
 Voir `BUILD.md` pour la classification raw/basic/advanced et la spec frontmatter de chaque type.
 
-## Créer une nouvelle source
+## Créer une nouvelle source, et l'ingérer
+
+Deux skills de session, rangées avec les autres dans `.skills/6-politics/1-wikipol/` à la racine du dépôt, enchaînent les commandes ci-dessus :
+
+- **`/politics:wikipol:new-source <URL de la chaîne>`** regarde la chaîne, fixe son nom, son slug, ses animateurs et la date où commence sa Chronicle, crée le nœud avec `Scripts/new_source.py`, récupère cinq Raws, rédige le contexte éditorial à partir de la page de la chaîne et de ces Raws, et l'éprouve sur un Digest.
+- **`/politics:wikipol:ingest-source <slug> [<slug> …]`** récupère les Raws qui manquent (`wikipol fetch`), fait écrire un Digest par Raw (`wikipol digest`, un agent par Raw, un agent de lot par Source), les range six par six (`wikipol file`), commite, pousse, puis met l'index à jour (`wikipol index`). Sur une Source neuve, elle prend tout l'historique ; relancée, elle reprend où elle s'était arrêtée, puis n'apporte que les vidéos publiées depuis. Elle n'ouvre ni ne fusionne de pull request.
+
+`wikipol run` fait le même trajet seul, chaque jour, dans le clone du runner, sans relecture des Digests ; ces skills sont pour une session, où un agent relit chaque Digest et signale ceux qui disent faux.
 
 ```bash
-python Scripts/new_source.py --name "NomSource" --slug "nomsource" \
-    --youtube-url "https://www.youtube.com/@Chaine/videos"
+python3 Scripts/new_source.py --name "NomSource" --slug "nomsource" \
+    --youtube-url "https://www.youtube.com/@Chaine/videos" \
+    [--attribution "Prénom Nom"] [--hosts "Prénom Nom"] [--since 2023-10-31]
 ```
 
-Le script crée le nœud de la Source au premier numéro libre de `6-politics/2-sources/` (`source.yaml`, `CLAUDE.md` éditorial à remplir, `1-chronicle/` vide) et refuse une septième Source tant qu'on n'a pas regroupé.
+Le script, que `new-source` appelle, crée le nœud de la Source au premier numéro libre de `6-politics/2-sources/` (`source.yaml`, `CLAUDE.md` éditorial à remplir, `1-chronicle/` vide) et refuse une septième Source tant qu'on n'a pas regroupé.
 
 ## Principes d'auto-amélioration
 

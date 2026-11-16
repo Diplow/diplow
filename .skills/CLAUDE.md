@@ -25,6 +25,7 @@ My skills are grouped by the domain they serve, numbered like the domains on the
 |---|---|---|---|
 | 3 | [[.skills/3-games/CLAUDE\|Games]] | `games:` | Playing and building decks: Riftbound for now |
 | 4 | [[.skills/4-softeng/CLAUDE\|Software Engineering]] | `softeng:` | Shipping, reviewing, and skills about skills |
+| 6 | [[.skills/6-politics/CLAUDE\|Politics]] | `politics:` | wikipol: adding a Source, ingesting its videos into its Chronicle |
 
 Three references are shared by every skill and cited by their path from the repo root: [[.skills/writing-tone\|writing-tone]] (the voice), [[.skills/model-tiers\|model-tiers]] (which model a subagent runs on) and [[.skills/conductor-workspaces\|conductor-workspaces]] (branches and worktrees).
 

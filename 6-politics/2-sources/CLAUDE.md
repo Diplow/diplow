@@ -24,7 +24,7 @@ The media whose output I want to argue from, each one a **Source** in the sense 
 | Slot | What goes there |
 |---|---|
 | `CLAUDE.md` | The Source's Tile and its editorial context: who speaks, the tone, the traps a reader falls into. Whoever writes a Digest reads it first |
-| `source.yaml` | Its config, read through wikipol's `Scripts/source_config.py`: the channel, the model its pipeline runs, and `legacy.vault`, the frozen vault it came from, if any |
+| `source.yaml` | Its config, read through wikipol's `Scripts/source_config.py`: the channel, the model its pipeline runs, `youtube.since`, the date its Chronicle starts when it doesn't take the whole channel, and `legacy.vault`, the frozen vault it came from, if any |
 | `1-chronicle/` | Its Chronicle: the Digests filed by date in a tree of Periods that split by count ([[6-politics/1-projects/1-wikipol/docs/adr/0001-chronicle-splits-by-count\|ADR 0001]]) |
 | `2-` to `6-` | Free, for a structure that emerges from the Digests rather than one decided up front |
 | `.skills/` | The Source's own skills, each overriding wikipol's skill of the same name, grouped by six |
@@ -32,5 +32,7 @@ The media whose output I want to argue from, each one a **Source** in the sense 
 ## Six at most
 
 This node takes six Sources. The seventh means regrouping first, by kind of media or by country, whichever the seven make obvious, and `Scripts/new_source.py` refuses to create it until then.
+
+A Source is added with `/politics:wikipol:new-source <channel URL>` and filled with `/politics:wikipol:ingest-source <slug>`, the two skills of [[.skills/6-politics/1-wikipol/CLAUDE|.skills/6-politics/1-wikipol]].
 
 The Obsidian vaults these Sources started as are frozen in `wikipol/Legacy/`: read as extra input, never written.
