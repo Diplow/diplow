@@ -1,6 +1,6 @@
 ---
 title: "Le changement climatique, un constat ! MaP#10"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/3-aout-sept-2015
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/3-q3-q4-2015
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que le changement climatique est un constat mesuré,
