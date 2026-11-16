@@ -1,0 +1,24 @@
+6-politics/2-sources/5-heureka/source.yaml
+  s_70e2b8820e4c39::t_679ac0f28f4564 1-54
+6-politics/2-sources/5-heureka/CLAUDE.md
+  s_70e2b8820e4c39::t_679ac0f28f4564 1-5,11,14,19,30-31,33-35,37,42,44,46,48-50,57-59,61-73
+  s_70e2b8820e4c39::t_62311958322752 6-10,12-13,15-18,20-29,32,36,38-41,43,45,47,51-56,60
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_70e2b8820e4c39::t_679ac0f28f4564 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "893a389644075f7c354899f2018f71dd55bd0148",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
