@@ -1,0 +1,59 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_d048bba8d1284a::t_c17cabd8031b2c 232
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/3-q3-2023-q1-2024/1-i-surproduction-crise-economique-comment-c.md
+  s_e3fb3118d39976::t_f7256a33d7c9d5 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/3-q3-2023-q1-2024/2-ii-l-etalon-or-c-est.md
+  s_e3fb3118d39976::t_2d20c09281218d 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/3-q3-2023-q1-2024/3-hein.md
+  s_e3fb3118d39976::t_d9d8910adc762e 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/3-q3-2023-q1-2024/4-pouvons-nous-faire-l-economie-du.md
+  s_e3fb3118d39976::t_62c566df8f6fc2 1-64
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/3-q3-2023-q1-2024/CLAUDE.md
+  s_e3fb3118d39976::t_c98135ad93891c 2-3,6-8,10,12,14,18-21
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/4-q2-q4-2024/1-iii-le-krach-de-1929-anatomie.md
+  s_e3fb3118d39976::t_8a8f234bdcafb8 1-90
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/4-q2-q4-2024/2-la-france-est-elle-un-enfer.md
+  s_e3fb3118d39976::t_7b60389b2a0718 1-60
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/4-q2-q4-2024/3-une-breve-histoire-de-la-comptabilite.md
+  s_e3fb3118d39976::t_1fab745b667ea1 1-72
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/4-q2-q4-2024/CLAUDE.md
+  s_e3fb3118d39976::t_283a7f594945be 1-23
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-2025-2026/1-comment-reparer-le-capitalisme-la-comptabilite.md
+  s_e3fb3118d39976::t_4c7a314b7ffdad 1-82
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-2025-2026/2-stratege-economique-ou-pas.md
+  s_e3fb3118d39976::t_acac32834b8ff3 1-81
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-2025-2026/3-10-ans-de-macron-l-heure.md
+  s_e3fb3118d39976::t_5769a1a9691b8d 3
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-2025-2026/CLAUDE.md
+  s_e3fb3118d39976::t_aa7aed08460a6d 1-21
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/CLAUDE.md
+  s_e3fb3118d39976::t_534469f40729ba 6-9,13,15,17,23-25
+6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/CLAUDE.md
+  s_e3fb3118d39976::t_9bca2983167dfa 6-9,13,15,17,23
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_e3fb3118d39976::t_ec10f72b8f66be 6-9,13,15-17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "83742aecd8acad557107270b9f836781bec842b7",
+  "prompts": {},
+  "sessions": {
+    "s_d048bba8d1284a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a3c13738-914e-41a3-a5d4-d91b93a68919",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_e3fb3118d39976": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a6fe3b9ee032e7d4f",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
