@@ -1,0 +1,57 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_d048bba8d1284a::t_988f5d7b181c1c 424-425
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-q4-2022-q1-2023/1-immobilier-inflation-l-inflation-est-elle.md
+  s_e3fb3118d39976::t_34d8ee0f5a1ea9 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-q4-2022-q1-2023/2-immobilier-inflation-c-est-pas-ce.md
+  s_e3fb3118d39976::t_98d35350b3c4b7 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-q4-2022-q1-2023/3-les-super-profits-des-fournisseurs-alternatifs.md
+  s_e3fb3118d39976::t_c1cf171b8184d5 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-q4-2022-q1-2023/4-pourquoi-fixer-le-prix-sur-la.md
+  s_e3fb3118d39976::t_a48a7d8338c50a 1-66
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-q4-2022-q1-2023/5-ce-que-le-gouvernement-ne-dit.md
+  s_e3fb3118d39976::t_570a0b6d3597f3 1-75
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/5-q4-2022-q1-2023/CLAUDE.md
+  s_e3fb3118d39976::t_14a772052e40f7 2-3,6-9,11,13,15,17,21-25
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/6-2023-2026/1-les-traites-europeens-sont-ils-reellement.md
+  s_e3fb3118d39976::t_3de99dc6fd131f 1-95
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/6-2023-2026/2-la-faillite-de-silicon-valley-bank.md
+  s_e3fb3118d39976::t_86fe5f18541f85 1-82
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/6-2023-2026/3-pourquoi-l-egoisme-seul-n-est.md
+  s_e3fb3118d39976::t_1d29b2741e4afc 1-53
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/6-2023-2026/4-la-france-doit-elle-sortir-du.md
+  s_e3fb3118d39976::t_6cb4733f93fad4 1-86
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/6-2023-2026/5-i-surproduction-crise-economique-comment-c.md
+  s_e3fb3118d39976::t_958a714ba81763 1-77
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/6-2023-2026/6-10-ans-de-macron-l-heure.md
+  s_e3fb3118d39976::t_bc906f67709a3e 3
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/6-2023-2026/CLAUDE.md
+  s_e3fb3118d39976::t_2873999a9a9da0 1-26
+6-politics/2-sources/5-heureka/1-chronicle/6-2020-2026/CLAUDE.md
+  s_e3fb3118d39976::t_3910088dbd798d 6-9,13,15,17,25-26
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_e3fb3118d39976::t_5711bec0aebba2 6-9,13,15,17,26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7869a476906f8bc6c91770edc4ad12203cec5398",
+  "prompts": {},
+  "sessions": {
+    "s_d048bba8d1284a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a3c13738-914e-41a3-a5d4-d91b93a68919",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_e3fb3118d39976": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a6fe3b9ee032e7d4f",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
