@@ -26,7 +26,7 @@ mentions:
 
 ## 1. L'humanité est devenue une force dominante de l'évolution de la planète, ce qui fonde la proposition d'une époque de l'Anthropocène.
 
-Meyer s'appuie sur la grande accélération des activités humaines et sur leurs impacts environnementaux (climat, océans, biodiversité, usage des sols). Il en a déjà traité plusieurs sur la chaîne, comme la surpêche dans [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/4-q4-2016-q2-2017/3-poissons-et-surpeche-map-30|Poissons et surpêche MaP#30]].
+Meyer s'appuie sur la grande accélération des activités humaines et sur leurs impacts environnementaux (climat, océans, biodiversité, usage des sols). Il en a déjà traité plusieurs sur la chaîne, comme la surpêche dans [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/6-q4-2016-q2-2017/3-poissons-et-surpeche-map-30|Poissons et surpêche MaP#30]].
 
 > [5:32](https://www.youtube.com/watch?v=n85obqP4CGE&t=332s) « Aujourd’hui, les activités humaines émettent en moyenne 130 fois plus de CO2 que les volcans. »
 

@@ -1,6 +1,6 @@
 ---
 title: "Les Métaux MaP#29"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/4-q4-2016-q2-2017
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/6-q4-2016-q2-2017
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient qu'une vingtaine de métaux sont critiques (réserves
@@ -28,7 +28,7 @@ relations:
 
 ## 1. Meyer montre que la ressource limitée n'est pas le métal lui-même mais les minerais assez concentrés pour être exploitables, et que leur teneur baisse.
 
-On exploite d'abord les gisements les plus concentrés, puis on se rabat sur des minerais plus pauvres, ce qui coûte toujours plus d'énergie. C'est la même logique que pour le pétrole, vue dans [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/4-q4-2016-q2-2017/1-le-pic-petrolier-map-28|Le Pic Pétrolier MaP#28]].
+On exploite d'abord les gisements les plus concentrés, puis on se rabat sur des minerais plus pauvres, ce qui coûte toujours plus d'énergie. C'est la même logique que pour le pétrole, vue dans [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/6-q4-2016-q2-2017/1-le-pic-petrolier-map-28|Le Pic Pétrolier MaP#28]].
 
 > [1:35](https://www.youtube.com/watch?v=XLRUcdMbZ_M&t=95s) « Vu qu’on utilise d’abord les minerais les plus concentrés, il faut se rabattre sur des minerais de moins en moins concentrés au fur et à mesure de l’exploitation. »
 

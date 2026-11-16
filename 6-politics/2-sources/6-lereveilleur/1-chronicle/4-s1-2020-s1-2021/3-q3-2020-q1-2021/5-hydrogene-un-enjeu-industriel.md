@@ -42,7 +42,7 @@ L'ammoniac, base des engrais azotés, en est l'exemple : le procédé Haber-Bosc
 
 ## 3. Raffiner le pétrole avec de l'hydrogène n'est pas illogique : l'utiliser directement fournirait environ 50 fois moins d'énergie.
 
-Meyer parle d'un calcul de coin de table, et le renvoie à une autre vidéo pour l'hydrogène dans les transports. Il admet qu'il faudra consommer de moins en moins de pétrole. Sur la fin du pétrole, voir [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/4-q4-2016-q2-2017/1-le-pic-petrolier-map-28|Le Pic Pétrolier MaP#28]] : le raffinage durera encore plusieurs décennies.
+Meyer parle d'un calcul de coin de table, et le renvoie à une autre vidéo pour l'hydrogène dans les transports. Il admet qu'il faudra consommer de moins en moins de pétrole. Sur la fin du pétrole, voir [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/6-q4-2016-q2-2017/1-le-pic-petrolier-map-28|Le Pic Pétrolier MaP#28]] : le raffinage durera encore plusieurs décennies.
 
 > [13:54](https://www.youtube.com/watch?v=NB9We5wwGPo&t=834s) « Donc si on utilisait directement l’hydrogène utilisé pour le raffinage, on aurait 50 fois moins d’énergie mise à disposition de nos sociétés qu’en l’utilisant pour raffiner le pétrole. »
 

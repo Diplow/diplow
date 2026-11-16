@@ -1,6 +1,6 @@
 ---
 title: "Le Pic Pétrolier MaP#28"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/4-q4-2016-q2-2017
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/6-q4-2016-q2-2017
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que le pic pétrolier est une certitude mathématique

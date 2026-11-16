@@ -1,6 +1,6 @@
 ---
 title: "La part de l'homme dans le changement climatique MaP#13"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/3-q3-q4-2015
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/4-nov-2015-janv-2016
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que l'homme est responsable de la majorité du

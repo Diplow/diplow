@@ -1,6 +1,6 @@
 ---
 title: "Comment avoir une société plus juste ? (méritocratie 3/3) MaP#8"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/3-q3-q4-2015
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2017/3-aout-oct-2015
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient qu'une société plus juste fonde ses distinctions
