@@ -1,6 +1,6 @@
 ---
 title: "L'argument du taux d’intérêt caché - Heu?reka"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/4-2020-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/4-mai-juin-2020
 owner: diplo
 preview: >-
   Gilles Mitteau examine l'argument de Claudio Borio (BRI) : financer une

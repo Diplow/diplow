@@ -1,6 +1,6 @@
 ---
 title: "Une Banque Centrale peut-elle faire faillite ? - Heu?reka"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/4-2020-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/4-mai-juin-2020
 owner: diplo
 preview: >-
   Gilles Mitteau soutient qu'une banque centrale ne peut pas faire faillite :
