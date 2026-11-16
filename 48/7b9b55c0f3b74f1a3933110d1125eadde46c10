@@ -1,0 +1,59 @@
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/4-hydrogene-un-enjeu-industriel.md
+  s_ea3c64365d1a84::t_23ddaf33f56b59 1-73
+6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/CLAUDE.md
+  s_ea3c64365d1a84::t_a08fae2c51d1ce 6-9,13,15,17,24
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022/1-voiture-electrique-un-probleme-de-batterie.md
+  s_ea3c64365d1a84::t_32de0e94b0f42a 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022/2-la-voiture-electrique-est-elle-ecologique.md
+  s_ea3c64365d1a84::t_55e3b35d6a7099 1-85
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022/3-comprendre-le-giec-et-ses-rapports.md
+  s_ea3c64365d1a84::t_4666e361877a78 1-88
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022/4-les-terres-rares.md
+  s_ea3c64365d1a84::t_c842f8580d8b3c 1-79
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022/5-quelle-electricite-pour-demain.md
+  s_ea3c64365d1a84::t_7aeb57797a0d76 1-82
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022/6-eolien-en-mer.md
+  s_ea3c64365d1a84::t_923f9cb4c250e8 1-85
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022/CLAUDE.md
+  s_ea3c64365d1a84::t_4b661d97cd70b5 1-26
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-q2-q4-2025/1-co2-rechauffement-climatique-la-meilleure-approche.md
+  s_ea3c64365d1a84::t_46500b2dd62d04 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-q2-q4-2025/2-faut-il-vraiment-culpabiliser-en-regardant.md
+  s_ea3c64365d1a84::t_a9feca4fb6de73 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-q2-q4-2025/3-des-machines-qui-retirent-directement-le.md
+  s_ea3c64365d1a84::t_5a37042d1038cf 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-q2-q4-2025/4-pompe-a-chaleur-se-chauffer-sans.md
+  s_ea3c64365d1a84::t_c1e524f66a8e37 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-q2-q4-2025/CLAUDE.md
+  s_ea3c64365d1a84::t_41b5159bcd4163 3,15,19-22
+6-politics/2-sources/6-lereveilleur/1-chronicle/4-s1-s2-2026/1-garder-sa-voiture-thermique-bon-pour.md
+  s_ea3c64365d1a84::t_d70d383872fb36 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/4-s1-s2-2026/2-climat-l-immense-defi-du-fret.md
+  s_ea3c64365d1a84::t_6ca11acfad5a52 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/4-s1-s2-2026/3-bois-son-veritable-impact-climatique.md
+  s_ea3c64365d1a84::t_7419b61b69edee 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/4-s1-s2-2026/4-le-chauffage-au-bois-est-il.md
+  s_ea3c64365d1a84::t_7a3804993b4688 3,31,49
+6-politics/2-sources/6-lereveilleur/1-chronicle/4-s1-s2-2026/5-climatisation-un-desastre-ecologique.md
+  s_ea3c64365d1a84::t_e0d5520e78080c 3
+6-politics/2-sources/6-lereveilleur/1-chronicle/4-s1-s2-2026/CLAUDE.md
+  s_ea3c64365d1a84::t_c31b587878a932 3,13,15,17,21-25
+6-politics/2-sources/6-lereveilleur/1-chronicle/CLAUDE.md
+  s_ea3c64365d1a84::t_bdfe3ccae93457 6-9,13,15,17,21-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "487b9b55c0f3b74f1a3933110d1125eadde46c10",
+  "prompts": {},
+  "sessions": {
+    "s_ea3c64365d1a84": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ae691c1ff8484b739",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
