@@ -1,6 +1,6 @@
 ---
 title: "Pompe à chaleur : se chauffer sans détruire le climat !"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-q2-q4-2025
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/3-q2-q4-2025
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que la pompe à chaleur, au COP saisonnier d'environ

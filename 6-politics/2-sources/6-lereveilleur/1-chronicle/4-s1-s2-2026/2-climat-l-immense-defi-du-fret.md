@@ -1,6 +1,6 @@
 ---
 title: "Climat : l’immense défi du fret maritime"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/3-s1-s2-2026
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/4-s1-s2-2026
 owner: diplo
 preview: >-
   Rodolphe Meyer montre que le transport maritime est très efficace et peu
