@@ -1,0 +1,39 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_70e2b8820e4c39::t_a8412a5951e90d 226,321
+6-politics/2-sources/5-heureka/1-chronicle/1-les-traders-heu-reka-1.md
+  s_300bdc193adc32::t_cde9fe69402a69 1-56
+6-politics/2-sources/5-heureka/1-chronicle/2-la-faillite-de-lehman-brothers-2.md
+  s_300bdc193adc32::t_a90231faa80cda 1-86
+6-politics/2-sources/5-heureka/1-chronicle/3-le-chomage-pour-les-nuls-comprendre.md
+  s_300bdc193adc32::t_4c92c6f68e6150 1-69
+6-politics/2-sources/5-heureka/1-chronicle/4-un-anthropologue-chez-les-traders-part.md
+  s_300bdc193adc32::t_062ad04104f4c9 1-79
+6-politics/2-sources/5-heureka/1-chronicle/5-10-ans-de-macron-l-heure.md
+  s_300bdc193adc32::t_21afc1d63387fb 1-94
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_300bdc193adc32::t_850b267998aa9d 2,6-10,14,16-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "be0bdd54c9cb2d2f80205ff32046336bc75c903b",
+  "prompts": {},
+  "sessions": {
+    "s_300bdc193adc32": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a1a5ff1fc0737c899",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
