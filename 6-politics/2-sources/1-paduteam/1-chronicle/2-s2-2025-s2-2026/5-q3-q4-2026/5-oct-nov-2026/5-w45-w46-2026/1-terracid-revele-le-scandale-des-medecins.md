@@ -1,6 +1,6 @@
 ---
 title: "TERRACID RÉVÈLE LE SCANDALE DES MÉDECINS EN FRANCE"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/4-w45-2026
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/5-w45-w46-2026
 owner: diplo
 preview: >-
   La PaduTeam s'empare du calvaire médical de Terracid, quatre jours de
