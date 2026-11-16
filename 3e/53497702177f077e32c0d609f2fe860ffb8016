@@ -1,0 +1,45 @@
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/3-mars-avr-2020/1-coronavirus-chaque-jour-compte.md
+  s_67a1239b8e0f32::t_5bda06b897f743 3
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/3-mars-avr-2020/2-ou-va-l-argent-du-krach.md
+  s_67a1239b8e0f32::t_17b41dc2239d6f 1-47
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/3-mars-avr-2020/3-le-plan-pour-sauver-l-economie.md
+  s_67a1239b8e0f32::t_d9c942cffbd5dd 1-62
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/3-mars-avr-2020/4-le-plan-pour-sauver-les-entreprises.md
+  s_67a1239b8e0f32::t_59173e5fbdfe32 1-79
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/3-mars-avr-2020/5-l-apocalypse-par-l-inflation-ou.md
+  s_67a1239b8e0f32::t_7a74b6f455bfb2 1-70
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/3-mars-avr-2020/6-prix-negatifs-du-petrole-heu-reka.md
+  s_67a1239b8e0f32::t_ac1b415cedc554 1-58
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/3-mars-avr-2020/CLAUDE.md
+  s_67a1239b8e0f32::t_8f60dbe5510d9a 1-26
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/4-2020-2026/1-une-banque-centrale-peut-elle-faire.md
+  s_67a1239b8e0f32::t_56d873358ee920 1-57
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/4-2020-2026/2-l-argument-du-taux-d-interet.md
+  s_67a1239b8e0f32::t_82af0c85ae0af7 1-62
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/4-2020-2026/3-un-anthropologue-chez-les-traders-part.md
+  s_67a1239b8e0f32::t_56b78666bcd57b 3
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/4-2020-2026/4-10-ans-de-macron-l-heure.md
+  s_67a1239b8e0f32::t_066ad5070b2531 3
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/4-2020-2026/CLAUDE.md
+  s_67a1239b8e0f32::t_2f48ee64e5e327 3,6-9,13,15,17,21-24
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/CLAUDE.md
+  s_67a1239b8e0f32::t_57dca897ae306b 6-9,13,15,17,23-24
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_67a1239b8e0f32::t_4ad91bb25e9db6 6-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3e53497702177f077e32c0d609f2fe860ffb8016",
+  "prompts": {},
+  "sessions": {
+    "s_67a1239b8e0f32": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a09a9a898fddabdfc",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
