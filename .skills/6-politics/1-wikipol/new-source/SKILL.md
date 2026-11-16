@@ -26,9 +26,7 @@ The scripts named `scripts/…` are this skill's; those named `ingest-source/scr
 scripts/look.sh <channel URL or @handle>
 ```
 
-It prints the channel's name, handle and About text, how many videos its Videos tab lists and how long they run, the twelve newest and twelve oldest titles, the Sources the repo holds and the node the new one takes. It needs `uv` and the network. Exit 2 says why it stopped: the channel can't be listed, it is a Source already, or the Sources node holds six, in which case regrouping them comes first and is the user's decision.
-
-The branch must be a working branch, since step 7 commits: on the default branch, `git switch -c wikipol/new-source-<slug>` first. A Conductor workspace is already on its own (`.skills/conductor-workspaces.md`).
+It prints the channel's name, handle and About text, how many videos its Videos tab lists and how long they run, the twelve newest and twelve oldest titles, the Sources the repo holds and the node the new one takes. It needs `uv`, `git`, `claude`, the bucket's settings and the network. Exit 2 says why it stopped: one of those is missing, the channel can't be listed, it is a Source already, or the Sources node holds six, in which case regrouping them comes first and is the user's decision. Relay the message and stop.
 
 ## 2. Settle the config
 
@@ -54,15 +52,17 @@ python3 Scripts/new_source.py --name "<name>" --slug "<slug>" \
 
 It creates `6-politics/2-sources/<n>-<slug>/` at the first free number and refuses a slug already taken.
 
+The node is committed in step 7, so the branch must be a working branch: on the default branch, `git switch -c wikipol/new-source-<slug>` now. A Conductor workspace is already on its own (`.skills/conductor-workspaces.md`).
+
 ## 4. Store five Raws and have them read
 
 ```bash
-scripts/sample.sh <slug>     # about two minutes
+scripts/sample.sh <slug>     # about two minutes; 600000 ms timeout, it may wait behind another fetch
 ```
 
-It stores five Raws spread evenly over the channel's listing, from its newest video to its oldest, and copies them to a temporary folder, printing each one's path, date, length and title. Spread, because a channel's five newest videos are often one series: Heu?reka's were four episodes of a show it co-hosts, and none of the scripted dialogues that make up most of the channel. It waits its turn behind any other fetch on the machine, and takes the next video over when one has no French captions.
+It stores five Raws spread evenly over the channel's listing, from its newest video to its oldest, and copies them to a temporary folder, printing each one's path, date, length and title. Spread, because a channel's five newest videos are often one series: Heu?reka's were four episodes of a show it co-hosts, and none of the scripted dialogues that make up most of the channel. It waits its turn behind any other fetch on the machine, and takes the next video over when one has no French captions. A video published before the Source's `since` is copied out to be read and not stored, so the bucket holds nothing the Chronicle will not.
 
-Exit 2 means it stored none: YouTube is refusing the machine, or the channel has no French captions. Stop there and report. Without a Raw there is nothing to ground the editorial context on, and a Source digested on the bare template is what this skill exists to prevent. The node stays, uncommitted, for the next try.
+Exit 2 means it has no Raw to show: a setting is missing, YouTube is refusing the machine, or the channel has no French captions. Any other exit that is not 0 is a crash. Either way, relay its last line, stop there and report. Without a Raw there is nothing to ground the editorial context on, and a Source digested on the bare template is what this skill exists to prevent. The node stays, uncommitted, for the next try.
 
 Then delegate the reading to one **work-tier** subagent (the session's model: what it reports decides how every Digest of the Source is written, and five Raws are up to 40,000 words that have no place in this session). Give it the output of `look.sh`, the five lines `sample.sh` printed, and the six questions of `references/editorial.md`, "What the sweep returns". It answers in 40 lines.
 
@@ -82,7 +82,7 @@ Pick the sampled Raw of the format the channel makes most. When the sweep found 
 
 Read the staged Digest against the three checks of `references/editorial.md`, "The proof", and follow its rule for a miss: fix the file, delete the staged Digest, write it again, two rounds at most. A Digest that passes stays staged for `ingest-source` to file.
 
-`digest.sh` exits 1 when the checker refused the Digest twice. That is about that Raw, not the editorial file: try another sampled Raw.
+`digest.sh` exits 1 when the checker refused the Digest twice. That is about that Raw, not the editorial file: try another sampled Raw. Exit 2 means it could not run (`claude`, the bucket): run it once more, and if it fails again go to step 7 with the proof missing and say so in the report, quoting its last line.
 
 ## 7. List the Source, verify, commit
 

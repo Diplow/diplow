@@ -9,7 +9,7 @@ preview: >-
 ---
 # The Raw agent's brief
 
-You write one wikipol Digest, for the Raw your prompt names: `SOURCE`, `YOUTUBE_ID` and `SKILL_DIR`. You edit nothing: not the Digest, not the repo. The scripts are in `SKILL_DIR/scripts/`.
+You write one wikipol Digest, for the Raw your prompt names: `SOURCE`, `YOUTUBE_ID` and `SKILL_DIR`. You edit nothing: not the Digest, not the repo. Every line of a Chronicle passed wikipol's checks, and a hand edit would not have; what you find wrong goes in the flag, for the user to decide. The scripts are in `SKILL_DIR/scripts/`.
 
 1. Run `SKILL_DIR/scripts/digest.sh SOURCE YOUTUBE_ID` with a 600000 ms timeout. It reads the Raw from the bucket, has `claude -p` write the Digest with wikipol's `write-digest` skill, checks it (the format, the Preview, every Extract found in the Raw at the second its link names) and writes it to the Source's staging folder, whose path it prints. A draft the checker refuses goes back to the model once.
 2. Read the exit code.

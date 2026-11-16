@@ -27,6 +27,9 @@ state_of() {
   printf %s "$STATE/$1"
 }
 
+# What a fetch looks like in the process list, `wikipol fetch` or new-source's sampler.
+FETCHING='wikipol fetch --source|new-source/scripts/sample\.py'
+
 # take_lock DIR PATTERN: one holder at a time. A holder that died is replaced once no process
 # matching PATTERN (the command it was running) is left: a tool timeout can stop a script and
 # leave its `wikipol` child working.

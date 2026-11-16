@@ -17,14 +17,17 @@ if [ -z "$branch" ] || [ "$branch" = "$(default_branch)" ]; then
   exit 2
 fi
 if ! gh auth status >/dev/null 2>&1; then
-  echo "warning: gh is not logged in (gh auth login): the Digests will be committed, not pushed"
+  echo "warning: gh is not logged in (gh auth login): pushes go through git's own credentials and may be refused"
 fi
 
-# The trailer is this run's, Source by Source: a later run without one leaves none behind.
+# The trailer is this session's, Source by Source: a later one without it leaves none behind.
 for slug in "$@"; do
   [[ "$slug" =~ ^[a-z0-9-]+$ ]] || continue
   mkdir -p "$STATE/$slug"
   rm -f "$STATE/$slug/commit-trailer"
+  # Where this session's results start: the report counts from here, across its queues.
+  touch "$STATE/$slug/results.tsv"
+  wc -l <"$STATE/$slug/results.tsv" | tr -d ' ' >"$STATE/$slug/session-offset"
   if [ -n "${INGEST_TRAILER:-}" ]; then printf '%s\n' "$INGEST_TRAILER" >"$STATE/$slug/commit-trailer"; fi
 done
 

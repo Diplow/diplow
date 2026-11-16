@@ -8,9 +8,46 @@ need_slug "${1:-}"
 slug="$1"
 dir="$(state_of "$slug")"
 
-shopt -s nullglob
-files=("$dir"/staged/*.md)
-[ ${#files[@]} -gt 0 ] || { echo "$slug: nothing staged"; exit 0; }
+# commit_chronicle N: commits what a filing of N Digests changed. A commit that fails leaves a
+# marker, so the next call commits before it does anything else: the Digests are in the
+# Chronicle by then, and no longer staged.
+commit_chronicle() {
+  local count="$1" message
+  cd "$REPO" || return 1
+  git add -A 6-politics
+  if git diff --cached --quiet; then
+    rm -f "$dir/uncommitted"
+    echo "$slug: filed $count, nothing new to commit"
+    return 0
+  fi
+  # transcrypt's hook calls nproc, which macOS lacks: without it the commit fails without a word.
+  if ! command -v nproc >/dev/null; then
+    shim="$(mktemp -d)"
+    printf '#!/bin/sh\nsysctl -n hw.ncpu\n' >"$shim/nproc"
+    chmod +x "$shim/nproc"
+    PATH="$shim:$PATH"
+  fi
+  message="feat(wikipol): file $count $slug Digests in the Chronicle"
+  if [ -s "$dir/commit-trailer" ]; then message+=$'\n\n'"$(cat "$dir/commit-trailer")"; fi
+  # A commit can lose a race for .git/index.lock with another git process: three tries.
+  for _ in 1 2 3; do
+    if git commit -q -m "$message" >>"$dir/file.log" 2>&1; then
+      rm -f "$dir/uncommitted"
+      echo "$slug: filed $count, $(git log -1 --format=%h)"
+      return 0
+    fi
+    if git diff --cached --quiet; then
+      rm -f "$dir/uncommitted"
+      echo "$slug: filed $count, already committed"
+      return 0
+    fi
+    sleep 10
+  done
+  echo "$count" >"$dir/uncommitted"
+  echo "$slug: COMMIT FAILED ($count placed in the Chronicle, uncommitted), see $dir/file.log; run file.sh again"
+  return 1
+}
+
 branch="$(git -C "$REPO" branch --show-current)"
 if [ -z "$branch" ] || [ "$branch" = "$(default_branch)" ]; then
   echo "$slug: NOT FILED, on '${branch:-a detached HEAD}': create a working branch first"
@@ -19,7 +56,12 @@ fi
 
 take_lock "$STATE/.file.lock" "wikipol file --source"
 trap 'rm -rf "$STATE/.file.lock"' EXIT
-files=("$dir"/staged/*.md) # as they are now that the lock is ours
+
+if [ -e "$dir/uncommitted" ]; then
+  commit_chronicle "$(cat "$dir/uncommitted")" || exit 1
+fi
+shopt -s nullglob
+files=("$dir"/staged/*.md)
 [ ${#files[@]} -gt 0 ] || { echo "$slug: nothing staged"; exit 0; }
 
 if ! wikipol file --source "$slug" "${files[@]}" >"$dir/file.log" 2>&1; then
@@ -28,27 +70,4 @@ if ! wikipol file --source "$slug" "${files[@]}" >"$dir/file.log" 2>&1; then
   exit 1
 fi
 mv "${files[@]}" "$dir/filed/"
-
-cd "$REPO" || exit 1
-git add -A 6-politics
-git diff --cached --quiet && { echo "$slug: filed ${#files[@]}, nothing new to commit"; exit 0; }
-# transcrypt's hook calls nproc, which macOS lacks: without it the commit fails without a word.
-if ! command -v nproc >/dev/null; then
-  shim="$(mktemp -d)"
-  printf '#!/bin/sh\nsysctl -n hw.ncpu\n' >"$shim/nproc"
-  chmod +x "$shim/nproc"
-  PATH="$shim:$PATH"
-fi
-message="feat(wikipol): file ${#files[@]} $slug Digests in the Chronicle"
-if [ -s "$dir/commit-trailer" ]; then message+=$'\n\n'"$(cat "$dir/commit-trailer")"; fi
-# A commit can lose a race for .git/index.lock with another git process: three tries.
-for _ in 1 2 3; do
-  if git commit -q -m "$message" >>"$dir/file.log" 2>&1; then
-    echo "$slug: filed ${#files[@]}, $(git log -1 --format=%h)"
-    exit 0
-  fi
-  git diff --cached --quiet && { echo "$slug: filed ${#files[@]}, already committed"; exit 0; }
-  sleep 10
-done
-echo "$slug: COMMIT FAILED (${#files[@]} placed in the Chronicle, uncommitted), see $dir/file.log"
-exit 1
+commit_chronicle "${#files[@]}"

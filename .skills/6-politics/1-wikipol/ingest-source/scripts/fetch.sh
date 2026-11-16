@@ -10,7 +10,7 @@ slug="$1"
 shift
 dir="$(state_of "$slug")"
 
-take_lock "$CACHE/fetch.lock" "wikipol fetch --source"
+take_lock "$CACHE/fetch.lock" "$FETCHING"
 trap 'rm -rf "$CACHE/fetch.lock"' EXIT
 
 wikipol fetch --source "$slug" "$@" >"$dir/fetch.out" 2>"$dir/fetch.log"

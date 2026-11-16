@@ -43,10 +43,11 @@ INGEST_TRAILER='<the attribution line your session ends its commits with, if it 
 
 It checks `uv`, `git` and `claude`, that the bucket's settings load, that each slug is a Source with a channel and a pinned model, and that the branch is a working branch. It prints one line per Source (its channel, where its Chronicle starts, how many Digests it holds), the branch, and the state folder. Exit 2 names what to fix: relay it and stop.
 
-Two of its answers are yours to act on.
+Three of its answers are yours to act on.
 
-- **On the default branch.** Filing commits, and `main` only takes pull requests. Create `wikipol/ingest-<yyyy-mm-dd>` with `git switch -c` and run the preflight again. A Conductor workspace is never on `main` (`.skills/conductor-workspaces.md`), so there the branch is already right: keep it.
-- **`warning: gh is not logged in`.** The run commits without pushing. Say so in the report, with `gh auth login` as the fix.
+- **On the default branch**, which is an exit 2. Filing commits, and `main` only takes pull requests. Create `wikipol/ingest-<yyyy-mm-dd>` with `git switch -c` and run the preflight again. A Conductor workspace is never on `main` (`.skills/conductor-workspaces.md`), so there the branch is already right: keep it.
+- **`warning: gh is not logged in`.** `push.sh` then pushes with git's own credentials, which GitHub may refuse. When a push fails, the commits stay on the local branch and the run goes on: say so in the report, with `gh auth login` as the fix.
+- **`warning: the search index will be skipped`.** The database's settings are missing. Skip `index.sh` in step 4 and say in the report that the index was not refreshed, with the setting the warning names.
 
 Print what the preflight printed, so someone reading the transcript later sees what the run believed at launch. Then carry on without waiting.
 
@@ -67,9 +68,11 @@ When a fetch ends, read its exit code and its report's first line, then start th
 
 ## 3. Digest and file, one batch at a time
 
-`scripts/queue.sh <slug>` starts a Source's run: it lists the Raws that have no up-to-date Digest in this checkout's Chronicle, oldest first so a Digest can cite the ones before it, with the Raws that failed in an earlier run last. It prints how many there are. Zero in the queue and zero staged: go to step 4 for that Source.
+`scripts/queue.sh <slug>` starts a Source's run: it lists the Raws that have no up-to-date Digest in this checkout's Chronicle, oldest first so a Digest can cite the ones before it, with the Raws that failed in an earlier run last. It prints how many there are. Zero in the queue and zero staged: go to step 4 for that Source. Exit 2 means the Chronicle or the bucket could not be read and the Source has no queue: relay the lines it printed and drop that Source from the run.
 
-Then keep **one batch agent in flight per Source**, the Sources side by side. Spawn each in the background as a **work-tier** subagent (on Claude Code, `subagent_type: general-purpose`, `model: sonnet`, whatever model the session runs on: the batch agent only loops over scripts and spawns). Its prompt, values filled in:
+Your own calls to `queue.sh`, `file.sh` and `index.sh` take a 600000 ms timeout: a queue lists a whole bucket, a filing summarizes Periods, an index embeds Raws. After a timeout, run the same call again: each one takes up where it stopped.
+
+Then keep **one batch agent in flight per Source**, the Sources side by side. Spawn each in the background as a **work-tier** subagent. On Claude Code that is `subagent_type: general-purpose` with `model: sonnet`, pinned in the call instead of left to the session's model: a batch agent loops over scripts and spawns for an hour, which Sonnet did for the first 3,200 Digests, and a session on a costlier model would pay its price for that. Where the harness can't set a subagent's model, spawn it all the same (`.skills/model-tiers.md`). Its prompt, values filled in:
 
 ```
 SOURCE=<slug> BATCH=24 SKILL_DIR=<SKILL_DIR>. Read <SKILL_DIR>/references/batch.md and follow it.
@@ -84,25 +87,40 @@ It answers one line: `<slug>: written N, failed M, filed K (commits …), end: �
 |---|---|
 | `batch done` | spawn the Source's next batch |
 | `none` | the queue is done: step 4 for that Source |
-| `STOP: 3 failures in a row` | read the three last notes: `tail -3 <state>/<slug>/results.tsv`, `<state>` being the folder the preflight printed. A usage limit, `claude` or the bucket failing: this is not about the Raws, so let the batches in flight return, start none, and go to step 5 saying how to resume. Three Digests the checker refused: run `queue.sh <slug>` again, which puts them last, and spawn the next batch; a second `STOP` ends that Source |
-| `STOP: filing failed` | read the end of `<state>/<slug>/file.log`. A Period's summary was refused twice and the Chronicle is unchanged: run `scripts/file.sh <slug>` once more. If it fails again, end that Source and quote the refusal in the report |
+| `STOP: 3 failures in a row` | read the notes, the last field of `tail -3 <state>/<slug>/results.tsv`, `<state>` being the folder the preflight printed. Then one of the two rows below |
+| … and a note starts with `wikipol:` or says the Raw agent stopped | the run could not work: `claude` failing, timing out or out of usage, a setting, the bucket. No Raw is at fault, so let the batches in flight return, start none, and go to step 5 saying how to resume |
+| … and the three notes each name a problem in a Digest | the checker refused three Digests twice. Run `queue.sh <slug>` again, which puts them last, and spawn the next batch; a second `STOP` ends that Source |
+| `STOP: filing failed` | run `scripts/file.sh <slug>` yourself and act on its first line, as "When a filing fails" says below |
+| `STOP: no queue` | `queue.sh <slug>` did not run or failed: run it, then spawn the batch again |
 | no answer, the batch agent died | `status.sh <slug>`, then `queue.sh <slug>` (it keeps the staged Digests and lists again what was claimed and never written) and one more batch. A second death in a row is a usage limit until proven otherwise: go to step 5 |
 
 While a Source's batch is in flight, its staging and its queue belong to that batch. Run `queue.sh` or `file.sh` for a Source only between two of its batches.
+
+### When a filing fails
+
+`file.sh` exits 1 and its first line says which of three things happened.
+
+| First line | Means | Do |
+|---|---|---|
+| `FILING FAILED` | `wikipol file` refused: a Period's summary rejected twice, a Digest it can't place. The Chronicle is unchanged and the Digests are still staged; the refusal is in the lines that follow | run `file.sh <slug>` once more. A second failure ends that Source: quote the refusal in the report |
+| `COMMIT FAILED` | the Digests are in the Chronicle and git refused the commit; git's words are at the end of `<state>/<slug>/file.log` | run `file.sh <slug>` once more: it commits what the last call placed before anything else. A second failure ends the run for every Source, since they share the checkout: quote git in the report |
+| `NOT FILED` | the checkout is on the default branch or on no branch: something moved it during the run | start no batch, let those in flight return, and go to step 5. The staged Digests wait for the next run |
+
+A call that prints `filed` or `nothing staged` succeeded: the failure passed, so spawn the Source's next batch.
 
 ## 4. Close a Source
 
 When a Source's queue is done:
 
-1. `scripts/file.sh <slug>` files what is still staged. The batch agent does it too; a second call says `nothing staged`.
-2. `scripts/index.sh <slug>` puts its new Raws in the search index and brings the path of every Digest the Chronicle moved up to date. A failure here loses nothing: quote its message in the report and go on.
+1. `scripts/file.sh <slug>` files what is still staged. The batch agent does it too; a second call says `nothing staged`. If it exits 1, "When a filing fails" above applies.
+2. `scripts/index.sh <slug>` puts its new Raws in the search index and brings the path of every Digest the Chronicle moved up to date. Nothing else refreshes the index on a machine without wikipol's daily runner. A failure here loses nothing: quote its message in the report and go on.
 3. `scripts/push.sh`.
 
 The other Sources' batches keep running meanwhile.
 
 ## 5. Report
 
-One report when every Source is closed or stopped, in the voice of `.skills/writing-tone.md`. Take the numbers from `scripts/status.sh --flags <slug> …` and from `git log`, and say what is true of each Source:
+One report when every Source is closed or stopped, in the voice of `.skills/writing-tone.md`. `scripts/status.sh --report <slug> …` prints what it needs, counted from this session's preflight: per Source, the status line (written, failed, staged), `fetch:` (what the last fetch stored and skipped), `at the last queue:` (what the Chronicle still lacked then), `chronicle:` (its size and dates), one `failed:` line per Raw that has no Digest and one `flag:` line per flagged Digest. The filing commits are in `git log`, the index's answer is what `index.sh` printed. Say what is true of each Source:
 
 ```
 <slug>: <stored> Raws fetched, <written> Digests written and <filed> filed, <failed> failed.
@@ -114,7 +132,7 @@ Not done: <what the run left: Raws without a date or captions, videos without Fr
 Branch <branch>, pushed at <sha>. No pull request opened.
 ```
 
-The flags are Digests a Raw agent found wrong after the checker passed them: a claim its Extract does not support, a misspelled name. They are filed as written. Correcting one, or a name in `.vocabulaire/noms.yaml`, is the user's call: list them, change none.
+The flags are Digests a Raw agent found wrong after the checker passed them: a claim its Extract does not support, a misspelled name. They are filed as written. Correcting one, or a name in `6-politics/1-projects/1-wikipol/.vocabulaire/noms.yaml`, is the user's call: list them, change none.
 
 ## Running it again
 
@@ -133,12 +151,15 @@ Every step reads what is there. The fetch stores only missing Raws, the queue li
 |---|---|---|
 | `references/batch.md` | the batch agent | its loop: `next.sh`, one Raw agent per id, the final line |
 | `references/raw.md` | the Raw agent | one Digest: write, read, flag, record |
-| `scripts/lib.sh` | every script | the repo, the pipeline, the state folder (`~/.cache/wikipol/ingest/<checkout>/<slug>/`), the lock |
-| `scripts/preflight.sh` | the root | the checks of step 1 |
-| `scripts/fetch.sh` | the root, and `new-source` | `wikipol fetch` behind the machine's fetch lock |
+| `scripts/lib.sh` | every script, and those of `new-source` | the repo, the pipeline, the state folder (`~/.cache/wikipol/ingest/<checkout>/<slug>/`), the locks |
+| `scripts/preflight.sh` | the root, and `new-source` | the checks of step 1; where this session's counts start |
+| `scripts/fetch.sh` | the root | `wikipol fetch` behind the machine's fetch lock |
 | `scripts/queue.sh` | the root | a run's queue for one Source, from `wikipol backfill --dry-run` |
 | `scripts/next.sh` | the batch agent | files at six staged Digests, then the next id, `none` or `STOP` |
-| `scripts/digest.sh`, `result.sh` | the Raw agent, and `new-source` | `wikipol digest` into staging; one line of `results.tsv` |
+| `scripts/digest.sh` | the Raw agent, and `new-source` | `wikipol digest` into staging |
+| `scripts/result.sh` | the Raw agent | one line of `results.tsv` |
 | `scripts/lost.sh` | the batch agent | the result of a Raw whose agent stopped |
 | `scripts/file.sh` | `next.sh`, the batch agent, the root | `wikipol file` and its commit, one filing at a time per checkout |
-| `scripts/status.sh`, `push.sh`, `index.sh` | the root | where a run stands, the push, the search index |
+| `scripts/status.sh` | the batch agent, the root | where a run stands; with `--report`, what step 5 needs |
+| `scripts/push.sh` | the root, and `new-source` | the push of the working branch |
+| `scripts/index.sh` | the root | `wikipol index` for one Source |

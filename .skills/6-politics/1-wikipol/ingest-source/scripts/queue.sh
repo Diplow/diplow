@@ -3,6 +3,7 @@
 # checkout's Chronicle (`wikipol backfill --dry-run`), oldest first, and writes them as the run's
 # queue: a Raw that failed in an earlier run goes last, so three old failures can't stop the run
 # before it reaches the new videos. Prints the dry run's first line, then the queue's size.
+# Exit 2, with the reason, when the Chronicle or the bucket can't be read: the Source has no queue.
 . "$(dirname "$0")/lib.sh"
 need_slug "${1:-}"
 slug="$1"
@@ -10,6 +11,7 @@ dir="$(state_of "$slug")"
 touch "$dir/results.tsv"
 
 if ! wikipol backfill --source "$slug" --dry-run >"$dir/queue.out" 2>"$dir/queue.log"; then
+  rm -f "$dir/queue" # no batch may run on the queue of an earlier run
   tail -5 "$dir/queue.log"
   exit 2
 fi

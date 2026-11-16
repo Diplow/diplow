@@ -18,7 +18,7 @@ fi
 # and fails again at the end of the queue.
 offset="$(cat "$dir/run-offset" 2>/dev/null || echo 0)"
 fails="$(tail -n +"$((offset + 1))" "$dir/results.tsv" \
-  | awk -F'\t' 'NR == FNR { before[$1] = 1; next } !($2 in before)' "$dir/failed-before" - \
+  | awk -F'\t' 'FILENAME == ARGV[1] { before[$1] = 1; next } !($2 in before)' "$dir/failed-before" - \
   | tail -3 | awk -F'\t' '$3 != "ok"' | wc -l | tr -d ' ')"
 if [ "$fails" -ge 3 ]; then
   echo "STOP: 3 failures in a row for $slug"
