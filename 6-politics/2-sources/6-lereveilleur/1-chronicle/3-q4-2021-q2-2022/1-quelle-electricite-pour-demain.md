@@ -1,6 +1,6 @@
 ---
 title: "Quelle électricité pour demain ?  🟦⬜🟥 ⚡"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/3-q4-2021-q2-2022
 owner: diplo
 preview: >-
   Rodolphe Meyer présente le rapport de RTE sur l'électricité de 2050 : tous

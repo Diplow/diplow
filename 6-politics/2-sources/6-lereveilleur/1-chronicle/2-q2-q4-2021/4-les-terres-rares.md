@@ -1,6 +1,6 @@
 ---
 title: "Les terres rares."
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-q2-q4-2021
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que les terres rares ne sont pas rares et que le
@@ -38,7 +38,7 @@ Meyer s'appuie sur les réserves estimées par l'USGS, 120 millions de tonnes, s
 
 ## 2. Les terres rares ne condamnent ni la voiture électrique, ni le photovoltaïque, ni l'éolien terrestre ; seul l'éolien en mer en dépend vraiment.
 
-Les batteries lithium-ion n'en contiennent pas ; elles ne se trouvent que dans certains moteurs, et la substitution est possible. Environ 80 % des éoliennes terrestres utilisent des boîtes de vitesse et très peu de terres rares. Les éoliennes en mer, sans boîte de vitesses, en utilisent plusieurs centaines de kg par MW. Pour les batteries, il renvoie à sa vidéo sur [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022/1-voiture-electrique-un-probleme-de-batterie|Voiture électrique: un problème de batterie ?]].
+Les batteries lithium-ion n'en contiennent pas ; elles ne se trouvent que dans certains moteurs, et la substitution est possible. Environ 80 % des éoliennes terrestres utilisent des boîtes de vitesse et très peu de terres rares. Les éoliennes en mer, sans boîte de vitesses, en utilisent plusieurs centaines de kg par MW. Pour les batteries, il renvoie à sa vidéo sur [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-q2-q4-2021/1-voiture-electrique-un-probleme-de-batterie|Voiture électrique: un problème de batterie ?]].
 
 > [4:51](https://www.youtube.com/watch?v=OAyYSlMhgI4&t=291s) « Je répète, il n’y a pas de terres rares dans les batteries qui équipent aujourd’hui la majorité des voitures électriques. »
 

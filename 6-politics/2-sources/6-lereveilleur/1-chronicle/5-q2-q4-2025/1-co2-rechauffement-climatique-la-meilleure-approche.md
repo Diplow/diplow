@@ -1,6 +1,6 @@
 ---
 title: "CO₂ & Réchauffement Climatique : la meilleure approche pour comprendre"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/3-q2-q4-2025
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/5-q2-q4-2025
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que le CO2 réchauffe la planète parce qu'ajouté à

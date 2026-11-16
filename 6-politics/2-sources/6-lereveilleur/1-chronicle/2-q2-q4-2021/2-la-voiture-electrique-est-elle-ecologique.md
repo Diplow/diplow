@@ -1,6 +1,6 @@
 ---
 title: "La voiture électrique est-elle écologique ?"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-q2-q4-2021
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que, dans un pays à électricité bas carbone comme la
@@ -42,7 +42,7 @@ Meyer compare la Zoé et la Clio de Renault. La production d'une électrique ém
 
 ## 2. Contre Guillaume Pitron, Meyer montre que, hors des pays dont l'électricité est fossile, la voiture électrique est plus écologique que la thermique.
 
-Il conteste l'affirmation de Pitron selon laquelle l'électrique émettrait presque autant que le diesel, en citant l'avis de l'ADEME de 2016 et l'étude de Ricardo. Elle améliore aussi la qualité de l'air et réduit la dépendance aux fossiles. Elle fait pire sur certaines pollutions liées aux mines. Cette vidéo prolonge [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022/1-voiture-electrique-un-probleme-de-batterie|Voiture électrique: un problème de batterie ?]] sur les métaux.
+Il conteste l'affirmation de Pitron selon laquelle l'électrique émettrait presque autant que le diesel, en citant l'avis de l'ADEME de 2016 et l'étude de Ricardo. Elle améliore aussi la qualité de l'air et réduit la dépendance aux fossiles. Elle fait pire sur certaines pollutions liées aux mines. Cette vidéo prolonge [[6-politics/2-sources/6-lereveilleur/1-chronicle/2-q2-q4-2021/1-voiture-electrique-un-probleme-de-batterie|Voiture électrique: un problème de batterie ?]] sur les métaux.
 
 > [19:24](https://www.youtube.com/watch?v=zjaUqUozwdc&t=1164s) « Ce que dit ici Monsieur Pitron ne peut être vrai que si la voiture électrique roule très peu sur sa durée de vie ou utilise une électricité fortement carbonée. »
 

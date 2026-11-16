@@ -1,6 +1,6 @@
 ---
 title: "Comprendre le GIEC et ses rapports."
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-s1-2021-s1-2022
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/2-q2-q4-2021
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que le GIEC, qui ne fait pas de recherche mais une
