@@ -1,0 +1,33 @@
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/CLAUDE.md
+  s_d048bba8d1284a::t_e48434a1d2e574 6-9,13,15,17,26
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/6-2020-2026/3-part-1-c-est-quoi-la.md
+  s_d048bba8d1284a::t_e48434a1d2e574 1-78
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/6-2020-2026/2-reforme-des-retraites-pour-ou-contre.md
+  s_d048bba8d1284a::t_e48434a1d2e574 1-86
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/6-2020-2026/5-un-anthropologue-chez-les-traders-part.md
+  s_d048bba8d1284a::t_e48434a1d2e574 1-79
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/6-2020-2026/4-pourquoi-le-coronavirus-fait-il-chuter.md
+  s_d048bba8d1284a::t_e48434a1d2e574 1-61
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_d048bba8d1284a::t_e48434a1d2e574 6-9,13,15,17,24
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/6-2020-2026/CLAUDE.md
+  s_d048bba8d1284a::t_e48434a1d2e574 6-9,13,15-17,22-26
+6-politics/2-sources/5-heureka/1-chronicle/4-2018-2026/6-2020-2026/6-10-ans-de-macron-l-heure.md
+  s_d048bba8d1284a::t_e48434a1d2e574 1-94
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bef865ba5f3114401d608168d893dd68930e3f3b",
+  "prompts": {},
+  "sessions": {
+    "s_d048bba8d1284a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a3c13738-914e-41a3-a5d4-d91b93a68919",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
