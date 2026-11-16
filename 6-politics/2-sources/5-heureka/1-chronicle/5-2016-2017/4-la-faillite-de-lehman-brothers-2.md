@@ -1,6 +1,6 @@
 ---
 title: "La faillite de Lehman Brothers (2/2) - Wall Street Stories #3 - Heu?reka"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/4-2016-2017
+parent: 6-politics/2-sources/5-heureka/1-chronicle/5-2016-2017
 owner: diplo
 preview: >-
   Gilles Mitteau soutient que Lehman Brothers a fait faillite parce que,

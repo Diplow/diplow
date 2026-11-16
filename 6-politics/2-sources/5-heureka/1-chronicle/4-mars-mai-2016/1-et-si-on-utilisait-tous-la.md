@@ -1,6 +1,6 @@
 ---
 title: "Et si on utilisait tous la même monnaie ? - Heu?reka #11"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/4-2016-2017
+parent: 6-politics/2-sources/5-heureka/1-chronicle/4-mars-mai-2016
 owner: diplo
 preview: >-
   Gilles Mitteau soutient que des monnaies distinctes compensent les écarts de

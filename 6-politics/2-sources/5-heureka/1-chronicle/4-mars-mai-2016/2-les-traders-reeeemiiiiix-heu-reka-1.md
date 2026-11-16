@@ -1,6 +1,6 @@
 ---
 title: "Les Traders (REEEEMIIIIIX) - Heu?reka #1.5"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/4-2016-2017
+parent: 6-politics/2-sources/5-heureka/1-chronicle/4-mars-mai-2016
 owner: diplo
 preview: >-
   Gilles Mitteau refait son épisode sur les traders : un trader est quiconque
