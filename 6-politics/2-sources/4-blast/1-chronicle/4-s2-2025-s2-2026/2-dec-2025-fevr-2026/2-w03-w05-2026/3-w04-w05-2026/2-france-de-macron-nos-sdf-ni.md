@@ -1,6 +1,6 @@
 ---
 title: "FRANCE DE MACRON : \"NOS SDF\" NI D'ABORD, NI APRÈS"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/2-dec-2025-fevr-2026/2-w03-w05-2026/2-w03-w04-2026
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/2-dec-2025-fevr-2026/2-w03-w05-2026/3-w04-w05-2026
 owner: diplo
 preview: >-
   Blast soutient que la mort de sans-abri n'est pas un accident : la rue sert

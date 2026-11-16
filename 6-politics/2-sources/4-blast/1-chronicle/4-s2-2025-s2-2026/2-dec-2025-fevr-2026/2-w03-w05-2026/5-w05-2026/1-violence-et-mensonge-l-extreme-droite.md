@@ -1,6 +1,6 @@
 ---
 title: "VIOLENCE ET MENSONGE : L’EXTRÊME DROITE, DES USA À LA FRANCE"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/2-dec-2025-fevr-2026/2-w03-w05-2026/4-w05-2026
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/2-dec-2025-fevr-2026/2-w03-w05-2026/5-w05-2026
 owner: diplo
 preview: >-
   Blast soutient que, des États-Unis à la France, l'extrême droite et ses

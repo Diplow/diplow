@@ -1,6 +1,6 @@
 ---
 title: "HORIZON 2027 : ENSEMBLE, NOS LIVRES DEVIENNENT ACCESSIBLES"
-parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/2-dec-2025-fevr-2026/2-w03-w05-2026/3-27-28-janv-2026
+parent: 6-politics/2-sources/4-blast/1-chronicle/4-s2-2025-s2-2026/2-dec-2025-fevr-2026/2-w03-w05-2026/4-27-28-janv-2026
 owner: diplo
 preview: >-
   Blast rejoue le discours de candidature de Macron en 2016 pour mesurer

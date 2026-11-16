@@ -328,6 +328,7 @@ kinds:
       groupe-d-experts: {définition: "Réunit des experts pour évaluer l'état des connaissances scientifiques sur un sujet, comme le GIEC.", statut: proposé, introduit_par: lereveilleur/jiIm5FPcGgE.md}
       gestionnaire-de-réseau: {définition: "Exploite et développe un réseau d'énergie, comme le transport d'électricité.", statut: proposé, introduit_par: lereveilleur/cfqrxAUJ5bI.md}
       agence-de-notation: {définition: "Note le risque de crédit des entreprises et des États à l'intention des investisseurs.", statut: proposé, introduit_par: heureka/ZbFQ4knxFhE.md}
+      unité-de-forces-spéciales: {définition: "Unité de commandos ou de forces spéciales chargée d'opérations clandestines, de sabotage et de contre-guérilla.", statut: proposé, introduit_par: blast/mvSuxcBgt_M.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
