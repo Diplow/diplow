@@ -1,0 +1,55 @@
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/1-sept-nov-2025/1-w36-w38-2025/2-5-6-sept-2025/2-tondelier-cringe-que-francois-ruffin.md
+  s_70464cecc704a8::t_38804bb409cf95 1-104
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/1-sept-nov-2025/1-w36-w38-2025/2-5-6-sept-2025/CLAUDE.md
+  s_70464cecc704a8::t_a1f7bd52cd72d9 6-9,13,15-17,22-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/1-sept-nov-2025/1-w36-w38-2025/CLAUDE.md
+  s_70464cecc704a8::t_3fef9100dbdd50 6-9,13,15-17,22
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/1-sept-nov-2025/CLAUDE.md
+  s_70464cecc704a8::t_7ebd349d594ed8 6-9,13,15,17,21
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/2-dec-2025-fevr-2026/3-janv-fevr-2026/4-30-janv-1-fevr-2026/3-primaire-de-la-gauche-la-plus.md
+  s_70464cecc704a8::t_ba6b2851e6e3ae 1-93
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/2-dec-2025-fevr-2026/3-janv-fevr-2026/4-30-janv-1-fevr-2026/CLAUDE.md
+  s_70464cecc704a8::t_2ea468a7568b74 6-9,13,15,21-22
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/2-dec-2025-fevr-2026/3-janv-fevr-2026/CLAUDE.md
+  s_70464cecc704a8::t_4aeb72a9c32d82 6-9,13,15,22
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/2-dec-2025-fevr-2026/CLAUDE.md
+  s_70464cecc704a8::t_c48413c74d5d41 6-9,13,15,17,23
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/4-w45-2026/CLAUDE.md
+  s_70464cecc704a8::t_0f1f4e20e955af 6-9,13,15
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/5-w45-w46-2026/1-terracid-revele-le-scandale-des-medecins.md
+  s_70464cecc704a8::t_4d69fcda4fa419 3
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/5-w45-w46-2026/2-melenchon-plie-la-concurrence-a-son.md
+  s_70464cecc704a8::t_f8218fe20f9bf8 1-86
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/5-w45-w46-2026/3-glucksmann-se-fait-boloss-en-manif.md
+  s_70464cecc704a8::t_ce8e491c4a0336 1-99
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/5-w45-w46-2026/4-teddy-riner-candidat-le-macroniste-ni.md
+  s_70464cecc704a8::t_fd48c6d75d0c6d 1-89
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/5-w45-w46-2026/5-caroline-fourest-fait-la-lecon-a.md
+  s_70464cecc704a8::t_770c4c4fbd95a8 1-94
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/5-w45-w46-2026/CLAUDE.md
+  s_70464cecc704a8::t_72f82c8e70d148 1-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/5-oct-nov-2026/CLAUDE.md
+  s_70464cecc704a8::t_b663831418e6e6 6-9,13,15,17,24-25
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/5-q3-q4-2026/CLAUDE.md
+  s_70464cecc704a8::t_7a7d957c7e48f5 6-9,13,15,17,25
+6-politics/2-sources/1-paduteam/1-chronicle/2-s2-2025-s2-2026/CLAUDE.md
+  s_70464cecc704a8::t_2c24c21e6168d3 6-9,13,15,17,21-22,25
+6-politics/2-sources/1-paduteam/1-chronicle/CLAUDE.md
+  s_70464cecc704a8::t_cba9e19b67f33d 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d7d54ca623e32960bf7d756c6f39daac1310a9ce",
+  "prompts": {},
+  "sessions": {
+    "s_70464cecc704a8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "58febe73-3099-4c4d-b1a2-eec7581b37f8",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
