@@ -1,0 +1,27 @@
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-s2-2016-s2-2017/3-comprendre-les-obligations-heu-reka-17.md
+  s_6eb855995d5530::t_6df6bb4b6a42ae 1-52
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-s2-2016-s2-2017/4-le-revenu-de-base-heu-reka.md
+  s_6eb855995d5530::t_2766ddb48061d0 1-55
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-s2-2016-s2-2017/CLAUDE.md
+  s_6eb855995d5530::t_136190afb2ea13 6-9,13,15,21-23
+6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/CLAUDE.md
+  s_6eb855995d5530::t_ef28678a87716d 6-9,13,15-17,22
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_6eb855995d5530::t_f66c11ebf9b2d2 6-9,13,15,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "19355eb0dfabbe2147408b39ed1d989110c6457f",
+  "prompts": {},
+  "sessions": {
+    "s_6eb855995d5530": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a369647c4180118a1",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
