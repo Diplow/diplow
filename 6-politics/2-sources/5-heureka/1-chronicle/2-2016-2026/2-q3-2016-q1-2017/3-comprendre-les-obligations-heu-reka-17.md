@@ -1,6 +1,6 @@
 ---
 title: "Comprendre les obligations - Heu?reka #17"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-s2-2016-s2-2017
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-q3-2016-q1-2017
 owner: diplo
 preview: >-
   Gilles Mitteau explique que l'obligation est une dette d'entreprise découpée
@@ -33,7 +33,7 @@ Le principal, la maturité et le taux d'intérêt définissent toute dette. Cont
 
 ## 2. Quand les montants dépassent ce que les banques prêtent, Mitteau explique que la dette est découpée en obligations vendues aux investisseurs sur les marchés financiers.
 
-Chaque obligation est un mini-prêt indépendant, avec son principal, son coupon et sa date de remboursement. Son détenteur est créancier, pas propriétaire : à la différence de l'actionnaire, il ne joue aucun rôle dans les décisions de l'entreprise. Le sujet prolonge [[6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-s2-2016-s2-2017/1-comprendre-les-actions-et-les-dividendes|Comprendre les actions et les dividendes - Heu?reka #16]].
+Chaque obligation est un mini-prêt indépendant, avec son principal, son coupon et sa date de remboursement. Son détenteur est créancier, pas propriétaire : à la différence de l'actionnaire, il ne joue aucun rôle dans les décisions de l'entreprise. Le sujet prolonge [[6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-q3-2016-q1-2017/1-comprendre-les-actions-et-les-dividendes|Comprendre les actions et les dividendes - Heu?reka #16]].
 
 > [4:13](https://www.youtube.com/watch?v=ZbFQ4knxFhE&t=253s) « quand les montants deviennent trop importants genre quelques centaines de millions d'euros »
 

@@ -1,6 +1,6 @@
 ---
 title: "Le revenu de base - Heu?reka #18"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-s2-2016-s2-2017
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2016-2026/2-q3-2016-q1-2017
 owner: diplo
 preview: >-
   Gilles Mitteau soutient que le revenu de base est économiquement possible :
