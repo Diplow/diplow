@@ -40,7 +40,7 @@ if ! command -v nproc >/dev/null; then
   PATH="$shim:$PATH"
 fi
 message="feat(wikipol): file ${#files[@]} $slug Digests in the Chronicle"
-if [ -s "$STATE/commit-trailer" ]; then message+=$'\n\n'"$(cat "$STATE/commit-trailer")"; fi
+if [ -s "$dir/commit-trailer" ]; then message+=$'\n\n'"$(cat "$dir/commit-trailer")"; fi
 # A commit can lose a race for .git/index.lock with another git process: three tries.
 for _ in 1 2 3; do
   if git commit -q -m "$message" >>"$dir/file.log" 2>&1; then

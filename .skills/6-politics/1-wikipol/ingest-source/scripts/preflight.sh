@@ -20,8 +20,13 @@ if ! gh auth status >/dev/null 2>&1; then
   echo "warning: gh is not logged in (gh auth login): the Digests will be committed, not pushed"
 fi
 
-mkdir -p "$STATE"
-if [ -n "${INGEST_TRAILER:-}" ]; then printf '%s\n' "$INGEST_TRAILER" >"$STATE/commit-trailer"; fi
+# The trailer is this run's, Source by Source: a later run without one leaves none behind.
+for slug in "$@"; do
+  [[ "$slug" =~ ^[a-z0-9-]+$ ]] || continue
+  mkdir -p "$STATE/$slug"
+  rm -f "$STATE/$slug/commit-trailer"
+  if [ -n "${INGEST_TRAILER:-}" ]; then printf '%s\n' "$INGEST_TRAILER" >"$STATE/$slug/commit-trailer"; fi
+done
 
 uv --directory "$SCRIPTS" run --quiet python - "$@" <<'PY' || exit 2
 import sys
