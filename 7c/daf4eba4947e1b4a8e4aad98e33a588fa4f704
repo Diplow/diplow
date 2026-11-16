@@ -1,0 +1,31 @@
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/1-q4-2018-q2-2019/3-des-gestes-individuels-a-l-action.md
+  s_3189af623b8c37::t_541f7e5be6a624 1-87
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/1-q4-2018-q2-2019/4-stockage-de-l-energie-sous-forme.md
+  s_3189af623b8c37::t_aef9edce33ee84 1-87
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/1-q4-2018-q2-2019/5-la-radioactivite-et-notre-exposition-aux.md
+  s_3189af623b8c37::t_dbb1c8959fa4f3 1-72
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/1-q4-2018-q2-2019/CLAUDE.md
+  s_3189af623b8c37::t_75a5bf705047ef 6-9,13,15,17,23-26
+6-politics/2-sources/6-lereveilleur/1-chronicle/2-2018-2020/CLAUDE.md
+  s_3189af623b8c37::t_76879e558a4dc4 6-9,13,15-17,21
+6-politics/2-sources/6-lereveilleur/1-chronicle/3-s1-2020-s1-2021/1-q1-q2-2020/4-analyse-impact-sanitaire-de-fukushima-une.md
+  s_3189af623b8c37::t_5a4aff6a215d03 41
+6-politics/2-sources/6-lereveilleur/1-chronicle/CLAUDE.md
+  s_3189af623b8c37::t_58ed0faee60ce2 6-9,13,15,17,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7cdaf4eba4947e1b4a8e4aad98e33a588fa4f704",
+  "prompts": {},
+  "sessions": {
+    "s_3189af623b8c37": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-af704619d9972c5a2",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
