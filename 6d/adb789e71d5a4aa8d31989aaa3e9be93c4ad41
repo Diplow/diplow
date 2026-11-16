@@ -1,0 +1,25 @@
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/4-2020-2026/3-et-si-l-argent-tombait-du.md
+  s_3c9e4513291cd7::t_99e5fb11c164f1 1-80
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/4-2020-2026/CLAUDE.md
+  s_3c9e4513291cd7::t_e7cb2034602a1f 6-9,13,15,17,23-25
+6-politics/2-sources/5-heureka/1-chronicle/5-2019-2026/CLAUDE.md
+  s_3c9e4513291cd7::t_39e05f52c73850 6-9,13,15,17,24
+6-politics/2-sources/5-heureka/1-chronicle/CLAUDE.md
+  s_3c9e4513291cd7::t_80a928a65492b2 6,8-9,13,15,17,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6dadb789e71d5a4aa8d31989aaa3e9be93c4ad41",
+  "prompts": {},
+  "sessions": {
+    "s_3c9e4513291cd7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a4013c6db76f20858",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
