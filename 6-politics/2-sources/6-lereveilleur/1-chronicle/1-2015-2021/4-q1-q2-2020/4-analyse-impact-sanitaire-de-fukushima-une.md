@@ -38,7 +38,7 @@ relations:
 
 ## 1. Le nombre de morts attribuables de façon statistiquement significative aux rayonnements à Fukushima est de zéro et le restera probablement ; le bilan de l'accident, lui, compte l'évacuation et les effets psychologiques.
 
-Meyer défend ici la conclusion de sa vidéo sur les morts du nucléaire (voir [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/1-2015-2019/3-resume-hiroshima-tchernobyl-fukushima-les-morts|Les morts du nucléaire (résumé)]]). Les doses reçues par les populations japonaises sont de l'ordre de quelques mSv, bien sous le seuil d'environ 100 mSv. Il distingue ce périmètre, les seuls rayonnements ionisants, du bilan global de l'accident.
+Meyer défend ici la conclusion de sa vidéo sur les morts du nucléaire (voir [[6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/1-2015-2019/6-resume-hiroshima-tchernobyl-fukushima-les-morts|Les morts du nucléaire (résumé)]]). Les doses reçues par les populations japonaises sont de l'ordre de quelques mSv, bien sous le seuil d'environ 100 mSv. Il distingue ce périmètre, les seuls rayonnements ionisants, du bilan global de l'accident.
 
 > [4:44](https://www.youtube.com/watch?v=k3mUS3JM4aM&t=284s) « Au contraire, en dessous de 100 mSv, malgré de nombreuses études scientifiques, il n’a pas été possible de prouver l’existence d’effets sanitaires. »
 

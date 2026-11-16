@@ -1,6 +1,6 @@
 ---
 title: "Hydrogène: un enjeu industriel !"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-s1-2020-s1-2021
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/6-q3-2020-q1-2021
 owner: diplo
 preview: >-
   Rodolphe Meyer soutient que l'hydrogène sert surtout de réactif industriel

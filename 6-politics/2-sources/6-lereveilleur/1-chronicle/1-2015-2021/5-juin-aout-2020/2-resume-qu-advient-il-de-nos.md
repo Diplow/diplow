@@ -1,6 +1,6 @@
 ---
 title: "[Résumé] Qu'advient-il de nos émissions de CO2 ?"
-parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-s1-2020-s1-2021
+parent: 6-politics/2-sources/6-lereveilleur/1-chronicle/1-2015-2021/5-juin-aout-2020
 owner: diplo
 preview: >-
   Meyer montre que le CO2 émis n'est pas détruit mais stocké ailleurs, surtout
