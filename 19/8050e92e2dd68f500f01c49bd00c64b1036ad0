@@ -1,0 +1,57 @@
+6-politics/1-projects/1-wikipol/.vocabulaire/vocabulaire.yaml
+  s_d048bba8d1284a::t_3b0386492c97ac 229
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/4-sept-oct-2026/CLAUDE.md
+  s_d048bba8d1284a::t_33400f108d575c 6-9,13,15,17
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/1-w43-w44-2026/1-gaza-dialogue-entre-un-humanitaire-et.md
+  s_d048bba8d1284a::t_469a72ac71a3a7 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/1-w43-w44-2026/2-lula-reelu-surprise-politique-choc-geopolitique.md
+  s_d048bba8d1284a::t_a1607588e12efc 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/1-w43-w44-2026/3-le-japon-face-au-defi-trump.md
+  s_d048bba8d1284a::t_54cb52001f005a 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/1-w43-w44-2026/4-l-ocs-une-otan-asiatique-expliquez.md
+  s_d048bba8d1284a::t_d0676edbd363a7 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/1-w43-w44-2026/CLAUDE.md
+  s_d048bba8d1284a::t_541dc861c35fe3 3,6-9,13,15,19-22
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/2-w44-w45-2026/1-j-ai-lu-israel-s-lobby.md
+  s_d048bba8d1284a::t_89072d083149ed 3
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/2-w44-w45-2026/2-jeu-concours-500-000-abonnes.md
+  s_d048bba8d1284a::t_f7cec0e5581bae 1-43
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/2-w44-w45-2026/3-israel-des-elections-pour-rien.md
+  s_d048bba8d1284a::t_233ac0a1aefea1 1-70
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/2-w44-w45-2026/CLAUDE.md
+  s_d048bba8d1284a::t_906b83a12e3841 1-23
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/3-w45-w46-2026/1-russie-ukraine-une-guerre-sans-fin.md
+  s_d048bba8d1284a::t_fcf3e92378d8f9 1-74
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/3-w45-w46-2026/2-midterms-trump-empetre.md
+  s_d048bba8d1284a::t_53fad1f7dd7b0b 1-70
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/3-w45-w46-2026/3-trump-et-netanyahou-affaiblis-mais-toujours.md
+  s_d048bba8d1284a::t_0b161e5807da79 1-62
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/3-w45-w46-2026/4-peut-on-prevoir-une-rupture-strategique.md
+  s_d048bba8d1284a::t_714daf00cec235 1-63
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/3-w45-w46-2026/CLAUDE.md
+  s_d048bba8d1284a::t_0c07592c5bf73d 1-25
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/5-oct-nov-2026/CLAUDE.md
+  s_d048bba8d1284a::t_294daa32a84d54 1-21
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/5-q2-q4-2026/CLAUDE.md
+  s_d048bba8d1284a::t_82742c1d61f272 6-9,13,15,17,24-25
+6-politics/2-sources/2-boniface/1-chronicle/4-2024-2026/CLAUDE.md
+  s_d048bba8d1284a::t_d81a101a51279d 6-9,13,15-17,25
+6-politics/2-sources/2-boniface/1-chronicle/CLAUDE.md
+  s_d048bba8d1284a::t_913ba6ca181816 6-9,13,15,17,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "198050e92e2dd68f500f01c49bd00c64b1036ad0",
+  "prompts": {},
+  "sessions": {
+    "s_d048bba8d1284a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a3c13738-914e-41a3-a5d4-d91b93a68919",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
