@@ -420,6 +420,7 @@ kinds:
       krach-éclair: {définition: "Chute brutale d'un marché, d'une durée de quelques minutes, souvent imputée à des algorithmes de trading.", statut: proposé, introduit_par: heureka/BuEyrskPUws.md}
       crise-de-la-dette: {définition: "Crise où des États perdent l'accès aux marchés pour refinancer leur dette publique.", statut: proposé, introduit_par: heureka/5uBXviM1PcQ.md}
       événement-climatique: {définition: "Épisode majeur de changement climatique du passé de la Terre, comme une glaciation ou un réchauffement brutal.", statut: proposé, introduit_par: lereveilleur/NRdaPrMNrkI.md}
+      épisode-de-pollution: {définition: "Pic de pollution de l'air qui frappe une ville ou une région et fait de nombreuses victimes.", statut: proposé, introduit_par: lereveilleur/PoEf2u3BLWg.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
