@@ -78,7 +78,8 @@ def main(argv: list[str] | None = None) -> int:
     get.add_argument(
         "--since",
         type=date.fromisoformat,
-        help="YYYY-MM-DD: store no video published before it, and end after 3 in a row",
+        help="YYYY-MM-DD: store no video published before it, and end after 3 in a row; "
+        "default: youtube.since of the Source's source.yaml",
     )
     get.add_argument("--fetcher", choices=FETCHERS, help="default: WIKIPOL_FETCHER, else yt-dlp")
     get.add_argument("--sources-dir", type=Path, default=DEFAULT_SOURCES_DIR)

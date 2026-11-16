@@ -10,6 +10,9 @@ source:
 youtube:
   channel_url: "https://www.youtube.com/@blastinfo/videos"
   channel_handle: "@blastinfo"
+  # Où commence la Chronicle : `wikipol fetch` ne range aucune vidéo publiée avant cette date
+  # (AAAA-MM-JJ, sans guillemets), et s'arrête à la troisième de suite. Absent : toute la chaîne.
+  since: 2023-10-31
 
 files:
   inventaire: "Sources/Inventaire.md"

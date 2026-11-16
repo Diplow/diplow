@@ -12,6 +12,7 @@ import os
 import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 
 import yaml
@@ -148,6 +149,9 @@ class Source:
     """Who leads every Publication of the Source, whose name the Raw may never say."""
     model: str | None = None
     """`claude.default_model`: the model that writes the Source's Digests, a pinned id."""
+    since: date | None = None
+    """`youtube.since`: where the Source's Chronicle starts. `wikipol fetch` stores no video
+    published before it, unless its `--since` says otherwise."""
 
     @property
     def chronicle(self) -> Path:
@@ -192,6 +196,9 @@ def load_source(node: Path) -> Source:
     if not all(isinstance(block, dict) for block in (legacy, files, youtube, claude)):
         raise ConfigError(f"{path}: `legacy:`, `files:`, `youtube:` and `claude:` must be mappings")
     channel_url = str(youtube.get("channel_url") or "").strip() or None
+    since = youtube.get("since")
+    if since is not None and type(since) is not date:  # YAML reads a bare 2023-10-31 as a date
+        raise ConfigError(f"{path}: youtube.since {since!r} is not a date, YYYY-MM-DD unquoted")
     model = str(claude.get("default_model") or "").strip() or None
     if model is not None and not is_pinned_model(model):
         raise ConfigError(
@@ -215,6 +222,7 @@ def load_source(node: Path) -> Source:
         attribution=attribution,
         hosts=tuple(host.strip() for host in hosts),
         model=model,
+        since=since,
     )
 
 

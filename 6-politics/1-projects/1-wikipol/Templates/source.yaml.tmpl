@@ -2,15 +2,20 @@
 # pour les scripts (Scripts/*.py) et les skills (Skills/*).
 
 source:
-  name: "{{SOURCE_NAME}}"                # nom affiché (commits, logs, docs)
+  name: {{SOURCE_NAME_YAML}}                # nom affiché (commits, logs, docs)
   slug: "{{SOURCE_SLUG}}"                # préfixe branches git, nom court
   type: "youtube"                        # unique type supporté pour l'instant
-  attribution: "{{SOURCE_ATTRIBUTION}}"  # phrase utilisée dans les fiches (ex: "la PaduTeam")
-  # hosts: ["Nom Prénom"]  # qui mène chaque Publication, même quand le Raw ne dit pas son nom
+  attribution: {{SOURCE_ATTRIBUTION_YAML}}  # phrase utilisée dans les fiches (ex: "la PaduTeam")
+  # Qui mène chaque Publication, même quand le Raw ne dit pas son nom : sa mention passe la
+  # vérification sans être entendue.
+  {{HOSTS_LINE}}
 
 youtube:
   channel_url: "{{CHANNEL_URL}}"
   channel_handle: "{{CHANNEL_HANDLE}}"
+  # Où commence la Chronicle : `wikipol fetch` ne range aucune vidéo publiée avant cette date
+  # (AAAA-MM-JJ, sans guillemets), et s'arrête à la troisième de suite. Absent : toute la chaîne.
+  {{SINCE_LINE}}
 
 files:
   inventaire: "Sources/Inventaire.md"

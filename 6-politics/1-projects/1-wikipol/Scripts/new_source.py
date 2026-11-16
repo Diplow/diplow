@@ -9,6 +9,8 @@ Usage:
 Args optionnels :
     --handle "@MaChaine"           # handle YouTube (déduit de l'URL si absent)
     --attribution "la MaChaine"    # attribution collective dans les fiches
+    --hosts "Prénom Nom, Autre Nom"  # qui mène chaque Publication (source.hosts), séparés par des virgules
+    --since 2023-10-31             # où commence la Chronicle (youtube.since) ; absent : toute la chaîne
     --git-repo "user/repo"         # dépôt GitHub qui héberge WikiPol (défaut : Diplow/diplow)
 
 Résultat : un nœud de source est créé sous `6-politics/2-sources/`, au premier
@@ -94,8 +96,29 @@ def next_free_number(sources_dir: str) -> int:
     sys.exit(1)
 
 
+def yaml_string(text: str) -> str:
+    """`text` entre guillemets doubles, comme YAML les lit."""
+    return '"' + text.replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+def hosts_line(hosts: str) -> str:
+    names = [h.strip() for h in hosts.split(",") if h.strip()]
+    if not names:
+        return '# hosts: ["Prénom Nom"]  # qui mène chaque Publication, même quand le Raw ne dit pas son nom'
+    return "hosts: [" + ", ".join(yaml_string(n) for n in names) + "]"
+
+
+def since_line(since: str) -> str:
+    if not since:
+        return "# since: 2023-10-31"
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", since):
+        print(f"ERREUR : --since {since!r} n'est pas une date AAAA-MM-JJ.")
+        sys.exit(1)
+    return f"since: {since}"
+
+
 def create_source(name: str, slug: str, channel_url: str, handle: str,
-                  attribution: str, git_repo: str):
+                  attribution: str, git_repo: str, hosts: str = "", since: str = ""):
     for entry in os.listdir(SOURCES_DIR) if os.path.isdir(SOURCES_DIR) else []:
         if re.sub(r'^\d+-', '', entry) == slug:
             print(f"ERREUR : la source {slug!r} existe déjà ({os.path.join(SOURCES_DIR, entry)}).")
@@ -109,6 +132,10 @@ def create_source(name: str, slug: str, channel_url: str, handle: str,
         "SOURCE_NAME": name,
         "SOURCE_SLUG": slug,
         "SOURCE_ATTRIBUTION": attribution,
+        "SOURCE_NAME_YAML": yaml_string(name),
+        "SOURCE_ATTRIBUTION_YAML": yaml_string(attribution),
+        "HOSTS_LINE": hosts_line(hosts),
+        "SINCE_LINE": since_line(since),
         "CHANNEL_URL": channel_url,
         "CHANNEL_HANDLE": handle,
         "GIT_REPO": git_repo,
@@ -150,6 +177,9 @@ def print_next_steps(source_dir: str):
     print()
     print("2. Ajouter la source à la liste de 6-politics/2-sources/CLAUDE.md")
     print()
+    print("La skill /politics:wikipol:new-source fait ces étapes, celle-ci comprise ;")
+    print("/politics:wikipol:ingest-source récupère ensuite les Raws et écrit les Digests.")
+    print()
 
 
 def main():
@@ -174,11 +204,14 @@ def main():
     print(f"  channel_url : {channel_url}")
     print(f"  handle      : {handle}")
     print(f"  attribution : {attribution}")
+    print(f"  hosts       : {args.get('hosts') or '(aucun)'}")
+    print(f"  since       : {args.get('since') or '(toute la chaîne)'}")
     print(f"  git_repo    : {git_repo or '(non défini)'}")
     print()
 
     source_dir = create_source(
-        name, slug, channel_url, handle, attribution, git_repo
+        name, slug, channel_url, handle, attribution, git_repo,
+        hosts=args.get("hosts") or "", since=args.get("since") or "",
     )
     print_next_steps(source_dir)
 
