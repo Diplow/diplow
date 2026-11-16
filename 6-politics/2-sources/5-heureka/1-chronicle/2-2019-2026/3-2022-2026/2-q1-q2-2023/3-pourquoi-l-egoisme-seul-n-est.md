@@ -1,6 +1,6 @@
 ---
 title: "Pourquoi l'égoïsme seul n'est pas efficace ?"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/2-mars-mai-2023
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/2-q1-q2-2023
 owner: diplo
 preview: >-
   Gilles Mitteau soutient, par le modèle de Hotelling (deux épiciers sur une

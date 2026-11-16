@@ -1,6 +1,6 @@
 ---
 title: "Les traités européens sont-ils réellement austéritaires ?"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/2-mars-mai-2023
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/2-q1-q2-2023
 owner: diplo
 preview: >-
   Dans une vidéo financée par deux ONG bruxelloises, dont Finance Watch,
