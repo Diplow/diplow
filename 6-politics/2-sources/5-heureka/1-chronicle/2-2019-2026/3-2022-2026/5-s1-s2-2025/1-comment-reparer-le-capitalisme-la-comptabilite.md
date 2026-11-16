@@ -1,6 +1,6 @@
 ---
 title: "Comment réparer le capitalisme ? La comptabilité C.A.R.E / en Triple Capital (K)"
-parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-2025-2026
+parent: 6-politics/2-sources/5-heureka/1-chronicle/2-2019-2026/3-2022-2026/5-s1-s2-2025
 owner: diplo
 preview: >-
   Gilles Mitteau soutient que la comptabilité en triple capital (CARE, de
