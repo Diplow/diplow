@@ -1,0 +1,27 @@
+.skills/6-politics/1-wikipol/new-source/scripts/sample.sh
+  s_70e2b8820e4c39::t_27f8e50b3f664b 2-6,10-12
+.skills/6-politics/1-wikipol/new-source/scripts/sample.py
+  s_70e2b8820e4c39::t_27f8e50b3f664b 1-55
+.skills/6-politics/1-wikipol/new-source/references/editorial.md
+  s_70e2b8820e4c39::t_0cb8043fb147c7 58
+.skills/6-politics/1-wikipol/new-source/SKILL.md
+  s_70e2b8820e4c39::t_0cb8043fb147c7 81
+  s_70e2b8820e4c39::t_11d731f0e3a902 3,10,57,60,63,65-67
+  s_70e2b8820e4c39::t_ddb974cf9f7083 82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fc2891a957dd34b151f75ee077092d7c32332cbb",
+  "prompts": {},
+  "sessions": {
+    "s_70e2b8820e4c39": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fa03826-6d2a-444d-9ca7-f94fa2469ebe",
+        "model": "claude-fable-5-2"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
