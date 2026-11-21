@@ -132,7 +132,9 @@ La Chronicle d'une Source, `1-chronicle/`, range ses Digests par date en un arbr
 
 ### Noms, titres, liens
 
-Les enfants sont numérotés de 1 à 6 dans l'ordre des dates. Un Digest est le fichier `N-<slug>.md`, le slug fait des six premiers mots de son titre, sans accents ; une Period est le dossier `N-<sa première date>`, par exemple `2-2026-01-05/`. Le titre d'une Period est sa plage de dates, `2026-01-05 → 2026-01-07` (une seule date quand tous ses Digests sont du même jour) ; la Chronicle garde le sien.
+Les enfants sont numérotés de 1 à 6 dans l'ordre des dates. Un Digest est le fichier `N-<slug>.md`, le slug fait des six premiers mots de son titre, sans accents ; une Period est le dossier `N-<le slug de son titre>`, par exemple `2-w02-2026/`. Le titre d'une Period est l'étendue de calendrier que couvrent ses dates, dans l'unité la plus fine (jour, semaine ISO, mois, trimestre, semestre, année) où elle tient en trois au plus : `W02 2026` quand elle tient dans une, `févr. → mars 2025`, `Q4 2024 → Q1 2025`, `5 → 7 janv. 2026` sinon, et le nom de l'unité plus large quand ses mois en font exactement une (de janvier à mars, `Q1 2024`) ; au-delà de trois années, `2016 → 2020`. Les semaines sont numérotées dans leur année ISO, les mois écrits en français. La Chronicle garde son titre. Le module `Scripts/src/wikipol/chronicle/span.py` tient cette règle.
+
+Une Period qui reçoit un Digest peut donc changer de nom, et de dossier : la plus récente, chaque fois qu'un Digest repousse sa fin dans une nouvelle unité, et ses parents quand leur étendue franchit la leur. C'est le prix d'un dossier qui dit sa période ; le rangement le suit comme une coupe.
 
 Ranger un Digest peut en déplacer d'autres : une coupe, une renumérotation. Le `parent` de chaque fichier déplacé suit, et chaque wikilink qui nommait un Digest ou une Period déplacée (par son `CLAUDE`) est réécrit : dans la Chronicle, et dans tous les fichiers Markdown du dépôt, hors dossiers cachés, `node_modules/` et les vaults figés de `Legacy/`.
 
@@ -140,23 +142,23 @@ Ranger un Digest peut en déplacer d'autres : une coupe, une renumérotation. Le
 
 ```markdown
 ---
-title: "2026-01-05 → 2026-01-07"
-parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-2026-01-05
+title: "W02 2026"
+parent: 6-politics/2-sources/1-paduteam/1-chronicle/2-w02-2026
 owner: diplo
 preview: >-
   Ce que la Source a soutenu pendant ces dates, 350 caractères au plus.
 ---
-# 2026-01-05 → 2026-01-07
+# W02 2026
 
 Un à trois paragraphes : le résumé de la Period.
 
 ## Contenu
 
-1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-2026-01-05/1-titre-de-la-video|TITRE DE LA VIDÉO]] (2026-01-05)
+1. [[6-politics/2-sources/1-paduteam/1-chronicle/2-w02-2026/1-titre-de-la-video|TITRE DE LA VIDÉO]] (2026-01-05)
 2. ...
 ```
 
-Le pipeline écrit le frontmatter, le titre et la liste `## Contenu` (pour une Period de Periods : `[[<dossier>/CLAUDE|<plage>]] (<n> Digests)`). `write-period` écrit le Preview et le résumé, à partir des titres et des Previews de ses enfants seulement, via `claude -p` sur le modèle épinglé dans le `source.yaml`. Le résumé est refusé s'il est vide, dépasse trois paragraphes, porte un titre ou une citation en bloc, lie autre chose qu'un enfant, ou met entre « » des mots qu'aucun titre ni Preview d'enfant ne contient ; refusé, il revient une fois au modèle, et un second refus n'écrit rien.
+Le pipeline écrit le frontmatter, le titre et la liste `## Contenu` (pour une Period de Periods : `[[<dossier>/CLAUDE|<titre>]] (<n> Digests, <première date> → <dernière date>)`, les dates exactes que le titre arrondit). `write-period` écrit le Preview et le résumé, à partir des titres et des Previews de ses enfants seulement, via `claude -p` sur le modèle épinglé dans le `source.yaml`. Le résumé est refusé s'il est vide, dépasse trois paragraphes, porte un titre ou une citation en bloc, lie autre chose qu'un enfant, ou met entre « » des mots qu'aucun titre ni Preview d'enfant ne contient ; refusé, il revient une fois au modèle, et un second refus n'écrit rien.
 
 Les Periods touchées sont celles dont les enfants ont changé : celles au-dessus du Digest rangé, et celles qu'une coupe a créées. Elles sont résumées de la plus profonde à la Chronicle, pour qu'un parent lise les Previews déjà réécrits de ses enfants. Tout est calculé avant d'écrire : un résumé qui échoue laisse la Chronicle telle qu'elle était. Une Period que le rangement n'a pas touchée garde son résumé.
 

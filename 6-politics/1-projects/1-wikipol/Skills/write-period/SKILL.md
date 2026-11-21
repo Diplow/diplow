@@ -27,7 +27,7 @@ Tu écris le résumé d'une **Period** : le Tile d'une Chronicle qui couvre une 
 2. **Le contexte éditorial de la Source**, son `CLAUDE.md` : qui parle, le ton, les pièges de lecture. Il dit comment restituer cette Source. Ses consignes sur un vault, des fiches ou des commandes d'ingestion décrivent l'ancien pipeline et ne te concernent pas.
 3. **Ses enfants**, dans l'ordre chronologique : pour chacun, son wikilink, son titre, sa date (un Digest) ou son nombre de Digests (une Period), et son Preview. C'est ta seule matière : tu ne vois ni les Raws, ni le corps des Digests.
 
-Le pipeline écrit lui-même le frontmatter de la Period, son titre (sa plage de dates) et, sous ton résumé, la liste `## Contenu` de ses enfants avec leurs liens : tu ne les écris pas.
+Le pipeline écrit lui-même le frontmatter de la Period, son titre (l'étendue de calendrier que couvrent ses dates, `Q4 2024 → Q1 2025`) et, sous ton résumé, la liste `## Contenu` de ses enfants avec leurs liens : tu ne les écris pas.
 
 ## Ce que tu rends
 

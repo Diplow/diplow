@@ -1,3 +1,4 @@
+from datetime import date
 from pathlib import Path
 
 import pytest
@@ -123,7 +124,8 @@ def test_a_numeric_name_is_read_as_text(tmp_path):
 def test_the_repo_sources_load_in_node_order():
     sources = load_sources(DEFAULT_SOURCES_DIR)
 
-    assert [s.slug for s in sources] == ["paduteam", "boniface", "osonscauser", "blast"]
+    # The first four; a Source added since (/politics:wikipol:new-source) comes after them.
+    assert [s.slug for s in sources][:4] == ["paduteam", "boniface", "osonscauser", "blast"]
     assert sources[0].channel_url == "https://www.youtube.com/@PaduTeam/videos"
     for source in sources:
         assert source.channel_url
@@ -132,6 +134,22 @@ def test_the_repo_sources_load_in_node_order():
         assert source.legacy_vault is not None
         assert source.legacy_vault.is_dir()
         assert Path(source.legacy_vault).parent.name == "Legacy"
+
+
+def test_a_source_says_where_its_chronicle_starts(tmp_path):
+    node = tmp_path / "1-x"
+    node.mkdir()
+    text = "source:\n  name: X\n  slug: x\nyoutube:\n  since: {}\n"
+    (node / "source.yaml").write_text(text.format("2023-10-31"))
+    assert load_source(node).since == date(2023, 10, 31)
+
+    (node / "source.yaml").write_text("source:\n  name: X\n  slug: x\n")
+    assert load_source(node).since is None
+
+    for wrong in ('"2023-10-31"', "2023", "2023-10-31 07:00:00"):
+        (node / "source.yaml").write_text(text.format(wrong))
+        with pytest.raises(ConfigError, match=r"youtube\.since"):
+            load_source(node)
 
 
 def test_the_fetcher_is_yt_dlp_unless_told_otherwise():
@@ -162,12 +180,9 @@ def test_an_unknown_fetcher_is_a_config_error():
 
 
 def test_every_repo_source_pins_the_model_that_writes_its_digests():
-    assert {s.slug: s.model for s in load_sources(DEFAULT_SOURCES_DIR)} == {
-        "paduteam": "claude-sonnet-5-5",
-        "boniface": "claude-sonnet-5-5",
-        "osonscauser": "claude-sonnet-5-5",
-        "blast": "claude-sonnet-5-5",
-    }
+    models = {s.slug: s.model for s in load_sources(DEFAULT_SOURCES_DIR)}
+
+    assert set(models.values()) == {"claude-sonnet-5-5"}, models
 
 
 def test_the_source_template_pins_a_model_too():

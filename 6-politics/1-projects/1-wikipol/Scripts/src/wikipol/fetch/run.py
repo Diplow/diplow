@@ -8,7 +8,9 @@ upload. `limit` caps the videos tried, not the ones stored, so a sample never gr
 
 `since` keeps a channel's recent past only. The listing carries no dates, so a video's date is
 known once it is fetched: one published before `since` is not stored, and 3 of them in a row end
-the run, since the channel lists newest first and one old video may only be out of order.
+the run, since the channel lists newest first and one old video may only be out of order. Without
+one, the run takes the Source's own, `youtube.since` of its `source.yaml`: where its Chronicle
+starts, so that no run, the daily one included, walks back into the history it left out.
 """
 
 from __future__ import annotations
@@ -68,6 +70,7 @@ def fetch_source(
 ) -> FetchReport:
     if not source.channel_url:
         raise ConfigError(f"{source.slug}: source.yaml has no youtube.channel_url")
+    since = since or source.since
     report = FetchReport(source.slug, since=since)
     listed = fetcher.list_channel(source.channel_url)
     stored = set(store.list(source.slug))

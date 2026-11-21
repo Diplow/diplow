@@ -58,7 +58,8 @@ def contents_line(number: int, child: Period | Leaf) -> str:
     if isinstance(child, Leaf):
         return f"{number}. [[{link(child)}|{label(child.title)}]] ({child.published.isoformat()})"
     count = len(child.leaves())
-    return f"{number}. [[{link(child)}|{child.title}]] ({count} Digest{'s' if count > 1 else ''})"
+    held = f"{count} Digest{'s' if count > 1 else ''}, {date_range(child.start, child.end)}"
+    return f"{number}. [[{link(child)}|{child.title}]] ({held})"
 
 
 def render_period(period: Period) -> str:

@@ -342,15 +342,16 @@ def test_a_staged_digest_with_another_parent_is_written_again(source, store, rep
 
 
 class MentioningWriter(FakeWriter):
-    """Mentions the Source's host, unheard, as a humoriste, a label it proposes."""
+    """Mentions the Source's host, unheard, under a label it proposes, one the live vocabulary
+    lacks."""
 
     def __call__(self, skill: str, prompt: str, model: str) -> str:
         draft = super().__call__(skill, prompt, model)
         if "# Le Raw" not in prompt:
             return draft
         mentions = (
-            "mentions:\n  - {name: Jean Hôte, kind: personne, labels: [humoriste]}\n"
-            "new_terms:\n  - {label: humoriste, kind: personne, definition: Fait rire.}\n"
+            "mentions:\n  - {name: Jean Hôte, kind: personne, labels: [humoriste-de-démo]}\n"
+            "new_terms:\n  - {label: humoriste-de-démo, kind: personne, definition: Fait rire.}\n"
         )
         return draft.replace("\n---\n## 1.", f"\n{mentions}---\n## 1.", 1)
 
@@ -369,5 +370,5 @@ def test_a_staged_digest_with_mentions_is_taken_back(source, store, repo, tmp_pa
 
     assert report.resumed == [FROM_NOTE]
     assert digests_in(repo)[FROM_NOTE]["mentions"][0]["name"] == "Jean Hôte"
-    term = load_vocabulary(vocabulary).kinds["personne"].labels["humoriste"]
+    term = load_vocabulary(vocabulary).kinds["personne"].labels["humoriste-de-démo"]
     assert term.introduced_by == f"demo/{FROM_NOTE}.md"

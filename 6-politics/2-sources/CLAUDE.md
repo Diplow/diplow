@@ -3,10 +3,11 @@ title: Sources
 parent: 6-politics/2-sources
 owner: diplo
 preview: >-
-  The political media I follow, one numbered node per Source: PaduTeam,
-  Boniface, Osons Causer and Blast for now. Each holds its config, its editorial context and its
-  Chronicle, where wikipol's pipeline files one Digest per Publication by date.
-  Six Sources at most here; past six, they get grouped.
+  The media I follow, one numbered node per Source: PaduTeam, Boniface, Osons
+  Causer, Blast, Heu?reka and Le Réveilleur. Each holds its config, its
+  editorial context and its Chronicle, where wikipol's pipeline files one
+  Digest per Publication by date. Six Sources at most here: the node is full,
+  and a seventh means grouping them first.
 ---
 # Sources
 
@@ -18,13 +19,15 @@ The media whose output I want to argue from, each one a **Source** in the sense 
 | 2 | [[6-politics/2-sources/2-boniface/CLAUDE\|Boniface]] | Pascal Boniface's geopolitics channel; he founded IRIS |
 | 3 | [[6-politics/2-sources/3-osonscauser/CLAUDE\|Osons Causer]] | A YouTube channel that explains politics and ideas; its editorial context is still to write |
 | 4 | [[6-politics/2-sources/4-blast/CLAUDE\|Blast]] | An independent online news outlet, *le souffle de l'info*; its editorial context is still to write |
+| 5 | [[6-politics/2-sources/5-heureka/CLAUDE\|Heu?reka]] | Gilles Mitteau's channel on how finance and the economy work, by a former trading-floor employee; its editorial context is a draft to review |
+| 6 | [[6-politics/2-sources/6-lereveilleur/CLAUDE\|Le Réveilleur]] | Rodolphe Meyer's long, sourced videos on climate, energy and the environmental impact of technologies; its editorial context is a draft to review |
 
 ## A Source node
 
 | Slot | What goes there |
 |---|---|
 | `CLAUDE.md` | The Source's Tile and its editorial context: who speaks, the tone, the traps a reader falls into. Whoever writes a Digest reads it first |
-| `source.yaml` | Its config, read through wikipol's `Scripts/source_config.py`: the channel, the model its pipeline runs, and `legacy.vault`, the frozen vault it came from, if any |
+| `source.yaml` | Its config, read through wikipol's `Scripts/source_config.py`: the channel, the model its pipeline runs, `youtube.since`, the date its Chronicle starts when it doesn't take the whole channel, and `legacy.vault`, the frozen vault it came from, if any |
 | `1-chronicle/` | Its Chronicle: the Digests filed by date in a tree of Periods that split by count ([[6-politics/1-projects/1-wikipol/docs/adr/0001-chronicle-splits-by-count\|ADR 0001]]) |
 | `2-` to `6-` | Free, for a structure that emerges from the Digests rather than one decided up front |
 | `.skills/` | The Source's own skills, each overriding wikipol's skill of the same name, grouped by six |
@@ -32,5 +35,7 @@ The media whose output I want to argue from, each one a **Source** in the sense 
 ## Six at most
 
 This node takes six Sources. The seventh means regrouping first, by kind of media or by country, whichever the seven make obvious, and `Scripts/new_source.py` refuses to create it until then.
+
+A Source is added with `/politics:wikipol:new-source <channel URL>` and filled with `/politics:wikipol:ingest-source <slug>`, the two skills of [[.skills/6-politics/1-wikipol/CLAUDE|.skills/6-politics/1-wikipol]].
 
 The Obsidian vaults these Sources started as are frozen in `wikipol/Legacy/`: read as extra input, never written.

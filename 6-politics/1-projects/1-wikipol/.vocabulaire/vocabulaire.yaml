@@ -28,6 +28,209 @@ kinds:
       témoin: {définition: "Rapporte ce qu'il a vécu ou vu.", statut: accepté}
       dirigeant-de-parti: {définition: "Dirige un parti ou en est un cadre dirigeant.", statut: proposé, introduit_par: paduteam/wsiChBGb6T0.md}
       chef-de-gouvernement: {définition: "Dirige le gouvernement d'un État (Premier ministre), à la date de la Publication.", statut: proposé, introduit_par: paduteam/ADd-wfitfm8.md}
+      philosophe: {définition: "Pense et écrit sur des questions de philosophie.", statut: proposé, introduit_par: paduteam/7d1lLvnd2cE.md}
+      philosophe: {définition: "Élabore et publie une pensée philosophique.", statut: proposé, introduit_par: paduteam/1fj9qJ21apI.md}
+      enseignant: {définition: "Enseigne dans un établissement scolaire.", statut: proposé, introduit_par: paduteam/1fj9qJ21apI.md}
+      ingénieur: {définition: "Conçoit, exploite ou évalue des systèmes techniques.", statut: proposé, introduit_par: osonscauser/owU0KJ7RXf0.md}
+      cartographe: {définition: "Conçoit et dessine des cartes.", statut: proposé, introduit_par: boniface/KXVSJ0cSg_U.md}
+      chef-cuisinier: {définition: "Cuisinier professionnel qui dirige une cuisine ou un restaurant.", statut: proposé, introduit_par: paduteam/vpr0o3duK_4.md}
+      fonctionnaire-international: {définition: "Dirige ou travaille pour une organisation internationale ou l'une de ses agences.", statut: proposé, introduit_par: osonscauser/0rRdwjRkuJU.md}
+      révolutionnaire: {définition: "Mène ou incarne une révolution politique.", statut: proposé, introduit_par: boniface/eqXoEN0OCWc.md}
+      linguiste: {définition: "Étudie les langues et en fixe ou en forge le vocabulaire.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
+      haut-fonctionnaire: {définition: "Occupe un poste de direction dans l'administration ou les établissements publics.", statut: proposé, introduit_par: blast/PfO0d2QPbXU.md}
+      médecin: {définition: "Exerce la médecine : soigne ou opère des patients.", statut: proposé, introduit_par: blast/PfO0d2QPbXU.md}
+      juriste: {définition: "Spécialiste du droit, qui l'étudie ou le pratique.", statut: proposé, introduit_par: osonscauser/cBhHMYnGSJE.md}
+      présentateur: {définition: "Présente des émissions de télévision ou de radio.", statut: proposé, introduit_par: osonscauser/cBhHMYnGSJE.md}
+      ancien-chef-d-état: {définition: "A dirigé un État et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: blast/5N2TINrVJPE.md}
+      humanitaire: {définition: "Agit dans l'aide humanitaire ou dirige une organisation qui la porte.", statut: proposé, introduit_par: paduteam/xvFF163UFn4.md}
+      président-élu: {définition: "Élu à la présidence d'un État mais pas encore entré en fonction, à la date de la Publication.", statut: proposé, introduit_par: boniface/k4Xi-vuVmJY.md}
+      dirigeant-sportif: {définition: "Dirige une instance, une fédération ou un comité du sport.", statut: proposé, introduit_par: boniface/2f8gBKazQp0.md}
+      ancien-ministre: {définition: "A été membre d'un gouvernement et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/oNE9KIl4LWM.md}
+      ancien-chef-de-gouvernement: {définition: "A dirigé le gouvernement d'un État (Premier ministre) et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: osonscauser/p2YA6-ades8.md}
+      religieux: {définition: "Exerce une fonction religieuse : rabbin, imam, prêtre.", statut: proposé, introduit_par: osonscauser/p2YA6-ades8.md}
+      chef-religieux: {définition: "Fonde ou dirige une religion, une communauté religieuse ou un culte.", statut: proposé, introduit_par: blast/fg9KvtkCDnE.md}
+      apôtre: {définition: "Disciple de Jésus qui propage son message et fonde les premières communautés chrétiennes.", statut: proposé, introduit_par: blast/fg9KvtkCDnE.md}
+      gouverneur: {définition: "Administre une province pour le compte d'un pouvoir central, à la date de la Publication.", statut: proposé, introduit_par: blast/fg9KvtkCDnE.md}
+      historien: {définition: "Étudie et écrit l'histoire.", statut: proposé, introduit_par: osonscauser/BBPBF5Q1Euc.md}
+      résistant: {définition: "Combat l'occupant ou un régime d'oppression dans la clandestinité.", statut: proposé, introduit_par: paduteam/xHa2JBJCZbc.md}
+      fondateur-de-parti: {définition: "A fondé un parti politique.", statut: proposé, introduit_par: blast/wcToU9D958Q.md}
+      économiste: {définition: "Étudie l'économie et en élabore des théories ou des mesures.", statut: proposé, introduit_par: osonscauser/nPJR_P9_T14.md}
+      humoriste: {définition: "Fait profession de l'humour : spectacles, sketchs, chroniques.", statut: proposé, introduit_par: paduteam/uOwfFzd8MZ8.md}
+      lanceur-d-alerte: {définition: "Révèle ou signale, dans l'intérêt général, des faits illégaux ou dangereux dont il a connaissance.", statut: proposé, introduit_par: blast/JQ-n9rdqUe0.md}
+      défenseur-des-droits: {définition: "Dirige l'autorité indépendante chargée de défendre les droits des citoyens face à l'administration.", statut: proposé, introduit_par: blast/ZQ8hNH3OOrE.md}
+      étudiant: {définition: "Suit des études, notamment supérieures, à la date de la Publication.", statut: proposé, introduit_par: paduteam/xrGePx2JwbM.md}
+      commissaire-européen: {définition: "Membre de la Commission européenne, à la date de la Publication.", statut: proposé, introduit_par: blast/RAbqVRNbepU.md}
+      influenceur: {définition: "Crée du contenu sur les réseaux sociaux et y rassemble un public.", statut: proposé, introduit_par: paduteam/XNIki6_ZNp0.md}
+      acteur: {définition: "Joue dans des films, y compris pornographiques.", statut: proposé, introduit_par: paduteam/XNIki6_ZNp0.md}
+      éditeur: {définition: "Publie des livres et dirige des collections dans une maison d'édition.", statut: proposé, introduit_par: blast/a3ezVXwQlkk.md}
+      documentariste: {définition: "Réalise des documentaires pour la télévision ou le cinéma.", statut: proposé, introduit_par: blast/QcyFxkkHY1w.md}
+      psychiatre: {définition: "Médecin qui soigne les troubles psychiques et en élabore des théories.", statut: proposé, introduit_par: blast/rx-pliV3vtc.md}
+      psychanalyste: {définition: "Pratique et théorise la psychanalyse.", statut: proposé, introduit_par: blast/rx-pliV3vtc.md}
+      accusé: {définition: "Est jugé devant un tribunal pénal, à la date de la Publication.", statut: proposé, introduit_par: paduteam/vfEiOQKnZ4M.md}
+      victime: {définition: "A subi une infraction, notamment une violence sexuelle.", statut: proposé, introduit_par: paduteam/vfEiOQKnZ4M.md}
+      chauffeur-vtc: {définition: "Conduit des clients avec sa propre voiture via une plateforme de transport.", statut: proposé, introduit_par: paduteam/OWvRp0vK2Sg.md}
+      expert-comptable: {définition: "Professionnel du chiffre qui tient et certifie la comptabilité d'entreprises.", statut: proposé, introduit_par: paduteam/OWvRp0vK2Sg.md}
+      réalisateur: {définition: "Réalise des films de fiction ou des documentaires.", statut: proposé, introduit_par: blast/tH60p9vvmXQ.md}
+      scénariste: {définition: "Écrit des scénarios de films.", statut: proposé, introduit_par: blast/tH60p9vvmXQ.md}
+      ancien-diplomate: {définition: "A représenté un État ou une organisation et ne le fait plus, à la date de la Publication.", statut: proposé, introduit_par: blast/YQayX26U_oU.md}
+      sondeur: {définition: "Mesure et analyse l'opinion publique par des sondages.", statut: proposé, introduit_par: blast/4uRY8jKfQH4.md}
+      prince-héritier: {définition: "Héritier désigné du trône d'une monarchie, à la date de la Publication.", statut: proposé, introduit_par: boniface/m427VTjvPno.md}
+      auteur-d-attentat: {définition: "A commis un attentat meurtrier.", statut: proposé, introduit_par: paduteam/6E070o72u6U.md}
+      lobbyiste: {définition: "Défend auprès des institutions les intérêts de clients ou d'un secteur.", statut: proposé, introduit_par: blast/fEc8opuX6DA.md}
+      chef-de-groupe-armé: {définition: "Dirige un groupe armé ou sa branche militaire.", statut: proposé, introduit_par: paduteam/U26977L2L24.md}
+      dirigeant-associatif: {définition: "Préside ou dirige une association ou une fédération d'associations.", statut: proposé, introduit_par: boniface/U0CB4brRb3g.md}
+      président-de-l-autorité-palestinienne: {définition: "Dirige l'Autorité palestinienne, à la date de la Publication.", statut: proposé, introduit_par: boniface/gTivTxVw9EE.md}
+      disciple: {définition: "Suit un maître et reçoit son enseignement, notamment l'un des compagnons de Jésus.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
+      magicien: {définition: "Pratique la magie et fait des prodiges devant un public.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
+      théologien: {définition: "Élabore et défend une doctrine religieuse.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
+      empereur: {définition: "Dirige un empire, notamment l'Empire romain.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
+      ancien-président-de-l-autorité-palestinienne: {définition: "A dirigé l'Autorité palestinienne et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: blast/9IODM4a91Ss.md}
+      ancien-élu: {définition: "A détenu un mandat électif et n'en détient plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/uIuBwaYJZEc.md}
+      sociologue: {définition: "Étudie les sociétés et les rapports sociaux, et en publie les analyses.", statut: proposé, introduit_par: blast/w09mN2LfUBc.md}
+      traducteur: {définition: "Traduit des textes d'une langue dans une autre, notamment des livres.", statut: proposé, introduit_par: blast/l26Xt3HOcFM.md}
+      entraîneur: {définition: "Dirige et prépare une équipe sportive.", statut: proposé, introduit_par: boniface/9X9jOh-GdcM.md}
+      ancien-haut-fonctionnaire: {définition: "A occupé un poste de direction dans l'administration et ne l'occupe plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/cK7ahpqnGRc.md}
+      astronaute: {définition: "Voyage dans l'espace ou appartient à un corps d'astronautes.", statut: proposé, introduit_par: boniface/Ecn08O4RQFs.md}
+      dirigeant-de-média: {définition: "Dirige un groupe, une chaîne ou une société de médias.", statut: proposé, introduit_par: blast/whkfczDMyVs.md}
+      policier: {définition: "Agent de la police nationale, gardien de la paix, brigadier ou major.", statut: proposé, introduit_par: blast/pvUNJ3ehYco.md}
+      sexologue: {définition: "Spécialiste de la sexualité humaine, qui conseille et publie sur le sujet.", statut: proposé, introduit_par: blast/Fp1gFaFFE_E.md}
+      agriculteur: {définition: "Exploite une ferme, élève des animaux ou cultive la terre.", statut: proposé, introduit_par: blast/h2YRlpLhQmY.md}
+      agronome: {définition: "Spécialiste de l'agriculture, qui étudie et conseille les pratiques agricoles.", statut: proposé, introduit_par: blast/nhOpTPh57zA.md}
+      microbiologiste: {définition: "Étudie les micro-organismes, notamment ceux des sols.", statut: proposé, introduit_par: blast/nhOpTPh57zA.md}
+      philanthrope: {définition: "Finance des causes et des organisations d'intérêt général.", statut: proposé, introduit_par: boniface/ol_r9vI3FpA.md}
+      consultant: {définition: "Conseille des organisations ou des pouvoirs publics, ici en démocratie participative.", statut: proposé, introduit_par: blast/9S0VA52zcxM.md}
+      roi: {définition: "Dirige un royaume par héritage ou par conquête, à la date de la Publication.", statut: proposé, introduit_par: blast/J99oFBtEsAE.md}
+      maire-du-palais: {définition: "Plus haut dignitaire d'un royaume franc après le roi, dont il finit par prendre le pouvoir.", statut: proposé, introduit_par: blast/J99oFBtEsAE.md}
+      dirigeant-de-think-tank: {définition: "Préside ou dirige un think tank ou une fondation de réflexion.", statut: proposé, introduit_par: boniface/D7fNMG-163A.md}
+      psychologue: {définition: "Étudie le psychisme et le comportement humains et en élabore des théories.", statut: proposé, introduit_par: paduteam/HGz-uG-9Hzw.md}
+      dirigeant-patronal: {définition: "Préside ou dirige une organisation patronale d'un secteur d'activité.", statut: proposé, introduit_par: paduteam/fZJh9PLgXdw.md}
+      responsable-nazi: {définition: "Sert l'appareil répressif de l'Allemagne nazie, police politique ou SS.", statut: proposé, introduit_par: blast/-Z9ixgPo36M.md}
+      condamné: {définition: "A été condamné par la justice pénale, à la date de la Publication.", statut: proposé, introduit_par: paduteam/7OzlCXM5t-U.md}
+      producteur: {définition: "Finance et supervise la production de films.", statut: proposé, introduit_par: blast/cKYSNkedyek.md}
+      conseiller-politique: {définition: "Conseille un dirigeant politique, notamment à la Maison-Blanche.", statut: proposé, introduit_par: boniface/yTDiNIy50xE.md}
+      graphiste: {définition: "Conçoit l'identité visuelle et les visuels d'une chaîne ou d'une publication.", statut: proposé, introduit_par: paduteam/LxwZ1JIvNtE.md}
+      porte-parole: {définition: "Parle au nom d'une organisation, d'une famille ou d'un mouvement.", statut: proposé, introduit_par: blast/LE_ZVLBJ5Mk.md}
+      épidémiologiste: {définition: "Étudie la répartition et les causes des maladies dans les populations.", statut: proposé, introduit_par: blast/ArZwQC88qgY.md}
+      rédacteur: {définition: "Écrit et dirige une revue ou un site de réflexion.", statut: proposé, introduit_par: paduteam/SQN9eTGn1Cg.md}
+      designer: {définition: "Conçoit des objets, des interfaces ou des images, en indépendant ou en agence.", statut: proposé, introduit_par: blast/06KQ5dB1EnU.md}
+      dessinateur: {définition: "Dessine des planches de bande dessinée ou des illustrations et les publie.", statut: proposé, introduit_par: paduteam/CI-C05V074k.md}
+      comte: {définition: "Seigneur qui dirige un comté, à la date de la Publication.", statut: proposé, introduit_par: blast/V2yr9N2jK-0.md}
+      négociateur: {définition: "Mène une négociation pour le compte d'un État ou d'une organisation, ici le Brexit pour l'Union européenne.", statut: proposé, introduit_par: boniface/DRcmNXr-nCw.md}
+      ancien-dirigeant-sportif: {définition: "A dirigé une instance, une fédération ou un comité du sport et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/kk3SmKSCNXM.md}
+      politologue: {définition: "Étudie la vie politique et en publie des analyses.", statut: proposé, introduit_par: blast/rPaHsMZ7pts.md}
+      pilote: {définition: "Pilote un aéronef, notamment pour une compagnie aérienne.", statut: proposé, introduit_par: blast/N_GWbPTMLqA.md}
+      dignitaire-nazi: {définition: "Dirigeant du parti ou de l'État nazi, notamment ministre du Reich.", statut: proposé, introduit_par: paduteam/oKhLNMPUApY.md}
+      démographe: {définition: "Étudie les populations et leur évolution.", statut: proposé, introduit_par: boniface/Tl5hZKRztyw.md}
+      chroniqueur: {définition: "Tient une chronique régulière dans un média, à la télévision, à la radio ou dans la presse.", statut: proposé, introduit_par: paduteam/L4b3g_GHEqk.md}
+      espion: {définition: "Mène des opérations de renseignement sous fausse identité, pour un service ou une société privée.", statut: proposé, introduit_par: blast/FUwkLwlpohA.md}
+      conférencier: {définition: "Donne des conférences publiques sur un sujet.", statut: proposé, introduit_par: boniface/QVFIXch9zL8.md}
+      duc: {définition: "Grand seigneur qui dirige un duché, à la date de la Publication.", statut: proposé, introduit_par: blast/FlQyQXxBQDU.md}
+      poète: {définition: "Écrit de la poésie et la publie.", statut: proposé, introduit_par: blast/FlQyQXxBQDU.md}
+      chef-politique-de-groupe-armé: {définition: "Dirige la branche politique d'un groupe armé.", statut: proposé, introduit_par: blast/7tYGSp4jvDM.md}
+      anthropologue: {définition: "Étudie les sociétés humaines, leurs pratiques et leurs institutions.", statut: proposé, introduit_par: paduteam/oJJjXM92mjs.md}
+      première-dame: {définition: "Épouse du chef de l'État, à la date de la Publication.", statut: proposé, introduit_par: paduteam/JvzArhdDXIk.md}
+      collaborateur-de-l-élysée: {définition: "Travaille auprès du président de la République, au palais de l'Élysée.", statut: proposé, introduit_par: blast/LSlUPiGbl7o.md}
+      impératrice: {définition: "Épouse d'un empereur, notamment romain.", statut: proposé, introduit_par: blast/QonpAL18ydE.md}
+      ancien-magistrat: {définition: "A été juge ou procureur et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/c3RX1PhRhI4.md}
+      mis-en-examen: {définition: "Est mis en examen dans une procédure pénale, sans avoir été jugé, à la date de la Publication.", statut: proposé, introduit_par: paduteam/KglA4OFVYy0.md}
+      haut-représentant-de-l-union-européenne: {définition: "Dirige la politique étrangère de l'Union européenne, à la date de la Publication.", statut: proposé, introduit_par: blast/kMIsW_Nm0e4.md}
+      libraire: {définition: "Tient une librairie.", statut: proposé, introduit_par: paduteam/gtB7UZM3OD4.md}
+      géographe: {définition: "Étudie l'espace, les territoires et les sociétés qui les habitent.", statut: proposé, introduit_par: paduteam/2-yjOa2ug5U.md}
+      président-de-la-commission-européenne: {définition: "Préside la Commission européenne, à la date de la Publication.", statut: proposé, introduit_par: blast/pZ6B-0R_1aA.md}
+      streamer: {définition: "Diffuse en direct sur une plateforme de streaming, devant un public qui le finance par des dons et des abonnements.", statut: proposé, introduit_par: paduteam/Szw7Cli2ltE.md}
+      commandant-de-groupe-armé: {définition: "Haut responsable militaire d'un groupe armé, sans en être le chef.", statut: proposé, introduit_par: blast/CdHELptA-5U.md}
+      ancien-chef-d-entreprise: {définition: "A dirigé une entreprise et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/SMZq-871veQ.md}
+      ancien-dirigeant-patronal: {définition: "A présidé ou dirigé une organisation patronale et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/yIq2MjL2sc4.md}
+      ancien-directeur-d-établissement: {définition: "A dirigé un établissement d'enseignement et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Udn6iu_F2vU.md}
+      mathématicien: {définition: "Étudie les mathématiques et en démontre les résultats.", statut: proposé, introduit_par: paduteam/oDlbLE_aTPM.md}
+      ancien-dirigeant-de-parti: {définition: "A dirigé un parti et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/4PV9RBcvic4.md}
+      ancien-sportif: {définition: "A pratiqué un sport en compétition et ne le pratique plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/q9BfkJS0cQs.md}
+      explorateur: {définition: "Part découvrir et conquérir des terres nouvelles pour une couronne.", statut: proposé, introduit_par: blast/umxy2AcM_R0.md}
+      coach: {définition: "Entraîne des personnes à la prise de parole et à la communication.", statut: proposé, introduit_par: paduteam/PBDnxew6e34.md}
+      publicitaire: {définition: "Conçoit des campagnes de publicité et de relations publiques.", statut: proposé, introduit_par: blast/buz6BTSdR2Q.md}
+      fondateur-de-mouvement: {définition: "Fonde un mouvement politique ou idéologique.", statut: proposé, introduit_par: blast/79U-Auozz6E.md}
+      suspect: {définition: "Soupçonné par l'enquête d'avoir participé à un crime, sans avoir été jugé.", statut: proposé, introduit_par: boniface/ezPoHfgR6GQ.md}
+      prétendant-au-trône: {définition: "Se présente comme l'héritier légitime d'un trône qu'il n'occupe pas, à la date de la Publication.", statut: proposé, introduit_par: paduteam/gFKj4CqjSv4.md}
+      vice-président: {définition: "Second du chef de l'État, qui le remplace en cas d'empêchement, à la date de la Publication.", statut: proposé, introduit_par: paduteam/0dXdv0MpE8o.md}
+      régicide: {définition: "A tué ou tenté de tuer un roi.", statut: proposé, introduit_par: blast/29aynNz_AcY.md}
+      représentant-du-personnel: {définition: "Élu du comité social et économique d'une entreprise, qui représente les salariés.", statut: proposé, introduit_par: blast/p_FSKLRQs-U.md}
+      vice-président-élu: {définition: "Élu à la vice-présidence d'un État mais pas encore entré en fonction, à la date de la Publication.", statut: proposé, introduit_par: blast/RexzwVwsZBI.md}
+      ancien-commissaire-européen: {définition: "A été membre de la Commission européenne et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Ax11S6NfGvc.md}
+      ancien-militaire: {définition: "A servi dans une armée et n'y sert plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/pMSgohsnkJM.md}
+      assistant-parlementaire: {définition: "Collabore avec un parlementaire dans son travail politique.", statut: proposé, introduit_par: paduteam/2lojw09EHRw.md}
+      commerçant: {définition: "Tient un commerce, comme un café ou une boutique.", statut: proposé, introduit_par: blast/AnnvY4AxufE.md}
+      reine-régente: {définition: "Reine qui exerce le pouvoir au nom d'un roi trop jeune pour régner, à la date de la Publication.", statut: proposé, introduit_par: blast/85c-YjO3hfY.md}
+      intermédiaire: {définition: "Se glisse entre États et entreprises dans des contrats, notamment d'armement, contre commissions.", statut: proposé, introduit_par: blast/7YW9bXmYMpE.md}
+      interprète: {définition: "Traduit à l'oral, en direct, les propos d'un intervenant qui parle une autre langue.", statut: proposé, introduit_par: blast/TtHgPQYIZL4.md}
+      président-du-conseil-européen: {définition: "Préside le Conseil européen, qui réunit les chefs d'État et de gouvernement de l'Union européenne, à la date de la Publication.", statut: proposé, introduit_par: boniface/ZuJ0luBkoAw.md}
+      pompier: {définition: "Sapeur-pompier qui intervient et transporte des patients en urgence.", statut: proposé, introduit_par: blast/m_3eBCypDlE.md}
+      éducateur-spécialisé: {définition: "Accompagne des jeunes en difficulté dans des structures sociales et éducatives.", statut: proposé, introduit_par: blast/rr3ED9-O228.md}
+      chef-mafieux: {définition: "Dirige une organisation mafieuse.", statut: proposé, introduit_par: blast/FiH9Yw5Kack.md}
+      criminologue: {définition: "Étudie la criminalité, la sécurité et la gestion des crises, et en publie des analyses.", statut: proposé, introduit_par: boniface/XiGimU2wvNI.md}
+      ancien-vice-président: {définition: "A été vice-président d'un État et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/SVcj1A0jL8E.md}
+      ancien-enseignant: {définition: "A enseigné dans un établissement scolaire et n'enseigne plus, à la date de la Publication.", statut: proposé, introduit_par: blast/eqrUAnS-0cE.md}
+      informaticien: {définition: "Conçoit ou écrit des programmes et des systèmes informatiques.", statut: proposé, introduit_par: boniface/w1ilRGaZOiA.md}
+      banquier: {définition: "Dirige une banque ou exerce dans la banque d'affaires.", statut: proposé, introduit_par: paduteam/Kmj7W1JPRYY.md}
+      secrétaire: {définition: "Assiste une personnalité et tape ou met en forme ses textes.", statut: proposé, introduit_par: blast/xSXsQtFy2Dg.md}
+      banquier-central: {définition: "Dirige une banque centrale, à la date de la Publication.", statut: proposé, introduit_par: paduteam/D9frhw2Dwhk.md}
+      opposant: {définition: "S'oppose politiquement à un pouvoir en place.", statut: proposé, introduit_par: blast/FsnJRNFB1wg.md}
+      médiateur: {définition: "Mène des missions de médiation ou de conciliation entre parties en conflit.", statut: proposé, introduit_par: boniface/NSI1pxlB9-g.md}
+      ancien-dirigeant-associatif: {définition: "A présidé ou dirigé une association ou une fédération d'associations et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/3WBBz75Z_NQ.md}
+      physicien: {définition: "Étudie la physique et en élabore les théories ou les applications.", statut: proposé, introduit_par: blast/mIdSpmQ6Z7g.md}
+      stratège-politique: {définition: "Conçoit la stratégie politique et médiatique d'un camp ou d'un dirigeant.", statut: proposé, introduit_par: blast/XSEEnC-jlkk.md}
+      ancien-policier: {définition: "A servi dans la police et n'y sert plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/L8URmnsnGWs.md}
+      photographe: {définition: "Réalise des photographies et en fait son art ou son métier.", statut: proposé, introduit_par: blast/ybD52hYNuCw.md}
+      financier: {définition: "Gère l'argent ou l'épargne de clients dans la finance.", statut: proposé, introduit_par: blast/EknEsfu3eiM.md}
+      lycéen: {définition: "Élève d'un lycée, à la date de la Publication.", statut: proposé, introduit_par: paduteam/uIUVoct42YQ.md}
+      ancienne-première-dame: {définition: "A été l'épouse du chef de l'État et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/wAPhRvXtsl0.md}
+      président-du-conseil-constitutionnel: {définition: "Préside le Conseil constitutionnel français, à la date de la Publication.", statut: proposé, introduit_par: blast/K_KPyei2JHk.md}
+      ancien-dirigeant-syndical: {définition: "A dirigé une confédération syndicale et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: blast/yYZOdhBTdnM.md}
+      ancien-dirigeant-de-média: {définition: "A dirigé un groupe, une chaîne ou une société de médias et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/U4HdNfy70NQ.md}
+      prisonnier-politique: {définition: "Dirigeant détenu pour des raisons politiques, à la date de la Publication.", statut: proposé, introduit_par: blast/nBaNRVIDMLQ.md}
+      universitaire: {définition: "Enseigne et mène des recherches à l'université.", statut: proposé, introduit_par: blast/98v7SwEoC8c.md}
+      prospectiviste: {définition: "Étudie les évolutions futures et construit des scénarios pour éclairer les décisions.", statut: proposé, introduit_par: boniface/L9DnxMJ5F2c.md}
+      planteur: {définition: "Exploite une plantation, notamment esclavagiste.", statut: proposé, introduit_par: blast/n5DkAIlDT1I.md}
+      dirigeant-culturel: {définition: "Dirige un lieu ou une institution culturelle.", statut: proposé, introduit_par: boniface/2R2oILPTndY.md}
+      dictateur: {définition: "Exerce seul un pouvoir autoritaire sur un État, sans contrôle ni alternance.", statut: proposé, introduit_par: blast/bd92aMK4PPg.md}
+      chef-autochtone: {définition: "Dirige un peuple ou une nation autochtone et parle en son nom.", statut: proposé, introduit_par: blast/uIAMr-d1gAw.md}
+      architecte: {définition: "Conçoit des bâtiments et des espaces, ici pour mener des recherches d'analyse spatiale.", statut: proposé, introduit_par: blast/h-e4d9Ervg0.md}
+      ancien-chef-religieux: {définition: "A dirigé une religion ou une communauté religieuse et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/AgUWx_jIOFg.md}
+      sémiologue: {définition: "Étudie les signes et les systèmes de signification, notamment dans la culture de masse.", statut: proposé, introduit_par: blast/tR6aujaUh_g.md}
+      émissaire: {définition: "Envoyé spécial d'un chef d'État, chargé de mener des négociations en son nom.", statut: proposé, introduit_par: boniface/7WE9vd_1-jA.md}
+      guide-suprême: {définition: "Plus haute autorité politique et religieuse de la République islamique d'Iran, à la date de la Publication.", statut: proposé, introduit_par: blast/Z2WqoAOlvK0.md}
+      ancien-guide-suprême: {définition: "A été guide suprême de la République islamique d'Iran et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: blast/Z2WqoAOlvK0.md}
+      haut-commissaire: {définition: "Dirige un haut-commissariat rattaché au gouvernement, à la date de la Publication.", statut: proposé, introduit_par: blast/1pnnFn_3njE.md}
+      ancien-rapporteur-spécial-de-l-onu: {définition: "A été rapporteur spécial des Nations Unies sur un dossier de droits de l'homme et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: blast/LrQxV7OgYAU.md}
+      arbitre: {définition: "Dirige et arbitre des rencontres sportives.", statut: proposé, introduit_par: blast/PUUGrk912k4.md}
+      ancien-agent-de-renseignement: {définition: "A servi dans un service de renseignement et n'y sert plus, à la date de la Publication.", statut: proposé, introduit_par: blast/vvdVALULLDo.md}
+      éthologue: {définition: "Étudie le comportement des animaux.", statut: proposé, introduit_par: blast/Y-GuT4K2gAw.md}
+      rapporteur-spécial-de-l-onu: {définition: "Expert mandaté par les Nations Unies pour rendre compte d'un dossier de droits de l'homme, à la date de la Publication.", statut: proposé, introduit_par: blast/5gAEYQ8Tf6A.md}
+      consultant-police-justice: {définition: "Commente à l'antenne les affaires de police et de justice pour une chaîne d'information.", statut: proposé, introduit_par: blast/-EKqiH9ceoc.md}
+      exégète: {définition: "Interprète en profondeur des œuvres, des textes ou des récits pour en dégager le sens.", statut: proposé, introduit_par: blast/ZPvrUlF46YY.md}
+      chef-de-cartel: {définition: "Dirige un cartel de la drogue.", statut: proposé, introduit_par: boniface/Rn6XIHyxmt0.md}
+      responsable-de-la-sécurité-nationale: {définition: "Dirige ou secrétaire le conseil chargé de la sécurité nationale d'un État, à la date de la Publication.", statut: proposé, introduit_par: boniface/u-D3bfctFBQ.md}
+      chargé-de-plaidoyer: {définition: "Porte auprès des pouvoirs publics et de l'opinion les positions d'une ONG sur un dossier.", statut: proposé, introduit_par: blast/6sqTB2BnM9g.md}
+      administrateur: {définition: "Siège au conseil d'une instance de gestion d'un régime de protection sociale ou la préside.", statut: proposé, introduit_par: blast/Fs36KBBJrBo.md}
+      communicant: {définition: "Dirige ou conduit la communication d'une entreprise ou conseille un dirigeant en communication.", statut: proposé, introduit_par: blast/rGh7e_JI4Ac.md}
+      infirmier: {définition: "Soigne les patients à l'hôpital sous l'autorité d'un médecin.", statut: proposé, introduit_par: blast/J1Ys7rkCM4Q.md}
+      stratège: {définition: "Pense et théorise la stratégie, militaire ou autre.", statut: proposé, introduit_par: boniface/3YYrGBP7N2s.md}
+      père-fondateur: {définition: "Figure qui a participé à la fondation des États-Unis et à l'écriture de leur Constitution.", statut: proposé, introduit_par: boniface/i80kxcvBdxc.md}
+      climatologue: {définition: "Étudie le climat et son évolution.", statut: proposé, introduit_par: blast/M-zNobiaxcY.md}
+      régisseur: {définition: "Gère les terres et collecte les loyers pour le compte d'un grand propriétaire.", statut: proposé, introduit_par: blast/vihypxAvoYA.md}
+      ancien-dirigeant-de-think-tank: {définition: "A présidé ou dirigé un think tank ou une fondation de réflexion et ne le dirige plus, à la date de la Publication.", statut: proposé, introduit_par: boniface/Z4GVz00Ptjg.md}
+      agent-de-mannequins: {définition: "Dirige une agence de mannequins et place des mannequins auprès de clients et de marques.", statut: proposé, introduit_par: blast/P0YnvoRW9BI.md}
+      inspecteur-du-travail: {définition: "Contrôle le respect du droit du travail dans les entreprises.", statut: proposé, introduit_par: blast/TkkZOqKt1Zg.md}
+      naturaliste: {définition: "Observe et filme la vie animale dans son milieu naturel.", statut: proposé, introduit_par: blast/eueMRr9VvT4.md}
+      enquêteur: {définition: "Mène des enquêtes de terrain sur un secteur d'activité pour une ONG ou un média.", statut: proposé, introduit_par: blast/uMTkMrlMZuU.md}
+      travailleur-du-sexe: {définition: "Vend des contenus ou des services sexuels, notamment en ligne.", statut: proposé, introduit_par: blast/utJWIe74eLQ.md}
+      trader: {définition: "Achète et vend des produits financiers sur les marchés, pour une banque, un fonds ou son compte.", statut: proposé, introduit_par: heureka/4Lc4hvhqps4.md}
+      fraudeur: {définition: "Monte une fraude financière, comme une pyramide de Ponzi.", statut: proposé, introduit_par: heureka/RSMyjLAthBE.md}
+      ancien-banquier-central: {définition: "A dirigé une banque centrale et ne la dirige plus, à la date de la Publication.", statut: proposé, introduit_par: paduteam/WwGLjTwomPs.md}
+      investisseur: {définition: "Place des capitaux sur les marchés ou dans des fonds, pour son compte ou celui d'autrui.", statut: proposé, introduit_par: heureka/n7jn-l2SbVk.md}
+      surintendant-des-finances: {définition: "Dirige les finances du royaume de France sous l'Ancien Régime.", statut: proposé, introduit_par: blast/SWUNkxUz1Uc.md}
+      expert-énergie: {définition: "Analyse et expertise les politiques énergétiques et nucléaires.", statut: proposé, introduit_par: lereveilleur/E3YLYzs_1Es.md}
+      comptable: {définition: "Conçoit ou tient la comptabilité des entreprises.", statut: proposé, introduit_par: heureka/7yC1OtofY28.md}
+      ancien-trader: {définition: "A été trader et ne l'est plus, à la date de la Publication.", statut: proposé, introduit_par: heureka/mJIJ8qj8GVo.md}
     qualifiers:
       animateur: {définition: "Mène la Publication.", statut: accepté}
       invité: {définition: "Invité de la Publication, qui y parle.", statut: accepté}
@@ -52,6 +255,90 @@ kinds:
       groupe-armé: {définition: "Un groupe qui combat les armes à la main, hors d'une armée d'État.", statut: accepté}
       think-tank: {définition: "Produit des analyses et des propositions politiques.", statut: accepté}
       institut-de-sondage: {définition: "Mesure l'opinion par des enquêtes et des sondages.", statut: proposé, introduit_par: paduteam/X0tXWZsjENQ.md}
+      institut-de-recherche: {définition: "Organisme qui mène des études et des évaluations, notamment économiques, et en publie les résultats.", statut: proposé, introduit_par: blast/FCVoy7L96sI.md}
+      établissement-scolaire: {définition: "École, collège ou lycée, public ou privé.", statut: proposé, introduit_par: osonscauser/emdc6suIeCc.md}
+      coalition: {définition: "Alliance de partis politiques qui agissent ensemble sous un même nom.", statut: proposé, introduit_par: blast/HAuq5hpiV0s.md}
+      communauté-en-ligne: {définition: "Groupe d'abonnés réuni autour d'un site ou d'une chaîne, souvent payant.", statut: proposé, introduit_par: paduteam/nxqv571BG-g.md}
+      ligue-sportive: {définition: "Organise des compétitions et des événements sportifs professionnels.", statut: proposé, introduit_par: paduteam/HyodKdeKyI4.md}
+      instance-sportive: {définition: "Dirige et régule un sport ou le mouvement olympique, et en attribue les compétitions.", statut: proposé, introduit_par: boniface/AB5haSkt-1o.md}
+      comité-d-organisation: {définition: "Organise une compétition sportive internationale et en fixe les modalités.", statut: proposé, introduit_par: paduteam/TVMgyPabBpE.md}
+      établissement-d-enseignement-supérieur: {définition: "Université, grande école ou institut qui dispense un enseignement supérieur.", statut: proposé, introduit_par: paduteam/iOd5lu0wO3c.md}
+      ordre-professionnel: {définition: "Organisme qui réunit les membres d'une profession réglementée et en contrôle la déontologie.", statut: proposé, introduit_par: paduteam/xrGePx2JwbM.md}
+      mouvement-de-résistance: {définition: "Organisation ou coordination qui combat l'occupant ou un régime d'oppression.", statut: proposé, introduit_par: paduteam/4-j1k5auwOU.md}
+      lobby: {définition: "Organisation qui défend auprès des pouvoirs publics les intérêts d'un secteur ou d'un groupe d'entreprises.", statut: proposé, introduit_par: blast/h6ziZ4JPWEM.md}
+      société-savante: {définition: "Réunit les spécialistes d'une discipline médicale ou scientifique et en émet des recommandations.", statut: proposé, introduit_par: paduteam/t6_vxVJrA1E.md}
+      réseau-criminel: {définition: "Organisation criminelle structurée qui contrôle un trafic, comme celui de l'héroïne.", statut: proposé, introduit_par: paduteam/UwDPHbgQm4s.md}
+      mission-de-paix: {définition: "Mission de l'ONU déployée dans un pays pour y maintenir la paix.", statut: proposé, introduit_par: blast/Ulg-VuZg6i8.md}
+      organisation-religieuse: {définition: "Église ou communauté religieuse constituée, avec ses structures et ses fidèles.", statut: proposé, introduit_par: blast/Ulg-VuZg6i8.md}
+      force-armée-du-régime: {définition: "Corps militaire distinct de l'armée régulière, chargé de défendre un régime et son idéologie.", statut: proposé, introduit_par: boniface/U6lYvoNv594.md}
+      club-sportif: {définition: "Club qui engage des équipes sportives en compétition, notamment professionnelles.", statut: proposé, introduit_par: blast/hTs4-SwOYGE.md}
+      maison-d-édition: {définition: "Publie des livres et dirige des collections.", statut: proposé, introduit_par: paduteam/NBOUwkc60fc.md}
+      plateforme-vidéo: {définition: "Héberge et diffuse des vidéos mises en ligne par ses utilisateurs.", statut: proposé, introduit_par: paduteam/KI1sQj8QvUo.md}
+      équipe-nationale: {définition: "Équipe qui représente un pays dans les compétitions sportives internationales.", statut: proposé, introduit_par: boniface/9X9jOh-GdcM.md}
+      coopérative-agricole: {définition: "Coopérative d'agriculteurs qui produit, transforme et commercialise des produits agricoles.", statut: proposé, introduit_par: blast/mkLUrap_xfM.md}
+      fonds-d-investissement: {définition: "Société qui réunit des capitaux pour les investir dans des entreprises.", statut: proposé, introduit_par: blast/mkLUrap_xfM.md}
+      ligue-politique: {définition: "Mouvement ou ligue politique qui agit hors des élections, sans être un parti.", statut: proposé, introduit_par: paduteam/7JKcdnkGji8.md}
+      cabinet-d-avocats: {définition: "Cabinet qui conseille et défend des entreprises, notamment par des enquêtes internes.", statut: proposé, introduit_par: blast/ow61t9N6KEE.md}
+      troupe-humoristique: {définition: "Groupe d'humoristes qui écrivent et jouent ensemble.", statut: proposé, introduit_par: blast/tUXPDn1iCHA.md}
+      forum-intergouvernemental: {définition: "Réunit régulièrement les dirigeants de plusieurs États pour se concerter, sans traité fondateur ni structure permanente.", statut: proposé, introduit_par: boniface/tQTH7PXX-sI.md}
+      établissement-de-santé: {définition: "Hôpital ou clinique qui accueille et soigne des patients.", statut: proposé, introduit_par: paduteam/43_Rj76Mv0Y.md}
+      club-de-banques-de-développement: {définition: "Réseau qui rassemble des banques de développement nationales et régionales pour financer des projets ensemble.", statut: proposé, introduit_par: boniface/JEWUezjunds.md}
+      communauté-autochtone: {définition: "Communauté d'un peuple autochtone qui vit sur son territoire et le défend.", statut: proposé, introduit_par: blast/uYQez7xkKz8.md}
+      mouvement-islamiste: {définition: "Mouvement politique et religieux se réclamant de l'islam, comme les Frères musulmans.", statut: proposé, introduit_par: paduteam/fE3d7YfY5Sw.md}
+      mouvement-de-libération: {définition: "Organisation qui mène la lutte politique et armée d'un peuple pour son indépendance nationale.", statut: proposé, introduit_par: blast/przNv45s2u0.md}
+      organisme-de-formation: {définition: "Forme des militants, des journalistes ou des cadres à l'engagement politique et médiatique.", statut: proposé, introduit_par: blast/C48PbGgqyDo.md}
+      organisation-de-jeunesse: {définition: "Organisation de jeunes rattachée à un parti ou à un courant politique, ou indépendante d'eux.", statut: proposé, introduit_par: paduteam/kmJDHYGIm9c.md}
+      mécanisme-d-achats-groupés: {définition: "Dispositif international qui regroupe les commandes de plusieurs pays pour acheter des produits de santé en commun.", statut: proposé, introduit_par: boniface/yjQYl9LEl0g.md}
+      organisation-patronale: {définition: "Représente et défend les intérêts des employeurs et des chefs d'entreprise.", statut: proposé, introduit_par: paduteam/YcsA0DOXtQw.md}
+      fondation: {définition: "Organisme privé qui finance des projets d'intérêt général.", statut: proposé, introduit_par: boniface/MPf_VEFQRc0.md}
+      intersyndicale: {définition: "Front commun de plusieurs confédérations syndicales qui appellent ensemble à l'action.", statut: proposé, introduit_par: paduteam/F0x4OhYVpTk.md}
+      coopérative: {définition: "Entreprise détenue et contrôlée démocratiquement par ses membres, à lucrativité limitée.", statut: proposé, introduit_par: blast/FA3IpqdI7k0.md}
+      représentation-diplomatique: {définition: "Ambassade ou mission qui représente un État à l'étranger.", statut: proposé, introduit_par: boniface/SSz3rP2B2PU.md}
+      comité-d-action-politique: {définition: "Organisation américaine qui collecte des fonds et mobilise des électeurs pour soutenir un candidat.", statut: proposé, introduit_par: blast/2zYR04KK2Ws.md}
+      junte-militaire: {définition: "Groupe de militaires qui a pris le pouvoir par la force et gouverne un État.", statut: proposé, introduit_par: boniface/lHBfr18TWes.md}
+      forum-économique: {définition: "Réunit chaque année des dirigeants politiques et économiques lors d'un forum, sans être un organe d'États.", statut: proposé, introduit_par: paduteam/m_yowJv-TVw.md}
+      service-d-urgence: {définition: "Service médical qui répond aux appels de secours ou accueille les patients en urgence.", statut: proposé, introduit_par: blast/DEaeCHgCKIk.md}
+      société-militaire-privée: {définition: "Société qui fournit des combattants et des services militaires, souvent proche d'un État.", statut: proposé, introduit_par: boniface/-NlfQ3Te0Qg.md}
+      service-de-renseignement: {définition: "Service d'un État chargé du renseignement et de la sécurité intérieure ou extérieure.", statut: proposé, introduit_par: boniface/5JLYioWHr38.md}
+      état: {définition: "Un État en tant que pouvoir constitué, avec son régime et ses institutions.", statut: proposé, introduit_par: paduteam/YKdEbgZZg1Q.md}
+      groupe-musical: {définition: "Groupe de musiciens qui compose et se produit ensemble.", statut: proposé, introduit_par: blast/0qT5qNEF76Y.md}
+      milice: {définition: "Groupe paramilitaire privé qui s'arme et s'entraîne en vue d'affrontements, hors de toute armée d'État.", statut: proposé, introduit_par: blast/rr3ED9-O228.md}
+      groupe-parlementaire: {définition: "Groupe politique constitué au sein d'un parlement, comme au Parlement européen.", statut: proposé, introduit_par: paduteam/V-HmXl_Jrz4.md}
+      fonds-public: {définition: "Dispositif de financement public qui distribue des subventions à des projets ou à des associations.", statut: proposé, introduit_par: boniface/f_R0_C1GahM.md}
+      banque-de-développement: {définition: "Banque multilatérale qui finance le développement de ses pays membres.", statut: proposé, introduit_par: boniface/ByjoMZ7Kjlo.md}
+      groupe-de-médiation: {définition: "Groupe d'États chargé de médier dans un conflit sous l'égide d'une organisation internationale.", statut: proposé, introduit_par: boniface/YBLtbkrDB0M.md}
+      cabinet-de-lobbying: {définition: "Cabinet qui défend auprès des pouvoirs publics les intérêts de ses clients, notamment de grandes entreprises.", statut: proposé, introduit_par: blast/COKf1MUd0_o.md}
+      plateforme-numérique: {définition: "Service en ligne de messagerie et de paiement utilisé par des centaines de millions de personnes.", statut: proposé, introduit_par: boniface/uDH1UuXeuQw.md}
+      club-de-motards: {définition: "Groupe de motards organisé en club ou en bande, autour de la moto et d'un mode de vie.", statut: proposé, introduit_par: blast/E4TVXCDbcM4.md}
+      banque-d-affaires: {définition: "Banque qui conseille des entreprises dans leurs fusions, acquisitions et grandes opérations financières.", statut: proposé, introduit_par: blast/p-s7UFqOPuU.md}
+      délégation-olympique: {définition: "Équipe d'athlètes réunie sous le drapeau olympique, hors de toute équipe nationale.", statut: proposé, introduit_par: boniface/y_fonRjkJQ0.md}
+      faction-politique: {définition: "Courant politique d'une assemblée, sans statut de parti, comme les Girondins à la Convention.", statut: proposé, introduit_par: blast/H-znJ0cGSRE.md}
+      école-militaire: {définition: "École qui forme des militaires, ici latino-américains, à des doctrines de combat.", statut: proposé, introduit_par: blast/P57Ks-w6F6A.md}
+      lieu-culturel: {définition: "Lieu qui accueille et programme des événements culturels ou des débats.", statut: proposé, introduit_par: boniface/2R2oILPTndY.md}
+      organisation-humanitaire: {définition: "Organisation qui distribue une aide humanitaire, notamment alimentaire, à une population.", statut: proposé, introduit_par: boniface/ibUUK-Xt7hQ.md}
+      coalition-d-états: {définition: "Groupe d'États qui agissent ensemble sur un dossier, hors d'un cadre institutionnel.", statut: proposé, introduit_par: boniface/gBJxSwjovD0.md}
+      réseau-social: {définition: "Plateforme en ligne où des utilisateurs publient, échangent et s'informent.", statut: proposé, introduit_par: blast/LnScMT0PzLI.md}
+      agence-de-façade: {définition: "Structure en apparence civile, comme une agence de presse, qui couvre des activités de renseignement et de subversion.", statut: proposé, introduit_par: blast/9LbmbBDfY-U.md}
+      réseau-paramilitaire-clandestin: {définition: "Réseau paramilitaire secret, adossé à des services de renseignement ou à l'OTAN.", statut: proposé, introduit_par: blast/9LbmbBDfY-U.md}
+      mouvement-d-opposition: {définition: "Organisation qui s'oppose à un régime, en exil ou dans le pays.", statut: proposé, introduit_par: boniface/IJJrlG1qRxA.md}
+      instance-de-gouvernance: {définition: "Organe de gouvernance internationale créé à l'initiative d'un État, hors du cadre de l'ONU.", statut: proposé, introduit_par: boniface/dAfVUHHl-48.md}
+      centrale-d-achat: {définition: "Alliance de distributeurs qui négocie ensemble ses achats auprès des fournisseurs.", statut: proposé, introduit_par: blast/OVUdQZ_0W-A.md}
+      cabinet-d-expertise: {définition: "Cabinet indépendant mandaté pour mener une expertise et en rendre les conclusions.", statut: proposé, introduit_par: blast/TkkZOqKt1Zg.md}
+      programme-d-évaluation: {définition: "Programme international qui évalue les acquis des élèves de 15 ans et classe les pays.", statut: proposé, introduit_par: blast/sAWcgVmYL3o.md}
+      banque: {définition: "Établissement qui collecte l'épargne, prête de l'argent et opère sur les marchés financiers.", statut: proposé, introduit_par: heureka/4Lc4hvhqps4.md}
+      bourse: {définition: "Société privée qui organise un marché financier et prélève une commission sur chaque transaction.", statut: proposé, introduit_par: heureka/N0OlW7G0Yqk.md}
+      banque-centrale: {définition: "Institution qui émet la monnaie centrale et conduit la politique monétaire d'un État ou d'une zone monétaire.", statut: proposé, introduit_par: heureka/KSQpp3CNeZQ.md}
+      groupe-d-experts: {définition: "Réunit des experts pour évaluer l'état des connaissances scientifiques sur un sujet, comme le GIEC.", statut: proposé, introduit_par: lereveilleur/jiIm5FPcGgE.md}
+      gestionnaire-de-réseau: {définition: "Exploite et développe un réseau d'énergie, comme le transport d'électricité.", statut: proposé, introduit_par: lereveilleur/cfqrxAUJ5bI.md}
+      agence-de-notation: {définition: "Note le risque de crédit des entreprises et des États à l'intention des investisseurs.", statut: proposé, introduit_par: heureka/ZbFQ4knxFhE.md}
+      unité-de-forces-spéciales: {définition: "Unité de commandos ou de forces spéciales chargée d'opérations clandestines, de sabotage et de contre-guérilla.", statut: proposé, introduit_par: blast/mvSuxcBgt_M.md}
+      instance-d-aide-financière: {définition: "Réunit plusieurs institutions pour prêter à des États en difficulté et les conseiller, comme la troïka.", statut: proposé, introduit_par: heureka/5uBXviM1PcQ.md}
+      société-de-gestion: {définition: "Gère des fonds d'investissement et y place l'argent de ses clients.", statut: proposé, introduit_par: heureka/FCa5ISgMQjg.md}
+      agence-de-notation-extra-financière: {définition: "Note les entreprises sur des critères environnementaux, sociaux et de gouvernance et vend ses grilles aux sociétés de gestion.", statut: proposé, introduit_par: heureka/FCa5ISgMQjg.md}
+      courtier: {définition: "Intermédiaire qui transmet aux marchés les ordres d'achat et de vente de ses clients.", statut: proposé, introduit_par: heureka/EGs5kYYw6d8.md}
+      site-de-vulgarisation: {définition: "Site animé par une équipe qui explique et documente l'état des connaissances scientifiques au grand public.", statut: proposé, introduit_par: lereveilleur/80jbj7jwEhY.md}
+      réseau-de-banques-centrales: {définition: "Réseau qui réunit des banques centrales pour réfléchir ensemble à un sujet, comme le verdissement du système financier.", statut: proposé, introduit_par: heureka/8ysjQYvgyCc.md}
+      messagerie-interbancaire: {définition: "Exploite un réseau de messagerie sécurisée qui facilite les paiements entre les banques.", statut: proposé, introduit_par: heureka/Ga-p11MVYzs.md}
     qualifiers:
       cité: {définition: "Ses mots, un communiqué, sont lus ou montrés.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -66,6 +353,14 @@ kinds:
       quartier: {définition: "Une partie d'une ville.", statut: accepté}
       territoire: {définition: "Une zone au statut disputé ou particulier.", statut: accepté}
       site: {définition: "Un lieu précis : une usine, une place, un bâtiment.", statut: accepté}
+      infrastructure: {définition: "Ouvrage ou projet d'aménagement du territoire, comme une autoroute.", statut: proposé, introduit_par: blast/E1Yn7k4mlBQ.md}
+      département: {définition: "Collectivité territoriale française de niveau départemental, y compris d'outre-mer.", statut: proposé, introduit_par: blast/Bq3_whwwKTg.md}
+      colonie: {définition: "Implantation civile israélienne en Cisjordanie, illégale au regard du droit international.", statut: proposé, introduit_par: blast/XjqGY3qsQaE.md}
+      mer: {définition: "Étendue d'eau salée bordée de terres, comme la Méditerranée.", statut: proposé, introduit_par: paduteam/CtL2h7P8Fe4.md}
+      continent: {définition: "Très vaste ensemble de terres et de pays, comme l'Afrique ou l'Europe.", statut: proposé, introduit_par: boniface/o43DHoCZys4.md}
+      fleuve: {définition: "Cours d'eau important qui se jette dans une mer ou un océan.", statut: proposé, introduit_par: boniface/c3M_-nwPYLU.md}
+      détroit: {définition: "Passage maritime étroit entre deux terres, comme le détroit de Bab el-Mandeb.", statut: proposé, introduit_par: boniface/AsvCCWqBywU.md}
+      île: {définition: "Terre entourée d'eau de tous côtés, comme Jura, en Écosse.", statut: proposé, introduit_par: blast/b_gbjN6O70w.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -83,6 +378,53 @@ kinds:
       sommet: {définition: "Une réunion de dirigeants.", statut: accepté}
       meeting: {définition: "Une réunion publique politique.", statut: accepté}
       compétition: {définition: "Une compétition sportive.", statut: accepté}
+      révolte: {définition: "Soulèvement populaire ou armé contre un pouvoir.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
+      déplacement-forcé: {définition: "Fuite ou expulsion d'une population hors de ses terres.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
+      rafle: {définition: "Arrestation massive de personnes, visées en raison de leur origine ou de leur appartenance.", statut: proposé, introduit_par: blast/ZlHBgyaDE-s.md}
+      cérémonie: {définition: "Remise de prix ou de distinctions lors d'une soirée publique.", statut: proposé, introduit_par: paduteam/uOwfFzd8MZ8.md}
+      conférence: {définition: "Réunion de responsables et d'experts qui débattent d'un sujet.", statut: proposé, introduit_par: boniface/gBhXKzKp9mo.md}
+      opération-militaire: {définition: "Action militaire d'envergure menée par une armée, comme un assaut ou un débarquement.", statut: proposé, introduit_par: paduteam/BE6RyV_X6m4.md}
+      défilé: {définition: "Parade publique, notamment militaire, organisée lors d'une fête nationale.", statut: proposé, introduit_par: boniface/mZfWVPlac4Y.md}
+      congrès: {définition: "Assemblée des délégués d'un parti, qui en fixe la direction et en désigne les dirigeants.", statut: proposé, introduit_par: boniface/OEVYfzPYeCI.md}
+      persécution: {définition: "Vague de violences dirigées contre un groupe en raison de sa religion ou de ses croyances.", statut: proposé, introduit_par: blast/vhvRqU0_6Jw.md}
+      coup-d-état: {définition: "Prise du pouvoir par la force, notamment par l'armée, contre un gouvernement en place.", statut: proposé, introduit_par: blast/K2a3NDKQs9s.md}
+      catastrophe-naturelle: {définition: "Phénomène naturel destructeur, comme un cyclone ou un séisme, qui frappe une population.", statut: proposé, introduit_par: paduteam/1OUcDuz-HjY.md}
+      campagne: {définition: "Opération de mobilisation ou de sensibilisation du public, menée sur une durée donnée.", statut: proposé, introduit_par: blast/OZ_VdHOsI14.md}
+      session: {définition: "Réunion annuelle ou périodique d'une assemblée ou d'une organisation internationale.", statut: proposé, introduit_par: boniface/y8rHlSIAunw.md}
+      festival: {définition: "Rencontre publique de plusieurs jours, faite de débats ou de conférences.", statut: proposé, introduit_par: boniface/Ecn08O4RQFs.md}
+      famine: {définition: "Pénurie alimentaire extrême qui provoque une mortalité de masse dans une population.", statut: proposé, introduit_par: paduteam/C1MLgXQ7fJA.md}
+      crise: {définition: "Tension politique ou militaire majeure entre États, sans guerre ouverte.", statut: proposé, introduit_par: boniface/TpKoDXZ7mQY.md}
+      génocide: {définition: "Extermination systématique d'un groupe national, ethnique ou religieux.", statut: proposé, introduit_par: blast/9sBrrpX8Ywg.md}
+      débat: {définition: "Échange organisé entre plusieurs intervenants autour d'un sujet, en direct ou enregistré.", statut: proposé, introduit_par: paduteam/Im2oLpge17Y.md}
+      massacre: {définition: "Tuerie de masse commise contre une population civile ou des manifestants.", statut: proposé, introduit_par: boniface/WVMzhXjYC5c.md}
+      foire: {définition: "Salon commercial où des exposants présentent leurs offres au public.", statut: proposé, introduit_par: blast/XjqGY3qsQaE.md}
+      festival-de-cinéma: {définition: "Festival où des films sont projetés et récompensés.", statut: proposé, introduit_par: paduteam/fE3d7YfY5Sw.md}
+      pandémie: {définition: "Épidémie qui s'étend à l'ensemble du monde.", statut: proposé, introduit_par: boniface/o43DHoCZys4.md}
+      bataille: {définition: "Affrontement armé décisif entre deux armées, en un lieu et un jour précis.", statut: proposé, introduit_par: blast/FlQyQXxBQDU.md}
+      défilé-de-mode: {définition: "Défilé où des mannequins, ici des bénéficiaires du RSA, présentent des vêtements devant un public.", statut: proposé, introduit_par: paduteam/NiyULKHmm0k.md}
+      crise-financière: {définition: "Effondrement de banques ou de marchés qui menace le système financier et appelle des sauvetages.", statut: proposé, introduit_par: blast/SHpGen_J318.md}
+      convention-citoyenne: {définition: "Assemblée de citoyens tirés au sort qui délibèrent sur un sujet et formulent des propositions.", statut: proposé, introduit_par: blast/9Cor6NP5qH4.md}
+      dîner: {définition: "Repas mondain, souvent annuel, qui réunit des personnalités d'un milieu autour d'une table.", statut: proposé, introduit_par: paduteam/mCek51AyK50.md}
+      opération-policière: {définition: "Opération de police d'envergure menée par l'État, comme une campagne de démolitions et d'expulsions.", statut: proposé, introduit_par: blast/LYkjqB8XUe8.md}
+      coup-de-force: {définition: "Tentative d'imposer ou de conserver le pouvoir par des moyens d'exception, comme une loi martiale.", statut: proposé, introduit_par: blast/1RD7TpXlcgA.md}
+      mouvement-social: {définition: "Mobilisation collective durable, sans organisateur unique, qui conteste l'ordre politique ou social.", statut: proposé, introduit_par: blast/6wX46WLb85o.md}
+      raid-humanitaire: {définition: "Course automobile étudiante en plusieurs étapes, qui reverse une partie de ses bénéfices à une association humanitaire.", statut: proposé, introduit_par: paduteam/gpsNkg378yI.md}
+      catastrophe-industrielle: {définition: "Accident industriel majeur, comme l'effondrement d'une usine, qui fait de nombreuses victimes.", statut: proposé, introduit_par: blast/sTed1yTvqW0.md}
+      université-d-été: {définition: "Rencontre annuelle d'été d'un parti, faite de débats, d'ateliers et de discours de ses dirigeants.", statut: proposé, introduit_par: paduteam/325tzF3T7FM.md}
+      séance: {définition: "Séance d'une assemblée qui prend une décision historique.", statut: proposé, introduit_par: blast/MOfb3v9r-CY.md}
+      concours: {définition: "Compétition artistique entre participants, comme l'Eurovision de la chanson.", statut: proposé, introduit_par: boniface/r2ynmfVCcyE.md}
+      épizootie: {définition: "Maladie contagieuse qui touche des animaux d'élevage et appelle des mesures sanitaires, comme l'abattage.", statut: proposé, introduit_par: blast/CYeCZnmhDkI.md}
+      épidémie: {définition: "Flambée d'une maladie infectieuse qui touche rapidement de nombreuses personnes dans une région.", statut: proposé, introduit_par: blast/N4582S7sn1w.md}
+      événement-artistique: {définition: "Événement public d'installations et de performances artistiques dans plusieurs lieux d'une ville.", statut: proposé, introduit_par: blast/eG2eVvOqcX4.md}
+      émeute: {définition: "Flambée de violences collectives dans la rue, avec incendies et affrontements, souvent dirigée contre un groupe ciblé.", statut: proposé, introduit_par: blast/-n5PKZJRfvo.md}
+      concert: {définition: "Spectacle musical public donné devant un public, parfois à visée militante.", statut: proposé, introduit_par: blast/cUW7Zu2VSX0.md}
+      accident-nucléaire: {définition: "Accident dans une installation nucléaire qui libère de la radioactivité dans l'environnement.", statut: proposé, introduit_par: lereveilleur/smGve9f6kpQ.md}
+      krach-éclair: {définition: "Chute brutale d'un marché, d'une durée de quelques minutes, souvent imputée à des algorithmes de trading.", statut: proposé, introduit_par: heureka/BuEyrskPUws.md}
+      crise-de-la-dette: {définition: "Crise où des États perdent l'accès aux marchés pour refinancer leur dette publique.", statut: proposé, introduit_par: heureka/5uBXviM1PcQ.md}
+      événement-climatique: {définition: "Épisode majeur de changement climatique du passé de la Terre, comme une glaciation ou un réchauffement brutal.", statut: proposé, introduit_par: lereveilleur/NRdaPrMNrkI.md}
+      épisode-de-pollution: {définition: "Pic de pollution de l'air qui frappe une ville ou une région et fait de nombreuses victimes.", statut: proposé, introduit_par: lereveilleur/PoEf2u3BLWg.md}
+      crise-économique: {définition: "Effondrement durable de la production et de l'emploi qui touche une ou plusieurs économies.", statut: proposé, introduit_par: heureka/R_8sjao6tGI.md}
+      krach: {définition: "Effondrement brutal et durable des cours d'une bourse.", statut: proposé, introduit_par: heureka/R_8sjao6tGI.md}
     qualifiers:
       sujet: {définition: "La Publication parle de lui.", statut: accepté}
       mentionné: {définition: "Nommé en passant.", statut: accepté}
@@ -98,6 +440,17 @@ kinds:
       vidéo: {définition: "Une vidéo en ligne.", statut: accepté}
       chanson: {définition: "Une chanson, un morceau.", statut: accepté}
       jeu-vidéo: {définition: "Un jeu vidéo.", statut: accepté}
+      tableau: {définition: "Une peinture, œuvre d'un peintre.", statut: proposé, introduit_par: blast/ZK9AqciwH1A.md}
+      encyclopédie: {définition: "Ouvrage de référence qui rassemble le savoir de nombreux domaines, imprimé ou en ligne.", statut: proposé, introduit_par: boniface/cE1htuHgQoQ.md}
+      bande-dessinée: {définition: "Une bande dessinée ou un comics.", statut: proposé, introduit_par: blast/buz6BTSdR2Q.md}
+      fable: {définition: "Court récit en vers qui met en scène des animaux pour en tirer une morale.", statut: proposé, introduit_par: paduteam/-Q-ulX_kTmU.md}
+      numéro-spécial: {définition: "Numéro hors série d'un journal ou d'un magazine consacré à un thème unique.", statut: proposé, introduit_par: blast/E9Y11DuoXuY.md}
+      pièce-de-théâtre: {définition: "Une pièce écrite pour être jouée sur scène.", statut: proposé, introduit_par: blast/zFHDAvSdKT8.md}
+      album: {définition: "Un album de musique.", statut: proposé, introduit_par: boniface/8SZ9ea-ADeY.md}
+      revue: {définition: "Publication périodique qui rassemble des témoignages, des récits et des analyses.", statut: proposé, introduit_par: blast/bikUdy-G_Po.md}
+      poème: {définition: "Un texte poétique, en vers ou en prose.", statut: proposé, introduit_par: blast/eueMRr9VvT4.md}
+      base-de-données: {définition: "Ensemble de données statistiques rassemblées et consultables en ligne.", statut: proposé, introduit_par: heureka/WYLXFeCL3HQ.md}
+      thèse: {définition: "Travail de recherche universitaire soutenu pour obtenir un doctorat.", statut: proposé, introduit_par: lereveilleur/uIXEnRB7TXc.md}
     qualifiers:
       cité: {définition: "Lue, montrée ou diffusée dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle d'elle.", statut: accepté}
@@ -114,6 +467,27 @@ kinds:
       décision-de-justice: {définition: "Un jugement, un arrêt.", statut: accepté}
       rapport: {définition: "Un rapport officiel, d'une institution ou d'une commission.", statut: accepté}
       programme: {définition: "Le programme d'un parti ou d'un candidat.", statut: accepté}
+      déclaration: {définition: "Prise de position publique et officielle d'un gouvernement ou d'une autorité.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
+      résolution: {définition: "Texte adopté par le vote d'une assemblée ou d'une organisation internationale.", statut: proposé, introduit_par: osonscauser/XK3oQi6vUng.md}
+      paquet-législatif: {définition: "Ensemble de textes législatifs adoptés ensemble pour atteindre un même objectif.", statut: proposé, introduit_par: osonscauser/e4ep4Ky23hI.md}
+      accord: {définition: "Accord conclu entre parties, États ou non, qui fixe un processus politique.", statut: proposé, introduit_par: boniface/GJeVOIsPrtU.md}
+      code: {définition: "Recueil de lois qui organise une matière du droit, comme le Code civil.", statut: proposé, introduit_par: blast/HFuCQg-owpw.md}
+      règlement: {définition: "Acte de l'Union européenne, directement applicable dans tous les États membres.", statut: proposé, introduit_par: boniface/0vlim-vqHn0.md}
+      serment: {définition: "Engagement solennel prêté par les membres d'une profession.", statut: proposé, introduit_par: paduteam/p1f7yn8b7XU.md}
+      directive: {définition: "Acte de l'Union européenne qui fixe des objectifs que les États membres transposent dans leur droit.", statut: proposé, introduit_par: blast/7lYFVTbvpHg.md}
+      appel: {définition: "Texte public signé par plusieurs personnes pour défendre une position ou appeler à agir.", statut: proposé, introduit_par: paduteam/gQes3ZACQmA.md}
+      charte: {définition: "Texte fondateur qui fixe les principes d'une organisation ou d'un mouvement.", statut: proposé, introduit_par: paduteam/HZfk8m0cvtU.md}
+      plan-de-paix: {définition: "Proposition de règlement d'un conflit, avancée par une puissance ou un médiateur, sans accord des parties.", statut: proposé, introduit_par: boniface/qHChXvTuJAI.md}
+      plan-d-action: {définition: "Plan public qui fixe des objectifs et des mesures sur un sujet, sans être une loi.", statut: proposé, introduit_par: blast/MgSxfC58dfM.md}
+      engagement-solennel: {définition: "Engagement public pris ensemble par des partis ou des élus, qui fixe un objectif commun.", statut: proposé, introduit_par: blast/MRXfHqwt3jg.md}
+      circulaire: {définition: "Document d'un ministre adressé aux préfets ou aux services pour préciser l'application d'une loi.", statut: proposé, introduit_par: blast/3OdTK10ycDg.md}
+      capitulaire: {définition: "Acte législatif ou réglementaire d'un souverain carolingien.", statut: proposé, introduit_par: paduteam/Zxpf21fWsNc.md}
+      proposition-de-loi: {définition: "Loi en discussion d'initiative parlementaire, pas encore définitivement adoptée.", statut: proposé, introduit_par: blast/qekuUH1fa0s.md}
+      doctrine: {définition: "Texte qui fixe l'orientation stratégique ou de sécurité d'un État.", statut: proposé, introduit_par: boniface/ZFwecl5wW7Q.md}
+      mesure-fiscale: {définition: "Impôt ou contribution instauré par une loi de finances.", statut: proposé, introduit_par: blast/TBRDLR98AW0.md}
+      édit-royal: {définition: "Acte législatif pris par un roi de France, comme le Code noir.", statut: proposé, introduit_par: blast/OVUdQZ_0W-A.md}
+      ordonnance: {définition: "Acte pris par le gouvernement dans le domaine de la loi, comme celle de 1945 sur l'enfance délinquante.", statut: proposé, introduit_par: blast/8ZGNxoQrzTc.md}
+      initiative-populaire: {définition: "Proposition de modification de la constitution soumise au vote du peuple, en Suisse.", statut: proposé, introduit_par: heureka/nHnH-a9ySgY.md}
     qualifiers:
       cité: {définition: "Lu ou montré dans la Publication.", statut: accepté}
       sujet: {définition: "La Publication parle de lui.", statut: accepté}

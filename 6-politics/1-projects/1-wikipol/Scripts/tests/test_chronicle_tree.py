@@ -77,10 +77,10 @@ def test_a_seventh_digest_splits_the_chronicle_into_two_periods_of_four_and_thre
 
     first, second = root.children
     assert [len(first.children), len(second.children)] == [4, 3]
-    assert (first.path, second.path) == ("c/1-2025-01-01", "c/2-2025-01-05")
-    assert (first.title, second.title) == ("2025-01-01 → 2025-01-04", "2025-01-05 → 2025-01-07")
-    assert first.children[0].path == "c/1-2025-01-01/1-video-n-1-elan"
-    assert second.children[0].path == "c/2-2025-01-05/1-video-n-5-elan"
+    assert (first.title, second.title) == ("W01 2025", "5 → 7 janv. 2025")
+    assert (first.path, second.path) == ("c/1-w01-2025", "c/2-5-7-janv-2025")
+    assert first.children[0].path == "c/1-w01-2025/1-video-n-1-elan"
+    assert second.children[0].path == "c/2-5-7-janv-2025/1-video-n-5-elan"
     assert touched_deepest_first(root) == [first, second, root]
     assert_holds(root, 7)
 
@@ -88,7 +88,8 @@ def test_a_seventh_digest_splits_the_chronicle_into_two_periods_of_four_and_thre
 def test_a_period_whose_digests_share_a_day_is_titled_by_that_day():
     root = chronicle([JAN_1] * 7)
 
-    assert [period.title for period in root.children] == ["2025-01-01", "2025-01-01"]
+    assert [period.title for period in root.children] == ["1 janv. 2025", "1 janv. 2025"]
+    assert [period.path for period in root.children] == ["c/1-1-janv-2025", "c/2-1-janv-2025"]
     assert_holds(root, 7)
 
 
@@ -168,11 +169,11 @@ def test_a_split_period_keeps_its_folder_and_a_moved_period_names_its_claude_fil
     for digest in root.leaves():
         digest.origin = digest.path
 
-    file_leaf(root, leaf(99, date(2024, 12, 31)))  # first Period: 5 Digests, no split
+    file_leaf(root, leaf(99, date(2024, 12, 20)))  # first Period: 5 Digests, no split
     assign_paths(root, "c")
 
-    assert moves(root)["c/1-2025-01-01/CLAUDE"] == "c/1-2024-12-31/CLAUDE"
-    assert "c/2-2025-01-05/CLAUDE" not in moves(root)
+    assert moves(root)["c/1-w01-2025/CLAUDE"] == "c/1-w51-2024-w01-2025/CLAUDE"
+    assert "c/2-5-7-janv-2025/CLAUDE" not in moves(root)
 
 
 def test_appending_touches_only_the_periods_above_the_new_digest():

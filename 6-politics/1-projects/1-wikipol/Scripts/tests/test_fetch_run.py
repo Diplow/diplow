@@ -97,6 +97,26 @@ def test_three_videos_in_a_row_published_before_since_end_the_run_unstored(pause
     assert "and the 2 after them are older still" in format_report(report)
 
 
+def test_a_source_that_says_where_it_starts_is_fetched_no_further_back(pauses):
+    channel = [vid(n) for n in range(1, 7)]
+    old = {vid(n): date(2023, 5, 1) for n in range(2, 7)}
+    fetcher = FakeFetcher(channel, published=old)
+    source = Source(
+        "Demo", "demo", Path("/nowhere"), None, None, channel_url=CHANNEL, since=date(2023, 10, 31)
+    )
+
+    report = fetch_source(source, InMemoryRawStore(), fetcher, sleep=pauses.append)
+
+    assert report.stored == [vid(1)]
+    assert report.since == date(2023, 10, 31) and report.reached_since
+    # The command line's date wins over the Source's.
+    fetcher = FakeFetcher(channel, published=old)
+    report = fetch_source(
+        source, InMemoryRawStore(), fetcher, since=date(2023, 1, 1), sleep=pauses.append
+    )
+    assert report.stored == channel
+
+
 def test_one_old_video_out_of_order_does_not_end_the_run(pauses):
     channel = [vid(n) for n in range(1, 5)]
     fetcher = FakeFetcher(channel, published={vid(2): date(2019, 1, 1)})

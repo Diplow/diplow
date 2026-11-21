@@ -130,60 +130,61 @@ def test_the_seventh_digest_splits_the_chronicle_and_every_link_follows(source, 
 
     chronicle = repo / CHRONICLE
     assert files_of(chronicle) == [
-        "1-2026-01-01/1-video-1.md",
-        "1-2026-01-01/2-video-2.md",
-        "1-2026-01-01/3-video-3.md",
-        "1-2026-01-01/4-video-4.md",
-        "1-2026-01-01/CLAUDE.md",
-        "2-2026-01-05/1-video-5.md",
-        "2-2026-01-05/2-video-6.md",
-        "2-2026-01-05/3-video-7.md",
-        "2-2026-01-05/CLAUDE.md",
+        "1-w01-2026/1-video-1.md",
+        "1-w01-2026/2-video-2.md",
+        "1-w01-2026/3-video-3.md",
+        "1-w01-2026/4-video-4.md",
+        "1-w01-2026/CLAUDE.md",
+        "2-5-7-janv-2026/1-video-5.md",
+        "2-5-7-janv-2026/2-video-6.md",
+        "2-5-7-janv-2026/3-video-7.md",
+        "2-5-7-janv-2026/CLAUDE.md",
         "CLAUDE.md",
     ]
-    new_first = f"[[{CHRONICLE}/1-2026-01-01/1-video-1|la première]]"
-    assert new_first in (chronicle / "1-2026-01-01" / "2-video-2.md").read_text()
+    new_first = f"[[{CHRONICLE}/1-w01-2026/1-video-1|la première]]"
+    assert new_first in (chronicle / "1-w01-2026" / "2-video-2.md").read_text()
     assert outside.read_text() == f"Voir {new_first} et [[ailleurs]].\n"
     assert relinked == [outside]
     assert legacy.read_text() == f"{first_link}\n"  # the frozen vaults are never read
-    frontmatter, _ = split_digest((chronicle / "2-2026-01-05" / "1-video-5.md").read_text())
-    assert frontmatter["parent"] == f"{CHRONICLE}/2-2026-01-05"
-    period = (chronicle / "2-2026-01-05" / "CLAUDE.md").read_text()
+    frontmatter, _ = split_digest((chronicle / "2-5-7-janv-2026" / "1-video-5.md").read_text())
+    assert frontmatter["parent"] == f"{CHRONICLE}/2-5-7-janv-2026"
+    period = (chronicle / "2-5-7-janv-2026" / "CLAUDE.md").read_text()
     assert period.startswith(
-        f'---\ntitle: "2026-01-05 → 2026-01-07"\nparent: {CHRONICLE}/2-2026-01-05\nowner: diplo\n'
+        f'---\ntitle: "5 → 7 janv. 2026"\nparent: {CHRONICLE}/2-5-7-janv-2026\nowner: diplo\n'
     )
-    assert "# 2026-01-05 → 2026-01-07\n\nLa Démo, 2026-01-05 → 2026-01-07.\n" in period
+    assert "# 5 → 7 janv. 2026\n\nLa Démo, 5 → 7 janv. 2026.\n" in period
     root = (chronicle / "CLAUDE.md").read_text()
-    assert f"2. [[{CHRONICLE}/2-2026-01-05/CLAUDE|2026-01-05 → 2026-01-07]] (3 Digests)" in root
-    assert calls == ["2026-01-01 → 2026-01-04", "2026-01-05 → 2026-01-07", "Chronicle"]
+    second = f"[[{CHRONICLE}/2-5-7-janv-2026/CLAUDE|5 → 7 janv. 2026]]"
+    assert f"2. {second} (3 Digests, 2026-01-05 → 2026-01-07)" in root
+    assert calls == ["W01 2026", "5 → 7 janv. 2026", "Chronicle"]
     assert len(filing.moved) == 6
 
 
 def test_a_period_the_filing_did_not_touch_keeps_its_file_and_its_summary(source, repo):
     file_digests(source, repo, [digest(n, DAYS[n - 1]) for n in range(1, 8)])
-    first = repo / CHRONICLE / "1-2026-01-01" / "CLAUDE.md"
+    first = repo / CHRONICLE / "1-w01-2026" / "CLAUDE.md"
     before = first.read_text()
     calls: list[str] = []
 
     file_digests(source, repo, [digest(8, DAYS[7])], calls)
 
     assert first.read_text() == before
-    assert calls == ["2026-01-05 → 2026-01-08", "Chronicle"]
+    assert calls == ["W02 2026", "Chronicle"]
 
 
 def test_a_period_left_as_it_was_still_follows_a_link_to_what_moved(source, repo):
     file_digests(source, repo, [digest(n, DAYS[n - 1]) for n in range(1, 8)])
-    first = repo / CHRONICLE / "1-2026-01-01" / "CLAUDE.md"
+    first = repo / CHRONICLE / "1-w01-2026" / "CLAUDE.md"
     link = "|la sixième]]"
-    old_link = f"[[{CHRONICLE}/2-2026-01-05/2-video-6{link}"
+    old_link = f"[[{CHRONICLE}/2-5-7-janv-2026/2-video-6{link}"
     first.write_text(first.read_text().replace("## Contenu", f"Voir {old_link}.\n\n## Contenu"))
     calls: list[str] = []
 
     # Filed between the fifth and the sixth: the sixth becomes 3-video-6, the first Period stays.
     file_digests(source, repo, [digest(0, DAYS[5])], calls)
 
-    assert f"Voir [[{CHRONICLE}/2-2026-01-05/3-video-6{link}." in first.read_text()
-    assert "2026-01-01 → 2026-01-04" not in calls
+    assert f"Voir [[{CHRONICLE}/2-5-7-janv-2026/3-video-6{link}." in first.read_text()
+    assert "W01 2026" not in calls
 
 
 def test_a_digest_named_in_capitals_by_hand_is_renamed_not_lost(source, repo):
@@ -310,12 +311,12 @@ def test_wikipol_file_refuses_a_sources_folder_outside_a_repo_s_layout(repo, cap
 
 def test_a_period_folder_left_with_only_hidden_files_goes(source, repo):
     file_digests(source, repo, [digest(n, DAYS[n - 1]) for n in range(1, 8)])
-    write(repo / CHRONICLE / "2-2026-01-05" / ".obsidian-swap", "x")
+    write(repo / CHRONICLE / "2-5-7-janv-2026" / ".obsidian-swap", "x")
 
-    # Three older Digests split the first Period: the second one becomes 3-2026-01-05.
+    # Three older Digests split the first Period: the second one becomes 3-5-7-janv-2026.
     file_digests(source, repo, [digest(n, date(2025, 12, n)) for n in (10, 11, 12)])
 
-    assert not (repo / CHRONICLE / "2-2026-01-05").exists()
+    assert not (repo / CHRONICLE / "2-5-7-janv-2026").exists()
     file_digests(source, repo, [digest(9, DAYS[7])])  # and the next filing still reads it
 
 
