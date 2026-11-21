@@ -13,6 +13,8 @@ preview: >-
 
 An inner child of the root: the skills I use, and the only ones a session started in this repo sees.
 
+Since 2026-11-11 a session here invokes no local skill at all: `.claude/settings.json` denies the `Skill` tool, and skills are served by the repo's `hodor` MCP server. The folder and `sync` stay, as the source of the skills and to keep outside ones off; lifting the deny brings them back.
+
 ## Where a skill goes
 
 - **Mine:** under the domain folder it serves, as `<domain>/<group>/<name>/SKILL.md`. Claude Code sees one flat list, so `sync` names each skill by its path with the `N-` of every folder dropped: `4-softeng/1-ship/do-ticket` is invoked as `/softeng:ship:do-ticket`. The path is the name, so it is unique by construction.
