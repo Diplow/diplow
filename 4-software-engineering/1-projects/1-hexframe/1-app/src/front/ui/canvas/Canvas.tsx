@@ -291,7 +291,13 @@ export function Canvas(props: CanvasProps) {
   return (
     <div ref={frame} className={cn('relative flex min-h-0 flex-col gap-2', props.className)}>
       <SunAtEdge system={system} center={center} hexes={state.hexes} sun={sun} />
-      <Drawing svg={svg} title={state.center.title} runsOn={props.runsOn} faded={zoom.fades}>
+      <Drawing
+        svg={svg}
+        title={state.center.title}
+        runsOn={props.runsOn}
+        faded={zoom.fades}
+        framed={zoom.framed}
+      >
         <Camera
           {...{ system, center, scale, sun, actions }}
           offers={(slot) => emptySlots?.(slot) !== undefined}
@@ -344,14 +350,16 @@ export function Canvas(props: CanvasProps) {
 }
 
 /**
- * The `<svg>`, the drawing: beneath the center's page, out of every hand's reach (`faded.under`), and
- * faded but while the page leaves (`faded.now`).
+ * The `<svg>`, the drawing: beneath the center's page, out of every hand's reach (`faded.under`),
+ * faded but while the page leaves (`faded.now`), at once as the hex view flies off it (`faded.cut`);
+ * the hex it frames its center by written on it (`framed`), for a page's flight to find.
  */
 function Drawing(props: {
   svg: RefObject<SVGSVGElement | null>
   title: string
   runsOn: boolean | undefined
-  faded: { under: boolean; now: boolean }
+  faded: { under: boolean; now: boolean; cut: boolean }
+  framed: string | undefined
   children: ReactNode
 }) {
   return (
@@ -361,7 +369,8 @@ function Drawing(props: {
         viewBox={viewBoxOf(canvasSize)}
         role="group"
         aria-label={m.hex_canvas_label({ title: props.title })}
-        className={svgClassOf(props.runsOn, props.faded.now)}
+        data-framed={props.framed}
+        className={svgClassOf(props.runsOn, props.faded.now, props.faded.cut)}
       >
         {props.children}
       </svg>
@@ -753,13 +762,15 @@ const standingIn = (
 
 /**
  * The `<svg>`'s class: the Tiles around the drawing running on past its box where they do, the whole
- * drawing fading under the center's page as the page grows out of it, and back as it leaves.
+ * drawing fading under the center's page as the page grows out of it, and back as it leaves, gone at
+ * once where the hex view flies off it (`cut`).
  */
-const svgClassOf = (runsOn = false, underPage = false) =>
+const svgClassOf = (runsOn = false, underPage = false, cut = false) =>
   cn(
     'relative min-h-0 w-full flex-1 select-none transition-opacity duration-(--duration-camera) ease-camera motion-reduce:transition-none',
     runsOn && 'overflow-visible',
     underPage && 'opacity-0',
+    cut && 'transition-none',
   )
 
 /** The `<svg>`'s viewBox: the canvas's own coordinates. */
